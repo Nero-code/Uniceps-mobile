@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:uniceps/Auth/views/Player_info_screen.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
-///   Animated switcher's second card...
 ///   This box is used to put the gym code so the player can subscribe to it.
 ///   it is given from the gym
 /// ////////////////////////////////////////////////////////////////////////////
@@ -32,8 +31,7 @@ class _CodeBoxState extends State<CodeBox> {
             color: const Color.fromARGB(255, 226, 226, 226),
           ),
           child: Column(children: [
-            Text(
-                "Please enter the code your gym gave you in order to sign in..."),
+            Text("Please type in the code we sent to your address"),
 
             ///   G Y M   C O D E
             Padding(
@@ -42,7 +40,17 @@ class _CodeBoxState extends State<CodeBox> {
                 key: CodeBox._codeFormKey,
                 child: TextFormField(
                   controller: codeCtrl,
-                  decoration: InputDecoration(label: Text("Gym Code")),
+                  maxLength: 6,
+                  onChanged: (value) {
+                    print(value);
+                    if (value.contains(RegExp(r"[^$0-9.]"))) {
+                      codeCtrl.text = codeCtrl.value.text
+                          .substring(0, codeCtrl.value.text.length - 1);
+                    }
+                  },
+                  decoration: InputDecoration(
+                    label: Text("Code"),
+                  ),
                 ),
               ),
             ),

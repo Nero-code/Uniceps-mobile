@@ -22,6 +22,20 @@ class EmailAuthScreen extends StatefulWidget {
 class _EmailAuthScreenState extends State<EmailAuthScreen> {
   bool flag = true;
 
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    _pageController = PageController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,10 +44,11 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              //////////////////////////////////////////////////////////////////
               ///   U N I C E P S   L O G O
               Container(
                 width: MediaQuery.of(context).size.height * 0.3,
-                height: MediaQuery.of(context).size.height * 0.3,
+                height: MediaQuery.of(context).size.height * 0.32,
                 padding: EdgeInsets.all(15),
                 alignment: Alignment.center,
                 child: Container(
@@ -55,29 +70,47 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                   ),
                 ),
               ),
-
+              //////////////////////////////////////////////////////////////////
               ///   M I D D L E   C A R D
+              // SizedBox(
+              //   height: MediaQuery.of(context).size.height * 0.6,
+              //   child: AnimatedSwitcher(
+              //     duration: const Duration(microseconds: 500),
+              //     child: flag
+              //         ? AuthBox(
+              //             onPressed: () {
+              //               print("onPressed");
+              //               setState(() {
+              //                 flag = !flag;
+              //               });
+              //             },
+              //           )
+              //         : CodeBox(
+              //             onPressed: () {
+              //               print("Code Box!");
+              //               setState(() {
+              //                 flag = !flag;
+              //               });
+              //             },
+              //           ),
+              //   ),
+              // ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.6,
-                child: AnimatedSwitcher(
-                  duration: const Duration(microseconds: 500),
-                  child: flag
-                      ? AuthBox(
-                          onPressed: () {
-                            print("onPressed");
-                            setState(() {
-                              flag = !flag;
-                            });
-                          },
-                        )
-                      : CodeBox(
-                          onPressed: () {
-                            print("Code Box!");
-                            setState(() {
-                              flag = !flag;
-                            });
-                          },
-                        ),
+                child: PageView(
+                  controller: _pageController,
+                  children: [
+                    AuthBox(
+                      onPressed: () async => _pageController.animateToPage(1,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeOutExpo),
+                    ),
+                    CodeBox(
+                      onPressed: () async => _pageController.animateToPage(0,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeOutExpo),
+                    ),
+                  ],
                 ),
               ),
               Center(
