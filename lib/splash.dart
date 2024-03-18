@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/Auth/views/Email_and_pass_screen.dart';
+import 'package:uniceps/features/Auth/views/Email_and_pass_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

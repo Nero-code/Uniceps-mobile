@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/Auth/views/Player_info_screen.dart';
+import 'package:uniceps/features/Auth/views/Player_info_screen.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 ///   This box is used to put the gym code so the player can subscribe to it.

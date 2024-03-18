@@ -1,9 +1,11 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:uniceps/Training/views/Exercise_page.dart';
-import 'package:uniceps/Training/views/widgets/Week_days.dart';
-import 'package:uniceps/Training/views/widgets/home_card.dart';
-import 'package:uniceps/Training/views/widgets/training_group.dart';
+import 'package:uniceps/features/Training/views/Screens/Exercise_page.dart';
+import 'package:uniceps/features/Training/views/Screens/Subs_page.dart';
+import 'package:uniceps/features/Training/views/widgets/Week_days.dart';
+import 'package:uniceps/features/Training/views/widgets/home_card.dart';
+import 'package:uniceps/features/Training/views/widgets/subscription_widget.dart';
+import 'package:uniceps/features/Training/views/widgets/training_group.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -31,7 +33,10 @@ class HomeScreen extends StatelessWidget {
               height: 40,
               child: InkWell(
                 borderRadius: BorderRadius.circular(30),
-                onTap: () {},
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => SubScriptionPage()),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(

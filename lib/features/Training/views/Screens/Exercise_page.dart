@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:uniceps/Training/views/widgets/exercise_widget.dart';
+import 'package:uniceps/features/Training/views/widgets/exercise_widget.dart';
 
 class ExercisesPage extends StatelessWidget {
   ExercisesPage({super.key});
@@ -13,8 +13,9 @@ class ExercisesPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Uniceps",
-          style: Theme.of(context).textTheme.headlineSmall,
         ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Colors.white,
       ),
       body: ListView.builder(
         itemCount: items.length * 2 - 1,

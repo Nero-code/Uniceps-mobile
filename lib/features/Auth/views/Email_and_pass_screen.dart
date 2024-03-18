@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/Auth/views/widgets/Auth_Box.dart';
-import 'package:uniceps/Auth/views/widgets/Code_Box.dart';
+import 'package:uniceps/features/Auth/views/widgets/Auth_Box.dart';
+import 'package:uniceps/features/Auth/views/widgets/Code_Box.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 ///
@@ -98,6 +98,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.6,
                 child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
                   controller: _pageController,
                   children: [
                     AuthBox(
