@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/Training/views/HomeScreen.dart';
+import 'package:uniceps/features/Training/views/Screens/HomeScreen.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 ///
