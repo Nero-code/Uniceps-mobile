@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/features/Training/views/widgets/subscription_widget.dart';
 
 class SubScriptionPage extends StatefulWidget {
   const SubScriptionPage({super.key});

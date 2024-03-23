@@ -4,7 +4,6 @@ import 'package:uniceps/features/Training/views/Screens/Exercise_page.dart';
 import 'package:uniceps/features/Training/views/Screens/Subs_page.dart';
 import 'package:uniceps/features/Training/views/widgets/Week_days.dart';
 import 'package:uniceps/features/Training/views/widgets/home_card.dart';
-import 'package:uniceps/features/Training/views/widgets/subscription_widget.dart';
 import 'package:uniceps/features/Training/views/widgets/training_group.dart';
 
 class HomeScreen extends StatelessWidget {

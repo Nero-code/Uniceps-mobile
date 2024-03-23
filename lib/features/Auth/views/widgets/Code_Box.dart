@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/features/Auth/views/Player_info_screen.dart';
+import 'package:uniceps/features/Auth/views/screens/Player_info_screen.dart';
+import 'package:uniceps/features/Auth/views/widgets/background_card.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 ///   This box is used to put the gym code so the player can subscribe to it.
@@ -23,13 +24,7 @@ class _CodeBoxState extends State<CodeBox> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 15),
-          padding: const EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: const Color.fromARGB(255, 226, 226, 226),
-          ),
+        BackgroundCard(
           child: Column(children: [
             Text("Please type in the code we sent to your address"),
 
@@ -64,22 +59,6 @@ class _CodeBoxState extends State<CodeBox> {
             child: Text("Verify"),
           ),
         ),
-        Expanded(
-          child: Align(
-            alignment: Alignment.bottomRight,
-            child: TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => PlayerInfoScreen(isEdit: true),
-                  ),
-                );
-              },
-              child: Text("SKIP >"),
-            ),
-          ),
-        )
       ],
     );
   }

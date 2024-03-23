@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/widgets/Auth_Box.dart';
 import 'package:uniceps/features/Auth/views/widgets/Code_Box.dart';
+import 'package:uniceps/features/Auth/views/widgets/gym_code_box.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 ///
@@ -42,6 +44,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.grey[100],
       body: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           return Stack(
@@ -50,17 +53,17 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      //////////////////////////////////////////////////////////////////
                       ///   U N I C E P S   L O G O
+
                       Container(
                         width: MediaQuery.of(context).size.height * 0.3,
                         height: MediaQuery.of(context).size.height * 0.32,
                         padding: EdgeInsets.all(15),
                         alignment: Alignment.center,
                         child: Container(
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.purple,
+                            color: Colors.grey.shade600,
                             // gradient: RadialGradient(
                             //   colors: [
                             //     Color.fromARGB(0, 140, 0, 255),
@@ -76,7 +79,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                           ),
                         ),
                       ),
-                      //////////////////////////////////////////////////////////////////
+
                       ///   M I D D L E   C A R D
 
                       SizedBox(
@@ -93,10 +96,15 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                             ),
                             CodeBox(
                               onPressed: () async =>
-                                  _pageController.animateToPage(0,
+                                  _pageController.animateToPage(2,
                                       duration: Duration(milliseconds: 500),
                                       curve: Curves.easeOutExpo),
                             ),
+                            GymCodeBox(
+                                onPressed: () => _pageController.animateToPage(
+                                    0,
+                                    duration: Duration(milliseconds: 500),
+                                    curve: Curves.easeOutExpo)),
                           ],
                         ),
                       ),
