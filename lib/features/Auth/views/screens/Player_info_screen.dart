@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uniceps/features/Auth/views/widgets/background_card.dart';
 import 'package:uniceps/features/Training/views/Screens/HomeScreen.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -70,55 +71,64 @@ class InputTypePlayerInfoScreen extends StatelessWidget {
                     ),
                   ),
 
-                  ///  N A M E
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: "Full Name",
-                      isDense: true,
-                    ),
-                  ),
-
-                  ///  P H O N E   N U M B E R
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: "Phone Number",
-                      isDense: true,
-                    ),
-                  ),
                   SizedBox(height: 10),
-
-                  ///  G E N D E R   A N D   B I R T H D A T E
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GenderSelectBox(
-                        onSelect: (selected) {},
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: TextFormField(
+                  BackgroundCard(
+                    child: Column(
+                      children: [
+                        ///  N A M E
+                        TextFormField(
                           decoration: InputDecoration(
-                            label: Text("BirthDate"),
+                            labelText: "Full Name",
                             isDense: true,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
 
-                  ///  H E I G H T
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: "Height",
-                      isDense: true,
-                    ),
-                  ),
+                        ///  P H O N E   N U M B E R
+                        TextFormField(
+                          decoration: InputDecoration(
+                            labelText: "Phone Number",
+                            isDense: true,
+                          ),
+                        ),
+                        SizedBox(height: 10),
 
-                  ///  W E I G H T
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: "Weight",
-                      isDense: true,
+                        ///  G E N D E R   A N D   B I R T H D A T E
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GenderSelectBox(
+                              onSelect: (selected) => male = selected,
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  label: Text("BirthDate"),
+                                  isDense: true,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        ///  H E I G H T
+                        TextFormField(
+                          decoration: InputDecoration(
+                            labelText: "Height",
+                            isDense: true,
+                          ),
+                        ),
+
+                        ///  W E I G H T
+                        TextFormField(
+                          decoration: InputDecoration(
+                            labelText: "Weight",
+                            isDense: true,
+                          ),
+                        ),
+
+                        SizedBox(height: 10),
+                      ],
                     ),
                   ),
                   SizedBox(height: 10),
@@ -126,10 +136,7 @@ class InputTypePlayerInfoScreen extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pop(context);
-
-                        Navigator.pop(context);
-                        Navigator.push(context,
+                        Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (_) => HomeScreen()));
                       },
                       child: Text("Save"),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uniceps/features/Auth/views/widgets/background_card.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 ///   Animated Switcher's First card.
@@ -20,18 +21,14 @@ class _AuthBoxState extends State<AuthBox> {
   final emailCtrl = TextEditingController();
   final passwCtrl = TextEditingController();
 
+  bool obscureText = true;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ///   B A C K G R O U N D   C A R D
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 15),
-          padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Color.fromARGB(255, 238, 238, 238),
-          ),
+        BackgroundCard(
           child: Form(
             key: AuthBox._authFormkey,
             child: Column(
@@ -52,10 +49,23 @@ class _AuthBoxState extends State<AuthBox> {
                 ///   T E X T F I E L D   P A S S W O R D
                 TextFormField(
                   controller: passwCtrl,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: "Password",
                     hintText: "123456789",
+                    suffixIcon: IconButton(
+                      iconSize: 25,
+                      splashRadius: 10,
+                      onPressed: () {
+                        setState(() {
+                          obscureText = !obscureText;
+                        });
+                      },
+                      icon: Icon(obscureText
+                          ? Icons.visibility_off
+                          : Icons.visibility),
+                    ),
                   ),
+                  obscureText: obscureText,
                   validator: (value) => "Error!",
                 ),
 

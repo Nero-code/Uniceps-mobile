@@ -15,7 +15,7 @@ class HomeCard extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 15),
           height: MediaQuery.of(context).size.height * 0.1,
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 201, 118, 216),
+            color: Color.fromARGB(255, 124, 124, 124),
             // gradient: LinearGradient(
             //   colors: [
             //     Color.fromARGB(255, 170, 29, 76),

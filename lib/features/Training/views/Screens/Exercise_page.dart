@@ -2,10 +2,17 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:uniceps/features/Training/views/widgets/exercise_widget.dart';
 
-class ExercisesPage extends StatelessWidget {
+class ExercisesPage extends StatefulWidget {
   ExercisesPage({super.key});
 
-  final List<int> items = List.generate(5, (index) => index);
+  @override
+  State<ExercisesPage> createState() => _ExercisesPageState();
+}
+
+class _ExercisesPageState extends State<ExercisesPage> {
+  final List<int> items = [0, 1, 2, 3, 4, 5];
+
+  final List<int> doneItems = [];
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +24,20 @@ class ExercisesPage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Colors.white,
       ),
-      body: ListView.builder(
-        itemCount: items.length * 2 - 1,
+      body: ListView.separated(
+        padding: EdgeInsets.symmetric(vertical: 10),
+        itemCount: items.length + doneItems.length,
         itemBuilder: (context, index) {
-          if (index % 2 == 0) {
+          if (doneItems.length > index) {
+            return Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: 15),
+              color: Colors.amber,
+              child: Icon(Icons.done),
+            );
+          } else if (items.length > 0)
             return Dismissible(
-              key: Key("$index"),
+              key: ValueKey(items[index - doneItems.length]),
               background: Container(
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(left: 15),
@@ -37,15 +52,21 @@ class ExercisesPage extends StatelessWidget {
               ),
               direction: DismissDirection.horizontal,
               onDismissed: (direction) {
-                items.remove(index);
+                print(index);
+                print(items);
+                print('\n');
+                setState(() {
+                  items.removeAt(index - doneItems.length);
+                  doneItems.add(index);
+                });
               },
               child: ExerciseWidget(),
             );
-          } else {
-            return SizedBox(
-              height: 10,
-            );
-          }
+        },
+        separatorBuilder: (context, index) {
+          return SizedBox(
+            height: 10,
+          );
         },
       ),
     );

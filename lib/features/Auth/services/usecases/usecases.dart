@@ -2,23 +2,21 @@ import 'package:dartz/dartz.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/features/Auth/services/repo/repo.dart';
 
-class AuthUsecases implements AuthRepo {
-  @override
+class AuthUsecases {
+  final AuthRepo repo;
+
+  AuthUsecases({required this.repo});
+
   Future<Either<Failure, Unit>> checkGymCode({required String gymCode}) async {
-    // TODO: implement checkGymCode
-    throw UnimplementedError();
+    return await repo.checkGymCode(gymCode: gymCode);
   }
 
-  @override
   Future<Either<Failure, Unit>> emailSignin(
       {required String email, required String password}) async {
-    // TODO: implement emailSignin
-    throw UnimplementedError();
+    return await repo.emailSignin(email: email, password: password);
   }
 
-  @override
   Future<Either<Failure, Unit>> validateCode({required String code}) async {
-    // TODO: implement validateCode
-    throw UnimplementedError();
+    return await repo.validateCode(code: code);
   }
 }

@@ -6,9 +6,9 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  // final AuthUsecases usecases;
+  final AuthUsecases usecases;
 
-  AuthBloc() : super(AuthInitial()) {
+  AuthBloc({required this.usecases}) : super(AuthInitial()) {
     on<AuthEvent>((event, emit) {
       if (event is AuthRequestEvent) {
         emit(AuthLoadingState());

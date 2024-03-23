@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/features/Auth/views/screens/Email_and_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
+import 'package:uniceps/features/Training/views/Screens/HomeScreen.dart';
+import 'package:uniceps/features/Training/views/Screens/Measurements_and_profile_page.dart';
+import 'package:uniceps/features/Training/views/bloc/training_bloc.dart';
+import 'package:uniceps/injection_dependency.dart' as di;
+import 'package:uniceps/main_bloc/main_bloc.dart';
 import 'package:uniceps/splash.dart';
 
-void main() {
+void main() async {
+  di.init();
   runApp(const MyApp());
 }
 
@@ -13,30 +21,39 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthBloc(),
-      child: MaterialApp(
-        title: 'Uniceps',
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // TRY THIS: Try running your application with "flutter run". You'll see
-          // the application has a blue toolbar. Then, without quitting the app,
-          // try changing the seedColor in the colorScheme below to Colors.green
-          // and then invoke "hot reload" (save your changes or press the "hot
-          // reload" button in a Flutter-supported IDE, or press "r" if you used
-          // the command line to start the app).
-          //
-          // Notice that the counter didn't reset back to zero; the application
-          // state is not lost during the reload. To reset the state, use hot
-          // restart instead.
-          //
-          // This works for code too, not just values: Most code changes can be
-          // tested with just a hot reload.
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
-          useMaterial3: true,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>(
+            create: (context) => AuthBloc(usecases: di.sl())),
+        BlocProvider<TrainingBloc>(
+            create: (context) => TrainingBloc(usecases: di.sl())),
+        BlocProvider<MainBloc>(
+          create: (context) => MainBloc(),
         ),
-        home: SplashScreen(),
+      ],
+      child: BlocBuilder<MainBloc, MainState>(
+        builder: (context, state) {
+          return MaterialApp(
+            title: 'Uniceps',
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+              useMaterial3: true,
+            ),
+            // darkTheme: ThemeData(
+            //     colorScheme: ColorScheme.fromSeed(
+            //         seedColor: Colors.blue, brightness: Brightness.dark)),
+            themeMode: state is ActiveState ? state.themeMode : ThemeMode.light,
+
+            initialRoute: '/',
+            routes: {
+              ROUTE_SPLASH: (_) => const SplashScreen(),
+              ROUTE_HOME: (_) => HomeScreen(),
+              ROUTE_MEASUREMENTS: (_) => MeasurementAndProfilePage(),
+              ROUTE_AUTH: (_) => EmailAuthScreen(),
+              ROUTE_QR_SCANNER: (_) => Container(),
+            },
+          );
+        },
       ),
     );
   }
