@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/features/Training/views/Screens/Measurements_and_profile_page.dart';
 
 class HomeCard extends StatelessWidget {
@@ -15,7 +15,7 @@ class HomeCard extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 15),
           height: MediaQuery.of(context).size.height * 0.1,
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 124, 124, 124),
+            color: Theme.of(context).colorScheme.primary,
             // gradient: LinearGradient(
             //   colors: [
             //     Color.fromARGB(255, 170, 29, 76),
@@ -41,7 +41,7 @@ class HomeCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        "PLayer Name",
+                        AppLocalizations.of(context)!.helloWorld,
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),

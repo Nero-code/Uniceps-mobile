@@ -8,10 +8,7 @@ enum ThemeType {
   Dark,
 }
 
-enum Language {
-  Ar,
-  En,
-}
+const List<String> languageCodes = ['ar', 'en'];
 
 enum MuscleGroup {
   Arms,

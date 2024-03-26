@@ -1,23 +1,30 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/features/Training/views/Screens/Exercise_page.dart';
 import 'package:uniceps/features/Training/views/Screens/Subs_page.dart';
 import 'package:uniceps/features/Training/views/widgets/Week_days.dart';
 import 'package:uniceps/features/Training/views/widgets/home_card.dart';
 import 'package:uniceps/features/Training/views/widgets/training_group.dart';
+import 'package:uniceps/main_cubit/locale_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var lang = BlocProvider.of<LocaleCubit>(context).state.locale.languageCode;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text("Uniceps"),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              BlocProvider.of<LocaleCubit>(context)
+                  .changeLanguage(lang == 'en' ? 'ar' : 'en');
+            },
             tooltip: "QR Scan",
             icon: const Icon(Icons.qr_code_scanner),
           ),

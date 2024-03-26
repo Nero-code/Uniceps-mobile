@@ -35,7 +35,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
               color: Colors.amber,
               child: Icon(Icons.done),
             );
-          } else if (items.length > 0)
+          } else if (items.length > 0) {
             return Dismissible(
               key: ValueKey(items[index - doneItems.length]),
               background: Container(
@@ -62,6 +62,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
               },
               child: ExerciseWidget(),
             );
+          }
         },
         separatorBuilder: (context, index) {
           return SizedBox(
