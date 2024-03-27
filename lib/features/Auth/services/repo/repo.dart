@@ -7,4 +7,6 @@ abstract class AuthRepo {
   Future<Either<Failure, Unit>> validateCode({required String code});
 
   Future<Either<Failure, Unit>> checkGymCode({required String gymCode});
+
+  Future<Either<Failure, Unit>> isLoggedIn();
 }

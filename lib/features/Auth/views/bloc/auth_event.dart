@@ -7,16 +7,21 @@ sealed class AuthEvent extends Equatable {
   List<Object> get props => [];
 }
 
+///
+///   Main Email Auth
+///
 final class AuthRequestEvent extends AuthEvent {}
-
-// final class AuthCodeSentEvent extends AuthEvent {}
 
 final class AuthCodeVerifyEvent extends AuthEvent {}
 
-// final class AuthDoneEvent extends AuthEvent {}
-
-// final class AuthFailedEvent extends AuthEvent {}
-
 final class AuthProfileSubmitEvent extends AuthEvent {}
 
-// final class AuthProfileFailedEvent extends AuthEvent {}
+///
+///   Forgot Password Auth
+///
+
+final class FPassEmailVerifyEvent extends AuthEvent {}
+
+final class FPassCodeVerifyEvent extends AuthEvent {}
+
+final class FPassChangePasswordEvent extends AuthEvent {}

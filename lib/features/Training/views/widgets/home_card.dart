@@ -30,48 +30,43 @@ class HomeCard extends StatelessWidget {
             // ),
             borderRadius: BorderRadius.circular(15),
           ),
-          child: OpenContainer(
-            closedColor: Colors.transparent,
-            closedElevation: 0,
-            closedBuilder: (context, _) => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.helloWorld,
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: LinearProgressIndicator(
-                              value: 0.5,
-                              color: Colors.amber,
-                            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.helloWorld,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: LinearProgressIndicator(
+                            value: 0.5,
+                            color: Colors.amber,
                           ),
-                          SizedBox(width: 10),
-                          Text("LVL: 9"),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                        SizedBox(width: 10),
+                        Text("LVL: 9"),
+                      ],
+                    ),
+                  ],
                 ),
-                SizedBox(width: 15),
-                Container(
-                  width: 35,
-                  height: 35,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
+              ),
+              SizedBox(width: 15),
+              Container(
+                width: 35,
+                height: 35,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
                 ),
-              ],
-            ),
-            openBuilder: (context, _) => MeasurementAndProfilePage(),
+              ),
+            ],
           ),
         ),
       ],

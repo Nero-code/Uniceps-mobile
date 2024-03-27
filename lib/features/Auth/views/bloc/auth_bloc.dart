@@ -16,6 +16,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthLoadingState());
       } else if (event is AuthProfileSubmitEvent) {
         emit(AuthLoadingState());
+      } else if (event is FPassEmailVerifyEvent) {
+        emit(AuthLoadingState());
+      } else if (event is FPassCodeVerifyEvent) {
+        emit(AuthLoadingState());
+      } else if (event is FPassChangePasswordEvent) {
+        emit(AuthLoadingState());
       }
     });
   }

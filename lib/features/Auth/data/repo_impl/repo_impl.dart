@@ -29,4 +29,10 @@ class AuthRepoImpl implements AuthRepo {
   Future<Either<Failure, Unit>> validateCode({required String code}) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<Either<Failure, Unit>> isLoggedIn() {
+    // TODO: implement isLoggedIn
+    throw UnimplementedError();
+  }
 }

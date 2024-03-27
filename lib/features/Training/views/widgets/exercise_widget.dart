@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ExerciseWidget extends StatelessWidget {
-  const ExerciseWidget({super.key});
+  const ExerciseWidget({super.key, this.isDone = false});
+  final bool isDone;
 
   @override
   Widget build(BuildContext context) {
@@ -10,6 +11,8 @@ class ExerciseWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 230, 230, 230),
         borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+            color: isDone ? Colors.amber : Colors.transparent, width: 2),
       ),
       child: Row(
         children: [
@@ -26,7 +29,9 @@ class ExerciseWidget extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
-              color: Colors.grey,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+              ),
               child: Center(child: Text("Image")),
             ),
           ),

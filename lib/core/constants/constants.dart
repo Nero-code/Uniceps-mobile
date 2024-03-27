@@ -1,23 +1,31 @@
+const APP_NAME = 'Uniceps';
+
 enum Gender {
-  Male,
-  Female,
+  male,
+  female,
 }
 
 enum ThemeType {
-  Light,
-  Dark,
+  light,
+  dark,
 }
 
 const List<String> languageCodes = ['ar', 'en'];
 
 enum MuscleGroup {
-  Arms,
-  Legs,
-  Abdomin,
-  Shoulders,
-  Chest,
-  Tripez,
+  arms,
+  legs,
+  abdomin,
+  shoulders,
+  chest,
+  tripez,
 }
+
+////////////////////////////////////////////////////////////////////////////////
+///
+///   A P P   R O U T E S
+///
+////////////////////////////////////////////////////////////////////////////////
 
 const ROUTE_SPLASH = '/';
 const ROUTE_HOME = '/home';
@@ -28,3 +36,5 @@ const ROUTE_PROFILE = '/profile';
 const ROUTE_AUTH = '/auth';
 const ROUTE_QR_SCANNER = '/qr_scanner';
 const ROUTE_PLAYER_INFO = '/player_info';
+const ROUTE_PRESENCE = '/presence';
+const ROUTE_FORGOT_PASSWORD = '/forgot_password';

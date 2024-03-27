@@ -29,11 +29,20 @@ class _ExercisesPageState extends State<ExercisesPage> {
         itemCount: items.length + doneItems.length,
         itemBuilder: (context, index) {
           if (doneItems.length > index) {
-            return Container(
-              alignment: Alignment.centerLeft,
-              padding: EdgeInsets.only(left: 15),
-              color: Colors.amber,
-              child: Icon(Icons.done),
+            return ExerciseWidget(isDone: true);
+          } else if (doneItems.length == index) {
+            return SizedBox(
+              child: Row(
+                children: [
+                  Expanded(child: Divider()),
+                  Icon(
+                    Icons.check_circle_rounded,
+                    color: Colors.green,
+                  ),
+                  Expanded(child: Divider()),
+                ],
+              ),
+              height: 20,
             );
           } else if (items.length > 0) {
             return Dismissible(
@@ -60,7 +69,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
                   doneItems.add(index);
                 });
               },
-              child: ExerciseWidget(),
+              child: ExerciseWidget(isDone: false),
             );
           }
         },

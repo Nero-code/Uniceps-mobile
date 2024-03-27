@@ -10,12 +10,49 @@ class ForgotPasswordScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            BackgroundCard(
-              child: TextField(
-                decoration: InputDecoration(
-                  label: Text("ASda"),
+            PageView(
+              children: [
+                Column(
+                  children: [
+                    SizedBox(
+                      child: Center(
+                        child: Text("Change Password"),
+                      ),
+                    ),
+                    BackgroundCard(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          label: Text("Email"),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text("Next"),
+                    ),
+                  ],
                 ),
-              ),
+                Column(
+                  children: [
+                    SizedBox(
+                      child: Center(
+                        child: Text("Change Password"),
+                      ),
+                    ),
+                    BackgroundCard(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          label: Text("Verification Code"),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text("Next"),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
