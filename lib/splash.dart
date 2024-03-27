@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:uniceps/features/Auth/views/screens/Email_and_pass_screen.dart';
+import 'package:uniceps/features/Training/views/Screens/HomeScreen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
   Future<void> navigate(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 3));
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (_) => EmailAuthScreen()));
+        context, MaterialPageRoute(builder: (_) => HomeScreen()));
   }
 
   @override

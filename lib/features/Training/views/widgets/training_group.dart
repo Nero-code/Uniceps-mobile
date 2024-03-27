@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/main_cubit/locale_cubit.dart';
 
 class TrainingGroup extends StatelessWidget {
   const TrainingGroup({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var local = BlocProvider.of<LocaleCubit>(context).state.locale;
     return Container(
       height: MediaQuery.of(context).size.height * 0.08,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.horizontal(
-          right: Radius.circular(50),
+          right: Radius.circular(local.languageCode == 'en' ? 50 : 0),
+          left: Radius.circular(local.languageCode == 'ar' ? 50 : 0),
         ),
         color: const Color.fromARGB(255, 230, 230, 230),
       ),
-      margin: EdgeInsets.only(right: 15),
+      margin: EdgeInsets.only(
+          right: local.languageCode == 'en' ? 15 : 0,
+          left: local.languageCode == 'ar' ? 15 : 0),
       child: Row(
         children: [
           Expanded(
@@ -49,7 +57,9 @@ class TrainingGroup extends StatelessWidget {
           Container(
             width: 45,
             height: 45,
-            margin: EdgeInsets.only(right: 7),
+            margin: EdgeInsets.only(
+                right: local.languageCode == 'en' ? 7 : 0,
+                left: local.languageCode == 'ar' ? 7 : 0),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.white,

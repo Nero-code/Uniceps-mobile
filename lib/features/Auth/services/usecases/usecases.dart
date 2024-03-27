@@ -19,4 +19,8 @@ class AuthUsecases {
   Future<Either<Failure, Unit>> validateCode({required String code}) async {
     return await repo.validateCode(code: code);
   }
+
+  Future<Either<Failure, Unit>> isLoggedIn() async {
+    return await repo.isLoggedIn();
+  }
 }

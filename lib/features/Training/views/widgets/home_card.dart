@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/features/Training/views/Screens/Measurements_and_profile_page.dart';
 
 class HomeCard extends StatelessWidget {
@@ -15,7 +15,7 @@ class HomeCard extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 15),
           height: MediaQuery.of(context).size.height * 0.1,
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 124, 124, 124),
+            color: Theme.of(context).colorScheme.primary,
             // gradient: LinearGradient(
             //   colors: [
             //     Color.fromARGB(255, 170, 29, 76),
@@ -30,48 +30,43 @@ class HomeCard extends StatelessWidget {
             // ),
             borderRadius: BorderRadius.circular(15),
           ),
-          child: OpenContainer(
-            closedColor: Colors.transparent,
-            closedElevation: 0,
-            closedBuilder: (context, _) => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        "PLayer Name",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: LinearProgressIndicator(
-                              value: 0.5,
-                              color: Colors.amber,
-                            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.helloWorld,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: LinearProgressIndicator(
+                            value: 0.5,
+                            color: Colors.amber,
                           ),
-                          SizedBox(width: 10),
-                          Text("LVL: 9"),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                        SizedBox(width: 10),
+                        Text("LVL: 9"),
+                      ],
+                    ),
+                  ],
                 ),
-                SizedBox(width: 15),
-                Container(
-                  width: 35,
-                  height: 35,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
+              ),
+              SizedBox(width: 15),
+              Container(
+                width: 35,
+                height: 35,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
                 ),
-              ],
-            ),
-            openBuilder: (context, _) => MeasurementAndProfilePage(),
+              ),
+            ],
           ),
         ),
       ],

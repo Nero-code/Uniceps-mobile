@@ -22,6 +22,7 @@ class WeekDaysBanner extends StatelessWidget {
       height: 70,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        textDirection: TextDirection.ltr,
         children: [
           for (int i = 0; i < 7; i++)
             Container(

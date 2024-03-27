@@ -1,4 +1,4 @@
-package com.example.uniceps
+package com.trioverse.uniceps
 
 import io.flutter.embedding.android.FlutterActivity
 
