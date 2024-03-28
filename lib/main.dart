@@ -1,16 +1,18 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/views/screens/Email_and_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
-import 'package:uniceps/features/Training/views/Screens/HomeScreen.dart';
-import 'package:uniceps/features/Training/views/Screens/Measurements_and_profile_page.dart';
-import 'package:uniceps/features/Training/views/Screens/Presence_screen.dart';
-import 'package:uniceps/features/Training/views/Screens/QR_scanner_screen.dart';
+import 'package:uniceps/features/Profile/presentation/measurement_screen.dart';
+import 'package:uniceps/features/Profile/presentation/profile_screen.dart';
+import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
+import 'package:uniceps/features/Training/views/Screens/home_screen.dart';
+import 'package:uniceps/features/Training/views/Screens/presence_screen.dart';
+import 'package:uniceps/features/Training/views/Screens/qr_scanner_screen.dart';
+import 'package:uniceps/features/Subscriptions/presentation/subs_screen.dart';
 import 'package:uniceps/features/Training/views/bloc/training_bloc.dart';
 import 'package:uniceps/firebase_options.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
@@ -55,13 +57,22 @@ class MyApp extends StatelessWidget {
 
             initialRoute: ROUTE_SPLASH,
             routes: {
-              ROUTE_SPLASH: (context) => SplashScreen(),
-              ROUTE_HOME: (context) => HomeScreen(),
-              ROUTE_MEASUREMENTS: (context) => MeasurementAndProfilePage(),
+              ROUTE_SPLASH: (context) => const SplashScreen(),
+
+              //  AUTH
               ROUTE_AUTH: (context) => EmailAuthScreen(),
+              ROUTE_FORGOT_PASSWORD: (context) => ForgotPasswordScreen(),
+
+              //  MAIN
+              ROUTE_HOME: (context) => HomeScreen(),
+              ROUTE_EXERCISE: (context) => ExercisesPage(),
               ROUTE_QR_SCANNER: (context) => QRScannerScreen(),
               ROUTE_PRESENCE: (context) => PresenceScreen(),
-              ROUTE_FORGOT_PASSWORD: (context) => ForgotPasswordScreen(),
+
+              //  AUX
+              ROUTE_MEASUREMENTS: (context) => MeasurementScreen(),
+              ROUTE_SUBSCRIPTIONS: (context) => SubScriptionScreen(),
+              ROUTE_PROFILE: (context) => ProfileScreen(),
             },
           );
         },

@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:uniceps/features/Training/services/entities/measrument.dart';
+import 'package:uniceps/features/Profile/domain/measrument.dart';
 
 class MeasurementModel extends Measurement {
   MeasurementModel({

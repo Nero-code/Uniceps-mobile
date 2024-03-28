@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uniceps/features/Auth/views/widgets/background_card.dart';
-import 'package:uniceps/features/Training/views/Screens/HomeScreen.dart';
+import 'package:uniceps/features/Auth/views/widgets/gender_selection_widget.dart';
+import 'package:uniceps/features/Training/views/Screens/home_screen.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 ///
@@ -30,12 +31,18 @@ class PlayerInfoScreen extends StatelessWidget {
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-class InputTypePlayerInfoScreen extends StatelessWidget {
-  InputTypePlayerInfoScreen({super.key});
+class InputTypePlayerInfoScreen extends StatefulWidget {
+  const InputTypePlayerInfoScreen({super.key});
 
+  @override
+  State<InputTypePlayerInfoScreen> createState() =>
+      _InputTypePlayerInfoScreenState();
+}
+
+class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  bool male = true;
+  bool? male;
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +88,12 @@ class InputTypePlayerInfoScreen extends StatelessWidget {
                             labelText: "Full Name",
                             isDense: true,
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter your name...";
+                            }
+                            return null;
+                          },
                         ),
 
                         ///  P H O N E   N U M B E R
@@ -89,6 +102,12 @@ class InputTypePlayerInfoScreen extends StatelessWidget {
                             labelText: "Phone Number",
                             isDense: true,
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "error";
+                            }
+                            return null;
+                          },
                         ),
                         SizedBox(height: 10),
 
@@ -103,9 +122,16 @@ class InputTypePlayerInfoScreen extends StatelessWidget {
                               width: MediaQuery.of(context).size.width * 0.5,
                               child: TextFormField(
                                 decoration: InputDecoration(
-                                  label: Text("BirthDate"),
+                                  label: Text("Birth Year"),
                                   isDense: true,
                                 ),
+                                maxLength: 4,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "please put a valid year";
+                                  }
+                                  return null;
+                                },
                               ),
                             ),
                           ],
@@ -117,6 +143,12 @@ class InputTypePlayerInfoScreen extends StatelessWidget {
                             labelText: "Height",
                             isDense: true,
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "please put a valid year";
+                            }
+                            return null;
+                          },
                         ),
 
                         ///  W E I G H T
@@ -125,6 +157,12 @@ class InputTypePlayerInfoScreen extends StatelessWidget {
                             labelText: "Weight",
                             isDense: true,
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "please put a valid year";
+                            }
+                            return null;
+                          },
                         ),
 
                         SizedBox(height: 10),
@@ -136,8 +174,10 @@ class InputTypePlayerInfoScreen extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (_) => HomeScreen()));
+                        if (_formKey.currentState!.validate()) {
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (_) => HomeScreen()));
+                        }
                       },
                       child: Text("Save"),
                     ),
@@ -149,74 +189,6 @@ class InputTypePlayerInfoScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-///   A Color-Changeing Widget to represent selection
-class GenderSelectBox extends StatefulWidget {
-  GenderSelectBox({super.key, this.isMale, required this.onSelect});
-
-  bool? isMale;
-  void Function(bool selected) onSelect;
-
-  @override
-  State<GenderSelectBox> createState() => _GenderSelectBoxState();
-}
-
-class _GenderSelectBoxState extends State<GenderSelectBox> {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.width * 0.1,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Material(
-            elevation: widget.isMale ?? false ? 3 : 0,
-            borderRadius: BorderRadius.circular(10),
-            color: widget.isMale ?? false
-                ? Colors.purple
-                : Color.fromARGB(255, 226, 226, 226),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(10),
-              onTap: () {
-                if (widget.isMale != null && widget.isMale == true) return;
-                widget.isMale = !(widget.isMale ?? false);
-                setState(() {});
-              },
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.1,
-                height: MediaQuery.of(context).size.width * 0.1,
-                child: Center(child: Text("M")),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.05,
-          ),
-          Material(
-            elevation: widget.isMale ?? true ? 0 : 3,
-            borderRadius: BorderRadius.circular(10),
-            color: widget.isMale ?? true
-                ? const Color.fromARGB(255, 226, 226, 226)
-                : Colors.purple,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(10),
-              onTap: () {
-                if (widget.isMale != null && widget.isMale == false) return;
-                widget.isMale = !(widget.isMale ?? true);
-                setState(() {});
-              },
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.1,
-                height: MediaQuery.of(context).size.width * 0.1,
-                child: Center(child: Text("F")),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

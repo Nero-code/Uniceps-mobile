@@ -33,6 +33,12 @@ class GymCodeBox extends StatelessWidget {
                         .substring(0, codeCtrl.value.text.length - 1);
                   }
                 },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the code the Gym gave you';
+                  }
+                  return null;
+                },
                 decoration: InputDecoration(
                   label: Text("Code"),
                 ),

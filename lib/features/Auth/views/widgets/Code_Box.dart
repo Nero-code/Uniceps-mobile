@@ -11,7 +11,6 @@ class CodeBox extends StatefulWidget {
   CodeBox({super.key, this.onPressed});
 
   final VoidCallback? onPressed;
-  static final _codeFormKey = GlobalKey<FormState>();
 
   @override
   State<CodeBox> createState() => _CodeBoxState();
@@ -19,6 +18,8 @@ class CodeBox extends StatefulWidget {
 
 class _CodeBoxState extends State<CodeBox> {
   final codeCtrl = TextEditingController();
+
+  final _codeFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +29,11 @@ class _CodeBoxState extends State<CodeBox> {
           child: Column(children: [
             Text("Please type in the code we sent to your address"),
 
-            ///   G Y M   C O D E
+            ///   C O D E
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Form(
-                key: CodeBox._codeFormKey,
+                key: _codeFormKey,
                 child: TextFormField(
                   controller: codeCtrl,
                   maxLength: 6,
@@ -43,8 +44,15 @@ class _CodeBoxState extends State<CodeBox> {
                           .substring(0, codeCtrl.value.text.length - 1);
                     }
                   },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the code sent to your E-mail';
+                    }
+                    return null;
+                  },
                   decoration: InputDecoration(
                     label: Text("Code"),
+                    hintText: '000-000',
                   ),
                 ),
               ),
@@ -55,7 +63,11 @@ class _CodeBoxState extends State<CodeBox> {
           margin: EdgeInsets.all(15),
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: widget.onPressed,
+            onPressed: () {
+              if (_codeFormKey.currentState!.validate()) {
+                widget.onPressed;
+              }
+            },
             child: Text("Verify"),
           ),
         ),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class SubScriptionPage extends StatefulWidget {
-  const SubScriptionPage({super.key});
+class SubScriptionScreen extends StatefulWidget {
+  const SubScriptionScreen({super.key});
 
   @override
-  State<SubScriptionPage> createState() => _SubScriptionPageState();
+  State<SubScriptionScreen> createState() => _SubScriptionScreenState();
 }
 
-class _SubScriptionPageState extends State<SubScriptionPage> {
+class _SubScriptionScreenState extends State<SubScriptionScreen> {
   final List<bool> items = [
     true,
     false,

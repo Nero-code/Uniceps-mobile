@@ -2,9 +2,8 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/features/Training/views/Screens/Exercise_page.dart';
-import 'package:uniceps/features/Training/views/Screens/Measurements_and_profile_page.dart';
-import 'package:uniceps/features/Training/views/Screens/Subs_page.dart';
+import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
+import 'package:uniceps/features/Subscriptions/presentation/subs_screen.dart';
 import 'package:uniceps/features/Training/views/widgets/Week_days.dart';
 import 'package:uniceps/features/Training/views/widgets/home_card.dart';
 import 'package:uniceps/features/Training/views/widgets/training_group.dart';
@@ -37,9 +36,16 @@ class _HomeScreenState extends State<HomeScreen> {
     var lang = BlocProvider.of<LocaleCubit>(context).state.locale.languageCode;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("Uniceps"),
+        title: Text(
+          "Uniceps",
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall!
+              .copyWith(fontWeight: FontWeight.w500),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -61,10 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 40,
               child: InkWell(
                 borderRadius: BorderRadius.circular(30),
-                onTap: () => Navigator.push(
+                onTap: () => Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(
-                      builder: (_) => MeasurementAndProfilePage()),
+                  ROUTE_PROFILE,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -72,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 25,
                     height: 25,
                     decoration: BoxDecoration(
-                        color: Colors.deepPurple, shape: BoxShape.circle),
+                        color: Colors.amber, shape: BoxShape.circle),
                   ),
                 ),
               ),
@@ -85,37 +90,44 @@ class _HomeScreenState extends State<HomeScreen> {
           Column(
             children: [
               ///   H O M E   C A R D
-              InkWell(
+              HomeCard(
                 onTap: () {
                   controller.animateTo(0.25,
                       duration: Duration(milliseconds: 500),
                       curve: Curves.linear);
                 },
-                child: HomeCard(),
               ),
 
               ///   W E E K   D A Y S
               InkWell(
+                highlightColor: Colors.transparent,
+                splashColor: Colors.grey,
                 onTap: () => Navigator.pushNamed(context, ROUTE_PRESENCE),
                 child: WeekDaysBanner(),
               ),
               SizedBox(height: 10),
+
+              ///   T R A I N I N G   G R O U P S
               Expanded(
-                child: ListView(
-                  padding: EdgeInsets.only(bottom: 50),
-                  children: [
-                    for (int i = 0; i < 14; i++)
-                      i % 2 == 1
-                          ? OpenContainer(
-                              closedElevation: 0,
-                              openElevation: 0,
-                              transitionType: ContainerTransitionType.fade,
-                              transitionDuration: Duration(milliseconds: 500),
-                              closedBuilder: (context, _) => TrainingGroup(),
-                              openBuilder: (context, _) => ExercisesPage(),
-                            )
-                          : const SizedBox(height: 10),
-                  ],
+                child: Container(
+                  color: Colors.white,
+                  child: ListView(
+                    padding: EdgeInsets.only(bottom: 50),
+                    children: [
+                      for (int i = 0; i < 14; i++)
+                        i % 2 == 1
+                            ? OpenContainer(
+                                closedElevation: 0,
+                                openElevation: 0,
+                                closedColor: Colors.white,
+                                transitionType: ContainerTransitionType.fade,
+                                transitionDuration: Duration(milliseconds: 500),
+                                closedBuilder: (context, _) => TrainingGroup(),
+                                openBuilder: (context, _) => ExercisesPage(),
+                              )
+                            : const SizedBox(height: 10),
+                    ],
+                  ),
                 ),
               )
             ],

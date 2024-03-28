@@ -18,6 +18,8 @@ class WeekDaysBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     calcWeekDays();
+    print("Sunday: ");
+    print(DateTime.now().add(Duration(days: -3)).weekday);
     return SizedBox(
       height: 70,
       child: Row(
@@ -29,9 +31,16 @@ class WeekDaysBanner extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.1,
               // padding: EdgeInsets.only(top: 5),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                color: today.weekday == (i + 1) ? Colors.pink : Colors.white,
-              ),
+                  borderRadius: BorderRadius.circular(50),
+                  color: (today.weekday % 7) == i ? Colors.pink : Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset.zero,
+                      color:
+                          (today.weekday % 7) == i ? Colors.pink : Colors.white,
+                      blurRadius: 5,
+                    ),
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -43,7 +52,7 @@ class WeekDaysBanner extends StatelessWidget {
                     width: 25,
                     height: 25,
                     alignment: Alignment.center,
-                    decoration: (i + 1) == today.weekday
+                    decoration: i == (today.weekday % 7)
                         ? const BoxDecoration(
                             shape: BoxShape.circle, color: Colors.white)
                         : null,
