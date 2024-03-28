@@ -28,13 +28,25 @@ enum MuscleGroup {
 ////////////////////////////////////////////////////////////////////////////////
 
 const ROUTE_SPLASH = '/';
+
+///
+///   A U T H   R O U T E S
+///
+const ROUTE_AUTH = '/auth';
+const ROUTE_FORGOT_PASSWORD = '/forgot_password';
+
+///
+///   M A I N   R O U T E S
+///
 const ROUTE_HOME = '/home';
+const ROUTE_PROFILE = '/profile';
 const ROUTE_EXERCISE = '/exercise';
 const ROUTE_SUBSCRIPTIONS = '/subscriptions';
 const ROUTE_MEASUREMENTS = '/measurements';
-const ROUTE_PROFILE = '/profile';
-const ROUTE_AUTH = '/auth';
+
+///
+///   A U X I L I A R Y   R O U T E S
+///
 const ROUTE_QR_SCANNER = '/qr_scanner';
 const ROUTE_PLAYER_INFO = '/player_info';
 const ROUTE_PRESENCE = '/presence';
-const ROUTE_FORGOT_PASSWORD = '/forgot_password';

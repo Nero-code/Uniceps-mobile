@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/widgets/Auth_Box.dart';
 import 'package:uniceps/features/Auth/views/widgets/Code_Box.dart';

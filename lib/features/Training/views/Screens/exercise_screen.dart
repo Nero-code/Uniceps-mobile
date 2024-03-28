@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:uniceps/features/Training/views/widgets/exercise_widget.dart';
 
@@ -21,8 +20,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
         title: Text(
           "Uniceps",
         ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: ListView.separated(
         padding: EdgeInsets.symmetric(vertical: 10),
@@ -31,7 +29,8 @@ class _ExercisesPageState extends State<ExercisesPage> {
           if (doneItems.length > index) {
             return ExerciseWidget(isDone: true);
           } else if (doneItems.length == index) {
-            return SizedBox(
+            return const SizedBox(
+              height: 20,
               child: Row(
                 children: [
                   Expanded(child: Divider()),
@@ -42,16 +41,15 @@ class _ExercisesPageState extends State<ExercisesPage> {
                   Expanded(child: Divider()),
                 ],
               ),
-              height: 20,
             );
-          } else if (items.length > 0) {
+          } else if (items.isNotEmpty) {
             return Dismissible(
               key: ValueKey(items[index - doneItems.length]),
               background: Container(
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(left: 15),
                 color: Colors.amber,
-                child: Icon(Icons.done),
+                child: const Icon(Icons.done),
               ),
               secondaryBackground: Container(
                 alignment: Alignment.centerRight,
@@ -72,6 +70,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
               child: ExerciseWidget(isDone: false),
             );
           }
+          return const SizedBox();
         },
         separatorBuilder: (context, index) {
           return SizedBox(

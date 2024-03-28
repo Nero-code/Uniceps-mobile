@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/views/widgets/background_card.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -11,8 +12,6 @@ class AuthBox extends StatefulWidget {
 
   final VoidCallback? onPressed;
 
-  static final _authFormkey = GlobalKey<FormState>();
-
   @override
   State<AuthBox> createState() => _AuthBoxState();
 }
@@ -20,6 +19,8 @@ class AuthBox extends StatefulWidget {
 class _AuthBoxState extends State<AuthBox> {
   final emailCtrl = TextEditingController();
   final passwCtrl = TextEditingController();
+
+  final _authFormkey = GlobalKey<FormState>();
 
   bool obscureText = true;
 
@@ -30,7 +31,7 @@ class _AuthBoxState extends State<AuthBox> {
         ///   B A C K G R O U N D   C A R D
         BackgroundCard(
           child: Form(
-            key: AuthBox._authFormkey,
+            key: _authFormkey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -42,7 +43,10 @@ class _AuthBoxState extends State<AuthBox> {
                     hintText: "john.doe@gmail.com",
                   ),
                   validator: (value) {
-                    return "Error!";
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your E-mail Address";
+                    }
+                    return null;
                   },
                 ),
 
@@ -66,7 +70,12 @@ class _AuthBoxState extends State<AuthBox> {
                     ),
                   ),
                   obscureText: obscureText,
-                  validator: (value) => "Error!",
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter a password";
+                    }
+                    return null;
+                  },
                 ),
 
                 ///   F O R G O T   P A S S W O R D
@@ -76,7 +85,9 @@ class _AuthBoxState extends State<AuthBox> {
                     padding: const EdgeInsets.only(top: 8.0),
                     child: InkWell(
                       splashColor: Colors.grey,
-                      onTapUp: (_) {},
+                      onTapUp: (_) {
+                        Navigator.of(context).pushNamed(ROUTE_FORGOT_PASSWORD);
+                      },
                       child: Text(
                         "Forgot password?",
                         style: TextStyle(color: Colors.blue, fontSize: 10),
@@ -93,7 +104,11 @@ class _AuthBoxState extends State<AuthBox> {
           margin: const EdgeInsets.only(top: 10),
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: ElevatedButton(
-            onPressed: widget.onPressed,
+            onPressed: () {
+              if (_authFormkey.currentState!.validate()) {
+                widget.onPressed;
+              }
+            },
             child: const Text("Sign in"),
           ),
         ),

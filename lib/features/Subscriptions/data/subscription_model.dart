@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:uniceps/features/Training/services/entities/subscription.dart';
+import 'package:uniceps/features/Subscriptions/domain/subscription.dart';
 
 class SubscriptionModel extends Subscription {
   SubscriptionModel(

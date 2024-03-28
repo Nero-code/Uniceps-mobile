@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:uniceps/features/Training/data/models/subscription_model.dart';
+import 'package:uniceps/features/Subscriptions/data/subscription_model.dart';
 
 class Subscription extends Equatable {
   final String id, description;
