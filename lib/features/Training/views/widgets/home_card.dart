@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -40,11 +39,11 @@ class HomeCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
           ),
           child: Material(
-            color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.onBackground,
             borderRadius: BorderRadius.circular(15),
             child: InkWell(
               onTap: onTap,
-              highlightColor: Theme.of(context).colorScheme.secondary,
+              highlightColor: Theme.of(context).colorScheme.onPrimaryContainer,
               borderRadius: BorderRadius.circular(15),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -66,7 +65,8 @@ class HomeCard extends StatelessWidget {
                               Expanded(
                                 child: LinearProgressIndicator(
                                   value: 0.5,
-                                  color: Colors.amber,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
                               ),
                               SizedBox(width: 10),

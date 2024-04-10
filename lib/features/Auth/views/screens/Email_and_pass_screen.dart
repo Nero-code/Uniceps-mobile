@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
+import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/widgets/Auth_Box.dart';
 import 'package:uniceps/features/Auth/views/widgets/Code_Box.dart';
 import 'package:uniceps/features/Auth/views/widgets/gym_code_box.dart';
@@ -57,25 +58,10 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                       Container(
                         width: MediaQuery.of(context).size.height * 0.3,
                         height: MediaQuery.of(context).size.height * 0.32,
-                        padding: EdgeInsets.all(15),
+                        padding: EdgeInsets.all(25),
                         alignment: Alignment.center,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey.shade600,
-                            // gradient: RadialGradient(
-                            //   colors: [
-                            //     Color.fromARGB(0, 140, 0, 255),
-                            //     Color.fromARGB(82, 38, 0, 87),
-                            //     Colors.purple,
-                            //   ],
-                            //   stops: [0.6, 0.8, 0.9],
-                            //   radius: 1.5,
-                            //   center: Alignment.lerp(
-                            //           Alignment.center, Alignment.bottomRight, 0.7)
-                            //       as Alignment,
-                            // ),
-                          ),
+                        child: Image(
+                          image: AssetImage('images/logo/Logo.png'),
                         ),
                       ),
 
@@ -92,6 +78,11 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                                   _pageController.animateToPage(1,
                                       duration: Duration(milliseconds: 500),
                                       curve: Curves.easeOutExpo),
+                              onForgot: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ForgotPasswordScreen(),
+                                ),
+                              ),
                             ),
                             CodeBox(
                               onPressed: () async =>

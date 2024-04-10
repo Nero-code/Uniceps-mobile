@@ -1,13 +1,10 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
-import 'package:uniceps/features/Subscriptions/presentation/subs_screen.dart';
 import 'package:uniceps/features/Training/views/widgets/Week_days.dart';
 import 'package:uniceps/features/Training/views/widgets/home_card.dart';
 import 'package:uniceps/features/Training/views/widgets/training_group.dart';
-import 'package:uniceps/main_cubit/locale_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -19,9 +16,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late final DraggableScrollableController controller;
 
+  bool isSheetOpen = false;
+
   @override
   void initState() {
     controller = DraggableScrollableController();
+    controller.addListener(() {
+      if (controller.size <= 0) {
+        setState(() {
+          isSheetOpen = false;
+        });
+      }
+    });
     super.initState();
   }
 
@@ -33,18 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var lang = BlocProvider.of<LocaleCubit>(context).state.locale.languageCode;
-
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(
           "Uniceps",
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall!
-              .copyWith(fontWeight: FontWeight.w500),
         ),
         actions: [
           IconButton(
@@ -92,8 +92,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ///   H O M E   C A R D
               HomeCard(
                 onTap: () {
+                  setState(() {
+                    isSheetOpen = true;
+                  });
                   controller.animateTo(0.25,
-                      duration: Duration(milliseconds: 500),
+                      duration: Duration(milliseconds: 300),
                       curve: Curves.linear);
                 },
               ),
@@ -101,16 +104,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ///   W E E K   D A Y S
               InkWell(
                 highlightColor: Colors.transparent,
-                splashColor: Colors.grey,
+                splashColor: Theme.of(context).colorScheme.primary,
                 onTap: () => Navigator.pushNamed(context, ROUTE_PRESENCE),
                 child: WeekDaysBanner(),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
 
               ///   T R A I N I N G   G R O U P S
               Expanded(
                 child: Container(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.background,
                   child: ListView(
                     padding: EdgeInsets.only(bottom: 50),
                     children: [
@@ -119,7 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ? OpenContainer(
                                 closedElevation: 0,
                                 openElevation: 0,
-                                closedColor: Colors.white,
+                                closedColor:
+                                    Theme.of(context).colorScheme.background,
                                 transitionType: ContainerTransitionType.fade,
                                 transitionDuration: Duration(milliseconds: 500),
                                 closedBuilder: (context, _) => TrainingGroup(),
@@ -132,6 +136,22 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ],
           ),
+          if (isSheetOpen)
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  isSheetOpen = false;
+                });
+                controller.animateTo(0,
+                    duration: Duration(milliseconds: 200),
+                    curve: Curves.easeInExpo);
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: Color.fromARGB(80, 0, 0, 0),
+              ),
+            ),
           DraggableScrollableSheet(
             initialChildSize: 0,
             controller: controller,
@@ -139,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
             maxChildSize: 0.8,
             builder: (context, scrollController) {
               return Container(
-                color: Colors.grey,
+                color: Theme.of(context).colorScheme.background,
                 child: SingleChildScrollView(
                   controller: scrollController,
                   child: Column(
