@@ -8,9 +8,9 @@ import 'package:uniceps/features/Auth/views/widgets/background_card.dart';
 ////////////////////////////////////////////////////////////////////////////////
 
 class AuthBox extends StatefulWidget {
-  const AuthBox({super.key, this.onPressed});
+  const AuthBox({super.key, this.onPressed, required this.onForgot});
 
-  final VoidCallback? onPressed;
+  final VoidCallback? onPressed, onForgot;
 
   @override
   State<AuthBox> createState() => _AuthBoxState();

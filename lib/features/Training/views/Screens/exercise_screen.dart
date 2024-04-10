@@ -20,7 +20,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
         title: Text(
           "Uniceps",
         ),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: ListView.separated(
         padding: EdgeInsets.symmetric(vertical: 10),

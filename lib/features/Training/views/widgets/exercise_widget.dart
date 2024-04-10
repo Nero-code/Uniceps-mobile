@@ -10,7 +10,7 @@ class ExerciseWidget extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.2,
       decoration: BoxDecoration(
         color: isDone
-            ? Theme.of(context).colorScheme.inversePrimary
+            ? Theme.of(context).colorScheme.onPrimary
             : const Color.fromARGB(255, 230, 230, 230),
         borderRadius: BorderRadius.circular(10),
       ),

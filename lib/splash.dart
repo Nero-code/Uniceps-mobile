@@ -7,7 +7,7 @@ class SplashScreen extends StatelessWidget {
     await Future.delayed(const Duration(seconds: 3));
     Navigator.pushReplacementNamed(
       context,
-      ROUTE_HOME,
+      ROUTE_AUTH,
     );
   }
 
@@ -16,7 +16,8 @@ class SplashScreen extends StatelessWidget {
     navigate(context);
     return const Scaffold(
       body: Center(
-        child: FlutterLogo(size: 100),
+        child: Image(
+            image: AssetImage('images/logo/Logo.png'), height: 150, width: 150),
       ),
     );
   }

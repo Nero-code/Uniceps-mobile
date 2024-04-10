@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/features/Auth/views/screens/Player_info_screen.dart';
 import 'package:uniceps/features/Auth/views/widgets/background_card.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
