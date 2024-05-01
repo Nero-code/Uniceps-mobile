@@ -67,6 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '58737800505',
     projectId: 'uniceps-58481',
     storageBucket: 'uniceps-58481.appspot.com',
+    androidClientId: '58737800505-3emsq31g633iol3m791mm6nprbo847ul.apps.googleusercontent.com',
+    iosClientId: '58737800505-bae7s3crg4nko5pcbip03r0j03spleea.apps.googleusercontent.com',
     iosBundleId: 'com.example.uniceps',
   );
 

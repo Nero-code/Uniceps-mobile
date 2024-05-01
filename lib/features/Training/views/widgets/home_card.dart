@@ -33,17 +33,17 @@ class HomeCard extends StatelessWidget {
                   0,
                   0,
                 ),
-                blurRadius: 10,
+                blurRadius: 3,
               ),
             ],
             borderRadius: BorderRadius.circular(15),
           ),
           child: Material(
-            color: Theme.of(context).colorScheme.onBackground,
+            color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(15),
             child: InkWell(
               onTap: onTap,
-              highlightColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              highlightColor: Theme.of(context).colorScheme.onBackground,
               borderRadius: BorderRadius.circular(15),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -65,8 +65,9 @@ class HomeCard extends StatelessWidget {
                               Expanded(
                                 child: LinearProgressIndicator(
                                   value: 0.5,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
                                 ),
                               ),
                               SizedBox(width: 10),

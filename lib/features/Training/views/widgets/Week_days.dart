@@ -31,15 +31,15 @@ class WeekDaysBanner extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
                   color: (today.weekday % 7) == i
-                      ? Theme.of(context).colorScheme.secondary
+                      ? Theme.of(context).colorScheme.primary
                       : Colors.white,
                   boxShadow: [
                     BoxShadow(
                       offset: Offset.zero,
                       color: (today.weekday % 7) == i
-                          ? Theme.of(context).colorScheme.secondary
+                          ? Theme.of(context).colorScheme.primary
                           : Colors.white,
-                      blurRadius: 5,
+                      blurRadius: 2,
                     ),
                   ]),
               child: Column(

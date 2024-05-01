@@ -1,76 +1,81 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/features/Auth/views/screens/Player_info_screen.dart';
 import 'package:uniceps/features/Auth/views/widgets/background_card.dart';
 
-class GymCodeBox extends StatelessWidget {
-  GymCodeBox({super.key, required this.onPressed});
+class GymCodeBox extends StatefulWidget {
+  const GymCodeBox({super.key, required this.onPressed, required this.onSkip});
 
+  final void Function(String) onPressed;
+  final VoidCallback onSkip;
+
+  @override
+  State<GymCodeBox> createState() => _GymCodeBoxState();
+}
+
+class _GymCodeBoxState extends State<GymCodeBox> {
   final codeCtrl = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 
-  final VoidCallback onPressed;
-
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      BackgroundCard(
-        child: Column(children: [
-          Text("Please type in the code we sent to your address"),
+    return Column(
+      children: [
+        BackgroundCard(
+          child: Column(
+            children: [
+              Text("Please type in the code the Gym Gave you:"),
+              SizedBox(height: 10),
 
-          ///   G Y M   C O D E
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Form(
-              key: formKey,
-              child: TextFormField(
-                controller: codeCtrl,
-                maxLength: 6,
-                onChanged: (value) {
-                  print(value);
-                  if (value.contains(RegExp(r"[^$0-9.]"))) {
-                    codeCtrl.text = codeCtrl.value.text
-                        .substring(0, codeCtrl.value.text.length - 1);
-                  }
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the code the Gym gave you';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  label: Text("Code"),
+              ///   G Y M   C O D E
+              Form(
+                key: formKey,
+                child: TextFormField(
+                  controller: codeCtrl,
+                  maxLength: 6,
+                  onChanged: (value) {
+                    print(value);
+                    if (value.contains(RegExp(r"[^0-9]"))) {
+                      codeCtrl.text = codeCtrl.value.text
+                          .substring(0, codeCtrl.value.text.length - 1);
+                    }
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the code the Gym gave you';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    label: Text("Code"),
+                  ),
                 ),
               ),
+            ],
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.all(15),
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                widget.onPressed(codeCtrl.text);
+              }
+            },
+            child: Text("OK"),
+          ),
+        ),
+        Expanded(
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: TextButton(
+              onPressed: widget.onSkip,
+              child: Text("SKIP >"),
             ),
           ),
-        ]),
-      ),
-      Container(
-        margin: EdgeInsets.all(15),
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: onPressed,
-          child: Text("OK"),
         ),
-      ),
-      Expanded(
-        child: Align(
-          alignment: Alignment.bottomRight,
-          child: TextButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => PlayerInfoScreen(isEdit: true),
-                ),
-              );
-            },
-            child: Text("SKIP >"),
-          ),
-        ),
-      ),
-    ]);
+      ],
+    );
   }
 }
