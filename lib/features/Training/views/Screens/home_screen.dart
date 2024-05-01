@@ -1,13 +1,16 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/core/logs/logger.dart';
 import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
 import 'package:uniceps/features/Training/views/widgets/Week_days.dart';
 import 'package:uniceps/features/Training/views/widgets/home_card.dart';
 import 'package:uniceps/features/Training/views/widgets/training_group.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key, required this.logger});
+
+  final Logger logger;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -40,17 +43,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Theme.of(context).colorScheme.onBackground,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.onBackground,
         title: Text(
           "Uniceps",
         ),
         actions: [
           IconButton(
-            onPressed: () {
+            onPressed: () async {
               // BlocProvider.of<LocaleCubit>(context)
               //     .changeLanguage(lang == 'en' ? 'ar' : 'en');
+              await widget.logger.log(
+                "QR_Btn_Pressed",
+                {"id": 1, "QR Opened": "true"},
+              );
               Navigator.pushNamed(context, ROUTE_QR_SCANNER);
             },
             tooltip: "QR Scan",
@@ -82,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
       body: Stack(
@@ -126,7 +133,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Theme.of(context).colorScheme.background,
                                 transitionType: ContainerTransitionType.fade,
                                 transitionDuration: Duration(milliseconds: 500),
-                                closedBuilder: (context, _) => TrainingGroup(),
+                                closedBuilder: (context, _) => TrainingGroup(
+                                  order: (i + 1) ~/ 2,
+                                ),
                                 openBuilder: (context, _) => ExercisesPage(),
                               )
                             : const SizedBox(height: 10),

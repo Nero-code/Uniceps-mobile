@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart' as di;
+import 'package:uniceps/core/logs/logger.dart';
 import 'package:uniceps/features/Auth/data/repo_impl/repo_impl.dart';
 import 'package:uniceps/features/Auth/services/repo/repo.dart';
 import 'package:uniceps/features/Auth/services/usecases/usecases.dart';
@@ -70,4 +71,8 @@ Future<void> init() async {
   ///   O T H E R
   ///
   //////////////////////////////////////////////////////////////////////////////
+
+  sl.registerLazySingleton<Logger>(
+    () => Logger(),
+  );
 }

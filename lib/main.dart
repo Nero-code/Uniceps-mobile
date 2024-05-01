@@ -1,11 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/features/Auth/views/screens/Email_and_pass_screen.dart';
+import 'package:uniceps/features/Auth/views/screens/email_and_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
+import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
 import 'package:uniceps/features/Profile/presentation/measurement_screen.dart';
 import 'package:uniceps/features/Profile/presentation/profile_screen.dart';
 import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
@@ -45,10 +47,17 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocBuilder<LocaleCubit, ChangedLangState>(
         builder: (context, state) {
+          SystemChrome.setSystemUIOverlayStyle(
+            const SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              systemNavigationBarColor: Colors.white,
+            ),
+          );
           return MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             locale: state.locale,
+            restorationScopeId: "root",
             title: 'Uniceps',
             theme: lightTheme,
             // darkTheme: ThemeData(
@@ -57,14 +66,14 @@ class MyApp extends StatelessWidget {
 
             initialRoute: ROUTE_SPLASH,
             routes: {
-              ROUTE_SPLASH: (context) => const SplashScreen(),
+              ROUTE_SPLASH: (context) => SplashScreen(),
 
               //  AUTH
               ROUTE_AUTH: (context) => EmailAuthScreen(),
               ROUTE_FORGOT_PASSWORD: (context) => ForgotPasswordScreen(),
 
               //  MAIN
-              ROUTE_HOME: (context) => HomeScreen(),
+              ROUTE_HOME: (context) => HomeScreen(logger: di.sl()),
               ROUTE_EXERCISE: (context) => ExercisesPage(),
               ROUTE_QR_SCANNER: (context) => QRScannerScreen(),
               ROUTE_PRESENCE: (context) => PresenceScreen(),
@@ -73,6 +82,7 @@ class MyApp extends StatelessWidget {
               ROUTE_MEASUREMENTS: (context) => MeasurementScreen(),
               ROUTE_SUBSCRIPTIONS: (context) => SubScriptionScreen(),
               ROUTE_PROFILE: (context) => ProfileScreen(),
+              ROUTE_PLAYER_INFO: (context) => PlayerInfoScreen(),
             },
           );
         },

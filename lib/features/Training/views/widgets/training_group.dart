@@ -4,7 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
 
 class TrainingGroup extends StatelessWidget {
-  const TrainingGroup({super.key});
+  const TrainingGroup({
+    super.key,
+    required this.order,
+  });
+
+  final int order;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +32,7 @@ class TrainingGroup extends StatelessWidget {
             flex: 1,
             child: Center(
               child: Text(
-                "1",
+                "$order",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -38,7 +43,7 @@ class TrainingGroup extends StatelessWidget {
           Container(
             width: 2,
             height: double.infinity,
-            color: Theme.of(context).colorScheme.secondary,
+            color: Theme.of(context).colorScheme.onBackground,
           ),
           Expanded(
             flex: 4,
