@@ -7,20 +7,20 @@ class AuthUsecases {
 
   AuthUsecases({required this.repo});
 
-  Future<Either<Failure, Unit>> checkGymCode({required String gymCode}) async {
+  Future<Either<Failure, bool>> checkGymCode({required String gymCode}) async {
     return await repo.checkGymCode(gymCode: gymCode);
   }
 
-  Future<Either<Failure, Unit>> emailSignin(
+  Future<Either<Failure, bool>> emailSignin(
       {required String email, required String password}) async {
-    return await repo.emailSignin(email: email, password: password);
+    return await repo.emailLogin(email: email, password: password);
   }
 
-  Future<Either<Failure, Unit>> validateCode({required String code}) async {
+  Future<Either<Failure, bool>> validateCode({required String code}) async {
     return await repo.validateCode(code: code);
   }
 
-  Future<Either<Failure, Unit>> isLoggedIn() async {
+  Future<Either<Failure, bool>> isLoggedIn() async {
     return await repo.isLoggedIn();
   }
 }

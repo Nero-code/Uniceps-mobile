@@ -2,6 +2,61 @@
   "helloWorld": "Hello World!",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
-  }
+  },
+  "signin": "Sign in",
+  "login": "Login",
+  "forgotPassword": "Forgot Password?",
+  "email": "Email",
+  "emailError": "Please enter your E-mail Address",
+  "password": "Password",
+  "passwordError": "Please enter a password",
+  "verify": "Verify",
+  "verifyCode": "Verify Code",
+  "code": "Code",
+  "codeError": "Invalid Code!",
+  "changePassword": "Change Password",
+  "gymBoxTitle": "Please type in the code the Gym Gave you",
+  "authBoxTitle": "Please enter your email",
   
+  "ok": "OK",
+  "no": "No",
+  "skip": "SKIP >",
+  "confirm": "Confirm",
+  "add": "Add",
+  
+  "logoutAlert": "Logout?",
+  "logoutAlertContents": "You are about to Logout of the app some of your data may be lost, Are you sure?",
+  
+  "subscription": "Subscription",
+  "sport": "Sport",
+  "measurements": "Measurements",
+  "language": "Language",
+  "about": "About",
+
+  "height": "Height (cm)",
+  "heightError": "Please put a valid Height",
+  "weight": "Weight (Kg)",
+  "weightError": "Please put a valid Weight",
+  "lastWeight": "Last Weight",
+
+  "lArm": "Left Arm",
+  "rArm": "Right Arm",
+  "lHumerus": "Left Humerus",
+  "rHumerus": "Right Humerus",
+  "lLeg": "Left Leg",
+  "rLeg": "Right Leg",
+  "lThigh": "Left Thigh",
+  "rThigh": "Right Thigh",
+  "nick": "Nick",
+  "shoulders": "Shoulders",
+  "waist": "Waist",
+  "chest": "Chest",
+  "hips": "Hips",
+  "checkDate": "Check Date",
+
+  "enteredAt": "Entered At",
+  "exitedAt": "Exited At",
+
+  "codeNum": "CodeNum"
+
 }

@@ -84,7 +84,7 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
                     ),
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   BackgroundCard(
                     child: Column(
                       children: [
@@ -96,7 +96,7 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please enter your name...";
+                              return "Please enter your name";
                             }
                             return null;
                           },
@@ -108,14 +108,17 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
                             labelText: "Phone Number",
                             isDense: true,
                           ),
+                          maxLength: 10,
                           validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "error";
+                            if (value == null ||
+                                value.isEmpty ||
+                                value.length < 10) {
+                              return "Please enter your phone number";
                             }
                             return null;
                           },
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
 
                         ///  G E N D E R   A N D   B I R T H D A T E
                         Row(
@@ -124,7 +127,7 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
                             GenderSelectBox(
                               onSelect: (selected) => male = selected,
                             ),
-                            Container(
+                            SizedBox(
                               width: MediaQuery.of(context).size.width * 0.5,
                               child: TextFormField(
                                 decoration: InputDecoration(
@@ -133,8 +136,10 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
                                 ),
                                 maxLength: 4,
                                 validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "please put a valid year";
+                                  if (value == null ||
+                                      value.isEmpty ||
+                                      value.length < 4) {
+                                    return "please enter a valid year";
                                   }
                                   return null;
                                 },
@@ -146,12 +151,13 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
                         ///  H E I G H T
                         TextFormField(
                           decoration: InputDecoration(
-                            labelText: "Height",
+                            labelText: "Height (cm)",
                             isDense: true,
                           ),
+                          maxLength: 3,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "please put a valid year";
+                              return "please put a valid height";
                             }
                             return null;
                           },
@@ -160,12 +166,12 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
                         ///  W E I G H T
                         TextFormField(
                           decoration: InputDecoration(
-                            labelText: "Weight",
+                            labelText: "Weight (Kg)",
                             isDense: true,
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "please put a valid year";
+                              return "please put a valid Weight";
                             }
                             return null;
                           },
