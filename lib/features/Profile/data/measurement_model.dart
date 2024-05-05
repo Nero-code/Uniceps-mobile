@@ -1,68 +1,66 @@
 import 'package:uniceps/features/Profile/domain/measrument.dart';
 
 class MeasurementModel extends Measurement {
-  MeasurementModel({
-    required super.Height,
-    required super.Weight,
-    required super.L_Arm,
-    required super.R_Arm,
-    required super.L_Humerus,
-    required super.R_Humerus,
-    required super.L_Leg,
-    required super.R_Leg,
-    required super.L_Thigh,
-    required super.R_Thigh,
-    required super.Nick,
-    required super.Shoulders,
-    required super.Waist,
-    required super.Chest,
-    required super.Hips,
-    required super.CheckDate,
-  });
+  const MeasurementModel(
+      {required super.height,
+      required super.weight,
+      required super.lArm,
+      required super.rArm,
+      required super.lHumerus,
+      required super.rHumerus,
+      required super.lLeg,
+      required super.rLeg,
+      required super.lThigh,
+      required super.rThigh,
+      required super.nick,
+      required super.shoulders,
+      required super.waist,
+      required super.chest,
+      required super.hips,
+      required super.checkDate});
 
   factory MeasurementModel.fromJson(Map<String, dynamic> json) {
     return MeasurementModel(
-      Height: json['Height'],
-      Weight: json['Weight'],
-      L_Arm: json['L_Arm'],
-      R_Arm: json['R_Arm'],
-      L_Humerus: json['L_Humerus'],
-      R_Humerus: json['R_Humerus'],
-      L_Leg: json['L_Leg'],
-      R_Leg: json['R_Leg'],
-      L_Thigh: json['L_Thigh'],
-      R_Thigh: json['R_Thigh'],
-      Nick: json['Nick'],
-      Shoulders: json['Shoulders'],
-      Waist: json['Waist'],
-      Chest: json['Chest'],
-      Hips: json['Hips'],
-      CheckDate: json['CheckDate'],
+      height: json['height'],
+      weight: json['weight'],
+      lArm: json['l_arm'],
+      rArm: json['r_arm'],
+      lHumerus: json['l_humerus'],
+      rHumerus: json['r_humerus'],
+      lLeg: json['l_leg'],
+      rLeg: json['r_leg'],
+      lThigh: json['l_thigh'],
+      rThigh: json['r_thigh'],
+      nick: json['nick'],
+      shoulders: json['shoulders'],
+      waist: json['waist'],
+      chest: json['chest'],
+      hips: json['hips'],
+      checkDate: json['check_date'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'Height': Height,
-      'Weight': Weight,
-      'L_Arm': L_Arm,
-      'R_Arm': R_Arm,
-      'L_Humerus': L_Humerus,
-      'R_Humerus': R_Humerus,
-      'L_Leg': L_Leg,
-      'R_Leg': R_Leg,
-      'L_Thigh': L_Thigh,
-      'R_Thigh': R_Thigh,
-      'Nick': Nick,
-      'Shoulders': Shoulders,
-      'Waist': Waist,
-      'Chest': Chest,
-      'Hips': Hips,
-      'CheckDate': CheckDate,
+      'height': height,
+      'weight': weight,
+      'l_arm': lArm,
+      'r_arm': rArm,
+      'l_humerus': lHumerus,
+      'r_humerus': rHumerus,
+      'l_leg': lLeg,
+      'r_leg': rLeg,
+      'l_thigh': lThigh,
+      'r_thigh': rThigh,
+      'nick': nick,
+      'shoulders': shoulders,
+      'waist': waist,
+      'chest': chest,
+      'hips': hips,
+      'check_date': checkDate,
     };
   }
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [CheckDate];
+  List<Object?> get props => [checkDate];
 }

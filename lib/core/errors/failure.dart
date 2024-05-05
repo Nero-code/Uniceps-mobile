@@ -5,6 +5,18 @@ abstract class Failure {
   String getErrorMessage();
 }
 
+class GeneralPurposFailure extends Failure {
+  final String _errorMessage;
+
+  GeneralPurposFailure({required String errorMessage})
+      : _errorMessage = errorMessage;
+
+  @override
+  String getErrorMessage() {
+    return _errorMessage;
+  }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 ///   A U T H   F A I L U R E S
 ////////////////////////////////////////////////////////////////////////////////
@@ -12,6 +24,26 @@ class AuthFailure extends Failure {
   final String _errorMessage;
 
   AuthFailure({required String errorMessage}) : _errorMessage = errorMessage;
+
+  @override
+  String getErrorMessage() {
+    return _errorMessage;
+  }
+}
+
+class OfflineFailure extends Failure {
+  final String _errorMessage;
+  OfflineFailure({required String errorMessage}) : _errorMessage = errorMessage;
+
+  @override
+  String getErrorMessage() {
+    return _errorMessage;
+  }
+}
+
+class InvalidCodeFailure extends Failure {
+  final String _errorMessage;
+  InvalidCodeFailure({required String errMsg}) : _errorMessage = errMsg;
 
   @override
   String getErrorMessage() {

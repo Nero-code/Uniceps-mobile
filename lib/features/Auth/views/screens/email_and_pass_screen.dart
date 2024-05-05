@@ -74,30 +74,30 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
       body: Container(
         height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
-          // gradient: RadialGradient(
-          //   colors: [
-          //     mainBlueDark,
-          //     mainBlueLight,
-          //   ],
-          //   center: Alignment.topLeft,
-          //   radius: 2,
-          //   stops: [
-          //     0.5,
-          //     0.5,
-          //   ],
-          // ),
-          gradient: LinearGradient(
+          gradient: RadialGradient(
             colors: [
               mainBlueDark,
-              secondaryBlue,
+              mainBlueLight,
             ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            center: Alignment.topLeft,
+            radius: 2,
             stops: [
               0.5,
               0.5,
             ],
           ),
+          // gradient: LinearGradient(
+          //   colors: [
+          //     mainBlueDark,
+          //     secondaryBlue,
+          //   ],
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          //   stops: [
+          //     0.5,
+          //     0.5,
+          //   ],
+          // ),
         ),
         child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {

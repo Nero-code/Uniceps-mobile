@@ -1,25 +1,41 @@
-abstract class RemoteDataSource {
-  Future<void> getTrainingProgram() async {}
-  Future<void> getPlayerSubscriptions() async {}
-  Future<void> getPlayerMeasurments() async {}
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/features/Training/data/models/gym_model.dart';
+import 'package:uniceps/features/Training/data/models/training_prog_model.dart';
+import 'package:uniceps/features/Training/services/entities/gym.dart';
+import 'package:uniceps/features/Training/services/entities/training_program.dart';
+
+abstract class RemoteTrainingSource {
+  Future<TrainingProgram> getTrainingProgram();
+  Future<List<Gym>> getGyms();
 }
 
-class RemoteSourceImpl implements RemoteDataSource {
+class RemoteTrainingSourceImpl implements RemoteTrainingSource {
+  final http.Client client;
+
+  const RemoteTrainingSourceImpl(this.client);
+
   @override
-  Future<void> getPlayerMeasurments() {
-    // TODO: implement getPlayerMeasurments
-    throw UnimplementedError();
+  Future<TrainingProgram> getTrainingProgram() async {
+    final res = await client.get(Uri.http(FAKE_API, "/path", {}));
+    if (res.statusCode == 200) {
+      final temp = jsonDecode(res.body);
+      return TrainingProgramModel.fromJson(temp);
+    }
+    throw Exception();
   }
 
   @override
-  Future<void> getPlayerSubscriptions() {
-    // TODO: implement getPlayerSubscriptions
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> getTrainingProgram() {
-    // TODO: implement getTrainingProgram
-    throw UnimplementedError();
+  Future<List<Gym>> getGyms() async {
+    final res = await client.get(Uri.http(FAKE_API, "/path", {}));
+    final list = <Gym>[];
+    if (res.statusCode == 200) {
+      final temp = jsonDecode(res.body)['data'] as List<Map<String, dynamic>>;
+      temp.map((e) => list.add(GymModel.fromJson(e)));
+      return list;
+    }
+    throw Exception();
   }
 }
