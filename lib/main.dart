@@ -9,6 +9,10 @@ import 'package:uniceps/features/Auth/views/screens/email_and_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/screens/measurement_screen.dart';
 import 'package:uniceps/features/Profile/presentation/screens/profile_screen.dart';
 import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
@@ -40,9 +44,26 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
-            create: (context) => AuthBloc(usecases: di.sl())),
+          create: (context) => AuthBloc(usecases: di.sl()),
+        ),
         BlocProvider<TrainingBloc>(
-            create: (context) => TrainingBloc(usecases: di.sl())),
+          create: (context) =>
+              TrainingBloc(usecases: di.sl())..add(const GetProgramEvent()),
+        ),
+        BlocProvider<ProfileBloc>(
+          create: (context) =>
+              ProfileBloc(usecases: di.sl())..add(const GetProfileDataEvent()),
+        ),
+        BlocProvider<SubsBloc>(
+          create: (context) => SubsBloc(usecases: di.sl()),
+        ),
+        BlocProvider<MeasurmentBloc>(
+          create: (context) => MeasurmentBloc(usecases: di.sl()),
+        ),
+        BlocProvider<GymsBloc>(
+          create: (context) =>
+              GymsBloc(usecases: di.sl())..add(const GetAllGymsEvent()),
+        ),
         BlocProvider<LocaleCubit>(
           create: (context) => LocaleCubit()..getSavedLanguageCode(),
         ),
@@ -68,23 +89,26 @@ class MyApp extends StatelessWidget {
 
             initialRoute: ROUTE_SPLASH,
             routes: {
-              ROUTE_SPLASH: (context) => SplashScreen(),
+              ROUTE_SPLASH: (context) => const SplashScreen(),
 
               //  AUTH
               ROUTE_AUTH: (context) => EmailAuthScreen(),
               ROUTE_FORGOT_PASSWORD: (context) => ForgotPasswordScreen(),
 
               //  MAIN
-              ROUTE_HOME: (context) => HomeScreen(logger: di.sl()),
+              ROUTE_HOME: (context) => HomeScreen(
+                    // logger: di.sl(),
+                    trainingUsecases: di.sl(),
+                  ),
               ROUTE_EXERCISE: (context) => ExercisesPage(),
               ROUTE_QR_SCANNER: (context) => QRScannerScreen(),
-              ROUTE_PRESENCE: (context) => PresenceScreen(),
+              ROUTE_PRESENCE: (context) => const PresenceScreen(),
 
               //  AUX
-              ROUTE_MEASUREMENTS: (context) => MeasurementScreen(),
-              ROUTE_SUBSCRIPTIONS: (context) => SubScriptionScreen(),
-              ROUTE_PROFILE: (context) => ProfileScreen(),
-              ROUTE_PLAYER_INFO: (context) => PlayerInfoScreen(),
+              ROUTE_MEASUREMENTS: (context) => const MeasurementScreen(),
+              ROUTE_SUBSCRIPTIONS: (context) => const SubScriptionScreen(),
+              ROUTE_PROFILE: (context) => const ProfileScreen(),
+              ROUTE_PLAYER_INFO: (context) => const PlayerInfoScreen(),
             },
           );
         },

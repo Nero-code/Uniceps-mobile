@@ -1,44 +1,24 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/core/logs/logger.dart';
+import "package:flutter_bloc/flutter_bloc.dart";
+import 'package:uniceps/features/Training/services/usecases/usecases.dart';
 import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
+import 'package:uniceps/features/Training/views/bloc/training_bloc.dart';
 import 'package:uniceps/features/Training/views/widgets/Week_days.dart';
 import 'package:uniceps/features/Training/views/widgets/home_card.dart';
 import 'package:uniceps/features/Training/views/widgets/training_group.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key, required this.logger});
+class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key, required this.trainingUsecases});
 
-  final Logger logger;
+  // final Logger logger;
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
+  final controller = DraggableScrollableController();
 
-class _HomeScreenState extends State<HomeScreen> {
-  late final DraggableScrollableController controller;
+  final TrainingUsecases trainingUsecases;
 
-  bool isSheetOpen = false;
-
-  @override
-  void initState() {
-    controller = DraggableScrollableController();
-    controller.addListener(() {
-      if (controller.size <= 0) {
-        setState(() {
-          isSheetOpen = false;
-        });
-      }
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+  // bool isSheetOpen = false;
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () async {
               // BlocProvider.of<LocaleCubit>(context)
               //     .changeLanguage(lang == 'en' ? 'ar' : 'en');
-              await widget.logger.log(
-                "QR_Btn_Pressed",
-                {"id": 1, "QR Opened": "true"},
-              );
+              // await logger.log(
+              //   "QR_Btn_Pressed",
+              //   {"id": 1, "QR Opened": "true"},
+              // );
               Navigator.pushNamed(context, ROUTE_QR_SCANNER);
             },
             tooltip: "QR Scan",
@@ -92,93 +72,109 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          Column(
+      body: BlocBuilder<TrainingBloc, TrainingState>(
+        builder: (context, state) {
+          return Stack(
             children: [
-              ///   H O M E   C A R D
-              HomeCard(
-                onTap: () {
-                  setState(() {
-                    isSheetOpen = true;
-                  });
-                  controller.animateTo(0.25,
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.linear);
-                },
-              ),
-
-              ///   W E E K   D A Y S
-              InkWell(
-                highlightColor: Colors.transparent,
-                splashColor: Theme.of(context).colorScheme.primary,
-                onTap: () => Navigator.pushNamed(context, ROUTE_PRESENCE),
-                child: WeekDaysBanner(),
-              ),
-              const SizedBox(height: 10),
-
-              ///   T R A I N I N G   G R O U P S
-              Expanded(
-                child: Container(
-                  color: Theme.of(context).colorScheme.background,
-                  child: ListView(
-                    padding: EdgeInsets.only(bottom: 50),
-                    children: [
-                      for (int i = 0; i < 14; i++)
-                        i % 2 == 1
-                            ? OpenContainer(
-                                closedElevation: 0,
-                                openElevation: 0,
-                                closedColor:
-                                    Theme.of(context).colorScheme.background,
-                                transitionType: ContainerTransitionType.fade,
-                                transitionDuration: Duration(milliseconds: 500),
-                                closedBuilder: (context, _) => TrainingGroup(
-                                  order: (i + 1) ~/ 2,
-                                ),
-                                openBuilder: (context, _) => ExercisesPage(),
-                              )
-                            : const SizedBox(height: 10),
-                    ],
+              Column(
+                children: [
+                  ///   H O M E   C A R D
+                  HomeCard(
+                    onTap: () {
+                      controller.animateTo(0.25,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.linear);
+                    },
                   ),
-                ),
+
+                  ///   W E E K   D A Y S
+                  InkWell(
+                    highlightColor: Colors.transparent,
+                    splashColor: Theme.of(context).colorScheme.primary,
+                    onTap: () => Navigator.pushNamed(context, ROUTE_PRESENCE),
+                    child: WeekDaysBanner(),
+                  ),
+                  const SizedBox(height: 10),
+
+                  ///   T R A I N I N G   G R O U P S
+                  Expanded(
+                    child: Container(
+                      color: Theme.of(context).colorScheme.background,
+                      child: ListView(
+                        padding: EdgeInsets.only(bottom: 50),
+                        children: [
+                          for (int i = 0; i < 14; i++)
+                            i % 2 == 1
+                                ? OpenContainer(
+                                    closedElevation: 0,
+                                    openElevation: 0,
+                                    closedColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
+                                    transitionType:
+                                        ContainerTransitionType.fade,
+                                    transitionDuration:
+                                        Duration(milliseconds: 500),
+                                    closedBuilder: (context, _) =>
+                                        TrainingGroup(
+                                      order: (i + 1) ~/ 2,
+                                    ),
+                                    openBuilder: (context, _) =>
+                                        ExercisesPage(),
+                                  )
+                                : const SizedBox(height: 10),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              // if (isSheetOpen)
+              // GestureDetector(
+              //   onTap: () {
+              //     controller.animateTo(0,
+              //         duration: Duration(milliseconds: 200),
+              //         curve: Curves.easeInExpo);
+              //   },
+              //   child: Container(
+              //     width: MediaQuery.of(context).size.width,
+              //     height: MediaQuery.of(context).size.height,
+              //     color: Color.fromARGB(80, 0, 0, 0),
+              //   ),
+              // ),
+              DraggableScrollableSheet(
+                initialChildSize: 0,
+                controller: controller,
+                minChildSize: 0.0,
+                maxChildSize: 0.8,
+                builder: (context, scrollController) {
+                  return Container(
+                    color: Theme.of(context).colorScheme.background,
+                    child: SingleChildScrollView(
+                      controller: scrollController,
+                      child: Column(
+                        children: [],
+                      ),
+                    ),
+                  );
+                },
               )
             ],
-          ),
-          if (isSheetOpen)
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  isSheetOpen = false;
-                });
-                controller.animateTo(0,
-                    duration: Duration(milliseconds: 200),
-                    curve: Curves.easeInExpo);
-              },
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                color: Color.fromARGB(80, 0, 0, 0),
-              ),
-            ),
-          DraggableScrollableSheet(
-            initialChildSize: 0,
-            controller: controller,
-            minChildSize: 0.0,
-            maxChildSize: 0.8,
-            builder: (context, scrollController) {
-              return Container(
-                color: Theme.of(context).colorScheme.background,
-                child: SingleChildScrollView(
-                  controller: scrollController,
-                  child: Column(
-                    children: [],
-                  ),
-                ),
-              );
-            },
-          )
-        ],
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final either = await trainingUsecases.getTrainingProgram();
+          either.fold((f) {
+            print(f.getErrorMessage());
+          }, (unit) {
+            print(unit);
+          });
+        },
+        backgroundColor: Theme.of(context).colorScheme.onBackground,
+        foregroundColor: Colors.white,
+        child: Icon(Icons.network_wifi_3_bar_rounded),
       ),
     );
   }

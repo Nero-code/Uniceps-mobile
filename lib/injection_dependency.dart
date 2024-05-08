@@ -9,10 +9,12 @@ import 'package:uniceps/features/Auth/data/sources/remote_source.dart';
 import 'package:uniceps/features/Auth/services/repo/repo.dart';
 import 'package:uniceps/features/Auth/services/usecases/usecases.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
-import 'package:uniceps/features/Profile/data/repo_impl.dart';
-import 'package:uniceps/features/Profile/data/sources.dart';
+import 'package:uniceps/features/Profile/data/repo/repo_impl.dart';
+import 'package:uniceps/features/Profile/data/sources/local_source.dart';
+import 'package:uniceps/features/Profile/data/sources/remote_source.dart';
 import 'package:uniceps/features/Profile/domain/repo.dart';
 import 'package:uniceps/features/Profile/domain/usecases.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
 import 'package:uniceps/features/Training/data/repos_impl/repo_imple.dart';
 import 'package:uniceps/features/Training/data/sources/local_data_source.dart';
 import 'package:uniceps/features/Training/data/sources/remote_data_source.dart';
@@ -26,6 +28,9 @@ Future<void> init() async {
   final userBox = await Hive.openBox<Map<String, dynamic>>("User");
   final profileBox = await Hive.openBox<Map<String, dynamic>>("Profile");
   final trainBox = await Hive.openBox<Map<String, dynamic>>("Training");
+  final gymsBox = await Hive.openBox<Map<String, dynamic>>("Gyms");
+  final subsBox = await Hive.openBox<List<Map<String, dynamic>>>("Subs");
+  final measureBox = await Hive.openBox<List<Map<String, dynamic>>>("Metrics");
 
   ///////                             ///
   //////                             ////
@@ -40,16 +45,20 @@ Future<void> init() async {
     () => RemoteTrainingSourceImpl(sl()),
   );
   sl.registerLazySingleton<LocalProfileSource>(
-    () => LocalProfileSource(box: profileBox),
+    () => LocalProfileSourceImpl(
+        gymsBox: gymsBox,
+        measurBox: measureBox,
+        playerBox: profileBox,
+        subsBox: subsBox),
   );
   sl.registerLazySingleton<RemoteProfileSource>(
-    () => RemoteProfileSource(client: sl()),
+    () => RemoteProfileSourceImpl(client: sl()),
   );
-  sl.registerLazySingleton<LocalAuthSourceImple>(
-    () => LocalAuthSourceImple(userBox: userBox),
+  sl.registerLazySingleton<LocalAuthSource>(
+    () => LocalAuthSourceImple(userBox: userBox, playerBox: profileBox),
   );
-  sl.registerLazySingleton<RemoteAuthSourceImpl>(
-    () => RemoteAuthSourceImpl(sl()),
+  sl.registerLazySingleton<RemoteAuthSource>(
+    () => RemoteAuthSourceImpl(client: sl()),
   );
 
   ///
@@ -110,7 +119,7 @@ Future<void> init() async {
 
   sl.registerFactory<AuthBloc>(() => AuthBloc(usecases: sl()));
   sl.registerFactory<TrainingBloc>(() => TrainingBloc(usecases: sl()));
-  // sl.registerFactory<ProfileBloc>(()=> ProfileBloc(usecases: sl()));
+  sl.registerFactory<ProfileBloc>(() => ProfileBloc(usecases: sl()));
 
   //////////////////////////////////////////////////////////////////////////////
   ///

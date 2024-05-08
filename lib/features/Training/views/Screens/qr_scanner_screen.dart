@@ -35,7 +35,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                 child: codeOrScan
                     ? MobileScanner(
                         controller: MobileScannerController(returnImage: true),
-                        overlay: Stack(
+                        overlayBuilder: (context, constraints) => Stack(
                           children: [
                             ColorFiltered(
                               colorFilter: ColorFilter.mode(
@@ -108,9 +108,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                               eyeShape: QrEyeShape.square,
                               color: Colors.blue,
                             ),
-                            embeddedImage: AssetImage('images/google.png'),
+                            embeddedImage: AssetImage('images/logo/Logo.png'),
                             embeddedImageStyle:
-                                QrEmbeddedImageStyle(color: Colors.blue),
+                                QrEmbeddedImageStyle(color: Colors.blueGrey),
                           ),
                         ),
                       ),

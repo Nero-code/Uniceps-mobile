@@ -1,4 +1,4 @@
-import 'package:uniceps/features/Profile/domain/measrument.dart';
+import 'package:uniceps/features/Profile/domain/entities/measrument.dart';
 
 class MeasurementModel extends Measurement {
   const MeasurementModel(

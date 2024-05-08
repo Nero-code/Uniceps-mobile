@@ -84,3 +84,11 @@ class NoInternetConnectionFailure extends Failure {
     return errMsg;
   }
 }
+
+class ServerFailure extends Failure {
+  final String errMsg;
+  ServerFailure({required this.errMsg});
+
+  @override
+  String getErrorMessage() => errMsg;
+}

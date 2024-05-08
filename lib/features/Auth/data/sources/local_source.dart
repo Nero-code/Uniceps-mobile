@@ -1,32 +1,56 @@
-import 'package:dartz/dartz.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
+import 'package:uniceps/features/Auth/data/models/user_model.dart';
+
+//  Box("User"):
+//  {
+//    "user":{
+//      "token": String,
+//      "id": String,
+//    }
+//  }
+//
+//
+//  Box("Player"):
+//
+//    "player_info": {
+//
+//    }
+//
 
 abstract class LocalAuthSource {
-  Future<String> getUserToken();
+  Future<UserModel> getUser();
+  Future<void> saveUser(UserModel model);
   Future<bool> isLoggedIn();
+  Future<void> localLogout();
   Future<PlayerModel> getPlayerInfo();
-  Future<Unit> savePlayerInfo({required PlayerModel playerModel});
+  Future<void> savePlayerInfo(PlayerModel playerModel);
 }
 
 class LocalAuthSourceImple implements LocalAuthSource {
   final Box<Map<String, dynamic>> userBox;
+  final Box<Map<String, dynamic>> playerBox;
 
-  const LocalAuthSourceImple({required this.userBox});
+  const LocalAuthSourceImple({required this.userBox, required this.playerBox});
 
   @override
-  Future<String> getUserToken() async {
-    final res = userBox.get("token");
+  Future<UserModel> getUser() async {
+    final res = userBox.get("user");
     if (res == null) {
       throw EmptyCacheExeption();
     }
-    return res['token'];
+    return UserModel.fromJson(res);
+  }
+
+  @override
+  Future<void> saveUser(UserModel model) async {
+    await userBox.put("user", model.toJson());
   }
 
   @override
   Future<PlayerModel> getPlayerInfo() async {
-    final playerInfo = userBox.get("player_info");
+    final playerInfo = playerBox.get("player_info");
     if (playerInfo == null) {
       throw EmptyCacheExeption();
     }
@@ -34,15 +58,19 @@ class LocalAuthSourceImple implements LocalAuthSource {
   }
 
   @override
+  Future<void> savePlayerInfo(PlayerModel playerModel) async {
+    return await playerBox.put("player_info", playerModel.toJson());
+  }
+
+  @override
   Future<bool> isLoggedIn() async {
-    final token = userBox.get("token");
-    if (token == null) return false;
+    final user = userBox.get("user");
+    if (user == null || !user.containsKey("token")) return false;
     return true;
   }
 
   @override
-  Future<Unit> savePlayerInfo({required PlayerModel playerModel}) async {
-    await userBox.put("player_info", playerModel.toJson());
-    return unit;
+  Future<void> localLogout() async {
+    await userBox.clear();
   }
 }

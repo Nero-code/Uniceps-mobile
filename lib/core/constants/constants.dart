@@ -64,3 +64,29 @@ const ROUTE_MEASUREMENTS = '/measurements';
 const ROUTE_QR_SCANNER = '/qr_scanner';
 const ROUTE_PLAYER_INFO = '/player_info';
 const ROUTE_PRESENCE = '/presence';
+
+// ////////////////////////////////////////////////////////////////////////// //
+//                H I V E   D A T A B A S E   S C H E M A
+// ////////////////////////////////////////////////////////////////////////// //
+//                                                                            //
+// {                                                                          //
+//    "user":                                                                 //
+//    {                                                                       //
+//      "player_info": {Player}                                               //
+//      "token": {Token}                                                      //
+//    }                                                                       //
+//                                                                            //
+//    "program": {TrainingProgram},                                           //
+//                                                                            //
+//    "Gyms":                                                                 //
+//    {                                                                       //
+//      "currentGym": {"gym_id"}                                              //
+//      list["gym_id"]:                                                       //
+//      {                                                                     //
+//        "metrics": [1,2,3],                                                 //
+//        "SubScriptions": [1,2,3],                                           //
+//      }                                                                     //
+//    }                                                                       //
+// }                                                                          //
+//                                                                            //
+// ////////////////////////////////////////////////////////////////////////// // 

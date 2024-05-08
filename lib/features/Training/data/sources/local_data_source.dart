@@ -1,9 +1,10 @@
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/features/Training/data/models/training_prog_model.dart';
 
 abstract class LocalTrainingSource {
   Future<TrainingProgramModel> getTrainingProgram();
+  Future<void> saveTrainingProgram(TrainingProgramModel model);
 }
 
 class LocalTrainingSourceImpl implements LocalTrainingSource {
@@ -18,5 +19,10 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
       throw EmptyCacheExeption();
     }
     return TrainingProgramModel.fromJson(res);
+  }
+
+  @override
+  Future<void> saveTrainingProgram(TrainingProgramModel model) async {
+    await trainBox.put("trainingProgram", model.toJson());
   }
 }

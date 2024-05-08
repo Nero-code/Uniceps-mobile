@@ -3,10 +3,13 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
-import 'package:uniceps/features/Profile/data/sources.dart';
-import 'package:uniceps/features/Profile/domain/measrument.dart';
+import 'package:uniceps/features/Profile/data/sources/local_source.dart';
+import 'package:uniceps/features/Profile/data/sources/remote_source.dart';
+import 'package:uniceps/features/Profile/domain/entities/measrument.dart';
 import 'package:uniceps/features/Profile/domain/repo.dart';
-import 'package:uniceps/features/Profile/domain/subscription.dart';
+import 'package:uniceps/features/Profile/domain/entities/subscription.dart';
+import 'package:uniceps/features/Profile/data/models/gym_model.dart';
+import 'package:uniceps/features/Profile/domain/entities/gym.dart';
 
 class ProfileRepoImpl implements ProfileRepo {
   final LocalProfileSource local;
@@ -20,10 +23,11 @@ class ProfileRepoImpl implements ProfileRepo {
   });
 
   @override
-  Future<Either<Failure, List<Measurement>>> getMeasurement() async {
+  Future<Either<Failure, List<Measurement>>> getMeasurement(
+      String gymId) async {
     if (await checker.hasConnection) {
       try {
-        final res = await remote.getMeasurements();
+        final res = await remote.getMeasurements(gymId);
         return Right(res);
       } catch (e) {
         return Left(GeneralPurposFailure(errorMessage: ""));
@@ -66,15 +70,41 @@ class ProfileRepoImpl implements ProfileRepo {
   }
 
   @override
-  Future<Either<Failure, List<Subscription>>> getSubscriptions() async {
+  Future<Either<Failure, List<Subscription>>> getSubscriptions(
+      String gymId) async {
     if (await checker.hasConnection) {
       try {
-        final res = await remote.getSubs();
+        final res = await remote.getSubs(gymId);
         return Right(res);
       } catch (e) {
         return Left(GeneralPurposFailure(errorMessage: ""));
       }
     }
     return Left(OfflineFailure(errorMessage: "Offline"));
+  }
+
+  @override
+  Future<Either<Failure, List<Gym>>> getGyms() async {
+    if (await checker.hasConnection) {
+      try {
+        final res = await remote.getGyms();
+        local.saveGyms(res);
+        return Right(res);
+      } catch (e) {
+        return Left(DatabaseFailure(errorMsg: "Error on fetching data"));
+      }
+    } else {
+      try {
+        final res = await local.getGyms();
+        return Right(res);
+      } on EmptyCacheExeption {
+        return Left(EmptyCacheFailure(errorMessage: "Empty Cache"));
+      }
+    }
+  }
+
+  @override
+  Future<void> saveGyms(List<GymModel> list) async {
+    await local.saveGyms(list);
   }
 }
