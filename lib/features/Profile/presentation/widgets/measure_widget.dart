@@ -8,25 +8,25 @@ class MeasureWidget extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.width * 0.8,
+          width: MediaQuery.of(context).size.width * 0.5,
+          height: MediaQuery.of(context).size.width * 0.5,
           margin: EdgeInsets.only(top: 60, left: 10, right: 10),
           child: PhysicalModel(
             elevation: 5,
-            color: Colors.amber,
+            color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text("L-Arm"),
                     Text("150 cm"),
                   ],
                 ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text("R-Arm"),
                     Text("100 cm"),
@@ -44,11 +44,11 @@ class MeasureWidget extends StatelessWidget {
             height: 70,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
-              color: Colors.pink,
+              color: Theme.of(context).colorScheme.secondary,
             ),
-            child: Center(
-              child: Icon(Icons.image),
-            ),
+            // child: Center(
+            //   child: Icon(Icons.image),
+            // ),
           ),
         ),
       ],

@@ -19,13 +19,13 @@ abstract class RemoteAuthSource {
 class RemoteAuthSourceImpl implements RemoteAuthSource {
   final http.Client client;
 
-  RemoteAuthSourceImpl(this.client);
+  RemoteAuthSourceImpl({required this.client});
 
   @override
   Future<void> loginWithEmailAndPassword(
       {required String email, required String password}) async {
     final res = await client.post(
-      Uri.parse("192.168.1.7:5000/login"),
+      Uri.http(API, "/login", {}),
       body: {"email": email, "password": password},
     );
     if (res.statusCode == 200) {
@@ -44,7 +44,8 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
 
   @override
   Future<void> uploadPlayerInfo({required PlayerModel player}) async {
-    final res = await client.put(Uri.parse(FAKE_API + "/player"), body: {});
+    final res =
+        await client.put(Uri.http(API, "/player", {}), body: player.toJson());
     if (res.statusCode != 201) {
       throw Exception();
     }
@@ -53,7 +54,7 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
   @override
   Future<bool> verifyCodeSent({required String code}) async {
     final res = await client
-        .post(Uri.parse(FAKE_API + "/Auth/verify"), body: {"code": 0});
+        .post(Uri.http(API, "/Auth/verify", {}), body: {"code": code});
     if (res.statusCode == 200) {
       return true;
     }
@@ -88,11 +89,22 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
   ///   H E L P E R   M E T H O D   FOR HTTP CLIENT
   ///
 
-  Future<http.Response> getIt(String suffix, Map<String, dynamic> body) async {
+  Future<http.Response> getIt(
+    String suffix,
+    Map<String, dynamic> body, [
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  ]) async {
     // final res = Uri.parse(FAKE_API + suffix);
     // final res2 = http.Request("GET", res);
     // res2.body = jsonEncode(body);
     // return await res2.send();
-    return await client.get(Uri.parse(FAKE_API + suffix), headers: {});
+    return await client.get(
+      Uri.http(API, suffix, queryParameters),
+      headers: {
+        "content-type": "application/json",
+        ...?headers,
+      },
+    );
   }
 }

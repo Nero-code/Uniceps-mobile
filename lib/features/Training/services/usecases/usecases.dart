@@ -1,5 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/core/errors/failure.dart';
+// import 'package:uniceps/features/Profile/domain/measrument.dart';
+// import 'package:uniceps/features/Profile/domain/subscription.dart';
+import 'package:uniceps/features/Training/services/entities/training_program.dart';
 import 'package:uniceps/features/Training/services/repos/repository.dart';
 
 class TrainingUsecases {
@@ -7,15 +10,15 @@ class TrainingUsecases {
 
   TrainingUsecases({required TrainingRepo repo}) : _repo = repo;
 
-  Future<Either<Failure, Unit>> getPlayerMeasurments() async {
-    return await _repo.getPlayerMeasurments();
-  }
+  // Future<Either<Failure, List<Measurement>>> getPlayerMeasurments() async {
+  //   return await _repo.getPlayerMeasurments();
+  // }
 
-  Future<Either<Failure, Unit>> getPlayerSubscriptions() async {
-    return await _repo.getPlayerSubscriptions();
-  }
+  // Future<Either<Failure, List<Subscription>>> getPlayerSubscriptions() async {
+  //   return await _repo.getPlayerSubscriptions();
+  // }
 
-  Future<Either<Failure, Unit>> getTrainingProgram() async {
+  Future<Either<Failure, TrainingProgram>> getTrainingProgram() async {
     return await _repo.getTrainingProgram();
   }
 }
