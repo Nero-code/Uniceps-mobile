@@ -8,6 +8,5 @@ class User extends Equatable {
     required this.token,
   });
   @override
-  // TODO: implement props
   List<Object?> get props => [token];
 }

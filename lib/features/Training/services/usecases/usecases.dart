@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/core/errors/failure.dart';
-// import 'package:uniceps/features/Profile/domain/measrument.dart';
-// import 'package:uniceps/features/Profile/domain/subscription.dart';
+import 'package:uniceps/features/Training/services/entities/presence.dart';
 import 'package:uniceps/features/Training/services/entities/training_program.dart';
 import 'package:uniceps/features/Training/services/repos/repository.dart';
 
@@ -10,15 +9,12 @@ class TrainingUsecases {
 
   TrainingUsecases({required TrainingRepo repo}) : _repo = repo;
 
-  // Future<Either<Failure, List<Measurement>>> getPlayerMeasurments() async {
-  //   return await _repo.getPlayerMeasurments();
-  // }
-
-  // Future<Either<Failure, List<Subscription>>> getPlayerSubscriptions() async {
-  //   return await _repo.getPlayerSubscriptions();
-  // }
-
   Future<Either<Failure, TrainingProgram>> getTrainingProgram() async {
     return await _repo.getTrainingProgram();
+  }
+
+  Future<Either<Failure, List<Presence>>> getPresenceAtGym(
+      {required String gymId}) async {
+    return await _repo.getPresenceAtGym(gymId: gymId);
   }
 }

@@ -44,7 +44,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
-          create: (context) => AuthBloc(usecases: di.sl()),
+          create: (context) =>
+              AuthBloc(usecases: di.sl())..add(AuthCheckEvent()),
         ),
         BlocProvider<TrainingBloc>(
           create: (context) =>
@@ -71,9 +72,10 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<LocaleCubit, ChangedLangState>(
         builder: (context, state) {
           SystemChrome.setSystemUIOverlayStyle(
-            const SystemUiOverlayStyle(
+            SystemUiOverlayStyle(
               statusBarColor: Colors.transparent,
-              systemNavigationBarColor: Colors.white,
+              systemNavigationBarColor:
+                  Theme.of(context).colorScheme.background,
             ),
           );
           return MaterialApp(
@@ -94,21 +96,19 @@ class MyApp extends StatelessWidget {
               //  AUTH
               ROUTE_AUTH: (context) => EmailAuthScreen(),
               ROUTE_FORGOT_PASSWORD: (context) => ForgotPasswordScreen(),
+              ROUTE_PLAYER_INFO: (context) =>
+                  const PlayerInfoScreen(), // NON REACHABLE FROM HERE
 
               //  MAIN
-              ROUTE_HOME: (context) => HomeScreen(
-                    // logger: di.sl(),
-                    trainingUsecases: di.sl(),
-                  ),
+              ROUTE_HOME: (context) => HomeScreen(trainingUsecases: di.sl()),
               ROUTE_EXERCISE: (context) => ExercisesPage(),
               ROUTE_QR_SCANNER: (context) => QRScannerScreen(),
               ROUTE_PRESENCE: (context) => const PresenceScreen(),
 
               //  AUX
-              ROUTE_MEASUREMENTS: (context) => const MeasurementScreen(),
+              ROUTE_MEASUREMENTS: (context) => MeasurementScreen(),
               ROUTE_SUBSCRIPTIONS: (context) => const SubScriptionScreen(),
               ROUTE_PROFILE: (context) => const ProfileScreen(),
-              ROUTE_PLAYER_INFO: (context) => const PlayerInfoScreen(),
             },
           );
         },

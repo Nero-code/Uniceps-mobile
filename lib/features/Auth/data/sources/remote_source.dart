@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
+import 'package:uniceps/features/Auth/services/enitites/player.dart';
 
 abstract class RemoteAuthSource {
   Future<void> loginWithEmailAndPassword({
@@ -13,6 +16,7 @@ abstract class RemoteAuthSource {
   Future<void> verifyGymCode({required String gymCode});
   Future<void> uploadPlayerInfo({required PlayerModel player});
   Future<void> requestPasswordChange(String newPass);
+  Future<Player> getPlayerInfo();
   // Future<bool> isLoggedIn();
 }
 
@@ -79,10 +83,20 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
     }
   }
 
+  @override
+  Future<Player> getPlayerInfo() async {
+    final res = await client.get(Uri.https(FAKE_API + HTTP_PLAYER_INFO));
+    if (res.statusCode == 200) {
+      final temp = jsonDecode(res.body);
+      return PlayerModel.fromJson(temp);
+    }
+    throw ServerException();
+  }
+
   // @override
   // Future<bool> isLoggedIn() {
-  //   // No Need to implement
-  //   throw UnimplementedError();
+  //   final res = await
+  //   throw ;
   // }
 
   ///

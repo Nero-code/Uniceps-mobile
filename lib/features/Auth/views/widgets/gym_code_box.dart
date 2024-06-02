@@ -68,10 +68,18 @@ class _GymCodeBoxState extends State<GymCodeBox> {
         ),
         Expanded(
           child: Align(
-            alignment: Alignment.bottomRight,
+            alignment: Alignment.lerp(
+                    Alignment.bottomRight, Alignment.bottomCenter, 0.1)
+                as Alignment,
             child: TextButton(
               onPressed: widget.onSkip,
-              child: Text("SKIP >"),
+              style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all<Color>(
+                      const Color.fromARGB(68, 158, 158, 158))),
+              child: Text(
+                "SKIP >",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),

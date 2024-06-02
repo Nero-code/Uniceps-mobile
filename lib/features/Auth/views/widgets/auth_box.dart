@@ -8,10 +8,18 @@ import 'package:uniceps/features/Auth/views/widgets/background_card.dart';
 ////////////////////////////////////////////////////////////////////////////////
 
 class AuthBox extends StatefulWidget {
-  const AuthBox({super.key, required this.onPressed, required this.onForgot});
+  const AuthBox(
+      {super.key,
+      required this.login,
+      required this.signin,
+      required this.onForgot,
+      required this.onChangeType,
+      required this.isLogin});
 
-  final void Function(String email, String pass) onPressed;
-  final VoidCallback onForgot;
+  final void Function(String email, String pass) login;
+  final void Function(String email) signin;
+  final VoidCallback onForgot, onChangeType;
+  final bool isLogin;
 
   @override
   State<AuthBox> createState() => _AuthBoxState();
@@ -29,8 +37,35 @@ class _AuthBoxState extends State<AuthBox> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context).colorScheme.background,
+                Color.fromARGB(255, 92, 168, 209),
+              ],
+            ),
+          ),
+          // child: Text("Welcome",
+          //     style: Theme.of(context)
+          //         .textTheme
+          //         .headlineSmall
+          //         ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+          child: Center(
+            child: Icon(
+              Icons.mail_lock_rounded,
+              size: 90,
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+          ),
+        ),
+
         ///   B A C K G R O U N D   C A R D
         BackgroundCard(
+          // back: Color.fromARGB(87, 255, 255, 255),
           child: Form(
             key: _authFormkey,
             child: Column(
@@ -55,59 +90,62 @@ class _AuthBoxState extends State<AuthBox> {
                 const SizedBox(height: 10),
 
                 ///   T E X T F I E L D   P A S S W O R D
-                TextFormField(
-                  controller: passwCtrl,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    border: const OutlineInputBorder(),
-                    labelText: "Password",
-                    hintText: "123456789",
-                    suffixIcon: IconButton(
-                      iconSize: 25,
-                      splashRadius: 10,
-                      onPressed: () {
-                        setState(() {
-                          obscureText = !obscureText;
-                        });
-                      },
-                      icon: Icon(obscureText
-                          ? Icons.visibility_off
-                          : Icons.visibility),
+                if (widget.isLogin)
+                  TextFormField(
+                    controller: passwCtrl,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      border: const OutlineInputBorder(),
+                      labelText: "Password",
+                      hintText: "123456789",
+                      suffixIcon: IconButton(
+                        iconSize: 25,
+                        splashRadius: 10,
+                        onPressed: () {
+                          setState(() {
+                            obscureText = !obscureText;
+                          });
+                        },
+                        icon: Icon(obscureText
+                            ? Icons.visibility_off
+                            : Icons.visibility),
+                      ),
                     ),
+                    obscureText: obscureText,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter a password";
+                      }
+                      return null;
+                    },
                   ),
-                  obscureText: obscureText,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter a password";
-                    }
-                    return null;
-                  },
-                ),
 
                 ///   F O R G O T   P A S S W O R D
-                Material(
-                  color: Colors.transparent,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: InkWell(
-                      splashColor: Colors.grey,
-                      onTapUp: (_) {
-                        Navigator.of(context).pushNamed(ROUTE_FORGOT_PASSWORD);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Text(
-                          "Forgot password?",
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
+                if (widget.isLogin)
+                  Material(
+                    color: Colors.transparent,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: InkWell(
+                        splashColor: Colors.grey,
+                        onTapUp: (_) {
+                          Navigator.of(context)
+                              .pushNamed(ROUTE_FORGOT_PASSWORD);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Text(
+                            "Forgot password?",
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                )
+                  )
               ],
             ),
           ),
@@ -121,10 +159,67 @@ class _AuthBoxState extends State<AuthBox> {
           child: ElevatedButton(
             onPressed: () {
               if (_authFormkey.currentState!.validate()) {
-                widget.onPressed(emailCtrl.text, passwCtrl.text);
+                if (widget.isLogin) {
+                  widget.login(emailCtrl.text, passwCtrl.text);
+                } else {
+                  widget.signin(emailCtrl.text);
+                }
               }
             },
-            child: const Text("Sign in"),
+            child: Text(widget.isLogin ? "Login" : "Sign in"),
+          ),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              color: Colors.amber,
+              height: 1,
+              width: MediaQuery.of(context).size.width * 0.2,
+            ),
+            SizedBox(
+              child: Material(
+                color: const Color.fromARGB(78, 158, 158, 158),
+                borderRadius: BorderRadius.circular(10),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: widget.onChangeType,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 3.0),
+                    child: Text(
+                      widget.isLogin
+                          ? "don't have an account?"
+                          : "already have an account?",
+                      style: TextStyle(color: Colors.black, fontSize: 10),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              color: Colors.grey,
+              height: 1,
+              width: MediaQuery.of(context).size.width * 0.2,
+            ),
+          ],
+        ),
+        Container(
+          width: double.infinity,
+          margin: const EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: TextButton(
+            onPressed: () {
+              if (_authFormkey.currentState!.validate()) {
+                if (widget.isLogin) {
+                  widget.login(emailCtrl.text, passwCtrl.text);
+                } else {
+                  widget.signin(emailCtrl.text);
+                }
+              }
+            },
+            child: Text(widget.isLogin ? "SignIn" : "Login"),
           ),
         ),
       ],

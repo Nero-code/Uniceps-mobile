@@ -31,9 +31,9 @@ class _SubScriptionScreenState extends State<SubScriptionScreen> {
           expansionCallback: (index, isOpen) {
             setState(() {
               for (int i = 0; i < items.length; i++) {
-                if (i != index)
+                if (i != index) {
                   items[i] = false;
-                else {
+                } else {
                   items[i] = !items[i];
                 }
               }
@@ -42,18 +42,23 @@ class _SubScriptionScreenState extends State<SubScriptionScreen> {
           children: [
             for (int i = 0; i < items.length; i++)
               ExpansionPanel(
+                canTapOnHeader: true,
                 headerBuilder: (context, isOpen) {
                   return SizedBox(
-                    width: MediaQuery.of(context).size.width - 50,
-                    height: 50,
-                    child: Text("Subscription $i \n Sport: Yoga"),
+                    height: 70,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Subscription $i\nSport: Yoga"),
+                    ),
                   );
                 },
                 isExpanded: items[i],
-                body: Container(
-                  color: Colors.amber,
-                  child: Center(
-                      child: Text("asdasdasdasdasdasd \nasdasdasdasdasdasd")),
+                body: Column(
+                  children: [
+                    Divider(),
+                    Text("Value"),
+                    Text("Description: "),
+                  ],
                 ),
               ),
           ],

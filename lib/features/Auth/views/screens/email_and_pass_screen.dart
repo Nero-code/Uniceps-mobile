@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/widgets/auth_box.dart';
 import 'package:uniceps/features/Auth/views/widgets/Code_Box.dart';
 import 'package:uniceps/features/Auth/views/widgets/gym_code_box.dart';
+import 'package:uniceps/features/Auth/views/widgets/password_box.dart';
 
-////////////////////////////////////////////////////////////////////////////////
-///
-///   This is the email authentication screen for which the user will sign in
-///   to the system.
-///
-///   StatefulWidget is not neccessary because the state-manegement (BLOC) will
-///   handle the changes in UI...
-///
-////////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
+//
+//    This is the email authentication screen for which the user will sign in
+//    to the system.
+//
+//    StatefulWidget is not neccessary because the state-manegement (BLOC) will
+//    handle the changes in UI...
+//
+// /////////////////////////////////////////////////////////////////////////////
 
 class EmailAuthScreen extends StatefulWidget {
   const EmailAuthScreen({super.key});
@@ -28,7 +31,7 @@ class EmailAuthScreen extends StatefulWidget {
 
 class _EmailAuthScreenState extends State<EmailAuthScreen>
     with RestorationMixin {
-  bool flag = true;
+  RestorableBool isLogin = RestorableBool(false);
 
   RestorableString email = RestorableString(''),
       pass = RestorableString(''),
@@ -42,7 +45,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
   late PageController _pageController;
 
   void navOnRestore() async {
-    await Future.delayed(Duration(seconds: 0));
+    await Future.delayed(const Duration(seconds: 0));
     print("currentPage: ${currentPage.value}");
     _pageController.animateToPage(currentPage.value,
         duration: duration, curve: curve);
@@ -65,7 +68,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        systemNavigationBarColor: Theme.of(context).colorScheme.secondary,
+        systemNavigationBarColor: Theme.of(context).colorScheme.primary,
       ),
     );
     navOnRestore();
@@ -80,7 +83,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
               mainBlueLight,
             ],
             center: Alignment.topLeft,
-            radius: 2,
+            radius: 2.2,
             stops: [
               0.5,
               0.5,
@@ -99,7 +102,22 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
           //   ],
           // ),
         ),
-        child: BlocBuilder<AuthBloc, AuthState>(
+        child: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthDoneState) {
+              Navigator.of(context).pushReplacementNamed(
+                ROUTE_PLAYER_INFO,
+                arguments: {
+                  "isEdit": false,
+                  "data": const Player(
+                      name: "name",
+                      phoneNum: "phoneNum",
+                      birthDate: "birthDate",
+                      gender: Gender.male),
+                },
+              );
+            }
+          },
           builder: (context, state) {
             return Stack(
               children: [
@@ -111,9 +129,9 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                         Container(
                           width: MediaQuery.of(context).size.height * 0.3,
                           height: MediaQuery.of(context).size.height * 0.32,
-                          padding: EdgeInsets.all(25),
+                          padding: const EdgeInsets.all(25),
                           alignment: Alignment.center,
-                          child: Image(
+                          child: const Image(
                             image: AssetImage('images/logo/Logo-light.png'),
                           ),
                         ),
@@ -126,13 +144,33 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                             controller: _pageController,
                             children: [
                               AuthBox(
-                                onPressed: (e, p) async {
+                                isLogin: isLogin.value,
+                                onChangeType: () {
+                                  setState(() {
+                                    isLogin.value = !isLogin.value;
+                                  });
+                                },
+                                login: (e, p) async {
+                                  BlocProvider.of<AuthBloc>(context).add(
+                                    LoginWithEmailAndPassEvent(
+                                        email: e, pass: p),
+                                  );
                                   email.value = e;
                                   pass.value = p;
-                                  currentPage.value = 1;
-                                  _pageController.animateToPage(1,
+                                  currentPage.value = 3;
+
+                                  _pageController.animateToPage(3,
                                       duration: duration,
                                       curve: Curves.easeOutExpo);
+                                },
+                                signin: (e) async {
+                                  BlocProvider.of<AuthBloc>(context).add(
+                                    EmailSigninRequestEvent(email: e),
+                                  );
+                                  email.value = e;
+                                  currentPage.value = 1;
+                                  _pageController.animateToPage(1,
+                                      duration: duration, curve: curve);
                                 },
                                 onForgot: () => Navigator.of(context).push(
                                   MaterialPageRoute(
@@ -141,26 +179,38 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                   ),
                                 ),
                               ),
-                              CodeBox(
-                                onPressed: (code) async {
-                                  currentPage.value = 2;
-                                  _pageController.animateToPage(2,
-                                      duration: duration, curve: curve);
-                                },
+                              Opacity(
+                                opacity: !isLogin.value ? 1 : 0,
+                                child: CodeBox(
+                                  onPressed: (code) async {
+                                    currentPage.value = 2;
+                                    _pageController.animateToPage(2,
+                                        duration: duration, curve: curve);
+                                  },
+                                ),
+                              ),
+                              Opacity(
+                                opacity: !isLogin.value ? 1 : 0,
+                                child: PasswordBox(
+                                  onConfirm: (pass) {
+                                    BlocProvider.of<AuthBloc>(context).add(
+                                      AuthAddNewPasswordEvent(
+                                          email: email.value, pass: pass),
+                                    );
+                                    currentPage.value = 3;
+                                    _pageController.animateToPage(3,
+                                        duration: duration, curve: curve);
+                                  },
+                                ),
                               ),
                               GymCodeBox(
                                 onPressed: (gymCode) {
-                                  // TODO: API integration...
-                                  // Navigator.of(context).pushReplacementNamed(
-                                  //   ROUTE_PLAYER_INFO,
-                                  //   arguments: {
-                                  //     "isEdit": false,
-                                  //     "data": "Player Data Goes Here",
-                                  //   },
-                                  // );
+                                  BlocProvider.of<AuthBloc>(context).add(
+                                    GymCodeVerifyEvent(gymCode: gymCode),
+                                  );
                                 },
                                 onSkip: () {
-                                  Navigator.of(context).pushReplacementNamed(
+                                  Navigator.of(context).pushNamed(
                                       ROUTE_PLAYER_INFO,
                                       arguments: {"isEdit": true});
                                 },
@@ -180,6 +230,21 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                     ),
                   ),
                 ),
+                // Positioned(
+                //   top: 5,
+                //   right: 5,
+                //   child: DropdownButton(
+                //     items: [
+                //       DropdownMenuItem(
+                //         child: Text("English"),
+                //       ),
+                //       DropdownMenuItem(
+                //         child: Text("عربي"),
+                //       ),
+                //     ],
+                //     onChanged: (a) {},
+                //   ),
+                // ),
                 if (state is AuthLoadingState)
                   Stack(
                     children: [
@@ -196,7 +261,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                         ),
                       ),
                     ],
-                  )
+                  ),
               ],
             );
           },
@@ -211,6 +276,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
     registerForRestoration(currentPage, 'currentPage');
+    registerForRestoration(isLogin, 'isLogin');
     registerForRestoration(email, 'email');
     registerForRestoration(pass, 'pass');
     registerForRestoration(code, 'code');

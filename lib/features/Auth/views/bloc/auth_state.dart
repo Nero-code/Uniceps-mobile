@@ -13,7 +13,23 @@ final class AuthLoadingState extends AuthState {}
 
 final class AuthCodeSentState extends AuthState {}
 
-final class AuthDoneState extends AuthState {}
+final class AuthNewPassword extends AuthState {
+  // final String pass
+}
+
+final class AuthDoneState extends AuthState {
+  final Player player;
+  const AuthDoneState({required this.player});
+}
+
+final class AuthErrorState extends AuthState {
+  final Failure f;
+  const AuthErrorState({required this.f});
+}
+
+final class ProfileSubmitionDone extends AuthState {}
+
+final class GymVerifiedState extends AuthState {}
 
 final class AuthInvalidCredentialsState extends AuthState {}
 

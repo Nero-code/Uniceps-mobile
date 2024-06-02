@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
+import 'package:uniceps/features/Auth/views/widgets/Code_Box.dart';
 import 'package:uniceps/features/Auth/views/widgets/background_card.dart';
+import 'package:uniceps/features/Auth/views/widgets/password_box.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -118,70 +120,39 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             ),
                           ],
                         ),
-                        Column(
-                          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            const BackgroundCard(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text("Enter the code sent to your email:"),
-                                  TextField(
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      label: Text("Verification Code"),
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                ],
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                controller.animateToPage(2,
-                                    duration: duration,
-                                    curve: Curves.easeOutExpo);
-                              },
-                              child: Text("Verify"),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            const BackgroundCard(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text("Enter New Password:"),
-                                  TextField(
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      label: Text("New Pass"),
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                  Text("Confirm New Password:"),
-                                  TextField(
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      label: Text("Confirm Pass"),
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                ],
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                controller.animateToPage(0,
-                                    duration: duration,
-                                    curve: Curves.easeOutExpo);
-                              },
-                              child: Text("Confirm"),
-                            ),
-                          ],
-                        ),
+                        // Column(
+                        //   // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        //   children: [
+                        //     const BackgroundCard(
+                        //       child: Column(
+                        //         mainAxisSize: MainAxisSize.min,
+                        //         children: [
+                        //           Text("Enter the code sent to your email:"),
+                        //           TextField(
+                        //             decoration: InputDecoration(
+                        //               border: OutlineInputBorder(),
+                        //               label: Text("Verification Code"),
+                        //             ),
+                        //           ),
+                        //           SizedBox(height: 20),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //     ElevatedButton(
+                        //       onPressed: () {
+                        //         controller.animateToPage(2,
+                        //             duration: duration,
+                        //             curve: Curves.easeOutExpo);
+                        //       },
+                        //       child: Text("Verify"),
+                        //     ),
+                        //   ],
+                        // ),
+                        CodeBox(onPressed: (code) {
+                          controller.animateToPage(2,
+                              duration: duration, curve: Curves.easeOutExpo);
+                        }),
+                        PasswordBox(onConfirm: (password) {}),
                       ],
                     ),
                   ),

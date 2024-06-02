@@ -32,14 +32,25 @@ enum MuscleGroup {
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-const API = "https://www.uniceps.com/api/v1";
 const FAKE_API = "http://192.168.1.10:5000";
+const API = "https://www.uniceps.com/api/v1/";
+const HTTP_REGISTER = "";
+const HTTP_LOGIN = "";
+const HTTP_FORGOT_PASSWORD = "";
+const HTTP_PLAYER_INFO = "";
 
-////////////////////////////////////////////////////////////////////////////////
-///
-///   A P P   R O U T E S
-///
-////////////////////////////////////////////////////////////////////////////////
+const HTTP_TRAINING_PROGRAM = "";
+const HTTP_SUBSCRIPTIONS = "";
+const HTTP_MEASURMENTS = "";
+
+const HTTP_PRESENCE = "";
+const HTTP_MY_GYMS = "";
+
+// /////////////////////////////////////////////////////////////////////////////
+//
+//    A P P   R O U T E S
+//
+// /////////////////////////////////////////////////////////////////////////////
 
 const ROUTE_SPLASH = '/';
 
@@ -87,6 +98,11 @@ const ROUTE_PRESENCE = '/presence';
 //        "SubScriptions": [1,2,3],                                           //
 //      }                                                                     //
 //    }                                                                       //
+//    
+//    "Presence":
+//    {
+//      "gymId": [ PresenceModel ]
+//    }
 // }                                                                          //
 //                                                                            //
 // ////////////////////////////////////////////////////////////////////////// // 
