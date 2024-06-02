@@ -1,12 +1,13 @@
 import 'package:uniceps/features/Training/services/entities/exercise.dart';
 
 class ExerciseModel extends Exercise {
-  ExerciseModel({
+  const ExerciseModel({
     required super.id,
     required super.name,
     required super.tId,
     required super.imageUrl,
     required super.description,
+    super.lastWaight = 0,
   });
 
   factory ExerciseModel.fromJson(Map<String, dynamic> json) {
@@ -16,6 +17,7 @@ class ExerciseModel extends Exercise {
       tId: json['tId'],
       imageUrl: json['imageUrl'],
       description: json['description'],
+      lastWaight: json['lastWaight'],
     );
   }
 
@@ -26,6 +28,7 @@ class ExerciseModel extends Exercise {
       'tId': tId,
       'imageUrl': imageUrl,
       'description': description,
+      'lastWaight': lastWaight,
     };
   }
 

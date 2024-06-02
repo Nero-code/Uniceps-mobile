@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
-import 'package:uniceps/features/Auth/views/widgets/background_card.dart';
 import 'package:uniceps/features/Auth/views/widgets/gender_selection_widget.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -16,6 +16,11 @@ class PlayerInfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+          systemNavigationBarColor: Theme.of(context).colorScheme.background,
+          statusBarIconBrightness: Brightness.dark),
+    );
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final isEdit = args['isEdit'] ?? true;
@@ -48,6 +53,10 @@ class InputTypePlayerInfoScreen extends StatefulWidget {
 class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  final nameCtl = TextEditingController();
+  final phoneCtl = TextEditingController();
+  final birthCtl = TextEditingController();
+
   bool? male;
 
   @override
@@ -65,31 +74,20 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.2,
                     child: Container(
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.purple,
-                        // gradient: RadialGradient(
-                        //   colors: [
-                        //     Color.fromARGB(0, 140, 0, 255),
-                        //     Color.fromARGB(82, 38, 0, 87),
-                        //     Colors.purple,
-                        //   ],
-                        //   stops: [0.6, 0.8, 0.9],
-                        //   radius: 1.5,
-                        //   center: Alignment.lerp(
-                        //           Alignment.center, Alignment.bottomRight, 0.7)
-                        //       as Alignment,
-                        // ),
-                      ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: const Image(
+                          image: AssetImage("images/logo/Logo-dark.png")),
                     ),
                   ),
 
                   const SizedBox(height: 10),
-                  BackgroundCard(
+                  Container(
+                    padding: EdgeInsets.all(10.0),
                     child: Column(
                       children: [
                         ///  N A M E
                         TextFormField(
+                          controller: nameCtl,
                           decoration: InputDecoration(
                             labelText: "Full Name",
                             isDense: true,
@@ -104,11 +102,18 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
 
                         ///  P H O N E   N U M B E R
                         TextFormField(
+                          controller: phoneCtl,
+                          keyboardType: TextInputType.phone,
                           decoration: InputDecoration(
                             labelText: "Phone Number",
                             isDense: true,
                           ),
                           maxLength: 10,
+                          onChanged: (val) {
+                            if (val.contains(RegExp(r"[^0-9]"))) {
+                              phoneCtl.text = val.substring(0, val.length - 1);
+                            }
+                          },
                           validator: (value) {
                             if (value == null ||
                                 value.isEmpty ||
@@ -130,16 +135,24 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.5,
                               child: TextFormField(
+                                controller: birthCtl,
                                 decoration: InputDecoration(
                                   label: Text("Birth Year"),
                                   isDense: true,
                                 ),
                                 maxLength: 4,
+                                keyboardType: TextInputType.phone,
+                                onChanged: (val) {
+                                  if (val.contains(RegExp(r"[^0-9]"))) {
+                                    birthCtl.text =
+                                        val.substring(0, val.length - 1);
+                                  }
+                                },
                                 validator: (value) {
                                   if (value == null ||
                                       value.isEmpty ||
                                       value.length < 4) {
-                                    return "please enter a valid year";
+                                    return "Please enter a valid year";
                                   }
                                   return null;
                                 },
@@ -149,52 +162,59 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
                         ),
 
                         ///  H E I G H T
-                        TextFormField(
-                          decoration: InputDecoration(
-                            labelText: "Height (cm)",
-                            isDense: true,
-                          ),
-                          maxLength: 3,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "please put a valid height";
-                            }
-                            return null;
-                          },
-                        ),
+                        // TextFormField(
+                        //   decoration: InputDecoration(
+                        //     labelText: "Height (cm)",
+                        //     isDense: true,
+                        //   ),
+                        //   maxLength: 3,
+                        //   validator: (value) {
+                        //     if (value == null || value.isEmpty) {
+                        //       return "please put a valid height";
+                        //     }
+                        //     return null;
+                        //   },
+                        // ),
 
                         ///  W E I G H T
-                        TextFormField(
-                          decoration: InputDecoration(
-                            labelText: "Weight (Kg)",
-                            isDense: true,
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "please put a valid Weight";
-                            }
-                            return null;
-                          },
-                        ),
+                        // TextFormField(
+                        //   decoration: InputDecoration(
+                        //     labelText: "Weight (Kg)",
+                        //     isDense: true,
+                        //   ),
+                        //   validator: (value) {
+                        //     if (value == null || value.isEmpty) {
+                        //       return "please put a valid Weight";
+                        //     }
+                        //     return null;
+                        //   },
+                        // ),
 
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
+                          if (male == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    backgroundColor: Colors.red,
+                                    content: Text("Please select a Gender")));
+                            return;
+                          }
                           Navigator.pushReplacementNamed(context, ROUTE_HOME);
                         }
                       },
                       child: Text("Save"),
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Text("TrioVerse"),
+                  const SizedBox(height: 10),
+                  const Text("TrioVerse"),
                 ],
               ),
             ),

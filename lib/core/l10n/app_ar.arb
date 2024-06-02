@@ -2,5 +2,64 @@
   "helloWorld": "مرحبا",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
-  }
+  },
+  "signin": "أضافة حساب",
+  "login": "تسجيل الدخول",
+  "forgotPassword": "نسيت كلمة السر؟",
+  "email": "البريد الالكتروني",
+  "emailError": "الرجاء ادخال البريد الالكتروني",
+  "password": "كلمة السر",
+  "passwordError": "الرجاء ادخال كلمة السر",
+  "verify": "تأكيد",
+  "verifyCode": "تأكيد الكود",
+  "code": "الكود",
+  "codeError": "الكود خاطئ!",
+  "changePassword": "تغيير كلمة السر",
+  "gymBoxTitle": "الرجاء ادخال الكود المأخوذ من النادي",
+  "authBoxTitle": "الرجاء ادخال البريد الالكتروني",
+  
+  "ok": "موافق",
+  "no": "لا",
+  "skip": "تخطي <",
+  "confirm": "تأكيد",
+  "add": "اضافة",
+  "update": "تعديل",
+  
+  "logoutAlert": "تسجيل الخروج؟",
+  "logoutAlertContents": "انت الأن على وشك تسجيل الخروج, قد تتعرض معلوماتك للحذف, هل انت متأكد؟",
+  
+  "subscription": "الأشتراكات",
+  "sport": "الرياضة",
+  "measurements": "القياسات",
+  "language": "اللغة",
+  "about": "حول",
+
+  "height": "الطول (cm)",
+  "heightError": "",
+  "weight": "الوزن (Kg)",
+  "weightError": "",
+  "lastWeight": "آخر وزن",
+
+  "lArm": "ذراع يسرى",
+  "rArm": "ذراع يمنى",
+  "lHumerus": "ساعد أيسر",
+  "rHumerus": "ساعد أيمن",
+  "lLeg": "رجل يسرى",
+  "rLeg": "رجل يمنى",
+  "lThigh": "فخذ أيسر",
+  "rThigh": "فخذ أيمن",
+  "nick": "العنق",
+  "shoulders": "الاكتاف",
+  "waist": "الخصر",
+  "chest": "الصدر",
+  "hips": "الارداف",
+  "checkDate": "تاريخ الصدور",
+
+  "enteredAt": "وقت الدخول",
+  "exitedAt": "وقت الخروج",
+
+  "codeNum": "رقم الكود",
+
+  "reps": "العدات"
+
 }

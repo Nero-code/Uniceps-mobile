@@ -1,79 +1,78 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'package:uniceps/features/Training/services/usecases/usecases.dart';
-import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
+// import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
 import 'package:uniceps/features/Training/views/bloc/training_bloc.dart';
-import 'package:uniceps/features/Training/views/widgets/Week_days.dart';
+import 'package:uniceps/features/Training/views/widgets/exercise_widget(2).dart';
+// import 'package:uniceps/features/Training/views/widgets/exercise_widget.dart';
+// import 'package:uniceps/features/Training/views/widgets/Week_days.dart';
 import 'package:uniceps/features/Training/views/widgets/home_card.dart';
-import 'package:uniceps/features/Training/views/widgets/training_group.dart';
+import 'package:uniceps/features/Training/views/widgets/training_group(2).dart';
+// import 'package:uniceps/features/Training/views/widgets/training_group.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key, required this.trainingUsecases});
+final img = [
+  "1.png",
+  "2.png",
+  "3.png",
+  "4.png",
+  "5.png",
+  "6.png",
+  "7.png",
+  "8.png"
+];
+final trImg = [
+  "Waist.png",
+  "Leg.png",
+  "Neck.png",
+  "Shoulder.png",
+  "Thigh.png",
+];
 
-  // final Logger logger;
-
-  final controller = DraggableScrollableController();
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key, required this.trainingUsecases});
 
   final TrainingUsecases trainingUsecases;
 
-  // bool isSheetOpen = false;
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  // final Logger logger;
+  final weightCtl = TextEditingController();
+
+  int selectedGroup = 0;
+
+  final List<int> completed = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.onBackground,
+      // backgroundColor: Theme.of(context).colorScheme.onBackground,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.onBackground,
-        title: Text(
-          "Uniceps",
-        ),
+        backgroundColor: Theme.of(context).colorScheme.background,
+        title: const Text("Uniceps"),
         actions: [
           IconButton(
             onPressed: () async {
-              // BlocProvider.of<LocaleCubit>(context)
-              //     .changeLanguage(lang == 'en' ? 'ar' : 'en');
-              // await logger.log(
-              //   "QR_Btn_Pressed",
-              //   {"id": 1, "QR Opened": "true"},
-              // );
               Navigator.pushNamed(context, ROUTE_QR_SCANNER);
             },
             tooltip: "QR Scan",
             icon: const Icon(Icons.qr_code_scanner),
           ),
-          // IconButton(
-          //   onPressed: () {},
-          //   icon: const Icon(Icons.fitness_center_rounded),
-          // ),
-          Material(
-            color: Colors.transparent,
-            child: SizedBox(
-              width: 40,
-              height: 40,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(30),
-                onTap: () => Navigator.pushNamed(
-                  context,
-                  ROUTE_PROFILE,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 25,
-                    height: 25,
-                    decoration: BoxDecoration(
-                        color: Colors.amber, shape: BoxShape.circle),
-                  ),
-                ),
-              ),
-            ),
+          IconButton(
+            onPressed: () async {
+              Navigator.pushNamed(context, ROUTE_PRESENCE);
+            },
+            tooltip: "QR Scan",
+            icon: const Icon(Icons.calendar_month),
           ),
         ],
       ),
       body: BlocBuilder<TrainingBloc, TrainingState>(
         builder: (context, state) {
+          // if (state is TrainingProgramLoadedState) {
           return Stack(
             children: [
               Column(
@@ -81,91 +80,135 @@ class HomeScreen extends StatelessWidget {
                   ///   H O M E   C A R D
                   HomeCard(
                     onTap: () {
-                      controller.animateTo(0.25,
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.linear);
+                      Navigator.pushNamed(context, ROUTE_PROFILE);
                     },
                   ),
 
-                  ///   W E E K   D A Y S
-                  InkWell(
-                    highlightColor: Colors.transparent,
-                    splashColor: Theme.of(context).colorScheme.primary,
-                    onTap: () => Navigator.pushNamed(context, ROUTE_PRESENCE),
-                    child: WeekDaysBanner(),
+                  ///   T R A I N I N G   G R O U P S
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.1,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15.0, vertical: 8.0),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 4,
+                      itemBuilder: (context, index) {
+                        return TrainingGroup2(
+                          image: "images/muscle-groups/" + trImg[index],
+                          name: trImg[index].split('.')[0],
+                          isSelected: selectedGroup == index,
+                          isToday: index > 3,
+                          onPressed: () {
+                            setState(() {
+                              selectedGroup = index;
+                            });
+                          },
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(width: 10);
+                      },
+                    ),
                   ),
                   const SizedBox(height: 10),
 
-                  ///   T R A I N I N G   G R O U P S
+                  ///   E X E R C I S E S
                   Expanded(
-                    child: Container(
-                      color: Theme.of(context).colorScheme.background,
-                      child: ListView(
-                        padding: EdgeInsets.only(bottom: 50),
-                        children: [
-                          for (int i = 0; i < 14; i++)
-                            i % 2 == 1
-                                ? OpenContainer(
-                                    closedElevation: 0,
-                                    openElevation: 0,
-                                    closedColor: Theme.of(context)
-                                        .colorScheme
-                                        .background,
-                                    transitionType:
-                                        ContainerTransitionType.fade,
-                                    transitionDuration:
-                                        Duration(milliseconds: 500),
-                                    closedBuilder: (context, _) =>
-                                        TrainingGroup(
-                                      order: (i + 1) ~/ 2,
+                    child: GridView.builder(
+                        itemCount: 8,
+                        padding: const EdgeInsets.all(10),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 16 / 13,
+                        ),
+                        itemBuilder: (context, index) {
+                          return ExerciseWidget2(
+                            index: index,
+                            image: "images/img/" + img[index],
+                            isCompleted: completed.contains(index),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  title: Text("Exercise Name"),
+                                  content: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        AspectRatio(
+                                          aspectRatio: 16 / 9,
+                                          child: Image(
+                                            image: AssetImage(
+                                                "images/img/" + img[0]),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                            "Description Description Description Description Description"),
+                                        const Divider(),
+                                        const SizedBox(height: 10),
+                                        Text("Last Weight: 15 Kg"),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            SizedBox(
+                                              width: 100,
+                                              child: TextField(
+                                                textAlign: TextAlign.center,
+                                                controller: weightCtl,
+                                                decoration: const InputDecoration(
+                                                    isCollapsed: true,
+                                                    contentPadding:
+                                                        EdgeInsets.all(10),
+                                                    border:
+                                                        OutlineInputBorder()),
+                                              ),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                // Add Weight to database...
+                                              },
+                                              child: Text("Update"),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                    openBuilder: (context, _) =>
-                                        ExercisesPage(),
-                                  )
-                                : const SizedBox(height: 10),
-                        ],
-                      ),
-                    ),
-                  )
+                                  ),
+                                ).build(context),
+                              );
+                            },
+                            onCheck: () {
+                              setState(() {
+                                if (completed.contains(index)) {
+                                  completed.remove(index);
+                                } else {
+                                  completed.add(index);
+                                }
+                              });
+                            },
+                          );
+                        }),
+                  ),
                 ],
               ),
-              // if (isSheetOpen)
-              // GestureDetector(
-              //   onTap: () {
-              //     controller.animateTo(0,
-              //         duration: Duration(milliseconds: 200),
-              //         curve: Curves.easeInExpo);
-              //   },
-              //   child: Container(
-              //     width: MediaQuery.of(context).size.width,
-              //     height: MediaQuery.of(context).size.height,
-              //     color: Color.fromARGB(80, 0, 0, 0),
-              //   ),
-              // ),
-              DraggableScrollableSheet(
-                initialChildSize: 0,
-                controller: controller,
-                minChildSize: 0.0,
-                maxChildSize: 0.8,
-                builder: (context, scrollController) {
-                  return Container(
-                    color: Theme.of(context).colorScheme.background,
-                    child: SingleChildScrollView(
-                      controller: scrollController,
-                      child: Column(
-                        children: [],
-                      ),
-                    ),
-                  );
-                },
-              )
             ],
           );
+          // } else {
+          //   return Center(
+          //     child: Text("No Records!"),
+          //   );
+          // }
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final either = await trainingUsecases.getTrainingProgram();
+          final either = await widget.trainingUsecases.getTrainingProgram();
           either.fold((f) {
             print(f.getErrorMessage());
           }, (unit) {
@@ -174,7 +217,7 @@ class HomeScreen extends StatelessWidget {
         },
         backgroundColor: Theme.of(context).colorScheme.onBackground,
         foregroundColor: Colors.white,
-        child: Icon(Icons.network_wifi_3_bar_rounded),
+        child: const Icon(Icons.done_all),
       ),
     );
   }

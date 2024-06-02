@@ -5,7 +5,7 @@ class Player extends Equatable {
   final String name, phoneNum, birthDate;
   final Gender gender;
 
-  Player({
+  const Player({
     required this.name,
     required this.phoneNum,
     required this.birthDate,
@@ -13,6 +13,5 @@ class Player extends Equatable {
   });
 
   @override
-  // TODO: implement props
   List<Object?> get props => [name, phoneNum, birthDate, gender];
 }
