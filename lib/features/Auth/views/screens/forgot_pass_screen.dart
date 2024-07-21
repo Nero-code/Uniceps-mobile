@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:uniceps/core/Themes/light_theme.dart';
+import 'package:flutter/widgets.dart';
 import 'package:uniceps/features/Auth/views/widgets/Code_Box.dart';
-import 'package:uniceps/features/Auth/views/widgets/background_card.dart';
+import 'package:uniceps/features/Auth/views/widgets/background_decoration.dart';
 import 'package:uniceps/features/Auth/views/widgets/password_box.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -15,6 +14,11 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   late final PageController controller;
 
+  final emailCtl = TextEditingController();
+  final codeCtl = TextEditingController();
+  final passCtl = TextEditingController();
+  final confirmCtl = TextEditingController();
+
   final duration = const Duration(milliseconds: 300);
 
   @override
@@ -25,50 +29,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        systemNavigationBarColor: Theme.of(context).colorScheme.onBackground,
-      ),
-    );
-    return WillPopScope(
-      onWillPop: () async {
-        SystemChrome.setSystemUIOverlayStyle(
-          SystemUiOverlayStyle(
-            systemNavigationBarColor: Theme.of(context).colorScheme.secondary,
-          ),
-        );
-        return true;
-      },
-      child: Scaffold(
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-            // gradient: RadialGradient(
-            //   colors: [
-            //     mainBlueDark,
-            //     mainBlueLight,
-            //   ],
-            //   center: Alignment.topLeft,
-            //   radius: 2,
-            //   stops: [
-            //     0.5,
-            //     0.5,
-            //   ],
-            // ),
-            gradient: LinearGradient(
-              colors: [
-                secondaryBlue,
-                mainBlueDark,
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              stops: [
-                0.5,
-                0.5,
-              ],
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            // decoration: const BoxDecoration(),
+            child: CustomPaint(
+              painter: TriPainter(
+                  mainColor: Theme.of(context).colorScheme.secondary,
+                  secondary: Theme.of(context).colorScheme.secondary),
             ),
           ),
-          child: SafeArea(
+          SafeArea(
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -88,33 +63,63 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       controller: controller,
                       children: [
                         Column(
-                          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          // mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const BackgroundCard(
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text("Please enter your email:"),
-                                    TextField(
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        label: Text("Email"),
-                                      ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 25.0, vertical: 10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "Please enter your email:",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey.shade600,
                                     ),
-                                    SizedBox(height: 10),
-                                  ],
-                                ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  TextField(
+                                    controller: emailCtl,
+                                    decoration: InputDecoration(
+                                      prefixIcon: Icon(
+                                        Icons.person,
+                                        color: Colors.grey.shade700,
+                                      ),
+                                      contentPadding: const EdgeInsets.all(10),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.grey.shade400),
+                                      ),
+                                      border: OutlineInputBorder(),
+                                      label: Text("Email"),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                ],
                               ),
                             ),
                             ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll<Color>(
+                                  Theme.of(context).colorScheme.secondary,
+                                ),
+                                foregroundColor:
+                                    MaterialStatePropertyAll<Color>(
+                                  Colors.grey.shade700,
+                                ),
+                              ),
                               onPressed: () {
-                                controller.animateToPage(
-                                  1,
-                                  duration: duration,
-                                  curve: Curves.easeOutExpo,
-                                );
+                                if (emailCtl.text.isNotEmpty) {
+                                  controller.animateToPage(
+                                    1,
+                                    duration: duration,
+                                    curve: Curves.easeOutExpo,
+                                  );
+                                }
                               },
                               child: Text("OK"),
                             ),
@@ -149,8 +154,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         //   ],
                         // ),
                         CodeBox(onPressed: (code) {
-                          controller.animateToPage(2,
-                              duration: duration, curve: Curves.easeOutExpo);
+                          controller.animateToPage(
+                            2,
+                            duration: duration,
+                            curve: Curves.easeOutExpo,
+                          );
                         }),
                         PasswordBox(onConfirm: (password) {}),
                       ],
@@ -160,7 +168,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

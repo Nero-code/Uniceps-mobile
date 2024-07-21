@@ -31,12 +31,13 @@ class MeasurementModel extends Measurement {
       rLeg: json['r_leg'],
       lThigh: json['l_thigh'],
       rThigh: json['r_thigh'],
-      nick: json['nick'],
+      nick: json['neck'],
       shoulders: json['shoulders'],
       waist: json['waist'],
       chest: json['chest'],
       hips: json['hips'],
-      checkDate: json['check_date'],
+      // checkDate: DateTime.parse(json['check_date']),
+      checkDate: DateTime.now(),
     );
   }
 

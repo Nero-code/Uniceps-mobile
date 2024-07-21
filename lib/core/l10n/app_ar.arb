@@ -3,7 +3,8 @@
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
   },
-  "signin": "أضافة حساب",
+  "welcome": "اهلا بك",
+  "signin": "تسجيل الدخول",
   "login": "تسجيل الدخول",
   "forgotPassword": "نسيت كلمة السر؟",
   "email": "البريد الالكتروني",
@@ -20,10 +21,12 @@
   
   "ok": "موافق",
   "no": "لا",
+  "cancel": "الغاء",
   "skip": "تخطي <",
   "confirm": "تأكيد",
   "add": "اضافة",
   "update": "تعديل",
+  "save": "حفظ",
   
   "logoutAlert": "تسجيل الخروج؟",
   "logoutAlertContents": "انت الأن على وشك تسجيل الخروج, قد تتعرض معلوماتك للحذف, هل انت متأكد؟",
@@ -32,6 +35,8 @@
   "sport": "الرياضة",
   "measurements": "القياسات",
   "language": "اللغة",
+
+  "chooseLang": "اختر اللغة:",
   "about": "حول",
 
   "height": "الطول (cm)",
@@ -60,6 +65,25 @@
 
   "codeNum": "رقم الكود",
 
-  "reps": "العدات"
+  "reps": "العدات",
+
+  "empty": "المحتوى فارغ",
+
+  "error": "حدث خطأ ما",
+
+  "profile": "الحساب",
+
+  "pName": "الاسم:",
+  "pNameError": "الرجاء ادخال الاسم الكامل",
+  "phoneNum": "رقم الهاتف:",
+  "phoneNumError": "الرجاء ادخال رقم الهاتف",
+  "birthDate": "سنة الميلاد:",
+  "birthDateError": "الرجاء ادخال سنة الميلاد",
+  "gender": "الجنس:",
+  "genderError": "الرجاء اختيار الجنس",
+
+  "male": "ذكر",
+  "female": "انثى"
+
 
 }

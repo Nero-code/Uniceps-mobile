@@ -17,6 +17,8 @@ final class AuthNewPassword extends AuthState {
   // final String pass
 }
 
+final class AuthAuthenticatedState extends AuthState {}
+
 final class AuthDoneState extends AuthState {
   final Player player;
   const AuthDoneState({required this.player});
@@ -27,7 +29,12 @@ final class AuthErrorState extends AuthState {
   const AuthErrorState({required this.f});
 }
 
-final class ProfileSubmitionDone extends AuthState {}
+final class AuthNullProfile extends AuthState {}
+
+final class ProfileSubmitionDone extends AuthState {
+  final Player player;
+  const ProfileSubmitionDone({required this.player});
+}
 
 final class GymVerifiedState extends AuthState {}
 

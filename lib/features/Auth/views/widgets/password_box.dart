@@ -36,6 +36,9 @@ class _PasswordBoxState extends State<PasswordBox> {
                   controller: passCtrl,
                   obscureText: true,
                   decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.password_rounded),
+                    contentPadding: EdgeInsets.all(10),
+                    enabledBorder: OutlineInputBorder(),
                     border: const OutlineInputBorder(),
                     label: Text("New Password"),
                   ),
@@ -51,8 +54,11 @@ class _PasswordBoxState extends State<PasswordBox> {
                   controller: secondCtrl,
                   obscureText: true,
                   decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.lock_reset_sharp),
+                    contentPadding: const EdgeInsets.all(10),
+                    enabledBorder: OutlineInputBorder(),
                     border: const OutlineInputBorder(),
-                    label: Text("Confirm Pass"),
+                    label: Text("Confirm Password"),
                   ),
                   validator: (val) {
                     if (val == null || val.isEmpty) {
@@ -73,25 +79,32 @@ class _PasswordBoxState extends State<PasswordBox> {
               if (passCtrl.text == secondCtrl.text) {
                 print("pass2");
                 widget.onConfirm(passCtrl.text);
+                // Navigator.pop(context);
                 return;
               }
               print("pass3");
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text("OK"),
-                        ),
-                      ],
-                      title: Text("Error..."),
-                      content: Text("Passwords do not match!"),
-                    ).build(context);
-                  });
+              // showDialog(
+              //     context: context,
+              //     builder: (context) {
+              //       return AlertDialog(
+              //         actions: [
+              //           TextButton(
+              //             onPressed: () {
+              //               Navigator.pop(context);
+              //             },
+              //             child: Text("OK"),
+              //           ),
+              //         ],
+              //         title: Text("Error..."),
+              //         content: Text("Passwords do not match!"),
+              //       ).build(context);
+              //     });
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.red,
+                  content: Text("Passwords do not match!"),
+                ),
+              );
             }
           },
           child: Text("Confirm"),

@@ -1,3 +1,4 @@
+// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Profile/domain/entities/gym.dart';
@@ -23,6 +24,8 @@ class _GymWidgetState extends State<GymWidget> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: ExpansionPanelList(
+        materialGapSize: 5,
+        elevation: 0,
         expansionCallback: (panelIndex, isExp) {
           if (isExpanded.contains(panelIndex)) {
             isExpanded.remove(panelIndex);
@@ -32,25 +35,40 @@ class _GymWidgetState extends State<GymWidget> {
           setState(() {});
         },
         children: [
-          for (var i in list)
+          for (var i in widget.gyms)
             ExpansionPanel(
               canTapOnHeader: true,
-              // backgroundColor: Theme.of(context).colorScheme.background,
-              backgroundColor: Colors.white,
-              isExpanded: isExpanded.contains(list.indexOf(i)),
+              backgroundColor: Theme.of(context).colorScheme.background,
+              // backgroundColor: Colors.white,
+              isExpanded: isExpanded.contains(widget.gyms.indexOf(i)),
               headerBuilder: (context, isExp) {
                 return Row(
                   children: [
-                    SizedBox(width: 10),
-                    Image(
-                      image: AssetImage("images/google.png"),
+                    const SizedBox(width: 10),
+                    // i.logo == null
+                    //     ?
+                    const Image(
+                      image: AssetImage("images/logo/Logo.png"),
                       width: 30,
                       height: 30,
                     ),
+                    // : CachedNetworkImage(
+                    //     imageUrl: "${i.logo}",
+                    //     width: 30,
+                    //     height: 30,
+                    //     placeholder: (context, url) {
+                    //       return const Icon(Icons.fitness_center_outlined);
+                    //     },
+                    //   ),
                     SizedBox(width: 15),
                     Text(
-                      "Gym Name",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      i.name,
+                      style: i.isCurrent
+                          ? TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary,
+                            )
+                          : null,
                     ),
                   ],
                 );
@@ -61,7 +79,7 @@ class _GymWidgetState extends State<GymWidget> {
                       onPressed: () {
                         Navigator.of(context).pushNamed(
                           ROUTE_MEASUREMENTS,
-                          // arguments: widget.gyms[i]
+                          arguments: i.gymId,
                         );
                       },
                       child: Text("Measurements")),
@@ -69,7 +87,7 @@ class _GymWidgetState extends State<GymWidget> {
                       onPressed: () {
                         Navigator.of(context).pushNamed(
                           ROUTE_SUBSCRIPTIONS,
-                          // arguments: widget.gyms[i]
+                          arguments: i.gymId,
                         );
                       },
                       child: Text("Subscriptions")),
