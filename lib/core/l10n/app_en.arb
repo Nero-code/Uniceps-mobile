@@ -3,6 +3,7 @@
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
   },
+  "welcome": "Welcome",
   "signin": "Sign in",
   "login": "Login",
   "forgotPassword": "Forgot Password?",
@@ -20,10 +21,12 @@
   
   "ok": "OK",
   "no": "No",
+  "cancel": "Cancel",
   "skip": "SKIP >",
   "confirm": "Confirm",
   "add": "Add",
   "update": "Update",
+  "save": "Save",
   
   "logoutAlert": "Logout?",
   "logoutAlertContents": "You are about to Logout of the app some of your data may be lost, Are you sure?",
@@ -32,6 +35,7 @@
   "sport": "Sport",
   "measurements": "Measurements",
   "language": "Language",
+  "chooseLang": "Choose Language:",
   "about": "About",
 
   "height": "Height (cm)",
@@ -60,6 +64,24 @@
 
   "codeNum": "Code Number",
 
-  "reps": "Reps"
+  "reps": "Reps",
+
+  "empty": "No Records to show",
+
+  "error": "something went wrong",
+
+  "profile": "Profile",
+
+  "pName": "Name:",
+  "pNameError": "Please Enter your Full name",
+  "phoneNum": "Phone Number:",
+  "phoneNumError": "Please Enter your Phone Number",
+  "birthDate": "Date of Birth:",
+  "birthDateError": "Please Enter your Year of Birth",
+  "gender": "Gender",
+  "genderError": "Please choose your Gender",
+
+  "male": "Male",
+  "female": "Female"
 
 }

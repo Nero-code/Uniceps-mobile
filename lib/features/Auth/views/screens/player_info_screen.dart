@@ -3,13 +3,22 @@ import 'package:flutter/services.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:uniceps/features/Auth/views/widgets/gender_selection_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-////////////////////////////////////////////////////////////////////////////////
+/**************************************************************************** */
 ///
-///   This Page Either presents player info as text after he chosed the gym,
-///   OR, Displays TextInputFields for the player to write his/her info...
+/// This Page Displays TextInputFields for the player to write his/her info...
 ///
-////////////////////////////////////////////////////////////////////////////////
+/// It Needs an Argument of type [Map] if data already exists, and it's form:
+///
+/// {
+///
+///       "hasData": bool,
+///       "data": Player()
+///
+/// }
+///
+///
 
 class PlayerInfoScreen extends StatelessWidget {
   const PlayerInfoScreen({super.key});
@@ -23,13 +32,14 @@ class PlayerInfoScreen extends StatelessWidget {
     );
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final isEdit = args['isEdit'] ?? true;
+    final hasData = args['isEdit'] ?? false;
     return Scaffold(
-      body: isEdit
-          ? const InputTypePlayerInfoScreen()
-          : PLayerInfoDisplay(
-              player: args['data'] as Player,
-            ),
+      body:
+          // isEdit ?
+          InputTypePlayerInfoScreen(player: hasData ? args['data'] : null),
+      // : PLayerInfoDisplay(
+      //     player: args['data'] as Player,
+      //   ),
     );
   }
 }
@@ -43,7 +53,9 @@ class PlayerInfoScreen extends StatelessWidget {
 ////////////////////////////////////////////////////////////////////////////////
 
 class InputTypePlayerInfoScreen extends StatefulWidget {
-  const InputTypePlayerInfoScreen({super.key});
+  const InputTypePlayerInfoScreen({super.key, this.player});
+
+  final Player? player;
 
   @override
   State<InputTypePlayerInfoScreen> createState() =>
@@ -61,6 +73,7 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
     return Scaffold(
       body: SafeArea(
         child: Form(
@@ -82,19 +95,24 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
 
                   const SizedBox(height: 10),
                   Container(
-                    padding: EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Column(
                       children: [
                         ///  N A M E
                         TextFormField(
                           controller: nameCtl,
                           decoration: InputDecoration(
-                            labelText: "Full Name",
+                            labelText: local!.pName,
                             isDense: true,
                           ),
+                          onChanged: (val) {
+                            if (val.contains(RegExp(r"[0-9]"))) {
+                              phoneCtl.text = val.substring(0, val.length - 1);
+                            }
+                          },
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please enter your name";
+                              return local.pNameError;
                             }
                             return null;
                           },
@@ -105,7 +123,7 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
                           controller: phoneCtl,
                           keyboardType: TextInputType.phone,
                           decoration: InputDecoration(
-                            labelText: "Phone Number",
+                            labelText: local.phoneNum,
                             isDense: true,
                           ),
                           maxLength: 10,
@@ -118,7 +136,7 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
                             if (value == null ||
                                 value.isEmpty ||
                                 value.length < 10) {
-                              return "Please enter your phone number";
+                              return local.phoneNumError;
                             }
                             return null;
                           },
@@ -137,7 +155,7 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
                               child: TextFormField(
                                 controller: birthCtl,
                                 decoration: InputDecoration(
-                                  label: Text("Birth Year"),
+                                  label: Text(local.birthDate),
                                   isDense: true,
                                 ),
                                 maxLength: 4,
@@ -152,7 +170,7 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
                                   if (value == null ||
                                       value.isEmpty ||
                                       value.length < 4) {
-                                    return "Please enter a valid year";
+                                    return local.birthDateError;
                                   }
                                   return null;
                                 },
@@ -201,16 +219,15 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           if (male == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    backgroundColor: Colors.red,
-                                    content: Text("Please select a Gender")));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text(local.genderError)));
                             return;
                           }
                           Navigator.pushReplacementNamed(context, ROUTE_HOME);
                         }
                       },
-                      child: Text("Save"),
+                      child: Text(local.save),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -233,21 +250,21 @@ class _InputTypePlayerInfoScreenState extends State<InputTypePlayerInfoScreen> {
 ///   provided by the subscribed-to gym...
 ///
 ////////////////////////////////////////////////////////////////////////////////
-
-class PLayerInfoDisplay extends StatelessWidget {
-  const PLayerInfoDisplay({super.key, required this.player});
-  final Player player;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Text("Full Name:  + ${player.name}"),
-          Text("Phone No: ${player.phoneNum}"),
-          Text("Gender: ${player.gender == Gender.male ? "male" : "female"}"),
-          Text("BirthDate: ${player.birthDate}"),
-        ],
-      ),
-    );
-  }
-}
+//
+// class PLayerInfoDisplay extends StatelessWidget {
+//   const PLayerInfoDisplay({super.key, required this.player});
+//   final Player player;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Column(
+//         children: [
+//           Text("Full Name:  + ${player.name}"),
+//           Text("Phone No: ${player.phoneNum}"),
+//           Text("Gender: ${player.gender == Gender.male ? "male" : "female"}"),
+//           Text("BirthDate: ${player.birthDate}"),
+//         ],
+//       ),
+//     );
+//   }
+// }

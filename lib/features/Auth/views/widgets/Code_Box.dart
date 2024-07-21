@@ -49,6 +49,10 @@ class _CodeBoxState extends State<CodeBox> {
                   return null;
                 },
                 decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.numbers_rounded),
+                  contentPadding: const EdgeInsets.all(10),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade400)),
                   border: OutlineInputBorder(),
                   label: Text("Code"),
                   hintText: '001122',

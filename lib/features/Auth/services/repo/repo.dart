@@ -10,11 +10,16 @@ abstract class AuthRepo {
   Future<Either<Failure, bool>> signinWithEmail({required String email});
 
   Future<Either<Failure, bool>> validateEmail(
-      {required String code, required String email});
+      {required String code,
+      required String email,
+      required String notifyToken});
 
   Future<Either<Failure, bool>> checkGymCode({required String gymCode});
 
   Future<Either<Failure, bool>> isLoggedIn();
+
+  // Future<Either<Failure, bool>> addNewPassword(
+  //     {required String email, required String pass});
 
   Future<Either<Failure, bool>> changePassword({required String pass});
 

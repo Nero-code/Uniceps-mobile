@@ -31,26 +31,48 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
     throw Exception();
   }
 
+// 2024-07-20 14:42:53.030212
   @override
   Future<List<Measurement>> getMeasurements(String gymId) async {
-    final res = await _client.get(Uri.http(API, "/metrics", {}), headers: {});
+    print("inside getMeasurements");
+    print(DateTime.now());
+    final res = await _client
+        .get(Uri.parse("$API/metrics/$gymId/123456789"), headers: {});
+    print(res.statusCode);
     if (res.statusCode == 200) {
-      final temp = jsonDecode(res.body)['data'] as List<Map<String, dynamic>>;
+      print("check 0");
+      final temp = jsonDecode(res.body) as List<dynamic>;
+      print("check 1");
       final list = <Measurement>[];
-      temp.map((e) => list.add(MeasurementModel.fromJson(e)));
+      // temp.map((e) =>
+      //     list.add(MeasurementModel.fromJson(e as Map<String, dynamic>)));
+      for (Map<String, dynamic> i in temp) {
+        list.add(MeasurementModel.fromJson(i));
+      }
+      list.sort((a, b) {
+        return b.checkDate.compareTo(a.checkDate);
+      });
+      print("check 2");
       return list;
+    } else if (res.statusCode == 204) {
+      return [];
     }
     throw Exception();
   }
 
   @override
   Future<List<Subscription>> getSubs(String gymId) async {
-    final res = await _client.get(Uri.http(API, "/subscriptions", {}));
+    print("inside Get Subscriptions");
+    final res =
+        await _client.get(Uri.parse("$API/subscription/$gymId/123456789"));
     final list = <Subscription>[];
+    print(res.statusCode);
     if (res.statusCode == 200) {
-      final body = jsonDecode(res.body)['data'] as List<Map<String, dynamic>>;
+      final body = jsonDecode(res.body) as List<Map<String, dynamic>>;
       body.map((e) => list.add(SubscriptionModel.fromJson(e)));
       return list;
+    } else if (res.statusCode == 204) {
+      return [];
     }
     throw Exception();
   }

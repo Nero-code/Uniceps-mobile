@@ -30,7 +30,7 @@ class ProfileRepoImpl implements ProfileRepo {
         final res = await remote.getMeasurements(gymId);
         return Right(res);
       } catch (e) {
-        return Left(GeneralPurposFailure(errorMessage: ""));
+        return Left(GeneralPurposFailure(errorMessage: "something went wrong"));
       }
     }
     return Left(GeneralPurposFailure(errorMessage: ""));

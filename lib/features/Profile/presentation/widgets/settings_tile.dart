@@ -6,8 +6,10 @@ class SettingTile extends StatelessWidget {
     required this.title,
     required this.onPressed,
     required this.isRtl,
+    required this.icon,
   });
 
+  final Widget icon;
   final String title;
   final VoidCallback onPressed;
   final bool isRtl;
@@ -23,10 +25,18 @@ class SettingTile extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(title),
-                const Icon(Icons.arrow_forward_ios_rounded),
+                icon,
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(title),
+                      const Icon(Icons.arrow_forward_ios_rounded),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

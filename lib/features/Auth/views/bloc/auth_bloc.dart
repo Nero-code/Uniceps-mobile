@@ -14,23 +14,39 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required this.usecases}) : super(AuthInitial()) {
     on<AuthEvent>((event, emit) async {
       if (event is AuthCheckEvent) {
-        bool isLogged = false;
+        // bool isLogged = false;
 
         final either = await usecases.isLoggedIn();
+
         either.fold(
           (l) => emit(AuthErrorState(f: l)),
-          (r) async {
-            isLogged = r;
-          },
+          (r) => emit(AuthAuthenticatedState()),
         );
-        if (!isLogged) {
-          emit(AuthErrorState(
-              f: AuthFailure(errorMessage: "Not Authenticated!")));
-          return;
-        }
-        final e = await usecases.getProfile();
-        e.fold(
-          (l) => emit(AuthErrorState(f: l)),
+
+        // either.fold(
+        //   (l) => emit(AuthErrorState(f: l)),
+        //   (r) async {
+        //     isLogged = r;
+        //   },
+        // );
+        // if (!isLogged) {
+        //   emit(
+        //     AuthErrorState(f: AuthFailure(errorMessage: "Not Authenticated!")),
+        //   );
+        //   return;
+        // }
+        // final e = await usecases.getProfile();
+        // e.fold(
+        //   (l) => emit(AuthErrorState(f: l)),
+        //   (r) => emit(AuthDoneState(player: r)),
+        // );
+        //
+        //
+        //
+      } else if (event is AuthGetProfileEvent) {
+        final either = await usecases.getProfile();
+        either.fold(
+          (l) => emit(AuthNullProfile()),
           (r) => emit(AuthDoneState(player: r)),
         );
       } else if (event is EmailSigninRequestEvent) {
@@ -40,21 +56,33 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           (l) => emit(AuthErrorState(f: l)),
           (r) => emit(AuthCodeSentState()),
         );
+        //
+        //
+        //
       } else if (event is AuthEmailCodeVerifyEvent) {
         emit(AuthLoadingState());
-        final either =
-            await usecases.validateCode(code: event.code, email: event.email);
+        final either = await usecases.validateCode(
+            code: event.code, email: event.email, notifyToken: "");
         either.fold(
           (l) => emit(AuthWrongCodeState()),
           (r) => emit(AuthNewPassword()),
         );
+        //
+        //
+        //
+        // } else if (event is AuthAddNewPasswordEvent) {
+        //   emit(AuthLoadingState());
+        //   final either = await usecases.addNewPassword(pass: event.pass);
       } else if (event is AuthProfileSubmitEvent) {
         emit(AuthLoadingState());
         final either = await usecases.submitProfile(player: event.player);
         either.fold(
           (l) => emit(AuthErrorState(f: l)),
-          (r) => emit(ProfileSubmitionDone()),
+          (r) => emit(ProfileSubmitionDone(player: event.player)),
         );
+        //
+        //
+        //
       } else if (event is GymCodeVerifyEvent) {
         emit(AuthLoadingState());
         final either = await usecases.checkGymCode(gymCode: event.gymCode);
@@ -62,6 +90,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           (l) => emit(AuthErrorState(f: l)),
           (r) => emit(GymVerifiedState()),
         );
+        //
+        //
+        //
       }
     });
   }

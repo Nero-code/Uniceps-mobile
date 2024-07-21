@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/core/Themes/light_theme.dart';
+// import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/features/Auth/services/enitites/player.dart';
+import 'package:uniceps/core/helpers/player_screen_arguments.dart';
+// import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/widgets/auth_box.dart';
 import 'package:uniceps/features/Auth/views/widgets/Code_Box.dart';
+import 'package:uniceps/features/Auth/views/widgets/background_decoration.dart';
 import 'package:uniceps/features/Auth/views/widgets/gym_code_box.dart';
-import 'package:uniceps/features/Auth/views/widgets/password_box.dart';
+// import 'package:uniceps/features/Auth/views/widgets/password_box.dart';
 
 // /////////////////////////////////////////////////////////////////////////////
 //
@@ -68,59 +69,97 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        systemNavigationBarColor: Theme.of(context).colorScheme.primary,
+        systemNavigationBarColor: Theme.of(context).colorScheme.background,
+        statusBarBrightness: Brightness.light,
       ),
     );
     navOnRestore();
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
+        child: const Icon(Icons.home),
+        onPressed: () => Navigator.pushReplacementNamed(context, ROUTE_HOME),
+      ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
-          gradient: RadialGradient(
-            colors: [
-              mainBlueDark,
-              mainBlueLight,
-            ],
-            center: Alignment.topLeft,
-            radius: 2.2,
-            stops: [
-              0.5,
-              0.5,
-            ],
-          ),
-          // gradient: LinearGradient(
-          //   colors: [
-          //     mainBlueDark,
-          //     secondaryBlue,
-          //   ],
-          //   begin: Alignment.topLeft,
-          //   end: Alignment.bottomRight,
-          //   stops: [
-          //     0.5,
-          //     0.5,
-          //   ],
-          // ),
-        ),
+            // gradient: RadialGradient(
+            //   colors: [
+            //     mainBlueDark,
+            //     mainBlueLight,
+            //   ],
+            //   center: Alignment.topLeft,
+            //   radius: 2.2,
+            //   stops: [
+            //     0.5,
+            //     0.5,
+            //   ],
+            // ),
+            // gradient: LinearGradient(
+            //   colors: [
+            //     mainBlueDark,
+            //     secondaryBlue,
+            //   ],
+            //   begin: Alignment.topLeft,
+            //   end: Alignment.bottomRight,
+            //   stops: [
+            //     0.5,
+            //     0.5,
+            //   ],
+            // ),
+            ),
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
-            if (state is AuthDoneState) {
-              Navigator.of(context).pushReplacementNamed(
-                ROUTE_PLAYER_INFO,
-                arguments: {
-                  "isEdit": false,
-                  "data": const Player(
-                      name: "name",
-                      phoneNum: "phoneNum",
-                      birthDate: "birthDate",
-                      gender: Gender.male),
-                },
-              );
+            print(state.runtimeType);
+            // AuthCodeSent
+            // AuthNewPass
+            // AuthDone
+            if (state is AuthCodeSentState) {
+              //
+              //  Jump to Code input
+              //
+              currentPage.value = 1;
+              _pageController.animateToPage(1,
+                  duration: duration, curve: curve);
+            } else if (state is AuthDoneState) {
+              //
+              //  Jump to Gym handshake
+              //
+
+              // state.player;
+              // Navigator.of(context).pushReplacementNamed(
+              //   ROUTE_PLAYER_INFO,
+              //   arguments: {
+              //     "isEdit": false,
+              //     "data": const Player(
+              //         name: "name",
+              //         phoneNum: "phoneNum",
+              //         birthDate: "birthDate",
+              //         gender: Gender.male),
+              //   },
+              // );
+              currentPage.value = 2;
+              _pageController.animateToPage(2,
+                  duration: duration, curve: curve);
+            } else if (state is GymVerifiedState) {
+              Navigator.pushReplacementNamed(context, ROUTE_PLAYER_INFO);
             }
           },
           builder: (context, state) {
             return Stack(
               children: [
+                ///   B A C K G R O U N D   P A I N T   T R I A N G L E S
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: CustomPaint(
+                    painter: TriPainter(
+                      mainColor: Theme.of(context).colorScheme.secondary,
+                      secondary: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                ),
                 SafeArea(
                   child: SingleChildScrollView(
                     child: Column(
@@ -132,7 +171,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                           padding: const EdgeInsets.all(25),
                           alignment: Alignment.center,
                           child: const Image(
-                            image: AssetImage('images/logo/Logo-light.png'),
+                            image: AssetImage('images/logo/Logo.png'),
                           ),
                         ),
 
@@ -143,6 +182,9 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                             physics: const NeverScrollableScrollPhysics(),
                             controller: _pageController,
                             children: [
+                              //
+                              //    E M A I L - I N P U T   S T E P  # 0
+                              //
                               AuthBox(
                                 isLogin: isLogin.value,
                                 onChangeType: () {
@@ -151,26 +193,45 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                   });
                                 },
                                 login: (e, p) async {
-                                  BlocProvider.of<AuthBloc>(context).add(
-                                    LoginWithEmailAndPassEvent(
-                                        email: e, pass: p),
-                                  );
+                                  context.read<AuthBloc>().add(
+                                        LoginWithEmailAndPassEvent(
+                                            email: e, pass: p),
+                                      );
+                                  await context
+                                      .read<AuthBloc>()
+                                      .stream
+                                      .skip(1)
+                                      .first;
+
+                                  // BlocProvider.of<AuthBloc>(context).add(
+                                  //   LoginWithEmailAndPassEvent(
+                                  //       email: e, pass: p),
+                                  // );
                                   email.value = e;
                                   pass.value = p;
-                                  currentPage.value = 3;
+                                  // currentPage.value = 3;
 
-                                  _pageController.animateToPage(3,
-                                      duration: duration,
-                                      curve: Curves.easeOutExpo);
+                                  // _pageController.animateToPage(3,
+                                  //     duration: duration,
+                                  //     curve: Curves.easeOutExpo);
                                 },
                                 signin: (e) async {
-                                  BlocProvider.of<AuthBloc>(context).add(
-                                    EmailSigninRequestEvent(email: e),
-                                  );
+                                  context.read<AuthBloc>().add(
+                                        EmailSigninRequestEvent(email: e),
+                                      );
+                                  await context
+                                      .read<AuthBloc>()
+                                      .stream
+                                      .skip(1)
+                                      .first;
+
+                                  // BlocProvider.of<AuthBloc>(context).add(
+                                  //   EmailSigninRequestEvent(email: e),
+                                  // );
                                   email.value = e;
-                                  currentPage.value = 1;
-                                  _pageController.animateToPage(1,
-                                      duration: duration, curve: curve);
+                                  // currentPage.value = 1;
+                                  // _pageController.animateToPage(1,
+                                  //     duration: duration, curve: curve);
                                 },
                                 onForgot: () => Navigator.of(context).push(
                                   MaterialPageRoute(
@@ -179,30 +240,44 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                   ),
                                 ),
                               ),
+
+                              //
+                              //  C O D E   I N P U T   S T E P   # 1
+                              //
                               Opacity(
                                 opacity: !isLogin.value ? 1 : 0,
                                 child: CodeBox(
                                   onPressed: (code) async {
-                                    currentPage.value = 2;
-                                    _pageController.animateToPage(2,
-                                        duration: duration, curve: curve);
-                                  },
-                                ),
-                              ),
-                              Opacity(
-                                opacity: !isLogin.value ? 1 : 0,
-                                child: PasswordBox(
-                                  onConfirm: (pass) {
+                                    // currentPage.value = 2;
+                                    // _pageController.animateToPage(2,
+                                    //     duration: duration, curve: curve);
                                     BlocProvider.of<AuthBloc>(context).add(
-                                      AuthAddNewPasswordEvent(
-                                          email: email.value, pass: pass),
-                                    );
-                                    currentPage.value = 3;
-                                    _pageController.animateToPage(3,
-                                        duration: duration, curve: curve);
+                                        AuthEmailCodeVerifyEvent(
+                                            code: code, email: email.value));
                                   },
                                 ),
                               ),
+                              //
+                              //    P A S S W O R D   S T E P
+                              //
+                              // Opacity(
+                              //   opacity: !isLogin.value ? 1 : 0,
+                              //   child: PasswordBox(
+                              //     onConfirm: (pass) {
+                              //       BlocProvider.of<AuthBloc>(context).add(
+                              //         AuthAddNewPasswordEvent(
+                              //             email: email.value, pass: pass),
+                              //       );
+                              //       currentPage.value = 3;
+                              //       _pageController.animateToPage(3,
+                              //           duration: duration, curve: curve);
+                              //     },
+                              //   ),
+                              // ),
+
+                              //
+                              //    G Y M - H A N D S H A K E   S T E P
+                              //
                               GymCodeBox(
                                 onPressed: (gymCode) {
                                   BlocProvider.of<AuthBloc>(context).add(
@@ -212,7 +287,8 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                 onSkip: () {
                                   Navigator.of(context).pushNamed(
                                       ROUTE_PLAYER_INFO,
-                                      arguments: {"isEdit": true});
+                                      arguments:
+                                          PlayerArguments(hasData: false));
                                 },
                               ),
                             ],
@@ -222,7 +298,8 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                           child: Text(
                             "TrioVerse",
                             style: TextStyle(
-                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey.shade700,
                             ),
                           ),
                         ),

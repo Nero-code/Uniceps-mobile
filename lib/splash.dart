@@ -5,24 +5,24 @@ import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
-  Future<void> navigate(BuildContext context) async {
-    await Future.delayed(const Duration(seconds: 3));
-    // Navigator.pushReplacementNamed(
-    //   context,
-    //   ROUTE_AUTH,
-    // );
-    Navigator.pushReplacementNamed(
-      context,
-      ROUTE_HOME,
-    );
-  }
+  // Future<void> navigate(BuildContext context) async {
+  //   await Future.delayed(const Duration(seconds: 3));
+  //   // Navigator.pushReplacementNamed(
+  //   //   context,
+  //   //   ROUTE_AUTH,
+  //   // );
+  //   Navigator.pushReplacementNamed(
+  //     context,
+  //     ROUTE_HOME,
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
     // navigate(context);
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) async {
-        // TODO: implement listener
+        print(state.runtimeType);
         if (state is AuthErrorState) {
           Navigator.of(context).pushReplacementNamed(ROUTE_AUTH);
         } else {

@@ -78,7 +78,6 @@ class _GymCodeBoxState extends State<GymCodeBox> {
                       const Color.fromARGB(68, 158, 158, 158))),
               child: Text(
                 "SKIP >",
-                style: TextStyle(color: Colors.white),
               ),
             ),
           ),

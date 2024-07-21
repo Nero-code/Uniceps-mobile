@@ -65,16 +65,26 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<Either<Failure, bool>> isLoggedIn() async {
     try {
-      if (await local.isLoggedIn()) {
-        return const Right(true);
-      }
-      return const Right(false);
+      return Right(await local.isLoggedIn());
     } on EmptyCacheExeption {
-      return const Right(false);
+      return Left(
+          EmptyCacheFailure(errorMessage: "Null User || No Token was found"));
     } catch (e) {
       return Left(EmptyCacheFailure(errorMessage: "Unknown Error"));
     }
   }
+
+  // @override
+  // Future<Either<Failure, bool>> addNewPassword(
+  //     {required String email, required String pass}) async {
+  //   if (await connection.hasConnection) {
+  //     try{
+
+  //     }
+  //   } else {
+  //     return Left(OfflineFailure(errorMessage: "No Internet Connection!"));
+  //   }
+  // }
 
   @override
   Future<Either<Failure, bool>> changePassword({required String pass}) async {
@@ -91,10 +101,16 @@ class AuthRepoImpl implements AuthRepo {
 
   @override
   Future<Either<Failure, bool>> validateEmail(
-      {required String code, required String email}) async {
+      {required String code,
+      required String email,
+      required String notifyToken}) async {
     if (await connection.hasConnection) {
       try {
-        final res = await remote.verifyCodeSent(code: code);
+        final res = await remote.verifyCodeSent(
+          code: code,
+          email: email,
+          notifyToken: notifyToken,
+        );
         return Right(res);
       } catch (e) {
         return Left(ServerFailure(errMsg: ""));

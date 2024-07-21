@@ -64,8 +64,10 @@ class LocalAuthSourceImple implements LocalAuthSource {
 
   @override
   Future<bool> isLoggedIn() async {
+    print("Inside Local isLoggedIn ");
     final user = userBox.get("user");
-    if (user == null || !user.containsKey("token")) return false;
+    print(user);
+    if (user == null || !user.containsKey("token")) throw EmptyCacheExeption();
     return true;
   }
 

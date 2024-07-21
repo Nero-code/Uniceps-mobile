@@ -40,6 +40,8 @@ final class AuthCheckEvent extends AuthEvent {}
 ///   Gym and Profile Events
 ///
 
+final class AuthGetProfileEvent extends AuthEvent {}
+
 final class AuthProfileSubmitEvent extends AuthEvent {
   final PlayerModel player;
   const AuthProfileSubmitEvent({required this.player});

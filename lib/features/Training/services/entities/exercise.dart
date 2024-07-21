@@ -1,6 +1,13 @@
 import 'package:equatable/equatable.dart';
 
 class Exercise extends Equatable {
+  /// `id`: Unique Id.
+  ///
+  /// `name`: name of the exercise.
+  ///
+  /// `description`: more explaination for the exercise.
+  ///
+  /// `tId`: Training Id the exercise belongs to.
   final String id, name, description, tId, imageUrl;
   final int lastWaight;
 
@@ -13,16 +20,10 @@ class Exercise extends Equatable {
     this.lastWaight = 0,
   });
 
-  factory Exercise.fromJson(Map<String, dynamic> json) {
-    return Exercise(
-      id: json['id'],
-      name: json['name'],
-      tId: json['tId'],
-      imageUrl: json['imageUrl'],
-      description: json['description'],
-    );
-  }
-
   @override
-  List<Object?> get props => [id, name];
+  List<Object?> get props => [
+        id,
+        name,
+        lastWaight,
+      ];
 }

@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeCard extends StatelessWidget {
-  const HomeCard({super.key, required this.onTap});
+  const HomeCard({
+    super.key,
+    required this.onTap,
+    this.percentage = 0.0,
+    this.level = 0,
+  });
 
   final VoidCallback onTap;
+  final double percentage;
+  final int level;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +78,7 @@ class HomeCard extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: LinearProgressIndicator(
-                                  value: 0.5,
+                                  value: percentage,
                                   color: Theme.of(context)
                                       .colorScheme
                                       .onBackground,
@@ -87,7 +94,7 @@ class HomeCard extends StatelessWidget {
                                   ),
                                   children: [
                                     TextSpan(
-                                      text: '9',
+                                      text: '$level',
                                       style: TextStyle(
                                           fontWeight: FontWeight.normal),
                                     ),

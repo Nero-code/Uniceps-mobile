@@ -19,8 +19,8 @@ class FogotPassBloc extends Bloc<FogotPassEvent, FogotPassState> {
         );
       } else if (event is FPassCodeVerifyEvent) {
         emit(FPassLoadingState());
-        final either =
-            await usecases.validateCode(code: event.code, email: event.email);
+        final either = await usecases.validateCode(
+            code: event.code, email: event.email, notifyToken: "");
         either.fold(
           (l) => emit(FPassErrorState(f: l)),
           (r) => emit(FPassNewPassState()),

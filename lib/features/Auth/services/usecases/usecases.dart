@@ -23,13 +23,21 @@ class AuthUsecases {
   }
 
   Future<Either<Failure, bool>> validateCode(
-      {required String code, required String email}) async {
-    return await repo.validateEmail(code: code, email: email);
+      {required String code,
+      required String email,
+      required String notifyToken}) async {
+    return await repo.validateEmail(
+        code: code, email: email, notifyToken: notifyToken);
   }
 
   Future<Either<Failure, bool>> isLoggedIn() async {
     return await repo.isLoggedIn();
   }
+
+  // Future<Either<Failure, bool>> addNewPassword(
+  //     {required String email, required String pass}) async {
+  //   return repo.addNewPassword(email: email, pass: pass);
+  // }
 
   Future<Either<Failure, bool>> changePassword({required String pass}) async {
     return await repo.changePassword(pass: pass);
