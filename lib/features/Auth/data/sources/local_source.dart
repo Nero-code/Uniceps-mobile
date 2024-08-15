@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/features/Auth/data/models/user_model.dart';
@@ -36,7 +37,7 @@ class LocalAuthSourceImple implements LocalAuthSource {
 
   @override
   Future<UserModel> getUser() async {
-    final res = userBox.get("user");
+    final res = userBox.get(HIVE_USER_BOX);
     if (res == null) {
       throw EmptyCacheExeption();
     }
@@ -45,12 +46,12 @@ class LocalAuthSourceImple implements LocalAuthSource {
 
   @override
   Future<void> saveUser(UserModel model) async {
-    await userBox.put("user", model.toJson());
+    await userBox.put(HIVE_USER_BOX, model.toJson());
   }
 
   @override
   Future<PlayerModel> getPlayerInfo() async {
-    final playerInfo = playerBox.get("player_info");
+    final playerInfo = playerBox.get(HIVE_PROFILE_BOX);
     if (playerInfo == null) {
       throw EmptyCacheExeption();
     }
@@ -59,14 +60,15 @@ class LocalAuthSourceImple implements LocalAuthSource {
 
   @override
   Future<void> savePlayerInfo(PlayerModel playerModel) async {
-    return await playerBox.put("player_info", playerModel.toJson());
+    return await playerBox.put(HIVE_PROFILE_BOX, playerModel.toJson());
   }
 
   @override
   Future<bool> isLoggedIn() async {
     print("Inside Local isLoggedIn ");
-    final user = userBox.get("user");
-    print(user);
+    final user = userBox.get(HIVE_USER_BOX);
+
+    print("User in Box: $user");
     if (user == null || !user.containsKey("token")) throw EmptyCacheExeption();
     return true;
   }

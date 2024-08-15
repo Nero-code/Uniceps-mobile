@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/features/Training/services/entities/avatar.dart';
 import 'package:uniceps/features/Training/services/entities/presence.dart';
 // import 'package:uniceps/features/Profile/domain/measrument.dart';
 // import 'package:uniceps/features/Profile/domain/subscription.dart';
@@ -10,4 +11,6 @@ abstract class TrainingRepo {
 
   Future<Either<Failure, List<Presence>>> getPresenceAtGym(
       {required String gymId});
+
+  Future<Either<Failure, Avatar>> getAvatar();
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 const APP_NAME = 'Uniceps';
 
 enum Gender {
@@ -26,32 +28,39 @@ enum MuscleGroup {
   tripez,
 }
 
-////////////////////////////////////////////////////////////////////////////////
 ///
-///   A P I   U R L S
 ///
-////////////////////////////////////////////////////////////////////////////////
+///   A P I - U R L S
+///
+///
+
+final HEADERS = {
+  "Content-Type": "application/json",
+  "Accept": "application/json",
+};
 
 const FAKE_API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
 const API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
 const HTTP_REGISTER = "/auth";
 const HTTP_VERIFY_CODE = "/auth/verify";
+
+const HTTP_PLAYER_INFO = "/profile";
+
 const HTTP_LOGIN = "";
 const HTTP_FORGOT_PASSWORD = "";
-const HTTP_PLAYER_INFO = "";
 
 const HTTP_TRAINING_PROGRAM = "";
 const HTTP_SUBSCRIPTIONS = "/subs";
 const HTTP_MEASURMENTS = "/metrics";
 
 const HTTP_PRESENCE = "";
-const HTTP_MY_GYMS = "";
+const HTTP_GYMS = "/gyms";
 
-// /////////////////////////////////////////////////////////////////////////////
-//
-//    A P P   R O U T E S
-//
-// /////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///
+///    A P P - R O U T E S
+///
+///////////////////////////////////////////////////////////////////////////////
 
 const ROUTE_SPLASH = '/';
 
@@ -65,45 +74,81 @@ const ROUTE_FORGOT_PASSWORD = '/forgot_password';
 ///   M A I N   R O U T E S
 ///
 const ROUTE_HOME = '/home';
-const ROUTE_PROFILE = '/profile';
-const ROUTE_EXERCISE = '/exercise';
-const ROUTE_SUBSCRIPTIONS = '/subscriptions';
-const ROUTE_MEASUREMENTS = '/measurements';
+const ROUTE_HANDSHAKE = '/home/handshake';
+const ROUTE_PROFILE = '/home/profile';
+const ROUTE_GYMS_LIST = '/home/profile/gyms_list';
+const ROUTE_EXERCISE = '/home/exercise';
+const ROUTE_SUBSCRIPTIONS = '/home/profile/subscriptions';
+const ROUTE_MEASUREMENTS = '/home/profile/measurements';
 
 ///
 ///   A U X I L I A R Y   R O U T E S
 ///
-const ROUTE_QR_SCANNER = '/qr_scanner';
+const ROUTE_QR_SCANNER = '/home/qr_scanner';
 const ROUTE_PLAYER_INFO = '/player_info';
-const ROUTE_PRESENCE = '/presence';
+const ROUTE_PRESENCE = '/home/profile/presence';
+
+///
+///   H I V E   T A B L E S   N A M E S
+///
+
+const HIVE_PROFILE_BOX = "player_info";
+const HIVE_USER_BOX = "user";
 
 // ////////////////////////////////////////////////////////////////////////// //
 //                H I V E   D A T A B A S E   S C H E M A
 // ////////////////////////////////////////////////////////////////////////// //
-//                                                                            //
-// {                                                                          //
-//    "user":                                                                 //
-//    {                                                                       //
-//      "player_info": {Player}                                               //
-//      "token": {Token}                                                      //
-//    }                                                                       //
-//                                                                            //
-//    "program": {TrainingProgram},                                           //
-//                                                                            //
-//    "Gyms":                                                                 //
-//    {                                                                       //
-//      "currentGym": {"gym_id"}                                              //
-//      list["gym_id"]:                                                       //
-//      {                                                                     //
-//        "metrics": [1,2,3],                                                 //
-//        "SubScriptions": [1,2,3],                                           //
-//      }                                                                     //
-//    }                                                                       //
-//    
+//                                                                            
+// {                                 
+//    "user":
+//      {
+//        "player_info": {Player}         @Deprecated
+//        "token": {Token}
+//      }
+//
+//    ----------------------------------
+//
+//    "program": {TrainingProgram},
+//
+//    ----------------------------------
+//  
+//    "Gyms":
+//      {
+//        "currentGym": {"gym_id"}
+//        list["gym_id"]:
+//        {
+//          "metrics": [id1, id2, id3],
+//          "SubScriptions": [id1, id2, id3],
+//        }
+//      }
+//
+//    ----------------------------------
+//
 //    "Presence":
-//    {
-//      "gymId": [ PresenceModel ]
-//    }
-// }                                                                          //
-//                                                                            //
+//      {
+//        "gymId": [ PresenceModel ]
+//      }
+//
+//    ----------------------------------
+//
+//    "measure": 
+//      {
+//        "gymId": [ MeasurementModel ]
+//      }
+//
+//    ----------------------------------
+//
+//    "subs":
+//      {
+//        "gymId": [ SubscriptionModel ]
+//      }
+//    ----------------------------------
+//  
+//    "avatar":
+
+
+
+
+// }
+//
 // ////////////////////////////////////////////////////////////////////////// // 

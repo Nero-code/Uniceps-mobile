@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
-import 'package:uniceps/features/Auth/services/enitites/player.dart';
+import 'package:uniceps/features/Auth/data/models/user_model.dart';
+// import 'package:uniceps/features/Auth/services/enitites/player.dart';
 
 abstract class RemoteAuthSource {
   Future<void> loginWithEmailAndPassword({
@@ -12,21 +14,23 @@ abstract class RemoteAuthSource {
     required String password,
   });
   Future<void> verifyEmail({required String email});
-  Future<bool> verifyCodeSent(
+  Future<UserModel> verifyCodeSent(
       {required String code,
       required String email,
       required String notifyToken});
   Future<void> verifyGymCode({required String gymCode});
   Future<void> uploadPlayerInfo({required PlayerModel player});
   Future<void> requestPasswordChange(String newPass);
-  Future<Player> getPlayerInfo();
+  Future<PlayerModel> getPlayerInfo();
   // Future<bool> isLoggedIn();
 }
 
 class RemoteAuthSourceImpl implements RemoteAuthSource {
   final http.Client client;
 
-  RemoteAuthSourceImpl({required this.client});
+  final Box<Map<String, dynamic>> userBox;
+
+  RemoteAuthSourceImpl({required this.client, required this.userBox});
 
   @override
   Future<void> loginWithEmailAndPassword(
@@ -55,31 +59,50 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
 
   @override
   Future<void> uploadPlayerInfo({required PlayerModel player}) async {
-    final res =
-        await client.put(Uri.http(API, "/player", {}), body: player.toJson());
-    if (res.statusCode != 201) {
-      throw Exception();
+    final res = await client.put(
+      Uri.parse("$API$HTTP_PLAYER_INFO"),
+      headers: {
+        ...HEADERS,
+        "x-access-token": userBox.get(HIVE_USER_BOX)!["token"]
+      },
+      body: player.toJson(),
+    );
+    if (res.statusCode != 200) {
+      throw NotFoundException();
     }
   }
 
   @override
-  Future<bool> verifyCodeSent(
+  Future<UserModel> verifyCodeSent(
       {required String code,
       required String email,
       required String notifyToken}) async {
     print("START FUNC: verifyCodeSent()");
-    final res = await client.post(
-        Uri.https(API, HTTP_VERIFY_CODE,
-            {'Content-Type': 'application/json; charset=UTF-8'}),
+    final res = await client.post(Uri.parse(API + HTTP_VERIFY_CODE),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(
             {"otp": code, "email": email, "notify_token": notifyToken}));
+    print("VerifyCode --> res.statusCode : ${res.statusCode}");
     if (res.statusCode == 200) {
+      //
+      // Profile Exists
+      //
       print(res.body);
-      return true;
+      print(
+          "VerifyCode --> jsonDecode(res.body)['token'] : ${jsonDecode(res.body)['token']}");
+      return UserModel(id: "id", token: jsonDecode(res.body)['token']);
+    } else if (res.statusCode == 201) {
+      //
+      //Profile does not Exist!!
+      //
+      // return jsonDecode(res.body)['token'];
+
+      print(res.body);
+      return UserModel(id: "id", token: jsonDecode(res.body)['token']);
     }
 
     print("END   FUNC: verifyCodeSent(): RES: ${res.statusCode}");
-    return false;
+    throw ServerException();
   }
 
   @override
@@ -99,16 +122,21 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
 
   @override
   Future<void> verifyGymCode({required String gymCode}) async {
-    final res = await client.post(Uri.parse(FAKE_API + "/Auth/verify_gym"),
-        body: {"gym_code": gymCode});
+    final res = await client
+        .post(Uri.parse("$API/Auth/verify_gym"), body: {"gym_code": gymCode});
     if (res.statusCode != 200) {
       throw Exception();
     }
   }
 
   @override
-  Future<Player> getPlayerInfo() async {
-    final res = await client.get(Uri.https(FAKE_API + HTTP_PLAYER_INFO));
+  Future<PlayerModel> getPlayerInfo() async {
+    print("inside GetPlayerInfo");
+    print(userBox.get(HIVE_USER_BOX)!["token"]);
+    final res = await client.get(Uri.parse(API + HTTP_PLAYER_INFO), headers: {
+      ...HEADERS,
+      "x-access-token": "${userBox.get(HIVE_USER_BOX)!["token"]}",
+    });
     if (res.statusCode == 200) {
       final temp = jsonDecode(res.body);
       return PlayerModel.fromJson(temp);
@@ -145,3 +173,10 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
     );
   }
 }
+
+// final class ApiAuthResponse {
+//   final bool isNew;
+//   final String token;
+
+//   ApiAuthResponse({required this.isNew, required this.token});
+// }

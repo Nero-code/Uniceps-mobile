@@ -1,8 +1,10 @@
 import 'package:dartz/dartz.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
+// import 'package:uniceps/features/Auth/data/models/user_model.dart';
 import 'package:uniceps/features/Auth/data/sources/local_source.dart';
 import 'package:uniceps/features/Auth/data/sources/remote_source.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
@@ -50,6 +52,32 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
+  Future<Either<Failure, bool>> validateEmail(
+      {required String code,
+      required String email,
+      required String notifyToken}) async {
+    if (await connection.hasConnection) {
+      try {
+        final token = await FirebaseMessaging.instance.getToken();
+        print("Firebase Messaging Token: ${token!.length} \n$token");
+        print("Before: Validate Code Func:");
+        final res = await remote.verifyCodeSent(
+          code: code,
+          email: email,
+          notifyToken: token,
+        );
+        print("Before: Validate Code Func:");
+
+        await local.saveUser(res);
+        return const Right(true);
+      } catch (e) {
+        return Left(ServerFailure(errMsg: ""));
+      }
+    }
+    return Left(OfflineFailure(errorMessage: ""));
+  }
+
+  @override
   Future<Either<Failure, bool>> checkGymCode({required String gymCode}) async {
     if (await connection.hasConnection) {
       try {
@@ -72,6 +100,11 @@ class AuthRepoImpl implements AuthRepo {
     } catch (e) {
       return Left(EmptyCacheFailure(errorMessage: "Unknown Error"));
     }
+    // if(await connection.hasConnection){
+    //   try{
+
+    //   }
+    // }
   }
 
   // @override
@@ -100,26 +133,6 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> validateEmail(
-      {required String code,
-      required String email,
-      required String notifyToken}) async {
-    if (await connection.hasConnection) {
-      try {
-        final res = await remote.verifyCodeSent(
-          code: code,
-          email: email,
-          notifyToken: notifyToken,
-        );
-        return Right(res);
-      } catch (e) {
-        return Left(ServerFailure(errMsg: ""));
-      }
-    }
-    return Left(OfflineFailure(errorMessage: ""));
-  }
-
-  @override
   Future<Either<Failure, bool>> submitProfile(
       {required PlayerModel player}) async {
     if (await connection.hasConnection) {
@@ -140,6 +153,7 @@ class AuthRepoImpl implements AuthRepo {
     if (await connection.hasConnection) {
       try {
         final res = await remote.getPlayerInfo();
+        await local.savePlayerInfo(res);
         return Right(res);
       } catch (e) {
         return Left(ServerFailure(errMsg: "Please try again later"));

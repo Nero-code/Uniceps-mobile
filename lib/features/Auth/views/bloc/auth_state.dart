@@ -13,15 +13,16 @@ final class AuthLoadingState extends AuthState {}
 
 final class AuthCodeSentState extends AuthState {}
 
-final class AuthNewPassword extends AuthState {
-  // final String pass
-}
+// final class AuthNewPassword extends AuthState {
+//   // final String pass
+// }
 
 final class AuthAuthenticatedState extends AuthState {}
 
 final class AuthDoneState extends AuthState {
-  final Player player;
-  const AuthDoneState({required this.player});
+  final bool hasData;
+  final Player? player;
+  const AuthDoneState({required this.hasData, this.player});
 }
 
 final class AuthErrorState extends AuthState {

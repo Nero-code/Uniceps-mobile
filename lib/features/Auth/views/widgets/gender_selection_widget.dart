@@ -1,27 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 ///   A Color-Changeing Widget to represent selection
 class GenderSelectBox extends StatefulWidget {
-  const GenderSelectBox({super.key, required this.onSelect});
+  const GenderSelectBox({super.key, required this.onSelect, this.initialValue});
 
   final void Function(bool? selected) onSelect;
+  final bool? initialValue;
 
   @override
-  State<GenderSelectBox> createState() => _GenderSelectBoxState();
+  State<GenderSelectBox> createState() {
+    print("initial: $initialValue");
+    return _GenderSelectBoxState(initialValue);
+  }
 }
 
 class _GenderSelectBoxState extends State<GenderSelectBox> {
   bool? isMale;
   final background = Color.fromARGB(255, 235, 235, 235);
 
+  _GenderSelectBoxState(this.isMale);
+
   @override
   Widget build(BuildContext context) {
+    print("IsMale: ${this.isMale} : ${isMale.runtimeType}");
+
     return SizedBox(
       height: MediaQuery.of(context).size.width * 0.2,
       child: Column(
         children: [
-          Text("Gender"),
-          SizedBox(height: 5),
+          Text(AppLocalizations.of(context)!.gender),
+          const SizedBox(height: 5),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [

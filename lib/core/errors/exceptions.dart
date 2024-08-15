@@ -7,3 +7,5 @@ class DataBaseException implements Exception {}
 class NoInternetException implements Exception {}
 
 class EmptyCacheExeption implements Exception {}
+
+class NotFoundException implements Exception {}

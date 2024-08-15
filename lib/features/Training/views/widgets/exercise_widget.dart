@@ -61,10 +61,10 @@ class ExerciseWidget extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.6,
                 child: Column(
                   children: [
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                         "Description: Play this exercise with cables and dumbells laying on the floor of the gym with no more than 50 Kg of weight on top of you..."),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: Row(

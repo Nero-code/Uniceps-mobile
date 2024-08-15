@@ -7,6 +7,25 @@ sealed class GymsEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class GetAllGymsEvent extends GymsEvent {
-  const GetAllGymsEvent();
+final class GetAllAvailableGymsEvent extends GymsEvent {
+  const GetAllAvailableGymsEvent();
+}
+
+final class GetCurrentGym extends GymsEvent {
+  const GetCurrentGym();
+}
+
+final class HandShakeGym extends GymsEvent {
+  final String qrCode;
+  const HandShakeGym({required this.qrCode});
+}
+
+final class GymAddAttendance extends GymsEvent {
+  final String data;
+  const GymAddAttendance({required this.data});
+}
+
+final class GymGetAttendanceLog extends GymsEvent {
+  final String gymId;
+  const GymGetAttendanceLog({required this.gymId});
 }

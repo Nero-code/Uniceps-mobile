@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:uniceps/features/Profile/data/sources/local_source.dart';
 import 'package:uniceps/features/Profile/data/sources/remote_source.dart';
@@ -38,9 +39,12 @@ class ProfileRepoImpl implements ProfileRepo {
 
   @override
   Future<Either<Failure, Player>> getProfileData() async {
+    print("REMOTE_S --> ProfileBloc --> getProfileData");
     if (await checker.hasConnection) {
       try {
         final res = await remote.getProfileData();
+        await local.savePlayerData(res);
+        print("profile res: $res");
         return Right(res);
       } catch (e) {
         return Left(GeneralPurposFailure(errorMessage: ""));
@@ -61,7 +65,7 @@ class ProfileRepoImpl implements ProfileRepo {
   Future<Either<Failure, Unit>> changeLanguage() async {
     if (await checker.hasConnection) {
       try {
-        return Right(unit);
+        return const Right(unit);
       } catch (e) {
         return Left(GeneralPurposFailure(errorMessage: ""));
       }
@@ -88,7 +92,7 @@ class ProfileRepoImpl implements ProfileRepo {
     if (await checker.hasConnection) {
       try {
         final res = await remote.getGyms();
-        local.saveGyms(res);
+        await local.saveGyms(res);
         return Right(res);
       } catch (e) {
         return Left(DatabaseFailure(errorMsg: "Error on fetching data"));
@@ -99,6 +103,8 @@ class ProfileRepoImpl implements ProfileRepo {
         return Right(res);
       } on EmptyCacheExeption {
         return Left(EmptyCacheFailure(errorMessage: "Empty Cache"));
+      } catch (e) {
+        return Left(GeneralPurposFailure(errorMessage: "Unknown Error"));
       }
     }
   }
@@ -106,5 +112,28 @@ class ProfileRepoImpl implements ProfileRepo {
   @override
   Future<void> saveGyms(List<GymModel> list) async {
     await local.saveGyms(list);
+  }
+
+  @override
+  Future<Either<Failure, Player>> submitProfileData(PlayerModel playerModel,
+      {required bool isCreate}) async {
+    print("REPO: Submit profile");
+    if (await checker.hasConnection) {
+      try {
+        print("SubmitProfile --> Check 1:");
+        await remote.submitProfileData(playerModel, isCreate: isCreate);
+        print("SubmitProfile --> Check 2:");
+        await local.savePlayerData(playerModel);
+        print("SubmitProfile --> Check 3:");
+        return Right(playerModel);
+      } on ServerException {
+        print("Submit Profile --> ServerEXception");
+        return Left(ServerFailure(errMsg: "Server Error"));
+      } catch (e) {
+        print("Submit Profile --> GeneralEXception: ${e.toString()}");
+        return Left(GeneralPurposFailure(errorMessage: e.toString()));
+      }
+    }
+    return Left(NoInternetConnectionFailure(errMsg: "Offline"));
   }
 }

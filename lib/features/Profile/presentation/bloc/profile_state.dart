@@ -16,6 +16,11 @@ final class ProfileLoadedState extends ProfileState {
   const ProfileLoadedState({required this.player});
 }
 
+final class ProfileSubmittedState extends ProfileState {
+  final Player player;
+  const ProfileSubmittedState({required this.player});
+}
+
 final class ProfileErrorState extends ProfileState {
   final Failure failure;
   const ProfileErrorState({required this.failure});

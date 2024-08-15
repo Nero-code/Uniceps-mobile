@@ -14,3 +14,8 @@ final class GetProgramEvent extends TrainingEvent {
 final class GetExercisesEvent extends TrainingEvent {
   const GetExercisesEvent();
 }
+
+final class ChangeFilterEvent extends TrainingEvent {
+  final String filter;
+  const ChangeFilterEvent({required this.filter});
+}

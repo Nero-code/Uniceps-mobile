@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/features/Training/services/entities/exercise.dart';
 import 'package:uniceps/features/Training/services/entities/training_program.dart';
 import 'package:uniceps/features/Training/services/usecases/usecases.dart';
 
@@ -16,7 +17,10 @@ class TrainingBloc extends Bloc<TrainingEvent, TrainingState> {
         emit(TrainingProgramLoadingState());
       } else if (event is GetExercisesEvent) {
         // G E T   E X E R C I S E S
-        emit(ExercisesLoadingState());
+        emit(TrainingProgramLoadingState());
+      } else if (event is ChangeFilterEvent) {
+        // C H A N G E   F I L T E R
+        emit(TrainingProgramLoadingState());
       }
     });
   }

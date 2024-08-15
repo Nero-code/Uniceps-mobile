@@ -27,6 +27,12 @@ final class TrainingProgramErrorState extends TrainingState {
 
 final class ExercisesLoadingState extends TrainingState {}
 
-final class ExercisesLoadedState extends TrainingState {}
+final class ExercisesLoadedState extends TrainingState {
+  final List<Exercise> list;
+  const ExercisesLoadedState({required this.list});
+}
 
-final class ExercisesErrorState extends TrainingState {}
+final class ExercisesErrorState extends TrainingState {
+  final Failure f;
+  const ExercisesErrorState({required this.f});
+}

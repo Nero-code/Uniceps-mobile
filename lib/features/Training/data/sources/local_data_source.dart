@@ -2,12 +2,15 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/features/Training/data/models/presence_model.dart';
 import 'package:uniceps/features/Training/data/models/training_prog_model.dart';
+import 'package:uniceps/features/Training/services/entities/avatar.dart';
 
+/// Abstract class [LocalTrainingSource] for SoC
 abstract class LocalTrainingSource {
   Future<TrainingProgramModel> getTrainingProgram();
   Future<void> saveTrainingProgram(TrainingProgramModel model);
   Future<List<PresenceModel>> getPresence(String gymId);
   Future<void> savePresenceUnderGym(List<PresenceModel> list, String gymId);
+  Future<Avatar> getAvatar();
 }
 
 class LocalTrainingSourceImpl implements LocalTrainingSource {
@@ -54,5 +57,11 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     } else {
       throw EmptyCacheExeption();
     }
+  }
+
+  @override
+  Future<Avatar> getAvatar() {
+    // TODO: implement getAvatar
+    throw UnimplementedError();
   }
 }

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Profile/domain/entities/gym.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GymWidget extends StatefulWidget {
   const GymWidget({
@@ -82,7 +83,7 @@ class _GymWidgetState extends State<GymWidget> {
                           arguments: i.gymId,
                         );
                       },
-                      child: Text("Measurements")),
+                      child: Text(AppLocalizations.of(context)!.measurements)),
                   TextButton(
                       onPressed: () {
                         Navigator.of(context).pushNamed(
@@ -90,7 +91,7 @@ class _GymWidgetState extends State<GymWidget> {
                           arguments: i.gymId,
                         );
                       },
-                      child: Text("Subscriptions")),
+                      child: Text(AppLocalizations.of(context)!.subscription)),
                 ],
               ),
             ),
