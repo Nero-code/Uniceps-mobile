@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/errors/failure.dart';
-import 'package:uniceps/features/Auth/data/models/player_model.dart';
+// import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:uniceps/features/Auth/services/usecases/usecases.dart';
 
@@ -43,12 +43,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         //
         //
         //
-      } else if (event is AuthGetProfileEvent) {
-        final either = await usecases.getProfile();
-        either.fold(
-          (l) => emit(AuthNullProfile()),
-          (r) => emit(AuthDoneState(player: r)),
-        );
+        // } else if (event is AuthGetProfileEvent) {
+        //   final either = await usecases.getProfile();
+        //   either.fold(
+        //     (l) => emit(AuthNullProfile()),
+        //     (r) => emit(AuthDoneState(player: r)),
+        //   );
       } else if (event is EmailSigninRequestEvent) {
         emit(AuthLoadingState());
         final either = await usecases.emailSignin(email: event.email);
@@ -60,12 +60,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         //
         //
       } else if (event is AuthEmailCodeVerifyEvent) {
+        //
+        //  Check if code is valid and authenticate user
+        //
         emit(AuthLoadingState());
         final either = await usecases.validateCode(
             code: event.code, email: event.email, notifyToken: "");
+        bool isLogged = false;
         either.fold(
           (l) => emit(AuthWrongCodeState()),
-          (r) => emit(AuthNewPassword()),
+          (isLoggedd) => isLogged = isLoggedd,
+        );
+        if (!isLogged) {
+          return;
+        }
+        print("AUTH-BLOC: isLogged: $isLogged");
+        //
+        //  Then, Chack if a profile is present for the user
+        //
+        final profileEither = await usecases.getProfile();
+        profileEither.fold(
+          (l) => emit(const AuthDoneState(hasData: false)),
+          (r) => emit(AuthDoneState(hasData: true, player: r)),
         );
         //
         //
@@ -73,23 +89,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         // } else if (event is AuthAddNewPasswordEvent) {
         //   emit(AuthLoadingState());
         //   final either = await usecases.addNewPassword(pass: event.pass);
-      } else if (event is AuthProfileSubmitEvent) {
-        emit(AuthLoadingState());
-        final either = await usecases.submitProfile(player: event.player);
-        either.fold(
-          (l) => emit(AuthErrorState(f: l)),
-          (r) => emit(ProfileSubmitionDone(player: event.player)),
-        );
+        // }
+        //  else if (event is AuthProfileSubmitEvent) {
+        //   emit(AuthLoadingState());
+        //   final either = await usecases.submitProfile(player: event.player);
+        //   either.fold(
+        //     (l) => emit(AuthErrorState(f: l)),
+        //     (r) => emit(ProfileSubmitionDone(player: event.player)),
+        //   );
         //
         //
         //
-      } else if (event is GymCodeVerifyEvent) {
-        emit(AuthLoadingState());
-        final either = await usecases.checkGymCode(gymCode: event.gymCode);
-        either.fold(
-          (l) => emit(AuthErrorState(f: l)),
-          (r) => emit(GymVerifiedState()),
-        );
+        // } else if (event is GymCodeVerifyEvent) {
+        //   emit(AuthLoadingState());
+        //   final either = await usecases.checkGymCode(gymCode: event.gymCode);
+        //   either.fold(
+        //     (l) => emit(AuthErrorState(f: l)),
+        //     (r) => emit(GymVerifiedState()),
+        //   );
         //
         //
         //

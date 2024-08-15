@@ -20,10 +20,10 @@ final class AuthEmailCodeVerifyEvent extends AuthEvent {
   const AuthEmailCodeVerifyEvent({required this.code, required this.email});
 }
 
-final class AuthAddNewPasswordEvent extends AuthEvent {
-  final String email, pass;
-  const AuthAddNewPasswordEvent({required this.email, required this.pass});
-}
+// final class AuthAddNewPasswordEvent extends AuthEvent {
+//   final String email, pass;
+//   const AuthAddNewPasswordEvent({required this.email, required this.pass});
+// }
 
 ///
 ///   Main Login
@@ -39,13 +39,6 @@ final class AuthCheckEvent extends AuthEvent {}
 ///
 ///   Gym and Profile Events
 ///
-
-final class AuthGetProfileEvent extends AuthEvent {}
-
-final class AuthProfileSubmitEvent extends AuthEvent {
-  final PlayerModel player;
-  const AuthProfileSubmitEvent({required this.player});
-}
 
 final class GymCodeVerifyEvent extends AuthEvent {
   final String gymCode;

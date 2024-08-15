@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeCard extends StatelessWidget {
   const HomeCard({
@@ -19,7 +19,8 @@ class HomeCard extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.all(15),
-          height: MediaQuery.of(context).size.height * 0.1,
+          // padding: const EdgeInsets.symmetric(vertical: 10.0),
+          // height: 100.0,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
@@ -30,23 +31,33 @@ class HomeCard extends StatelessWidget {
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              stops: [
-                0.3,
-                1,
-              ],
+              // stops: [
+              //   0.3,
+              //   1,
+              // ],
             ),
             // boxShadow: [
             //   BoxShadow(
-            //     // color: Theme.of(context).colorScheme.onBackground,
-            //     color: const Color.fromARGB(146, 0, 0, 0),
+            //     color: Theme.of(context).colorScheme.secondary,
+            //     // color: Color.fromARGB(255, 145, 2, 68),
             //     offset: Offset(
-            //       0,
-            //       2,
+            //       1,
+            //       1,
             //     ),
-            //     blurRadius: 3,
+            //     blurRadius: 1,
+            //   ),
+            //   BoxShadow(
+            //     color: Theme.of(context).colorScheme.primary,
+            //     // color: Color.fromARGB(255, 168, 9, 9),
+            //     offset: Offset(
+            //       -1,
+            //       -1,
+            //     ),
+            //     blurRadius: 5,
             //   ),
             // ],
             borderRadius: BorderRadius.circular(15),
+            // border: Border.all(width: 0.5),
           ),
           child: Material(
             // color: Color(0xFF00A9B9),
@@ -58,65 +69,85 @@ class HomeCard extends StatelessWidget {
               highlightColor: Theme.of(context).colorScheme.onBackground,
               borderRadius: BorderRadius.circular(15),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 15.0, vertical: 10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            // AppLocalizations.of(context)!.helloWorld,
-                            "Yazan Abo Shash",
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Row(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                child: LinearProgressIndicator(
-                                  value: percentage,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              RichText(
-                                text: TextSpan(
-                                  text: "Level: ",
-                                  style: TextStyle(
+                              Text(
+                                "Yazan Abo Shash",
+                                style: const TextStyle(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: '$level',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: LinearProgressIndicator(
+                                      value: percentage,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  RichText(
+                                    text: TextSpan(
+                                      text:
+                                          "${AppLocalizations.of(context)!.level} ",
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: '$level',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.normal),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 15),
+                        Container(
+                          width: 35,
+                          height: 35,
+                          decoration: const BoxDecoration(
+                            // color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Image(
+                              image: AssetImage("images/logo/Logo-dark.png")),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 15),
-                    Container(
-                      width: 35,
-                      height: 35,
-                      decoration: const BoxDecoration(
-                        // color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child:
-                          Image(image: AssetImage("images/logo/Logo-dark.png")),
-                    ),
+                    // Container(
+                    //   child: Material(
+                    //     borderRadius: BorderRadius.circular(10.0),
+                    //     child: InkWell(
+                    //       borderRadius: BorderRadius.circular(10.0),
+                    //       onTap: () {},
+                    //       child: Padding(
+                    //         padding: EdgeInsets.symmetric(
+                    //             horizontal: 15.0, vertical: 0.0),
+                    //         child: Text("shoulder + neck"),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

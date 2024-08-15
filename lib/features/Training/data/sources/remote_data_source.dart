@@ -1,23 +1,29 @@
 import 'dart:convert';
 
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
 import 'package:uniceps/features/Training/data/models/presence_model.dart';
 import 'package:uniceps/features/Training/data/models/training_prog_model.dart';
 import 'package:uniceps/features/Profile/domain/entities/gym.dart';
+import 'package:uniceps/features/Training/services/entities/avatar.dart';
 import 'package:uniceps/features/Training/services/entities/training_program.dart';
 
 abstract class RemoteTrainingSource {
   Future<TrainingProgram> getTrainingProgram();
   Future<List<Gym>> getGyms();
   Future<List<PresenceModel>> getPresence(String gymId);
+  Future<Avatar> getAvatar();
 }
 
 class RemoteTrainingSourceImpl implements RemoteTrainingSource {
   final http.Client client;
 
-  const RemoteTrainingSourceImpl(this.client);
+  /// This box is for granting access to user token effeciently
+  final Box<Map<String, dynamic>> userBox;
+
+  const RemoteTrainingSourceImpl({required this.client, required this.userBox});
 
   @override
   Future<TrainingProgram> getTrainingProgram() async {
@@ -49,6 +55,12 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
 
   @override
   Future<List<PresenceModel>> getPresence(String gymId) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Avatar> getAvatar() {
+    // TODO: implement getAvatar
     throw UnimplementedError();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uniceps/features/Auth/views/widgets/background_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 ///   This box is used to put the gym code so the player can subscribe to it.
@@ -26,7 +27,7 @@ class _CodeBoxState extends State<CodeBox> {
       children: [
         BackgroundCard(
           child: Column(children: [
-            Text("Please type in the code we sent to your Email:"),
+            Text(AppLocalizations.of(context)!.verify),
 
             ///   C O D E
             const SizedBox(height: 10),
@@ -34,6 +35,7 @@ class _CodeBoxState extends State<CodeBox> {
               key: _codeFormKey,
               child: TextFormField(
                 controller: codeCtrl,
+                keyboardType: TextInputType.number,
                 maxLength: 6,
                 onChanged: (value) {
                   print(value);
@@ -49,13 +51,13 @@ class _CodeBoxState extends State<CodeBox> {
                   return null;
                 },
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.numbers_rounded),
+                  prefixIcon: const Icon(Icons.numbers_rounded),
                   contentPadding: const EdgeInsets.all(10),
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey.shade400)),
-                  border: OutlineInputBorder(),
-                  label: Text("Code"),
-                  hintText: '001122',
+                  border: const OutlineInputBorder(),
+                  label: Text(AppLocalizations.of(context)!.code),
+                  hintText: '000000',
                 ),
               ),
             ),
@@ -67,10 +69,10 @@ class _CodeBoxState extends State<CodeBox> {
           child: ElevatedButton(
             onPressed: () {
               if (_codeFormKey.currentState!.validate()) {
-                widget.onPressed(codeCtrl.text);
+                widget.onPressed(codeCtrl.text.trim());
               }
             },
-            child: Text("Verify"),
+            child: Text(AppLocalizations.of(context)!.verifyCode),
           ),
         ),
       ],

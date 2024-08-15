@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class TrainingGroup2 extends StatelessWidget {
   const TrainingGroup2({
@@ -20,8 +18,8 @@ class TrainingGroup2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.width * 0.2,
-      width: MediaQuery.of(context).size.width * 0.4,
+      // height: MediaQuery.of(context).size.width * 0.2,
+      width: MediaQuery.of(context).size.width * 0.3,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
@@ -37,7 +35,7 @@ class TrainingGroup2 extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
           onTap: onPressed,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: Row(
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -57,7 +55,7 @@ class TrainingGroup2 extends StatelessWidget {
                     child: Text(
                       name,
                       style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 11,
                           fontWeight: FontWeight.bold,
                           color:
                               /**isSelected ? Colors.white : */ Colors.black),

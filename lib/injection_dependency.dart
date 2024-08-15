@@ -14,7 +14,10 @@ import 'package:uniceps/features/Profile/data/sources/local_source.dart';
 import 'package:uniceps/features/Profile/data/sources/remote_source.dart';
 import 'package:uniceps/features/Profile/domain/repo.dart';
 import 'package:uniceps/features/Profile/domain/usecases.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
 import 'package:uniceps/features/Training/data/repos_impl/repo_imple.dart';
 import 'package:uniceps/features/Training/data/sources/local_data_source.dart';
 import 'package:uniceps/features/Training/data/sources/remote_data_source.dart';
@@ -31,6 +34,7 @@ Future<void> init() async {
   final gymsBox = await Hive.openBox<Map<String, dynamic>>("Gyms");
   final subsBox = await Hive.openBox<List<Map<String, dynamic>>>("Subs");
   final measureBox = await Hive.openBox<List<Map<String, dynamic>>>("Metrics");
+  final avatarBox = await Hive.openBox<List<Map<String, dynamic>>>("avatar");
 
   ///////                             ///
   //////                             ////
@@ -42,7 +46,7 @@ Future<void> init() async {
     () => LocalTrainingSourceImpl(trainBox: trainBox),
   );
   sl.registerLazySingleton<RemoteTrainingSource>(
-    () => RemoteTrainingSourceImpl(sl()),
+    () => RemoteTrainingSourceImpl(client: sl(), userBox: userBox),
   );
   sl.registerLazySingleton<LocalProfileSource>(
     () => LocalProfileSourceImpl(
@@ -52,13 +56,14 @@ Future<void> init() async {
         subsBox: subsBox),
   );
   sl.registerLazySingleton<RemoteProfileSource>(
-    () => RemoteProfileSourceImpl(client: sl()),
+    () => RemoteProfileSourceImpl(
+        client: sl(), userBox: userBox, playerBox: profileBox),
   );
   sl.registerLazySingleton<LocalAuthSource>(
     () => LocalAuthSourceImple(userBox: userBox, playerBox: profileBox),
   );
   sl.registerLazySingleton<RemoteAuthSource>(
-    () => RemoteAuthSourceImpl(client: sl()),
+    () => RemoteAuthSourceImpl(client: sl(), userBox: userBox),
   );
 
   ///
@@ -118,8 +123,11 @@ Future<void> init() async {
   //////////////////////////////////////////////////////////////////////////////
 
   sl.registerFactory<AuthBloc>(() => AuthBloc(usecases: sl()));
-  sl.registerFactory<TrainingBloc>(() => TrainingBloc(usecases: sl()));
+  sl.registerFactory<GymsBloc>(() => GymsBloc(usecases: sl()));
+  sl.registerFactory<SubsBloc>(() => SubsBloc(usecases: sl()));
   sl.registerFactory<ProfileBloc>(() => ProfileBloc(usecases: sl()));
+  sl.registerFactory<TrainingBloc>(() => TrainingBloc(usecases: sl()));
+  sl.registerFactory<MeasurmentBloc>(() => MeasurmentBloc(usecases: sl()));
 
   //////////////////////////////////////////////////////////////////////////////
   ///
@@ -132,5 +140,6 @@ Future<void> init() async {
 
   sl.registerLazySingleton<InternetConnectionChecker>(
       () => InternetConnectionChecker());
+
   sl.registerLazySingleton<Logger>(() => Logger());
 }

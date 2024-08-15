@@ -1,8 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/features/Training/data/sources/local_data_source.dart';
 import 'package:uniceps/features/Training/data/sources/remote_data_source.dart';
+import 'package:uniceps/features/Training/services/entities/avatar.dart';
 import 'package:uniceps/features/Training/services/entities/presence.dart';
 import 'package:uniceps/features/Training/services/entities/training_program.dart';
 import 'package:uniceps/features/Training/services/repos/repository.dart';
@@ -53,6 +55,27 @@ class TrainingRepoImple implements TrainingRepo {
         return Right(res);
       } catch (e) {
         return Left(EmptyCacheFailure(errorMessage: "No Records!"));
+      }
+    }
+  }
+
+  @override
+  Future<Either<Failure, Avatar>> getAvatar() async {
+    if (await connection.hasConnection) {
+      try {
+        final res = await remote.getAvatar();
+        return Right(res);
+      } catch (e) {
+        return Left(ServerFailure(errMsg: "ServerF"));
+      }
+    } else {
+      try {
+        final res = await local.getAvatar();
+        return Right(res);
+      } on EmptyCacheExeption {
+        return Left(EmptyCacheFailure(errorMessage: "Empty Records"));
+      } catch (e) {
+        return Left(GeneralPurposFailure(errorMessage: "Unknown err occourd"));
       }
     }
   }

@@ -19,7 +19,8 @@ const themeDark = Color(0xFF3C494F); //   A   K                 11
 const themeLight = Color(0xFFD7E6E6); //                         12
 
 const background = Color.fromARGB(255, 245, 245, 245);
-const back2 = Color.fromARGB(255, 228, 228, 228);
+// const back2 = Color.fromARGB(255, 228, 228, 228);
+const back2 = Color(0xFFF4F4F4);
 
 ThemeData lightTheme = ThemeData(
   appBarTheme: const AppBarTheme().copyWith(

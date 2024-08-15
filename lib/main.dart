@@ -8,14 +8,15 @@ import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/views/screens/email_and_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
-import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/screens/gym_list_screen.dart';
 import 'package:uniceps/features/Profile/presentation/screens/measurement_screen.dart';
 import 'package:uniceps/features/Profile/presentation/screens/profile_screen.dart';
 import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
+import 'package:uniceps/features/Training/views/Screens/gym_handshake_screen.dart';
 import 'package:uniceps/features/Training/views/Screens/home_screen.dart';
 import 'package:uniceps/features/Training/views/Screens/presence_screen.dart';
 import 'package:uniceps/features/Training/views/Screens/qr_scanner_screen.dart';
@@ -44,26 +45,41 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
-          create: (context) =>
-              AuthBloc(usecases: di.sl())..add(AuthCheckEvent()),
+          create: (context) {
+            print(
+                "------------------------AuthBloc Created!--------------------------");
+            return AuthBloc(usecases: di.sl())..add(AuthCheckEvent());
+          },
         ),
         BlocProvider<TrainingBloc>(
-          create: (context) =>
-              TrainingBloc(usecases: di.sl())..add(const GetProgramEvent()),
+          create: (context) {
+            print(
+                "------------------------TrainingBLoc Created!--------------------------");
+            return TrainingBloc(usecases: di.sl())
+              ..add(const GetProgramEvent());
+          },
         ),
         BlocProvider<ProfileBloc>(
-          create: (context) =>
-              ProfileBloc(usecases: di.sl())..add(const GetProfileDataEvent()),
+          create: (context) {
+            print(
+                "------------------------ProfileBloc Created!--------------------------");
+            return ProfileBloc(usecases: di.sl())
+              ..add(const GetProfileDataEvent());
+          },
         ),
         BlocProvider<SubsBloc>(
-          create: (context) => SubsBloc(usecases: di.sl()),
+          create: (context) {
+            print(
+                "------------------------SubsBloc Created!--------------------------");
+            return SubsBloc(usecases: di.sl());
+          },
         ),
         BlocProvider<MeasurmentBloc>(
           create: (context) => MeasurmentBloc(usecases: di.sl()),
         ),
         BlocProvider<GymsBloc>(
           create: (context) =>
-              GymsBloc(usecases: di.sl())..add(const GetAllGymsEvent()),
+              GymsBloc(usecases: di.sl())..add(const GetCurrentGym()),
         ),
         BlocProvider<LocaleCubit>(
           create: (context) => LocaleCubit()..getSavedLanguageCode(),
@@ -94,19 +110,21 @@ class MyApp extends StatelessWidget {
               ROUTE_SPLASH: (context) => const SplashScreen(),
 
               //  AUTH
-              ROUTE_AUTH: (context) => EmailAuthScreen(),
-              ROUTE_FORGOT_PASSWORD: (context) => ForgotPasswordScreen(),
-              ROUTE_PLAYER_INFO: (context) =>
-                  const PlayerInfoScreen(), // NON REACHABLE FROM HERE
+              ROUTE_AUTH: (context) => const EmailAuthScreen(),
+              ROUTE_FORGOT_PASSWORD: (context) => const ForgotPasswordScreen(),
+              // ROUTE_PLAYER_INFO: (context) =>
+              //     const PlayerInfoScreen(), // NON REACHABLE FROM HERE
 
               //  MAIN
               ROUTE_HOME: (context) => HomeScreen(trainingUsecases: di.sl()),
+              ROUTE_HANDSHAKE: (context) => const GymHandShakeScreen(),
               ROUTE_EXERCISE: (context) => ExercisesPage(),
               ROUTE_QR_SCANNER: (context) => QRScannerScreen(),
               ROUTE_PRESENCE: (context) => const PresenceScreen(),
+              ROUTE_GYMS_LIST: (context) => const GymListScreen(),
 
               //  AUX
-              ROUTE_MEASUREMENTS: (context) => MeasurementScreen(),
+              ROUTE_MEASUREMENTS: (context) => const MeasurementScreen(),
               ROUTE_SUBSCRIPTIONS: (context) => const SubScriptionScreen(),
               ROUTE_PROFILE: (context) => const ProfileScreen(),
             },

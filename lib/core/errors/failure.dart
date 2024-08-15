@@ -92,3 +92,11 @@ class ServerFailure extends Failure {
   @override
   String getErrorMessage() => errMsg;
 }
+
+class NotFoundFailure extends Failure {
+  final String errMsg;
+  NotFoundFailure({required this.errMsg});
+
+  @override
+  String getErrorMessage() => errMsg;
+}

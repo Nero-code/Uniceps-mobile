@@ -4,7 +4,9 @@ class AvatarModel extends Avatar {
   const AvatarModel({
     required super.level,
     required super.percentage,
-    super.completedToday,
+    required super.playerName,
+    super.gymLogo,
+    // super.completedToday,
   });
 
   factory AvatarModel.fromJson(Map<String, dynamic> json) {
@@ -17,8 +19,20 @@ class AvatarModel extends Avatar {
       });
     }
     return AvatarModel(
-        level: json['level'],
-        percentage: json['percentage'],
-        completedToday: temp);
+      level: json['level'],
+      percentage: json['percentage'],
+      playerName: json['player_name'],
+      gymLogo: json['gym_logo'],
+      // completedToday: temp,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "level": level,
+      "percentage": percentage,
+      "playerName": playerName,
+      "gymLogo": gymLogo,
+    };
   }
 }

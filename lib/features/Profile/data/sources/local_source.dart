@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
@@ -89,7 +90,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
   // }
   @override
   Future<Player> getProfileData() async {
-    final res = playerBox.get("player_info");
+    final res = playerBox.get(HIVE_PROFILE_BOX);
     if (res != null) {
       return PlayerModel.fromJson(res);
     }
@@ -98,7 +99,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
 
   @override
   Future<void> savePlayerData(PlayerModel model) async {
-    return await playerBox.put("player_info", model.toJson());
+    return await playerBox.put(HIVE_PROFILE_BOX, model.toJson());
   }
 
   @override
