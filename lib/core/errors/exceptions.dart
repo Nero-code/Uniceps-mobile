@@ -9,3 +9,5 @@ class NoInternetException implements Exception {}
 class EmptyCacheExeption implements Exception {}
 
 class NotFoundException implements Exception {}
+
+class NoGymSpecifiedException implements Exception {}

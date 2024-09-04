@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 // import 'package:uniceps/features/Profile/domain/entities/measrument.dart';
 
 class MeasureWidget extends StatelessWidget {
   const MeasureWidget({
     super.key,
+    required this.title,
     required this.isSymmetric,
     required this.image,
     required this.lValue,
@@ -12,7 +14,7 @@ class MeasureWidget extends StatelessWidget {
   });
 
   final bool isSymmetric, isCm;
-  final String image;
+  final String image, title;
   final double lValue, rValue;
   // final Measurement object;
 
@@ -49,21 +51,28 @@ class MeasureWidget extends StatelessWidget {
             flex: 1,
             child: Column(
               children: [
-                if (!isSymmetric) const Text("Left"),
-                Text("$lValue ${isCm ? "(Cm)" : "(Kg)"}"),
+                Text(title),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        if (!isSymmetric) const Text("Left"),
+                        Text("$lValue ${isCm ? "(Cm)" : "(Kg)"}"),
+                      ],
+                    ),
+                    if (!isSymmetric)
+                      Column(
+                        children: [
+                          const Text("Right"),
+                          Text("$rValue ${isCm ? "(Cm)" : "(Kg)"}"),
+                        ],
+                      ),
+                  ],
+                ),
               ],
             ),
           ),
-          if (!isSymmetric)
-            Expanded(
-              flex: 1,
-              child: Column(
-                children: [
-                  const Text("Right"),
-                  Text("$rValue ${isCm ? "(Cm)" : "(Kg)"}"),
-                ],
-              ),
-            ),
         ],
       ),
     );

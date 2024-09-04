@@ -1,14 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/features/Auth/services/enitites/player.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
 
 class HomeCard extends StatelessWidget {
   const HomeCard({
     super.key,
+    required this.player,
     required this.onTap,
     this.percentage = 0.0,
     this.level = 0,
   });
 
+  // final Gym gym;
+  final Player player;
   final VoidCallback onTap;
   final double percentage;
   final int level;
@@ -83,11 +90,12 @@ class HomeCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Yazan Abo Shash",
+                                player.name,
                                 style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
                               ),
+                              const SizedBox(height: 5),
                               Row(
                                 children: [
                                   Expanded(
@@ -129,8 +137,26 @@ class HomeCard extends StatelessWidget {
                             // color: Colors.white,
                             shape: BoxShape.circle,
                           ),
-                          child: Image(
-                              image: AssetImage("images/logo/Logo-dark.png")),
+                          child: BlocBuilder<HandshakeBloc, HandshakeState>(
+                            builder: (context, state) {
+                              if (state is HandshakeLoadedState) {
+                                final url = state.handshakes.first.logoUrl;
+                                if (url != null && url.isNotEmpty) {
+                                  return Image(
+                                      image: CachedNetworkImageProvider(url));
+                                }
+                                return const Image(
+                                  image:
+                                      AssetImage("images/logo/Logo-dark.png"),
+                                );
+                              } else if (state is HandshakeLoadingState) {
+                                return const CircularProgressIndicator();
+                              }
+                              return const Image(
+                                image: AssetImage("images/logo/Logo-dark.png"),
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),

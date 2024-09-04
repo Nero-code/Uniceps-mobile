@@ -32,6 +32,13 @@
   "logoutAlert": "تسجيل الخروج؟",
   "logoutAlertContents": "انت الأن على وشك تسجيل الخروج, قد تتعرض معلوماتك للحذف, هل انت متأكد؟",
   
+
+  "price": "السعر",
+  "status": "الحالة",
+  "address": "العنوان",
+  "owner": "المالك",
+  "telephone": "الهاتف",
+
   "subscription": "الأشتراكات",
   "sport": "الرياضة",
   "measurements": "القياسات",
@@ -42,18 +49,25 @@
 
   "gyms": "النوادي",
 
-  "height": "الطول (cm)",
+  "height": "الطول",
   "heightError": "",
-  "weight": "الوزن (Kg)",
+  "weight": "الوزن",
   "weightError": "",
   "lastWeight": "آخر وزن",
 
+  "arms": "الذراعين",
   "lArm": "ذراع يسرى",
   "rArm": "ذراع يمنى",
+
+  "humerus": "الساعدين",
   "lHumerus": "ساعد أيسر",
   "rHumerus": "ساعد أيمن",
+
+  "legs": "الارجل",
   "lLeg": "رجل يسرى",
   "rLeg": "رجل يمنى",
+
+  "thighs": "الفخذين",
   "lThigh": "فخذ أيسر",
   "rThigh": "فخذ أيمن",
   "nick": "العنق",
@@ -86,7 +100,9 @@
   "genderError": "الرجاء اختيار الجنس",
 
   "male": "ذكر",
-  "female": "انثى"
+  "female": "انثى",
+
+  "payment": "الدفعة"
 
 
 }

@@ -10,4 +10,7 @@ sealed class SubsEvent extends Equatable {
 final class GetSubsEvent extends SubsEvent {
   final String gymId;
   const GetSubsEvent({required this.gymId});
+
+  @override
+  List<Object> get props => [gymId];
 }

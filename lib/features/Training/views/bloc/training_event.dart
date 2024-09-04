@@ -8,7 +8,8 @@ sealed class TrainingEvent extends Equatable {
 }
 
 final class GetProgramEvent extends TrainingEvent {
-  const GetProgramEvent();
+  final int filter;
+  const GetProgramEvent({this.filter = 1});
 }
 
 final class GetExercisesEvent extends TrainingEvent {

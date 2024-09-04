@@ -64,12 +64,6 @@ class _GymWidgetState extends State<GymWidget> {
                     SizedBox(width: 15),
                     Text(
                       i.name,
-                      style: i.isCurrent
-                          ? TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.primary,
-                            )
-                          : null,
                     ),
                   ],
                 );
@@ -80,18 +74,19 @@ class _GymWidgetState extends State<GymWidget> {
                       onPressed: () {
                         Navigator.of(context).pushNamed(
                           ROUTE_MEASUREMENTS,
-                          arguments: i.gymId,
+                          arguments: i.id,
                         );
                       },
                       child: Text(AppLocalizations.of(context)!.measurements)),
                   TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(
-                          ROUTE_SUBSCRIPTIONS,
-                          arguments: i.gymId,
-                        );
-                      },
-                      child: Text(AppLocalizations.of(context)!.subscription)),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        ROUTE_SUBSCRIPTIONS,
+                        arguments: i.id,
+                      );
+                    },
+                    child: Text(AppLocalizations.of(context)!.subscription),
+                  ),
                 ],
               ),
             ),

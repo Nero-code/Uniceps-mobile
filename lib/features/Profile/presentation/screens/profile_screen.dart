@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/reload_wiget.dart';
+import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
 import 'package:uniceps/features/Profile/domain/entities/gym.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/gym_widget.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/profile_card.dart';
@@ -43,7 +45,10 @@ class ProfileScreen extends StatelessWidget {
                               child: Text(AppLocalizations.of(context)!.cancel),
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                BlocProvider.of<AuthBloc>(context)
+                                    .add(LogoutEvent());
+                              },
                               child: Text(AppLocalizations.of(context)!.ok),
                             ),
                           ],
@@ -144,43 +149,46 @@ class ProfileScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 50),
-                BlocBuilder<GymsBloc, GymsState>(
-                  builder: (context, state) {
-                    if (state is GymsLoadedState) {
-                      if (state.list.isEmpty) {
-                        return const SizedBox();
-                      }
-                      return GymWidget(
-                        gyms: [
-                          for (var i in state.list)
-                            Gym(
-                              name: i.name,
-                              gymId: i.gymId,
-                              isCurrent: i.isCurrent,
-                              logo: i.logo,
-                            ),
-                        ],
-                      );
-                    } else if (state is GymsErrorState) {
-                      return ReloadScreenWiget(
-                        image: const Icon(Icons.error),
-                        message: Text(AppLocalizations.of(context)!.error),
-                        callBack: IconButton(
-                          icon: const Icon(Icons.refresh),
-                          onPressed: () {
-                            BlocProvider.of<GymsBloc>(context)
-                                .add(const GetAllAvailableGymsEvent());
-                          },
-                        ),
-                      );
-                      // return const GymWidget(gyms: [
-                      //   Gym(name: "Platinum", gymId: "0", isCurrent: true)
-                      // ]);
-                    }
-                    return const CircularProgressIndicator();
-                  },
-                ),
-                const SizedBox(height: 10),
+                // BlocBuilder<GymsBloc, GymsState>(
+                //   builder: (context, state) {
+                //     if (state is GymsLoadedState) {
+                //       if (state.list.isEmpty) {
+                //         return const SizedBox();
+                //       }
+                //       return GymWidget(
+                //         gyms: [
+                //           for (var i in state.list)
+                //             Gym(
+                //               name: i.name,
+                //               id: i.id,
+                //               logo: i.logo,
+                //               address: "address",
+                //               ownerName: "flan al 3lany",
+                //               phoneNum: "0987654321",
+                //               telephone: "016 333 222",
+                //             ),
+                //         ],
+                //       );
+                //     } else if (state is GymsErrorState) {
+                //       return ReloadScreenWiget(
+                //         image: const Icon(Icons.error),
+                //         message: Text(AppLocalizations.of(context)!.error),
+                //         callBack: IconButton(
+                //           icon: const Icon(Icons.refresh),
+                //           onPressed: () {
+                //             BlocProvider.of<GymsBloc>(context)
+                //                 .add(const GetAllAvailableGymsEvent());
+                //           },
+                //         ),
+                //       );
+                //       // return const GymWidget(gyms: [
+                //       //   Gym(name: "Platinum", gymId: "0", isCurrent: true)
+                //       // ]);
+                //     }
+                //     return const CircularProgressIndicator();
+                //   },
+                // ),
+                // const SizedBox(height: 10),
                 SettingTile(
                   icon: Icon(
                     Icons.language,
@@ -265,6 +273,8 @@ class ProfileScreen extends StatelessWidget {
                   title: AppLocalizations.of(context)!.gyms,
                   isRtl: st.locale.languageCode == "ar",
                   onPressed: () {
+                    BlocProvider.of<GymsBloc>(context)
+                        .add(const GetAllAvailableGymsEvent());
                     Navigator.pushNamed(context, ROUTE_GYMS_LIST);
                   },
                 ),
@@ -276,9 +286,53 @@ class ProfileScreen extends StatelessWidget {
                     Icons.info_outline,
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
+                  // title: AppLocalizations.of(context)!.about,
+                  title: "Hand Shake",
+                  isRtl: st.locale.languageCode == "ar",
+                  onPressed: () {
+                    print("onpressed");
+                    BlocProvider.of<HandshakeBloc>(context)
+                        .add(GetAllHandShakeEvent());
+                  },
+                ),
+                SettingTile(
+                  icon: Icon(
+                    Icons.leaderboard_rounded,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+                  // title: AppLocalizations.of(context)!.about,
+                  title: AppLocalizations.of(context)!.measurements,
+                  isRtl: st.locale.languageCode == "ar",
+                  onPressed: () {
+                    Navigator.pushNamed(context, ROUTE_MEASUREMENTS);
+                    // BlocProvider.of<HandshakeBloc>(context)
+                    //     .add(RequestAttendanceEvent("11"));
+                  },
+                ),
+                SettingTile(
+                  icon: Icon(
+                    Icons.medical_information_outlined,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+                  // title: AppLocalizations.of(context)!.about,
+                  title: "",
+                  isRtl: st.locale.languageCode == "ar",
+                  onPressed: () {
+                    // BlocProvider.of<HandshakeBloc>(context)
+                    //     .add(RequestAttendanceEvent("11"));
+                  },
+                ),
+                SettingTile(
+                  icon: Icon(
+                    Icons.medical_information_outlined,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
                   title: AppLocalizations.of(context)!.about,
                   isRtl: st.locale.languageCode == "ar",
-                  onPressed: () {},
+                  onPressed: () {
+                    // BlocProvider.of<HandshakeBloc>(context)
+                    // .add();
+                  },
                 ),
               ],
             ),

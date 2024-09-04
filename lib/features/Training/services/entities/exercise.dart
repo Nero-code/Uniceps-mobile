@@ -8,22 +8,26 @@ class Exercise extends Equatable {
   /// `description`: more explaination for the exercise.
   ///
   /// `tId`: Training Id the exercise belongs to.
-  final String id, name, description, tId, imageUrl;
-  final int lastWaight;
+  final String id, name, notes, orders, imageUrl;
+  final int muscleGroup, itemOrder;
+  final double lastWaight;
 
   const Exercise({
     required this.id,
     required this.name,
-    required this.tId,
+    required this.notes,
+    required this.muscleGroup,
+    required this.itemOrder,
+    required this.orders,
     required this.imageUrl,
-    required this.description,
-    this.lastWaight = 0,
+    required this.lastWaight,
   });
 
   @override
   List<Object?> get props => [
         id,
         name,
-        lastWaight,
+        muscleGroup,
+        imageUrl,
       ];
 }

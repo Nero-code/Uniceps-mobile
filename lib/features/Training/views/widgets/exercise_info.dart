@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Training/services/entities/exercise.dart';
 
 class ExerciseInfoDialog extends StatelessWidget {
@@ -18,13 +20,11 @@ class ExerciseInfoDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Image(
-                image: AssetImage(e.imageUrl),
-              ),
-            ),
+                aspectRatio: 16 / 9,
+                child: CachedNetworkImage(
+                    imageUrl: imgUrlParser(e.muscleGroup, e.imageUrl))),
             const SizedBox(height: 10),
-            Text(e.description),
+            Text(e.notes),
             const Divider(),
             const SizedBox(height: 10),
             Text("Last Weight: ${e.lastWaight} Kg"),

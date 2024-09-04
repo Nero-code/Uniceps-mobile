@@ -7,7 +7,4 @@ sealed class MeasurmentEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class GetMeasurementsEvent extends MeasurmentEvent {
-  final String gymId;
-  const GetMeasurementsEvent({required this.gymId});
-}
+final class GetMeasurementsEvent extends MeasurmentEvent {}

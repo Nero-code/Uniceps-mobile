@@ -28,7 +28,7 @@ abstract class RemoteAuthSource {
 class RemoteAuthSourceImpl implements RemoteAuthSource {
   final http.Client client;
 
-  final Box<Map<String, dynamic>> userBox;
+  final Box<Map<dynamic, dynamic>> userBox;
 
   RemoteAuthSourceImpl({required this.client, required this.userBox});
 

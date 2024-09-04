@@ -90,8 +90,8 @@ class ProfileCard extends StatelessWidget {
             // padding: const EdgeInsets.all(15),
             // width: MediaQuery.of(context).size.width,
 
-            width: 150,
-            height: 150,
+            width: 130,
+            height: 130,
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(width: 5.0),
