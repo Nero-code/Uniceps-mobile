@@ -4,19 +4,36 @@ class ExerciseModel extends Exercise {
   const ExerciseModel({
     required super.id,
     required super.name,
-    required super.tId,
     required super.imageUrl,
-    required super.description,
+    required super.notes,
+    required super.muscleGroup,
+    required super.itemOrder,
+    required super.orders,
     super.lastWaight = 0,
   });
 
   factory ExerciseModel.fromJson(Map<String, dynamic> json) {
+    //  PROBING TYPES
+    //
+    // print("Prob for exercises parsing algorithm");
+    // print("id:     ${json['id'].runtimeType}");
+    // print("exName: ${json['ExerciseName'].runtimeType}");
+    // print("exImg:  ${json['ExerciseImage'].runtimeType}");
+    // print("notes:  ${json['notes'] ?? "".runtimeType}");
+    // print("mg:     ${json['Muscle_Group'].runtimeType}");
+    // print("itemo:  ${json['itemOrder'].runtimeType}");
+    // print("orders: ${json['orders'] ?? "".runtimeType}");
+    // print("lastW:  ${json['lastWaight'].runtimeType}");
+    //
+    // ///////////////////////////////////////////////////
     return ExerciseModel(
-      id: json['id'],
-      name: json['name'],
-      tId: json['tId'],
-      imageUrl: json['imageUrl'],
-      description: json['description'],
+      id: json['id'].toString(),
+      name: json['ExerciseName'],
+      imageUrl: json['ExerciseImage'],
+      notes: json['notes'] ?? "",
+      muscleGroup: json['Muscle_Group'],
+      itemOrder: json['itemOrder'],
+      orders: json['orders'] ?? "",
       lastWaight: json['lastWaight'],
     );
   }
@@ -24,10 +41,12 @@ class ExerciseModel extends Exercise {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'name': name,
-      'tId': tId,
-      'imageUrl': imageUrl,
-      'description': description,
+      'ExerciseName': name,
+      'ExerciseImage': imageUrl,
+      'notes': notes,
+      'muscleGroup': muscleGroup,
+      'itemOrder': itemOrder,
+      'orders': orders,
       'lastWaight': lastWaight,
     };
   }

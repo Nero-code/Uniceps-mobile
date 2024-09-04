@@ -15,7 +15,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEvent>((event, emit) async {
       if (event is AuthCheckEvent) {
         // bool isLogged = false;
-
+        print("auth check event!!!");
         final either = await usecases.isLoggedIn();
 
         either.fold(

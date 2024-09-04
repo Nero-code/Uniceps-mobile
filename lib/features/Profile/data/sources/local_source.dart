@@ -45,10 +45,10 @@ abstract class LocalProfileSource {
 }
 
 class LocalProfileSourceImpl implements LocalProfileSource {
-  final Box<Map<String, dynamic>> playerBox;
-  final Box<Map<String, dynamic>> gymsBox;
-  final Box<List<Map<String, dynamic>>> subsBox;
-  final Box<List<Map<String, dynamic>>> measurBox;
+  final Box<Map<dynamic, dynamic>> playerBox;
+  final Box<Map<dynamic, dynamic>> gymsBox;
+  final Box<List<Map<dynamic, dynamic>>> subsBox;
+  final Box<List<Map<dynamic, dynamic>>> measurBox;
 
   LocalProfileSourceImpl({
     required this.gymsBox,
@@ -108,7 +108,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
     final list = <Subscription>[];
     if (res != null) {
       for (var i in res) {
-        list.add(SubscriptionModel.fromJson(i));
+        list.add(SubscriptionModel.fromJson(i, []));
       }
       return list;
     }
@@ -138,7 +138,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
   @override
   Future<void> saveGyms(List<GymModel> list) async {
     for (var i in list) {
-      await gymsBox.put(i.gymId, i.toJson());
+      await gymsBox.put(i.id, i.toJson());
     }
   }
 }

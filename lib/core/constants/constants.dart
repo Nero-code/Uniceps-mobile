@@ -1,21 +1,14 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:intl/intl.dart';
+
 const APP_NAME = 'Uniceps';
 
-enum Gender {
-  male,
-  female,
-}
+enum Gender { male, female }
 
-enum Lang {
-  en,
-  ar,
-}
+enum Lang { en, ar }
 
-enum ThemeType {
-  light,
-  dark,
-}
+enum ThemeType { light, dark }
 
 const List<String> languageCodes = ['ar', 'en'];
 
@@ -27,6 +20,8 @@ enum MuscleGroup {
   chest,
   tripez,
 }
+
+const DATE_PATTERN = "dd/MM/yyyy";
 
 ///
 ///
@@ -44,13 +39,16 @@ const API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
 const HTTP_REGISTER = "/auth";
 const HTTP_VERIFY_CODE = "/auth/verify";
 
+const HTTP_HANDSHAKE = "/handshake";
+
 const HTTP_PLAYER_INFO = "/profile";
 
 const HTTP_LOGIN = "";
 const HTTP_FORGOT_PASSWORD = "";
 
-const HTTP_TRAINING_PROGRAM = "";
-const HTTP_SUBSCRIPTIONS = "/subs";
+const HTTP_TRAINING_PROGRAM = "/routines";
+const HTTP_IMAGES = "/images";
+const HTTP_SUBSCRIPTIONS = "/subscription";
 const HTTP_MEASURMENTS = "/metrics";
 
 const HTTP_PRESENCE = "";
@@ -94,12 +92,14 @@ const ROUTE_PRESENCE = '/home/profile/presence';
 
 const HIVE_PROFILE_BOX = "player_info";
 const HIVE_USER_BOX = "user";
+const HIVE_TRAINING_BOX = "trainingProgram";
+const HIVE_LAST_WEIGHT_BOX = "lastWeightBox";
 
 // ////////////////////////////////////////////////////////////////////////// //
 //                H I V E   D A T A B A S E   S C H E M A
 // ////////////////////////////////////////////////////////////////////////// //
-//                                                                            
-// {                                 
+//
+// {
 //    "user":
 //      {
 //        "player_info": {Player}         @Deprecated
@@ -111,7 +111,7 @@ const HIVE_USER_BOX = "user";
 //    "program": {TrainingProgram},
 //
 //    ----------------------------------
-//  
+//
 //    "Gyms":
 //      {
 //        "currentGym": {"gym_id"}
@@ -131,7 +131,7 @@ const HIVE_USER_BOX = "user";
 //
 //    ----------------------------------
 //
-//    "measure": 
+//    "measure":
 //      {
 //        "gymId": [ MeasurementModel ]
 //      }
@@ -143,12 +143,26 @@ const HIVE_USER_BOX = "user";
 //        "gymId": [ SubscriptionModel ]
 //      }
 //    ----------------------------------
-//  
+//
 //    "avatar":
-
-
-
 
 // }
 //
-// ////////////////////////////////////////////////////////////////////////// // 
+// ////////////////////////////////////////////////////////////////////////// //
+
+String dateToString(DateTime date) {
+  return DateFormat("dd/MM/yyyy").format(date);
+}
+
+DateTime stringToDate(String source) {
+  return DateFormat("dd/MM/yyyy").parse(source);
+}
+
+String imgUrlParser(int muscleG, String imgName) {
+  return "$API"
+      "$HTTP_TRAINING_PROGRAM"
+      "$HTTP_IMAGES"
+      "/$muscleG"
+      "/$imgName"
+      ".jpg";
+}

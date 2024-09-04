@@ -18,7 +18,6 @@ class TrainingGroup2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      // height: MediaQuery.of(context).size.width * 0.2,
       width: MediaQuery.of(context).size.width * 0.3,
       child: Container(
         decoration: BoxDecoration(
@@ -39,16 +38,16 @@ class TrainingGroup2 extends StatelessWidget {
             child: Row(
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: Image(
-                      // color: isSelected ? Colors.white : Colors.black,
-                      image: AssetImage(image),
-                      width: MediaQuery.of(context).size.width * 0.075,
-                    ),
-                  ),
-                ),
+                // Expanded(
+                //   child: ClipRRect(
+                //     borderRadius: BorderRadius.circular(15),
+                //     child: Image(
+                //       // color: isSelected ? Colors.white : Colors.black,
+                //       image: AssetImage(image),
+                //       width: MediaQuery.of(context).size.width * 0.075,
+                //     ),
+                //   ),
+                // ),
                 Expanded(
                   flex: 2,
                   child: Center(

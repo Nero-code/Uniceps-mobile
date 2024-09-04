@@ -32,6 +32,11 @@
   "logoutAlert": "Logout?",
   "logoutAlertContents": "You are about to Logout of the app some of your data may be lost, Are you sure?",
   
+  "price": "Price",
+  "status": "Status",
+  "address": "Address",
+  "owner": "owner",
+  "telephone": "Telephone",
   "subscription": "Subscription",
   "sport": "Sport",
   "measurements": "Measurements",
@@ -40,18 +45,25 @@
   "about": "About",
   "gyms": "Gyms",
 
-  "height": "Height (cm)",
+  "height": "Height",
   "heightError": "Please put a valid Height",
-  "weight": "Weight (Kg)",
+  "weight": "Weight",
   "weightError": "Please put a valid Weight",
   "lastWeight": "Last Weight",
 
+  "arms": "Arms",
   "lArm": "Left Arm",
   "rArm": "Right Arm",
+
+  "humerus": "Humerus",
   "lHumerus": "Left Humerus",
   "rHumerus": "Right Humerus",
+  
+  "legs": "Legs",
   "lLeg": "Left Leg",
   "rLeg": "Right Leg",
+
+  "thighs": "Thighs",
   "lThigh": "Left Thigh",
   "rThigh": "Right Thigh",
   "nick": "Nick",
@@ -63,15 +75,12 @@
 
   "enteredAt": "Entered At",
   "exitedAt": "Exited At",
-
   "codeNum": "Code Number",
 
   "reps": "Reps",
 
   "empty": "No Records to show",
-
   "error": "something went wrong",
-
   "profile": "Profile",
 
   "pName": "Name:",
@@ -84,6 +93,8 @@
   "genderError": "Please choose your Gender",
 
   "male": "Male",
-  "female": "Female"
+  "female": "Female",
+
+  "payment": "Payment"
 
 }

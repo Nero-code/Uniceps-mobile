@@ -11,10 +11,16 @@ part 'training_state.dart';
 class TrainingBloc extends Bloc<TrainingEvent, TrainingState> {
   final TrainingUsecases usecases;
   TrainingBloc({required this.usecases}) : super(TrainingInitial()) {
-    on<TrainingEvent>((event, emit) {
+    on<TrainingEvent>((event, emit) async {
       if (event is GetProgramEvent) {
         // G E T   P R O G R A M
         emit(TrainingProgramLoadingState());
+        print("inside training bloc");
+        final either = await usecases.getTrainingProgram();
+        either.fold(
+          (l) => emit(TrainingProgramErrorState(f: l)),
+          (r) => emit(TrainingProgramLoadedState(program: r)),
+        );
       } else if (event is GetExercisesEvent) {
         // G E T   E X E R C I S E S
         emit(TrainingProgramLoadingState());

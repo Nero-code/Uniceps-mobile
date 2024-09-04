@@ -19,7 +19,7 @@ class MeasurementModel extends Measurement {
       required super.hips,
       required super.checkDate});
 
-  factory MeasurementModel.fromJson(Map<String, dynamic> json) {
+  factory MeasurementModel.fromJson(Map<dynamic, dynamic> json) {
     return MeasurementModel(
       height: json['height'],
       weight: json['weight'],

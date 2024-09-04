@@ -13,7 +13,7 @@ class MeasurmentBloc extends Bloc<MeasurmentEvent, MeasurmentState> {
     on<MeasurmentEvent>((event, emit) async {
       if (event is GetMeasurementsEvent) {
         emit(MeasurementLoadingState());
-        final either = await usecases.getMeasurement(event.gymId);
+        final either = await usecases.getMeasurement();
         either.fold(
           (f) => emit(MeasurementErrorState(f: f)),
           (list) => emit(MeasurementLoadedState(list: list)),

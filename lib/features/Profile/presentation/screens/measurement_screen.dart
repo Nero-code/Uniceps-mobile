@@ -31,7 +31,6 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final gymId = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 236, 236, 236),
       appBar: AppBar(
@@ -43,8 +42,8 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
         builder: (context, state) {
           if (state is MeasurmentInitial) {
             BlocProvider.of<MeasurmentBloc>(context)
-                .add(GetMeasurementsEvent(gymId: gymId));
-            return Center(child: CircularProgressIndicator());
+                .add(GetMeasurementsEvent());
+            return const Center(child: CircularProgressIndicator());
           } else if (state is MeasurementLoadedState) {
             if (state.list.isEmpty) {
               return Center(child: Text(AppLocalizations.of(context)!.empty));
@@ -106,37 +105,44 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                   child: ListView(
                     children: [
                       MeasureWidget(
+                        title: AppLocalizations.of(context)!.height,
                         isSymmetric: true,
                         lValue: state.list[currentPage].height,
                         image: trImg[0],
                       ),
                       MeasureWidget(
+                        title: AppLocalizations.of(context)!.weight,
                         isSymmetric: true,
                         lValue: state.list[currentPage].weight,
                         isCm: false,
                         image: trImg[1],
                       ),
                       MeasureWidget(
+                        title: AppLocalizations.of(context)!.nick,
                         isSymmetric: true,
                         lValue: state.list[currentPage].nick,
                         image: trImg[2],
                       ),
                       MeasureWidget(
+                        title: AppLocalizations.of(context)!.shoulders,
                         isSymmetric: true,
                         lValue: state.list[currentPage].shoulders,
                         image: trImg[3],
                       ),
                       MeasureWidget(
+                        title: AppLocalizations.of(context)!.chest,
                         isSymmetric: true,
                         lValue: state.list[currentPage].chest,
                         image: trImg[4],
                       ),
                       MeasureWidget(
+                        title: AppLocalizations.of(context)!.waist,
                         isSymmetric: true,
                         lValue: state.list[currentPage].waist,
                         image: trImg[5],
                       ),
                       MeasureWidget(
+                        title: AppLocalizations.of(context)!.arms,
                         isSymmetric: state.list[currentPage].lArm ==
                             state.list[currentPage].rArm,
                         lValue: state.list[currentPage].lArm,
@@ -144,6 +150,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                         image: trImg[6],
                       ),
                       MeasureWidget(
+                        title: AppLocalizations.of(context)!.thighs,
                         isSymmetric: state.list[currentPage].lThigh ==
                             state.list[currentPage].rThigh,
                         lValue: state.list[currentPage].lThigh,
@@ -151,6 +158,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                         image: trImg[7],
                       ),
                       MeasureWidget(
+                        title: AppLocalizations.of(context)!.legs,
                         isSymmetric: state.list[currentPage].lLeg ==
                             state.list[currentPage].rLeg,
                         lValue: state.list[currentPage].lLeg,
@@ -175,7 +183,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                   callBack: IconButton(
                     onPressed: () {
                       BlocProvider.of<MeasurmentBloc>(context)
-                          .add(GetMeasurementsEvent(gymId: gymId));
+                          .add(GetMeasurementsEvent());
                     },
                     icon: const Icon(Icons.refresh_outlined),
                   )),

@@ -28,13 +28,21 @@ import 'package:uniceps/features/Training/views/bloc/training_bloc.dart';
 final sl = di.GetIt.instance;
 
 Future<void> init() async {
-  final userBox = await Hive.openBox<Map<String, dynamic>>("User");
-  final profileBox = await Hive.openBox<Map<String, dynamic>>("Profile");
-  final trainBox = await Hive.openBox<Map<String, dynamic>>("Training");
-  final gymsBox = await Hive.openBox<Map<String, dynamic>>("Gyms");
-  final subsBox = await Hive.openBox<List<Map<String, dynamic>>>("Subs");
-  final measureBox = await Hive.openBox<List<Map<String, dynamic>>>("Metrics");
-  final avatarBox = await Hive.openBox<List<Map<String, dynamic>>>("avatar");
+  final userBox = await Hive.openBox<Map<dynamic, dynamic>>("User");
+  // final tokenBox = await Hive.openBox<String>("Token");
+  // print("---------------U S E R   B O X------------------");
+  // print("${userBox.keys.first.runtimeType}");
+  // await userBox.put("userKey", {"1": 1});
+  // print("${userBox.get("userKey")}");
+  // print("---------------U S E R   B O X------------------");
+
+  final profileBox = await Hive.openBox<Map<dynamic, dynamic>>("Profile");
+  final trainBox = await Hive.openBox<Map<dynamic, dynamic>>("Training");
+  final lastWeightBox = await Hive.openBox<double>("LastWeight");
+  final gymsBox = await Hive.openBox<Map<dynamic, dynamic>>("Gyms");
+  final subsBox = await Hive.openBox<List<Map<dynamic, dynamic>>>("Subs");
+  final measureBox = await Hive.openBox<List<Map<dynamic, dynamic>>>("Metrics");
+  // final avatarBox = await Hive.openBox<List<Map<String, dynamic>>>("Avatar");
 
   ///////                             ///
   //////                             ////
@@ -43,10 +51,11 @@ Future<void> init() async {
   ///                             ///////
 
   sl.registerLazySingleton<LocalTrainingSource>(
-    () => LocalTrainingSourceImpl(trainBox: trainBox),
+    () => LocalTrainingSourceImpl(trainBox: trainBox, lastWBox: lastWeightBox),
   );
   sl.registerLazySingleton<RemoteTrainingSource>(
-    () => RemoteTrainingSourceImpl(client: sl(), userBox: userBox),
+    () => RemoteTrainingSourceImpl(
+        client: sl(), userBox: userBox, playerBox: profileBox),
   );
   sl.registerLazySingleton<LocalProfileSource>(
     () => LocalProfileSourceImpl(

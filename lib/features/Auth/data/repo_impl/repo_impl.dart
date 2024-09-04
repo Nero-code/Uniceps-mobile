@@ -69,6 +69,7 @@ class AuthRepoImpl implements AuthRepo {
         print("Before: Validate Code Func:");
 
         await local.saveUser(res);
+        print("saved user: ${local.getUser()}");
         return const Right(true);
       } catch (e) {
         return Left(ServerFailure(errMsg: ""));
@@ -93,12 +94,18 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<Either<Failure, bool>> isLoggedIn() async {
     try {
+      print("Is Logged in repo");
+      final res = await local.getUser();
+      print(res.toJson());
+      // throw EmptyCacheExeption();
       return Right(await local.isLoggedIn());
     } on EmptyCacheExeption {
       return Left(
           EmptyCacheFailure(errorMessage: "Null User || No Token was found"));
     } catch (e) {
-      return Left(EmptyCacheFailure(errorMessage: "Unknown Error"));
+      print("Exception on Auth " + e.toString());
+      return Left(
+          EmptyCacheFailure(errorMessage: "Unknown Error: ${e.toString()}"));
     }
     // if(await connection.hasConnection){
     //   try{

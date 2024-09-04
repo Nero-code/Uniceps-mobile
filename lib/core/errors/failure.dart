@@ -71,18 +71,14 @@ class DatabaseFailure extends Failure {
   DatabaseFailure({required this.errorMsg});
 
   @override
-  String getErrorMessage() {
-    return errorMsg;
-  }
+  String getErrorMessage() => errorMsg;
 }
 
 class NoInternetConnectionFailure extends Failure {
   final String errMsg;
   NoInternetConnectionFailure({required this.errMsg});
   @override
-  String getErrorMessage() {
-    return errMsg;
-  }
+  String getErrorMessage() => errMsg;
 }
 
 class ServerFailure extends Failure {
@@ -96,6 +92,14 @@ class ServerFailure extends Failure {
 class NotFoundFailure extends Failure {
   final String errMsg;
   NotFoundFailure({required this.errMsg});
+
+  @override
+  String getErrorMessage() => errMsg;
+}
+
+class NoGymSpecifiedFailure extends Failure {
+  final String errMsg;
+  NoGymSpecifiedFailure({required this.errMsg});
 
   @override
   String getErrorMessage() => errMsg;

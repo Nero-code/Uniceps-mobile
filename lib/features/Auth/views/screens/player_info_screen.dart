@@ -272,7 +272,8 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                                         player: PlayerModel(
                                           uid: isCreate
                                               ? ""
-                                              : widget.player!.uid,
+                                              // : widget.player!.uid,
+                                              : "",
                                           name: nameCtl.text,
                                           phoneNum: phoneCtl.text,
                                           birthDate: birthCtl.text,

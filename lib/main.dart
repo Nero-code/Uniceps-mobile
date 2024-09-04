@@ -9,6 +9,7 @@ import 'package:uniceps/features/Auth/views/screens/email_and_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
@@ -31,8 +32,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await di.init();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -54,7 +55,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<TrainingBloc>(
           create: (context) {
             print(
-                "------------------------TrainingBLoc Created!--------------------------");
+                "------------------------TrainingBLoc Created!----------------------");
             return TrainingBloc(usecases: di.sl())
               ..add(const GetProgramEvent());
           },
@@ -63,8 +64,7 @@ class MyApp extends StatelessWidget {
           create: (context) {
             print(
                 "------------------------ProfileBloc Created!--------------------------");
-            return ProfileBloc(usecases: di.sl())
-              ..add(const GetProfileDataEvent());
+            return ProfileBloc(usecases: di.sl());
           },
         ),
         BlocProvider<SubsBloc>(
@@ -74,13 +74,21 @@ class MyApp extends StatelessWidget {
             return SubsBloc(usecases: di.sl());
           },
         ),
-        BlocProvider<MeasurmentBloc>(
-          create: (context) => MeasurmentBloc(usecases: di.sl()),
-        ),
-        BlocProvider<GymsBloc>(
-          create: (context) =>
-              GymsBloc(usecases: di.sl())..add(const GetCurrentGym()),
-        ),
+        BlocProvider<HandshakeBloc>(create: (context) {
+          print(
+              "------------------------HandshakesBloc Created!--------------------------");
+          return HandshakeBloc(usecases: di.sl())..add(GetAllHandShakeEvent());
+        }),
+        BlocProvider<MeasurmentBloc>(create: (context) {
+          print(
+              "------------------------MeasurmentsBloc Created!--------------------------");
+          return MeasurmentBloc(usecases: di.sl());
+        }),
+        BlocProvider<GymsBloc>(create: (context) {
+          print(
+              "------------------------GymsBloc Created!--------------------------");
+          return GymsBloc(usecases: di.sl())..add(const GetCurrentGym());
+        }),
         BlocProvider<LocaleCubit>(
           create: (context) => LocaleCubit()..getSavedLanguageCode(),
         ),

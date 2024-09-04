@@ -85,11 +85,12 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
           floatingActionButton: FloatingActionButton(
             backgroundColor: Colors.black,
             child: const Icon(Icons.home),
-            onPressed: () =>
-                Navigator.pushReplacementNamed(context, ROUTE_HOME),
-            // onPressed: () {
-            //   print("email: ${email.value}");
-            // },
+            // onPressed: () =>
+            //     Navigator.pushReplacementNamed(context, ROUTE_HOME),
+            onPressed: () {
+              // print("email: ${email.value}");
+              BlocProvider.of<AuthBloc>(context).add(AuthCheckEvent());
+            },
           ),
           body: Stack(
             children: [
@@ -255,7 +256,8 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                         signin: (e) async {
                                           context.read<AuthBloc>().add(
                                                 EmailSigninRequestEvent(
-                                                    email: e),
+                                                    email:
+                                                        e.trim().toLowerCase()),
                                               );
                                           await context
                                               .read<AuthBloc>()
@@ -266,7 +268,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                           // BlocProvider.of<AuthBloc>(context).add(
                                           //   EmailSigninRequestEvent(email: e),
                                           // );
-                                          email.value = e.trim();
+                                          email.value = e.trim().toLowerCase();
                                           // currentPage.value = 1;
                                           // _pageController.animateToPage(1,
                                           //     duration: duration, curve: curve);

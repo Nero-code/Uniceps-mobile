@@ -34,6 +34,8 @@ final class LoginWithEmailAndPassEvent extends AuthEvent {
   const LoginWithEmailAndPassEvent({required this.email, required this.pass});
 }
 
+final class LogoutEvent extends AuthEvent {}
+
 final class AuthCheckEvent extends AuthEvent {}
 
 ///

@@ -30,15 +30,21 @@ abstract class LocalAuthSource {
 }
 
 class LocalAuthSourceImple implements LocalAuthSource {
-  final Box<Map<String, dynamic>> userBox;
-  final Box<Map<String, dynamic>> playerBox;
+  final Box<Map<dynamic, dynamic>> userBox;
+  final Box<Map<dynamic, dynamic>> playerBox;
 
-  const LocalAuthSourceImple({required this.userBox, required this.playerBox});
+  const LocalAuthSourceImple({
+    required this.userBox,
+    required this.playerBox,
+  });
 
   @override
   Future<UserModel> getUser() async {
+    print("Inside Local getUser!");
+    // print("${userBox.get(HIVE_USER_BOX)}");
     final res = userBox.get(HIVE_USER_BOX);
-    if (res == null) {
+    print(res);
+    if (res == null || res.isEmpty) {
       throw EmptyCacheExeption();
     }
     return UserModel.fromJson(res);
@@ -46,7 +52,10 @@ class LocalAuthSourceImple implements LocalAuthSource {
 
   @override
   Future<void> saveUser(UserModel model) async {
+    print("LOCAL SAVE USER: clear count: ${await userBox.clear()}");
+    print("Model: ${model.toJson()}\n ${model.toJson().runtimeType}");
     await userBox.put(HIVE_USER_BOX, model.toJson());
+    print("DATA SAVED! ${userBox.get(HIVE_USER_BOX)}");
   }
 
   @override
@@ -65,7 +74,19 @@ class LocalAuthSourceImple implements LocalAuthSource {
 
   @override
   Future<bool> isLoggedIn() async {
-    print("Inside Local isLoggedIn ");
+    print("check 1: Inside Local isLoggedIn ");
+    print(
+        " isOpen: ${userBox.isOpen}\n isEmpty: ${userBox.isEmpty}\n length: ${userBox.length}\n keys: ${userBox.keys}");
+    // print(userBox.toString());
+    try {
+      print("try read from db");
+      print(userBox.get("user"));
+      // print(userBox.get(userBox.keys.first));
+    } catch (e) {
+      print(e.toString());
+    }
+    print("check 2: runtimetype");
+    print(userBox.get(HIVE_USER_BOX)?.toString());
     final user = userBox.get(HIVE_USER_BOX);
 
     print("User in Box: $user");

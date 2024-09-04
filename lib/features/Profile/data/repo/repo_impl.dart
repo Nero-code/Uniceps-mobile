@@ -6,6 +6,8 @@ import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:uniceps/features/Profile/data/sources/local_source.dart';
 import 'package:uniceps/features/Profile/data/sources/remote_source.dart';
+import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
+import 'package:uniceps/features/Profile/domain/entities/handshake.dart';
 import 'package:uniceps/features/Profile/domain/entities/measrument.dart';
 import 'package:uniceps/features/Profile/domain/repo.dart';
 import 'package:uniceps/features/Profile/domain/entities/subscription.dart';
@@ -24,11 +26,10 @@ class ProfileRepoImpl implements ProfileRepo {
   });
 
   @override
-  Future<Either<Failure, List<Measurement>>> getMeasurement(
-      String gymId) async {
+  Future<Either<Failure, List<Measurement>>> getMeasurement() async {
     if (await checker.hasConnection) {
       try {
-        final res = await remote.getMeasurements(gymId);
+        final res = await remote.getMeasurements();
         return Right(res);
       } catch (e) {
         return Left(GeneralPurposFailure(errorMessage: "something went wrong"));
@@ -47,6 +48,7 @@ class ProfileRepoImpl implements ProfileRepo {
         print("profile res: $res");
         return Right(res);
       } catch (e) {
+        print(e.toString());
         return Left(GeneralPurposFailure(errorMessage: ""));
       }
     } else {
@@ -56,6 +58,7 @@ class ProfileRepoImpl implements ProfileRepo {
       } on EmptyCacheExeption {
         return Left(EmptyCacheFailure(errorMessage: "No records"));
       } catch (e) {
+        print(e.toString());
         return Left(GeneralPurposFailure(errorMessage: "unknown Error!"));
       }
     }
@@ -93,6 +96,17 @@ class ProfileRepoImpl implements ProfileRepo {
       try {
         final res = await remote.getGyms();
         await local.saveGyms(res);
+        // final hands = await remote.getAllHandshake();
+        // print("before Sort");
+        // print(hands);
+        // print("afterSort");
+        // hands.sort(
+        //   (a, b) => a.createdAt.compareTo(b.createdAt),
+        // );
+        // final temp =
+        //     res.firstWhere((element) => element.id == hands.first.gymId);
+        // res.remove(temp);
+        // res.insert(0, temp);
         return Right(res);
       } catch (e) {
         return Left(DatabaseFailure(errorMsg: "Error on fetching data"));
@@ -135,5 +149,31 @@ class ProfileRepoImpl implements ProfileRepo {
       }
     }
     return Left(NoInternetConnectionFailure(errMsg: "Offline"));
+  }
+
+  @override
+  Future<Either<Failure, List<Attendence>>> gymAttendence(String gymId) async {
+    if (await checker.hasConnection) {
+      try {
+        final res = await remote.getAllAttendance(gymId);
+        return Right(res);
+      } catch (e) {
+        return Left(ServerFailure(errMsg: e.toString()));
+      }
+    }
+    return Left(OfflineFailure(errorMessage: "Offline"));
+  }
+
+  @override
+  Future<Either<Failure, List<HandShake>>> getAllGymHandshake() async {
+    if (await checker.hasConnection) {
+      try {
+        await remote.getAllHandshake();
+      } catch (e) {
+        print("getAllGymHandshake repoImpl: " + e.toString());
+        return Left(ServerFailure(errMsg: e.toString()));
+      }
+    }
+    return Left(OfflineFailure(errorMessage: ""));
   }
 }
