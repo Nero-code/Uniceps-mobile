@@ -158,10 +158,12 @@ const HIVE_MEASURE_BOX = "measurements";
 //
 // ////////////////////////////////////////////////////////////////////////// //
 
+/// Pattern: [dd/MM/yyyy]
 String dateToString(DateTime date) {
   return DateFormat("dd/MM/yyyy").format(date);
 }
 
+/// Pattern: [dd/MM/yyyy]
 DateTime stringToDate(String source) {
   return DateFormat("dd/MM/yyyy").parse(source);
 }

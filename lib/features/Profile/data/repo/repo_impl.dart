@@ -36,8 +36,18 @@ class ProfileRepoImpl implements ProfileRepo {
         print(e.toString());
         return Left(GeneralPurposFailure(errorMessage: "something went wrong"));
       }
+    } else {
+      try {
+        final res = await local.getMeasurements();
+        return Right(res);
+      } on EmptyCacheExeption {
+        return Left(EmptyCacheFailure(errorMessage: "No Measurments saved"));
+      } catch (e) {
+        print(e.toString());
+        return Left(
+            GeneralPurposFailure(errorMessage: "UNknown Err: ${e.toString()}"));
+      }
     }
-    return Left(GeneralPurposFailure(errorMessage: ""));
   }
 
   @override

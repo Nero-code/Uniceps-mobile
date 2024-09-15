@@ -34,7 +34,7 @@ class ExerciseModel extends Exercise {
       notes: json['notes'] ?? "",
       muscleGroup: json['Muscle_Group'],
       itemOrder: json['itemOrder'],
-      sets: json['sets'],
+      sets: json['sets'] ?? "",
       lastWaight: json['lastWaight'],
     );
   }

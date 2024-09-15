@@ -36,7 +36,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
     "ForeArm.jpg",
     "Thigh.jpg",
     "Leg.jpg",
-    'Hips.jpg',
+    'hips.jpg',
   ];
 
   int currentPage = 0;
@@ -138,7 +138,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                       MeasureWidget(
                         title: AppLocalizations.of(context)!.nick,
                         isSymmetric: true,
-                        lValue: state.list[currentPage].nick,
+                        lValue: state.list[currentPage].neck,
                         image: trImg[2],
                       ),
                       MeasureWidget(
@@ -196,6 +196,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
             );
             // "Unexpected Error occourd!"
           } else if (state is MeasurementErrorState) {
+            print("Measurement Failure: ${state.f.runtimeType}");
             return Center(
               child: ReloadScreenWiget(
                   image: const Icon(
@@ -203,7 +204,8 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                     size: 50,
                     color: Colors.grey,
                   ),
-                  message: Text(AppLocalizations.of(context)!.error),
+                  // message: Text("${AppLocalizations.of(context)!.error}")
+                  message: Text("${state.f.getErrorMessage()}"),
                   callBack: IconButton(
                     onPressed: () {
                       BlocProvider.of<MeasurmentBloc>(context)

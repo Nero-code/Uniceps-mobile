@@ -126,7 +126,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<MeasurmentBloc>(create: (context) {
           print(
               "------------------------MeasurmentsBloc Created!--------------------------");
-          return MeasurmentBloc(usecases: di.sl());
+          return MeasurmentBloc(usecases: di.sl())..add(GetMeasurementsEvent());
         }),
         BlocProvider<GymsBloc>(create: (context) {
           print(

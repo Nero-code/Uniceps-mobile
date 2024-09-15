@@ -11,7 +11,7 @@ class Measurement extends Equatable {
   final double rThigh;
   final double lLeg;
   final double rLeg;
-  final double nick;
+  final double neck;
   final double shoulders;
   final double waist;
   final double chest;
@@ -29,7 +29,7 @@ class Measurement extends Equatable {
     required this.rLeg,
     required this.lThigh,
     required this.rThigh,
-    required this.nick,
+    required this.neck,
     required this.shoulders,
     required this.waist,
     required this.chest,
