@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -137,18 +139,39 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                       _pageController.animateToPage(1,
                           duration: duration, curve: curve);
                     } else if (state is AuthDoneState) {
+                      print("Auth State: ${state.runtimeType}");
+
+                      print("state.hasData: ${state.hasData}");
                       if (!state.hasData) {
-                        final res = await Navigator.of(context).push(
+                        final res = await Navigator.push<bool>(
+                          context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                PlayerInfoScreen(player: state.player),
+                                const PlayerInfoScreen(player: null),
                           ),
                           // ROUTE_PLAYER_INFO,
                           // arguments: PlayerArguments(
                           //     hasData: state.hasData, data: state.player),
                         );
-                        if (res) {
-                          Navigator.popUntil(context, (route) => false);
+
+                        print("check: if Condition state: $res");
+
+                        if (res != null && !res) {
+                          print("check: inside if statement");
+                          // while (Navigator.canPop(context)) {
+                          //   print("check: inside while statement");
+                          //   Navigator.pop(context);
+                          // }
+                          // return;
+
+                          // TODO: Exit Application (for Android)
+                          if (Platform.isAndroid) {
+                            SystemNavigator.pop();
+                          } else if (Platform.isIOS) {
+                            exit(0);
+                          }
+                          // For IOS
+                          // exit(0);
                         }
                       }
 

@@ -9,17 +9,15 @@ import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
 import 'package:uniceps/features/Profile/data/models/measurement_model.dart';
 import 'package:uniceps/features/Profile/data/models/subscription_model.dart';
 import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
-import 'package:uniceps/features/Profile/domain/entities/measrument.dart';
 import "package:http/http.dart" as http;
-import 'package:uniceps/features/Profile/domain/entities/subscription.dart';
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
 
 abstract class RemoteProfileSource {
   Future<PlayerModel> getProfileData();
-  Future<Unit> submitProfileData(PlayerModel playerModel,
+  Future<String> submitProfileData(PlayerModel playerModel,
       {required bool isCreate});
-  Future<List<Measurement>> getMeasurements();
-  Future<List<Subscription>> getSubs(String gymId);
+  Future<List<MeasurementModel>> getMeasurements();
+  Future<List<SubscriptionModel>> getSubs(String gymId);
   Future<List<GymModel>> getGyms();
   Future<List<HandShakeModel>> getAllHandshake();
   Future<List<Attendence>> getAllAttendance(String gymId);
@@ -27,29 +25,28 @@ abstract class RemoteProfileSource {
 
 class RemoteProfileSourceImpl implements RemoteProfileSource {
   final http.Client _client;
-  final Box<Map<dynamic, dynamic>> userBox;
-  final Box<Map<dynamic, dynamic>> playerBox;
+  final Box<Map<dynamic, dynamic>> userBox, playerBox, handshakesBox;
 
   RemoteProfileSourceImpl({
     required http.Client client,
     required this.userBox,
     required this.playerBox,
+    required this.handshakesBox,
   }) : _client = client;
 
   @override
   Future<PlayerModel> getProfileData() async {
     print("REMOTE-S: GetProfileData()");
     print("$API$HTTP_PLAYER_INFO");
-    print(playerBox.get(HIVE_PROFILE_BOX));
-    print("HIVE: Passed!!!");
+    // print("HIVE PlayerBox : ${playerBox.get(HIVE_PROFILE_BOX)}");
 
     final res = await _client.get(Uri.parse("$API$HTTP_PLAYER_INFO"), headers: {
       ...HEADERS,
       "x-access-token": "${userBox.get(HIVE_USER_BOX)!["token"]}",
     });
 
-    print(res.statusCode);
-    print(res.body);
+    print("Remote_S profile res statusCode: ${res.statusCode}");
+    print("Remote_S profile res body: ${res.body}");
     if (res.statusCode == 200) {
       return PlayerModel.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
     }
@@ -58,7 +55,7 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
 
 // 2024-07-20 14:42:53.030212
   @override
-  Future<List<Measurement>> getMeasurements() async {
+  Future<List<MeasurementModel>> getMeasurements() async {
     print("inside getMeasurements");
 
     final res = await _client.get(Uri.parse("$API$HTTP_MEASURMENTS"), headers: {
@@ -67,23 +64,11 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
     });
     print(res.statusCode);
     if (res.statusCode == 200) {
-      print("check 0");
       print(res.body);
 
-      //
-      //  temp is not of type list but rather of type Map
-      //
-      try {
-        final temp = jsonDecode(res.body) as List<dynamic>;
-      } catch (e) {
-        print(e.toString());
-      }
-      print("after try catch phrase");
-      final temp = [jsonDecode(res.body)];
-      print("check 1: Data parse successful");
-      final list = <Measurement>[];
-      // temp.map((e) =>
-      //     list.add(MeasurementModel.fromJson(e as Map<String, dynamic>)));
+      final temp = jsonDecode(res.body) as List<dynamic>;
+
+      final list = <MeasurementModel>[];
       for (Map<String, dynamic> i in temp) {
         list.add(MeasurementModel.fromJson(i));
       }
@@ -99,22 +84,33 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
   }
 
   @override
-  Future<List<Subscription>> getSubs(String gymId) async {
+  Future<List<SubscriptionModel>> getSubs(String gymId) async {
     print("inside Get Subscriptions");
-    // final res = await _client.get(Uri.parse("$API$HTTP_SUBSCRIPTIONS/$gymId/${playerBox.get(HIVE_PROFILE_BOX)!['pid']}"));
-
-    final res = await _client
-        .get(Uri.parse("$API$HTTP_SUBSCRIPTIONS/$gymId/123456789"));
-    final list = <Subscription>[];
+    if (!handshakesBox.containsKey(gymId)) {
+      throw EmptyCacheExeption();
+    }
+    print(
+        "Profile ->  RemoteS -> getSubs -> URL: /$gymId/${handshakesBox.get(gymId)!['pid']}");
+    final res = await _client.get(Uri.parse(
+        "$API$HTTP_SUBSCRIPTIONS/$gymId/${handshakesBox.get(gymId)!['pid']}"));
+    final list = <SubscriptionModel>[];
     print(res.statusCode);
     if (res.statusCode == 200) {
-      final body = jsonDecode(res.body) as List<Map<String, dynamic>>;
-      body.map((e) => list.add(SubscriptionModel.fromJson(e, [])));
+      print(res.body);
+      print(jsonDecode(res.body).runtimeType);
+
+      final subsList = jsonDecode(res.body) as List<dynamic>;
+
+      print("check 3");
+      for (var i in subsList) {
+        list.add(SubscriptionModel.fromJson(i));
+      }
+      print("check 4");
       return list;
     } else if (res.statusCode == 204) {
-      return [];
+      throw EmptyCacheExeption();
     }
-    throw Exception();
+    throw ServerException();
   }
 
   @override
@@ -137,7 +133,7 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
   }
 
   @override
-  Future<Unit> submitProfileData(PlayerModel playerModel,
+  Future<String> submitProfileData(PlayerModel playerModel,
       {required bool isCreate}) async {
     print("REMOTE-S: Submit Profile --> Check 1!");
     if (isCreate) {
@@ -154,12 +150,15 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
         },
         body: jsonEncode(playerModel.toJson()),
       );
-      print(res.statusCode);
+      print("SubmitProfile : POST");
+      print("res statusCode: ${res.statusCode}");
+      print("res body: ${res.body}");
       if (res.statusCode == 201) {
-        return unit;
+        return jsonDecode(res.body)['profile_info']['uid'];
       }
     } else {
       print("REMOTE-S: Submit Profile --> Check 2.2!");
+      print("SubmitProfile : PUT");
       final res = await _client.put(
         Uri.parse(API + HTTP_PLAYER_INFO),
         headers: {
@@ -170,7 +169,7 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
       );
       print("res: ${res.statusCode}");
       if (res.statusCode == 200) {
-        return unit;
+        return jsonDecode(res.body)['profile_info']['uid'];
       }
     }
     throw ServerException();
@@ -178,21 +177,33 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
 
   @override
   Future<List<Attendence>> getAllAttendance(String gymId) async {
-    final res = await _client.post(
-      Uri.parse("$API$HTTP_PRESENCE/$gymId"),
+    if (!handshakesBox.containsKey(gymId)) {
+      throw NoAttendenceLogFoundException();
+    }
+    final res = await _client.get(
+      Uri.parse(
+          "$API$HTTP_PRESENCE/$gymId/${handshakesBox.get(gymId)!['pid']}"),
       headers: {
         ...HEADERS,
         "x-access-token": userBox.get(HIVE_USER_BOX)!["token"],
       },
     );
-    print(res.statusCode);
-    print(res.body);
+    print("attenence code: ${res.statusCode}");
+
     if (res.statusCode == 200) {
-      return [];
+      final data = jsonDecode(res.body) as List<dynamic>;
+      final list = <Attendence>[];
+      for (var i in data) {
+        list.add(Attendence.fromJson(i));
+      }
+      print(list);
+      return list;
     } else if (res.statusCode == 204) {
-      return [];
+      // TODO: Remote_S --> getAllAttendence --> statusCode: 204 needs research
+      return throw EmptyCacheExeption();
     }
-    throw Exception();
+
+    throw ServerException();
   }
 
   @override
@@ -221,6 +232,8 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
         temp.add(HandShakeModel.fromJson(i));
       }
       return temp;
+    } else if (res.statusCode == 204) {
+      throw NoGymSpecifiedException();
     }
     throw ServerException();
   }

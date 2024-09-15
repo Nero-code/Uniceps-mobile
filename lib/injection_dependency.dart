@@ -8,22 +8,22 @@ import 'package:uniceps/features/Auth/data/sources/local_source.dart';
 import 'package:uniceps/features/Auth/data/sources/remote_source.dart';
 import 'package:uniceps/features/Auth/services/repo/repo.dart';
 import 'package:uniceps/features/Auth/services/usecases/usecases.dart';
-import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
+// import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Profile/data/repo/repo_impl.dart';
 import 'package:uniceps/features/Profile/data/sources/local_source.dart';
 import 'package:uniceps/features/Profile/data/sources/remote_source.dart';
 import 'package:uniceps/features/Profile/domain/repo.dart';
 import 'package:uniceps/features/Profile/domain/usecases.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
+// import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
+// import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
+// import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
+// import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
 import 'package:uniceps/features/Training/data/repos_impl/repo_imple.dart';
 import 'package:uniceps/features/Training/data/sources/local_data_source.dart';
 import 'package:uniceps/features/Training/data/sources/remote_data_source.dart';
 import 'package:uniceps/features/Training/services/repos/repository.dart';
 import 'package:uniceps/features/Training/services/usecases/usecases.dart';
-import 'package:uniceps/features/Training/views/bloc/training_bloc.dart';
+// import 'package:uniceps/features/Training/views/bloc/training_bloc.dart';
 
 final sl = di.GetIt.instance;
 
@@ -40,9 +40,21 @@ Future<void> init() async {
   final trainBox = await Hive.openBox<Map<dynamic, dynamic>>("Training");
   final lastWeightBox = await Hive.openBox<double>("LastWeight");
   final gymsBox = await Hive.openBox<Map<dynamic, dynamic>>("Gyms");
-  final subsBox = await Hive.openBox<List<Map<dynamic, dynamic>>>("Subs");
-  final measureBox = await Hive.openBox<List<Map<dynamic, dynamic>>>("Metrics");
-  // final avatarBox = await Hive.openBox<List<Map<String, dynamic>>>("Avatar");
+  final subsBox = await Hive.openBox<List<dynamic>>("Subs");
+  final measureBox = await Hive.openBox<Map<dynamic, dynamic>>("Metrics");
+  final handshakesBox = await Hive.openBox<Map<dynamic, dynamic>>("HandShakes");
+  final attendenceBox = await Hive.openBox<List<dynamic>>("Attendence");
+  // final avatarBox = await Hive.openBox<List<Map<dynamic, dynamic>>>("Avatar");
+
+  // await userBox.clear();
+  // await profileBox.clear();
+  // await trainBox.clear();
+  // await lastWeightBox.clear();
+  // await gymsBox.clear();
+  // await subsBox.clear();
+  // await measureBox.clear();
+  // await handshakesBox.clear();
+  // await attendenceBox.clear();
 
   ///////                             ///
   //////                             ////
@@ -51,7 +63,10 @@ Future<void> init() async {
   ///                             ///////
 
   sl.registerLazySingleton<LocalTrainingSource>(
-    () => LocalTrainingSourceImpl(trainBox: trainBox, lastWBox: lastWeightBox),
+    () => LocalTrainingSourceImpl(
+        trainBox: trainBox,
+        lastWBox: lastWeightBox,
+        handshakesBox: handshakesBox),
   );
   sl.registerLazySingleton<RemoteTrainingSource>(
     () => RemoteTrainingSourceImpl(
@@ -59,14 +74,21 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<LocalProfileSource>(
     () => LocalProfileSourceImpl(
-        gymsBox: gymsBox,
-        measurBox: measureBox,
-        playerBox: profileBox,
-        subsBox: subsBox),
+      gymsBox: gymsBox,
+      measurBox: measureBox,
+      playerBox: profileBox,
+      subsBox: subsBox,
+      handshakesBox: handshakesBox,
+      attendBox: attendenceBox,
+    ),
   );
   sl.registerLazySingleton<RemoteProfileSource>(
     () => RemoteProfileSourceImpl(
-        client: sl(), userBox: userBox, playerBox: profileBox),
+      client: sl(),
+      userBox: userBox,
+      playerBox: profileBox,
+      handshakesBox: handshakesBox,
+    ),
   );
   sl.registerLazySingleton<LocalAuthSource>(
     () => LocalAuthSourceImple(userBox: userBox, playerBox: profileBox),
@@ -131,12 +153,12 @@ Future<void> init() async {
   ///
   //////////////////////////////////////////////////////////////////////////////
 
-  sl.registerFactory<AuthBloc>(() => AuthBloc(usecases: sl()));
-  sl.registerFactory<GymsBloc>(() => GymsBloc(usecases: sl()));
-  sl.registerFactory<SubsBloc>(() => SubsBloc(usecases: sl()));
-  sl.registerFactory<ProfileBloc>(() => ProfileBloc(usecases: sl()));
-  sl.registerFactory<TrainingBloc>(() => TrainingBloc(usecases: sl()));
-  sl.registerFactory<MeasurmentBloc>(() => MeasurmentBloc(usecases: sl()));
+  // sl.registerFactory<AuthBloc>(() => AuthBloc(usecases: sl()));
+  // sl.registerFactory<GymsBloc>(() => GymsBloc(usecases: sl()));
+  // sl.registerFactory<SubsBloc>(() => SubsBloc(usecases: sl()));
+  // sl.registerFactory<ProfileBloc>(() => ProfileBloc(usecases: sl()));
+  // sl.registerFactory<TrainingBloc>(() => TrainingBloc(usecases: sl()));
+  // sl.registerFactory<MeasurmentBloc>(() => MeasurmentBloc(usecases: sl()));
 
   //////////////////////////////////////////////////////////////////////////////
   ///

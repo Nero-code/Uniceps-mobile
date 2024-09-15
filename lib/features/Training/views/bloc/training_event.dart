@@ -12,11 +12,20 @@ final class GetProgramEvent extends TrainingEvent {
   const GetProgramEvent({this.filter = 1});
 }
 
-final class GetExercisesEvent extends TrainingEvent {
-  const GetExercisesEvent();
+final class UpdateLastWeightExerciseEvent extends TrainingEvent {
+  final double newVal;
+  final String eId;
+  const UpdateLastWeightExerciseEvent({
+    required this.eId,
+    required this.newVal,
+  });
 }
 
-final class ChangeFilterEvent extends TrainingEvent {
-  final String filter;
-  const ChangeFilterEvent({required this.filter});
-}
+// final class GetExercisesEvent extends TrainingEvent {
+//   const GetExercisesEvent();
+// }
+
+// final class ChangeFilterEvent extends TrainingEvent {
+//   final int filter;
+//   const ChangeFilterEvent({required this.filter});
+// }

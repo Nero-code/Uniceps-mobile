@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
 
@@ -10,15 +11,11 @@ class HomeCard extends StatelessWidget {
     super.key,
     required this.player,
     required this.onTap,
-    this.percentage = 0.0,
-    this.level = 0,
   });
 
   // final Gym gym;
   final Player player;
   final VoidCallback onTap;
-  final double percentage;
-  final int level;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +97,9 @@ class HomeCard extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: LinearProgressIndicator(
-                                      value: percentage,
+                                      borderRadius: BorderRadius.circular(5),
+                                      value: (player.level -
+                                          player.level.toInt()) as double?,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onBackground,
@@ -117,7 +116,7 @@ class HomeCard extends StatelessWidget {
                                       ),
                                       children: [
                                         TextSpan(
-                                          text: '$level',
+                                          text: '${player.level.toInt()}',
                                           style: TextStyle(
                                               fontWeight: FontWeight.normal),
                                         ),
@@ -139,15 +138,24 @@ class HomeCard extends StatelessWidget {
                           ),
                           child: BlocBuilder<HandshakeBloc, HandshakeState>(
                             builder: (context, state) {
+                              print("HOME CARD PROBE: ${state.runtimeType}");
                               if (state is HandshakeLoadedState) {
-                                final url = state.handshakes.first.logoUrl;
-                                if (url != null && url.isNotEmpty) {
-                                  return Image(
-                                      image: CachedNetworkImageProvider(url));
-                                }
-                                return const Image(
-                                  image:
-                                      AssetImage("images/logo/Logo-dark.png"),
+                                final url = "$API"
+                                    "$HTTP_GYMS"
+                                    "$HTTP_GYM_LOGO"
+                                    "/${state.handshakes.first.gymId}";
+                                print(
+                                    "HOME CARD PROBE: ${state.handshakes.first.gymId}");
+
+                                return CachedNetworkImage(
+                                  imageUrl: url,
+                                  errorWidget: (context, url, error) =>
+                                      const Image(
+                                    image:
+                                        AssetImage("images/logo/Logo-dark.png"),
+                                  ),
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
                                 );
                               } else if (state is HandshakeLoadingState) {
                                 return const CircularProgressIndicator();

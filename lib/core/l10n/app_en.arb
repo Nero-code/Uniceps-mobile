@@ -80,6 +80,9 @@
   "reps": "Reps",
 
   "empty": "No Records to show",
+  "emptySubs": "No Subscriptions",
+  "emptyMeasure": "No Measurements",
+  "emptyExc": "No Exercises",
   "error": "something went wrong",
   "profile": "Profile",
 
@@ -95,6 +98,8 @@
   "male": "Male",
   "female": "Female",
 
-  "payment": "Payment"
+  "payment": "Payment",
+  "paid": "Paid",
+  "notPaid": "Not Paid"
 
 }

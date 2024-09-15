@@ -15,16 +15,28 @@ class MeasurementScreen extends StatefulWidget {
 
 class _MeasurementScreenState extends State<MeasurementScreen> {
   // final numbers = [180, 70, 0, 120, 95, 0, 30, 76, 30];
+  // final trImgPng = [
+  //   "Height.png",
+  //   "Weight.png",
+  //   "Neck.png",
+  //   "Shoulder.png",
+  //   "Chest.png",
+  //   "Waist.png",
+  //   "ForeArm.png",
+  //   "Thigh.png",
+  //   "Leg.png",
+  // ];
   final trImg = [
-    "Height.png",
-    "Weight.png",
-    "Neck.png",
-    "Shoulder.png",
-    "Chest.png",
-    "Waist.png",
-    "ForeArm.png",
-    "Thigh.png",
-    "Leg.png",
+    "Height.jpg",
+    "Weight.jpg",
+    "Neck.jpg",
+    "Shoulder.jpg",
+    "Chest.jpg",
+    "Waist.jpg",
+    "ForeArm.jpg",
+    "Thigh.jpg",
+    "Leg.jpg",
+    'Hips.jpg',
   ];
 
   int currentPage = 0;
@@ -59,13 +71,15 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                           child: Center(
                             child: IconButton(
                               icon: const Icon(Icons.arrow_back_ios_new),
-                              onPressed: () {
-                                setState(() {
-                                  if (currentPage > 0) {
-                                    --currentPage;
-                                  }
-                                });
-                              },
+                              onPressed: state.list.length > 1
+                                  ? () {
+                                      setState(() {
+                                        if (currentPage > 0) {
+                                          --currentPage;
+                                        }
+                                      });
+                                    }
+                                  : null,
                             ),
                           ),
                         ),
@@ -76,7 +90,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                               "${state.list[currentPage].checkDate.year}/"
                               "${state.list[currentPage].checkDate.month}/"
                               "${state.list[currentPage].checkDate.day}",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -86,14 +100,18 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                         Expanded(
                           child: Center(
                             child: IconButton(
-                              icon: Icon(Icons.arrow_forward_ios_outlined),
-                              onPressed: () {
-                                setState(() {
-                                  if (currentPage < state.list.length - 1) {
-                                    ++currentPage;
-                                  }
-                                });
-                              },
+                              icon:
+                                  const Icon(Icons.arrow_forward_ios_outlined),
+                              onPressed: state.list.length > 1
+                                  ? () {
+                                      setState(() {
+                                        if (currentPage <
+                                            state.list.length - 1) {
+                                          ++currentPage;
+                                        }
+                                      });
+                                    }
+                                  : null,
                             ),
                           ),
                         ),
@@ -164,6 +182,12 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                         lValue: state.list[currentPage].lLeg,
                         rValue: state.list[currentPage].rLeg,
                         image: trImg[8],
+                      ),
+                      MeasureWidget(
+                        title: AppLocalizations.of(context)!.hips,
+                        isSymmetric: true,
+                        lValue: state.list[currentPage].hips,
+                        image: trImg[9],
                       ),
                     ],
                   ),

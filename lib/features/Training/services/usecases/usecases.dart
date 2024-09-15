@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/features/Profile/domain/entities/handshake.dart';
 import 'package:uniceps/features/Training/services/entities/avatar.dart';
+import 'package:uniceps/features/Training/services/entities/exercise.dart';
 import 'package:uniceps/features/Training/services/entities/presence.dart';
 import 'package:uniceps/features/Training/services/entities/training_program.dart';
 import 'package:uniceps/features/Training/services/repos/repository.dart';
@@ -15,13 +16,22 @@ class TrainingUsecases {
     return await _repo.getTrainingProgram();
   }
 
+  Future<Either<Failure, List<Exercise>>> getExercisesByFilter(
+      int filter) async {
+    return await _repo.getExercisesByFilter(filter);
+  }
+
+  Future<Either<Failure, bool>> completeExercise(String eId) async {
+    return await _repo.completeExercise(eId);
+  }
+
   Future<Either<Failure, HandShake>> getCurrentHandshake() async {
     return await _repo.getCurrentHandshake();
   }
 
   Future<Either<Failure, List<Presence>>> getPresenceAtGym(
       {required String gymId}) async {
-    return await _repo.getPresenceAtGym(gymId: gymId);
+    return await _repo.getPresenceAtGym(gymId);
   }
 
   Future<Either<Failure, Avatar>> getAvatar() async {

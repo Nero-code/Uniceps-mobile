@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -86,23 +85,6 @@ class ProfileCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            margin: const EdgeInsets.all(15),
-            // padding: const EdgeInsets.all(15),
-            // width: MediaQuery.of(context).size.width,
-
-            width: 130,
-            height: 130,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(width: 5.0),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: QrImageView(
-              padding: const EdgeInsets.all(5.0),
-              data: profile.uid,
-            ),
-          ),
-          Container(
             margin: const EdgeInsets.all(5),
             padding: const EdgeInsets.all(15),
             width: MediaQuery.of(context).size.width,
@@ -112,12 +94,12 @@ class ProfileCard extends StatelessWidget {
                   // Color.fromARGB(255, 170, 29, 76),
                   // Color.fromARGB(255, 139, 34, 158),
 
-                  // Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.primary,
 
-                  Theme.of(context).colorScheme.onBackground,
+                  // Theme.of(context).colorScheme.onBackground,
 
-                  Theme.of(context).colorScheme.onBackground,
-                  // Theme.of(context).colorScheme.secondary,
+                  // Theme.of(context).colorScheme.onBackground,
+                  Theme.of(context).colorScheme.secondary,
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,

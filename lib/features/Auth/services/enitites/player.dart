@@ -3,8 +3,8 @@ import 'package:uniceps/core/constants/constants.dart';
 
 class Player extends Equatable {
   final String name, phoneNum, birthDate, uid;
-  final String? gymUrl;
   final Gender gender;
+  final double level;
 
   const Player({
     required this.name,
@@ -12,18 +12,18 @@ class Player extends Equatable {
     required this.phoneNum,
     required this.birthDate,
     required this.gender,
-    this.gymUrl,
+    required this.level,
   });
 
-  Map<String, dynamic> toJson() => {
-        'uid': uid,
-        'full_name': name,
-        'phone': phoneNum,
-        'birth_date': birthDate,
-        'gender_male': gender == Gender.male ? "True" : "False",
-        // 'gymUrl': gymUrl,
-      };
+  // Map<String, dynamic> toJson() => {
+  //       'uid': uid,
+  //       'full_name': name,
+  //       'phone': phoneNum,
+  //       'birth_date': birthDate,
+  //       'gender_male': gender == Gender.male ? "True" : "False",
+  //       // 'gymUrl': gymUrl,
+  //     };
 
   @override
-  List<Object?> get props => [name, phoneNum, birthDate, gender];
+  List<Object?> get props => [uid, name, phoneNum, birthDate, gender.name];
 }

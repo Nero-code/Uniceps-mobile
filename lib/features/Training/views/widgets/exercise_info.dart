@@ -1,17 +1,25 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Training/services/entities/exercise.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ExerciseInfoDialog extends StatelessWidget {
-  const ExerciseInfoDialog(
-      {super.key, required this.weightCtl, required this.e});
+  const ExerciseInfoDialog({
+    super.key,
+    required this.weightCtl,
+    required this.e,
+    required this.onPressed,
+  });
 
   final TextEditingController weightCtl;
+  final void Function(double) onPressed;
   final Exercise e;
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
     return AlertDialog(
       backgroundColor: Colors.white,
       title: Text(e.name),
@@ -27,32 +35,47 @@ class ExerciseInfoDialog extends StatelessWidget {
             Text(e.notes),
             const Divider(),
             const SizedBox(height: 10),
-            Text("Last Weight: ${e.lastWaight} Kg"),
+            Text("${local!.lastWeight}: ${e.lastWaight} Kg"),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                TextButton(
+                  onPressed: () {
+                    if (weightCtl.text.isEmpty) return;
+                    print(double.parse(weightCtl.text));
+                    onPressed(double.parse(weightCtl.text));
+                    weightCtl.clear();
+                    Navigator.pop(context);
+                  },
+                  child: Text(local.update),
+                ),
                 SizedBox(
                   width: 70,
                   child: TextField(
+                    maxLength: 10,
                     textAlign: TextAlign.center,
                     controller: weightCtl,
-                    decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: const EdgeInsets.all(5),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade700,
-                          ),
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      counter: SizedBox(),
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(5),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey,
+                          width: 0.5,
                         ),
-                        border: OutlineInputBorder()),
+                      ),
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      if (value.contains(RegExp(r"[^0-9^\.]"))) {
+                        weightCtl.text = weightCtl.value.text
+                            .substring(0, weightCtl.value.text.length - 1);
+                      }
+                    },
                   ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // Add Weight to database...
-                  },
-                  child: Text("Update"),
                 ),
               ],
             ),

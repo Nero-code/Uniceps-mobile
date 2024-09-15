@@ -21,8 +21,10 @@ class TrainingProgramModel extends TrainingProgram {
     print("pid:            ${json['pid'].runtimeType}");
     print("routine_date:   ${json['routine_date'].runtimeType}");
     print("days_group_map: ${json['days_group_map'].runtimeType}");
+    print("weights:        ${weights.runtimeType}");
 
-    for (Map<String, dynamic> i in json['routine_items']) {
+    for (Map<dynamic, dynamic> e in json['routine_items']) {
+      var i = Map<String, dynamic>.from(e);
       i.addAll({'lastWaight': weights["${i['id']}"] ?? 0.0});
       list.add(ExerciseModel.fromJson(i));
     }
@@ -34,7 +36,7 @@ class TrainingProgramModel extends TrainingProgram {
       id: "${json['rid']}",
       gymId: json['gym_id'],
       pid: json['pid'],
-      createdAt: DateFormat("yyyy-MM-dd").parse(json['routine_date']),
+      createdAt: DateFormat("dd/MM/yyyy").parse(json['routine_date']),
       daysGroupMap: Map<String, String>.from(json['days_group_map']),
       exercises: list,
     );
@@ -51,7 +53,7 @@ class TrainingProgramModel extends TrainingProgram {
       'rid': id,
       'gym_id': gymId,
       'pid': pid,
-      'routine_date': DateFormat("yyyy-MM-dd").format(createdAt),
+      'routine_date': DateFormat("dd/MM/yyyy").format(createdAt),
       'days_group_map': daysGroupMap,
       'routine_items': list,
     };

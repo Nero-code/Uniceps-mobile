@@ -4,9 +4,8 @@ import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/reload_wiget.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/screens/gym_profile_screen.dart';
-import 'package:uniceps/features/Profile/presentation/widgets/gym_widget.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/gym_widget_2.dart';
 
 class GymListScreen extends StatelessWidget {
@@ -19,11 +18,13 @@ class GymListScreen extends StatelessWidget {
         title: const Text(APP_NAME),
       ),
       body: RefreshIndicator(
-        onRefresh: () async {},
-        child: Builder(
-          builder: (context) {
-            final state = context.watch<GymsBloc>().state;
-            // final handshake = context.watch<HandshakeBloc>().state;
+        onRefresh: () async {
+          BlocProvider.of<GymsBloc>(context)
+              .add(const GetAllAvailableGymsEvent());
+          await BlocProvider.of<GymsBloc>(context).stream.skip(1).first;
+        },
+        child: BlocBuilder<GymsBloc, GymsState>(
+          builder: (context, state) {
             if (state is GymsLoadedState) {
               if (state.list.isEmpty) {
                 return Center(child: Text(AppLocalizations.of(context)!.empty));
@@ -34,6 +35,8 @@ class GymListScreen extends StatelessWidget {
                   return GymWidget2(
                     gym: state.list[index],
                     onPressed: () {
+                      BlocProvider.of<SubsBloc>(context)
+                          .add(GetSubsEvent(gymId: state.list[index].id));
                       Navigator.push(
                         context,
                         MaterialPageRoute(

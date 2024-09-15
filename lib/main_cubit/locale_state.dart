@@ -12,4 +12,6 @@ part of 'locale_cubit.dart';
 final class ChangedLangState {
   final Locale locale;
   ChangedLangState({required this.locale});
+
+  bool isRtl() => locale.languageCode == 'ar';
 }

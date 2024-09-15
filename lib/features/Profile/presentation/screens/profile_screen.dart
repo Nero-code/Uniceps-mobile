@@ -1,15 +1,14 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/reload_wiget.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
-import 'package:uniceps/features/Profile/domain/entities/gym.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/widgets/gym_widget.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/profile_card.dart';
+import 'package:uniceps/features/Profile/presentation/widgets/profile_card_2.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/settings_tile.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -45,9 +44,22 @@ class ProfileScreen extends StatelessWidget {
                               child: Text(AppLocalizations.of(context)!.cancel),
                             ),
                             TextButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 BlocProvider.of<AuthBloc>(context)
                                     .add(LogoutEvent());
+                                final bloc =
+                                    await BlocProvider.of<AuthBloc>(context)
+                                        .stream
+                                        .skip(1)
+                                        .first;
+                                print("Test");
+                                print("Bloc: ${bloc.runtimeType}");
+                                if (bloc is AuthLoggedoutState) {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pushReplacementNamed(
+                                      context, ROUTE_AUTH);
+                                }
                               },
                               child: Text(AppLocalizations.of(context)!.ok),
                             ),
@@ -74,7 +86,8 @@ class ProfileScreen extends StatelessWidget {
                   builder: (context, state) {
                     print(state.runtimeType);
                     if (state is ProfileLoadedState) {
-                      return ProfileCard(profile: state.player);
+                      // return ProfileCard(profile: state.player);
+                      return ProfileCard2(player: state.player);
 
                       // return Card(
                       //   child: SizedBox(
@@ -278,23 +291,6 @@ class ProfileScreen extends StatelessWidget {
                     Navigator.pushNamed(context, ROUTE_GYMS_LIST);
                   },
                 ),
-                //
-                //      A B O U T   O P T I O N
-                //
-                SettingTile(
-                  icon: Icon(
-                    Icons.info_outline,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
-                  // title: AppLocalizations.of(context)!.about,
-                  title: "Hand Shake",
-                  isRtl: st.locale.languageCode == "ar",
-                  onPressed: () {
-                    print("onpressed");
-                    BlocProvider.of<HandshakeBloc>(context)
-                        .add(GetAllHandShakeEvent());
-                  },
-                ),
                 SettingTile(
                   icon: Icon(
                     Icons.leaderboard_rounded,
@@ -309,31 +305,51 @@ class ProfileScreen extends StatelessWidget {
                     //     .add(RequestAttendanceEvent("11"));
                   },
                 ),
+
+                //
+                //      A B O U T   O P T I O N
+                //
                 SettingTile(
                   icon: Icon(
-                    Icons.medical_information_outlined,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
-                  // title: AppLocalizations.of(context)!.about,
-                  title: "",
-                  isRtl: st.locale.languageCode == "ar",
-                  onPressed: () {
-                    // BlocProvider.of<HandshakeBloc>(context)
-                    //     .add(RequestAttendanceEvent("11"));
-                  },
-                ),
-                SettingTile(
-                  icon: Icon(
-                    Icons.medical_information_outlined,
+                    Icons.info_outline,
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
                   title: AppLocalizations.of(context)!.about,
+                  // title: "Hand Shake",
                   isRtl: st.locale.languageCode == "ar",
-                  onPressed: () {
+                  onPressed: () async {
+                    print("onpressed");
+                    print(await FirebaseMessaging.instance.getToken());
                     // BlocProvider.of<HandshakeBloc>(context)
-                    // .add();
+                    //     .add(GetAllHandShakeEvent());
                   },
                 ),
+
+                // SettingTile(
+                //   icon: Icon(
+                //     Icons.medical_information_outlined,
+                //     color: Theme.of(context).colorScheme.onPrimaryContainer,
+                //   ),
+                //   // title: AppLocalizations.of(context)!.about,
+                //   title: "",
+                //   isRtl: st.locale.languageCode == "ar",
+                //   onPressed: () {
+                //     // BlocProvider.of<HandshakeBloc>(context)
+                //     //     .add(RequestAttendanceEvent("11"));
+                //   },
+                // ),
+                // SettingTile(
+                //   icon: Icon(
+                //     Icons.medical_information_outlined,
+                //     color: Theme.of(context).colorScheme.onPrimaryContainer,
+                //   ),
+                //   title: AppLocalizations.of(context)!.about,
+                //   isRtl: st.locale.languageCode == "ar",
+                //   onPressed: () {
+                //     // BlocProvider.of<HandshakeBloc>(context)
+                //     // .add();
+                //   },
+                // ),
               ],
             ),
           ),

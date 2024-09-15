@@ -17,7 +17,7 @@ abstract class ProfileRepo {
   Future<void> saveGyms(List<GymModel> list);
   Future<Either<Failure, List<Measurement>>> getMeasurement();
   Future<Either<Failure, List<Subscription>>> getSubscriptions(String gymId);
-  Future<Either<Failure, Unit>> changeLanguage();
+  // Future<Either<Failure, Unit>> changeLanguage();
   Future<Either<Failure, List<HandShake>>> getAllGymHandshake();
   Future<Either<Failure, List<Attendence>>> gymAttendence(String gymId);
 }

@@ -1,6 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
+import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
 import 'package:uniceps/features/Training/data/models/presence_model.dart';
 import 'package:uniceps/features/Training/data/models/training_prog_model.dart';
 import 'package:uniceps/features/Training/services/entities/avatar.dart';
@@ -14,23 +15,32 @@ abstract class LocalTrainingSource {
   Future<List<PresenceModel>> getPresence(String gymId);
   Future<void> savePresenceUnderGym(List<PresenceModel> list, String gymId);
   Future<Avatar> getAvatar();
+
+  Future<void> saveHandshakes(List<HandShakeModel> list);
 }
 
 class LocalTrainingSourceImpl implements LocalTrainingSource {
-  final Box<Map<dynamic, dynamic>> trainBox;
+  final Box<Map<dynamic, dynamic>> trainBox, handshakesBox;
   final Box<double> lastWBox;
 
-  LocalTrainingSourceImpl({required this.trainBox, required this.lastWBox});
+  LocalTrainingSourceImpl({
+    required this.trainBox,
+    required this.lastWBox,
+    required this.handshakesBox,
+  });
 
   @override
   Future<TrainingProgramModel> getTrainingProgram() async {
+    print("Local_S --> getTrainingProgram");
     final routine = trainBox.get(HIVE_TRAINING_BOX);
     // var weightsRes = lastWBox.get(HIVE_LAST_WEIGHT_BOX);
     Map<String, double> weights = {};
     if (routine == null || routine.isEmpty) {
       throw EmptyCacheExeption();
     }
+    print("training Program not null!");
     for (var i in lastWBox.keys) {
+      print("weight: ${lastWBox.get(i)}");
       weights.addAll({"$i": lastWBox.get(i) ?? 0});
     }
     return TrainingProgramModel.fromJson(routine, weights);
@@ -39,11 +49,6 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
   @override
   Future<void> saveTrainingProgram(TrainingProgramModel model) async {
     await trainBox.put(HIVE_TRAINING_BOX, model.toJson());
-  }
-
-  @override
-  Future<void> saveNewWeight(Map<String, double> val) async {
-    await lastWBox.put(val.keys.first, val.values.first);
   }
 
   @override
@@ -88,5 +93,17 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     }
     print("weights: $weights");
     return weights;
+  }
+
+  @override
+  Future<void> saveNewWeight(Map<String, double> val) async {
+    await lastWBox.put(val.keys.first, val.values.first);
+  }
+
+  @override
+  Future<void> saveHandshakes(List<HandShakeModel> list) async {
+    for (var i in list) {
+      await handshakesBox.put(i.gymId, i.toJson());
+    }
   }
 }

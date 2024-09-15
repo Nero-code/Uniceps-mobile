@@ -28,7 +28,7 @@ class SubscriptionModel extends Subscription {
     required super.sportName,
     required super.gymId,
     required super.trainerName,
-    required super.discountDes,
+    super.discountDes,
     required super.isPaid,
     required super.price,
     required super.paidValue,
@@ -37,31 +37,38 @@ class SubscriptionModel extends Subscription {
     required super.endDate,
   });
 
-  factory SubscriptionModel.fromJson(
-      Map<dynamic, dynamic> json, List<Payment>? payments) {
-    json.forEach(
-      (key, value) => print("$key: $value"),
+  factory SubscriptionModel.fromJson(Map<dynamic, dynamic> temp) {
+    temp.forEach(
+      (key, value) {
+        print("$key: $value " "\n" "${key.runtimeType}: ${value.runtimeType}");
+      },
     );
+    final payments = <Payment>[];
+    final json = Map<String, dynamic>.from(temp);
+    for (var i in json['payments']) {
+      final e = Map<String, dynamic>.from(i);
+      payments.add(Payment.fromJson(e));
+    }
 
     return SubscriptionModel(
       id: json['id'].toString(),
-      pId: json['pId'].toString(),
-      gymId: json['gymId'].toString(),
-      sportName: json['sportName'],
-      trainerName: json['trainerName'],
-      discountDes: json['discountDes'],
-      isPaid: json['isPaid'],
+      pId: json['pid'].toString(),
+      gymId: json['gym_id'].toString(),
+      sportName: json['sport_name'],
+      trainerName: json['trainer_name'],
+      discountDes: json['discount_des'],
+      isPaid: json['is_paid'] == "True",
       price: json['price'],
-      paidValue: json['paidValue'],
-      discountVal: json['discountVal'],
-      startDate: stringToDate(json['startDate']),
-      endDate: stringToDate(json['endDate']),
+      paidValue: json['paid_value'],
+      discountVal: json['discount_value'],
+      startDate: stringToDate(json['start_date']),
+      endDate: stringToDate(json['end_date']),
       payments: payments,
     );
   }
 
   Map<String, dynamic> toJson() {
-    final pays = <Map<dynamic, dynamic>>[];
+    final pays = <Map<String, dynamic>>[];
     if (payments != null) {
       for (var i in payments as List<Payment>) {
         pays.add(i.toJson());
@@ -78,7 +85,7 @@ class SubscriptionModel extends Subscription {
       "price": price,
       "discount_value": discountVal,
       "discount_des": discountDes,
-      "is_paid": isPaid,
+      "is_paid": isPaid ? "True" : "False",
       "paid_value": paidValue,
       "payments": pays,
     };
@@ -91,7 +98,7 @@ class SubscriptionModel extends Subscription {
 class Payment extends Equatable {
   final String id, plId, sId, gymId;
   final DateTime payDate;
-  final int value;
+  final double value;
 
   const Payment({
     required this.id,
@@ -103,21 +110,27 @@ class Payment extends Equatable {
   });
 
   factory Payment.fromJson(Map<String, dynamic> json) {
+    json.forEach(
+      (key, value) => print("$key : ${value.runtimeType}"),
+    );
     return Payment(
       id: json['id'],
       plId: json['pid'],
       sId: json['sid'],
       gymId: json['gym_id'],
       value: json['value'],
-      payDate: json['payDate'],
+      payDate: stringToDate(json['date']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'pid': plId,
+      'sid': sId,
+      'gym_id': gymId,
       'value': value,
-      'payDate': payDate,
+      'date': dateToString(payDate),
     };
   }
 

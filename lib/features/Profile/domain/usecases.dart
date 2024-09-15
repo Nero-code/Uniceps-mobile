@@ -13,9 +13,9 @@ class ProfileUsecases {
   final ProfileRepo repo;
   ProfileUsecases({required this.repo});
 
-  Future<Either<Failure, Unit>> changeLanguage() async {
-    return await repo.changeLanguage();
-  }
+  // Future<Either<Failure, Unit>> changeLanguage() async {
+  //   return await repo.changeLanguage();
+  // }
 
   Future<Either<Failure, List<Measurement>>> getMeasurement() async {
     return await repo.getMeasurement();

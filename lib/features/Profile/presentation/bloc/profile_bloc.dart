@@ -20,13 +20,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         if (event is GetProfileDataEvent) {
           emit(ProfileLoadingState());
 
-          print("Inside profile bloc");
+          print("GetProfileDataEvent");
           final either = await usecases.getProfileData();
           either.fold(
             (f) => emit(ProfileErrorState(failure: f)),
             (p) => emit(ProfileLoadedState(player: p)),
           );
-          print("Inside profile bloc 2");
+          print("profile bloc Finished!");
         } else if (event is ProfileSubmitEvent) {
           emit(ProfileLoadingState());
           print("Profile Submit Bloc");
@@ -42,9 +42,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             emit(ProfileErrorState(failure: l));
           }, (r) {
             print(r.toString());
-            emit(ProfileSubmittedState(player: r));
+            // emit(ProfileSubmittedState(player: r));
+            emit(ProfileLoadedState(player: r));
           });
         }
+        // else if(event is LogoutEvent){
+
+        // }
       },
     );
   }
