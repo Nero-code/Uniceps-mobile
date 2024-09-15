@@ -198,8 +198,7 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
       print(list);
       return list;
     } else if (res.statusCode == 204) {
-      // TODO: Remote_S --> getAllAttendence --> statusCode: 204 needs research
-      return throw EmptyCacheExeption();
+      return throw NoAttendenceLogFoundException();
     }
 
     throw ServerException();

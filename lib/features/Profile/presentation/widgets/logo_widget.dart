@@ -18,7 +18,12 @@ class LogoWidget extends StatelessWidget {
       placeholder: (context, url) =>
           const Center(child: CircularProgressIndicator()),
       errorWidget: (context, url, error) =>
-          const Image(image: AssetImage("images/logo/Logo-dark.png")),
+          // const Image(image: AssetImage("images/logo/Logo-dark.png")),
+          Icon(
+        Icons.fitness_center,
+        size: size,
+        color: Colors.grey.shade400,
+      ),
     );
   }
 }

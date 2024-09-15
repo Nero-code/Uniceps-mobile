@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/features/Profile/data/models/subscription_model.dart';
 import 'package:uniceps/features/Profile/domain/entities/subscription.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:uniceps/main_cubit/locale_cubit.dart';
+// import 'package:uniceps/main_cubit/locale_cubit.dart';
 
 class SubscriptionWidget extends StatelessWidget {
   const SubscriptionWidget({
@@ -17,7 +17,7 @@ class SubscriptionWidget extends StatelessWidget {
     print(percent(sub.startDate, sub.endDate));
     final local = AppLocalizations.of(context)!;
     // final isRtl = context.read<ChangedLangState>().isRtl();
-    final isRtl = BlocProvider.of<LocaleCubit>(context).state.isRtl();
+    // final isRtl = BlocProvider.of<LocaleCubit>(context).state.isRtl();
     return Container(
       margin: const EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0),
       decoration: BoxDecoration(
@@ -26,7 +26,7 @@ class SubscriptionWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(5.0),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -37,18 +37,21 @@ class SubscriptionWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("${local.sport}: ${sub.sportName}"),
-                    Text("${local.price}: ${sub.price.toInt()}"),
+                    Text("${local.trainer}: ${sub.trainerName}"),
                     Text(
                         "${local.status}: ${sub.isPaid ? local.paid : local.notPaid}"),
+                    Text("${local.price}: ${sub.price.toInt()}"),
                   ],
                 ),
                 SizedBox(
-                  width: 50,
-                  height: 50,
+                  width: 70,
+                  height: 70,
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
                       CircularProgressIndicator(
+                        backgroundColor: Colors.grey.shade200,
+                        // color: Colors.green,
                         strokeCap: StrokeCap.round,
                         strokeWidth: 5,
                         strokeAlign: -1.0,

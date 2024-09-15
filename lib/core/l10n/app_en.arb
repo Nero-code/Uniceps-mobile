@@ -44,6 +44,7 @@
   "chooseLang": "Choose Language:",
   "about": "About",
   "gyms": "Gyms",
+  "trainer": "Trainer",
 
   "height": "Height",
   "heightError": "Please put a valid Height",
