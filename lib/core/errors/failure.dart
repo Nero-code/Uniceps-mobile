@@ -5,7 +5,7 @@ abstract class Failure {
   String getErrorMessage();
 }
 
-class GeneralPurposFailure extends Failure {
+class GeneralPurposFailure implements Failure {
   final String _errorMessage;
 
   GeneralPurposFailure({required String errorMessage})
@@ -20,7 +20,7 @@ class GeneralPurposFailure extends Failure {
 ////////////////////////////////////////////////////////////////////////////////
 ///   A U T H   F A I L U R E S
 ////////////////////////////////////////////////////////////////////////////////
-class AuthFailure extends Failure {
+class AuthFailure implements Failure {
   final String _errorMessage;
 
   AuthFailure({required String errorMessage}) : _errorMessage = errorMessage;
@@ -31,7 +31,7 @@ class AuthFailure extends Failure {
   }
 }
 
-class OfflineFailure extends Failure {
+class OfflineFailure implements Failure {
   final String _errorMessage;
   OfflineFailure({required String errorMessage}) : _errorMessage = errorMessage;
 
@@ -41,7 +41,7 @@ class OfflineFailure extends Failure {
   }
 }
 
-class InvalidCodeFailure extends Failure {
+class InvalidCodeFailure implements Failure {
   final String _errorMessage;
   InvalidCodeFailure({required String errMsg}) : _errorMessage = errMsg;
 
@@ -55,7 +55,7 @@ class InvalidCodeFailure extends Failure {
 ///   D A T A B A S E   F A I L U R E S
 ////////////////////////////////////////////////////////////////////////////////
 
-class EmptyCacheFailure extends Failure {
+class EmptyCacheFailure implements Failure {
   final String errorMessage;
 
   EmptyCacheFailure({required this.errorMessage});
@@ -65,7 +65,7 @@ class EmptyCacheFailure extends Failure {
   }
 }
 
-class DatabaseFailure extends Failure {
+class DatabaseFailure implements Failure {
   final String errorMsg;
 
   DatabaseFailure({required this.errorMsg});
@@ -74,14 +74,14 @@ class DatabaseFailure extends Failure {
   String getErrorMessage() => errorMsg;
 }
 
-class NoInternetConnectionFailure extends Failure {
+class NoInternetConnectionFailure implements Failure {
   final String errMsg;
   NoInternetConnectionFailure({required this.errMsg});
   @override
   String getErrorMessage() => errMsg;
 }
 
-class ServerFailure extends Failure {
+class ServerFailure implements Failure {
   final String errMsg;
   ServerFailure({required this.errMsg});
 
@@ -89,7 +89,7 @@ class ServerFailure extends Failure {
   String getErrorMessage() => errMsg;
 }
 
-class NotFoundFailure extends Failure {
+class NotFoundFailure implements Failure {
   final String errMsg;
   NotFoundFailure({required this.errMsg});
 
@@ -97,9 +97,27 @@ class NotFoundFailure extends Failure {
   String getErrorMessage() => errMsg;
 }
 
-class NoGymSpecifiedFailure extends Failure {
+class NoGymSpecifiedFailure implements Failure {
   final String errMsg;
   NoGymSpecifiedFailure({required this.errMsg});
+
+  @override
+  String getErrorMessage() => errMsg;
+}
+
+class NoTrainingProgramFailure implements Failure {
+  final String errMsg;
+  const NoTrainingProgramFailure(this.errMsg);
+
+  @override
+  String getErrorMessage() {
+    return errMsg;
+  }
+}
+
+class NoAttendenceFoundFailure implements Failure {
+  final String errMsg;
+  const NoAttendenceFoundFailure(this.errMsg);
 
   @override
   String getErrorMessage() => errMsg;

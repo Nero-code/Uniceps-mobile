@@ -114,6 +114,16 @@ class AuthRepoImpl implements AuthRepo {
     // }
   }
 
+  @override
+  Future<Either<Failure, bool>> logout() async {
+    try {
+      await local.localLogout();
+      return const Right(true);
+    } catch (e) {
+      return Left(GeneralPurposFailure(errorMessage: "Could not logout"));
+    }
+  }
+
   // @override
   // Future<Either<Failure, bool>> addNewPassword(
   //     {required String email, required String pass}) async {

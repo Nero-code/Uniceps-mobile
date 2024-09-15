@@ -74,7 +74,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
         body: BlocConsumer<ProfileBloc, ProfileState>(
           listener: (context, state) {
             if (state is ProfileSubmittedState) {
-              Navigator.pop(context);
+              Navigator.pop(context, true);
             }
           },
           builder: (context, state) {
@@ -98,15 +98,29 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                         child: Column(
                           children: [
                             ///   A P P   L O G O
+                            // SizedBox(
+                            //   height: MediaQuery.of(context).size.height * 0.2,
+                            //   child: Container(
+                            //     padding: const EdgeInsets.all(8.0),
+                            //     child: const Image(
+                            //         image: AssetImage(
+                            //             "images/logo/Logo-dark.png")),
+                            //   ),
+                            // ),
+                            const SizedBox(height: 20),
                             SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.2,
-                              child: Container(
-                                padding: const EdgeInsets.all(8.0),
-                                child: const Image(
-                                    image: AssetImage(
-                                        "images/logo/Logo-dark.png")),
-                              ),
-                            ),
+                                height: MediaQuery.of(context).size.width * 0.3,
+                                width: MediaQuery.of(context).size.width * 0.3,
+                                child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  iconSize:
+                                      MediaQuery.of(context).size.width * 0.3,
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.account_circle,
+                                    color: Colors.grey,
+                                  ),
+                                )),
 
                             const SizedBox(height: 10),
                             Container(
@@ -280,6 +294,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                                           gender: male as bool
                                               ? Gender.male
                                               : Gender.female,
+                                          level: 0,
                                         ),
                                       ),
                                     );

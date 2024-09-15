@@ -5,7 +5,7 @@ import 'package:uniceps/language_cache_helper.dart';
 part 'locale_state.dart';
 
 class LocaleCubit extends Cubit<ChangedLangState> {
-  LocaleCubit() : super(ChangedLangState(locale: Locale('en')));
+  LocaleCubit() : super(ChangedLangState(locale: const Locale('ar')));
 
   ///
   ///     Get Already Saved Language on App open from SharedPrefrences...

@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:io';
+
 import 'package:intl/intl.dart';
 
 const APP_NAME = 'Uniceps';
@@ -32,6 +34,10 @@ const DATE_PATTERN = "dd/MM/yyyy";
 final HEADERS = {
   "Content-Type": "application/json",
   "Accept": "application/json",
+  "version": "1.0.0",
+  "Platform": Platform.isAndroid ? "Android" : "IOS",
+  "os-version": Platform.operatingSystemVersion,
+  "os": Platform.operatingSystem,
 };
 
 const FAKE_API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
@@ -51,8 +57,9 @@ const HTTP_IMAGES = "/images";
 const HTTP_SUBSCRIPTIONS = "/subscription";
 const HTTP_MEASURMENTS = "/metrics";
 
-const HTTP_PRESENCE = "";
+const HTTP_PRESENCE = "/attendances";
 const HTTP_GYMS = "/gyms";
+const HTTP_GYM_LOGO = "/logos";
 
 ///////////////////////////////////////////////////////////////////////////////
 ///
@@ -94,6 +101,7 @@ const HIVE_PROFILE_BOX = "player_info";
 const HIVE_USER_BOX = "user";
 const HIVE_TRAINING_BOX = "trainingProgram";
 const HIVE_LAST_WEIGHT_BOX = "lastWeightBox";
+const HIVE_MEASURE_BOX = "measurements";
 
 // ////////////////////////////////////////////////////////////////////////// //
 //                H I V E   D A T A B A S E   S C H E M A

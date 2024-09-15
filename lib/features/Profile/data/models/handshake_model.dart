@@ -3,6 +3,7 @@ import 'package:uniceps/features/Profile/domain/entities/handshake.dart';
 
 class HandShakeModel extends HandShake {
   const HandShakeModel({
+    // required super.id,
     required super.gymId,
     required super.playerId,
     required super.uid,
@@ -12,6 +13,7 @@ class HandShakeModel extends HandShake {
   });
 
   factory HandShakeModel.fromJson(Map<String, dynamic> json) => HandShakeModel(
+        // id: json['id'],
         gymId: json['gym_id'],
         playerId: json['pid'],
         uid: json['uid'],

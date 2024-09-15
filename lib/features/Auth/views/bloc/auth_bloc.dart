@@ -83,33 +83,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           (l) => emit(const AuthDoneState(hasData: false)),
           (r) => emit(AuthDoneState(hasData: true, player: r)),
         );
-        //
-        //
-        //
-        // } else if (event is AuthAddNewPasswordEvent) {
-        //   emit(AuthLoadingState());
-        //   final either = await usecases.addNewPassword(pass: event.pass);
-        // }
-        //  else if (event is AuthProfileSubmitEvent) {
-        //   emit(AuthLoadingState());
-        //   final either = await usecases.submitProfile(player: event.player);
-        //   either.fold(
-        //     (l) => emit(AuthErrorState(f: l)),
-        //     (r) => emit(ProfileSubmitionDone(player: event.player)),
-        //   );
-        //
-        //
-        //
-        // } else if (event is GymCodeVerifyEvent) {
-        //   emit(AuthLoadingState());
-        //   final either = await usecases.checkGymCode(gymCode: event.gymCode);
-        //   either.fold(
-        //     (l) => emit(AuthErrorState(f: l)),
-        //     (r) => emit(GymVerifiedState()),
-        //   );
-        //
-        //
-        //
+      } else if (event is LogoutEvent) {
+        emit(AuthLoadingState());
+        final either = await usecases.logout();
+        either.fold(
+          (l) => emit(AuthErrorState(f: l)),
+          (r) => emit(AuthLoggedoutState()),
+        );
       }
     });
   }

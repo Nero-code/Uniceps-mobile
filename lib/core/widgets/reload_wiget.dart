@@ -14,15 +14,17 @@ class ReloadScreenWiget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        image,
-        SizedBox(height: gapSize),
-        message,
-        SizedBox(height: gapSize),
-        callBack,
-      ],
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          image,
+          SizedBox(height: gapSize),
+          message,
+          SizedBox(height: gapSize),
+          callBack,
+        ],
+      ),
     );
   }
 }

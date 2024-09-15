@@ -51,4 +51,8 @@ class AuthUsecases {
   Future<Either<Failure, Player>> getProfile() async {
     return await repo.getPlayer();
   }
+
+  Future<Either<Failure, bool>> logout() async {
+    return await repo.logout();
+  }
 }

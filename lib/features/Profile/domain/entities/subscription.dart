@@ -18,7 +18,8 @@ import 'package:uniceps/features/Profile/data/models/subscription_model.dart';
 // }
 
 class Subscription extends Equatable {
-  final String id, pId, sportName, gymId, trainerName, discountDes;
+  final String id, pId, sportName, gymId, trainerName;
+  final String? discountDes;
   final bool isPaid;
   final double price, paidValue, discountVal;
   final DateTime startDate, endDate;
@@ -30,7 +31,7 @@ class Subscription extends Equatable {
     required this.sportName,
     required this.gymId,
     required this.trainerName,
-    required this.discountDes,
+    this.discountDes,
     required this.isPaid,
     required this.price,
     required this.paidValue,

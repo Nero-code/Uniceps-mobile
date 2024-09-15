@@ -6,12 +6,12 @@ class TrainingGroup2 extends StatelessWidget {
     this.isSelected = false,
     this.isToday = false,
     required this.onPressed,
-    required this.image,
+    // required this.image,
     required this.name,
   });
 
   final VoidCallback onPressed;
-  final String image, name;
+  final String name;
   final bool isSelected;
   final bool isToday;
 

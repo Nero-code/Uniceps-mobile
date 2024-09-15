@@ -3,7 +3,7 @@ import 'package:uniceps/features/Training/data/models/exercise_model.dart';
 class TrainingProgram {
   final String id, gymId, pid;
   final DateTime createdAt;
-  final Map<String, String> daysGroupMap;
+  final Map<dynamic, dynamic> daysGroupMap;
   final List<ExerciseModel> exercises;
 
   TrainingProgram({

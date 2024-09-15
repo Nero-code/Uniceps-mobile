@@ -13,6 +13,7 @@ final class TrainingInitial extends TrainingState {}
 
 final class TrainingProgramLoadedState extends TrainingState {
   final TrainingProgram program;
+  // final List<Exercise> filterList;
   const TrainingProgramLoadedState({required this.program});
 }
 
@@ -25,14 +26,14 @@ final class TrainingProgramErrorState extends TrainingState {
 
 ///   Exercises States
 
-final class ExercisesLoadingState extends TrainingState {}
+// final class ExercisesLoadingState extends TrainingState {}
 
-final class ExercisesLoadedState extends TrainingState {
-  final List<Exercise> list;
-  const ExercisesLoadedState({required this.list});
-}
+// final class ExercisesLoadedState extends TrainingState {
+//   final List<Exercise> list;
+//   const ExercisesLoadedState({required this.list});
+// }
 
-final class ExercisesErrorState extends TrainingState {
-  final Failure f;
-  const ExercisesErrorState({required this.f});
-}
+// final class ExercisesErrorState extends TrainingState {
+//   final Failure f;
+//   const ExercisesErrorState({required this.f});
+// }

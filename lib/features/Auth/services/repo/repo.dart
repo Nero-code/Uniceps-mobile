@@ -18,6 +18,8 @@ abstract class AuthRepo {
 
   Future<Either<Failure, bool>> isLoggedIn();
 
+  Future<Either<Failure, bool>> logout();
+
   // Future<Either<Failure, bool>> addNewPassword(
   //     {required String email, required String pass});
 

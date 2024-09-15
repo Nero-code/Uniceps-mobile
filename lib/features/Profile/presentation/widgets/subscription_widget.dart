@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/features/Profile/data/models/subscription_model.dart';
 import 'package:uniceps/features/Profile/domain/entities/subscription.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/main_cubit/locale_cubit.dart';
 
 class SubscriptionWidget extends StatelessWidget {
   const SubscriptionWidget({
@@ -13,7 +15,9 @@ class SubscriptionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(percent(sub.startDate, sub.endDate));
-    final local = AppLocalizations.of(context);
+    final local = AppLocalizations.of(context)!;
+    // final isRtl = context.read<ChangedLangState>().isRtl();
+    final isRtl = BlocProvider.of<LocaleCubit>(context).state.isRtl();
     return Container(
       margin: const EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0),
       decoration: BoxDecoration(
@@ -24,20 +28,18 @@ class SubscriptionWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.baseline,
-          textBaseline: TextBaseline.alphabetic,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("${local!.sport}: ${sub.sportName}"),
+                    Text("${local.sport}: ${sub.sportName}"),
                     Text("${local.price}: ${sub.price.toInt()}"),
                     Text(
-                        "${local.status}: ${sub.isPaid ? "Paid" : "Not Paid"}"),
+                        "${local.status}: ${sub.isPaid ? local.paid : local.notPaid}"),
                   ],
                 ),
                 SizedBox(
@@ -47,7 +49,9 @@ class SubscriptionWidget extends StatelessWidget {
                     fit: StackFit.expand,
                     children: [
                       CircularProgressIndicator(
-                        strokeWidth: 3,
+                        strokeCap: StrokeCap.round,
+                        strokeWidth: 5,
+                        strokeAlign: -1.0,
                         value: percent(sub.startDate, sub.endDate),
                       ),
                       Center(
@@ -64,7 +68,7 @@ class SubscriptionWidget extends StatelessWidget {
             if (sub.discountVal != 0) ...[
               const Divider(),
               Text("Discount Value: ${sub.discountVal}"),
-              Text("Discount Description:\n${sub.discountDes}"),
+              Text("${sub.discountDes}"),
             ],
             if (sub.payments != null)
               for (var i in sub.payments as List<Payment>)

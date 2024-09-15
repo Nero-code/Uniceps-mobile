@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/widgets/reload_wiget.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+///
+/// This screen is depricated
+/// you can move on now...
+///
+@Deprecated("THE EXPANSION PANEL TYPE")
 class SubScriptionScreen extends StatefulWidget {
   const SubScriptionScreen({super.key});
 
@@ -17,6 +23,7 @@ class _SubScriptionScreenState extends State<SubScriptionScreen> {
   @override
   Widget build(BuildContext context) {
     final gymId = ModalRoute.of(context)!.settings.arguments as String;
+    final local = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Uniceps"),
@@ -27,9 +34,9 @@ class _SubScriptionScreenState extends State<SubScriptionScreen> {
             BlocProvider.of<SubsBloc>(context).add(GetSubsEvent(gymId: gymId));
             return const Center(child: CircularProgressIndicator());
           } else if (state is SubsLoadedState) {
-            if (state.list.isEmpty) {
-              return Center(child: Text(AppLocalizations.of(context)!.empty));
-            }
+            // if (state.list.isEmpty) {
+            //   return Center(child: Text(AppLocalizations.of(context)!.empty));
+            // }
             return SingleChildScrollView(
               child: ExpansionPanelList(
                 expansionCallback: (index, isOpen) {

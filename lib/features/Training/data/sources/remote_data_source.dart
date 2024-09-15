@@ -21,7 +21,7 @@ abstract class RemoteTrainingSource {
   Future<List<PresenceModel>> getPresence(String gymId);
   Future<Avatar> getAvatar();
 
-  Future<HandShakeModel> getCurrentHandshake();
+  Future<List<HandShakeModel>> getAllHandshakes();
 }
 
 class RemoteTrainingSourceImpl implements RemoteTrainingSource {
@@ -95,7 +95,7 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
   }
 
   @override
-  Future<HandShakeModel> getCurrentHandshake() async {
+  Future<List<HandShakeModel>> getAllHandshakes() async {
     print(
         "check 1 inside getCurrenthandshake: Playerbox.get(): ${playerBox.get(HIVE_PROFILE_BOX)}");
     final temp = <HandShakeModel>[];
@@ -110,17 +110,16 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
     print("hanshakes status code: ${res.statusCode}");
     print("Handshakes body: ${res.body}");
     if (res.statusCode == 200) {
-      int index = 0;
       for (var i in jsonDecode(res.body)) {
         temp.add(HandShakeModel.fromJson(i));
-        index++;
       }
 
-      temp.removeWhere((element) => !element.status);
+      temp.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      print("Handshakes: $temp");
 
-      if (temp.isNotEmpty) {
-        return temp.first;
-      }
+      return temp;
+    } else if (res.statusCode == 204) {
+      print("hanshakes status code: ${res.statusCode}");
       throw NoGymSpecifiedException();
     }
     throw ServerException();

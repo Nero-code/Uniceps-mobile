@@ -8,9 +8,10 @@ class Exercise extends Equatable {
   /// `description`: more explaination for the exercise.
   ///
   /// `tId`: Training Id the exercise belongs to.
-  final String id, name, notes, orders, imageUrl;
+  final String id, name, notes, sets, imageUrl;
   final int muscleGroup, itemOrder;
   final double lastWaight;
+  final bool isCompleted;
 
   const Exercise({
     required this.id,
@@ -18,9 +19,10 @@ class Exercise extends Equatable {
     required this.notes,
     required this.muscleGroup,
     required this.itemOrder,
-    required this.orders,
+    required this.sets,
     required this.imageUrl,
     required this.lastWaight,
+    this.isCompleted = false,
   });
 
   @override

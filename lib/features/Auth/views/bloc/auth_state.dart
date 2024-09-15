@@ -30,6 +30,8 @@ final class AuthErrorState extends AuthState {
   const AuthErrorState({required this.f});
 }
 
+final class AuthLoggedoutState extends AuthState {}
+
 final class AuthNullProfile extends AuthState {}
 
 final class ProfileSubmitionDone extends AuthState {

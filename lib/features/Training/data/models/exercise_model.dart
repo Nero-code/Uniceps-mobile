@@ -8,22 +8,23 @@ class ExerciseModel extends Exercise {
     required super.notes,
     required super.muscleGroup,
     required super.itemOrder,
-    required super.orders,
+    required super.sets,
     super.lastWaight = 0,
+    super.isCompleted = false,
   });
 
   factory ExerciseModel.fromJson(Map<String, dynamic> json) {
     //  PROBING TYPES
     //
-    // print("Prob for exercises parsing algorithm");
-    // print("id:     ${json['id'].runtimeType}");
-    // print("exName: ${json['ExerciseName'].runtimeType}");
-    // print("exImg:  ${json['ExerciseImage'].runtimeType}");
-    // print("notes:  ${json['notes'] ?? "".runtimeType}");
-    // print("mg:     ${json['Muscle_Group'].runtimeType}");
-    // print("itemo:  ${json['itemOrder'].runtimeType}");
-    // print("orders: ${json['orders'] ?? "".runtimeType}");
-    // print("lastW:  ${json['lastWaight'].runtimeType}");
+    print("Prob for exercises parsing algorithm");
+    print("id:     ${json['id'].runtimeType}");
+    print("exName: ${json['ExerciseName'].runtimeType}");
+    print("exImg:  ${json['ExerciseImage'].runtimeType}");
+    print("notes:  ${json['notes'].runtimeType}");
+    print("mg:     ${json['Muscle_Group'].runtimeType}");
+    print("itemo:  ${json['itemOrder'].runtimeType}");
+    print("sets:   ${json['sets'].runtimeType}");
+    print("lastW:  ${json['lastWaight'].runtimeType}");
     //
     // ///////////////////////////////////////////////////
     return ExerciseModel(
@@ -33,7 +34,7 @@ class ExerciseModel extends Exercise {
       notes: json['notes'] ?? "",
       muscleGroup: json['Muscle_Group'],
       itemOrder: json['itemOrder'],
-      orders: json['orders'] ?? "",
+      sets: json['sets'],
       lastWaight: json['lastWaight'],
     );
   }
@@ -44,9 +45,9 @@ class ExerciseModel extends Exercise {
       'ExerciseName': name,
       'ExerciseImage': imageUrl,
       'notes': notes,
-      'muscleGroup': muscleGroup,
+      'Muscle_Group': muscleGroup,
       'itemOrder': itemOrder,
-      'orders': orders,
+      'sets': sets,
       'lastWaight': lastWaight,
     };
   }

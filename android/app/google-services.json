@@ -1,51 +1,26 @@
 {
   "project_info": {
-    "project_number": "58737800505",
-    "project_id": "uniceps-58481",
-    "storage_bucket": "uniceps-58481.appspot.com"
+    "project_number": "726589830448",
+    "project_id": "uniceps-a7c75",
+    "storage_bucket": "uniceps-a7c75.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:58737800505:android:7d3d4d0d91644e0093a4e8",
+        "mobilesdk_app_id": "1:726589830448:android:e02cac548ba5b3d14f84f5",
         "android_client_info": {
           "package_name": "com.trioverse.uniceps"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "58737800505-3emsq31g633iol3m791mm6nprbo847ul.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.trioverse.uniceps",
-            "certificate_hash": "62c8efeffb68cdab7ab259a4a98087b1ed8a6ff2"
-          }
-        },
-        {
-          "client_id": "58737800505-jp0c637e2jnvjv240k9fqk0h9dcgvfo1.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCWry9ThnYxbvTJ5zNk_ktXOguOuOixhjo"
+          "current_key": "AIzaSyCgiuaU4B7qxgNKeuoY46YtUrAjXhInZm0"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "58737800505-jp0c637e2jnvjv240k9fqk0h9dcgvfo1.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "58737800505-51o01pkfuiqp40c22qu6f30b12kqtknr.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.uniceps.RunnerTests"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

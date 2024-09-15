@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Training/services/entities/exercise.dart';
+import 'package:uniceps/main_cubit/locale_cubit.dart';
 
-class ExerciseWidget3 extends StatelessWidget {
-  const ExerciseWidget3(
+class ExerciseListTile extends StatelessWidget {
+  const ExerciseListTile(
       {super.key,
       // required this.image,
       // required this.index,
@@ -66,7 +68,15 @@ class ExerciseWidget3 extends StatelessWidget {
                                             color: isCompleted
                                                 ? Colors.white
                                                 : Colors.black)),
-                                Text("Reps: 15 x 3",
+                                Text(exercise.notes,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                            color: isCompleted
+                                                ? Colors.white
+                                                : Colors.black)),
+                                Text(exercise.sets,
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall
@@ -86,8 +96,12 @@ class ExerciseWidget3 extends StatelessWidget {
                   flex: 4,
                   child: Padding(
                     padding: const EdgeInsets.all(1.0),
-                    child: Align(
-                      alignment: Alignment.centerRight,
+                    child: Container(
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(14),
                         child: CachedNetworkImage(
@@ -100,23 +114,29 @@ class ExerciseWidget3 extends StatelessWidget {
                 ),
               ],
             ),
-            Positioned(
-              top: 5,
-              right: 5,
-              width: 25,
-              height: 25,
-              child: Checkbox(
-                checkColor: theme.background,
-                activeColor: theme.secondary,
-                side: const BorderSide(width: 0.5, color: Colors.grey),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                value: isCompleted,
-                onChanged: (val) {
-                  onCheck();
-                },
-              ),
+            BlocBuilder<LocaleCubit, ChangedLangState>(
+              builder: (context, state) {
+                return Positioned(
+                  top: 5,
+                  right: state.isRtl() ? null : 5,
+                  left: state.isRtl() ? 5 : null,
+                  width: 25,
+                  height: 25,
+                  child: Checkbox(
+                    checkColor: theme.background,
+                    activeColor: theme.secondary,
+                    side: const BorderSide(width: 0.5, color: Colors.grey),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    value: isCompleted,
+                    onChanged: (val) {
+                      onCheck();
+                    },
+                  ),
+                );
+              },
             ),
+
             // Positioned(
             //   top: 5,
             //   left: 5,

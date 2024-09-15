@@ -69,6 +69,7 @@ class LocalAuthSourceImple implements LocalAuthSource {
 
   @override
   Future<void> savePlayerInfo(PlayerModel playerModel) async {
+    print(playerModel.toJson());
     return await playerBox.put(HIVE_PROFILE_BOX, playerModel.toJson());
   }
 
