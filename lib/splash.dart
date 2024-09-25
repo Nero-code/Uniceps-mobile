@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
@@ -47,10 +48,11 @@ class SplashScreen extends StatelessWidget {
           } else if (profileState is ProfileErrorState) {
             final res = await Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PlayerInfoScreen()),
+              MaterialPageRoute(builder: (context) => const PlayerInfoScreen()),
             );
             if (res != null && !res) {
-              Navigator.pop(context);
+              // Navigator.pop(context);
+              SystemNavigator.pop();
             } else {
               Navigator.pushReplacementNamed(context, ROUTE_HOME);
             }

@@ -296,13 +296,10 @@ class ProfileScreen extends StatelessWidget {
                     Icons.leaderboard_rounded,
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
-                  // title: AppLocalizations.of(context)!.about,
                   title: AppLocalizations.of(context)!.measurements,
                   isRtl: st.locale.languageCode == "ar",
                   onPressed: () {
                     Navigator.pushNamed(context, ROUTE_MEASUREMENTS);
-                    // BlocProvider.of<HandshakeBloc>(context)
-                    //     .add(RequestAttendanceEvent("11"));
                   },
                 ),
 
@@ -315,13 +312,9 @@ class ProfileScreen extends StatelessWidget {
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
                   title: AppLocalizations.of(context)!.about,
-                  // title: "Hand Shake",
                   isRtl: st.locale.languageCode == "ar",
                   onPressed: () async {
-                    print("onpressed");
-                    print(await FirebaseMessaging.instance.getToken());
-                    // BlocProvider.of<HandshakeBloc>(context)
-                    //     .add(GetAllHandShakeEvent());
+                    Navigator.pushNamed(context, ROUTE_ABOUT);
                   },
                 ),
 

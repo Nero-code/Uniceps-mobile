@@ -15,6 +15,7 @@ import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/screens/about.dart';
 import 'package:uniceps/features/Profile/presentation/screens/gym_list_screen.dart';
 import 'package:uniceps/features/Profile/presentation/screens/measurement_screen.dart';
 import 'package:uniceps/features/Profile/presentation/screens/profile_screen.dart';
@@ -131,7 +132,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<GymsBloc>(create: (context) {
           print(
               "------------------------GymsBloc Created!--------------------------");
-          return GymsBloc(usecases: di.sl())..add(const GetCurrentGym());
+          return GymsBloc(usecases: di.sl())..add(const GetSubscribedToGym());
         }),
         BlocProvider<AttendenceBloc>(create: (context) {
           print(
@@ -187,6 +188,7 @@ class MyApp extends StatelessWidget {
               ROUTE_MEASUREMENTS: (context) => const MeasurementScreen(),
               ROUTE_SUBSCRIPTIONS: (context) => const SubScriptionScreen(),
               ROUTE_PROFILE: (context) => const ProfileScreen(),
+              ROUTE_ABOUT: (context) => const AboutScreen(),
             },
           );
         },

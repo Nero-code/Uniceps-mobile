@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 const color1 = Color(0xFF000814);
 const color2 = Color(0xFF001D3D);

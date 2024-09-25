@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
+import 'package:uniceps/core/helpers/image_cache_manager.dart';
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
 import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
 import 'package:uniceps/features/Training/data/models/presence_model.dart';
@@ -33,10 +34,13 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
 
   // final Box<Map<String, dynamic>> routineBox;
 
+  final ImageCacheManager cacheManager;
+
   const RemoteTrainingSourceImpl({
     required this.client,
     required this.userBox,
     required this.playerBox,
+    required this.cacheManager,
     // required this.lastWBox,
   });
 
@@ -64,7 +68,23 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
 
       print("temp: $temp");
       print("weights: $weights");
-      return TrainingProgramModel.fromJson(temp, weights);
+
+      //  /////////////////////////////////
+      //
+      //  CACHE PROGRAM IMAGES BEFORE PARSE
+      //
+      (temp['routine_items'] as List).forEach((element) {
+        print("element: $element");
+      });
+      final images =
+          await cacheManager.getAndCacheImages(temp['routine_items']);
+      //
+      //  /////////////////////////////////
+      return TrainingProgramModel.fromJson(
+        json: temp,
+        weights: weights,
+        images: images,
+      );
     } else if (res.statusCode == 204) {
       throw EmptyCacheExeption();
     }

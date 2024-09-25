@@ -108,7 +108,20 @@
 
   "payment": "الدفعة",
   "paid": "مدفوع",
-  "notPaid": "غير مدفوع"
+  "notPaid": "غير مدفوع",
 
+  "versionInfo": "معلومات الاصدار",
+  "version": "رقم الاصدار",
+  "versionDate": "تاريخ الاصدار",
+  "developers" : "المطورون",
+
+  "support": "الدعم",
+  "supportPage": "صفحتنا",
+  "faqs": "الاسئلة الشائعة",
+
+  "privacy": "الخصوصية",
+  "privacyPolicy": "سياسة الخصوصية",
+  "userAgreement": "اتفاقية المستخدم",
+  "termsOfUse": "شروط الاستخدام"
 
 }

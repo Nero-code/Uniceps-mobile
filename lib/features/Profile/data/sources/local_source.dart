@@ -8,30 +8,6 @@ import 'package:uniceps/features/Profile/data/models/subscription_model.dart';
 import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
 
-//  Gyms:
-//    "gymId": {
-//      "gymId": String,
-//      "isCurrent": bool,            // \
-//      "name": String,               //  > Type (Gym)
-//      "logo": String(img URL),      // /
-//    }
-//
-//
-//
-//  Subs:
-//    "gymId":
-//    [
-//      { Subscription.toJson() },
-//    ]
-//
-//
-//
-//  Metricss:
-//    "gymId":
-//    [
-//      { Measurment.toJson() },
-//    ]
-
 abstract class LocalProfileSource {
   Future<List<MeasurementModel>> getMeasurements();
   Future<void> saveMeasurements(List<MeasurementModel> list);
@@ -45,6 +21,7 @@ abstract class LocalProfileSource {
   Future<void> saveHandshakes(List<HandShakeModel> list);
   Future<List<Attendence>> getAttendenceAtGym(String gymId);
   Future<void> saveAttenenceAtGym(String gymId, List<Attendence> list);
+  Future<List<GymModel>> getSubscribedToGyms();
 }
 
 class LocalProfileSourceImpl implements LocalProfileSource {
@@ -191,5 +168,11 @@ class LocalProfileSourceImpl implements LocalProfileSource {
       temp.add(i.toJson());
     }
     await attendBox.put(gymId, temp);
+  }
+
+  @override
+  Future<List<GymModel>> getSubscribedToGyms() {
+    // TODO: implement getSubscribedToGyms
+    throw UnimplementedError();
   }
 }

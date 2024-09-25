@@ -84,16 +84,16 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
       builder: (context, state) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.black,
-            child: const Icon(Icons.home),
-            // onPressed: () =>
-            //     Navigator.pushReplacementNamed(context, ROUTE_HOME),
-            onPressed: () {
-              // print("email: ${email.value}");
-              BlocProvider.of<AuthBloc>(context).add(AuthCheckEvent());
-            },
-          ),
+          // floatingActionButton: FloatingActionButton(
+          //   backgroundColor: Colors.black,
+          //   child: const Icon(Icons.home),
+          //   // onPressed: () =>
+          //   //     Navigator.pushReplacementNamed(context, ROUTE_HOME),
+          //   onPressed: () {
+          //     // print("email: ${email.value}");
+          //     BlocProvider.of<AuthBloc>(context).add(AuthCheckEvent());
+          //   },
+          // ),
           body: Stack(
             children: [
               Container(

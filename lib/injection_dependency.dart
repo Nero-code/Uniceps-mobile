@@ -1,7 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:get_it/get_it.dart' as di;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:uniceps/core/helpers/image_cache_manager.dart';
 import 'package:uniceps/core/logs/logger.dart';
 import 'package:uniceps/features/Auth/data/repo_impl/repo_impl.dart';
 import 'package:uniceps/features/Auth/data/sources/local_source.dart';
@@ -44,17 +47,27 @@ Future<void> init() async {
   final measureBox = await Hive.openBox<Map<dynamic, dynamic>>("Metrics");
   final handshakesBox = await Hive.openBox<Map<dynamic, dynamic>>("HandShakes");
   final attendenceBox = await Hive.openBox<List<dynamic>>("Attendence");
+  final imagesBox = await Hive.openBox<Uint8List>("Images");
   // final avatarBox = await Hive.openBox<List<Map<dynamic, dynamic>>>("Avatar");
 
   // await userBox.clear();
   // await profileBox.clear();
   // await trainBox.clear();
+  // await imagesBox.clear();
   // await lastWeightBox.clear();
   // await gymsBox.clear();
   // await subsBox.clear();
   // await measureBox.clear();
   // await handshakesBox.clear();
   // await attendenceBox.clear();
+
+  sl.registerLazySingleton(
+    () => ImageCacheManager(
+      imagesCache: imagesBox,
+      checker: sl(),
+      client: sl(),
+    ),
+  );
 
   ///////                             ///
   //////                             ////
@@ -64,13 +77,19 @@ Future<void> init() async {
 
   sl.registerLazySingleton<LocalTrainingSource>(
     () => LocalTrainingSourceImpl(
-        trainBox: trainBox,
-        lastWBox: lastWeightBox,
-        handshakesBox: handshakesBox),
+      trainBox: trainBox,
+      lastWBox: lastWeightBox,
+      handshakesBox: handshakesBox,
+      cacheManager: sl(),
+    ),
   );
   sl.registerLazySingleton<RemoteTrainingSource>(
     () => RemoteTrainingSourceImpl(
-        client: sl(), userBox: userBox, playerBox: profileBox),
+      client: sl(),
+      cacheManager: sl(),
+      userBox: userBox,
+      playerBox: profileBox,
+    ),
   );
   sl.registerLazySingleton<LocalProfileSource>(
     () => LocalProfileSourceImpl(

@@ -85,6 +85,7 @@ const ROUTE_GYMS_LIST = '/home/profile/gyms_list';
 const ROUTE_EXERCISE = '/home/exercise';
 const ROUTE_SUBSCRIPTIONS = '/home/profile/subscriptions';
 const ROUTE_MEASUREMENTS = '/home/profile/measurements';
+const ROUTE_ABOUT = "/home/profile/about";
 
 ///
 ///   A U X I L I A R Y   R O U T E S

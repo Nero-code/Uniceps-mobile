@@ -14,6 +14,7 @@ abstract class ProfileRepo {
   Future<Either<Failure, Player>> submitProfileData(PlayerModel playerModel,
       {required bool isCreate});
   Future<Either<Failure, List<Gym>>> getGyms();
+  Future<Either<Failure, List<Gym>>> getSubscribedToGyms();
   Future<void> saveGyms(List<GymModel> list);
   Future<Either<Failure, List<Measurement>>> getMeasurement();
   Future<Either<Failure, List<Subscription>>> getSubscriptions(String gymId);

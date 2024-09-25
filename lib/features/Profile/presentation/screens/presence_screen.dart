@@ -37,13 +37,17 @@ class _PresenceScreenState extends State<PresenceScreen> {
           print("presence screen bloc type: ${state.runtimeType}");
 
           if (state is AttenedenceLoadedState) {
+            state.list.forEach((element) {
+              print(element.toJson());
+            });
+            print("length: ${state.list.length}");
             return SingleChildScrollView(
               child: Column(
                 children: [
                   TableCalendar(
                     // locale: 'ar',
                     focusedDay: fDay,
-                    firstDay: DateTime(2024),
+                    firstDay: state.list.first.date,
                     lastDay: lDay,
                     currentDay: cDay,
                     startingDayOfWeek: StartingDayOfWeek.sunday,
@@ -69,7 +73,13 @@ class _PresenceScreenState extends State<PresenceScreen> {
                     },
                     enabledDayPredicate: (day) {
                       for (var i in state.list) {
-                        return i.date.day == day.day;
+                        print("i: ${i.date}");
+                        print("day: $day");
+                        print(
+                            "compare: ${i.date.compareTo(day.copyWith(isUtc: false))}");
+                        if (i.date.compareTo(day.copyWith(isUtc: false)) == 0) {
+                          return true;
+                        }
                       }
                       return false;
                     },
@@ -97,7 +107,7 @@ class _PresenceScreenState extends State<PresenceScreen> {
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      textDirection: TextDirection.ltr,
+                      textDirection: TextDirection.rtl,
                       children: a != null
                           ? [
                               Text('Entered At: \n${a!.loginTime}'),

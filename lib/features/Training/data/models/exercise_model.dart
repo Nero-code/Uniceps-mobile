@@ -9,6 +9,7 @@ class ExerciseModel extends Exercise {
     required super.muscleGroup,
     required super.itemOrder,
     required super.sets,
+    super.imageBitMap,
     super.lastWaight = 0,
     super.isCompleted = false,
   });
@@ -25,6 +26,7 @@ class ExerciseModel extends Exercise {
     print("itemo:  ${json['itemOrder'].runtimeType}");
     print("sets:   ${json['sets'].runtimeType}");
     print("lastW:  ${json['lastWaight'].runtimeType}");
+    print("image:  ${json['image'].runtimeType}");
     //
     // ///////////////////////////////////////////////////
     return ExerciseModel(
@@ -36,6 +38,7 @@ class ExerciseModel extends Exercise {
       itemOrder: json['itemOrder'],
       sets: json['sets'] ?? "",
       lastWaight: json['lastWaight'],
+      imageBitMap: json['image'],
     );
   }
 
@@ -48,7 +51,7 @@ class ExerciseModel extends Exercise {
       'Muscle_Group': muscleGroup,
       'itemOrder': itemOrder,
       'sets': sets,
-      'lastWaight': lastWaight,
+      // 'lastWaight': lastWaight,
     };
   }
 

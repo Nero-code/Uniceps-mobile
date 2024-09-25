@@ -64,17 +64,15 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
         }
       },
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            print("Inside FAB");
-            BlocProvider.of<ProfileBloc>(context).add(GetProfileDataEvent());
-            // setState(() {});
-          },
+        bottomSheet: Container(
+          color: Theme.of(context).colorScheme.background,
+          child: const Text("TrioVerse"),
         ),
         body: BlocConsumer<ProfileBloc, ProfileState>(
           listener: (context, state) {
             if (state is ProfileSubmittedState) {
               Navigator.pop(context, true);
+              return;
             }
           },
           builder: (context, state) {
@@ -304,7 +302,6 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            const Text("TrioVerse"),
                           ],
                         ),
                       ),

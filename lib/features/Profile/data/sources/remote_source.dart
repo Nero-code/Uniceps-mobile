@@ -20,6 +20,7 @@ abstract class RemoteProfileSource {
   Future<List<GymModel>> getGyms();
   Future<List<HandShakeModel>> getAllHandshake();
   Future<List<Attendence>> getAllAttendance(String gymId);
+  Future<List<GymModel>> getSubscribedToGyms();
 }
 
 class RemoteProfileSourceImpl implements RemoteProfileSource {
@@ -137,9 +138,9 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
     print("REMOTE-S: Submit Profile --> Check 1!");
     if (isCreate) {
       print("REMOTE-S: Submit Profile --> Check 2.1!");
-      print("REMOTE-S: Submit Profile --> Check 2.1!: $HEADERS");
-      print("REMOTE-S: Box ${userBox.get("user")!["id"]}");
-      print("REMOTE-S: player model: ${playerModel.toJson()}");
+      // print("REMOTE-S: Submit Profile --> Check 2.1!: $HEADERS");
+      // print("REMOTE-S: Box ${userBox.get("user")!["id"]}");
+      // print("REMOTE-S: player model: ${playerModel.toJson()}");
       final res = await _client.post(
         Uri.parse(API + HTTP_PLAYER_INFO),
         headers: {
@@ -166,9 +167,12 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
         },
         body: jsonEncode(playerModel.toJson()),
       );
+
       print("res: ${res.statusCode}");
+      print("res body: ${res.body}");
+
       if (res.statusCode == 200) {
-        return jsonDecode(res.body)['profile_info']['uid'];
+        return jsonDecode(res.body)['user_info']['uid'];
       }
     }
     throw ServerException();
@@ -196,6 +200,7 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
         list.add(Attendence.fromJson(i));
       }
       print(list);
+
       return list;
     } else if (res.statusCode == 204) {
       return throw NoAttendenceLogFoundException();
@@ -232,6 +237,30 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
       return temp;
     } else if (res.statusCode == 204) {
       throw NoGymSpecifiedException();
+    }
+    throw ServerException();
+  }
+
+  @override
+  Future<List<GymModel>> getSubscribedToGyms() async {
+    final response = await _client.get(
+      headers: {
+        ...HEADERS,
+        "x-access-token": userBox.get(HIVE_USER_BOX)!["token"],
+      },
+      Uri.parse("$API" "$HTTP_GYMS"),
+    );
+    print("status: ${response.statusCode}");
+    print("body: ${jsonDecode(response.body)}");
+    if (response.statusCode == 200) {
+      final list = <GymModel>[];
+      for (var i in jsonDecode(response.body)) {
+        list.add(GymModel.fromJson(i));
+      }
+
+      return list;
+    } else if (response.statusCode == 204) {
+      throw EmptyCacheExeption();
     }
     throw ServerException();
   }

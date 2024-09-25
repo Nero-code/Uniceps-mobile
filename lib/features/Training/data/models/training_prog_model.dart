@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:intl/intl.dart';
 import 'package:uniceps/features/Training/data/models/exercise_model.dart';
 import 'package:uniceps/features/Training/services/entities/training_program.dart';
@@ -13,7 +15,9 @@ class TrainingProgramModel extends TrainingProgram {
   });
 
   factory TrainingProgramModel.fromJson(
-      Map<dynamic, dynamic> json, Map<String, double> weights) {
+      {required Map<dynamic, dynamic> json,
+      required Map<String, double> weights,
+      required Map<String, Uint8List> images}) {
     final List<ExerciseModel> list = [];
     print("-----------------PROB FOR TRAINING PROGRAM--------------");
     print("id:             ${json['rid'].runtimeType}");
@@ -22,10 +26,14 @@ class TrainingProgramModel extends TrainingProgram {
     print("routine_date:   ${json['routine_date'].runtimeType}");
     print("days_group_map: ${json['days_group_map'].runtimeType}");
     print("weights:        ${weights.runtimeType}");
+    print("images:         ${images.entries}");
 
     for (Map<dynamic, dynamic> e in json['routine_items']) {
       var i = Map<String, dynamic>.from(e);
-      i.addAll({'lastWaight': weights["${i['id']}"] ?? 0.0});
+      i.addAll({
+        'lastWaight': weights["${e['id']}"] ?? 0.0,
+        'image': images["${e['id']}"],
+      });
       list.add(ExerciseModel.fromJson(i));
     }
     // list.sort((a, b) => a.muscleGroup.compareTo(b.muscleGroup));

@@ -1,8 +1,9 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
+import 'package:uniceps/core/helpers/image_cache_manager.dart';
 import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
-import 'package:uniceps/features/Training/data/models/presence_model.dart';
+// import 'package:uniceps/features/Training/data/models/presence_model.dart';
 import 'package:uniceps/features/Training/data/models/training_prog_model.dart';
 import 'package:uniceps/features/Training/services/entities/avatar.dart';
 
@@ -12,8 +13,8 @@ abstract class LocalTrainingSource {
   Future<void> saveTrainingProgram(TrainingProgramModel model);
   Future<Map<String, double>> getWeights();
   Future<void> saveNewWeight(Map<String, double> val);
-  Future<List<PresenceModel>> getPresence(String gymId);
-  Future<void> savePresenceUnderGym(List<PresenceModel> list, String gymId);
+  // Future<List<PresenceModel>> getPresence(String gymId);
+  // Future<void> savePresenceUnderGym(List<PresenceModel> list, String gymId);
   Future<Avatar> getAvatar();
 
   Future<void> saveHandshakes(List<HandShakeModel> list);
@@ -23,10 +24,13 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
   final Box<Map<dynamic, dynamic>> trainBox, handshakesBox;
   final Box<double> lastWBox;
 
+  final ImageCacheManager cacheManager;
+
   LocalTrainingSourceImpl({
     required this.trainBox,
     required this.lastWBox,
     required this.handshakesBox,
+    required this.cacheManager,
   });
 
   @override
@@ -43,7 +47,10 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
       print("weight: ${lastWBox.get(i)}");
       weights.addAll({"$i": lastWBox.get(i) ?? 0});
     }
-    return TrainingProgramModel.fromJson(routine, weights);
+    print("routine: ${routine.entries}");
+    final images = await cacheManager.getLocalImages(routine['routine_items']);
+    return TrainingProgramModel.fromJson(
+        json: routine, weights: weights, images: images);
   }
 
   @override
@@ -51,32 +58,32 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     await trainBox.put(HIVE_TRAINING_BOX, model.toJson());
   }
 
-  @override
-  Future<void> savePresenceUnderGym(
-      List<PresenceModel> list, String gymId) async {
-    final map = <String, dynamic>{};
-    final jsonList = <Map<String, dynamic>>[];
-    for (var i in list) {
-      jsonList.add(i.toJson());
-    }
-    map.addAll({gymId: jsonList});
+  // @override
+  // Future<void> savePresenceUnderGym(
+  //     List<PresenceModel> list, String gymId) async {
+  //   final map = <String, dynamic>{};
+  //   final jsonList = <Map<String, dynamic>>[];
+  //   for (var i in list) {
+  //     jsonList.add(i.toJson());
+  //   }
+  //   // map.addAll({gymId: jsonList});
 
-    await trainBox.put("Presence", map);
-  }
+  //   await attendenceBox.put(gymId, {gymId: jsonList});
+  // }
 
-  @override
-  Future<List<PresenceModel>> getPresence(String gymId) async {
-    final res = trainBox.get("Presence");
-    final list = <PresenceModel>[];
-    if (res != null) {
-      for (var i in res[gymId]) {
-        list.add(PresenceModel.fromJson(i));
-      }
-      return list;
-    } else {
-      throw EmptyCacheExeption();
-    }
-  }
+  // @override
+  // Future<List<PresenceModel>> getPresence(String gymId) async {
+  //   final res = trainBox.get(gymId);
+  //   final list = <PresenceModel>[];
+  //   if (res != null) {
+  //     for (var i in res[gymId]) {
+  //       list.add(PresenceModel.fromJson(i));
+  //     }
+  //     return list;
+  //   } else {
+  //     throw EmptyCacheExeption();
+  //   }
+  // }
 
   @override
   Future<Avatar> getAvatar() {

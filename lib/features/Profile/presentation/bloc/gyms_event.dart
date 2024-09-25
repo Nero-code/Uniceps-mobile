@@ -11,8 +11,8 @@ final class GetAllAvailableGymsEvent extends GymsEvent {
   const GetAllAvailableGymsEvent();
 }
 
-final class GetCurrentGym extends GymsEvent {
-  const GetCurrentGym();
+final class GetSubscribedToGym extends GymsEvent {
+  const GetSubscribedToGym();
 }
 
 final class HandShakeGym extends GymsEvent {

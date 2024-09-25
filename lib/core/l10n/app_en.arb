@@ -101,6 +101,19 @@
 
   "payment": "Payment",
   "paid": "Paid",
-  "notPaid": "Not Paid"
+  "notPaid": "Not Paid",
 
+  "versionInfo": "Version Info",
+  "version": "Version",
+  "versionDate": "Release Date",
+  "developers" : "Developers",
+  
+  "support": "Support",
+  "supportPage": "Our Page",
+  "faqs": "FAQs",
+  
+  "privacy": "Privacy",
+  "privacyPolicy": "Privacy Policy",
+  "userAgreement": "User Agreement",
+  "termsOfUse": "Terms of use"
 }

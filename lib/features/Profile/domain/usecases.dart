@@ -34,6 +34,10 @@ class ProfileUsecases {
     return await repo.getGyms();
   }
 
+  Future<Either<Failure, List<Gym>>> getSubscribedToGyms() async {
+    return await repo.getSubscribedToGyms();
+  }
+
   Future<Either<Failure, List<Subscription>>> getSubs(String gymId) async {
     return await repo.getSubscriptions(gymId);
   }

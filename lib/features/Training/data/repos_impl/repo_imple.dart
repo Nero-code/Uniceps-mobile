@@ -8,7 +8,7 @@ import 'package:uniceps/features/Training/data/sources/local_data_source.dart';
 import 'package:uniceps/features/Training/data/sources/remote_data_source.dart';
 import 'package:uniceps/features/Training/services/entities/avatar.dart';
 import 'package:uniceps/features/Training/services/entities/exercise.dart';
-import 'package:uniceps/features/Training/services/entities/presence.dart';
+// import 'package:uniceps/features/Training/services/entities/presence.dart';
 import 'package:uniceps/features/Training/services/entities/training_program.dart';
 import 'package:uniceps/features/Training/services/repos/repository.dart';
 
@@ -42,6 +42,7 @@ class TrainingRepoImple implements TrainingRepo {
         final handshake = allHandshakes.first;
         await local.saveHandshakes(allHandshakes);
         print("gymId: ${handshake.gymId}\n" "playerId: ${handshake.playerId}");
+
         final weights = await local.getWeights();
         final res = await remote.getTrainingProgram(
           gymId: handshake.gymId,
@@ -123,9 +124,15 @@ class TrainingRepoImple implements TrainingRepo {
     }
     if (index != null) {
       final element = tp!.exercises[index];
+      final lasW = element.lastWaight;
+      final image = element.imageBitMap;
       tp!.exercises.removeAt(index);
-      final ex = ExerciseModel.fromJson(
-          {...element.toJson(), "isCompleted": !element.isCompleted});
+      final ex = ExerciseModel.fromJson({
+        ...element.toJson(),
+        'lastWaight': lasW,
+        'image': image,
+        "isCompleted": !element.isCompleted,
+      });
       tp!.exercises.insert(index, ex);
       return const Right(true);
     }
@@ -150,25 +157,25 @@ class TrainingRepoImple implements TrainingRepo {
     return Left(OfflineFailure(errorMessage: "no internet"));
   }
 
-  @override
-  Future<Either<Failure, List<Presence>>> getPresenceAtGym(gymId) async {
-    if (await connection.hasConnection) {
-      try {
-        final res = await remote.getPresence(gymId);
-        await local.savePresenceUnderGym(res, gymId);
-        return Right(res);
-      } catch (e) {
-        return Left(ServerFailure(errMsg: "ServerError!"));
-      }
-    } else {
-      try {
-        final res = await local.getPresence(gymId);
-        return Right(res);
-      } catch (e) {
-        return Left(EmptyCacheFailure(errorMessage: "No Records!"));
-      }
-    }
-  }
+  // @override
+  // Future<Either<Failure, List<Presence>>> getPresenceAtGym(gymId) async {
+  //   if (await connection.hasConnection) {
+  //     try {
+  //       final res = await remote.getPresence(gymId);
+  //       await local.savePresenceUnderGym(res, gymId);
+  //       return Right(res);
+  //     } catch (e) {
+  //       return Left(ServerFailure(errMsg: "ServerError!"));
+  //     }
+  //   } else {
+  //     try {
+  //       final res = await local.getPresence(gymId);
+  //       return Right(res);
+  //     } catch (e) {
+  //       return Left(EmptyCacheFailure(errorMessage: "No Records!"));
+  //     }
+  //   }
+  // }
 
   @override
   Future<Either<Failure, Avatar>> getAvatar() async {
@@ -199,12 +206,21 @@ class TrainingRepoImple implements TrainingRepo {
       final e =
           tp!.exercises.firstWhere((element) => element.id == val.keys.first);
       tp!.exercises.remove(e);
+      final isCompl = e.isCompleted;
+      final image = e.imageBitMap;
       // final map = e.toJson();
       // map.addAll({"lastWeight": val.values.first});
       print("Training -> RepoImle -> local saveNewWeight: DATA");
-      print("${{...e.toJson(), "lastWaight": val.values.first}}");
-      tp!.exercises.add(ExerciseModel.fromJson(
-          {...e.toJson(), "lastWaight": val.values.first}));
+      print("${{
+        ...e.toJson(),
+        "lastWaight": val.values.first,
+      }}");
+      tp!.exercises.add(ExerciseModel.fromJson({
+        ...e.toJson(),
+        'image': image,
+        "lastWaight": val.values.first,
+        "isCompleted": isCompl,
+      }));
     } catch (e) {
       print("Training -> RepoImle -> local saveNewWeight: ${e.toString()}");
       return Left(DatabaseFailure(errorMsg: e.toString()));

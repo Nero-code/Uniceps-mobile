@@ -18,18 +18,22 @@ class TrainingGroup2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.3,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          color: Colors.white,
-          border: Border.all(
-            width: 2,
-            color: isSelected
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.background,
-          ),
-        ),
+      // width: MediaQuery.of(context).size.width * 0.3,
+      width: 100,
+      child: Material(
+        borderRadius: BorderRadius.circular(50),
+        // color: Colors.white,
+        // border: Border.all(
+        //   width: 2,
+        //   color: isSelected
+        //       ? Theme.of(context).colorScheme.primary
+        //       : Theme.of(context).colorScheme.background,
+        // ),
+        elevation: 5,
+        color: isSelected
+            ? Theme.of(context).colorScheme.primary.withAlpha(190)
+            : Colors.white,
+
         child: InkWell(
           borderRadius: BorderRadius.circular(50),
           onTap: onPressed,
@@ -54,10 +58,9 @@ class TrainingGroup2 extends StatelessWidget {
                     child: Text(
                       name,
                       style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
-                          color:
-                              /**isSelected ? Colors.white : */ Colors.black),
+                          color: isSelected ? Colors.white : Colors.black54),
                     ),
                   ),
                 ),
