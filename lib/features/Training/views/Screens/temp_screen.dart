@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+@Deprecated("Not a real screen")
 class TempScreen extends StatelessWidget {
   const TempScreen({super.key});
 

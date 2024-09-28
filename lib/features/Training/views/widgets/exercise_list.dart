@@ -1,10 +1,5 @@
-import 'dart:typed_data';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Training/services/entities/exercise.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
 
@@ -29,12 +24,12 @@ class ExerciseListTile extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderRadius: const BorderRadius.all(Radius.circular(15)),
         border: Border.all(
           width: 2.0,
           color: isCompleted
               ? Theme.of(context).colorScheme.secondary
-              : Colors.white,
+              : Theme.of(context).colorScheme.background,
         ),
       ),
       child: Material(
@@ -45,13 +40,13 @@ class ExerciseListTile extends StatelessWidget {
         // Theme.of(context).colorScheme.secondary
         // :
         // color: Color.fromARGB(255, 228, 228, 228),
-        elevation: 3,
+        elevation: 1,
         color: Colors.white,
 
-        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderRadius: const BorderRadius.all(Radius.circular(15)),
         borderOnForeground: true,
         child: InkWell(
-          borderRadius: BorderRadius.all(Radius.circular(15)),
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
           onTapUp: (details) {
             onPressed();
           },
@@ -63,45 +58,41 @@ class ExerciseListTile extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 3,
-                    child: SizedBox(
-                      // width: MediaQuery.of(context).size.width * 0.5,
-                      child: Stack(
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    exercise.name,
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      color: Colors.black,
-                                    ),
+                    child: Stack(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  exercise.name,
+                                  style: const TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.black,
                                   ),
-                                  Text(exercise.notes,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(color: Colors.black)),
-                                  Text(exercise.sets,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                              color: isCompleted
-                                                  ? Colors.white
-                                                  : Colors.black)),
-                                ],
-                              ),
+                                ),
+                                Text(exercise.notes,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(color: Colors.black)),
+                                const SizedBox(height: 5.0),
+                                Text(exercise.sets,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold)),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   Expanded(
@@ -120,8 +111,11 @@ class ExerciseListTile extends StatelessWidget {
                           //   imageUrl: imgUrlParser(
                           //       exercise.muscleGroup, exercise.imageUrl),
                           // ),
-                          child:
-                              Image.memory(exercise.imageBitMap as Uint8List),
+                          child: Image.memory(
+                            exercise.imageBitMap!,
+                            // width: 50,
+                            height: MediaQuery.of(context).size.height * 0.08,
+                          ),
                         ),
                       ),
                     ),

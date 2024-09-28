@@ -17,16 +17,16 @@ class ExerciseModel extends Exercise {
   factory ExerciseModel.fromJson(Map<String, dynamic> json) {
     //  PROBING TYPES
     //
-    print("Prob for exercises parsing algorithm");
-    print("id:     ${json['id'].runtimeType}");
-    print("exName: ${json['ExerciseName'].runtimeType}");
-    print("exImg:  ${json['ExerciseImage'].runtimeType}");
-    print("notes:  ${json['notes'].runtimeType}");
-    print("mg:     ${json['Muscle_Group'].runtimeType}");
-    print("itemo:  ${json['itemOrder'].runtimeType}");
-    print("sets:   ${json['sets'].runtimeType}");
-    print("lastW:  ${json['lastWaight'].runtimeType}");
-    print("image:  ${json['image'].runtimeType}");
+    // print("Prob for exercises parsing algorithm");
+    // print("id:     ${json['id'].runtimeType}");
+    // print("exName: ${json['ExerciseName'].runtimeType}");
+    // print("exImg:  ${json['ExerciseImage'].runtimeType}");
+    // print("notes:  ${json['notes'].runtimeType}");
+    // print("mg:     ${json['Muscle_Group'].runtimeType}");
+    // print("itemo:  ${json['itemOrder'].runtimeType}");
+    // print("sets:   ${json['sets'].runtimeType}");
+    // print("lastW:  ${json['lastWaight'].runtimeType}");
+    // print("image:  ${json['image'].runtimeType}");
     //
     // ///////////////////////////////////////////////////
     return ExerciseModel(
@@ -51,7 +51,6 @@ class ExerciseModel extends Exercise {
       'Muscle_Group': muscleGroup,
       'itemOrder': itemOrder,
       'sets': sets,
-      // 'lastWaight': lastWaight,
     };
   }
 

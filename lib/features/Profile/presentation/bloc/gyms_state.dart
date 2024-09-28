@@ -21,18 +21,6 @@ final class GymsErrorState extends GymsState {
   const GymsErrorState({required this.f});
 }
 
-final class CurrentGymLoadingState extends GymsState {}
-
-final class CurrentGymLoadedState extends GymsState {
-  final Gym myGym;
-  const CurrentGymLoadedState(this.myGym);
-}
-
-final class CurrentGymErrorState extends GymsState {
-  final Failure f;
-  const CurrentGymErrorState(this.f);
-}
-
 final class GymSuccessfulHandshake extends GymsState {}
 
 final class GymErrorHandshake extends GymsState {

@@ -248,7 +248,7 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
         ...HEADERS,
         "x-access-token": userBox.get(HIVE_USER_BOX)!["token"],
       },
-      Uri.parse("$API" "$HTTP_GYMS"),
+      Uri.parse("$API" "$HTTP_GYMS" "/shakes"),
     );
     print("status: ${response.statusCode}");
     print("body: ${jsonDecode(response.body)}");

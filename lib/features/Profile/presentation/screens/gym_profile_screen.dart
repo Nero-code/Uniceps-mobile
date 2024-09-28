@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/errors/failure.dart';
-import 'package:uniceps/core/widgets/reload_wiget.dart';
+import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/features/Profile/domain/entities/gym.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
@@ -133,20 +133,12 @@ class GymProfileScreen extends StatelessWidget {
                     return SizedBox(
                       height: MediaQuery.of(context).size.height * 0.3,
                       child: Center(
-                        child: ReloadScreenWiget(
-                          image: const Icon(
-                            Icons.content_paste_search_rounded,
-                            size: 50,
-                            color: Colors.grey,
-                          ),
-                          message: Text(local.emptySubs),
-                          callBack: IconButton(
-                            icon: const Icon(Icons.refresh),
-                            onPressed: () {
-                              BlocProvider.of<SubsBloc>(context)
-                                  .add(GetSubsEvent(gymId: gym.id));
-                            },
-                          ),
+                        child: ReloadScreenWidget(
+                          f: state.f,
+                          callBack: () {
+                            BlocProvider.of<SubsBloc>(context)
+                                .add(GetSubsEvent(gymId: gym.id));
+                          },
                         ),
                       ),
                     );
@@ -154,16 +146,12 @@ class GymProfileScreen extends StatelessWidget {
                   return SizedBox(
                     height: MediaQuery.of(context).size.height * 0.3,
                     child: Center(
-                      child: ReloadScreenWiget(
-                        image: const Icon(Icons.warning_rounded),
-                        message: Text(local.error),
-                        callBack: IconButton(
-                          icon: const Icon(Icons.refresh),
-                          onPressed: () {
-                            BlocProvider.of<SubsBloc>(context)
-                                .add(GetSubsEvent(gymId: gym.id));
-                          },
-                        ),
+                      child: ReloadScreenWidget(
+                        f: state.f,
+                        callBack: () {
+                          BlocProvider.of<SubsBloc>(context)
+                              .add(GetSubsEvent(gymId: gym.id));
+                        },
                       ),
                     ),
                   );

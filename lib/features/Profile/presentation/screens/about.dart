@@ -26,14 +26,17 @@ class AboutScreen extends StatelessWidget {
                 child: Center(
                   child: Image(
                     image: const AssetImage("images/logo/Logo.png"),
-                    height: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.width * 0.2,
                   ),
                 ),
               ),
               const Center(
                 child: Text(
                   APP_NAME,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black54),
                 ),
               ),
               const Divider(),

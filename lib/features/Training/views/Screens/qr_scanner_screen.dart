@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+// &0934499662&
+
+@Deprecated("QR Scan from mobile is disabled in this version 1.0.0")
 class QRScannerScreen extends StatefulWidget {
-  QRScannerScreen({super.key});
+  const QRScannerScreen({super.key});
 
   @override
   State<QRScannerScreen> createState() => _QRScannerScreenState();
@@ -80,13 +83,13 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                                     0.5),
                             radius: MediaQuery.of(context).size.width * 0.25),
                         onDetect: (capture) {
-                          print(capture.raw.toString());
+                          print(capture.raw);
                           setState(() {
                             captured = true;
                           });
                           Future.delayed(Duration(seconds: 5), () {
                             try {
-                              Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
                             } catch (e) {
                               print(e);
                             }

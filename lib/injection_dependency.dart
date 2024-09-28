@@ -43,12 +43,13 @@ Future<void> init() async {
   final trainBox = await Hive.openBox<Map<dynamic, dynamic>>("Training");
   final lastWeightBox = await Hive.openBox<double>("LastWeight");
   final gymsBox = await Hive.openBox<Map<dynamic, dynamic>>("Gyms");
+  final myGyms = await Hive.openBox<Map<dynamic, dynamic>>("MyGyms");
   final subsBox = await Hive.openBox<List<dynamic>>("Subs");
   final measureBox = await Hive.openBox<Map<dynamic, dynamic>>("Metrics");
   final handshakesBox = await Hive.openBox<Map<dynamic, dynamic>>("HandShakes");
   final attendenceBox = await Hive.openBox<List<dynamic>>("Attendence");
   final imagesBox = await Hive.openBox<Uint8List>("Images");
-  // final avatarBox = await Hive.openBox<List<Map<dynamic, dynamic>>>("Avatar");
+  final selectedGym = await Hive.openBox<bool>("SelectedGym");
 
   // await userBox.clear();
   // await profileBox.clear();
@@ -80,6 +81,7 @@ Future<void> init() async {
       trainBox: trainBox,
       lastWBox: lastWeightBox,
       handshakesBox: handshakesBox,
+      myGyms: myGyms,
       cacheManager: sl(),
     ),
   );
@@ -94,6 +96,8 @@ Future<void> init() async {
   sl.registerLazySingleton<LocalProfileSource>(
     () => LocalProfileSourceImpl(
       gymsBox: gymsBox,
+      myGyms: myGyms,
+      selectedGym: selectedGym,
       measurBox: measureBox,
       playerBox: profileBox,
       subsBox: subsBox,

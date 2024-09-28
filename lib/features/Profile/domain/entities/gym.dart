@@ -1,12 +1,22 @@
 import 'package:equatable/equatable.dart';
 
 class Gym extends Equatable {
-  final String name, id, address, logo, ownerName, phoneNum, telephone;
+  final String name,
+      id,
+      pid,
+      address,
+      logo,
+      ownerName,
+      phoneNum,
+      telephone,
+      start,
+      end;
   final DateTime? joinedAt;
   final bool isSelected;
 
   const Gym({
     required this.id,
+    required this.pid,
     required this.name,
     required this.address,
     required this.logo,
@@ -14,6 +24,8 @@ class Gym extends Equatable {
     required this.phoneNum,
     required this.telephone,
     required this.joinedAt,
+    required this.start,
+    required this.end,
     this.isSelected = false,
   });
 

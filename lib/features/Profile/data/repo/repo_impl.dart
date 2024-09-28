@@ -180,24 +180,6 @@ class ProfileRepoImpl implements ProfileRepo {
   }
 
   @override
-  Future<Either<Failure, List<GymModel>>> getSubscribedToGyms() async {
-    if (await checker.hasConnection) {
-      try {
-        final res = await remote.getSubscribedToGyms();
-        return Right(res);
-      } catch (e) {
-        return Left(GeneralPurposFailure(errorMessage: e.toString()));
-      }
-    } else {
-      try {
-        throw UnimplementedError();
-      } catch (e) {
-        return Left(GeneralPurposFailure(errorMessage: e.toString()));
-      }
-    }
-  }
-
-  @override
   Future<void> saveGyms(List<GymModel> list) async {
     await local.saveGyms(list);
   }

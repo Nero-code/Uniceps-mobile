@@ -1,10 +1,17 @@
 // ignore_for_file: constant_identifier_names
 
 import 'dart:io';
-
 import 'package:intl/intl.dart';
 
+///
+///   A P P   C O N S T A N T S
+///
+
 const APP_NAME = 'Uniceps';
+
+const APP_LOGO = "images/logo/Logo.png";
+const APP_LOGO_DARK = "images/logo/Logo-dark.png";
+const APP_LOGO_LIGHT = "images/logo/Logo-light.png";
 
 enum Gender { male, female }
 
@@ -14,16 +21,24 @@ enum ThemeType { light, dark }
 
 const List<String> languageCodes = ['ar', 'en'];
 
-enum MuscleGroup {
-  arms,
-  legs,
-  abdomin,
-  shoulders,
-  chest,
-  tripez,
-}
-
 const DATE_PATTERN = "dd/MM/yyyy";
+
+///   A P P   I M A G E S
+
+const PHOTOS_PATH = "images/photos/";
+
+const IMG_BACK = "back.png";
+const IMG_BLANK = "blank.png";
+const IMG_CONTROL_PANAL = "control_panal.png";
+const IMG_DEPARTING = "departing.png";
+const IMG_DESKTOP = "desktop.png";
+const IMG_EMPTY = "empty.png";
+const IMG_EMPTY_2 = "empty_2.png";
+const IMG_MEMORY = "memory.png";
+const IMG_NO_INTERNET = "noInternet.png";
+const IMG_SERVER_ERROR = "server_error.png";
+const IMG_VOID = "void.png";
+const IMG_WARNING = "warning.png";
 
 ///
 ///
@@ -169,6 +184,7 @@ DateTime stringToDate(String source) {
   return DateFormat("dd/MM/yyyy").parse(source);
 }
 
+/// Exercises image url parser...
 String imgUrlParser(int muscleG, String imgName) {
   return "$API"
       "$HTTP_TRAINING_PROGRAM"

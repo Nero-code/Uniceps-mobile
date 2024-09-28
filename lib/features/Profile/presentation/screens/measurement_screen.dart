@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/core/widgets/reload_wiget.dart';
+import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
 // import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/measure_widget.dart';
@@ -198,21 +198,13 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
           } else if (state is MeasurementErrorState) {
             print("Measurement Failure: ${state.f.runtimeType}");
             return Center(
-              child: ReloadScreenWiget(
-                  image: const Icon(
-                    Icons.error,
-                    size: 50,
-                    color: Colors.grey,
-                  ),
-                  // message: Text("${AppLocalizations.of(context)!.error}")
-                  message: Text("${state.f.getErrorMessage()}"),
-                  callBack: IconButton(
-                    onPressed: () {
-                      BlocProvider.of<MeasurmentBloc>(context)
-                          .add(GetMeasurementsEvent());
-                    },
-                    icon: const Icon(Icons.refresh_outlined),
-                  )),
+              child: ReloadScreenWidget(
+                f: state.f,
+                callBack: () {
+                  BlocProvider.of<MeasurmentBloc>(context)
+                      .add(GetMeasurementsEvent());
+                },
+              ),
             );
           } else {
             return const Center(child: CircularProgressIndicator());

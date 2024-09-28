@@ -72,13 +72,13 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        systemNavigationBarColor: Theme.of(context).colorScheme.background,
-        // statusBarBrightness: Brightness.light,
-        statusBarIconBrightness: Brightness.dark,
-      ),
-    );
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   SystemUiOverlayStyle(
+    //     systemNavigationBarColor: Theme.of(context).colorScheme.background,
+    //     // statusBarBrightness: Brightness.light,
+    //     statusBarIconBrightness: Brightness.dark,
+    //   ),
+    // );
     navOnRestore();
     return BlocBuilder<LocaleCubit, ChangedLangState>(
       builder: (context, state) {

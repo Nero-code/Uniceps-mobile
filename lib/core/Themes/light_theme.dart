@@ -21,6 +21,9 @@ const background = Color.fromARGB(255, 245, 245, 245);
 // const back2 = Color.fromARGB(255, 228, 228, 228);
 const back2 = Color(0xFFF4F4F4);
 
+const secondaryLighter = Color(0xFFDBF5F6);
+const secondaryLight = Color(0xFFB5EBE9);
+
 ThemeData lightTheme = ThemeData(
   appBarTheme: const AppBarTheme().copyWith(
     foregroundColor: Colors.black,

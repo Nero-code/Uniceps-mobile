@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/core/widgets/reload_wiget.dart';
+import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
@@ -34,6 +34,7 @@ class GymListScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return GymWidget2(
                     gym: state.list[index],
+                    icon: Icon(Icons.arrow_back_ios_new_rounded),
                     onPressed: () {
                       BlocProvider.of<SubsBloc>(context)
                           .add(GetSubsEvent(gymId: state.list[index].id));
@@ -51,16 +52,12 @@ class GymListScreen extends StatelessWidget {
               );
             } else if (state is GymsErrorState) {
               return Center(
-                child: ReloadScreenWiget(
-                  image: const Icon(Icons.warning_rounded),
-                  message: Text(AppLocalizations.of(context)!.error),
-                  callBack: IconButton(
-                    icon: const Icon(Icons.refresh),
-                    onPressed: () {
-                      BlocProvider.of<GymsBloc>(context)
-                          .add(const GetAllAvailableGymsEvent());
-                    },
-                  ),
+                child: ReloadScreenWidget(
+                  f: state.f,
+                  callBack: () {
+                    BlocProvider.of<GymsBloc>(context)
+                        .add(const GetAllAvailableGymsEvent());
+                  },
                 ),
               );
             }

@@ -1,13 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/features/Profile/domain/entities/gym.dart';
 import 'package:uniceps/features/Profile/domain/entities/handshake.dart';
-import 'package:uniceps/features/Training/services/entities/avatar.dart';
 import 'package:uniceps/features/Training/services/entities/exercise.dart';
-// import 'package:uniceps/features/Training/services/entities/presence.dart';
 import 'package:uniceps/features/Training/services/entities/training_program.dart';
 
 abstract class TrainingRepo {
-  Future<Either<Failure, TrainingProgram>> getTrainingProgram();
+  Future<Either<Failure, TrainingProgram>> getTrainingProgram(
+      /**String gymId*/);
 
   Future<Either<Failure, List<Exercise>>> getExercisesByFilter(int filter);
 
@@ -17,7 +17,6 @@ abstract class TrainingRepo {
 
   Future<Either<Failure, HandShake>> getCurrentHandshake();
 
-  // Future<Either<Failure, List<Presence>>> getPresenceAtGym(String gymId);
-
-  Future<Either<Failure, Avatar>> getAvatar();
+  Future<Either<Failure, List<Gym>>> getSubscribedToGyms();
+  Future<Either<Failure, List<Gym>>> setSelectedGym(String gymId);
 }

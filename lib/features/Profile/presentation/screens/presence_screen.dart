@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:uniceps/core/errors/failure.dart';
-import 'package:uniceps/core/widgets/reload_wiget.dart';
+import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
 
@@ -124,46 +124,18 @@ class _PresenceScreenState extends State<PresenceScreen> {
             print(state.f.getErrorMessage());
             switch (state.f.runtimeType) {
               case NoAttendenceFoundFailure:
-                return ReloadScreenWiget(
-                  image: const Icon(Icons.highlight_off_rounded),
-                  message: Text(state.f.getErrorMessage()),
-                  callBack: const SizedBox(),
+                return ReloadScreenWidget(
+                  f: state.f,
+                  callBack: null,
                 );
-              case EmptyCacheFailure:
-                return ReloadScreenWiget(
-                  image: const Icon(Icons.error),
-                  message: Text(state.f.getErrorMessage()),
-                  callBack: IconButton(
-                    onPressed: () {
-                      BlocProvider.of<AttendenceBloc>(context)
-                          .add(GetAttendenceEvent(widget.gymId));
-                    },
-                    icon: const Icon(Icons.refresh),
-                  ),
-                );
-              case ServerFailure:
-                return ReloadScreenWiget(
-                  image: const Icon(Icons.dangerous),
-                  message: Text(state.f.getErrorMessage()),
-                  callBack: IconButton(
-                    onPressed: () {
-                      BlocProvider.of<AttendenceBloc>(context)
-                          .add(GetAttendenceEvent(widget.gymId));
-                    },
-                    icon: const Icon(Icons.refresh),
-                  ),
-                );
+
               default:
-                return ReloadScreenWiget(
-                  image: const Icon(Icons.dangerous),
-                  message: Text(state.f.getErrorMessage()),
-                  callBack: IconButton(
-                    onPressed: () {
-                      BlocProvider.of<AttendenceBloc>(context)
-                          .add(GetAttendenceEvent(widget.gymId));
-                    },
-                    icon: const Icon(Icons.refresh),
-                  ),
+                return ReloadScreenWidget(
+                  f: state.f,
+                  callBack: () {
+                    BlocProvider.of<AttendenceBloc>(context)
+                        .add(GetAttendenceEvent(widget.gymId));
+                  },
                 );
             }
           }

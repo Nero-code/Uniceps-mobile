@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
@@ -10,6 +11,7 @@ import 'package:uniceps/features/Auth/views/screens/email_and_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
+import 'package:uniceps/features/Training/views/bloc/current_gym_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
@@ -132,7 +134,14 @@ class MyApp extends StatelessWidget {
         BlocProvider<GymsBloc>(create: (context) {
           print(
               "------------------------GymsBloc Created!--------------------------");
-          return GymsBloc(usecases: di.sl())..add(const GetSubscribedToGym());
+          return GymsBloc(usecases: di.sl())
+            ..add(const GetAllAvailableGymsEvent());
+        }),
+        BlocProvider(create: (context) {
+          print(
+              "--------------------CUrrent GymsBloc Created!---------------------");
+          return CurrentGymBloc(usecases: di.sl())
+            ..add(const GetSubscribedToGymEvent());
         }),
         BlocProvider<AttendenceBloc>(create: (context) {
           print(
@@ -161,7 +170,7 @@ class MyApp extends StatelessWidget {
             locale: state.locale,
             restorationScopeId: "root",
             title: 'Uniceps',
-            theme: lightTheme,
+            theme: lightTheme.copyWith(textTheme: GoogleFonts.cairoTextTheme()),
             // darkTheme: ThemeData(
             //     colorScheme: ColorScheme.fromSeed(
             //         seedColor: Colors.blue, brightness: Brightness.dark)),
@@ -174,14 +183,14 @@ class MyApp extends StatelessWidget {
               ROUTE_AUTH: (context) => const EmailAuthScreen(),
               ROUTE_FORGOT_PASSWORD: (context) => const ForgotPasswordScreen(),
               // ROUTE_PLAYER_INFO: (context) =>
-              //     const PlayerInfoScreen(), // NON REACHABLE FROM HERE
+              //     const PlayerInfoScreen(), // NOT REACHABLE FROM HERE
 
               //  MAIN
               ROUTE_HOME: (context) => HomeScreen(trainingUsecases: di.sl()),
               ROUTE_HANDSHAKE: (context) => const GymHandShakeScreen(),
               ROUTE_EXERCISE: (context) => ExercisesPage(),
               ROUTE_QR_SCANNER: (context) => QRScannerScreen(),
-              // ROUTE_PRESENCE: (context) => const PresenceScreen(),
+              // ROUTE_PRESENCE: (context) => const PresenceScreen(), //  NOT REACHABLE FROM HERE
               ROUTE_GYMS_LIST: (context) => const GymListScreen(),
 
               //  AUX

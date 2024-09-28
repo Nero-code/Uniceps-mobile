@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/core/errors/failure.dart';
-import 'package:uniceps/core/widgets/reload_wiget.dart';
+// import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 ///
 /// This screen is depricated
@@ -23,7 +23,7 @@ class _SubScriptionScreenState extends State<SubScriptionScreen> {
   @override
   Widget build(BuildContext context) {
     final gymId = ModalRoute.of(context)!.settings.arguments as String;
-    final local = AppLocalizations.of(context);
+    // final local = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Uniceps"),
@@ -57,7 +57,7 @@ class _SubScriptionScreenState extends State<SubScriptionScreen> {
                           height: 70,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("Subscription $i\nSport: Yoga"),
+                            child: Text("S" " $i\nSport: Yoga"),
                           ),
                         );
                       },
@@ -75,21 +75,13 @@ class _SubScriptionScreenState extends State<SubScriptionScreen> {
             );
           } else if (state is SubsErrorState) {
             return Center(
-              child: ReloadScreenWiget(
-                image: const Icon(
-                  Icons.error,
-                  color: Colors.grey,
-                  size: 50,
-                ),
-                message: Text("Unable to Load items"),
-                callBack: IconButton(
-                  icon: Icon(Icons.refresh),
-                  onPressed: () {
-                    BlocProvider.of<SubsBloc>(context).add(
-                      GetSubsEvent(gymId: gymId),
-                    );
-                  },
-                ),
+              child: ReloadScreenWidget(
+                f: state.f,
+                callBack: () {
+                  BlocProvider.of<SubsBloc>(context).add(
+                    GetSubsEvent(gymId: gymId),
+                  );
+                },
               ),
             );
           } else {

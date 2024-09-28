@@ -41,9 +41,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             print(l.getErrorMessage());
             emit(ProfileErrorState(failure: l));
           }, (r) {
-            print(r.toString());
-            // emit(ProfileSubmittedState(player: r));
-            emit(ProfileLoadedState(player: r));
+            print("DEBUG: profile is: ${r.toString()}");
+            emit(ProfileSubmittedState(player: r));
+            // emit(ProfileLoadedState(player: r));
           });
         }
         // else if(event is LogoutEvent){

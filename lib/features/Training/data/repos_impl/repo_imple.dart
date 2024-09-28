@@ -2,13 +2,12 @@ import 'package:dartz/dartz.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/features/Profile/domain/entities/gym.dart';
 import 'package:uniceps/features/Profile/domain/entities/handshake.dart';
 import 'package:uniceps/features/Training/data/models/exercise_model.dart';
 import 'package:uniceps/features/Training/data/sources/local_data_source.dart';
 import 'package:uniceps/features/Training/data/sources/remote_data_source.dart';
-import 'package:uniceps/features/Training/services/entities/avatar.dart';
 import 'package:uniceps/features/Training/services/entities/exercise.dart';
-// import 'package:uniceps/features/Training/services/entities/presence.dart';
 import 'package:uniceps/features/Training/services/entities/training_program.dart';
 import 'package:uniceps/features/Training/services/repos/repository.dart';
 
@@ -26,27 +25,22 @@ class TrainingRepoImple implements TrainingRepo {
   TrainingProgram? tp;
 
   @override
-  Future<Either<Failure, TrainingProgram>> getTrainingProgram() async {
-    // print("Check: Inside training repo");
-    // return Left(ServerFailure(errMsg: "something went wrong!"));
-    // return Left(NoInternetConnectionFailure(errMsg: "No Internet connection!"));
-    // return Left(NoGymSpecifiedFailure(errMsg: "Not a participent in a gym"));
-
-    // bool? isSignedToAGym;
-
-    print("Training_F --> Repo --> getTrainingProgram");
+  Future<Either<Failure, TrainingProgram>> getTrainingProgram(
+      /**String gymId*/) async {
+    print("Training_Feature --> Repo --> getTrainingProgram");
 
     if (await connection.hasConnection) {
       try {
-        final allHandshakes = await remote.getAllHandshakes();
-        final handshake = allHandshakes.first;
-        await local.saveHandshakes(allHandshakes);
-        print("gymId: ${handshake.gymId}\n" "playerId: ${handshake.playerId}");
-
+        final temp = await remote.getSubscribedToGyms();
+        final myGems = await local.cacheSubsToGyms(temp);
+        final currentGym = myGems.firstWhere(
+          (element) => element.isSelected,
+          orElse: () => myGems.first,
+        );
         final weights = await local.getWeights();
         final res = await remote.getTrainingProgram(
-          gymId: handshake.gymId,
-          pid: handshake.playerId,
+          gymId: currentGym.id,
+          pid: currentGym.pid,
           weights: weights,
         );
         print("TrainingProgram finished");
@@ -68,7 +62,12 @@ class TrainingRepoImple implements TrainingRepo {
       }
     } else {
       try {
-        final res = await local.getTrainingProgram();
+        final myGems = await local.getSubscribedToGyms();
+        final currentGym = myGems.firstWhere(
+          (element) => element.isSelected,
+          orElse: () => myGems.first,
+        );
+        final res = await local.getTrainingProgram(currentGym.id);
         print("getTrainingProgram finished! ${res.runtimeType}");
         tp = res;
 
@@ -157,44 +156,43 @@ class TrainingRepoImple implements TrainingRepo {
     return Left(OfflineFailure(errorMessage: "no internet"));
   }
 
-  // @override
-  // Future<Either<Failure, List<Presence>>> getPresenceAtGym(gymId) async {
-  //   if (await connection.hasConnection) {
-  //     try {
-  //       final res = await remote.getPresence(gymId);
-  //       await local.savePresenceUnderGym(res, gymId);
-  //       return Right(res);
-  //     } catch (e) {
-  //       return Left(ServerFailure(errMsg: "ServerError!"));
-  //     }
-  //   } else {
-  //     try {
-  //       final res = await local.getPresence(gymId);
-  //       return Right(res);
-  //     } catch (e) {
-  //       return Left(EmptyCacheFailure(errorMessage: "No Records!"));
-  //     }
-  //   }
-  // }
-
   @override
-  Future<Either<Failure, Avatar>> getAvatar() async {
+  Future<Either<Failure, List<Gym>>> getSubscribedToGyms() async {
+    print("Debug: 1");
+
     if (await connection.hasConnection) {
       try {
-        final res = await remote.getAvatar();
-        return Right(res);
+        print("Debug: 2");
+        final res = await remote.getSubscribedToGyms();
+
+        print("Debug ${res}");
+        final list = await local.cacheSubsToGyms(res);
+        return Right(list);
       } catch (e) {
-        return Left(ServerFailure(errMsg: "ServerF"));
+        return Left(GeneralPurposFailure(errorMessage: e.toString()));
       }
     } else {
       try {
-        final res = await local.getAvatar();
+        final res = await local.getSubscribedToGyms();
         return Right(res);
       } on EmptyCacheExeption {
-        return Left(EmptyCacheFailure(errorMessage: "Empty Records"));
+        return Left(EmptyCacheFailure(errorMessage: "No Gyms Specified"));
       } catch (e) {
-        return Left(GeneralPurposFailure(errorMessage: "Unknown err occourd"));
+        return Left(GeneralPurposFailure(errorMessage: e.toString()));
       }
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Gym>>> setSelectedGym(String gymId) async {
+    print("repo: SetSelectedGym Function:");
+    try {
+      final res = await local.setSelectedGym(gymId);
+      print("local Responce: $res");
+      return Right(res);
+    } catch (e) {
+      print(e.toString());
+      return Left(GeneralPurposFailure(errorMessage: "error: ${e.toString()}"));
     }
   }
 

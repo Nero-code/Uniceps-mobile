@@ -21,15 +21,21 @@ abstract class LocalProfileSource {
   Future<void> saveHandshakes(List<HandShakeModel> list);
   Future<List<Attendence>> getAttendenceAtGym(String gymId);
   Future<void> saveAttenenceAtGym(String gymId, List<Attendence> list);
-  Future<List<GymModel>> getSubscribedToGyms();
 }
 
 class LocalProfileSourceImpl implements LocalProfileSource {
-  final Box<Map<dynamic, dynamic>> gymsBox, playerBox, handshakesBox, measurBox;
+  final Box<Map<dynamic, dynamic>> gymsBox,
+      myGyms,
+      playerBox,
+      handshakesBox,
+      measurBox;
   final Box<List<dynamic>> subsBox, attendBox;
+  final Box<bool> selectedGym;
 
   LocalProfileSourceImpl({
     required this.gymsBox,
+    required this.myGyms,
+    required this.selectedGym,
     required this.subsBox,
     required this.measurBox,
     required this.playerBox,
@@ -168,11 +174,5 @@ class LocalProfileSourceImpl implements LocalProfileSource {
       temp.add(i.toJson());
     }
     await attendBox.put(gymId, temp);
-  }
-
-  @override
-  Future<List<GymModel>> getSubscribedToGyms() {
-    // TODO: implement getSubscribedToGyms
-    throw UnimplementedError();
   }
 }

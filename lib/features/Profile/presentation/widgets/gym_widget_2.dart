@@ -5,10 +5,16 @@ import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Profile/domain/entities/gym.dart';
 
 class GymWidget2 extends StatelessWidget {
-  const GymWidget2({super.key, required this.gym, required this.onPressed});
+  const GymWidget2({
+    super.key,
+    required this.gym,
+    required this.onPressed,
+    required this.icon,
+  });
 
   final Gym gym;
   final VoidCallback onPressed;
+  final Widget icon;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +39,7 @@ class GymWidget2 extends StatelessWidget {
               ),
             ),
             Text(gym.name),
-            const Icon(Icons.arrow_forward_ios_rounded),
+            icon,
           ],
         ),
       ),

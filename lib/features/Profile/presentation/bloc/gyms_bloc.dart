@@ -11,12 +11,13 @@ class GymsBloc extends Bloc<GymsEvent, GymsState> {
   final ProfileUsecases usecases;
   GymsBloc({required this.usecases}) : super(GymsInitial()) {
     on<GymsEvent>((event, emit) async {
-      if (event is GetSubscribedToGym) {
-        emit(GymsLoadingState());
-        final either = await usecases.getSubscribedToGyms();
-        either.fold((l) => emit(GymsErrorState(f: l)),
-            (r) => emit(GymsLoadedState(list: r)));
-      } else if (event is GetAllAvailableGymsEvent) {
+      // if (event is GetSubscribedToGym) {
+      //   emit(GymsLoadingState());
+      //   final either = await usecases.getSubscribedToGyms();
+      //   either.fold((l) => emit(GymsErrorState(f: l)),
+      //       (r) => emit(GymsLoadedState(list: r)));
+      // } else
+      if (event is GetAllAvailableGymsEvent) {
         emit(GymsLoadingState());
         final either = await usecases.getGyms();
         either.fold(

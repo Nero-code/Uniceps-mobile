@@ -19,14 +19,14 @@ class TrainingProgramModel extends TrainingProgram {
       required Map<String, double> weights,
       required Map<String, Uint8List> images}) {
     final List<ExerciseModel> list = [];
-    print("-----------------PROB FOR TRAINING PROGRAM--------------");
-    print("id:             ${json['rid'].runtimeType}");
-    print("gymId:          ${json['gym_id'].runtimeType}");
-    print("pid:            ${json['pid'].runtimeType}");
-    print("routine_date:   ${json['routine_date'].runtimeType}");
-    print("days_group_map: ${json['days_group_map'].runtimeType}");
-    print("weights:        ${weights.runtimeType}");
-    print("images:         ${images.entries}");
+    // print("-----------------PROB FOR TRAINING PROGRAM--------------");
+    // print("id:             ${json['rid'].runtimeType}");
+    // print("gymId:          ${json['gym_id'].runtimeType}");
+    // print("pid:            ${json['pid'].runtimeType}");
+    // print("routine_date:   ${json['routine_date'].runtimeType}");
+    // print("days_group_map: ${json['days_group_map'].runtimeType}");
+    // print("weights:        ${weights.runtimeType}");
+    // print("images:         ${images.entries}");
 
     for (Map<dynamic, dynamic> e in json['routine_items']) {
       var i = Map<String, dynamic>.from(e);
