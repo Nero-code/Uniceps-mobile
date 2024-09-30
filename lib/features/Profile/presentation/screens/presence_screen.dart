@@ -10,9 +10,10 @@ class PresenceScreen extends StatefulWidget {
   const PresenceScreen({
     super.key,
     required this.gymId,
+    required this.pid,
   });
 
-  final String gymId;
+  final String gymId, pid;
   @override
   State<PresenceScreen> createState() => _PresenceScreenState();
 }
@@ -134,7 +135,7 @@ class _PresenceScreenState extends State<PresenceScreen> {
                   f: state.f,
                   callBack: () {
                     BlocProvider.of<AttendenceBloc>(context)
-                        .add(GetAttendenceEvent(widget.gymId));
+                        .add(GetAttendenceEvent(widget.gymId, widget.pid));
                   },
                 );
             }

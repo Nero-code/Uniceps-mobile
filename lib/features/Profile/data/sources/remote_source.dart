@@ -10,28 +10,29 @@ import 'package:uniceps/features/Profile/data/models/subscription_model.dart';
 import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
 import "package:http/http.dart" as http;
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
+import 'package:uniceps/features/Profile/domain/entities/player_in_gym.dart';
 
 abstract class RemoteProfileSource {
   Future<PlayerModel> getProfileData();
   Future<String> submitProfileData(PlayerModel playerModel,
       {required bool isCreate});
   Future<List<MeasurementModel>> getMeasurements();
-  Future<List<SubscriptionModel>> getSubs(String gymId);
+  Future<List<SubscriptionModel>> getSubs(String gymId, String pid);
   Future<List<GymModel>> getGyms();
   Future<List<HandShakeModel>> getAllHandshake();
-  Future<List<Attendence>> getAllAttendance(String gymId);
+  Future<List<Attendence>> getAllAttendance(String gymId, String pid);
   Future<List<GymModel>> getSubscribedToGyms();
+  Future<PlayerInGym> getPlayerInGym(String gymId, String pid);
 }
 
 class RemoteProfileSourceImpl implements RemoteProfileSource {
   final http.Client _client;
-  final Box<Map<dynamic, dynamic>> userBox, playerBox, handshakesBox;
+  final Box<Map<dynamic, dynamic>> userBox, playerBox;
 
   RemoteProfileSourceImpl({
     required http.Client client,
     required this.userBox,
     required this.playerBox,
-    required this.handshakesBox,
   }) : _client = client;
 
   @override
@@ -78,21 +79,16 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
       print("check 2: Data sort successful");
       return list;
     } else if (res.statusCode == 204) {
-      return [];
+      throw EmptyCacheExeption();
     }
-    throw Exception();
+    throw ServerException();
   }
 
   @override
-  Future<List<SubscriptionModel>> getSubs(String gymId) async {
-    print("inside Get Subscriptions");
-    if (!handshakesBox.containsKey(gymId)) {
-      throw EmptyCacheExeption();
-    }
-    print(
-        "Profile ->  RemoteS -> getSubs -> URL: /$gymId/${handshakesBox.get(gymId)!['pid']}");
-    final res = await _client.get(Uri.parse(
-        "$API$HTTP_SUBSCRIPTIONS/$gymId/${handshakesBox.get(gymId)!['pid']}"));
+  Future<List<SubscriptionModel>> getSubs(String gymId, String pid) async {
+    print("Profile ->  RemoteS -> getSubs -> URL: /$gymId/$pid");
+    final res =
+        await _client.get(Uri.parse("$API$HTTP_SUBSCRIPTIONS/$gymId/$pid"));
     final list = <SubscriptionModel>[];
     print(res.statusCode);
     if (res.statusCode == 200) {
@@ -179,13 +175,9 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
   }
 
   @override
-  Future<List<Attendence>> getAllAttendance(String gymId) async {
-    if (!handshakesBox.containsKey(gymId)) {
-      throw NoAttendenceLogFoundException();
-    }
+  Future<List<Attendence>> getAllAttendance(String gymId, String pid) async {
     final res = await _client.get(
-      Uri.parse(
-          "$API$HTTP_PRESENCE/$gymId/${handshakesBox.get(gymId)!['pid']}"),
+      Uri.parse("$API$HTTP_PRESENCE/$gymId/$pid"),
       headers: {
         ...HEADERS,
         "x-access-token": userBox.get(HIVE_USER_BOX)!["token"],
@@ -263,5 +255,15 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
       throw EmptyCacheExeption();
     }
     throw ServerException();
+  }
+
+  @override
+  Future<PlayerInGym> getPlayerInGym(String gymId, String pid) async {
+    final res =
+        await _client.get(Uri.parse("$API" "$HTTP_PLAYER" "/$gymId" "/$pid"));
+    print(res.statusCode);
+    print(res.body);
+    final map = jsonDecode(res.body);
+    return PlayerInGym.fromJson(map);
   }
 }

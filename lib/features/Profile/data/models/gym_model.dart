@@ -21,6 +21,7 @@ class GymModel extends Gym {
     required super.start,
     required super.end,
     required super.isSelected,
+    required super.isCurrent,
     super.joinedAt,
   });
   factory GymModel.fromJson(Map<dynamic, dynamic> json, [DateTime? joinedAt]) {
@@ -36,6 +37,7 @@ class GymModel extends Gym {
     print("start:      ${json['start'] ?? ""}");
     print("end:        ${json['end'] ?? ""}");
     print("isSelected: ${json['isSelected'] ?? false}");
+    print("isCurrent: ${json['isCurrent'] ?? false}");
 
     return GymModel(
       id: json['id'],
@@ -49,6 +51,7 @@ class GymModel extends Gym {
       start: json['start'] ?? "",
       end: json['end'] ?? "",
       isSelected: json['isSelected'] ?? false,
+      isCurrent: json['isCurrent'] ?? false,
       joinedAt: joinedAt,
     );
   }
@@ -66,6 +69,7 @@ class GymModel extends Gym {
       'start': start,
       'end': end,
       'isSelected': isSelected,
+      'isCurrent': isCurrent,
     };
   }
 }

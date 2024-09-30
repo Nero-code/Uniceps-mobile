@@ -38,6 +38,8 @@
   "owner": "owner",
   "telephone": "Telephone",
   "subscription": "Subscription",
+  "subscriptions": "Subscriptions",
+  "balance": "Balance",
   "sport": "Sport",
   "measurements": "Measurements",
   "language": "Language",
@@ -83,7 +85,7 @@
   "empty": "No Records to show",
   "emptySubs": "No Subscriptions",
   "emptyMeasure": "No Measurements",
-  "emptyExc": "No Exercises",
+  "emptyExcercises": "No Exercises",
   "error": "something went wrong",
   "profile": "Profile",
 
@@ -115,5 +117,18 @@
   "privacy": "Privacy",
   "privacyPolicy": "Privacy Policy",
   "userAgreement": "User Agreement",
-  "termsOfUse": "Terms of use"
+  "termsOfUse": "Terms of use",
+
+  "emptySubscriptions":"No Subscriptions yet",
+  "emptyMeasurements":"No Measurements yet",
+  "emptyExercisesList":"No Exercises in this Group",
+  "emptyGymsList":"No Gyms Available",
+  "emptyHandshakes":"you are not a member of any gym",
+  "emptyTriningDaysMap":"No Training Program yet",
+  "emptyHomeCard":"No Gym Specified, select a gym to load data",
+  "emptyAttendence":"Not a member",
+
+  "errNoInternet":"No Internet Available",
+  "errServerException":"An error occurred from our side, try again later",
+  "errUnknown":"Unknown error occurred"
 }

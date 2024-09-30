@@ -65,7 +65,7 @@ class ExerciseListTile extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
-                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
@@ -82,6 +82,7 @@ class ExerciseListTile extends StatelessWidget {
                                         ?.copyWith(color: Colors.black)),
                                 const SizedBox(height: 5.0),
                                 Text(exercise.sets,
+                                    textDirection: TextDirection.ltr,
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall

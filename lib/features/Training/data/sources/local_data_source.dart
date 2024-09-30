@@ -140,8 +140,14 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     final List<GymModel> list = [];
     for (var key in myGyms.keys) {
       print("DEBUG: SET 3");
-      await myGyms.put(key,
-          {...myGyms.get(key)!, "isSelected": myGyms.get(key)!['id'] == gymId});
+      await myGyms.put(
+        key,
+        {
+          ...myGyms.get(key)!,
+          "isSelected": myGyms.get(key)!['id'] == gymId,
+          "isCurent": myGyms.get(key)!['id'] == gymId,
+        },
+      );
       list.add(GymModel.fromJson(myGyms.get(key)!));
       print("DEBUG: SET 4");
     }

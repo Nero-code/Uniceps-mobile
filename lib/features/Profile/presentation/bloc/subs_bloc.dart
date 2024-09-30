@@ -14,7 +14,7 @@ class SubsBloc extends Bloc<SubsEvent, SubsState> {
     on<SubsEvent>((event, emit) async {
       if (event is GetSubsEvent) {
         emit(SubsLoadingState());
-        final either = await usecases.getSubs(event.gymId);
+        final either = await usecases.getSubs(event.gymId, event.pid);
         either.fold((f) {
           emit(SubsErrorState(f: f));
         }, (list) {

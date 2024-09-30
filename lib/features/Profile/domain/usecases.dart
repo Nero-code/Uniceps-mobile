@@ -5,6 +5,7 @@ import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
 import 'package:uniceps/features/Profile/domain/entities/handshake.dart';
 import 'package:uniceps/features/Profile/domain/entities/measrument.dart';
+import 'package:uniceps/features/Profile/domain/entities/player_in_gym.dart';
 import 'package:uniceps/features/Profile/domain/repo.dart';
 import 'package:uniceps/features/Profile/domain/entities/subscription.dart';
 import 'package:uniceps/features/Profile/domain/entities/gym.dart';
@@ -34,15 +35,21 @@ class ProfileUsecases {
     return await repo.getGyms();
   }
 
-  Future<Either<Failure, List<Subscription>>> getSubs(String gymId) async {
-    return await repo.getSubscriptions(gymId);
+  Future<Either<Failure, List<Subscription>>> getSubs(
+      String gymId, String pid) async {
+    return await repo.getSubscriptions(gymId, pid);
   }
 
   Future<Either<Failure, List<HandShake>>> getAllGymHandShake() async {
     return await repo.getAllGymHandshake();
   }
 
-  Future<Either<Failure, List<Attendence>>> gymAttendance(String gymId) async {
-    return await repo.gymAttendence(gymId);
+  Future<Either<Failure, List<Attendence>>> gymAttendance(
+      String gymId, String pid) async {
+    return await repo.gymAttendence(gymId, pid);
+  }
+
+  Future<Either<Failure, PlayerInGym>> getPlayerInGym(String gymId) async {
+    return await repo.getPlayerInGym(gymId);
   }
 }

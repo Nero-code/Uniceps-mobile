@@ -12,7 +12,7 @@ class Gym extends Equatable {
       start,
       end;
   final DateTime? joinedAt;
-  final bool isSelected;
+  final bool isSelected, isCurrent;
 
   const Gym({
     required this.id,
@@ -27,6 +27,7 @@ class Gym extends Equatable {
     required this.start,
     required this.end,
     this.isSelected = false,
+    this.isCurrent = false,
   });
 
   @override

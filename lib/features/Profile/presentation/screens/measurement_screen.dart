@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
 // import 'package:uniceps/core/Themes/light_theme.dart';
@@ -52,19 +53,26 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
       ),
       body: BlocBuilder<MeasurmentBloc, MeasurmentState>(
         builder: (context, state) {
+          print(state.runtimeType);
           if (state is MeasurmentInitial) {
             BlocProvider.of<MeasurmentBloc>(context)
                 .add(GetMeasurementsEvent());
             return const Center(child: CircularProgressIndicator());
           } else if (state is MeasurementLoadedState) {
             if (state.list.isEmpty) {
-              return Center(child: Text(AppLocalizations.of(context)!.empty));
+              // return Center(child: Text(AppLocalizations.of(context)!.empty));
+              return ReloadScreenWidget(
+                  f: EmptyCacheFailure(errorMessage: ""),
+                  callBack: () {
+                    BlocProvider.of<MeasurmentBloc>(context)
+                        .add(GetMeasurementsEvent());
+                  });
             }
             return Column(
               children: [
                 SizedBox(
                   child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 10),
+                    margin: const EdgeInsets.symmetric(vertical: 10),
                     child: Row(
                       children: [
                         Expanded(

@@ -31,7 +31,7 @@ class _SubScriptionScreenState extends State<SubScriptionScreen> {
       body: BlocBuilder<SubsBloc, SubsState>(
         builder: (context, state) {
           if (state is SubsInitial) {
-            BlocProvider.of<SubsBloc>(context).add(GetSubsEvent(gymId: gymId));
+            // BlocProvider.of<SubsBloc>(context).add(GetSubsEvent(gymId: gymId,pid: pi));
             return const Center(child: CircularProgressIndicator());
           } else if (state is SubsLoadedState) {
             // if (state.list.isEmpty) {
@@ -78,9 +78,9 @@ class _SubScriptionScreenState extends State<SubScriptionScreen> {
               child: ReloadScreenWidget(
                 f: state.f,
                 callBack: () {
-                  BlocProvider.of<SubsBloc>(context).add(
-                    GetSubsEvent(gymId: gymId),
-                  );
+                  // BlocProvider.of<SubsBloc>(context).add(
+                  //   GetSubsEvent(gymId: gymId),
+                  // );
                 },
               ),
             );

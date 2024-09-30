@@ -8,6 +8,6 @@ sealed class AttendenceEvent extends Equatable {
 }
 
 final class GetAttendenceEvent extends AttendenceEvent {
-  final String gymId;
-  const GetAttendenceEvent(this.gymId);
+  final String gymId, pid;
+  const GetAttendenceEvent(this.gymId, this.pid);
 }

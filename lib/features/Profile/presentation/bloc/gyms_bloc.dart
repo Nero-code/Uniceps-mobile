@@ -22,7 +22,29 @@ class GymsBloc extends Bloc<GymsEvent, GymsState> {
         final either = await usecases.getGyms();
         either.fold(
           (l) => emit(GymsErrorState(f: l)),
-          (r) => emit(GymsLoadedState(list: r)),
+          (r) {
+            r.forEach(print);
+            final myGyms = <Gym>[];
+            Gym? current;
+            while (r.isNotEmpty && r.first.isSelected) {
+              print("Gyms Bloc: GetGyms: Found 1 gym isSelected true");
+              if (r.first.isCurrent) {
+                print("Gyms Bloc: GetGyms: Found 1 gym isCurrent true");
+                current = r.first;
+                r.removeAt(0);
+                continue;
+              }
+              myGyms.add(r.first);
+              r.removeAt(0);
+            }
+
+            print("Debug r: $r");
+            emit(GymsLoadedState(
+              restList: r,
+              myGyms: myGyms,
+              current: current,
+            ));
+          },
         );
       }
     });

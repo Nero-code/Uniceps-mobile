@@ -20,13 +20,14 @@ class HandshakeBloc extends Bloc<HandshakeEvent, HandshakeState> {
           (fail) => emit(HandshakeErrorState(f: fail)),
           (list) => emit(HandshakeLoadedState(handshakes: list)),
         );
-      } else if (event is GetAllAttendanceEvent) {
-        final either = await usecases.gymAttendance(event.gymId);
-        either.fold(
-          (l) => emit(AttErrorState(f: l)),
-          (r) => emit(AttDoneState(list: r)),
-        );
       }
+      //  else if (event is GetAllAttendanceEvent) {
+      //   final either = await usecases.gymAttendance(event.gymId);
+      //   either.fold(
+      //     (l) => emit(AttErrorState(f: l)),
+      //     (r) => emit(AttDoneState(list: r)),
+      //   );
+      // }
     });
   }
 }

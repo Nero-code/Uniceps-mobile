@@ -45,9 +45,14 @@ class MyGymWidget extends StatelessWidget {
                 CachedNetworkImage(
                   width: MediaQuery.of(context).size.width * 0.15,
                   imageUrl: "$API" "$HTTP_GYMS" "$HTTP_GYM_LOGO" "/${myGym.id}",
+                  imageBuilder: (context, imageProvider) => ClipRRect(
+                    borderRadius: BorderRadius.circular(80),
+                    child: Image(image: imageProvider),
+                  ),
                   errorWidget: (context, url, error) => Image(
                     image: const AssetImage(APP_LOGO_DARK),
                     width: MediaQuery.of(context).size.width * 0.1,
+                    height: MediaQuery.of(context).size.width * 0.1,
                   ),
                 ),
                 Column(
@@ -56,6 +61,7 @@ class MyGymWidget extends StatelessWidget {
                     Text(myGym.ownerName),
                   ],
                 ),
+                const SizedBox(),
               ],
             ),
           ),

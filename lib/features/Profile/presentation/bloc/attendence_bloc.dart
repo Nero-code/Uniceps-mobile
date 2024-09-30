@@ -13,7 +13,7 @@ class AttendenceBloc extends Bloc<AttendenceEvent, AttendenceState> {
     on<AttendenceEvent>((event, emit) async {
       if (event is GetAttendenceEvent) {
         emit(AttenedenceLoadingState());
-        final either = await usecases.gymAttendance(event.gymId);
+        final either = await usecases.gymAttendance(event.gymId, event.pid);
         either.fold(
           (l) => emit(AttenedenceErrorState(l)),
           (r) => emit(AttenedenceLoadedState(r)),

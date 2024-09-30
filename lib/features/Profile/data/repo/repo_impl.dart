@@ -9,6 +9,7 @@ import 'package:uniceps/features/Profile/data/sources/remote_source.dart';
 import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
 import 'package:uniceps/features/Profile/domain/entities/handshake.dart';
 import 'package:uniceps/features/Profile/domain/entities/measrument.dart';
+import 'package:uniceps/features/Profile/domain/entities/player_in_gym.dart';
 import 'package:uniceps/features/Profile/domain/repo.dart';
 import 'package:uniceps/features/Profile/domain/entities/subscription.dart';
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
@@ -28,6 +29,7 @@ class ProfileRepoImpl implements ProfileRepo {
   @override
   Future<Either<Failure, List<Measurement>>> getMeasurement() async {
     if (await checker.hasConnection) {
+      print("Connected");
       try {
         final res = await remote.getMeasurements();
         await local.saveMeasurements(res);
@@ -99,10 +101,10 @@ class ProfileRepoImpl implements ProfileRepo {
 
   @override
   Future<Either<Failure, List<Subscription>>> getSubscriptions(
-      String gymId) async {
+      String gymId, String pid) async {
     if (await checker.hasConnection) {
       try {
-        final res = await remote.getSubs(gymId);
+        final res = await remote.getSubs(gymId, pid);
         await local.saveSubs(gymId, res);
         return Right(res);
       } on ServerException {
@@ -151,18 +153,32 @@ class ProfileRepoImpl implements ProfileRepo {
     if (await checker.hasConnection) {
       try {
         final res = await remote.getGyms();
+        final localRes = await local.getSubscribedToGyms();
+        final list = <GymModel>[];
+        for (var i in localRes) {
+          var map = i.toJson();
+          map.addAll({"isSelected": true});
+          final temp = GymModel.fromJson(
+              i.toJson()..update("isSelected", (value) => true));
+
+          list.add(temp);
+        }
         await local.saveGyms(res);
-        // final hands = await remote.getAllHandshake();
-        // print("before Sort");
-        // print(hands);
-        // print("afterSort");
-        // hands.sort(
-        //   (a, b) => a.createdAt.compareTo(b.createdAt),
-        // );
-        // final temp =
-        //     res.firstWhere((element) => element.id == hands.first.gymId);
-        // res.remove(temp);
-        // res.insert(0, temp);
+        // for (int i = 0; i < res.length; i++) {
+        //   if (res[i].id == localRes[i].id) {
+        //     list.add(res[i]);
+        //   }
+        // }
+        print("before remove: ${res.length}");
+        for (var gym in list) {
+          res.removeWhere((e) => e.id == gym.id);
+        }
+
+        print("after remove: ${res.length}");
+        for (var gym in list) {
+          res.insert(0, gym);
+        }
+
         return Right(res);
       } catch (e) {
         return Left(DatabaseFailure(errorMsg: "Error on fetching data"));
@@ -170,6 +186,25 @@ class ProfileRepoImpl implements ProfileRepo {
     } else {
       try {
         final res = await local.getGyms();
+        final localRes = await local.getSubscribedToGyms();
+        final list = <GymModel>[];
+        for (var i in localRes) {
+          var map = i.toJson();
+          map.addAll({"isSelected": true});
+          final temp = GymModel.fromJson(
+              i.toJson()..update("isSelected", (value) => true));
+
+          list.add(temp);
+        }
+        print("before remove: ${res.length}");
+        for (var gym in list) {
+          res.removeWhere((e) => e.id == gym.id);
+        }
+
+        print("after remove: ${res.length}");
+        for (var gym in list) {
+          res.insert(0, gym);
+        }
         return Right(res);
       } on EmptyCacheExeption {
         return Left(EmptyCacheFailure(errorMessage: "Empty Cache"));
@@ -210,11 +245,12 @@ class ProfileRepoImpl implements ProfileRepo {
   }
 
   @override
-  Future<Either<Failure, List<Attendence>>> gymAttendence(String gymId) async {
+  Future<Either<Failure, List<Attendence>>> gymAttendence(
+      String gymId, String pid) async {
     print("Attenence --> RepoImpl --> gymAttendence $gymId");
     if (await checker.hasConnection) {
       try {
-        final res = await remote.getAllAttendance(gymId);
+        final res = await remote.getAllAttendance(gymId, pid);
         res.sort(
           (a, b) => a.date.compareTo(b.date),
         );
@@ -272,6 +308,39 @@ class ProfileRepoImpl implements ProfileRepo {
         return Left(GeneralPurposFailure(
             errorMessage:
                 "Unknown err! |>>> Profile -> localS -> getAllHandshakes: ${e.toString()}"));
+      }
+    }
+  }
+
+  @override
+  Future<Either<Failure, PlayerInGym>> getPlayerInGym(String gymId) async {
+    String? pid;
+    try {
+      final list = await local.getSubscribedToGyms();
+      pid = list.firstWhere((gym) => gym.id == gymId).pid;
+    } catch (e) {
+      print("Gym Not Found, Therefor not a member");
+      return Right(PlayerInGym(gymId: gymId, balance: 0.0, subs: 0));
+    }
+
+    if (await checker.hasConnection) {
+      try {
+        final player = await remote.getPlayerInGym(gymId, pid);
+        // final subs = await remote.getSubs(gymId, pid);
+        final res = PlayerInGym(gymId: gymId, balance: player.balance, subs: 0);
+        await local.savePlayerInGym(res);
+        return Right(res);
+      } catch (e) {
+        return Right(PlayerInGym(gymId: gymId, balance: 0.0, subs: 0));
+      }
+    } else {
+      try {
+        final res = await local.getPlayerInGym(gymId);
+
+        return Right(res);
+      } catch (e) {
+        print(e);
+        return Right(PlayerInGym(gymId: gymId, balance: 0.0, subs: 0));
       }
     }
   }

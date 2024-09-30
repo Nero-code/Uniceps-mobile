@@ -37,8 +37,12 @@ const IMG_EMPTY_2 = "empty_2.png";
 const IMG_MEMORY = "memory.png";
 const IMG_NO_INTERNET = "noInternet.png";
 const IMG_SERVER_ERROR = "server_error.png";
+const IMG_SERVER_DOWN = "server_down.png";
 const IMG_VOID = "void.png";
 const IMG_WARNING = "warning.png";
+const IMG_NO_PROGRAM = "no_program.png";
+const IMG_NO_ATTENDENCE = "attenence_err.png";
+const IMG_NO_MEASUREMENTS = "measurments_err.png";
 
 ///
 ///
@@ -63,6 +67,7 @@ const HTTP_VERIFY_CODE = "/auth/verify";
 const HTTP_HANDSHAKE = "/handshake";
 
 const HTTP_PLAYER_INFO = "/profile";
+const HTTP_PLAYER = "/player";
 
 const HTTP_LOGIN = "";
 const HTTP_FORGOT_PASSWORD = "";

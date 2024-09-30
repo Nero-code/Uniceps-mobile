@@ -28,6 +28,10 @@ class GymWidget2 extends StatelessWidget {
             CachedNetworkImage(
               width: MediaQuery.of(context).size.width * 0.15,
               imageUrl: "$API" "$HTTP_GYMS" "$HTTP_GYM_LOGO" "/${gym.id}",
+              imageBuilder: (context, imageProvider) => ClipRRect(
+                borderRadius: BorderRadius.circular(80),
+                child: Image(image: imageProvider),
+              ),
               placeholder: (context, url) => SizedBox(
                   width: MediaQuery.of(context).size.width * 0.1,
                   height: MediaQuery.of(context).size.width * 0.1,

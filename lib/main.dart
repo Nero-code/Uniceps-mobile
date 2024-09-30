@@ -11,6 +11,7 @@ import 'package:uniceps/features/Auth/views/screens/email_and_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/player_gym_bloc.dart';
 import 'package:uniceps/features/Training/views/bloc/current_gym_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
@@ -139,9 +140,14 @@ class MyApp extends StatelessWidget {
         }),
         BlocProvider(create: (context) {
           print(
-              "--------------------CUrrent GymsBloc Created!---------------------");
+              "--------------------Current GymsBloc Created!---------------------");
           return CurrentGymBloc(usecases: di.sl())
             ..add(const GetSubscribedToGymEvent());
+        }),
+        BlocProvider(create: (context) {
+          print(
+              "--------------------Player-Gym Bloc Created!---------------------");
+          return PlayerGymBloc(usecases: di.sl());
         }),
         BlocProvider<AttendenceBloc>(create: (context) {
           print(
@@ -191,7 +197,7 @@ class MyApp extends StatelessWidget {
               ROUTE_EXERCISE: (context) => ExercisesPage(),
               ROUTE_QR_SCANNER: (context) => QRScannerScreen(),
               // ROUTE_PRESENCE: (context) => const PresenceScreen(), //  NOT REACHABLE FROM HERE
-              ROUTE_GYMS_LIST: (context) => const GymListScreen(),
+              ROUTE_GYMS_LIST: (context) => GymListScreen(),
 
               //  AUX
               ROUTE_MEASUREMENTS: (context) => const MeasurementScreen(),

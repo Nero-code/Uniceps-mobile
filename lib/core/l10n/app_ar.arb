@@ -40,6 +40,8 @@
   "telephone": "الهاتف",
 
   "subscription": "الأشتراكات",
+  "subscriptions": "الأشتراكات",
+  "balance": "الرصيد",
   "sport": "الرياضة",
   "measurements": "القياسات",
   "language": "اللغة",
@@ -88,7 +90,7 @@
   "empty": "المحتوى فارغ",
   "emptySubs": "لا يوجد اشتراكات",
   "emptyMeasure": "لا يوجد قياسات",
-  "emptyExc": "لا يوجد تمارين",
+  "emptyExcercises": "لا يوجد تمارين",
 
   "error": "حدث خطأ ما",
 
@@ -122,6 +124,21 @@
   "privacy": "الخصوصية",
   "privacyPolicy": "سياسة الخصوصية",
   "userAgreement": "اتفاقية المستخدم",
-  "termsOfUse": "شروط الاستخدام"
+  "termsOfUse": "شروط الاستخدام",
+
+  "emptySubscriptions":"لا يوجد اشتراكات",
+  "emptyMeasurements":"لا يوجد قياسات حاليا",
+  "emptyExercisesList":"لا يوجد تمارين لهذه المجموعة",
+  "emptyGymsList":"لا يوجد نوادي",
+  "emptyHandshakes":"لست عضوا في اي نادي",
+  "emptyTriningDaysMap":"لا يوجد برنامج تدريبي",
+  "emptyHomeCard":"اختر احد النوادي لعرضه",
+  "emptyAttendence":"لا يوجد سجل حضور",
+
+  "errNoInternet":"لا يوجد اتصال بالانترنت",
+  "errServerException":"حدث خطأ في الخادم, الرجاء المحاولة لاحقا",
+  "errUnknown":"حدث خطأ غير معروف"
+  
+  
 
 }

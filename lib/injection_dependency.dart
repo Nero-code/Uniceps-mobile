@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:get_it/get_it.dart' as di;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'dart:io' as io;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
 import 'package:uniceps/core/logs/logger.dart';
@@ -50,6 +51,8 @@ Future<void> init() async {
   final attendenceBox = await Hive.openBox<List<dynamic>>("Attendence");
   final imagesBox = await Hive.openBox<Uint8List>("Images");
   final selectedGym = await Hive.openBox<bool>("SelectedGym");
+  final playerInGymBox =
+      await Hive.openBox<Map<dynamic, dynamic>>("PlayerInGym");
 
   // await userBox.clear();
   // await profileBox.clear();
@@ -97,6 +100,7 @@ Future<void> init() async {
     () => LocalProfileSourceImpl(
       gymsBox: gymsBox,
       myGyms: myGyms,
+      playerProfilesBox: playerInGymBox,
       selectedGym: selectedGym,
       measurBox: measureBox,
       playerBox: profileBox,
@@ -110,7 +114,6 @@ Future<void> init() async {
       client: sl(),
       userBox: userBox,
       playerBox: profileBox,
-      handshakesBox: handshakesBox,
     ),
   );
   sl.registerLazySingleton<LocalAuthSource>(
@@ -190,6 +193,7 @@ Future<void> init() async {
   //////////////////////////////////////////////////////////////////////////////
 
   final client = http.Client();
+  final c = io.HttpClient()..connectionTimeout = const Duration(seconds: 30);
   sl.registerLazySingleton<http.Client>(() => client);
 
   sl.registerLazySingleton<InternetConnectionChecker>(

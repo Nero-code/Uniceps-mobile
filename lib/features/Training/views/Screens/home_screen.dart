@@ -278,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   top: Radius.circular(30),
                                 ),
                                 child: Image(
-                                  image: AssetImage("images/back.png"),
+                                  image: AssetImage("images/photos/back.png"),
                                   fit: BoxFit.fill,
                                 ),
                               ),
@@ -673,6 +673,9 @@ class _HomeScreenState extends State<HomeScreen>
                     onRefresh: () async {
                       BlocProvider.of<TrainingBloc>(context)
                           .add(const GetProgramEvent());
+
+                      BlocProvider.of<ProfileBloc>(context)
+                          .add(const GetProfileDataEvent());
                       await BlocProvider.of<TrainingBloc>(context)
                           .stream
                           .skip(1)
@@ -711,20 +714,11 @@ class _HomeScreenState extends State<HomeScreen>
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
+                                        textDirection: TextDirection.ltr,
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          IconButton(
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pushNamed(ROUTE_PROFILE);
-                                            },
-                                            icon: const Icon(
-                                              Icons.person,
-                                              size: 40,
-                                              color: Colors.white,
-                                            ),
-                                          ),
+                                          const SizedBox(width: 50),
                                           Row(
                                             children: [
                                               Text(
@@ -746,7 +740,17 @@ class _HomeScreenState extends State<HomeScreen>
                                               ),
                                             ],
                                           ),
-                                          const SizedBox(width: 50),
+                                          IconButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pushNamed(ROUTE_PROFILE);
+                                            },
+                                            icon: const Icon(
+                                              Icons.person,
+                                              size: 40,
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -902,15 +906,43 @@ class _HomeScreenState extends State<HomeScreen>
                                   ],
                                 );
                               } else if (playerState is ProfileErrorState) {
-                                return Center(child: Text(local.error));
+                                return Material(
+                                  elevation: 3,
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: Colors.white,
+                                  child: SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.18,
+                                    child: Center(
+                                      child: ReloadScreenWidget(
+                                        f: playerState.failure,
+                                        callBack: () {},
+                                      ),
+                                    ),
+                                  ),
+                                );
                               } else if (playerState is ProfileInitial ||
                                   playerState is ProfileSubmittedState) {
                                 BlocProvider.of<ProfileBloc>(context)
                                     .add(const GetProfileDataEvent());
                                 return const SizedBox();
                               }
-                              return const Center(
-                                  child: CircularProgressIndicator());
+                              return Material(
+                                elevation: 3,
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.white,
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.18,
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                ),
+                              );
                             },
                           ),
 
