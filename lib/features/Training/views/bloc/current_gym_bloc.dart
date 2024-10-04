@@ -19,7 +19,7 @@ class CurrentGymBloc extends Bloc<CurrentGymEvent, CurrentGymState> {
           (r) {
             Gym? current;
             for (var i in r) {
-              if (i.isSelected) {
+              if (i.isCurrent) {
                 current = i;
                 break;
               }

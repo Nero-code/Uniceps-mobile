@@ -13,12 +13,10 @@ final class GymsLoadingState extends GymsState {}
 
 final class GymsLoadedState extends GymsState {
   final List<Gym> restList, myGyms;
-  final Gym? current;
 
   const GymsLoadedState({
     required this.restList,
     required this.myGyms,
-    required this.current,
   });
 }
 

@@ -71,7 +71,7 @@ class ExerciseListTile extends StatelessWidget {
                                 Text(
                                   exercise.name,
                                   style: const TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 14,
                                     color: Colors.black,
                                   ),
                                 ),

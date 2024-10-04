@@ -1,13 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
+import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
 import 'package:uniceps/features/Profile/domain/entities/gym.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/screens/gym_profile_2.dart';
 import 'package:uniceps/features/Profile/presentation/screens/gym_profile_screen.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/gym_logo_widget.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/gyms_list_wave_back.dart';
@@ -30,13 +31,17 @@ class _GymListScreenState extends State<GymListScreen> {
 
   List<Gym> gymsList = [], searchRes = [];
 
+  Gym? gym;
+
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Scaffold(
       // appBar: AppBar(
       //   title: const Text(APP_NAME),
       // ),
       resizeToAvoidBottomInset: false,
+
       body: PopScope(
         canPop: false,
         onPopInvoked: (didPop) {
@@ -65,6 +70,7 @@ class _GymListScreenState extends State<GymListScreen> {
                   return Center(
                       child: Text(AppLocalizations.of(context)!.empty));
                 }
+                gym = state.myGyms.first;
                 return Stack(
                   children: [
                     ListView.builder(
@@ -104,10 +110,14 @@ class _GymListScreenState extends State<GymListScreen> {
                                   GetSubsEvent(
                                       gymId: state.restList[index - 1].id,
                                       pid: state.restList[index - 1].pid));
+                              BlocProvider.of<AttendenceBloc>(context).add(
+                                  GetAttendenceEvent(
+                                      state.restList[index - 1].id,
+                                      state.restList[index - 1].pid));
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => GymProfileScreen(
+                                  builder: (context) => GymProfileScreen2(
                                     gym: state.restList[index - 1],
                                   ),
                                 ),
@@ -168,6 +178,30 @@ class _GymListScreenState extends State<GymListScreen> {
                                 for (var i in state.myGyms)
                                   GymLogoWidget(
                                     gym: i,
+                                    onPressed: () {
+                                      BlocProvider.of<SubsBloc>(context).add(
+                                        GetSubsEvent(
+                                          gymId: i.id,
+                                          pid: i.pid,
+                                        ),
+                                      );
+                                      BlocProvider.of<AttendenceBloc>(context)
+                                          .add(
+                                        GetAttendenceEvent(
+                                          i.id,
+                                          i.pid,
+                                        ),
+                                      );
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              GymProfileScreen2(
+                                            gym: i,
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                               ],
                             ),
@@ -179,35 +213,35 @@ class _GymListScreenState extends State<GymListScreen> {
                     SafeArea(
                       child: SearchAnchor(
                         // viewBackgroundColor: Colors.transparent,
-                        viewBuilder: (suggestions) {
-                          return Container(
-                            color: Colors.amber,
-                            width: 210,
-                            height: 150,
-                            child: const Text("asasd"),
-                          );
-                        },
+                        // viewBuilder: (suggestions) {
+                        //   return Container(
+                        //     color: Colors.amber,
+                        //     width: 210,
+                        //     height: 150,
+                        //     child: const Text("asasd"),
+                        //   );
+                        // },
                         builder: (context, controller) {
                           return Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: SearchBar(
                               focusNode: node2,
                               // controller: controller,
-                              hintText: "بحث",
+                              hintText: local.search,
                               hintStyle:
                                   const MaterialStatePropertyAll<TextStyle>(
-                                      TextStyle(color: Colors.white30)),
+                                      TextStyle(color: Colors.white54)),
                               textStyle:
                                   const MaterialStatePropertyAll<TextStyle>(
                                       TextStyle(color: Colors.white70)),
                               leading: const Icon(Icons.search,
-                                  color: Colors.white30),
+                                  color: Colors.white54),
                               shadowColor:
                                   const MaterialStatePropertyAll<Color>(
                                       Colors.transparent),
                               backgroundColor:
                                   const MaterialStatePropertyAll<Color>(
-                                      Colors.white10),
+                                      Colors.white24),
                               constraints: const BoxConstraints(
                                 minHeight: 40,
                               ),
@@ -265,11 +299,20 @@ class _GymListScreenState extends State<GymListScreen> {
                                                   pid: searchRes.isEmpty
                                                       ? gymsList[index].pid
                                                       : searchRes[index].pid));
+                                          BlocProvider.of<AttendenceBloc>(
+                                                  context)
+                                              .add(GetAttendenceEvent(
+                                                  searchRes.isEmpty
+                                                      ? gymsList[index].id
+                                                      : searchRes[index].id,
+                                                  searchRes.isEmpty
+                                                      ? gymsList[index].pid
+                                                      : searchRes[index].pid));
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  GymProfileScreen(
+                                                  GymProfileScreen2(
                                                 gym: searchRes.isEmpty
                                                     ? gymsList[index]
                                                     : searchRes[index],
@@ -360,7 +403,7 @@ class _GymListScreenState extends State<GymListScreen> {
                                         height: 40,
                                         padding: const EdgeInsets.all(5.0),
                                         decoration: BoxDecoration(
-                                          color: Colors.white10,
+                                          color: Colors.white24,
                                           borderRadius:
                                               BorderRadius.circular(50),
                                         ),
@@ -373,10 +416,10 @@ class _GymListScreenState extends State<GymListScreen> {
                                                 width: 30,
                                                 height: 30,
                                                 child: Material(
-                                                  color: Colors.white24,
+                                                  color: Colors.white30,
                                                   shape: const CircleBorder(),
                                                   child: Tooltip(
-                                                    message: "search",
+                                                    message: local.search,
                                                     child: InkWell(
                                                       borderRadius:
                                                           BorderRadius.circular(

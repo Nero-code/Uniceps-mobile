@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:get_it/get_it.dart' as di;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'dart:io' as io;
+// import 'dart:io' as io;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
 import 'package:uniceps/core/logs/logger.dart';
@@ -57,13 +57,32 @@ Future<void> init() async {
   // await userBox.clear();
   // await profileBox.clear();
   // await trainBox.clear();
-  // await imagesBox.clear();
   // await lastWeightBox.clear();
   // await gymsBox.clear();
+  // await myGyms.clear();
   // await subsBox.clear();
   // await measureBox.clear();
   // await handshakesBox.clear();
   // await attendenceBox.clear();
+  // await imagesBox.clear();
+  // await selectedGym.clear();
+  // await playerInGymBox.clear();
+
+  Future<void> clear() async {
+    await userBox.clear();
+    await profileBox.clear();
+    await trainBox.clear();
+    await lastWeightBox.clear();
+    await gymsBox.clear();
+    await myGyms.clear();
+    await subsBox.clear();
+    await measureBox.clear();
+    await handshakesBox.clear();
+    await attendenceBox.clear();
+    // await imagesBox.clear();
+    await selectedGym.clear();
+    await playerInGymBox.clear();
+  }
 
   sl.registerLazySingleton(
     () => ImageCacheManager(
@@ -117,7 +136,11 @@ Future<void> init() async {
     ),
   );
   sl.registerLazySingleton<LocalAuthSource>(
-    () => LocalAuthSourceImple(userBox: userBox, playerBox: profileBox),
+    () => LocalAuthSourceImple(
+      userBox: userBox,
+      playerBox: profileBox,
+      resetBottun: clear,
+    ),
   );
   sl.registerLazySingleton<RemoteAuthSource>(
     () => RemoteAuthSourceImpl(client: sl(), userBox: userBox),
@@ -193,7 +216,7 @@ Future<void> init() async {
   //////////////////////////////////////////////////////////////////////////////
 
   final client = http.Client();
-  final c = io.HttpClient()..connectionTimeout = const Duration(seconds: 30);
+  // final c = io.HttpClient()..connectionTimeout = const Duration(seconds: 30);
   sl.registerLazySingleton<http.Client>(() => client);
 
   sl.registerLazySingleton<InternetConnectionChecker>(

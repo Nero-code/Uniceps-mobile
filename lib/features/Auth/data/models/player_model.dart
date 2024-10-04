@@ -9,6 +9,7 @@ class PlayerModel extends Player {
     required super.birthDate,
     required super.gender,
     required super.level,
+    required super.email,
   });
   factory PlayerModel.fromJson(Map<dynamic, dynamic> json) => PlayerModel(
         uid: json['uid'] ?? "",
@@ -17,6 +18,7 @@ class PlayerModel extends Player {
         birthDate: json['birth_date'],
         gender: json['gender_male'] == "True" ? Gender.male : Gender.female,
         level: double.parse("${json['level']}"),
+        email: json['email'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -26,5 +28,6 @@ class PlayerModel extends Player {
         'birth_date': birthDate,
         'gender_male': gender == Gender.male ? "True" : "False",
         'level': level,
+        'email': email,
       };
 }

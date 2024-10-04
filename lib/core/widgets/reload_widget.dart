@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,11 +18,20 @@ class ReloadScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Reload Widget: ${errorToTextMapper(context, f)}");
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image(image: AssetImage(errorImageMapper(f))),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Image(
+              width: MediaQuery.of(context).size.width * 0.75,
+              image: AssetImage(
+                errorImageMapper(f),
+              ),
+            ),
+          ),
           SizedBox(height: gapSize),
           Text(errorToTextMapper(context, f)),
           SizedBox(height: gapSize),
@@ -69,10 +79,10 @@ class ReloadScreenWidget extends StatelessWidget {
         return "$PHOTOS_PATH" "$IMG_DESKTOP";
 
       case GeneralPurposFailure:
-        return "$PHOTOS_PATH" "$IMG_VOID";
+        return "$PHOTOS_PATH" "$IMG_WARNING";
 
       default:
-        return "$PHOTOS_PATH" "$IMG_SERVER_DOWN";
+        return "$PHOTOS_PATH" "$IMG_WARNING";
     }
   }
 
@@ -111,7 +121,7 @@ class ReloadScreenWidget extends StatelessWidget {
 
       case GeneralPurposFailure:
       default:
-        return "";
+        return local.errUnknown;
     }
   }
 }

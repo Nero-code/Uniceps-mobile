@@ -5,6 +5,7 @@ import "package:flutter_bloc/flutter_bloc.dart";
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/features/Training/views/bloc/current_gym_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
@@ -114,6 +115,16 @@ class _HomeScreenState extends State<HomeScreen>
     daysController = PanelController();
     WidgetsFlutterBinding.ensureInitialized();
 
+    context.read<TrainingSectionCubit>().getSection().then(
+      (value) {
+        if (value != null) {
+          setState(() {
+            section = value;
+          });
+        }
+      },
+    );
+
     super.initState();
   }
 
@@ -121,7 +132,8 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void dispose() {
     filtersController.dispose();
-
+    exercisesController.dispose();
+    weightCtl.dispose();
     super.dispose();
   }
 
@@ -305,13 +317,6 @@ class _HomeScreenState extends State<HomeScreen>
                                 color: background,
                                 child: Stack(
                                   children: [
-                                    // const Icon(
-                                    //   Icons.remove_rounded,
-                                    //   size: 40,
-                                    //   color: Colors.grey,
-                                    // ),
-
-                                    // const SizedBox(height: 25.0),
                                     SingleChildScrollView(
                                       padding:
                                           const EdgeInsets.only(bottom: 50),
@@ -331,6 +336,18 @@ class _HomeScreenState extends State<HomeScreen>
                                                 setState(() {
                                                   section = i.value.toString();
                                                 });
+                                                await BlocProvider.of<
+                                                            TrainingSectionCubit>(
+                                                        context)
+                                                    .cacheSection(
+                                                        section.toString());
+
+                                                await daysController
+                                                    .animatePanelToPosition(
+                                                  0.0,
+                                                  duration: duration,
+                                                  curve: curve,
+                                                );
                                               },
                                             ),
                                         ],
@@ -346,7 +363,7 @@ class _HomeScreenState extends State<HomeScreen>
                                         child: Column(
                                           children: [
                                             Text(
-                                              "ماذا سنستهدف اليوم؟",
+                                              local.dayQuete,
                                               style: TextStyle(
                                                 color: Theme.of(context)
                                                     .colorScheme
@@ -356,8 +373,8 @@ class _HomeScreenState extends State<HomeScreen>
                                               ),
                                             ),
                                             Text(
-                                              "هيا لنبدأ...",
-                                              style: TextStyle(
+                                              local.letsStart,
+                                              style: const TextStyle(
                                                 // color: Theme.of(context).colorScheme.primary,
                                                 color: Colors.grey,
                                                 fontSize: 12,
@@ -368,52 +385,51 @@ class _HomeScreenState extends State<HomeScreen>
                                         ),
                                       ),
                                     ),
-                                    Positioned(
-                                      bottom: 0.0,
-                                      width: MediaQuery.of(context).size.width,
-                                      child: ColoredBox(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background,
-                                        child: ActionChip.elevated(
-                                          backgroundColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          label: SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.5,
-                                            child: Center(
-                                              child: Text(
-                                                "تطبيق",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          onPressed: () async {
-                                            if (section != null &&
-                                                section != currentSection) {
-                                              await BlocProvider.of<
-                                                          TrainingSectionCubit>(
-                                                      context)
-                                                  .cacheSection(
-                                                      section.toString());
-
-                                              daysController
-                                                  .animatePanelToPosition(
-                                                0.0,
-                                                duration: duration,
-                                                curve: curve,
-                                              );
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    ),
+                                    // Positioned(
+                                    //   bottom: 0.0,
+                                    //   width: MediaQuery.of(context).size.width,
+                                    //   child: ColoredBox(
+                                    //     color: Theme.of(context)
+                                    //         .colorScheme
+                                    //         .background,
+                                    //     child: ActionChip.elevated(
+                                    //       backgroundColor: Theme.of(context)
+                                    //           .colorScheme
+                                    //           .primary,
+                                    //       label: SizedBox(
+                                    //         width: MediaQuery.of(context)
+                                    //                 .size
+                                    //                 .width *
+                                    //             0.5,
+                                    //         child: Center(
+                                    //           child: Text(
+                                    //             local.apply,
+                                    //             style: const TextStyle(
+                                    //               color: Colors.white,
+                                    //               fontWeight: FontWeight.bold,
+                                    //             ),
+                                    //           ),
+                                    //         ),
+                                    //       ),
+                                    //       onPressed: () async {
+                                    //         // if (section != null &&
+                                    //         //     section != currentSection) {
+                                    //         //   await BlocProvider.of<
+                                    //         //               TrainingSectionCubit>(
+                                    //         //           context)
+                                    //         //       .cacheSection(
+                                    //         //           section.toString());
+                                    //         //   daysController
+                                    //         //       .animatePanelToPosition(
+                                    //         //     0.0,
+                                    //         //     duration: duration,
+                                    //         //     curve: curve,
+                                    //         //   );
+                                    //         // }
+                                    //       },
+                                    //     ),
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -426,7 +442,10 @@ class _HomeScreenState extends State<HomeScreen>
                 } else if (state is TrainingProgramErrorState) {
                   return ReloadScreenWidget(
                     f: state.f,
-                    callBack: () {},
+                    callBack: () {
+                      BlocProvider.of<TrainingBloc>(context)
+                          .add(const GetProgramEvent());
+                    },
                   );
                 }
 
@@ -484,12 +503,11 @@ class _HomeScreenState extends State<HomeScreen>
 
                                 MyGymWidget(
                                   myGym: i,
-                                  isCurrent: i.isSelected,
+                                  isCurrent: i.isCurrent,
                                   isSelected: gymId == i.id,
-                                  onPressed: i.isSelected
+                                  onPressed: i.isCurrent
                                       ? null
                                       : () {
-                                          print("CliCK");
                                           gymId = i.id;
                                           setState(() {});
                                         },
@@ -511,8 +529,8 @@ class _HomeScreenState extends State<HomeScreen>
                               width: 150,
                               child: Center(
                                 child: Text(
-                                  "تطبيق",
-                                  style: TextStyle(
+                                  local.apply,
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w900,
                                   ),
@@ -722,7 +740,7 @@ class _HomeScreenState extends State<HomeScreen>
                                           Row(
                                             children: [
                                               Text(
-                                                "مرحبا, ",
+                                                local.hello,
                                                 style: TextStyle(
                                                     fontSize: 20,
                                                     color: Colors.white
@@ -783,6 +801,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     //     ),
                                     //   ),
                                     // ),
+
                                     BlocConsumer<CurrentGymBloc,
                                         CurrentGymState>(
                                       listener: (context, state) {
@@ -800,7 +819,7 @@ class _HomeScreenState extends State<HomeScreen>
                                       builder: (context, state) {
                                         if (state is CurrentGymLoadedState) {
                                           return HomeCard(
-                                            section: section ?? "الخطة",
+                                            section: section ?? local.about,
                                             myGym: state.current,
                                             openQRPopup: () {
                                               showDialog(
@@ -906,19 +925,30 @@ class _HomeScreenState extends State<HomeScreen>
                                   ],
                                 );
                               } else if (playerState is ProfileErrorState) {
-                                return Material(
-                                  elevation: 3,
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.white,
-                                  child: SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.8,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.18,
-                                    child: Center(
-                                      child: ReloadScreenWidget(
-                                        f: playerState.failure,
-                                        callBack: () {},
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                      top: MediaQuery.of(context).size.height *
+                                          0.1),
+                                  child: Material(
+                                    elevation: 3,
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.white,
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.8,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.18,
+                                      child: Center(
+                                        child: ErrorScreenWidget(
+                                          f: playerState.failure,
+                                          callback: () {
+                                            BlocProvider.of<ProfileBloc>(
+                                                    context)
+                                                .add(
+                                                    const GetProfileDataEvent());
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -929,17 +959,22 @@ class _HomeScreenState extends State<HomeScreen>
                                     .add(const GetProfileDataEvent());
                                 return const SizedBox();
                               }
-                              return Material(
-                                elevation: 3,
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.white,
-                                child: SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.18,
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height *
+                                        0.1),
+                                child: Material(
+                                  elevation: 3,
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: Colors.white,
+                                  child: SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.18,
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
                                   ),
                                 ),
                               );
@@ -1044,7 +1079,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 exercisesController.animateTo(0.0,
                                     duration: duration, curve: curve);
                                 setState(() {});
-                                filtersController.animateTo(selectedGroup * 50,
+                                filtersController.animateTo(selectedGroup * 100,
                                     duration: const Duration(milliseconds: 500),
                                     curve: Curves.easeIn);
                               },

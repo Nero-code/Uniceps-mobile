@@ -193,6 +193,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
       throw EmptyCacheExeption();
     }
     for (var i in list) {
+      print("DEBUG: GET SUBS TO GYMS: ${i.toJson()}");
       if (i.isSelected) {
         list.remove(i);
         list.insert(0, i);
@@ -204,7 +205,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
   @override
   Future<PlayerInGym> getPlayerInGym(String gymId) async {
     if (await playerProfilesBox.containsKey(gymId)) {
-      final res = await playerProfilesBox.get(gymId)!;
+      final res = playerProfilesBox.get(gymId)!;
       return PlayerInGym.fromJson(res);
     }
     throw EmptyCacheExeption();

@@ -66,16 +66,14 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
       final temp = jsonDecode(res.body);
       // print("res body: ${res.body}");
 
-      print("temp: $temp");
-      print("weights: $weights");
+      // print("temp: $temp");
+      // print("weights: $weights");
 
       //  /////////////////////////////////
       //
       //  CACHE PROGRAM IMAGES BEFORE PARSE
       //
-      (temp['routine_items'] as List).forEach((element) {
-        print("element: $element");
-      });
+
       final images =
           await cacheManager.getAndCacheImages(temp['routine_items']);
       //

@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
@@ -30,12 +31,12 @@ abstract class LocalAuthSource {
 }
 
 class LocalAuthSourceImple implements LocalAuthSource {
-  final Box<Map<dynamic, dynamic>> userBox;
-  final Box<Map<dynamic, dynamic>> playerBox;
-
+  final Box<Map<dynamic, dynamic>> userBox, playerBox;
+  final Future<void> Function() resetBottun;
   const LocalAuthSourceImple({
     required this.userBox,
     required this.playerBox,
+    required this.resetBottun,
   });
 
   @override
@@ -70,33 +71,32 @@ class LocalAuthSourceImple implements LocalAuthSource {
   @override
   Future<void> savePlayerInfo(PlayerModel playerModel) async {
     print(playerModel.toJson());
-    return await playerBox.put(HIVE_PROFILE_BOX, playerModel.toJson());
+    return await playerBox.put(
+      HIVE_PROFILE_BOX,
+      playerModel.toJson(),
+    );
   }
 
   @override
   Future<bool> isLoggedIn() async {
     print("check 1: Inside Local isLoggedIn ");
-    print(
-        " isOpen: ${userBox.isOpen}\n isEmpty: ${userBox.isEmpty}\n length: ${userBox.length}\n keys: ${userBox.keys}");
-    // print(userBox.toString());
-    try {
-      print("try read from db");
-      print(userBox.get("user"));
-      // print(userBox.get(userBox.keys.first));
-    } catch (e) {
-      print(e.toString());
-    }
-    print("check 2: runtimetype");
+
     print(userBox.get(HIVE_USER_BOX)?.toString());
     final user = userBox.get(HIVE_USER_BOX);
 
     print("User in Box: $user");
     if (user == null || !user.containsKey("token")) throw EmptyCacheExeption();
+    final notify = await FirebaseMessaging.instance.getToken();
+    if (notify != user['notify']) {
+      user.addAll({'notify': notify});
+      userBox.put(HIVE_USER_BOX, user);
+    }
     return true;
   }
 
   @override
   Future<void> localLogout() async {
-    await userBox.clear();
+    await FirebaseMessaging.instance.deleteToken();
+    await resetBottun();
   }
 }

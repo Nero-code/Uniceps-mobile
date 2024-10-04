@@ -1,8 +1,6 @@
 {
-  "helloWorld": "مرحبا",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
-  },
+  "hello": "مرحبا, ",
+  
   "welcome": "اهلا بك",
   "signin": "تسجيل الدخول",
   "login": "تسجيل الدخول",
@@ -28,12 +26,15 @@
   "update": "تعديل",
   "save": "حفظ",
   "level": "المستوى:",
+  "apply" : "تطبيق",
+  "search": "بحث",
   
   "logoutAlert": "تسجيل الخروج؟",
   "logoutAlertContents": "انت الأن على وشك تسجيل الخروج, قد تتعرض معلوماتك للحذف, هل انت متأكد؟",
   
 
   "price": "السعر",
+  "discount":"الحسم",
   "status": "الحالة",
   "address": "العنوان",
   "owner": "المالك",
@@ -45,6 +46,9 @@
   "sport": "الرياضة",
   "measurements": "القياسات",
   "language": "اللغة",
+  "calender": "التقويم",
+  "list": "قائمة",
+  "attendenceLog":"سجل الحضور",
 
   "chooseLang": "اختر اللغة:",
   "about": "حول",
@@ -67,8 +71,8 @@
   "rHumerus": "ساعد أيمن",
 
   "legs": "الارجل",
-  "lLeg": "رجل يسرى",
-  "rLeg": "رجل يمنى",
+  "lLeg": "ساق يسرى",
+  "rLeg": "ساق يمنى",
 
   "thighs": "الفخذين",
   "lThigh": "فخذ أيسر",
@@ -96,9 +100,9 @@
 
   "profile": "الحساب",
 
-  "pName": "الاسم:",
+  "pName": "الاسم",
   "pNameError": "الرجاء ادخال الاسم الكامل",
-  "phoneNum": "رقم الهاتف:",
+  "phoneNum": "رقم الهاتف",
   "phoneNumError": "الرجاء ادخال رقم الهاتف",
   "birthDate": "سنة الميلاد:",
   "birthDateError": "الرجاء ادخال سنة الميلاد",
@@ -137,8 +141,13 @@
 
   "errNoInternet":"لا يوجد اتصال بالانترنت",
   "errServerException":"حدث خطأ في الخادم, الرجاء المحاولة لاحقا",
-  "errUnknown":"حدث خطأ غير معروف"
-  
-  
+  "errUnknown":"حدث خطأ غير معروف",
 
+  "endOfSubDate": "تاريخ نهاية الاشتراك",
+  "dayQuete": "ماذا سنستهدف اليوم؟",
+  "letsStart": "هيا لنبدأ...",
+
+  "days":"يوم",
+  "date":"التاريخ"
+ 
 }

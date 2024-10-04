@@ -29,15 +29,15 @@ class GymModel extends Gym {
     print("id:         ${json['id']}");
     print("pid:        ${json['pid'] ?? ""}");
     print("name:       ${json['gym_name']}");
-    print("address:    ${json['address']}");
-    print("logo:       ${json['logo']}");
-    print("ownerName:  ${json['owner_name']}");
-    print("phoneNum:   ${json['phone_number']}");
-    print("telephone:  ${json['telephone']}");
-    print("start:      ${json['start'] ?? ""}");
-    print("end:        ${json['end'] ?? ""}");
-    print("isSelected: ${json['isSelected'] ?? false}");
-    print("isCurrent: ${json['isCurrent'] ?? false}");
+    // print("address:    ${json['address']}");
+    // print("logo:       ${json['logo']}");
+    // print("ownerName:  ${json['owner_name']}");
+    // print("phoneNum:   ${json['phone_number']}");
+    // print("telephone:  ${json['telephone']}");
+    // print("start:      ${json['start'] ?? ""}");
+    // print("end:        ${json['end'] ?? ""}");
+    print("isSelected: ${json['isSelected'] ?? "null"}");
+    print("isCurrent:  ${json['isCurrent'] ?? "null"}");
 
     return GymModel(
       id: json['id'],

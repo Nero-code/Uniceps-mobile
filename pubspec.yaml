@@ -58,6 +58,7 @@ dependencies:
   gradient_circular_progress_indicator: ^0.0.4
   sliding_up_panel: ^2.0.0+1
   google_fonts: ^6.2.1
+  animated_flip_card: ^1.0.2
 
 dev_dependencies:
   flutter_test:

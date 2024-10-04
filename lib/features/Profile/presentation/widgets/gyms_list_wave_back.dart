@@ -29,10 +29,12 @@ class WavePainter extends CustomPainter {
     final paint = Paint()
       ..shader = ui.Gradient.linear(
         Offset.zero,
-        Offset(0, size.height * (1 + curve)),
+        Offset(size.width, size.height),
         [
-          mainBlueDark,
           mainBlueLight,
+          // mainBlue,
+          secondaryBlue,
+          // secondaryBlueLight,
         ],
       );
     canvas.drawPath(path, paint);

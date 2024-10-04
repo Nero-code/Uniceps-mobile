@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/core/Themes/light_theme.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
@@ -26,10 +27,12 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
   final phoneCtl = TextEditingController();
   final birthCtl = TextEditingController();
 
-  final decoration = InputDecoration(
-    border: InputBorder.none,
-    fillColor: background,
-  );
+  String email = '';
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   bool? male;
 
@@ -86,6 +89,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
               phoneCtl.text = state.player.phoneNum;
               birthCtl.text = state.player.birthDate;
               male = state.player.gender == Gender.male;
+
               print(male);
               print("FOUND: Profile already exists");
             }
@@ -109,10 +113,12 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                           children: [
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.13,
-                              child: const Center(
+                              child: Center(
                                 child: Text(
-                                  "osamasda111@gmail.com",
-                                  style: TextStyle(
+                                  state is ProfileLoadedState
+                                      ? state.player.email
+                                      : "",
+                                  style: const TextStyle(
                                       color: Colors.white70,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 12),
@@ -273,7 +279,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                             const SizedBox(height: 10),
                             ActionChip.elevated(
                               backgroundColor:
-                                  Color.fromARGB(255, 61, 170, 184),
+                                  const Color.fromARGB(255, 61, 170, 184),
                               label: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.7,
                                 child: Center(
@@ -287,13 +293,22 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                                   ),
                                 ),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
                                   if (male == null) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
                                             backgroundColor: Colors.red,
                                             content: Text(local.genderError)));
+                                    return;
+                                  }
+                                  if (!await InternetConnectionChecker()
+                                      .hasConnection) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(local.errNoInternet),
+                                      ),
+                                    );
                                     return;
                                   }
                                   // Navigator.pushReplacementNamed(context, ROUTE_HOME);
@@ -308,21 +323,20 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                                   //   ),
                                   // );
                                   print("Player info screen!!");
+
                                   BlocProvider.of<ProfileBloc>(context).add(
                                     ProfileSubmitEvent(
                                       isCreate: isCreate,
                                       player: PlayerModel(
-                                        uid: isCreate
-                                            ? ""
-                                            // : widget.player!.uid,
-                                            : "",
+                                        uid: "",
                                         name: nameCtl.text,
                                         phoneNum: phoneCtl.text,
                                         birthDate: birthCtl.text,
                                         gender: male as bool
                                             ? Gender.male
                                             : Gender.female,
-                                        level: 0,
+                                        level: 0.0,
+                                        email: "",
                                       ),
                                     ),
                                   );

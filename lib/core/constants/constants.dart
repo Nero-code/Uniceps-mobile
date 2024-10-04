@@ -42,7 +42,7 @@ const IMG_VOID = "void.png";
 const IMG_WARNING = "warning.png";
 const IMG_NO_PROGRAM = "no_program.png";
 const IMG_NO_ATTENDENCE = "attenence_err.png";
-const IMG_NO_MEASUREMENTS = "measurments_err.png";
+const IMG_NO_MEASUREMENTS = "measurements_err.png";
 
 ///
 ///
@@ -57,13 +57,14 @@ final HEADERS = {
   "Platform": Platform.isAndroid ? "Android" : "IOS",
   "os-version": Platform.operatingSystemVersion,
   "os": Platform.operatingSystem,
+  "build-number": Platform.operatingSystemVersion,
 };
 
 const FAKE_API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
 const API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
 const HTTP_REGISTER = "/auth";
 const HTTP_VERIFY_CODE = "/auth/verify";
-
+const HTTP_REFRESH = "/refresh";
 const HTTP_HANDSHAKE = "/handshake";
 
 const HTTP_PLAYER_INFO = "/profile";

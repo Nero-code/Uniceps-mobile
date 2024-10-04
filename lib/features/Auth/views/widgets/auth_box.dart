@@ -75,8 +75,10 @@ class _AuthBoxState extends State<AuthBox> {
                 ///   T E X T F I E L D   E M A I L
                 TextFormField(
                   controller: emailCtrl,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(10),
+
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.grey.shade400,

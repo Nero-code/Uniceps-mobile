@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
+import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
 import 'package:uniceps/features/Profile/data/models/measurement_model.dart';
@@ -49,7 +51,10 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
     print("Remote_S profile res statusCode: ${res.statusCode}");
     print("Remote_S profile res body: ${res.body}");
     if (res.statusCode == 200) {
-      return PlayerModel.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+      return PlayerModel.fromJson({
+        ...jsonDecode(res.body),
+        "email": userBox.get(HIVE_USER_BOX)!['email']
+      });
     }
     throw Exception();
   }
@@ -59,11 +64,18 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
   Future<List<MeasurementModel>> getMeasurements() async {
     print("inside getMeasurements");
 
-    final res = await _client.get(Uri.parse("$API$HTTP_MEASURMENTS"), headers: {
+    final res =
+        await _client.get(Uri.parse("$API" "$HTTP_MEASURMENTS"), headers: {
       ...HEADERS,
       "x-access-token": "${userBox.get(HIVE_USER_BOX)!['token']}",
     });
-    print(res.statusCode);
+    print("measurements: ${res.statusCode}");
+    print("measurements: ${res.body}");
+    print("measurements: ${Platform.operatingSystemVersion}");
+    print("measurements: ${{
+      ...HEADERS,
+      // "x-access-token": "${userBox.get(HIVE_USER_BOX)!['token']}",
+    }} ");
     if (res.statusCode == 200) {
       print(res.body);
 
@@ -87,12 +99,16 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
   @override
   Future<List<SubscriptionModel>> getSubs(String gymId, String pid) async {
     print("Profile ->  RemoteS -> getSubs -> URL: /$gymId/$pid");
+
+    if (pid.isEmpty) {
+      throw EmptyCacheExeption();
+    }
     final res =
         await _client.get(Uri.parse("$API$HTTP_SUBSCRIPTIONS/$gymId/$pid"));
     final list = <SubscriptionModel>[];
     print(res.statusCode);
     if (res.statusCode == 200) {
-      print(res.body);
+      print("Subs: ${res.body}");
       print(jsonDecode(res.body).runtimeType);
 
       final subsList = jsonDecode(res.body) as List<dynamic>;
@@ -176,6 +192,10 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
 
   @override
   Future<List<Attendence>> getAllAttendance(String gymId, String pid) async {
+    if (pid.isEmpty) {
+      throw EmptyAttendenceFailure(
+          errorMessage: "No Attendence for gym $gymId");
+    }
     final res = await _client.get(
       Uri.parse("$API$HTTP_PRESENCE/$gymId/$pid"),
       headers: {
@@ -263,7 +283,11 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
         await _client.get(Uri.parse("$API" "$HTTP_PLAYER" "/$gymId" "/$pid"));
     print(res.statusCode);
     print(res.body);
-    final map = jsonDecode(res.body);
-    return PlayerInGym.fromJson(map);
+
+    if (res.statusCode == 200) {
+      final map = jsonDecode(res.body);
+      return PlayerInGym.fromJson(map);
+    }
+    throw NotFoundException();
   }
 }

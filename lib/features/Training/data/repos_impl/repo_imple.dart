@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
@@ -34,7 +35,7 @@ class TrainingRepoImple implements TrainingRepo {
         final temp = await remote.getSubscribedToGyms();
         final myGems = await local.cacheSubsToGyms(temp);
         final currentGym = myGems.firstWhere(
-          (element) => element.isSelected,
+          (element) => element.isCurrent,
           orElse: () => myGems.first,
         );
         final weights = await local.getWeights();
@@ -53,6 +54,8 @@ class TrainingRepoImple implements TrainingRepo {
         print("NoGymSpecified EXC");
         return Left(
             NoGymSpecifiedFailure(errMsg: "No handshakes found for player"));
+      } on ClientException {
+        return Left(NoInternetConnectionFailure(errMsg: ""));
       } on ServerException {
         print("Server EXC");
         return Left(ServerFailure(errMsg: "Error happened serverside"));
@@ -94,7 +97,7 @@ class TrainingRepoImple implements TrainingRepo {
     print("tp.list : ${tp!.exercises.length}");
     List<Exercise> list = [];
     for (var i in tp!.exercises) {
-      print("${i.muscleGroup} : $filter");
+      // print("${i.muscleGroup} : $filter");
       if (i.muscleGroup == filter) {
         list.add(i);
       }
@@ -164,10 +167,15 @@ class TrainingRepoImple implements TrainingRepo {
       try {
         print("Debug: 2");
         final res = await remote.getSubscribedToGyms();
-
-        print("Debug ${res}");
         final list = await local.cacheSubsToGyms(res);
+
         return Right(list);
+      } on ClientException {
+        return Left(NoInternetConnectionFailure(errMsg: ""));
+      } on ServerException {
+        return Left(ServerFailure(errMsg: ""));
+      } on EmptyCacheExeption {
+        return Left(NoGymSpecifiedFailure(errMsg: "errMsg"));
       } catch (e) {
         return Left(GeneralPurposFailure(errorMessage: e.toString()));
       }
@@ -190,6 +198,10 @@ class TrainingRepoImple implements TrainingRepo {
       final res = await local.setSelectedGym(gymId);
       print("local Responce: $res");
       return Right(res);
+    } on ClientException {
+      return Left(NoInternetConnectionFailure(errMsg: ""));
+    } on ServerException {
+      return Left(ServerFailure(errMsg: ""));
     } catch (e) {
       print(e.toString());
       return Left(GeneralPurposFailure(errorMessage: "error: ${e.toString()}"));
@@ -219,6 +231,10 @@ class TrainingRepoImple implements TrainingRepo {
         "lastWaight": val.values.first,
         "isCompleted": isCompl,
       }));
+    } on ClientException {
+      return Left(NoInternetConnectionFailure(errMsg: ""));
+    } on ServerException {
+      return Left(ServerFailure(errMsg: ""));
     } catch (e) {
       print("Training -> RepoImle -> local saveNewWeight: ${e.toString()}");
       return Left(DatabaseFailure(errorMsg: e.toString()));

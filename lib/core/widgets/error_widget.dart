@@ -3,15 +3,17 @@ import 'package:uniceps/core/errors/failure.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 ///   Error widget without image or refresh
-class ErrorWidget extends StatelessWidget {
-  const ErrorWidget({
+class ErrorScreenWidget extends StatelessWidget {
+  const ErrorScreenWidget({
     super.key,
     required this.f,
     required this.callback,
+    this.gapSize = 5.0,
   });
 
   final Failure f;
   final VoidCallback callback;
+  final double gapSize;
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +21,10 @@ class ErrorWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(errorToTextMapper(context, f)),
+        SizedBox(height: gapSize),
         IconButton(
           onPressed: callback,
-          icon: const Icon(Icons.refresh),
+          icon: const Icon(Icons.refresh_rounded),
         ),
       ],
     );

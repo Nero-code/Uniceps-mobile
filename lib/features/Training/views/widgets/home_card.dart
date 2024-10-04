@@ -9,6 +9,7 @@ import 'package:uniceps/features/Profile/domain/entities/gym.dart';
 // import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeCard extends StatelessWidget {
   const HomeCard({
@@ -27,6 +28,7 @@ class HomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.25,
@@ -196,6 +198,11 @@ class HomeCard extends StatelessWidget {
                                   "$HTTP_GYMS"
                                   "$HTTP_GYM_LOGO"
                                   "/${myGym.id}",
+                              imageBuilder: (context, imageProvider) =>
+                                  ClipRRect(
+                                child: Image(image: imageProvider),
+                                borderRadius: BorderRadius.circular(50),
+                              ),
                               errorWidget: (context, url, error) {
                                 return const Image(
                                   image: AssetImage(
@@ -256,7 +263,7 @@ class HomeCard extends StatelessWidget {
                             //   ),
                             // ),
                             Text(
-                              "تاريخ نهاية الاشتراك:",
+                              local.endOfSubDate,
                               style: const TextStyle(
                                 color: Colors.black45,
                                 // fontWeight: FontWeight.bold,

@@ -1,8 +1,6 @@
 {
-  "helloWorld": "Hello World!",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
-  },
+  "hello": "Hi, ",
+  
   "welcome": "Welcome",
   "signin": "Sign in",
   "login": "Login",
@@ -28,11 +26,14 @@
   "update": "Update",
   "save": "Save",
   "level": "Level:",
+  "apply" : "Apply",
+  "search": "Search",
   
   "logoutAlert": "Logout?",
   "logoutAlertContents": "You are about to Logout of the app some of your data may be lost, Are you sure?",
   
   "price": "Price",
+  "discount":"Discount",
   "status": "Status",
   "address": "Address",
   "owner": "owner",
@@ -43,6 +44,10 @@
   "sport": "Sport",
   "measurements": "Measurements",
   "language": "Language",
+  "calender":"Calender",
+  "list":"List",
+  "attendenceLog":"Attendence Log",
+
   "chooseLang": "Choose Language:",
   "about": "About",
   "gyms": "Gyms",
@@ -89,9 +94,9 @@
   "error": "something went wrong",
   "profile": "Profile",
 
-  "pName": "Name:",
+  "pName": "Name",
   "pNameError": "Please Enter your Full name",
-  "phoneNum": "Phone Number:",
+  "phoneNum": "Phone Number",
   "phoneNumError": "Please Enter your Phone Number",
   "birthDate": "Date of Birth:",
   "birthDateError": "Please Enter your Year of Birth",
@@ -130,5 +135,12 @@
 
   "errNoInternet":"No Internet Available",
   "errServerException":"An error occurred from our side, try again later",
-  "errUnknown":"Unknown error occurred"
+  "errUnknown":"Unknown error occurred",
+
+  "endOfSubDate": "End of subscription Date",
+  "dayQuete": "what're you going to train today?",
+  "letsStart": "Let's Start...",
+
+  "days":"Day(s)",
+  "date":"التاريخ"
 }

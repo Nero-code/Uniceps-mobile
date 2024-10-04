@@ -62,7 +62,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
             if (state.list.isEmpty) {
               // return Center(child: Text(AppLocalizations.of(context)!.empty));
               return ReloadScreenWidget(
-                  f: EmptyCacheFailure(errorMessage: ""),
+                  f: EmptyCacheFailure(errorMessage: "asad"),
                   callBack: () {
                     BlocProvider.of<MeasurmentBloc>(context)
                         .add(GetMeasurementsEvent());

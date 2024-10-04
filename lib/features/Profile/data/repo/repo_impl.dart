@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
@@ -34,6 +35,12 @@ class ProfileRepoImpl implements ProfileRepo {
         final res = await remote.getMeasurements();
         await local.saveMeasurements(res);
         return Right(res);
+      } on EmptyCacheExeption {
+        return const Left(EmptyMeasureFailure(errorMessage: ""));
+      } on ClientException {
+        return Left(NoInternetConnectionFailure(errMsg: ""));
+      } on ServerException {
+        return Left(ServerFailure(errMsg: ""));
       } catch (e) {
         print(e.toString());
         return Left(GeneralPurposFailure(errorMessage: "something went wrong"));
@@ -43,7 +50,8 @@ class ProfileRepoImpl implements ProfileRepo {
         final res = await local.getMeasurements();
         return Right(res);
       } on EmptyCacheExeption {
-        return Left(EmptyCacheFailure(errorMessage: "No Measurments saved"));
+        return const Left(
+            EmptyCacheFailure(errorMessage: "No Measurments saved"));
       } catch (e) {
         print(e.toString());
         return Left(
@@ -62,6 +70,10 @@ class ProfileRepoImpl implements ProfileRepo {
         await local.savePlayerData(res);
         print("profile res: $res");
         return Right(res);
+      } on ClientException {
+        return Left(NoInternetConnectionFailure(errMsg: ""));
+      } on ServerException {
+        return Left(ServerFailure(errMsg: ""));
       } catch (e) {
         print(e.toString());
         return Left(GeneralPurposFailure(errorMessage: ""));
@@ -74,7 +86,7 @@ class ProfileRepoImpl implements ProfileRepo {
         return Right(res);
       } on EmptyCacheExeption {
         print("No RECORD");
-        return Left(EmptyCacheFailure(errorMessage: "No records"));
+        return const Left(EmptyCacheFailure(errorMessage: "No records"));
       } catch (e) {
         print("Error: $e");
         return Left(
@@ -86,18 +98,6 @@ class ProfileRepoImpl implements ProfileRepo {
       }
     }
   }
-
-  // @override
-  // Future<Either<Failure, Unit>> changeLanguage() async {
-  //   if (await checker.hasConnection) {
-  //     try {
-  //       return const Right(unit);
-  //     } catch (e) {
-  //       return Left(GeneralPurposFailure(errorMessage: ""));
-  //     }
-  //   }
-  //   return Left(GeneralPurposFailure(errorMessage: ""));
-  // }
 
   @override
   Future<Either<Failure, List<Subscription>>> getSubscriptions(
@@ -113,8 +113,10 @@ class ProfileRepoImpl implements ProfileRepo {
             ServerFailure(errMsg: "ServerF! |> Profile -> repo -> getSubs"));
       } on EmptyCacheExeption {
         print("Empty Execption");
-        return Left(EmptyCacheFailure(
+        return Left(EmptySubsFailure(
             errorMessage: "EmptyCacheF! |> Profile -> repo -> getSubs"));
+      } on ClientException {
+        return Left(NoInternetConnectionFailure(errMsg: ""));
       } catch (e) {
         print("General Execption"
             "\n"
@@ -133,7 +135,7 @@ class ProfileRepoImpl implements ProfileRepo {
         return Right(res);
       } on EmptyCacheExeption {
         print("LOCAL_S --> getSubs --> EmptyCacheExeption");
-        return Left(EmptyCacheFailure(
+        return Left(EmptySubsFailure(
             errorMessage: "no Subscriptions found for gym: $gymId"));
       } catch (e) {
         print("LOCAL_S --> getSubs --> Error: $e");
@@ -156,6 +158,7 @@ class ProfileRepoImpl implements ProfileRepo {
         final localRes = await local.getSubscribedToGyms();
         final list = <GymModel>[];
         for (var i in localRes) {
+          print("DEBUG: GETGYMS: ${i.toJson()}");
           var map = i.toJson();
           map.addAll({"isSelected": true});
           final temp = GymModel.fromJson(
@@ -171,15 +174,21 @@ class ProfileRepoImpl implements ProfileRepo {
         // }
         print("before remove: ${res.length}");
         for (var gym in list) {
-          res.removeWhere((e) => e.id == gym.id);
-        }
-
-        print("after remove: ${res.length}");
-        for (var gym in list) {
-          res.insert(0, gym);
+          res.forEach((e) {
+            if (e.id == gym.id) {
+              res.remove(e);
+              res.insert(0, gym);
+            }
+          });
         }
 
         return Right(res);
+      } on ServerException {
+        return Left(ServerFailure(errMsg: ""));
+      } on EmptyCacheExeption {
+        return const Left(EmptyGymsListFailure(errorMessage: ""));
+      } on ClientException {
+        return Left(NoInternetConnectionFailure(errMsg: ""));
       } catch (e) {
         return Left(DatabaseFailure(errorMsg: "Error on fetching data"));
       }
@@ -189,8 +198,8 @@ class ProfileRepoImpl implements ProfileRepo {
         final localRes = await local.getSubscribedToGyms();
         final list = <GymModel>[];
         for (var i in localRes) {
-          var map = i.toJson();
-          map.addAll({"isSelected": true});
+          // var map = i.toJson();
+          // map.addAll({"isSelected": true});
           final temp = GymModel.fromJson(
               i.toJson()..update("isSelected", (value) => true));
 
@@ -198,16 +207,18 @@ class ProfileRepoImpl implements ProfileRepo {
         }
         print("before remove: ${res.length}");
         for (var gym in list) {
-          res.removeWhere((e) => e.id == gym.id);
+          res.forEach((e) {
+            if (e.id == gym.id) {
+              res.remove(e);
+              res.insert(0, gym);
+            }
+          });
         }
-
         print("after remove: ${res.length}");
-        for (var gym in list) {
-          res.insert(0, gym);
-        }
+
         return Right(res);
       } on EmptyCacheExeption {
-        return Left(EmptyCacheFailure(errorMessage: "Empty Cache"));
+        return const Left(EmptyCacheFailure(errorMessage: "Empty Cache"));
       } catch (e) {
         return Left(GeneralPurposFailure(errorMessage: "Unknown Error"));
       }
@@ -233,6 +244,8 @@ class ProfileRepoImpl implements ProfileRepo {
         await local.savePlayerData(pm);
         print("SubmitProfile --> Check 3:");
         return Right(playerModel);
+      } on ClientException {
+        return Left(NoInternetConnectionFailure(errMsg: ""));
       } on ServerException {
         print("Submit Profile --> ServerEXception");
         return Left(ServerFailure(errMsg: "Server Error"));
@@ -258,6 +271,8 @@ class ProfileRepoImpl implements ProfileRepo {
         return Right(res);
       } on NoAttendenceLogFoundException {
         return const Left(NoAttendenceFoundFailure("not a member in the gym"));
+      } on ClientException {
+        return Left(NoInternetConnectionFailure(errMsg: ""));
       } on ServerException {
         return Left(ServerFailure(errMsg: "Error on ServerSide"));
       } catch (e) {
@@ -290,6 +305,8 @@ class ProfileRepoImpl implements ProfileRepo {
         return Right(list);
       } on NoGymSpecifiedException {
         return Left(NoGymSpecifiedFailure(errMsg: "NO Handshakes Found"));
+      } on ClientException {
+        return Left(NoInternetConnectionFailure(errMsg: ""));
       } on ServerException {
         return Left(ServerFailure(errMsg: ""));
       } catch (e) {
@@ -318,6 +335,8 @@ class ProfileRepoImpl implements ProfileRepo {
     try {
       final list = await local.getSubscribedToGyms();
       pid = list.firstWhere((gym) => gym.id == gymId).pid;
+    } on EmptyCacheExeption {
+      return Left(NoGymSpecifiedFailure(errMsg: "errMsg"));
     } catch (e) {
       print("Gym Not Found, Therefor not a member");
       return Right(PlayerInGym(gymId: gymId, balance: 0.0, subs: 0));
@@ -330,6 +349,10 @@ class ProfileRepoImpl implements ProfileRepo {
         final res = PlayerInGym(gymId: gymId, balance: player.balance, subs: 0);
         await local.savePlayerInGym(res);
         return Right(res);
+      } on NotFoundException {
+        return Left(NotFoundFailure(errMsg: ""));
+      } on ClientException {
+        return Left(NoInternetConnectionFailure(errMsg: ""));
       } catch (e) {
         return Right(PlayerInGym(gymId: gymId, balance: 0.0, subs: 0));
       }

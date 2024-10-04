@@ -43,7 +43,7 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     }
     print("training Program not null!");
     for (var i in lastWBox.keys) {
-      print("weight: ${lastWBox.get(i)}");
+      // print("weight: ${lastWBox.get(i)}");
       weights.addAll({"$i": lastWBox.get(i) ?? 0});
     }
     print("routine: ${routine.entries}");
@@ -64,7 +64,7 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     for (var i in lastWBox.keys) {
       weights.addAll({"$i": lastWBox.get(i) as double});
     }
-    print("weights: $weights");
+    // print("weights: $weights");
     return weights;
   }
 
@@ -96,7 +96,13 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
         list.insert(0, i);
       }
     }
-    print("Here");
+    for (var i in list) {
+      if (i.isCurrent) {
+        list.remove(i);
+        list.insert(0, i);
+        break;
+      }
+    }
     return list;
   }
 
@@ -111,13 +117,14 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     print("LocalList: ${localList.length}");
     for (var i in list) {
       if (localList.contains(i)) {
-        bool isSelected = false;
-
         final map = i.toJson();
-        if (localList[localList.indexOf(i)].isSelected) {
-          isSelected = true;
-        }
-        map.addAll({"isSelected": isSelected});
+
+        map.addAll(
+          {
+            "isSelected": localList[localList.indexOf(i)].isSelected,
+            "isCurrent": localList[localList.indexOf(i)].isCurrent,
+          },
+        );
         final updatedGym = GymModel.fromJson(map);
         print("Removing GYMMODEL ITEM: " "${localList.remove(i)}");
         localList.add(updatedGym);
@@ -139,15 +146,17 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     print("DEBUG: SET 2");
     final List<GymModel> list = [];
     for (var key in myGyms.keys) {
-      print("DEBUG: SET 3");
+      print("DEBUG: SET 3 isCurrent: ${myGyms.get(key)!['id'] == gymId}");
       await myGyms.put(
         key,
         {
           ...myGyms.get(key)!,
-          "isSelected": myGyms.get(key)!['id'] == gymId,
-          "isCurent": myGyms.get(key)!['id'] == gymId,
+          // "isSelected": myGyms.get(key)!['id'] == gymId,
+          "isCurrent": myGyms.get(key)!['id'] == gymId,
         },
       );
+      print(
+          "aasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd: ${myGyms.get(key)}");
       list.add(GymModel.fromJson(myGyms.get(key)!));
       print("DEBUG: SET 4");
     }
