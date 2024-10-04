@@ -142,5 +142,6 @@
   "letsStart": "Let's Start...",
 
   "days":"Day(s)",
-  "date":"التاريخ"
+  "date":"Date",
+  "availableGyms": "Available Gyms"
 }

@@ -7,12 +7,15 @@ class MeasureWidget3 extends StatelessWidget {
     required this.title,
     required this.image,
     required this.value,
+    required this.isLoading,
     this.isCm = true,
   });
 
   final String title, image;
   final double value;
-  final bool isCm;
+  final bool isCm, isLoading;
+
+  final shrinkSize = 50.0;
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +37,15 @@ class MeasureWidget3 extends StatelessWidget {
             ),
           ),
         ),
-        Text(title),
-        Text(
-          "${intl.NumberFormat("###,###.#").format(value)} ${isCm ? "Cm" : "Kg"}",
-          textDirection: TextDirection.ltr,
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(title),
+            Text(
+              "${intl.NumberFormat("###,###.#").format(value)} ${isCm ? "Cm" : "Kg"}",
+              textDirection: TextDirection.ltr,
+            ),
+          ],
         ),
       ],
     );

@@ -60,8 +60,9 @@ final HEADERS = {
   "build-number": Platform.operatingSystemVersion,
 };
 
-const FAKE_API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
-const API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
+// const FAKE_API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
+// const API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
+const API = "https://uniceps.trio-verse.com/api/v1";
 const HTTP_REGISTER = "/auth";
 const HTTP_VERIFY_CODE = "/auth/verify";
 const HTTP_REFRESH = "/refresh";

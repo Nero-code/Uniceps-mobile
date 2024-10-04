@@ -22,18 +22,20 @@ class SettingsTile2 extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Material(
-        elevation: 2,
-        borderRadius: BorderRadius.circular(35),
+        // elevation: 2,
+        borderRadius: BorderRadius.circular(10),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(35),
-            // color: backColor,
-            color: Theme.of(context).colorScheme.secondary.withAlpha(10),
-            // border: Border.all(),
+            borderRadius: BorderRadius.circular(15),
+            // color: Colors.white,
+            // color: Theme.of(context).colorScheme.secondary.withAlpha(10),
+            border: Border.all(
+              color: Color(0xFFCCCCCC),
+            ),
           ),
           padding: const EdgeInsets.all(1.0),
           child: InkWell(
-            borderRadius: BorderRadius.circular(35),
+            borderRadius: BorderRadius.circular(10),
             onTap: onPressed,
             child: Padding(
               padding: const EdgeInsets.all(8.0),

@@ -181,6 +181,7 @@ class MyApp extends StatelessWidget {
             ),
           );
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             navigatorKey: NavigatorKey.navigatorKey,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,

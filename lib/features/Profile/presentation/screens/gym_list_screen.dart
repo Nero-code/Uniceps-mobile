@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
-import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
 import 'package:uniceps/features/Profile/domain/entities/gym.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/screens/gym_profile_2.dart';
-import 'package:uniceps/features/Profile/presentation/screens/gym_profile_screen.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/gym_logo_widget.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/gyms_list_wave_back.dart';
 import 'package:uniceps/features/Training/views/widgets/my_gym_widget.dart';
@@ -146,7 +143,7 @@ class _GymListScreenState extends State<GymListScreen> {
                           padding: const EdgeInsets.only(
                               right: 15.0, left: 8.0, top: 8.0, bottom: 8.0),
                           child: Text(
-                            "المنضمون لنا",
+                            local.availableGyms,
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontSize: 12,

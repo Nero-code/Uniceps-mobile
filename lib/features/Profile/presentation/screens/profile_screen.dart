@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
@@ -11,7 +10,6 @@ import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart'
 // import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
 // import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/screens/measurement_screen_2.dart';
 import 'package:uniceps/features/Profile/presentation/screens/measurement_screen_3.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/profile_back_circle.dart';
 // import 'package:uniceps/features/Profile/presentation/widgets/settings_tile.dart';
