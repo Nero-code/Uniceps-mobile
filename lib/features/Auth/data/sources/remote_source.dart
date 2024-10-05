@@ -23,6 +23,7 @@ abstract class RemoteAuthSource {
   Future<void> requestPasswordChange(String newPass);
   Future<PlayerModel> getPlayerInfo();
   // Future<bool> isLoggedIn();
+  Future<int> sendNotifyToken(String token);
 }
 
 class RemoteAuthSourceImpl implements RemoteAuthSource {
@@ -83,14 +84,19 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
         body: jsonEncode(
             {"otp": code, "email": email, "notify_token": notifyToken}));
     print("VerifyCode --> res.statusCode : ${res.statusCode}");
-    if (res.statusCode == 200) {
+    if (res.statusCode == 200 || res.statusCode == 201) {
       //
       // Profile Exists
       //
       print(res.body);
-      print(
-          "VerifyCode --> jsonDecode(res.body)['token'] : ${jsonDecode(res.body)['token']}");
-      return UserModel(id: "id", token: jsonDecode(res.body)['token']);
+      print("VerifyCode --> jsonDecode(res.body)['token'] : "
+          "${jsonDecode(res.body)['token']}");
+      return UserModel(
+        id: "id",
+        token: jsonDecode(res.body)['token'],
+        email: email,
+        notifyToken: notifyToken,
+      );
     } else if (res.statusCode == 201) {
       //
       //Profile does not Exist!!
@@ -98,7 +104,11 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
       // return jsonDecode(res.body)['token'];
 
       print(res.body);
-      return UserModel(id: "id", token: jsonDecode(res.body)['token']);
+      return UserModel(
+        id: "id",
+        token: jsonDecode(res.body)['token'],
+        email: email,
+      );
     }
 
     print("END   FUNC: verifyCodeSent(): RES: ${res.statusCode}");
@@ -139,7 +149,12 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
     });
     if (res.statusCode == 200) {
       final temp = jsonDecode(res.body);
-      return PlayerModel.fromJson(temp);
+      print("PlayerProfile: ${{
+        ...temp,
+        "email": userBox.get(HIVE_USER_BOX)!['email']
+      }}");
+      return PlayerModel.fromJson(
+          {...temp, "email": userBox.get(HIVE_USER_BOX)!['email']});
     }
     throw ServerException();
   }
@@ -171,6 +186,21 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
         ...?headers,
       },
     );
+  }
+
+  @override
+  Future<int> sendNotifyToken(String token) async {
+    final res = await client.post(
+      Uri.parse(
+        "$API" " $HTTP_REGISTER" "$HTTP_REFRESH",
+      ),
+      headers: {
+        ...HEADERS,
+        "x-access-token": userBox.get(HIVE_USER_BOX)!['token'],
+      },
+    );
+    print("${res.statusCode}");
+    return res.statusCode;
   }
 }
 

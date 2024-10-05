@@ -7,12 +7,14 @@ class SettingTile extends StatelessWidget {
     required this.onPressed,
     required this.isRtl,
     required this.icon,
+    this.color = Colors.white,
   });
 
   final Widget icon;
   final String title;
   final VoidCallback onPressed;
   final bool isRtl;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,7 @@ class SettingTile extends StatelessWidget {
       height: 50,
       child: Material(
         elevation: 3,
+        color: color,
         child: InkWell(
           onTap: onPressed,
           child: Padding(

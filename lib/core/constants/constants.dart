@@ -1,10 +1,17 @@
 // ignore_for_file: constant_identifier_names
 
 import 'dart:io';
-
 import 'package:intl/intl.dart';
 
+///
+///   A P P   C O N S T A N T S
+///
+
 const APP_NAME = 'Uniceps';
+
+const APP_LOGO = "images/logo/Logo.png";
+const APP_LOGO_DARK = "images/logo/Logo-dark.png";
+const APP_LOGO_LIGHT = "images/logo/Logo-light.png";
 
 enum Gender { male, female }
 
@@ -14,16 +21,28 @@ enum ThemeType { light, dark }
 
 const List<String> languageCodes = ['ar', 'en'];
 
-enum MuscleGroup {
-  arms,
-  legs,
-  abdomin,
-  shoulders,
-  chest,
-  tripez,
-}
-
 const DATE_PATTERN = "dd/MM/yyyy";
+
+///   A P P   I M A G E S
+
+const PHOTOS_PATH = "images/photos/";
+
+const IMG_BACK = "back.png";
+const IMG_BLANK = "blank.png";
+const IMG_CONTROL_PANAL = "control_panal.png";
+const IMG_DEPARTING = "departing.png";
+const IMG_DESKTOP = "desktop.png";
+const IMG_EMPTY = "empty.png";
+const IMG_EMPTY_2 = "empty_2.png";
+const IMG_MEMORY = "memory.png";
+const IMG_NO_INTERNET = "noInternet.png";
+const IMG_SERVER_ERROR = "server_error.png";
+const IMG_SERVER_DOWN = "server_down.png";
+const IMG_VOID = "void.png";
+const IMG_WARNING = "warning.png";
+const IMG_NO_PROGRAM = "no_program.png";
+const IMG_NO_ATTENDENCE = "attenence_err.png";
+const IMG_NO_MEASUREMENTS = "measurements_err.png";
 
 ///
 ///
@@ -38,16 +57,19 @@ final HEADERS = {
   "Platform": Platform.isAndroid ? "Android" : "IOS",
   "os-version": Platform.operatingSystemVersion,
   "os": Platform.operatingSystem,
+  "build-number": Platform.operatingSystemVersion,
 };
 
-const FAKE_API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
-const API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
+// const FAKE_API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
+// const API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
+const API = "https://uniceps.trio-verse.com/api/v1";
 const HTTP_REGISTER = "/auth";
 const HTTP_VERIFY_CODE = "/auth/verify";
-
+const HTTP_REFRESH = "/refresh";
 const HTTP_HANDSHAKE = "/handshake";
 
 const HTTP_PLAYER_INFO = "/profile";
+const HTTP_PLAYER = "/player";
 
 const HTTP_LOGIN = "";
 const HTTP_FORGOT_PASSWORD = "";
@@ -85,6 +107,7 @@ const ROUTE_GYMS_LIST = '/home/profile/gyms_list';
 const ROUTE_EXERCISE = '/home/exercise';
 const ROUTE_SUBSCRIPTIONS = '/home/profile/subscriptions';
 const ROUTE_MEASUREMENTS = '/home/profile/measurements';
+const ROUTE_ABOUT = "/home/profile/about";
 
 ///
 ///   A U X I L I A R Y   R O U T E S
@@ -158,14 +181,17 @@ const HIVE_MEASURE_BOX = "measurements";
 //
 // ////////////////////////////////////////////////////////////////////////// //
 
+/// Pattern: [dd/MM/yyyy]
 String dateToString(DateTime date) {
   return DateFormat("dd/MM/yyyy").format(date);
 }
 
+/// Pattern: [dd/MM/yyyy]
 DateTime stringToDate(String source) {
   return DateFormat("dd/MM/yyyy").parse(source);
 }
 
+/// Exercises image url parser...
 String imgUrlParser(int muscleG, String imgName) {
   return "$API"
       "$HTTP_TRAINING_PROGRAM"

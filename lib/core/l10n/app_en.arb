@@ -1,8 +1,6 @@
 {
-  "helloWorld": "Hello World!",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
-  },
+  "hello": "Hi, ",
+  
   "welcome": "Welcome",
   "signin": "Sign in",
   "login": "Login",
@@ -28,22 +26,32 @@
   "update": "Update",
   "save": "Save",
   "level": "Level:",
+  "apply" : "Apply",
+  "search": "Search",
   
   "logoutAlert": "Logout?",
   "logoutAlertContents": "You are about to Logout of the app some of your data may be lost, Are you sure?",
   
   "price": "Price",
+  "discount":"Discount",
   "status": "Status",
   "address": "Address",
   "owner": "owner",
   "telephone": "Telephone",
   "subscription": "Subscription",
+  "subscriptions": "Subscriptions",
+  "balance": "Balance",
   "sport": "Sport",
   "measurements": "Measurements",
   "language": "Language",
+  "calender":"Calender",
+  "list":"List",
+  "attendenceLog":"Attendence Log",
+
   "chooseLang": "Choose Language:",
   "about": "About",
   "gyms": "Gyms",
+  "trainer": "Trainer",
 
   "height": "Height",
   "heightError": "Please put a valid Height",
@@ -82,13 +90,13 @@
   "empty": "No Records to show",
   "emptySubs": "No Subscriptions",
   "emptyMeasure": "No Measurements",
-  "emptyExc": "No Exercises",
+  "emptyExcercises": "No Exercises",
   "error": "something went wrong",
   "profile": "Profile",
 
-  "pName": "Name:",
+  "pName": "Name",
   "pNameError": "Please Enter your Full name",
-  "phoneNum": "Phone Number:",
+  "phoneNum": "Phone Number",
   "phoneNumError": "Please Enter your Phone Number",
   "birthDate": "Date of Birth:",
   "birthDateError": "Please Enter your Year of Birth",
@@ -100,6 +108,40 @@
 
   "payment": "Payment",
   "paid": "Paid",
-  "notPaid": "Not Paid"
+  "notPaid": "Not Paid",
 
+  "versionInfo": "Version Info",
+  "version": "Version",
+  "versionDate": "Release Date",
+  "developers" : "Developers",
+  
+  "support": "Support",
+  "supportPage": "Our Page",
+  "faqs": "FAQs",
+  
+  "privacy": "Privacy",
+  "privacyPolicy": "Privacy Policy",
+  "userAgreement": "User Agreement",
+  "termsOfUse": "Terms of use",
+
+  "emptySubscriptions":"No Subscriptions yet",
+  "emptyMeasurements":"No Measurements yet",
+  "emptyExercisesList":"No Exercises in this Group",
+  "emptyGymsList":"No Gyms Available",
+  "emptyHandshakes":"you are not a member of any gym",
+  "emptyTriningDaysMap":"No Training Program yet",
+  "emptyHomeCard":"No Gym Specified, select a gym to load data",
+  "emptyAttendence":"Not a member",
+
+  "errNoInternet":"No Internet Available",
+  "errServerException":"An error occurred from our side, try again later",
+  "errUnknown":"Unknown error occurred",
+
+  "endOfSubDate": "End of subscription Date",
+  "dayQuete": "what're you going to train today?",
+  "letsStart": "Let's Start...",
+
+  "days":"Day(s)",
+  "date":"Date",
+  "availableGyms": "Available Gyms"
 }

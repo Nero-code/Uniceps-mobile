@@ -8,8 +8,8 @@ sealed class SubsEvent extends Equatable {
 }
 
 final class GetSubsEvent extends SubsEvent {
-  final String gymId;
-  const GetSubsEvent({required this.gymId});
+  final String gymId, pid;
+  const GetSubsEvent({required this.gymId, required this.pid});
 
   @override
   List<Object> get props => [gymId];

@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:uniceps/core/constants/constants.dart';
 
 class Player extends Equatable {
-  final String name, phoneNum, birthDate, uid;
+  final String name, phoneNum, birthDate, uid, email;
   final Gender gender;
   final double level;
 
@@ -13,6 +13,7 @@ class Player extends Equatable {
     required this.birthDate,
     required this.gender,
     required this.level,
+    required this.email,
   });
 
   // Map<String, dynamic> toJson() => {

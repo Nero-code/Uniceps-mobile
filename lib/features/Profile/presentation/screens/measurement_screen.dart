@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/core/widgets/reload_wiget.dart';
+import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
 // import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/measure_widget.dart';
@@ -36,7 +37,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
     "ForeArm.jpg",
     "Thigh.jpg",
     "Leg.jpg",
-    'Hips.jpg',
+    'hips.jpg',
   ];
 
   int currentPage = 0;
@@ -52,19 +53,26 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
       ),
       body: BlocBuilder<MeasurmentBloc, MeasurmentState>(
         builder: (context, state) {
+          print(state.runtimeType);
           if (state is MeasurmentInitial) {
             BlocProvider.of<MeasurmentBloc>(context)
                 .add(GetMeasurementsEvent());
             return const Center(child: CircularProgressIndicator());
           } else if (state is MeasurementLoadedState) {
             if (state.list.isEmpty) {
-              return Center(child: Text(AppLocalizations.of(context)!.empty));
+              // return Center(child: Text(AppLocalizations.of(context)!.empty));
+              return ReloadScreenWidget(
+                  f: EmptyCacheFailure(errorMessage: "asad"),
+                  callBack: () {
+                    BlocProvider.of<MeasurmentBloc>(context)
+                        .add(GetMeasurementsEvent());
+                  });
             }
             return Column(
               children: [
                 SizedBox(
                   child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 10),
+                    margin: const EdgeInsets.symmetric(vertical: 10),
                     child: Row(
                       children: [
                         Expanded(
@@ -138,7 +146,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                       MeasureWidget(
                         title: AppLocalizations.of(context)!.nick,
                         isSymmetric: true,
-                        lValue: state.list[currentPage].nick,
+                        lValue: state.list[currentPage].neck,
                         image: trImg[2],
                       ),
                       MeasureWidget(
@@ -196,21 +204,15 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
             );
             // "Unexpected Error occourd!"
           } else if (state is MeasurementErrorState) {
+            print("Measurement Failure: ${state.f.runtimeType}");
             return Center(
-              child: ReloadScreenWiget(
-                  image: const Icon(
-                    Icons.error,
-                    size: 50,
-                    color: Colors.grey,
-                  ),
-                  message: Text(AppLocalizations.of(context)!.error),
-                  callBack: IconButton(
-                    onPressed: () {
-                      BlocProvider.of<MeasurmentBloc>(context)
-                          .add(GetMeasurementsEvent());
-                    },
-                    icon: const Icon(Icons.refresh_outlined),
-                  )),
+              child: ReloadScreenWidget(
+                f: state.f,
+                callBack: () {
+                  BlocProvider.of<MeasurmentBloc>(context)
+                      .add(GetMeasurementsEvent());
+                },
+              ),
             );
           } else {
             return const Center(child: CircularProgressIndicator());

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:uniceps/features/Auth/views/widgets/gender_selection_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/widgets/profile_back_circle.dart';
 
 class PlayerInfoScreen extends StatefulWidget {
   const PlayerInfoScreen({super.key, /**required this.onSave,*/ this.player});
@@ -24,6 +26,13 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
   final nameCtl = TextEditingController();
   final phoneCtl = TextEditingController();
   final birthCtl = TextEditingController();
+
+  String email = '';
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   bool? male;
 
@@ -45,11 +54,11 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-          systemNavigationBarColor: Theme.of(context).colorScheme.background,
-          statusBarIconBrightness: Brightness.dark),
-    );
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   SystemUiOverlayStyle(
+    //       systemNavigationBarColor: Theme.of(context).colorScheme.background,
+    //       statusBarIconBrightness: Brightness.dark),
+    // );
     // final args = ModalRoute.of(context)!.settings.arguments as PlayerArguments;
     final local = AppLocalizations.of(context);
     print("Build()");
@@ -64,17 +73,13 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
         }
       },
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            print("Inside FAB");
-            BlocProvider.of<ProfileBloc>(context).add(GetProfileDataEvent());
-            // setState(() {});
-          },
-        ),
         body: BlocConsumer<ProfileBloc, ProfileState>(
           listener: (context, state) {
+            print("state is: ${state.runtimeType}");
             if (state is ProfileSubmittedState) {
+              print("state is Submitted");
               Navigator.pop(context, true);
+              return;
             }
           },
           builder: (context, state) {
@@ -84,11 +89,20 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
               phoneCtl.text = state.player.phoneNum;
               birthCtl.text = state.player.birthDate;
               male = state.player.gender == Gender.male;
+
               print(male);
               print("FOUND: Profile already exists");
             }
             return Stack(
               children: [
+                Positioned(
+                  top: 0.0,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  child: CustomPaint(
+                    painter: ProfileBackgroundCircle(),
+                  ),
+                ),
                 SafeArea(
                   child: Form(
                     key: _formKey,
@@ -97,30 +111,33 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            ///   A P P   L O G O
-                            // SizedBox(
-                            //   height: MediaQuery.of(context).size.height * 0.2,
-                            //   child: Container(
-                            //     padding: const EdgeInsets.all(8.0),
-                            //     child: const Image(
-                            //         image: AssetImage(
-                            //             "images/logo/Logo-dark.png")),
-                            //   ),
-                            // ),
-                            const SizedBox(height: 20),
                             SizedBox(
-                                height: MediaQuery.of(context).size.width * 0.3,
-                                width: MediaQuery.of(context).size.width * 0.3,
-                                child: IconButton(
-                                  padding: EdgeInsets.zero,
-                                  iconSize:
-                                      MediaQuery.of(context).size.width * 0.3,
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.account_circle,
-                                    color: Colors.grey,
-                                  ),
-                                )),
+                              height: MediaQuery.of(context).size.height * 0.13,
+                              child: Center(
+                                child: Text(
+                                  state is ProfileLoadedState
+                                      ? state.player.email
+                                      : "",
+                                  style: const TextStyle(
+                                      color: Colors.white70,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12),
+                                ),
+                              ),
+                            ),
+
+                            ///   A P P   L O G O
+                            Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Theme.of(context).colorScheme.background,
+                              ),
+                              child: const Icon(
+                                Icons.account_circle,
+                                size: 100,
+                                color: Color.fromARGB(255, 61, 170, 184),
+                              ),
+                            ),
 
                             const SizedBox(height: 10),
                             Container(
@@ -134,6 +151,11 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                                     controller: nameCtl,
                                     decoration: InputDecoration(
                                       labelText: local!.pName,
+                                      // prefix: Text(
+                                      //   local!.pName,
+                                      //   style: TextStyle(
+                                      //       fontWeight: FontWeight.bold),
+                                      // ),
                                       isDense: true,
                                     ),
                                     onChanged: (val) {
@@ -255,56 +277,73 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    if (male == null) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              backgroundColor: Colors.red,
-                                              content:
-                                                  Text(local.genderError)));
-                                      return;
-                                    }
-                                    // Navigator.pushReplacementNamed(context, ROUTE_HOME);
-                                    // Navigator.pop(context);
-                                    // widget.onSave(
-                                    //   Player(
-                                    //     name: nameCtl.text,
-                                    //     phoneNum: phoneCtl.text,
-                                    //     birthDate: birthCtl.text,
-                                    //     gender:
-                                    //         male as bool ? Gender.male : Gender.female,
-                                    //   ),
-                                    // );
-                                    print("Player info screen!!");
-                                    BlocProvider.of<ProfileBloc>(context).add(
-                                      ProfileSubmitEvent(
-                                        isCreate: isCreate,
-                                        player: PlayerModel(
-                                          uid: isCreate
-                                              ? ""
-                                              // : widget.player!.uid,
-                                              : "",
-                                          name: nameCtl.text,
-                                          phoneNum: phoneCtl.text,
-                                          birthDate: birthCtl.text,
-                                          gender: male as bool
-                                              ? Gender.male
-                                              : Gender.female,
-                                          level: 0,
-                                        ),
+                            ActionChip.elevated(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 61, 170, 184),
+                              label: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.7,
+                                child: Center(
+                                  child: Text(
+                                    local.save,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  if (male == null) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            backgroundColor: Colors.red,
+                                            content: Text(local.genderError)));
+                                    return;
+                                  }
+                                  if (!await InternetConnectionChecker()
+                                      .hasConnection) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(local.errNoInternet),
                                       ),
                                     );
+                                    return;
                                   }
-                                },
-                                child: Text(local.save),
-                              ),
+                                  // Navigator.pushReplacementNamed(context, ROUTE_HOME);
+                                  // Navigator.pop(context);
+                                  // widget.onSave(
+                                  //   Player(
+                                  //     name: nameCtl.text,
+                                  //     phoneNum: phoneCtl.text,
+                                  //     birthDate: birthCtl.text,
+                                  //     gender:
+                                  //         male as bool ? Gender.male : Gender.female,
+                                  //   ),
+                                  // );
+                                  print("Player info screen!!");
+
+                                  BlocProvider.of<ProfileBloc>(context).add(
+                                    ProfileSubmitEvent(
+                                      isCreate: isCreate,
+                                      player: PlayerModel(
+                                        uid: "",
+                                        name: nameCtl.text,
+                                        phoneNum: phoneCtl.text,
+                                        birthDate: birthCtl.text,
+                                        gender: male as bool
+                                            ? Gender.male
+                                            : Gender.female,
+                                        level: 0.0,
+                                        email: "",
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
                             ),
                             const SizedBox(height: 10),
-                            const Text("TrioVerse"),
                           ],
                         ),
                       ),

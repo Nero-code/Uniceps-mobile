@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 const color1 = Color(0xFF000814);
 const color2 = Color(0xFF001D3D);
@@ -21,6 +20,9 @@ const themeLight = Color(0xFFD7E6E6); //                         12
 const background = Color.fromARGB(255, 245, 245, 245);
 // const back2 = Color.fromARGB(255, 228, 228, 228);
 const back2 = Color(0xFFF4F4F4);
+
+const secondaryLighter = Color(0xFFDBF5F6);
+const secondaryLight = Color(0xFFB5EBE9);
 
 ThemeData lightTheme = ThemeData(
   appBarTheme: const AppBarTheme().copyWith(

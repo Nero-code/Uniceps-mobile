@@ -1,38 +1,41 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
+import 'package:uniceps/core/helpers/image_cache_manager.dart';
+import 'package:uniceps/features/Profile/data/models/gym_model.dart';
 import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
-import 'package:uniceps/features/Training/data/models/presence_model.dart';
 import 'package:uniceps/features/Training/data/models/training_prog_model.dart';
-import 'package:uniceps/features/Training/services/entities/avatar.dart';
 
 /// Abstract class [LocalTrainingSource] for SoC
 abstract class LocalTrainingSource {
-  Future<TrainingProgramModel> getTrainingProgram();
+  Future<TrainingProgramModel> getTrainingProgram(String gymId);
   Future<void> saveTrainingProgram(TrainingProgramModel model);
   Future<Map<String, double>> getWeights();
   Future<void> saveNewWeight(Map<String, double> val);
-  Future<List<PresenceModel>> getPresence(String gymId);
-  Future<void> savePresenceUnderGym(List<PresenceModel> list, String gymId);
-  Future<Avatar> getAvatar();
 
   Future<void> saveHandshakes(List<HandShakeModel> list);
+  Future<List<GymModel>> getSubscribedToGyms();
+  Future<List<GymModel>> cacheSubsToGyms(List<GymModel> list);
+  Future<List<GymModel>> setSelectedGym(String gymId);
 }
 
 class LocalTrainingSourceImpl implements LocalTrainingSource {
-  final Box<Map<dynamic, dynamic>> trainBox, handshakesBox;
+  final Box<Map<dynamic, dynamic>> trainBox, handshakesBox, myGyms;
   final Box<double> lastWBox;
+
+  final ImageCacheManager cacheManager;
 
   LocalTrainingSourceImpl({
     required this.trainBox,
     required this.lastWBox,
     required this.handshakesBox,
+    required this.myGyms,
+    required this.cacheManager,
   });
 
   @override
-  Future<TrainingProgramModel> getTrainingProgram() async {
+  Future<TrainingProgramModel> getTrainingProgram(String gymId) async {
     print("Local_S --> getTrainingProgram");
-    final routine = trainBox.get(HIVE_TRAINING_BOX);
+    final routine = trainBox.get(gymId);
     // var weightsRes = lastWBox.get(HIVE_LAST_WEIGHT_BOX);
     Map<String, double> weights = {};
     if (routine == null || routine.isEmpty) {
@@ -40,48 +43,18 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     }
     print("training Program not null!");
     for (var i in lastWBox.keys) {
-      print("weight: ${lastWBox.get(i)}");
+      // print("weight: ${lastWBox.get(i)}");
       weights.addAll({"$i": lastWBox.get(i) ?? 0});
     }
-    return TrainingProgramModel.fromJson(routine, weights);
+    print("routine: ${routine.entries}");
+    final images = await cacheManager.getLocalImages(routine['routine_items']);
+    return TrainingProgramModel.fromJson(
+        json: routine, weights: weights, images: images);
   }
 
   @override
   Future<void> saveTrainingProgram(TrainingProgramModel model) async {
-    await trainBox.put(HIVE_TRAINING_BOX, model.toJson());
-  }
-
-  @override
-  Future<void> savePresenceUnderGym(
-      List<PresenceModel> list, String gymId) async {
-    final map = <String, dynamic>{};
-    final jsonList = <Map<String, dynamic>>[];
-    for (var i in list) {
-      jsonList.add(i.toJson());
-    }
-    map.addAll({gymId: jsonList});
-
-    await trainBox.put("Presence", map);
-  }
-
-  @override
-  Future<List<PresenceModel>> getPresence(String gymId) async {
-    final res = trainBox.get("Presence");
-    final list = <PresenceModel>[];
-    if (res != null) {
-      for (var i in res[gymId]) {
-        list.add(PresenceModel.fromJson(i));
-      }
-      return list;
-    } else {
-      throw EmptyCacheExeption();
-    }
-  }
-
-  @override
-  Future<Avatar> getAvatar() {
-    // TODO: implement getAvatar
-    throw UnimplementedError();
+    await trainBox.put(model.gymId, model.toJson());
   }
 
   @override
@@ -91,7 +64,7 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     for (var i in lastWBox.keys) {
       weights.addAll({"$i": lastWBox.get(i) as double});
     }
-    print("weights: $weights");
+    // print("weights: $weights");
     return weights;
   }
 
@@ -105,5 +78,92 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     for (var i in list) {
       await handshakesBox.put(i.gymId, i.toJson());
     }
+  }
+
+  @override
+  Future<List<GymModel>> getSubscribedToGyms() async {
+    print("Here");
+    final list = <GymModel>[];
+    for (var i in myGyms.keys) {
+      list.add(GymModel.fromJson(myGyms.get(i)!));
+    }
+    if (list.isEmpty) {
+      throw EmptyCacheExeption();
+    }
+    for (var i in list) {
+      if (i.isSelected) {
+        list.remove(i);
+        list.insert(0, i);
+      }
+    }
+    for (var i in list) {
+      if (i.isCurrent) {
+        list.remove(i);
+        list.insert(0, i);
+        break;
+      }
+    }
+    return list;
+  }
+
+  @override
+  Future<List<GymModel>> cacheSubsToGyms(List<GymModel> list) async {
+    print("Cacheing MyGyms: ${list.length}");
+
+    final List<GymModel> localList = [];
+    for (var key in myGyms.keys) {
+      localList.add(GymModel.fromJson(myGyms.get(key)!));
+    }
+    print("LocalList: ${localList.length}");
+    for (var i in list) {
+      if (localList.contains(i)) {
+        final map = i.toJson();
+
+        map.addAll(
+          {
+            "isSelected": localList[localList.indexOf(i)].isSelected,
+            "isCurrent": localList[localList.indexOf(i)].isCurrent,
+          },
+        );
+        final updatedGym = GymModel.fromJson(map);
+        print("Removing GYMMODEL ITEM: " "${localList.remove(i)}");
+        localList.add(updatedGym);
+        await myGyms.put(i.id, map);
+        continue;
+      }
+      await myGyms.put(i.id, i.toJson());
+      localList.add(i);
+    }
+    return localList;
+  }
+
+  @override
+  Future<List<GymModel>> setSelectedGym(String gymId) async {
+    print("DEBUG: SET 1");
+    if (!myGyms.containsKey(gymId)) {
+      throw EmptyCacheExeption();
+    }
+    print("DEBUG: SET 2");
+    final List<GymModel> list = [];
+    for (var key in myGyms.keys) {
+      print("DEBUG: SET 3 isCurrent: ${myGyms.get(key)!['id'] == gymId}");
+      await myGyms.put(
+        key,
+        {
+          ...myGyms.get(key)!,
+          // "isSelected": myGyms.get(key)!['id'] == gymId,
+          "isCurrent": myGyms.get(key)!['id'] == gymId,
+        },
+      );
+      print(
+          "aasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd: ${myGyms.get(key)}");
+      list.add(GymModel.fromJson(myGyms.get(key)!));
+      print("DEBUG: SET 4");
+    }
+    print("DEBUG: SET 5 $list");
+    if (list.isEmpty) {
+      throw EmptyCacheExeption();
+    }
+    return list;
   }
 }

@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
@@ -10,11 +11,14 @@ import 'package:uniceps/features/Auth/views/screens/email_and_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/player_gym_bloc.dart';
+import 'package:uniceps/features/Training/views/bloc/current_gym_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/screens/about.dart';
 import 'package:uniceps/features/Profile/presentation/screens/gym_list_screen.dart';
 import 'package:uniceps/features/Profile/presentation/screens/measurement_screen.dart';
 import 'package:uniceps/features/Profile/presentation/screens/profile_screen.dart';
@@ -42,6 +46,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
 }
 
+class NavigatorKey {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
@@ -67,7 +75,10 @@ void main() async {
     print('Message data: ${message.data}');
 
     if (message.notification != null) {
-      print('Message also contained a notification: ${message.notification}');
+      ScaffoldMessenger.of(NavigatorKey.navigatorKey.currentContext!)
+          .showSnackBar(SnackBar(
+        content: Text("${message.notification?.body}"),
+      ));
     }
   });
 
@@ -84,60 +95,75 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthBloc>(
           create: (context) {
-            print(
-                "------------------------AuthBloc Created!--------------------------");
+            print("------------------AuthBloc Created!-----------------------");
             return AuthBloc(usecases: di.sl())..add(AuthCheckEvent());
           },
         ),
         BlocProvider<TrainingBloc>(
           create: (context) {
-            print(
-                "------------------------TrainingBLoc Created!----------------------");
+            print("------------------TrainingBLoc Created!-------------------");
             return TrainingBloc(usecases: di.sl())
               ..add(const GetProgramEvent());
           },
         ),
         BlocProvider<ExercisesBloc>(
           create: (context) {
-            print(
-                "------------------------ExercisesBLoc Created!----------------------");
+            print("------------------ExercisesBLoc Created!------------------");
             return ExercisesBloc(usecases: di.sl());
           },
         ),
         BlocProvider<ProfileBloc>(
           create: (context) {
-            print(
-                "------------------------ProfileBloc Created!--------------------------");
+            print("------------------ProfileBloc Created!--------------------");
             return ProfileBloc(usecases: di.sl());
           },
         ),
         BlocProvider<SubsBloc>(
           create: (context) {
-            print(
-                "------------------------SubsBloc Created!--------------------------");
+            print("------------------SubsBloc Created!-----------------------");
             return SubsBloc(usecases: di.sl());
           },
         ),
-        BlocProvider<HandshakeBloc>(create: (context) {
-          print(
-              "------------------------HandshakesBloc Created!--------------------------");
-          return HandshakeBloc(usecases: di.sl())..add(GetAllHandShakeEvent());
-        }),
-        BlocProvider<MeasurmentBloc>(create: (context) {
-          print(
-              "------------------------MeasurmentsBloc Created!--------------------------");
-          return MeasurmentBloc(usecases: di.sl());
-        }),
-        BlocProvider<GymsBloc>(create: (context) {
-          print(
-              "------------------------GymsBloc Created!--------------------------");
-          return GymsBloc(usecases: di.sl())..add(const GetCurrentGym());
-        }),
-        BlocProvider<AttendenceBloc>(create: (context) {
-          print(
-              "------------------------AttendenceBloc Created!--------------------------");
-          return AttendenceBloc(di.sl());
-        }),
+        BlocProvider<HandshakeBloc>(
+          create: (context) {
+            print("------------------HandshakesBloc Created!-----------------");
+            return HandshakeBloc(usecases: di.sl())
+              ..add(GetAllHandShakeEvent());
+          },
+        ),
+        BlocProvider<MeasurmentBloc>(
+          create: (context) {
+            print("------------------MeasurmentsBloc Created!----------------");
+            return MeasurmentBloc(usecases: di.sl())
+              ..add(GetMeasurementsEvent());
+          },
+        ),
+        BlocProvider<GymsBloc>(
+          create: (context) {
+            print("------------------GymsBloc Created!-----------------------");
+            return GymsBloc(usecases: di.sl())
+              ..add(const GetAllAvailableGymsEvent());
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            print("------------------Current GymsBloc Created!---------------");
+            return CurrentGymBloc(usecases: di.sl())
+              ..add(const GetSubscribedToGymEvent());
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            print("------------------Player-Gym Bloc Created!----------------");
+            return PlayerGymBloc(usecases: di.sl());
+          },
+        ),
+        BlocProvider<AttendenceBloc>(
+          create: (context) {
+            print("------------------AttendenceBloc Created!-----------------");
+            return AttendenceBloc(di.sl());
+          },
+        ),
         BlocProvider<LocaleCubit>(
           create: (context) => LocaleCubit()..getSavedLanguageCode(),
         ),
@@ -155,12 +181,14 @@ class MyApp extends StatelessWidget {
             ),
           );
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            navigatorKey: NavigatorKey.navigatorKey,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             locale: state.locale,
             restorationScopeId: "root",
             title: 'Uniceps',
-            theme: lightTheme,
+            theme: lightTheme.copyWith(textTheme: GoogleFonts.cairoTextTheme()),
             // darkTheme: ThemeData(
             //     colorScheme: ColorScheme.fromSeed(
             //         seedColor: Colors.blue, brightness: Brightness.dark)),
@@ -173,20 +201,21 @@ class MyApp extends StatelessWidget {
               ROUTE_AUTH: (context) => const EmailAuthScreen(),
               ROUTE_FORGOT_PASSWORD: (context) => const ForgotPasswordScreen(),
               // ROUTE_PLAYER_INFO: (context) =>
-              //     const PlayerInfoScreen(), // NON REACHABLE FROM HERE
+              //     const PlayerInfoScreen(), // NOT REACHABLE FROM HERE
 
               //  MAIN
               ROUTE_HOME: (context) => HomeScreen(trainingUsecases: di.sl()),
               ROUTE_HANDSHAKE: (context) => const GymHandShakeScreen(),
               ROUTE_EXERCISE: (context) => ExercisesPage(),
               ROUTE_QR_SCANNER: (context) => QRScannerScreen(),
-              // ROUTE_PRESENCE: (context) => const PresenceScreen(),
-              ROUTE_GYMS_LIST: (context) => const GymListScreen(),
+              // ROUTE_PRESENCE: (context) => const PresenceScreen(), //  NOT REACHABLE FROM HERE
+              ROUTE_GYMS_LIST: (context) => GymListScreen(),
 
               //  AUX
               ROUTE_MEASUREMENTS: (context) => const MeasurementScreen(),
               ROUTE_SUBSCRIPTIONS: (context) => const SubScriptionScreen(),
               ROUTE_PROFILE: (context) => const ProfileScreen(),
+              ROUTE_ABOUT: (context) => const AboutScreen(),
             },
           );
         },

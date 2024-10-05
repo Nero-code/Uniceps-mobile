@@ -72,28 +72,28 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        systemNavigationBarColor: Theme.of(context).colorScheme.background,
-        // statusBarBrightness: Brightness.light,
-        statusBarIconBrightness: Brightness.dark,
-      ),
-    );
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   SystemUiOverlayStyle(
+    //     systemNavigationBarColor: Theme.of(context).colorScheme.background,
+    //     // statusBarBrightness: Brightness.light,
+    //     statusBarIconBrightness: Brightness.dark,
+    //   ),
+    // );
     navOnRestore();
     return BlocBuilder<LocaleCubit, ChangedLangState>(
       builder: (context, state) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.black,
-            child: const Icon(Icons.home),
-            // onPressed: () =>
-            //     Navigator.pushReplacementNamed(context, ROUTE_HOME),
-            onPressed: () {
-              // print("email: ${email.value}");
-              BlocProvider.of<AuthBloc>(context).add(AuthCheckEvent());
-            },
-          ),
+          // floatingActionButton: FloatingActionButton(
+          //   backgroundColor: Colors.black,
+          //   child: const Icon(Icons.home),
+          //   // onPressed: () =>
+          //   //     Navigator.pushReplacementNamed(context, ROUTE_HOME),
+          //   onPressed: () {
+          //     // print("email: ${email.value}");
+          //     BlocProvider.of<AuthBloc>(context).add(AuthCheckEvent());
+          //   },
+          // ),
           body: Stack(
             children: [
               Container(

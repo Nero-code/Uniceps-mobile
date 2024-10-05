@@ -7,30 +7,7 @@ import 'package:uniceps/features/Profile/data/models/measurement_model.dart';
 import 'package:uniceps/features/Profile/data/models/subscription_model.dart';
 import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
-
-//  Gyms:
-//    "gymId": {
-//      "gymId": String,
-//      "isCurrent": bool,            // \
-//      "name": String,               //  > Type (Gym)
-//      "logo": String(img URL),      // /
-//    }
-//
-//
-//
-//  Subs:
-//    "gymId":
-//    [
-//      { Subscription.toJson() },
-//    ]
-//
-//
-//
-//  Metricss:
-//    "gymId":
-//    [
-//      { Measurment.toJson() },
-//    ]
+import 'package:uniceps/features/Profile/domain/entities/player_in_gym.dart';
 
 abstract class LocalProfileSource {
   Future<List<MeasurementModel>> getMeasurements();
@@ -45,17 +22,30 @@ abstract class LocalProfileSource {
   Future<void> saveHandshakes(List<HandShakeModel> list);
   Future<List<Attendence>> getAttendenceAtGym(String gymId);
   Future<void> saveAttenenceAtGym(String gymId, List<Attendence> list);
+  Future<List<GymModel>> getSubscribedToGyms();
+  Future<PlayerInGym> getPlayerInGym(String gymId);
+  Future<void> savePlayerInGym(PlayerInGym playerInGym);
 }
 
 class LocalProfileSourceImpl implements LocalProfileSource {
-  final Box<Map<dynamic, dynamic>> gymsBox, playerBox, handshakesBox, measurBox;
+  final Box<Map<dynamic, dynamic>> gymsBox,
+      myGyms,
+      playerProfilesBox,
+      playerBox,
+      handshakesBox,
+      measurBox;
   final Box<List<dynamic>> subsBox, attendBox;
+
+  final Box<bool> selectedGym;
 
   LocalProfileSourceImpl({
     required this.gymsBox,
+    required this.myGyms,
+    required this.selectedGym,
     required this.subsBox,
     required this.measurBox,
     required this.playerBox,
+    required this.playerProfilesBox,
     required this.handshakesBox,
     required this.attendBox,
   });
@@ -191,5 +181,38 @@ class LocalProfileSourceImpl implements LocalProfileSource {
       temp.add(i.toJson());
     }
     await attendBox.put(gymId, temp);
+  }
+
+  @override
+  Future<List<GymModel>> getSubscribedToGyms() async {
+    final list = <GymModel>[];
+    for (var i in myGyms.keys) {
+      list.add(GymModel.fromJson(myGyms.get(i)!));
+    }
+    if (list.isEmpty) {
+      throw EmptyCacheExeption();
+    }
+    for (var i in list) {
+      print("DEBUG: GET SUBS TO GYMS: ${i.toJson()}");
+      if (i.isSelected) {
+        list.remove(i);
+        list.insert(0, i);
+      }
+    }
+    return list;
+  }
+
+  @override
+  Future<PlayerInGym> getPlayerInGym(String gymId) async {
+    if (await playerProfilesBox.containsKey(gymId)) {
+      final res = playerProfilesBox.get(gymId)!;
+      return PlayerInGym.fromJson(res);
+    }
+    throw EmptyCacheExeption();
+  }
+
+  @override
+  Future<void> savePlayerInGym(PlayerInGym playerInGym) async {
+    await playerProfilesBox.put(playerInGym.gymId, playerInGym.toJson());
   }
 }

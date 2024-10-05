@@ -11,10 +11,6 @@ final class GetAllAvailableGymsEvent extends GymsEvent {
   const GetAllAvailableGymsEvent();
 }
 
-final class GetCurrentGym extends GymsEvent {
-  const GetCurrentGym();
-}
-
 final class HandShakeGym extends GymsEvent {
   final String qrCode;
   const HandShakeGym({required this.qrCode});

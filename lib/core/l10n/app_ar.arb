@@ -1,8 +1,6 @@
 {
-  "helloWorld": "مرحبا",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
-  },
+  "hello": "مرحبا, ",
+  
   "welcome": "اهلا بك",
   "signin": "تسجيل الدخول",
   "login": "تسجيل الدخول",
@@ -28,27 +26,36 @@
   "update": "تعديل",
   "save": "حفظ",
   "level": "المستوى:",
+  "apply" : "تطبيق",
+  "search": "بحث",
   
   "logoutAlert": "تسجيل الخروج؟",
   "logoutAlertContents": "انت الأن على وشك تسجيل الخروج, قد تتعرض معلوماتك للحذف, هل انت متأكد؟",
   
 
   "price": "السعر",
+  "discount":"الحسم",
   "status": "الحالة",
   "address": "العنوان",
   "owner": "المالك",
   "telephone": "الهاتف",
 
   "subscription": "الأشتراكات",
+  "subscriptions": "الأشتراكات",
+  "balance": "الرصيد",
   "sport": "الرياضة",
   "measurements": "القياسات",
   "language": "اللغة",
+  "calender": "التقويم",
+  "list": "قائمة",
+  "attendenceLog":"سجل الحضور",
 
   "chooseLang": "اختر اللغة:",
   "about": "حول",
 
   "gyms": "النوادي",
 
+  "trainer": "المدرب",
   "height": "الطول",
   "heightError": "",
   "weight": "الوزن",
@@ -64,8 +71,8 @@
   "rHumerus": "ساعد أيمن",
 
   "legs": "الارجل",
-  "lLeg": "رجل يسرى",
-  "rLeg": "رجل يمنى",
+  "lLeg": "ساق يسرى",
+  "rLeg": "ساق يمنى",
 
   "thighs": "الفخذين",
   "lThigh": "فخذ أيسر",
@@ -87,15 +94,15 @@
   "empty": "المحتوى فارغ",
   "emptySubs": "لا يوجد اشتراكات",
   "emptyMeasure": "لا يوجد قياسات",
-  "emptyExc": "لا يوجد تمارين",
+  "emptyExcercises": "لا يوجد تمارين",
 
   "error": "حدث خطأ ما",
 
   "profile": "الحساب",
 
-  "pName": "الاسم:",
+  "pName": "الاسم",
   "pNameError": "الرجاء ادخال الاسم الكامل",
-  "phoneNum": "رقم الهاتف:",
+  "phoneNum": "رقم الهاتف",
   "phoneNumError": "الرجاء ادخال رقم الهاتف",
   "birthDate": "سنة الميلاد:",
   "birthDateError": "الرجاء ادخال سنة الميلاد",
@@ -107,7 +114,41 @@
 
   "payment": "الدفعة",
   "paid": "مدفوع",
-  "notPaid": "غير مدفوع"
+  "notPaid": "غير مدفوع",
 
+  "versionInfo": "معلومات الاصدار",
+  "version": "رقم الاصدار",
+  "versionDate": "تاريخ الاصدار",
+  "developers" : "المطورون",
 
+  "support": "الدعم",
+  "supportPage": "صفحتنا",
+  "faqs": "الاسئلة الشائعة",
+
+  "privacy": "الخصوصية",
+  "privacyPolicy": "سياسة الخصوصية",
+  "userAgreement": "اتفاقية المستخدم",
+  "termsOfUse": "شروط الاستخدام",
+
+  "emptySubscriptions":"لا يوجد اشتراكات",
+  "emptyMeasurements":"لا يوجد قياسات حاليا",
+  "emptyExercisesList":"لا يوجد تمارين لهذه المجموعة",
+  "emptyGymsList":"لا يوجد نوادي",
+  "emptyHandshakes":"لست عضوا في اي نادي",
+  "emptyTriningDaysMap":"لا يوجد برنامج تدريبي",
+  "emptyHomeCard":"اختر احد النوادي لعرضه",
+  "emptyAttendence":"لا يوجد سجل حضور",
+
+  "errNoInternet":"لا يوجد اتصال بالانترنت",
+  "errServerException":"حدث خطأ في الخادم, الرجاء المحاولة لاحقا",
+  "errUnknown":"حدث خطأ غير معروف",
+
+  "endOfSubDate": "تاريخ نهاية الاشتراك",
+  "dayQuete": "ماذا سنستهدف اليوم؟",
+  "letsStart": "هيا لنبدأ...",
+
+  "days":"يوم",
+  "date":"التاريخ",
+  "availableGyms": "المنضمون لنا"
+ 
 }

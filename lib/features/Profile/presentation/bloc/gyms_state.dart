@@ -12,25 +12,17 @@ final class GymsInitial extends GymsState {}
 final class GymsLoadingState extends GymsState {}
 
 final class GymsLoadedState extends GymsState {
-  final List<Gym> list;
-  const GymsLoadedState({required this.list});
+  final List<Gym> restList, myGyms;
+
+  const GymsLoadedState({
+    required this.restList,
+    required this.myGyms,
+  });
 }
 
 final class GymsErrorState extends GymsState {
   final Failure f;
   const GymsErrorState({required this.f});
-}
-
-final class CurrentGymLoadingState extends GymsState {}
-
-final class CurrentGymLoadedState extends GymsState {
-  final Gym myGym;
-  const CurrentGymLoadedState(this.myGym);
-}
-
-final class CurrentGymErrorState extends GymsState {
-  final Failure f;
-  const CurrentGymErrorState(this.f);
 }
 
 final class GymSuccessfulHandshake extends GymsState {}

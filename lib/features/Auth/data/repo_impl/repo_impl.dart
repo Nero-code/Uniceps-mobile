@@ -4,6 +4,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
+import 'package:uniceps/features/Auth/data/models/user_model.dart';
 // import 'package:uniceps/features/Auth/data/models/user_model.dart';
 import 'package:uniceps/features/Auth/data/sources/local_source.dart';
 import 'package:uniceps/features/Auth/data/sources/remote_source.dart';
@@ -95,12 +96,22 @@ class AuthRepoImpl implements AuthRepo {
   Future<Either<Failure, bool>> isLoggedIn() async {
     try {
       print("Is Logged in repo");
-      final res = await local.getUser();
-      print(res.toJson());
-      // throw EmptyCacheExeption();
-      return Right(await local.isLoggedIn());
+      final resUser = await local.getUser();
+
+      final nToken = await FirebaseMessaging.instance.getToken();
+      if (resUser.notifyToken != nToken && await connection.hasConnection) {
+        final res = await remote.sendNotifyToken(nToken as String);
+        if (res == 200) {
+          await local.saveUser(
+            UserModel.fromJson(
+              {...resUser.toJson(), "notify": nToken},
+            ),
+          );
+        }
+      }
+      return const Right(true);
     } on EmptyCacheExeption {
-      return Left(
+      return const Left(
           EmptyCacheFailure(errorMessage: "Null User || No Token was found"));
     } catch (e) {
       print("Exception on Auth " + e.toString());
@@ -109,7 +120,6 @@ class AuthRepoImpl implements AuthRepo {
     }
     // if(await connection.hasConnection){
     //   try{
-
     //   }
     // }
   }
@@ -120,21 +130,23 @@ class AuthRepoImpl implements AuthRepo {
       await local.localLogout();
       return const Right(true);
     } catch (e) {
-      return Left(GeneralPurposFailure(errorMessage: "Could not logout"));
+      return Left(GeneralPurposFailure(errorMessage: "LogoutFailed"));
     }
+    // if (await connection.hasConnection) {
+    // try{
+    //   final res = await remote.logout();
+    // }
+    // }
+    // else {
+    //     try {
+    //     await local.localLogout();
+    //     return const Right(true);
+    //   } catch (e) {
+    //     return Left(GeneralPurposFailure(errorMessage: "Could not logout"));
+    //   }
+    //   // return Left(NoInternetConnectionFailure(errMsg: ""));
+    // }
   }
-
-  // @override
-  // Future<Either<Failure, bool>> addNewPassword(
-  //     {required String email, required String pass}) async {
-  //   if (await connection.hasConnection) {
-  //     try{
-
-  //     }
-  //   } else {
-  //     return Left(OfflineFailure(errorMessage: "No Internet Connection!"));
-  //   }
-  // }
 
   @override
   Future<Either<Failure, bool>> changePassword({required String pass}) async {

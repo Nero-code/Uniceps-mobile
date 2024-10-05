@@ -1,7 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:get_it/get_it.dart' as di;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
+// import 'dart:io' as io;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:uniceps/core/helpers/image_cache_manager.dart';
 import 'package:uniceps/core/logs/logger.dart';
 import 'package:uniceps/features/Auth/data/repo_impl/repo_impl.dart';
 import 'package:uniceps/features/Auth/data/sources/local_source.dart';
@@ -40,21 +44,53 @@ Future<void> init() async {
   final trainBox = await Hive.openBox<Map<dynamic, dynamic>>("Training");
   final lastWeightBox = await Hive.openBox<double>("LastWeight");
   final gymsBox = await Hive.openBox<Map<dynamic, dynamic>>("Gyms");
+  final myGyms = await Hive.openBox<Map<dynamic, dynamic>>("MyGyms");
   final subsBox = await Hive.openBox<List<dynamic>>("Subs");
   final measureBox = await Hive.openBox<Map<dynamic, dynamic>>("Metrics");
   final handshakesBox = await Hive.openBox<Map<dynamic, dynamic>>("HandShakes");
   final attendenceBox = await Hive.openBox<List<dynamic>>("Attendence");
-  // final avatarBox = await Hive.openBox<List<Map<dynamic, dynamic>>>("Avatar");
+  final imagesBox = await Hive.openBox<Uint8List>("Images");
+  final selectedGym = await Hive.openBox<bool>("SelectedGym");
+  final playerInGymBox =
+      await Hive.openBox<Map<dynamic, dynamic>>("PlayerInGym");
 
   // await userBox.clear();
   // await profileBox.clear();
   // await trainBox.clear();
   // await lastWeightBox.clear();
   // await gymsBox.clear();
+  // await myGyms.clear();
   // await subsBox.clear();
   // await measureBox.clear();
   // await handshakesBox.clear();
   // await attendenceBox.clear();
+  // await imagesBox.clear();
+  // await selectedGym.clear();
+  // await playerInGymBox.clear();
+
+  Future<void> clear() async {
+    await userBox.clear();
+    await profileBox.clear();
+    await trainBox.clear();
+    await lastWeightBox.clear();
+    await gymsBox.clear();
+    await myGyms.clear();
+    await subsBox.clear();
+    await measureBox.clear();
+    await handshakesBox.clear();
+    await attendenceBox.clear();
+    // await imagesBox.clear();
+    await selectedGym.clear();
+    await playerInGymBox.clear();
+  }
+
+  sl.registerLazySingleton(
+    () => ImageCacheManager(
+      imagesCache: imagesBox,
+      checker: sl(),
+      client: sl(),
+    ),
+  );
 
   ///////                             ///
   //////                             ////
@@ -64,17 +100,27 @@ Future<void> init() async {
 
   sl.registerLazySingleton<LocalTrainingSource>(
     () => LocalTrainingSourceImpl(
-        trainBox: trainBox,
-        lastWBox: lastWeightBox,
-        handshakesBox: handshakesBox),
+      trainBox: trainBox,
+      lastWBox: lastWeightBox,
+      handshakesBox: handshakesBox,
+      myGyms: myGyms,
+      cacheManager: sl(),
+    ),
   );
   sl.registerLazySingleton<RemoteTrainingSource>(
     () => RemoteTrainingSourceImpl(
-        client: sl(), userBox: userBox, playerBox: profileBox),
+      client: sl(),
+      cacheManager: sl(),
+      userBox: userBox,
+      playerBox: profileBox,
+    ),
   );
   sl.registerLazySingleton<LocalProfileSource>(
     () => LocalProfileSourceImpl(
       gymsBox: gymsBox,
+      myGyms: myGyms,
+      playerProfilesBox: playerInGymBox,
+      selectedGym: selectedGym,
       measurBox: measureBox,
       playerBox: profileBox,
       subsBox: subsBox,
@@ -87,11 +133,14 @@ Future<void> init() async {
       client: sl(),
       userBox: userBox,
       playerBox: profileBox,
-      handshakesBox: handshakesBox,
     ),
   );
   sl.registerLazySingleton<LocalAuthSource>(
-    () => LocalAuthSourceImple(userBox: userBox, playerBox: profileBox),
+    () => LocalAuthSourceImple(
+      userBox: userBox,
+      playerBox: profileBox,
+      resetBottun: clear,
+    ),
   );
   sl.registerLazySingleton<RemoteAuthSource>(
     () => RemoteAuthSourceImpl(client: sl(), userBox: userBox),
@@ -167,6 +216,7 @@ Future<void> init() async {
   //////////////////////////////////////////////////////////////////////////////
 
   final client = http.Client();
+  // final c = io.HttpClient()..connectionTimeout = const Duration(seconds: 30);
   sl.registerLazySingleton<http.Client>(() => client);
 
   sl.registerLazySingleton<InternetConnectionChecker>(

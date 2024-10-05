@@ -15,10 +15,20 @@ class LogoWidget extends StatelessWidget {
       width: size,
       height: size,
       imageUrl: "$API" "$HTTP_GYMS" "$HTTP_GYM_LOGO" "/$gymId",
+      imageBuilder: (context, imageProvider) => ClipRRect(
+        borderRadius: BorderRadius.circular(25),
+        child:
+            ColoredBox(color: Colors.amber, child: Image(image: imageProvider)),
+      ),
       placeholder: (context, url) =>
           const Center(child: CircularProgressIndicator()),
       errorWidget: (context, url, error) =>
-          const Image(image: AssetImage("images/logo/Logo-dark.png")),
+          // const Image(image: AssetImage("images/logo/Logo-dark.png")),
+          Icon(
+        Icons.fitness_center,
+        size: size,
+        color: Colors.grey.shade400,
+      ),
     );
   }
 }

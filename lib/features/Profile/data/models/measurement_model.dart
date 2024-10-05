@@ -1,3 +1,4 @@
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Profile/domain/entities/measrument.dart';
 
 class MeasurementModel extends Measurement {
@@ -12,7 +13,7 @@ class MeasurementModel extends Measurement {
       required super.rLeg,
       required super.lThigh,
       required super.rThigh,
-      required super.nick,
+      required super.neck,
       required super.shoulders,
       required super.waist,
       required super.chest,
@@ -20,6 +21,25 @@ class MeasurementModel extends Measurement {
       required super.checkDate});
 
   factory MeasurementModel.fromJson(Map<dynamic, dynamic> json) {
+    print("Measurement: \n$json");
+
+    print("height:    ${json['height'].runtimeType}");
+    print("weight:    ${json['weight'].runtimeType}");
+    print("lArm:      ${json['l_arm'].runtimeType}");
+    print("rArm:      ${json['r_arm'].runtimeType}");
+    print("lHumerus:  ${json['l_humerus'].runtimeType}");
+    print("rHumerus:  ${json['r_humerus'].runtimeType}");
+    print("lLeg:      ${json['l_leg'].runtimeType}");
+    print("rLeg:      ${json['r_leg'].runtimeType}");
+    print("lThigh:    ${json['l_thigh'].runtimeType}");
+    print("rThigh:    ${json['r_thigh'].runtimeType}");
+    print("neck:      ${json['neck'].runtimeType}");
+    print("shoulders: ${json['shoulders'].runtimeType}");
+    print("waist:     ${json['waist'].runtimeType}");
+    print("chest:     ${json['chest'].runtimeType}");
+    print("hips:      ${json['hips'].runtimeType}");
+    print("checkDate: ${json['check_date'].runtimeType}");
+
     return MeasurementModel(
       height: json['height'],
       weight: json['weight'],
@@ -31,13 +51,13 @@ class MeasurementModel extends Measurement {
       rLeg: json['r_leg'],
       lThigh: json['l_thigh'],
       rThigh: json['r_thigh'],
-      nick: json['neck'],
+      neck: json['neck'],
       shoulders: json['shoulders'],
       waist: json['waist'],
       chest: json['chest'],
       hips: json['hips'],
-      // checkDate: DateTime.parse(json['check_date']),
-      checkDate: DateTime.now(),
+      checkDate: stringToDate(json['check_date']),
+      // checkDate: DateTime.now(),
     );
   }
 
@@ -53,12 +73,12 @@ class MeasurementModel extends Measurement {
       'r_leg': rLeg,
       'l_thigh': lThigh,
       'r_thigh': rThigh,
-      'nick': nick,
+      'neck': neck,
       'shoulders': shoulders,
       'waist': waist,
       'chest': chest,
       'hips': hips,
-      'check_date': checkDate,
+      'check_date': dateToString(checkDate),
     };
   }
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:uniceps/core/errors/failure.dart';
-import 'package:uniceps/core/widgets/reload_wiget.dart';
+import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
 
@@ -10,9 +10,10 @@ class PresenceScreen extends StatefulWidget {
   const PresenceScreen({
     super.key,
     required this.gymId,
+    required this.pid,
   });
 
-  final String gymId;
+  final String gymId, pid;
   @override
   State<PresenceScreen> createState() => _PresenceScreenState();
 }
@@ -37,13 +38,17 @@ class _PresenceScreenState extends State<PresenceScreen> {
           print("presence screen bloc type: ${state.runtimeType}");
 
           if (state is AttenedenceLoadedState) {
+            state.list.forEach((element) {
+              print(element.toJson());
+            });
+            print("length: ${state.list.length}");
             return SingleChildScrollView(
               child: Column(
                 children: [
                   TableCalendar(
                     // locale: 'ar',
                     focusedDay: fDay,
-                    firstDay: DateTime(2024),
+                    firstDay: state.list.first.date,
                     lastDay: lDay,
                     currentDay: cDay,
                     startingDayOfWeek: StartingDayOfWeek.sunday,
@@ -69,7 +74,13 @@ class _PresenceScreenState extends State<PresenceScreen> {
                     },
                     enabledDayPredicate: (day) {
                       for (var i in state.list) {
-                        return i.date.day == day.day;
+                        print("i: ${i.date}");
+                        print("day: $day");
+                        print(
+                            "compare: ${i.date.compareTo(day.copyWith(isUtc: false))}");
+                        if (i.date.compareTo(day.copyWith(isUtc: false)) == 0) {
+                          return true;
+                        }
                       }
                       return false;
                     },
@@ -97,7 +108,7 @@ class _PresenceScreenState extends State<PresenceScreen> {
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      textDirection: TextDirection.ltr,
+                      textDirection: TextDirection.rtl,
                       children: a != null
                           ? [
                               Text('Entered At: \n${a!.loginTime}'),
@@ -114,46 +125,18 @@ class _PresenceScreenState extends State<PresenceScreen> {
             print(state.f.getErrorMessage());
             switch (state.f.runtimeType) {
               case NoAttendenceFoundFailure:
-                return ReloadScreenWiget(
-                  image: const Icon(Icons.highlight_off_rounded),
-                  message: Text(state.f.getErrorMessage()),
-                  callBack: const SizedBox(),
+                return ReloadScreenWidget(
+                  f: state.f,
+                  callBack: null,
                 );
-              case EmptyCacheFailure:
-                return ReloadScreenWiget(
-                  image: const Icon(Icons.error),
-                  message: Text(state.f.getErrorMessage()),
-                  callBack: IconButton(
-                    onPressed: () {
-                      BlocProvider.of<AttendenceBloc>(context)
-                          .add(GetAttendenceEvent(widget.gymId));
-                    },
-                    icon: const Icon(Icons.refresh),
-                  ),
-                );
-              case ServerFailure:
-                return ReloadScreenWiget(
-                  image: const Icon(Icons.dangerous),
-                  message: Text(state.f.getErrorMessage()),
-                  callBack: IconButton(
-                    onPressed: () {
-                      BlocProvider.of<AttendenceBloc>(context)
-                          .add(GetAttendenceEvent(widget.gymId));
-                    },
-                    icon: const Icon(Icons.refresh),
-                  ),
-                );
+
               default:
-                return ReloadScreenWiget(
-                  image: const Icon(Icons.dangerous),
-                  message: Text(state.f.getErrorMessage()),
-                  callBack: IconButton(
-                    onPressed: () {
-                      BlocProvider.of<AttendenceBloc>(context)
-                          .add(GetAttendenceEvent(widget.gymId));
-                    },
-                    icon: const Icon(Icons.refresh),
-                  ),
+                return ReloadScreenWidget(
+                  f: state.f,
+                  callBack: () {
+                    BlocProvider.of<AttendenceBloc>(context)
+                        .add(GetAttendenceEvent(widget.gymId, widget.pid));
+                  },
                 );
             }
           }

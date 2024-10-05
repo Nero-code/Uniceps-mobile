@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:equatable/equatable.dart';
 
 class Exercise extends Equatable {
@@ -12,6 +13,7 @@ class Exercise extends Equatable {
   final int muscleGroup, itemOrder;
   final double lastWaight;
   final bool isCompleted;
+  final Uint8List? imageBitMap;
 
   const Exercise({
     required this.id,
@@ -23,13 +25,9 @@ class Exercise extends Equatable {
     required this.imageUrl,
     required this.lastWaight,
     this.isCompleted = false,
+    this.imageBitMap,
   });
 
   @override
-  List<Object?> get props => [
-        id,
-        name,
-        muscleGroup,
-        imageUrl,
-      ];
+  List<Object?> get props => [id, name, muscleGroup, imageUrl];
 }

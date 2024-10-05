@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/features/Profile/data/models/subscription_model.dart';
+import 'package:intl/intl.dart';
 import 'package:uniceps/features/Profile/domain/entities/subscription.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:uniceps/main_cubit/locale_cubit.dart';
 
 class SubscriptionWidget extends StatelessWidget {
   const SubscriptionWidget({
@@ -12,21 +10,24 @@ class SubscriptionWidget extends StatelessWidget {
   });
 
   final Subscription sub;
+
   @override
   Widget build(BuildContext context) {
     print(percent(sub.startDate, sub.endDate));
     final local = AppLocalizations.of(context)!;
     // final isRtl = context.read<ChangedLangState>().isRtl();
-    final isRtl = BlocProvider.of<LocaleCubit>(context).state.isRtl();
+    // final isRtl = BlocProvider.of<LocaleCubit>(context).state.isRtl();
+    final f = NumberFormat("###,###,###.##");
     return Container(
       margin: const EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0),
+      width: MediaQuery.of(context).size.width * 0.9,
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(width: 1.0, color: Colors.grey.shade400),
         borderRadius: BorderRadius.circular(5.0),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -37,18 +38,20 @@ class SubscriptionWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("${local.sport}: ${sub.sportName}"),
-                    Text("${local.price}: ${sub.price.toInt()}"),
+                    Text("${local.trainer}: ${sub.trainerName}"),
                     Text(
                         "${local.status}: ${sub.isPaid ? local.paid : local.notPaid}"),
+                    Text("${local.price}: ${f.format(sub.price)}"),
                   ],
                 ),
                 SizedBox(
-                  width: 50,
-                  height: 50,
+                  width: 70,
+                  height: 70,
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
                       CircularProgressIndicator(
+                        backgroundColor: Colors.grey.shade200,
                         strokeCap: StrokeCap.round,
                         strokeWidth: 5,
                         strokeAlign: -1.0,
@@ -70,10 +73,14 @@ class SubscriptionWidget extends StatelessWidget {
               Text("Discount Value: ${sub.discountVal}"),
               Text("${sub.discountDes}"),
             ],
-            if (sub.payments != null)
-              for (var i in sub.payments as List<Payment>)
+            if (sub.payments != null && sub.payments!.isNotEmpty) ...[
+              const Divider(),
+              for (int i = 0; i < sub.payments!.length; i++)
                 Text(
-                    AppLocalizations.of(context)!.payment + i.value.toString()),
+                  "${local.payment} (${i + 1}): "
+                  "${f.format(sub.payments![i].value)}",
+                ),
+            ]
           ],
         ),
       ),
@@ -84,7 +91,7 @@ class SubscriptionWidget extends StatelessWidget {
 int range(DateTime end) {
   final now = DateTime.now();
   if (now.compareTo(end) < 0) {
-    return end.difference(now).inDays;
+    return end.difference(now).inDays + 1;
   }
   return 0;
 }

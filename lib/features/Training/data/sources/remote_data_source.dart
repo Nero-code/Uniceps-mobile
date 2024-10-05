@@ -4,11 +4,11 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
+import 'package:uniceps/core/helpers/image_cache_manager.dart';
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
 import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
 import 'package:uniceps/features/Training/data/models/presence_model.dart';
 import 'package:uniceps/features/Training/data/models/training_prog_model.dart';
-import 'package:uniceps/features/Profile/domain/entities/gym.dart';
 import 'package:uniceps/features/Training/services/entities/avatar.dart';
 
 abstract class RemoteTrainingSource {
@@ -17,7 +17,8 @@ abstract class RemoteTrainingSource {
     required String pid,
     required Map<String, double> weights,
   });
-  Future<List<Gym>> getGyms();
+  Future<List<GymModel>> getGyms();
+  Future<List<GymModel>> getSubscribedToGyms();
   Future<List<PresenceModel>> getPresence(String gymId);
   Future<Avatar> getAvatar();
 
@@ -33,10 +34,13 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
 
   // final Box<Map<String, dynamic>> routineBox;
 
+  final ImageCacheManager cacheManager;
+
   const RemoteTrainingSourceImpl({
     required this.client,
     required this.userBox,
     required this.playerBox,
+    required this.cacheManager,
     // required this.lastWBox,
   });
 
@@ -62,9 +66,23 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
       final temp = jsonDecode(res.body);
       // print("res body: ${res.body}");
 
-      print("temp: $temp");
-      print("weights: $weights");
-      return TrainingProgramModel.fromJson(temp, weights);
+      // print("temp: $temp");
+      // print("weights: $weights");
+
+      //  /////////////////////////////////
+      //
+      //  CACHE PROGRAM IMAGES BEFORE PARSE
+      //
+
+      final images =
+          await cacheManager.getAndCacheImages(temp['routine_items']);
+      //
+      //  /////////////////////////////////
+      return TrainingProgramModel.fromJson(
+        json: temp,
+        weights: weights,
+        images: images,
+      );
     } else if (res.statusCode == 204) {
       throw EmptyCacheExeption();
     }
@@ -72,9 +90,9 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
   }
 
   @override
-  Future<List<Gym>> getGyms() async {
+  Future<List<GymModel>> getGyms() async {
     final res = await client.get(Uri.http(API, "/path", {}));
-    final list = <Gym>[];
+    final list = <GymModel>[];
     if (res.statusCode == 200) {
       final temp = jsonDecode(res.body)['data'] as List<Map<String, dynamic>>;
       temp.map((e) => list.add(GymModel.fromJson(e)));
@@ -123,5 +141,29 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
       throw NoGymSpecifiedException();
     }
     throw ServerException();
+  }
+
+  @override
+  Future<List<GymModel>> getSubscribedToGyms() async {
+    final list = <GymModel>[];
+    final res = await client.get(
+      Uri.parse(
+        "$API" "$HTTP_GYMS" "/shakes",
+      ),
+      headers: {
+        ...HEADERS,
+        "x-access-token": userBox.get(HIVE_USER_BOX)!['token'],
+      },
+    );
+
+    if (res.statusCode == 200) {
+      print("Debug: ${res.body}");
+      for (var i in jsonDecode(res.body)) {
+        list.add(GymModel.fromJson(i));
+      }
+    } else if (res.statusCode == 204) {
+      throw NoGymSpecifiedException();
+    }
+    return list;
   }
 }

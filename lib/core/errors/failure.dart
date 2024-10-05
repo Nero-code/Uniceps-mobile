@@ -58,7 +58,67 @@ class InvalidCodeFailure implements Failure {
 class EmptyCacheFailure implements Failure {
   final String errorMessage;
 
-  EmptyCacheFailure({required this.errorMessage});
+  const EmptyCacheFailure({required this.errorMessage});
+  @override
+  String getErrorMessage() {
+    return errorMessage;
+  }
+}
+
+class EmptyMeasureFailure implements Failure {
+  final String errorMessage;
+
+  const EmptyMeasureFailure({required this.errorMessage});
+  @override
+  String getErrorMessage() {
+    return errorMessage;
+  }
+}
+
+class EmptySubsFailure implements Failure {
+  final String errorMessage;
+
+  const EmptySubsFailure({required this.errorMessage});
+  @override
+  String getErrorMessage() {
+    return errorMessage;
+  }
+}
+
+class EmptyGymsListFailure implements Failure {
+  final String errorMessage;
+
+  const EmptyGymsListFailure({required this.errorMessage});
+  @override
+  String getErrorMessage() {
+    return errorMessage;
+  }
+}
+
+class EmptyTrainingDaysFailure implements Failure {
+  final String errorMessage;
+
+  const EmptyTrainingDaysFailure({required this.errorMessage});
+  @override
+  String getErrorMessage() {
+    return errorMessage;
+  }
+}
+
+class EmptyAttendenceFailure implements Failure {
+  final String errorMessage;
+
+  const EmptyAttendenceFailure({required this.errorMessage});
+  @override
+  String getErrorMessage() {
+    return errorMessage;
+  }
+}
+
+class EmptyExercisesFailure implements Failure {
+  final String errorMessage;
+
+  const EmptyExercisesFailure({required this.errorMessage});
   @override
   String getErrorMessage() {
     return errorMessage;

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:uniceps/features/Training/views/widgets/exercise_widget.dart';
 
-///
-///   DEPRICATED
-///
-
+@Deprecated("Exercises now show in listview in homePage")
 class ExercisesPage extends StatefulWidget {
-  ExercisesPage({super.key});
+  const ExercisesPage({super.key});
 
   @override
   State<ExercisesPage> createState() => _ExercisesPageState();

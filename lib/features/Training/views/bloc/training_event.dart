@@ -9,6 +9,7 @@ sealed class TrainingEvent extends Equatable {
 
 final class GetProgramEvent extends TrainingEvent {
   final int filter;
+  final String gymId = '';
   const GetProgramEvent({this.filter = 1});
 }
 
