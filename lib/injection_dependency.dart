@@ -73,7 +73,7 @@ Future<void> init() async {
     await profileBox.clear();
     await trainBox.clear();
     await lastWeightBox.clear();
-    await gymsBox.clear();
+    // await gymsBox.clear();
     await myGyms.clear();
     await subsBox.clear();
     await measureBox.clear();

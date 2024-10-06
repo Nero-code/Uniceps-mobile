@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+// import 'package:qr_flutter/qr_flutter.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
@@ -8,7 +8,6 @@ import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/features/Training/views/bloc/current_gym_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
 import 'package:uniceps/features/Training/services/usecases/usecases.dart';
 import 'package:uniceps/features/Training/views/bloc/exercises_bloc.dart';
@@ -749,7 +748,8 @@ class _HomeScreenState extends State<HomeScreen>
                                                         FontWeight.bold),
                                               ),
                                               Text(
-                                                "${playerState.player.name.split(" ")[0]}",
+                                                playerState.player.name
+                                                    .split(" ")[0],
                                                 style: TextStyle(
                                                     fontSize: 20,
                                                     color: Colors.white,
@@ -802,8 +802,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     //   ),
                                     // ),
 
-                                    BlocConsumer<CurrentGymBloc,
-                                        CurrentGymState>(
+                                    BlocConsumer<ProfileBloc, ProfileState>(
                                       listener: (context, state) {
                                         print("DEBUG: ${state.runtimeType}");
                                         if (state is CurrentGymUpdatedState) {
@@ -817,60 +816,61 @@ class _HomeScreenState extends State<HomeScreen>
                                         }
                                       },
                                       builder: (context, state) {
-                                        if (state is CurrentGymLoadedState) {
+                                        if (state is ProfileLoadedState) {
                                           return HomeCard(
                                             section: section ?? local.about,
-                                            myGym: state.current,
+                                            // myGym: state.current,
+                                            player: state.player,
                                             openQRPopup: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) =>
-                                                    BlocBuilder<ProfileBloc,
-                                                        ProfileState>(
-                                                  builder: (context, state) {
-                                                    if (state
-                                                        is ProfileLoadedState) {
-                                                      return AlertDialog(
-                                                        // title:
-                                                        content: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: [
-                                                            QrImageView(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(
-                                                                      15.0),
-                                                              data: state
-                                                                  .player.uid,
-                                                            ),
-                                                            const Divider(),
-                                                            Center(
-                                                              child: Text(
-                                                                state.player
-                                                                    .name,
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        25,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ).build(context);
-                                                    } else if (state
-                                                        is ProfileErrorState) {
-                                                      return Center(
-                                                        child:
-                                                            Text(local.error),
-                                                      );
-                                                    }
-                                                    return const CircularProgressIndicator();
-                                                  },
-                                                ),
-                                              );
+                                              // showDialog(
+                                              //   context: context,
+                                              //   builder: (context) =>
+                                              //       BlocBuilder<ProfileBloc,
+                                              //           ProfileState>(
+                                              //     builder: (context, state) {
+                                              //       if (state
+                                              //           is ProfileLoadedState) {
+                                              //         return AlertDialog(
+                                              //           // title:
+                                              //           content: Column(
+                                              //             mainAxisSize:
+                                              //                 MainAxisSize.min,
+                                              //             children: [
+                                              //               QrImageView(
+                                              //                 padding:
+                                              //                     const EdgeInsets
+                                              //                         .all(
+                                              //                         15.0),
+                                              //                 data: state
+                                              //                     .player.uid,
+                                              //               ),
+                                              //               const Divider(),
+                                              //               Center(
+                                              //                 child: Text(
+                                              //                   state.player
+                                              //                       .name,
+                                              //                   style: const TextStyle(
+                                              //                       fontSize:
+                                              //                           25,
+                                              //                       fontWeight:
+                                              //                           FontWeight
+                                              //                               .bold),
+                                              //                 ),
+                                              //               ),
+                                              //             ],
+                                              //           ),
+                                              //         ).build(context);
+                                              //       } else if (state
+                                              //           is ProfileErrorState) {
+                                              //         return Center(
+                                              //           child:
+                                              //               Text(local.error),
+                                              //         );
+                                              //       }
+                                              //       return const CircularProgressIndicator();
+                                              //     },
+                                              //   ),
+                                              // );
                                             },
                                             openGymSheet: () {
                                               if (!panelController.isAttached) {
@@ -897,7 +897,7 @@ class _HomeScreenState extends State<HomeScreen>
                                               );
                                             },
                                           );
-                                        } else if (state is GymsErrorState) {
+                                        } else if (state is ProfileErrorState) {
                                           return const SizedBox();
                                         }
                                         return Material(
@@ -914,7 +914,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                     .size
                                                     .height *
                                                 0.18,
-                                            child: Center(
+                                            child: const Center(
                                               child:
                                                   CircularProgressIndicator(),
                                             ),

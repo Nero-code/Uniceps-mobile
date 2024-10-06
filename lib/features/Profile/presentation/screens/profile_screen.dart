@@ -69,8 +69,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 //   ],
 // ),
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  bool loggingOut = false;
 
   @override
   Widget build(BuildContext context) {
@@ -133,37 +140,36 @@ class ProfileScreen extends StatelessWidget {
                           children: [
                             IconButton(
                               onPressed: () async {
-                                showDialog(
-                                    context: context,
-                                    builder: (c) => AlertDialog(
-                                          title: Text(local.chooseLang),
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              for (var i in Lang.values)
-                                                RadioListTile(
-                                                    title: Text(i == Lang.en
-                                                        ? "English"
-                                                        : "العربية"),
-                                                    value: st.locale
-                                                            .languageCode ==
-                                                        i.name,
-                                                    groupValue: true,
-                                                    onChanged: (newVal) {
-                                                      BlocProvider.of<
-                                                                  LocaleCubit>(
-                                                              context)
-                                                          .changeLanguage(
-                                                              i.name == "en"
-                                                                  ? "en"
-                                                                  : "ar");
-                                                      Navigator.pop(context);
-                                                    }),
-                                            ],
-                                          ),
-                                        ).build(context));
+                                // showDialog(
+                                //   context: context,
+                                //   builder: (c) => AlertDialog(
+                                //     title: Text(local.chooseLang),
+                                //     content: Column(
+                                //       mainAxisSize: MainAxisSize.min,
+                                //       children: [
+                                //         for (var i in Lang.values)
+                                //           RadioListTile(
+                                //               title: Text(i == Lang.en
+                                //                   ? "English"
+                                //                   : "العربية"),
+                                //               value: st.locale.languageCode ==
+                                //                   i.name,
+                                //               groupValue: true,
+                                //               onChanged: (newVal) {
+                                //                 BlocProvider.of<LocaleCubit>(
+                                //                         context)
+                                //                     .changeLanguage(
+                                //                         i.name == "en"
+                                //                             ? "en"
+                                //                             : "ar");
+                                //                 Navigator.pop(context);
+                                //               }),
+                                //       ],
+                                //     ),
+                                //   ).build(context),
+                                // );
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.language,
                                 size: 30,
                                 color: Colors.white70,
@@ -342,6 +348,106 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            TableRow(
+                              children: [
+                                SettingsTile2(
+                                  icon: Icons.language,
+                                  iconsColor: Colors.blue,
+                                  title: local.measurements,
+                                  subtitle: "",
+                                  onPressed: () {
+                                    // BlocProvider.of<MeasurmentBloc>(context)
+                                    //     .add(GetMeasurementsEvent());
+                                    // Navigator.of(context)
+                                    //     .push(MaterialPageRoute(
+                                    //   builder: (context) =>
+                                    //       MeasurementScreen3(),
+                                    // ));
+                                    showDialog(
+                                      context: context,
+                                      builder: (c) => AlertDialog(
+                                        title: Text(local.chooseLang),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            for (var i in Lang.values)
+                                              RadioListTile(
+                                                  title: Text(i == Lang.en
+                                                      ? "English"
+                                                      : "العربية"),
+                                                  value:
+                                                      st.locale.languageCode ==
+                                                          i.name,
+                                                  groupValue: true,
+                                                  onChanged: (newVal) {
+                                                    BlocProvider.of<
+                                                                LocaleCubit>(
+                                                            context)
+                                                        .changeLanguage(
+                                                            i.name == "en"
+                                                                ? "en"
+                                                                : "ar");
+                                                    Navigator.pop(context);
+                                                  }),
+                                          ],
+                                        ),
+                                      ).build(context),
+                                    );
+                                  },
+                                ),
+                                SettingsTile2(
+                                  icon: Icons.logout_rounded,
+                                  iconsColor: Colors.red,
+                                  title: local.about,
+                                  subtitle: "",
+                                  // onPressed: () => Navigator.of(context)
+                                  //     .pushNamed(ROUTE_ABOUT),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text(local.logoutAlert),
+                                          content:
+                                              Text(local.logoutAlertContents),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(local.cancel),
+                                            ),
+                                            TextButton(
+                                              onPressed: () async {
+                                                BlocProvider.of<AuthBloc>(
+                                                        context)
+                                                    .add(LogoutEvent());
+                                                final bloc = await BlocProvider
+                                                        .of<AuthBloc>(context)
+                                                    .stream
+                                                    .skip(1)
+                                                    .first;
+                                                print(
+                                                    "Bloc: ${bloc.runtimeType}");
+                                                if (bloc
+                                                    is AuthLoggedoutState) {
+                                                  Navigator.pop(context);
+                                                  Navigator.pop(context);
+                                                  Navigator
+                                                      .pushReplacementNamed(
+                                                          context, ROUTE_AUTH);
+                                                }
+                                              },
+                                              child: Text(local.ok),
+                                            ),
+                                          ],
+                                        ).build(context);
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ],
                         ),
 
@@ -401,7 +507,6 @@ class ProfileScreen extends StatelessWidget {
                         //         });
                         //   },
                         // ),
-
                         // SettingTile(
                         //   icon: Icon(
                         //     Icons.language,
@@ -469,7 +574,6 @@ class ProfileScreen extends StatelessWidget {
                         // //
                         // //      G Y M S   L I S T   O P T I O N
                         // //
-
                         // SettingTile(
                         //   icon: Icon(
                         //     Icons.fitness_center_rounded,
@@ -483,7 +587,6 @@ class ProfileScreen extends StatelessWidget {
                         //     Navigator.pushNamed(context, ROUTE_GYMS_LIST);
                         //   },
                         // ),
-
                         // SettingTile(
                         //   icon: Icon(
                         //     Icons.leaderboard_rounded,
@@ -495,7 +598,6 @@ class ProfileScreen extends StatelessWidget {
                         //     Navigator.pushNamed(context, ROUTE_MEASUREMENTS);
                         //   },
                         // ),
-
                         // //
                         // //      A B O U T   O P T I O N
                         // //
@@ -514,6 +616,11 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                if (loggingOut)
+                  SizedBox(
+                    width: screen.width,
+                    height: screen.height,
+                  ),
               ],
             ),
           ),

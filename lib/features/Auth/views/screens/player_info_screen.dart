@@ -95,6 +95,13 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
             }
             return Stack(
               children: [
+                if (isCreate)
+                  Positioned(
+                    child: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.arrow_back),
+                    ),
+                  ),
                 Positioned(
                   top: 0.0,
                   width: MediaQuery.of(context).size.width,

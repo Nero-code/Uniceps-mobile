@@ -75,23 +75,9 @@ class _GymListScreenState extends State<GymListScreen> {
                           top: MediaQuery.of(context).size.height * 0.35),
                       itemCount: state.restList.length + 1,
                       itemBuilder: (context, index) {
-                        // return GymWidget2(
-                        //   gym: state.list[index],
-                        //   icon: const Icon(Icons.arrow_forward_ios_rounded),
-                        //   onPressed: () {
-                        //     BlocProvider.of<SubsBloc>(context)
-                        //         .add(GetSubsEvent(gymId: state.list[index].id));
-                        //     Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(
-                        //         builder: (context) => GymProfileScreen(
-                        //           gym: state.list[index],
-                        //         ),
-                        //       ),
-                        //     );
-                        //   },
-                        // );
                         gymsList = state.restList;
+
+                        //  TODO: N E E D S   R E F A C T O R
                         if (index == 0) {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -133,7 +119,7 @@ class _GymListScreenState extends State<GymListScreen> {
                     Positioned(
                       top: MediaQuery.of(context).size.height * 0.35,
                       child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Color.fromARGB(255, 218, 218, 218),
                           borderRadius: BorderRadius.horizontal(
                             left: Radius.circular(15),
@@ -155,9 +141,6 @@ class _GymListScreenState extends State<GymListScreen> {
                     ),
                     SafeArea(
                       child: Column(
-                        // top: 0.0,
-                        // width: MediaQuery.of(context).size.width,
-                        // height: MediaQuery.of(context).size.height * 0.25,
                         children: [
                           Container(
                             width: MediaQuery.of(context).size.width,
@@ -221,33 +204,41 @@ class _GymListScreenState extends State<GymListScreen> {
                         builder: (context, controller) {
                           return Padding(
                             padding: const EdgeInsets.all(15.0),
-                            child: SearchBar(
-                              focusNode: node2,
-                              // controller: controller,
-                              hintText: local.search,
-                              hintStyle:
-                                  const MaterialStatePropertyAll<TextStyle>(
-                                      TextStyle(color: Colors.white54)),
-                              textStyle:
-                                  const MaterialStatePropertyAll<TextStyle>(
-                                      TextStyle(color: Colors.white70)),
-                              leading: const Icon(Icons.search,
-                                  color: Colors.white54),
-                              shadowColor:
-                                  const MaterialStatePropertyAll<Color>(
-                                      Colors.transparent),
-                              backgroundColor:
-                                  const MaterialStatePropertyAll<Color>(
-                                      Colors.white24),
-                              constraints: const BoxConstraints(
-                                minHeight: 40,
-                              ),
-                              onTap: () {
-                                isOpen = true;
-                                node2.unfocus();
-                                node.requestFocus();
-                                setState(() {});
-                              },
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  icon: const Icon(Icons.arrow_back),
+                                ),
+                                SearchBar(
+                                  focusNode: node2,
+                                  // controller: controller,
+                                  hintText: local.search,
+                                  hintStyle:
+                                      const MaterialStatePropertyAll<TextStyle>(
+                                          TextStyle(color: Colors.white54)),
+                                  textStyle:
+                                      const MaterialStatePropertyAll<TextStyle>(
+                                          TextStyle(color: Colors.white70)),
+                                  leading: const Icon(Icons.search,
+                                      color: Colors.white54),
+                                  shadowColor:
+                                      const MaterialStatePropertyAll<Color>(
+                                          Colors.transparent),
+                                  backgroundColor:
+                                      const MaterialStatePropertyAll<Color>(
+                                          Colors.white24),
+                                  constraints: const BoxConstraints(
+                                    minHeight: 40,
+                                  ),
+                                  onTap: () {
+                                    isOpen = true;
+                                    node2.unfocus();
+                                    node.requestFocus();
+                                    setState(() {});
+                                  },
+                                ),
+                              ],
                             ),
                           );
                         },

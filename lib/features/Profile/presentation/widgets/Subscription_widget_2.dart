@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/features/Profile/domain/entities/subscription.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-final f = NumberFormat("###,###,###");
+final f = intl.NumberFormat("###,###,###");
 
 class SubsrciptionWidget2 extends StatefulWidget {
   const SubsrciptionWidget2({super.key, required this.sub});
@@ -222,14 +222,12 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
       }
     }
     return Container(
-      height: MediaQuery.of(context).size.height,
+      height: MediaQuery.sizeOf(context).height,
+      width: MediaQuery.sizeOf(context).width,
       key: const ValueKey(false),
       margin: const EdgeInsets.all(5.0),
       decoration: BoxDecoration(
           color: Colors.white,
-          // border: Border.all(
-          //   color: Colors.grey.shade300,
-          // ),
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
             BoxShadow(
@@ -258,12 +256,17 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
                             children: [
                               Material(
                                 borderRadius: BorderRadius.circular(5),
-                                color: secondaryLight,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withAlpha(90),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 5.0),
                                   child: Text(
-                                    "${i.payDate.day}/${i.payDate.month}/${i.payDate.year}: ",
+                                    intl.DateFormat("dd/MM/yyyy - hh:MM a")
+                                        .format(i.payDate),
+                                    textDirection: TextDirection.ltr,
                                     style: TextStyle(
                                       fontSize: size,
                                     ),
@@ -272,10 +275,7 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
                               ),
                               const SizedBox(height: 10.0),
                               Material(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primary
-                                    .withAlpha(90),
+                                color: secondaryLight,
                                 borderRadius: BorderRadius.circular(5),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(

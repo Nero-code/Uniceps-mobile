@@ -23,7 +23,7 @@ class GymLogoWidget extends StatelessWidget {
                     ? Border.all(
                         width: 5.0,
                         // color: Theme.of(context).colorScheme.primary,
-                        color: Colors.green.shade300,
+                        color: Theme.of(context).colorScheme.primary,
                       )
                     : null,
                 borderRadius: BorderRadius.circular(30),

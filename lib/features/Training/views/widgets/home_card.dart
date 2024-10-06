@@ -2,27 +2,29 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gradient_circular_progress_indicator/gradient_circular_progress_indicator.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/features/Profile/domain/entities/gym.dart';
-// import 'package:uniceps/features/Auth/services/enitites/player.dart';
-// import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
+import 'package:uniceps/core/widgets/error_widget.dart';
+import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/features/Training/views/bloc/current_gym_bloc.dart';
 
 class HomeCard extends StatelessWidget {
   const HomeCard({
     super.key,
-    required this.myGym,
+    // required this.myGym,
+    required this.player,
     required this.openGymSheet,
     required this.openQRPopup,
     required this.openSectionSheet,
     required this.section,
   });
 
-  final Gym myGym;
-  // final Player player;
+  // final Gym myGym;
+  final Player player;
   final VoidCallback openGymSheet, openQRPopup, openSectionSheet;
   final String? section;
 
@@ -53,7 +55,6 @@ class HomeCard extends StatelessWidget {
                     child: Row(
                       children: [
                         SizedBox(
-                          // width: MediaQuery.of(context).size.width * 0.5,
                           height: 30,
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
@@ -126,161 +127,186 @@ class HomeCard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Material(
-                              // elevation: 3,
-                              borderRadius: BorderRadius.circular(8),
-                              // color: Color.fromARGB(138, 41, 91, 121),
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withAlpha(190),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(8),
-                                onTap: openGymSheet,
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 5.0, vertical: 3.0),
-                                  child: Icon(
-                                    Icons.cached,
-                                    color: Colors.white,
+                    BlocBuilder<CurrentGymBloc, CurrentGymState>(
+                      builder: (context, state) {
+                        if (state is CurrentGymLoadedState) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Material(
+                                    // elevation: 3,
+                                    borderRadius: BorderRadius.circular(8),
+                                    // color: Color.fromARGB(138, 41, 91, 121),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withAlpha(190),
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(8),
+                                      onTap: openGymSheet,
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 5.0, vertical: 3.0),
+                                        child: Icon(
+                                          Icons.cached,
+                                          color: Colors.white,
+                                        ),
+                                        // Text(
+                                        //   "تبديل",
+                                        //   style: TextStyle(
+                                        //     fontSize: 16,
+                                        //     fontWeight: FontWeight.bold,
+                                        //     color: Color.fromARGB(
+                                        //         255, 255, 255, 255),
+                                        //   ),
+                                        // ),
+                                      ),
+                                    ),
                                   ),
-                                  // Text(
-                                  //   "تبديل",
-                                  //   style: TextStyle(
-                                  //     fontSize: 16,
-                                  //     fontWeight: FontWeight.bold,
-                                  //     color: Color.fromARGB(
-                                  //         255, 255, 255, 255),
-                                  //   ),
-                                  // ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Material(
-                              // elevation: 3,
-                              borderRadius: BorderRadius.circular(8),
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondary
-                                  .withAlpha(100),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(8),
-                                onTap: openQRPopup,
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 5.0, vertical: 3.0),
-                                  child: Icon(Icons.qr_code),
-                                  // Text(
-                                  //   "111111",
-                                  //   style: TextStyle(
-                                  //     fontWeight: FontWeight.bold,
-                                  //     color: const Color.fromARGB(
-                                  //         255, 11, 81, 138),
-                                  //   ),
-                                  // ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            CachedNetworkImage(
-                              width: 40,
-                              imageUrl: "$API"
-                                  "$HTTP_GYMS"
-                                  "$HTTP_GYM_LOGO"
-                                  "/${myGym.id}",
-                              imageBuilder: (context, imageProvider) =>
-                                  ClipRRect(
-                                child: Image(image: imageProvider),
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              errorWidget: (context, url, error) {
-                                return const Image(
-                                  image: AssetImage(
-                                    "images/logo/Logo-dark.png",
+                                  const SizedBox(width: 10),
+                                  Material(
+                                    // elevation: 3,
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary
+                                        .withAlpha(100),
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(8),
+                                      // onTap: openQRPopup,
+                                      onTap: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                                  // title:
+                                                  content: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      QrImageView(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(15.0),
+                                                        data: player.uid,
+                                                      ),
+                                                      const Divider(),
+                                                      Center(
+                                                        child: Text(
+                                                          player.name,
+                                                          style: const TextStyle(
+                                                              fontSize: 25,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ).build(context));
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 5.0, vertical: 3.0),
+                                        child: Icon(Icons.qr_code),
+                                        // Text(
+                                        //   "111111",
+                                        //   style: TextStyle(
+                                        //     fontWeight: FontWeight.bold,
+                                        //     color: const Color.fromARGB(
+                                        //         255, 11, 81, 138),
+                                        //   ),
+                                        // ),
+                                      ),
+                                    ),
                                   ),
-                                  width: 30,
-                                );
-                              },
-                            ),
-                            const SizedBox(width: 5),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              // height: 30,
-                              child: Text(
-                                // "${name[0].trim()}"
-                                // "\n"
-                                // "${name[1].trim()}",
-                                // "النادي العربي الرياضي الاوحد",
-                                myGym.name,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    // color:
-                                    //     Theme.of(context).colorScheme.secondary,
-                                    fontSize: myGym.name.length < 14
-                                        ? 20
-                                        : myGym.name.length <= 20
-                                            ? 15
-                                            : 11,
-                                    // fontSize: 35 - myGym.name.length.toDouble(),
-                                    fontWeight: FontWeight.bold),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
+                              Row(
+                                children: [
+                                  CachedNetworkImage(
+                                    width: 40,
+                                    imageUrl: "$API"
+                                        "$HTTP_GYMS"
+                                        "$HTTP_GYM_LOGO"
+                                        "/${state.current.id}",
+                                    imageBuilder: (context, imageProvider) =>
+                                        ClipRRect(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child: Image(image: imageProvider),
+                                    ),
+                                    errorWidget: (context, url, error) {
+                                      return const Image(
+                                        image: AssetImage(
+                                          "images/logo/Logo-dark.png",
+                                        ),
+                                        width: 30,
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(width: 5),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    // height: 30,
+                                    child: Text(
+                                      // "${name[0].trim()}"
+                                      // "\n"
+                                      // "${name[1].trim()}",
+                                      // "النادي العربي الرياضي الاوحد",
+                                      state.current.name,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: Colors.black54,
+                                          // color:
+                                          //     Theme.of(context).colorScheme.secondary,
+                                          fontSize: state.current.name.length <
+                                                  14
+                                              ? 20
+                                              : state.current.name.length <= 20
+                                                  ? 15
+                                                  : 11,
+                                          // fontSize: 35 - myGym.name.length.toDouble(),
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
 
-                        // const SizedBox(height: 5),
-                        Column(
-                          children: [
-                            // Expanded(
-                            //   child: LinearProgressIndicator(
-                            //     minHeight: 7,
-                            //     borderRadius: BorderRadius.circular(5),
-                            //     // backgroundColor:
-                            //     // Colors.black.withAlpha(100),
-                            //     backgroundColor: Theme.of(context)
-                            //         .colorScheme
-                            //         .secondary
-                            //         .withAlpha(50),
-                            //     color: Theme.of(context)
-                            //         .colorScheme
-                            //         .secondary,
-                            //     value: (player.level -
-                            //         player.level.toInt()) as double?,
-
-                            //     // color: Colors.black,
-                            //   ),
-                            // ),
-                            Text(
-                              local.endOfSubDate,
-                              style: const TextStyle(
-                                color: Colors.black45,
-                                // fontWeight: FontWeight.bold,
-                                fontSize: 11,
+                              // const SizedBox(height: 5),
+                              Column(
+                                children: [
+                                  Text(
+                                    local.endOfSubDate,
+                                    style: const TextStyle(
+                                      color: Colors.black45,
+                                      // fontWeight: FontWeight.bold,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                  Text(
+                                    state.current.end,
+                                    style: const TextStyle(
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Text(
-                              myGym.end,
-                              style: TextStyle(
-                                color: Colors.black54,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          );
+                        } else if (state is CurrentGymErrorState) {
+                          return ErrorScreenWidget(f: state.f, callback: null);
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
                     ),
                     BlocBuilder<ProfileBloc, ProfileState>(
                       builder: (context, state) {
@@ -320,7 +346,7 @@ class HomeCard extends StatelessWidget {
                                     children: [
                                       Text(
                                         "lvl: ${state.player.level.toInt()}",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black54,
@@ -328,7 +354,7 @@ class HomeCard extends StatelessWidget {
                                       ),
                                       Text(
                                         "${((state.player.level - state.player.level.toInt()) * 100).toInt()}%",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black54,

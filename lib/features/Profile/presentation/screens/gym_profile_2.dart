@@ -60,21 +60,13 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
             ),
             boxShadow: [],
           ),
-          child: Column(
+          child: const Column(
             children: [
-              const Icon(
+              Icon(
                 Icons.remove_rounded,
                 color: Colors.white,
                 size: 30,
               ),
-              // Text(
-              //   local.attendenceLog,
-              //   style: TextStyle(
-              //     fontSize: 12,
-              //     color: Colors.white,
-              //     fontWeight: FontWeight.bold,
-              //   ),
-              // ),
             ],
           ),
         ),

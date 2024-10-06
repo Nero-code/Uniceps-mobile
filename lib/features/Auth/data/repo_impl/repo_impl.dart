@@ -126,26 +126,20 @@ class AuthRepoImpl implements AuthRepo {
 
   @override
   Future<Either<Failure, bool>> logout() async {
-    try {
-      await local.localLogout();
-      return const Right(true);
-    } catch (e) {
-      return Left(GeneralPurposFailure(errorMessage: "LogoutFailed"));
+    if (await connection.hasConnection) {
+      try {
+        await remote.logout();
+        await local.localLogout();
+        return const Right(true);
+      } on AuthException {
+        return Left(AuthFailure(errorMessage: "could not logout user"));
+      } catch (e) {
+        return Left(GeneralPurposFailure(errorMessage: "LogoutFailed"));
+      }
     }
-    // if (await connection.hasConnection) {
-    // try{
-    //   final res = await remote.logout();
-    // }
-    // }
-    // else {
-    //     try {
-    //     await local.localLogout();
-    //     return const Right(true);
-    //   } catch (e) {
-    //     return Left(GeneralPurposFailure(errorMessage: "Could not logout"));
-    //   }
-    //   // return Left(NoInternetConnectionFailure(errMsg: ""));
-    // }
+    return Left(
+      NoInternetConnectionFailure(errMsg: ""),
+    );
   }
 
   @override

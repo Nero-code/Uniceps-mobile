@@ -12,7 +12,7 @@ class ErrorScreenWidget extends StatelessWidget {
   });
 
   final Failure f;
-  final VoidCallback callback;
+  final VoidCallback? callback;
   final double gapSize;
 
   @override
@@ -22,10 +22,11 @@ class ErrorScreenWidget extends StatelessWidget {
       children: [
         Text(errorToTextMapper(context, f)),
         SizedBox(height: gapSize),
-        IconButton(
-          onPressed: callback,
-          icon: const Icon(Icons.refresh_rounded),
-        ),
+        if (callback != null)
+          IconButton(
+            onPressed: callback,
+            icon: const Icon(Icons.refresh_rounded),
+          ),
       ],
     );
   }

@@ -155,15 +155,17 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
         "x-access-token": userBox.get(HIVE_USER_BOX)!['token'],
       },
     );
-
+    print(res.statusCode);
     if (res.statusCode == 200) {
       print("Debug: ${res.body}");
       for (var i in jsonDecode(res.body)) {
         list.add(GymModel.fromJson(i));
       }
+
+      return list;
     } else if (res.statusCode == 204) {
       throw NoGymSpecifiedException();
     }
-    return list;
+    throw ServerException();
   }
 }

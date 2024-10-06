@@ -24,6 +24,7 @@ abstract class RemoteAuthSource {
   Future<PlayerModel> getPlayerInfo();
   // Future<bool> isLoggedIn();
   Future<int> sendNotifyToken(String token);
+  Future<void> logout();
 }
 
 class RemoteAuthSourceImpl implements RemoteAuthSource {
@@ -201,6 +202,18 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
     );
     print("${res.statusCode}");
     return res.statusCode;
+  }
+
+  @override
+  Future<void> logout() async {
+    final res = await client.get(
+      Uri.parse("$API" "$HTTP_REGISTER" "/logout"),
+    );
+    print(res.statusCode);
+    if (res.statusCode == 200) {
+      return;
+    }
+    throw AuthException();
   }
 }
 

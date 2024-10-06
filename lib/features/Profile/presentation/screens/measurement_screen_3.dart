@@ -9,7 +9,7 @@ import 'package:uniceps/features/Profile/presentation/widgets/measure_widget_3.d
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MeasurementScreen3 extends StatefulWidget {
-  MeasurementScreen3({super.key});
+  const MeasurementScreen3({super.key});
 
   @override
   State<MeasurementScreen3> createState() => _MeasurementScreen3State();
@@ -41,7 +41,7 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
 
   final duration = const Duration(milliseconds: 500);
 
-  Widget child = SizedBox();
+  Widget child = const SizedBox();
 
   Future<void> animate(bool isNext) async {
     // isLoading = true;
@@ -64,7 +64,6 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
     print("currentPAge:  $page");
     print("isLoading:  $isLoading");
     return Scaffold(
-      // backgroundColor: Colors.white,
       body: BlocBuilder<MeasurmentBloc, MeasurmentState>(
         builder: (context, state) {
           if (state is MeasurementLoadedState) {
@@ -92,68 +91,37 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
                   width: screen.width,
                   height: screen.height,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 10.0),
-                      Column(
-                        children: [
-                          PageTransitionSwitcher(
-                            duration: const Duration(milliseconds: 500),
-                            reverse: isLeft,
-                            transitionBuilder:
-                                (child, primaryAnimation, secondaryAnimation) {
-                              // return SharedAxisTransition(
-                              //   animation: primaryAnimation,
-                              //   secondaryAnimation: secondaryAnimation,
-                              //   transitionType:
-                              //       SharedAxisTransitionType.horizontal,
-                              //   child: SizedBox(
-                              //     child: child,
-                              //   ),
-                              // );
-                              // return Stack(
-                              //   children: [
-                              //     // SlideTransition(
-                              //     //   position: Tween(
-                              //     //           begin: Offset(0.3, 0),
-                              //     //           end: Offset.zero)
-                              //     //       .animate(primaryAnimation),
-                              //     //   child: FadeTransition(
-                              //     //     opacity: primaryAnimation,
-                              //     //     child: child,
-                              //     //   ),
-                              //     // ),
-                              //     // SlideTransition(
-                              //     //   position: Tween(
-                              //     //     begin: Offset.zero,
-                              //     //     end: Offset(-0.3, 0),
-                              //     //   ).animate(primaryAnimation),
-                              //     //   child: FadeTransition(
-                              //     //     opacity:
-                              //     //         Tween<double>(begin: 0.7, end: 0.0)
-                              //     //             .animate(primaryAnimation),
-                              //     //     child: this,
-                              //     //   ),
-                              //     // ),
-                              //     // SharedAxisTransition(
-                              //     //   animation: primaryAnimation,
-                              //     //   secondaryAnimation: primaryAnimation,
-                              //     //   transitionType:
-
-                              return SharedAxisTransition(
-                                animation: primaryAnimation,
-                                secondaryAnimation: secondaryAnimation,
-                                transitionType:
-                                    SharedAxisTransitionType.horizontal,
-                                child: child,
-                              );
-                            },
-                            child: SizedBox(
-                              key: ValueKey<int>(page),
-                              child: child,
+                      const SizedBox(height: 20.0),
+                      ColoredBox(
+                        color: Colors.blue,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ColoredBox(
+                              color: Colors.amber,
+                              child: PageTransitionSwitcher(
+                                duration: const Duration(milliseconds: 500),
+                                reverse: isLeft,
+                                transitionBuilder: (child, primaryAnimation,
+                                    secondaryAnimation) {
+                                  return SharedAxisTransition(
+                                    animation: primaryAnimation,
+                                    secondaryAnimation: secondaryAnimation,
+                                    transitionType:
+                                        SharedAxisTransitionType.horizontal,
+                                    child: child,
+                                  );
+                                },
+                                child: SizedBox(
+                                  key: ValueKey<int>(page),
+                                  child: child,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -182,10 +150,25 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
                               ),
                             ),
                           ),
-                          Text(
-                            DateFormat("dd/MM/yyyy")
-                                .format(state.list[page].checkDate),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          PageTransitionSwitcher(
+                            duration: const Duration(milliseconds: 500),
+                            reverse: isLeft,
+                            transitionBuilder:
+                                (child, primaryAnimation, secondaryAnimation) =>
+                                    SharedAxisTransition(
+                              animation: primaryAnimation,
+                              secondaryAnimation: secondaryAnimation,
+                              transitionType:
+                                  SharedAxisTransitionType.horizontal,
+                              child: child,
+                            ),
+                            child: Text(
+                              key: ValueKey<String>("$page"),
+                              DateFormat("dd/MM/yyyy")
+                                  .format(state.list[page].checkDate),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                           IconButton(
                             onPressed: () async {
@@ -236,102 +219,97 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
 
   void childBuilder(Measurement m) {
     final local = AppLocalizations.of(context)!;
-    final screen = MediaQuery.sizeOf(context);
-    child = SizedBox(
-      width: screen.width,
-      height: screen.height * 0.85,
-      child: Column(
-        // key: ValueKey<int>(page),
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              MeasureWidget3(
-                  isLoading: isLoading,
-                  image: trImg[0],
-                  title: local.height,
-                  value: m.height),
-              MeasureWidget3(
-                  isLoading: isLoading,
-                  image: trImg[2],
-                  title: local.nick,
-                  value: m.neck),
-              MeasureWidget3(
-                  isLoading: isLoading,
-                  image: trImg[3],
-                  title: local.shoulders,
-                  value: m.shoulders),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              MeasureWidget3(
-                  isLoading: isLoading,
-                  image: trImg[6],
-                  title: local.lArm,
-                  value: m.lArm),
-              MeasureWidget3(
-                  isLoading: isLoading,
-                  image: trImg[4],
-                  title: local.chest,
-                  value: m.chest),
-              MeasureWidget3(
-                  isLoading: isLoading,
-                  image: trImg[7],
-                  title: local.rArm,
-                  value: m.rArm),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              MeasureWidget3(
-                  isLoading: isLoading,
-                  image: trImg[8],
-                  title: local.lThigh,
-                  value: m.lThigh),
-              MeasureWidget3(
-                  isLoading: isLoading,
-                  image: trImg[5],
-                  title: local.waist,
-                  value: m.waist),
-              MeasureWidget3(
-                  isLoading: isLoading,
-                  image: trImg[9],
-                  title: local.rThigh,
-                  value: m.rThigh),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              MeasureWidget3(
-                  isLoading: isLoading,
-                  image: trImg[10],
-                  title: local.lLeg,
-                  value: m.lLeg), // rLeg
-              MeasureWidget3(
-                  isLoading: isLoading,
-                  image: trImg[12],
-                  title: local.hips,
-                  value: m.hips),
+    child = Column(
+      // key: ValueKey<int>(page),
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            MeasureWidget3(
+                isLoading: isLoading,
+                image: trImg[0],
+                title: local.height,
+                value: m.height),
+            MeasureWidget3(
+                isLoading: isLoading,
+                image: trImg[2],
+                title: local.nick,
+                value: m.neck),
+            MeasureWidget3(
+                isLoading: isLoading,
+                image: trImg[3],
+                title: local.shoulders,
+                value: m.shoulders),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            MeasureWidget3(
+                isLoading: isLoading,
+                image: trImg[6],
+                title: local.lArm,
+                value: m.lArm),
+            MeasureWidget3(
+                isLoading: isLoading,
+                image: trImg[4],
+                title: local.chest,
+                value: m.chest),
+            MeasureWidget3(
+                isLoading: isLoading,
+                image: trImg[7],
+                title: local.rArm,
+                value: m.rArm),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            MeasureWidget3(
+                isLoading: isLoading,
+                image: trImg[8],
+                title: local.lThigh,
+                value: m.lThigh),
+            MeasureWidget3(
+                isLoading: isLoading,
+                image: trImg[5],
+                title: local.waist,
+                value: m.waist),
+            MeasureWidget3(
+                isLoading: isLoading,
+                image: trImg[9],
+                title: local.rThigh,
+                value: m.rThigh),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            MeasureWidget3(
+                isLoading: isLoading,
+                image: trImg[10],
+                title: local.lLeg,
+                value: m.lLeg), // rLeg
+            MeasureWidget3(
+                isLoading: isLoading,
+                image: trImg[12],
+                title: local.hips,
+                value: m.hips),
 
-              MeasureWidget3(
-                  isLoading: isLoading,
-                  image: trImg[11],
-                  title: local.rLeg,
-                  value: m.rLeg),
-            ],
-          ),
-          MeasureWidget3(
-              isLoading: isLoading,
-              image: trImg[1],
-              title: local.weight,
-              isCm: false,
-              value: m.weight),
-        ],
-      ),
+            MeasureWidget3(
+                isLoading: isLoading,
+                image: trImg[11],
+                title: local.rLeg,
+                value: m.rLeg),
+          ],
+        ),
+        MeasureWidget3(
+            isLoading: isLoading,
+            image: trImg[1],
+            title: local.weight,
+            isCm: false,
+            value: m.weight),
+      ],
     );
   }
 }
