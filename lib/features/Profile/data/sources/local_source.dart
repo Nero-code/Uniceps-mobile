@@ -190,7 +190,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
       list.add(GymModel.fromJson(myGyms.get(i)!));
     }
     if (list.isEmpty) {
-      throw EmptyCacheExeption();
+      return [];
     }
     for (var i in list) {
       print("DEBUG: GET SUBS TO GYMS: ${i.toJson()}");
@@ -204,8 +204,9 @@ class LocalProfileSourceImpl implements LocalProfileSource {
 
   @override
   Future<PlayerInGym> getPlayerInGym(String gymId) async {
-    if (await playerProfilesBox.containsKey(gymId)) {
+    if (playerProfilesBox.containsKey(gymId)) {
       final res = playerProfilesBox.get(gymId)!;
+      print("PLAYER IN GYM: $res");
       return PlayerInGym.fromJson(res);
     }
     throw EmptyCacheExeption();

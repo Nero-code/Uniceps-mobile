@@ -42,5 +42,5 @@ class Subscription extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [id, payments?.length];
 }

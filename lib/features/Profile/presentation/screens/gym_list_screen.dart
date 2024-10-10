@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/features/Profile/domain/entities/gym.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import 'package:uniceps/features/Profile/presentation/bloc/player_gym_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/screens/gym_profile_2.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/gym_logo_widget.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/gyms_list_wave_back.dart';
 import 'package:uniceps/features/Training/views/widgets/my_gym_widget.dart';
+import 'package:uniceps/main_cubit/locale_cubit.dart';
 
 class GymListScreen extends StatefulWidget {
   const GymListScreen({super.key});
@@ -33,6 +38,7 @@ class _GymListScreenState extends State<GymListScreen> {
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
+    final isRtl = context.read<LocaleCubit>().state.isRtl();
     return Scaffold(
       // appBar: AppBar(
       //   title: const Text(APP_NAME),
@@ -62,66 +68,67 @@ class _GymListScreenState extends State<GymListScreen> {
           },
           child: BlocBuilder<GymsBloc, GymsState>(
             builder: (context, state) {
+              print("Inside Gyms Bloc 1");
               if (state is GymsLoadedState) {
+                print("Inside Gyms Bloc 2");
                 if (state.restList.isEmpty && state.myGyms.isEmpty) {
+                  print("Inside Gyms Bloc 3");
                   return Center(
                       child: Text(AppLocalizations.of(context)!.empty));
                 }
-                gym = state.myGyms.first;
+                if (state.myGyms.isNotEmpty) {
+                  gym = state.myGyms.first;
+                }
                 return Stack(
                   children: [
+                    //
+                    //  R E S T   L I S T   G Y M S
+                    //
                     ListView.builder(
                       padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.35),
-                      itemCount: state.restList.length + 1,
+                          top: MediaQuery.sizeOf(context).height * 0.4),
+                      itemCount: state.restList.length,
                       itemBuilder: (context, index) {
-                        // return GymWidget2(
-                        //   gym: state.list[index],
-                        //   icon: const Icon(Icons.arrow_forward_ios_rounded),
-                        //   onPressed: () {
-                        //     BlocProvider.of<SubsBloc>(context)
-                        //         .add(GetSubsEvent(gymId: state.list[index].id));
-                        //     Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(
-                        //         builder: (context) => GymProfileScreen(
-                        //           gym: state.list[index],
-                        //         ),
-                        //       ),
-                        //     );
-                        //   },
-                        // );
                         gymsList = state.restList;
-                        if (index == 0) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(""),
-                          );
-                        }
+
                         return MyGymWidget(
-                            myGym: state.restList[index - 1],
+                            myGym: state.restList[index],
                             isSelected: false,
                             isCurrent: false,
                             onPressed: () {
                               BlocProvider.of<SubsBloc>(context).add(
-                                  GetSubsEvent(
-                                      gymId: state.restList[index - 1].id,
-                                      pid: state.restList[index - 1].pid));
+                                GetSubsEvent(
+                                  gymId: state.restList[index].id,
+                                  pid: "",
+                                ),
+                              );
                               BlocProvider.of<AttendenceBloc>(context).add(
-                                  GetAttendenceEvent(
-                                      state.restList[index - 1].id,
-                                      state.restList[index - 1].pid));
+                                GetAttendenceEvent(
+                                  state.restList[index].id,
+                                  "",
+                                ),
+                              );
+                              BlocProvider.of<PlayerGymBloc>(context).add(
+                                GetPlayerInGymEvent(
+                                  gymId: state.restList[index].id,
+                                  pid: "",
+                                ),
+                              );
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => GymProfileScreen2(
-                                    gym: state.restList[index - 1],
+                                    gym: state.restList[index],
                                   ),
                                 ),
                               );
                             });
                       },
                     ),
+
+                    //
+                    //  W A V E   P A I N T E R
+                    //
                     Positioned(
                       top: 0.0,
                       width: MediaQuery.of(context).size.width,
@@ -130,10 +137,15 @@ class _GymListScreenState extends State<GymListScreen> {
                         painter: WavePainter(),
                       ),
                     ),
+
+                    //
+                    //  A V A I L A B L E   G Y M S   B A N N E R
+                    //
                     Positioned(
                       top: MediaQuery.of(context).size.height * 0.35,
+                      right: isRtl ? null : 0.0,
                       child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Color.fromARGB(255, 218, 218, 218),
                           borderRadius: BorderRadius.horizontal(
                             left: Radius.circular(15),
@@ -153,11 +165,11 @@ class _GymListScreenState extends State<GymListScreen> {
                         ),
                       ),
                     ),
+                    //
+                    //  M Y - G Y M S   L I S T
+                    //
                     SafeArea(
                       child: Column(
-                        // top: 0.0,
-                        // width: MediaQuery.of(context).size.width,
-                        // height: MediaQuery.of(context).size.height * 0.25,
                         children: [
                           Container(
                             width: MediaQuery.of(context).size.width,
@@ -170,92 +182,128 @@ class _GymListScreenState extends State<GymListScreen> {
                           ),
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                for (var i in state.myGyms)
-                                  GymLogoWidget(
-                                    gym: i,
-                                    onPressed: () {
-                                      BlocProvider.of<SubsBloc>(context).add(
-                                        GetSubsEvent(
-                                          gymId: i.id,
-                                          pid: i.pid,
+                            child: state.myGyms.isNotEmpty
+                                ? Row(
+                                    children: [
+                                      for (var i in state.myGyms)
+                                        GymLogoWidget(
+                                          gym: i,
+                                          onPressed: () {
+                                            BlocProvider.of<SubsBloc>(context)
+                                                .add(
+                                              GetSubsEvent(
+                                                gymId: i.id,
+                                                pid: i.pid,
+                                              ),
+                                            );
+                                            BlocProvider.of<AttendenceBloc>(
+                                                    context)
+                                                .add(
+                                              GetAttendenceEvent(
+                                                i.id,
+                                                i.pid,
+                                              ),
+                                            );
+                                            BlocProvider.of<PlayerGymBloc>(
+                                                    context)
+                                                .add(
+                                              GetPlayerInGymEvent(
+                                                gymId: i.id,
+                                                pid: i.pid,
+                                              ),
+                                            );
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    GymProfileScreen2(
+                                                  gym: i,
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
-                                      );
-                                      BlocProvider.of<AttendenceBloc>(context)
-                                          .add(
-                                        GetAttendenceEvent(
-                                          i.id,
-                                          i.pid,
-                                        ),
-                                      );
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              GymProfileScreen2(
-                                            gym: i,
-                                          ),
-                                        ),
-                                      );
-                                    },
+                                    ],
+                                  )
+                                : SizedBox(
+                                    height: MediaQuery.sizeOf(context).height *
+                                        0.15,
+                                    child: Center(
+                                      child: DefaultTextStyle(
+                                        style: GoogleFonts.cairo()
+                                          ..copyWith(color: Colors.white),
+                                        child: ErrorScreenWidget(
+                                            f: NoGymSpecifiedFailure(
+                                                errMsg: "errMsg"),
+                                            callback: null),
+                                      ),
+                                    ),
                                   ),
-                              ],
-                            ),
                           ),
                         ],
                       ),
                     ),
-                    // search bar
+                    // S E A R C H   B A R
                     SafeArea(
-                      child: SearchAnchor(
-                        // viewBackgroundColor: Colors.transparent,
-                        // viewBuilder: (suggestions) {
-                        //   return Container(
-                        //     color: Colors.amber,
-                        //     width: 210,
-                        //     height: 150,
-                        //     child: const Text("asasd"),
-                        //   );
-                        // },
-                        builder: (context, controller) {
-                          return Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: SearchBar(
-                              focusNode: node2,
-                              // controller: controller,
-                              hintText: local.search,
-                              hintStyle:
-                                  const MaterialStatePropertyAll<TextStyle>(
-                                      TextStyle(color: Colors.white54)),
-                              textStyle:
-                                  const MaterialStatePropertyAll<TextStyle>(
-                                      TextStyle(color: Colors.white70)),
-                              leading: const Icon(Icons.search,
-                                  color: Colors.white54),
-                              shadowColor:
-                                  const MaterialStatePropertyAll<Color>(
-                                      Colors.transparent),
-                              backgroundColor:
-                                  const MaterialStatePropertyAll<Color>(
-                                      Colors.white24),
-                              constraints: const BoxConstraints(
-                                minHeight: 40,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: 15.0,
+                          left: isRtl ? 15.0 : 0.0,
+                          right: isRtl ? 0.0 : 15.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: IconButton(
+                                onPressed: () => Navigator.pop(context),
+                                icon: const Icon(Icons.arrow_back),
+                                color: Colors.white,
+                                iconSize: 30,
                               ),
-                              onTap: () {
-                                isOpen = true;
-                                node2.unfocus();
-                                node.requestFocus();
-                                setState(() {});
-                              },
                             ),
-                          );
-                        },
-                        suggestionsBuilder: (context, controller) {
-                          return [
-                            const SizedBox(),
-                          ];
-                        },
+                            Expanded(
+                              flex: 7,
+                              child: Container(
+                                height: 40,
+                                padding: const EdgeInsets.all(5.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.white24,
+                                  // color: Colors.black,
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: Center(
+                                  child: TextFormField(
+                                    onTap: () {
+                                      isOpen = true;
+                                      node2.unfocus();
+                                      node.requestFocus();
+                                      setState(() {});
+                                    },
+                                    focusNode: node2,
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 15.0),
+                                      isCollapsed: true,
+                                      enabledBorder: InputBorder.none,
+                                      hintText: local.search,
+                                      hintStyle: const TextStyle(
+                                        color: Colors.white70,
+                                        decoration: TextDecoration.none,
+                                        decorationColor: Colors.white70,
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                      color: Colors.white70,
+                                      decoration: TextDecoration.none,
+                                      decorationColor: Colors.white70,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     if (isOpen)
@@ -277,7 +325,7 @@ class _GymListScreenState extends State<GymListScreen> {
                                     keyboardDismissBehavior:
                                         ScrollViewKeyboardDismissBehavior
                                             .onDrag,
-                                    itemCount: searchRes.isEmpty
+                                    itemCount: controller.text.isEmpty
                                         ? gymsList.length
                                         : searchRes.length,
                                     itemBuilder: (context, index) {
@@ -316,12 +364,14 @@ class _GymListScreenState extends State<GymListScreen> {
                                               ),
                                             ),
                                           );
-                                          // clean search
                                         },
                                       );
                                     }),
                               ),
                             ),
+                            //
+                            //  R E A L   S E A R C H   B A R
+                            //
                             SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height * 0.25,
@@ -343,58 +393,7 @@ class _GymListScreenState extends State<GymListScreen> {
                                           outlineBorder: BorderSide.none,
                                         ),
                                       ),
-                                      child:
-                                          //  SearchBar(
-                                          //   controller: controller,
-                                          //   padding: const MaterialStatePropertyAll(
-                                          //       EdgeInsets.zero),
-                                          //   focusNode: node,
-                                          //   hintText: "بحث",
-                                          //   hintStyle:
-                                          //       const MaterialStatePropertyAll<
-                                          //               TextStyle>(
-                                          //           TextStyle(
-                                          //               color: Colors.white30)),
-                                          //   textStyle:
-                                          //       const MaterialStatePropertyAll<
-                                          //           TextStyle>(
-                                          //     TextStyle(
-                                          //       color: Colors.white70,
-                                          //     ),
-                                          //   ),
-                                          //   leading: IconButton(
-                                          //     // constraints: BoxConstraints.tight(
-                                          //     //   Size(25.0, 25.0),
-                                          //     // ),
-                                          //     style: ButtonStyle(
-                                          //       backgroundColor:
-                                          //           MaterialStatePropertyAll(
-                                          //               Colors.blueGrey),
-                                          //     ),
-                                          //     onPressed: () {
-                                          //       print("yoyoyoy");
-                                          //       print(controller.text);
-                                          //       FocusManager.instance.primaryFocus
-                                          //           ?.unfocus();
-                                          //     },
-                                          //     icon: const Icon(Icons.search,
-                                          //         color: Colors.white70),
-                                          //   ),
-                                          //   elevation:
-                                          //       const MaterialStatePropertyAll<
-                                          //           double>(0),
-                                          //   backgroundColor:
-                                          //       const MaterialStatePropertyAll<
-                                          //           Color>(Colors.white10),
-                                          //   constraints: const BoxConstraints(
-                                          //     minHeight: 40,
-                                          //   ),
-                                          //   onSubmitted: (value) {
-                                          //     FocusManager.instance.primaryFocus
-                                          //         ?.unfocus();
-                                          //   },
-                                          // ),
-                                          Container(
+                                      child: Container(
                                         width:
                                             MediaQuery.of(context).size.width,
                                         height: 40,
@@ -408,29 +407,14 @@ class _GymListScreenState extends State<GymListScreen> {
                                           child: TextFormField(
                                             focusNode: node,
                                             decoration: InputDecoration(
-                                              isCollapsed: true,
-                                              icon: SizedBox(
-                                                width: 30,
-                                                height: 30,
-                                                child: Material(
-                                                  color: Colors.white30,
-                                                  shape: const CircleBorder(),
-                                                  child: Tooltip(
-                                                    message: local.search,
-                                                    child: InkWell(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              40),
-                                                      onTap: () {},
-                                                      child: const Icon(
-                                                        Icons.search,
-                                                        color: Colors.white70,
-                                                        size: 25,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
+                                              hintText: local.search,
+                                              hintStyle: const TextStyle(
+                                                color: Colors.white54,
                                               ),
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15.0),
+                                              isCollapsed: true,
                                             ),
                                             onChanged: (value) {
                                               searchRes.clear();

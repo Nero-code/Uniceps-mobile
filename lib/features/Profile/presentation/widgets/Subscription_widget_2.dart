@@ -1,12 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/features/Profile/domain/entities/subscription.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/main_cubit/locale_cubit.dart';
 
-final f = NumberFormat("###,###,###");
+final f = intl.NumberFormat("###,###,###");
 
 class SubsrciptionWidget2 extends StatefulWidget {
   const SubsrciptionWidget2({super.key, required this.sub});
@@ -24,6 +26,7 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
+    final isRtl = context.read<LocaleCubit>().state.isRtl();
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.5,
       height: MediaQuery.of(context).size.height * 0.3,
@@ -35,7 +38,7 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
           layoutBuilder: (widget, list) => Stack(children: [widget!, ...list]),
           switchInCurve: Curves.easeInBack,
           switchOutCurve: Curves.easeInBack.flipped,
-          child: _showFrontSide ? _buildFront(local) : _buildRear(),
+          child: _showFrontSide ? _buildFront(local, isRtl) : _buildRear(),
         ),
       ),
     );
@@ -50,7 +53,11 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
     });
   }
 
-  Widget _buildFront(AppLocalizations local) {
+  Widget _buildFront(AppLocalizations local, bool rtl) {
+    print(widget.sub.price);
+    print(widget.sub.paidValue);
+    print(widget.sub.discountVal);
+    final isRtl = rtl;
     return Stack(
       key: const ValueKey(true),
       children: [
@@ -89,11 +96,18 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
                       const SizedBox(height: 5.0),
                       Row(
                         children: [
+                          //
+                          //  P R I C E
+                          //
                           Text(
                             "${local.price}: ${f.format(widget.sub.price - widget.sub.discountVal)}",
                           ),
                           const SizedBox(width: 10.0),
                           if (widget.sub.discountVal != 0.0)
+
+                            //
+                            //  D I S C O U N T
+                            //
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 5.0, vertical: 0.0),
@@ -117,16 +131,19 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
                             ),
                         ],
                       ),
+                      //
+                      //  R E M A I N  I N G
+                      //
                       const SizedBox(height: 5.0),
                       Row(
                         children: [
+                          //
+                          //  I S   P A I D
+                          //
                           Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 5.0, vertical: 0.0),
                             decoration: BoxDecoration(
-                                // color: widget.sub.isPaid
-                                //     ? Colors.green.withAlpha(30)
-                                //     : Colors.red.withAlpha(30),
                                 borderRadius: BorderRadius.circular(15),
                                 border: Border.all(
                                   width: 0.5,
@@ -146,9 +163,37 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
                             ),
                           ),
                           const SizedBox(width: 5.0),
+                          if (!widget.sub.isPaid)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5.0, vertical: 0.0),
+                              decoration: BoxDecoration(
+                                  // color:
+                                  //     Theme.of(context).colorScheme.secondary,
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(3),
+                                  border: Border.all(
+                                    width: 0.5,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  )),
+                              child: Text(
+                                "${local.remaining}: "
+                                "${f.format(widget.sub.price - widget.sub.paidValue - widget.sub.discountVal)}",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 7.5,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                       const SizedBox(height: 5.0),
+
+                      //
+                      //  E N D - D A T E
+                      //
                       Text(
                         "${local.endOfSubDate}: ",
                       ),
@@ -159,6 +204,10 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
                     ],
                   ),
                 ),
+
+                //
+                //  L I N E A R   P R O G R E S S
+                //
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -191,7 +240,8 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
         ),
         Positioned(
           top: 10.0,
-          left: 10.0,
+          left: isRtl ? 10.0 : null,
+          right: isRtl ? null : 10.0,
           child: Container(
             width: 10,
             height: 10,
@@ -208,6 +258,7 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
   }
 
   Widget _buildRear() {
+    widget.sub.payments?.forEach((e) => print(e.toJson()));
     double size = 14.0;
     if (widget.sub.payments != null && widget.sub.payments!.isNotEmpty) {
       switch (widget.sub.payments!.length) {
@@ -222,14 +273,12 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
       }
     }
     return Container(
-      height: MediaQuery.of(context).size.height,
+      height: MediaQuery.sizeOf(context).height,
+      width: MediaQuery.sizeOf(context).width,
       key: const ValueKey(false),
       margin: const EdgeInsets.all(5.0),
       decoration: BoxDecoration(
           color: Colors.white,
-          // border: Border.all(
-          //   color: Colors.grey.shade300,
-          // ),
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
             BoxShadow(
@@ -258,12 +307,17 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
                             children: [
                               Material(
                                 borderRadius: BorderRadius.circular(5),
-                                color: secondaryLight,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withAlpha(90),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 5.0),
                                   child: Text(
-                                    "${i.payDate.day}/${i.payDate.month}/${i.payDate.year}: ",
+                                    intl.DateFormat("dd/MM/yyyy")
+                                        .format(i.payDate),
+                                    textDirection: TextDirection.ltr,
                                     style: TextStyle(
                                       fontSize: size,
                                     ),
@@ -272,10 +326,7 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
                               ),
                               const SizedBox(height: 10.0),
                               Material(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primary
-                                    .withAlpha(90),
+                                color: secondaryLight,
                                 borderRadius: BorderRadius.circular(5),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(

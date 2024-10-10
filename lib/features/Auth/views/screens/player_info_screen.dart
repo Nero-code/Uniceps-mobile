@@ -1,8 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:uniceps/features/Auth/views/widgets/gender_selection_widget.dart';
@@ -36,7 +40,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
 
   bool? male;
 
-  bool isCreate = true;
+  bool isCreate = true, showBackBtn = false;
 
   // @override
   // void initState() {
@@ -85,6 +89,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
           builder: (context, state) {
             if (state is ProfileLoadedState) {
               isCreate = false;
+              showBackBtn = true;
               nameCtl.text = state.player.name;
               phoneCtl.text = state.player.phoneNum;
               birthCtl.text = state.player.birthDate;
@@ -95,6 +100,13 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
             }
             return Stack(
               children: [
+                if (isCreate)
+                  Positioned(
+                    child: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.arrow_back),
+                    ),
+                  ),
                 Positioned(
                   top: 0.0,
                   width: MediaQuery.of(context).size.width,
@@ -295,6 +307,21 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
+                                  if (!await InternetConnectionChecker()
+                                      .hasConnection) {
+                                    ScaffoldMessenger.of(context)
+                                        .clearSnackBars();
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        backgroundColor: Colors.red.shade300,
+                                        content: ErrorScreenWidget(
+                                            f: NoInternetConnectionFailure(
+                                                errMsg: ""),
+                                            callback: null),
+                                      ),
+                                    );
+                                    return;
+                                  }
                                   if (male == null) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
@@ -302,15 +329,23 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                                             content: Text(local.genderError)));
                                     return;
                                   }
-                                  if (!await InternetConnectionChecker()
-                                      .hasConnection) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(local.errNoInternet),
-                                      ),
-                                    );
-                                    return;
+                                  if (state is ProfileLoadedState) {
+                                    if (nameCtl.text == state.player.name &&
+                                        birthCtl.text ==
+                                            state.player.birthDate &&
+                                        phoneCtl.text ==
+                                            state.player.phoneNum) {
+                                      ScaffoldMessenger.of(context)
+                                          .clearSnackBars();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content:
+                                                  Text(local.nothingChanged)));
+
+                                      return;
+                                    }
                                   }
+
                                   // Navigator.pushReplacementNamed(context, ROUTE_HOME);
                                   // Navigator.pop(context);
                                   // widget.onSave(
@@ -355,12 +390,22 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                     color: const Color.fromARGB(108, 0, 0, 0),
                     child: Center(
                       child: Container(
-                          padding: EdgeInsets.all(30),
+                          padding: const EdgeInsets.all(30),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: CircularProgressIndicator()),
+                          child: const CircularProgressIndicator()),
+                    ),
+                  ),
+                if (showBackBtn)
+                  Positioned(
+                    top: 30.0,
+                    child: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.arrow_back),
+                      iconSize: 30,
+                      color: Colors.white,
                     ),
                   ),
               ],

@@ -29,53 +29,51 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
   DateTime cDay = DateTime.now(), // Current
       fDay = DateTime.now(), // focused
       sDay = DateTime.now(), // selected
-      lDay = DateTime.now(); // last
+      lDay = DateTime.now(),
+      day1 = DateTime.now(); // last
 
   List<Attendence> a = [];
+
+  final controller = PanelController();
+
+  final i = Attendence(
+      date: DateTime.now(),
+      loginTime: DateTime.now(),
+      logoutTime: DateTime.now(),
+      gymId: "gymId",
+      pid: "pid",
+      sid: "sid");
+
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size;
     final local = AppLocalizations.of(context)!;
+    final isRtl = context.read<LocaleCubit>().state.isRtl();
     return Scaffold(
       body: SlidingUpPanel(
+        controller: controller,
         backdropEnabled: false,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(25)),
         margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        collapsed: Container(
-          width: screen.width,
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 85, 151, 177),
-            // gradient: LinearGradient(
-            //   colors: [
-            //     Colors.white,
-            //     Color.fromARGB(255, 85, 151, 177),
-            //   ],
-            //   begin: Alignment.topCenter,
-            //   end: Alignment.bottomCenter,
-            // ),
-            borderRadius: BorderRadius.vertical(
+        collapsed: Material(
+          // width: screen.width,
+          color: const Color.fromARGB(255, 85, 151, 177),
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(25),
+          ),
+          child: InkWell(
+            onTap: () => controller.animatePanelToPosition(1,
+                duration: Durations.extralong1, curve: Curves.easeOutExpo),
+            borderRadius: const BorderRadius.vertical(
               top: Radius.circular(25),
             ),
-            boxShadow: [],
-          ),
-          child: Column(
-            children: [
-              const Icon(
-                Icons.remove_rounded,
-                color: Colors.white,
-                size: 30,
-              ),
-              // Text(
-              //   local.attendenceLog,
-              //   style: TextStyle(
-              //     fontSize: 12,
-              //     color: Colors.white,
-              //     fontWeight: FontWeight.bold,
-              //   ),
-              // ),
-            ],
+            child: const Icon(
+              Icons.remove_rounded,
+              color: Colors.white,
+              size: 30,
+            ),
           ),
         ),
         minHeight: 30,
@@ -90,362 +88,416 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
               );
             }
 
-            if (state is AttenedenceLoadedState) {
-              print("Debug: ${state.list.first.date}");
-              print("Debug: ${state.list.first.loginTime}");
-              print("Debug: ${state.list.first.logoutTime}");
+            // if (state is AttenedenceLoadedState) {
+            // print("Debug: ${state.list.first.date}");
+            // print("Debug: ${state.list.first.loginTime}");
+            // print("Debug: ${state.list.first.logoutTime}");
 
-              return Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(25),
-                  ),
-                  gradient: LinearGradient(
-                    colors: [
-                      mainBlueLight,
-                      mainBlueLight,
-                      background,
-                    ],
-                    stops: [
-                      0.0,
-                      0.2,
-                      0.2,
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
+            return Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(25),
                 ),
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  physics: const PageScrollPhysics(),
-                  children: [
-                    //
-                    //  A T T E N D E N C E   V I E W   T Y P E   [CALENDER]
-                    //
-                    SizedBox(
-                      width: screen.width - 25,
-                      height: screen.height * 0.7,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              local.calender,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 5.0),
-                          SizedBox(
-                            width: screen.width,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Column(
-                                children: [
-                                  Center(
-                                    child: Material(
-                                      elevation: 2,
-                                      borderRadius: BorderRadius.circular(15),
-                                      // decoration: BoxDecoration(
-                                      //     // color: secondaryLight,
-                                      //     color: Color(0xFFEEEEEE),
-                                      //     borderRadius:
-                                      //         BorderRadius.circular(15),
-                                      //     boxShadow: [
-                                      //       BoxShadow(
-                                      //         offset: Offset(0.0, 0.0),
-                                      //         color: Colors.grey,
-                                      //         blurRadius: 500.0,
-                                      //         spreadRadius: 25.0,
-                                      //       ).scale(0.1),
-                                      //     ]),
-                                      child: TableCalendar(
-                                        daysOfWeekHeight: 20.0,
-                                        calendarFormat: CalendarFormat.week,
-                                        locale: LocaleCubit()
-                                            .state
-                                            .locale
-                                            .languageCode,
-                                        focusedDay: fDay,
-                                        firstDay: state.list.first.date,
-                                        lastDay: lDay,
-                                        currentDay: cDay,
-                                        startingDayOfWeek:
-                                            StartingDayOfWeek.sunday,
-                                        availableGestures:
-                                            AvailableGestures.none,
-                                        calendarStyle: CalendarStyle(
-                                            selectedDecoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onBackground,
-                                                shape: BoxShape.circle),
-                                            todayDecoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary,
-                                                shape: BoxShape.circle)),
-                                        onHeaderTapped: null,
-                                        onFormatChanged: (format) {
-                                          print("Format Tapped: $format");
-                                        },
-                                        onPageChanged: (focusedDay) {
-                                          print("OnPageChanged! $focusedDay");
-
-                                          fDay = focusedDay;
-                                        },
-                                        enabledDayPredicate: (day) {
-                                          for (var i in state.list) {
-                                            if (i.date.compareTo(day.copyWith(
-                                                    isUtc: false)) ==
-                                                0) {
-                                              return true;
-                                            }
-                                          }
-                                          return false;
-                                        },
-                                        selectedDayPredicate: (day) {
-                                          if (day.compareTo(cDay) == 0 ||
-                                              day.compareTo(sDay) == 0) {
-                                            return true;
-                                          }
-
-                                          return false;
-                                        },
-                                        onDaySelected:
-                                            (selectedDay, focusedDay) {
-                                          print(
-                                              "selectedDay: $selectedDay \nfocusedDay:  $focusedDay");
-                                          sDay = selectedDay;
-                                          setState(() {
-                                            a.clear();
-                                            state.list.forEach(
-                                              (element) {
-                                                if (element.date.day ==
-                                                    selectedDay.day) {
-                                                  a.add(element);
-                                                }
-                                              },
-                                            );
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    // height: screen.height * 0.25,
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        textDirection: TextDirection.rtl,
-                                        children: [
-                                          const SizedBox(height: 5.0),
-                                          for (var i in a)
-                                            Container(
-                                              margin:
-                                                  const EdgeInsets.all(10.0),
-                                              width: screen.width,
-                                              alignment: Alignment.center,
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: Column(
-                                                          children: [
-                                                            Text(
-                                                              local.enteredAt,
-                                                              style: TextStyle(
-                                                                color: const Color
-                                                                    .fromARGB(
-                                                                    181,
-                                                                    0,
-                                                                    0,
-                                                                    0),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              // "${i.loginTime.toLocal().hour}:${i.loginTime.toLocal().minute}",
-                                                              intl.DateFormat(
-                                                                      "h:mm a")
-                                                                  .format(i
-                                                                      .loginTime),
-                                                              textDirection:
-                                                                  TextDirection
-                                                                      .ltr,
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .black54,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        child: Column(
-                                                          children: [
-                                                            Text(
-                                                              local.exitedAt,
-                                                              style: TextStyle(
-                                                                color: const Color
-                                                                    .fromARGB(
-                                                                    181,
-                                                                    0,
-                                                                    0,
-                                                                    0),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              intl.DateFormat(
-                                                                      "h:mm a")
-                                                                  .format(i
-                                                                      .loginTime),
-                                                              textDirection:
-                                                                  TextDirection
-                                                                      .ltr,
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .black54,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Divider(
-                                                    color: Colors.grey.shade300,
-                                                    endIndent: 20,
-                                                    indent: 20,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    //
-                    //  A T T E N D E N C E   V I E W   T Y P E   [LIST]
-                    //
-                    SizedBox(
-                      width: screen.width - 25,
-                      height: screen.height * 0.7,
-                      child: Column(
-                        children: [
-                          Text(
-                            local.list,
-                            style: TextStyle(
+                gradient: LinearGradient(
+                  colors: [
+                    mainBlueLight,
+                    mainBlueLight,
+                    background,
+                  ],
+                  stops: [
+                    0.0,
+                    0.2,
+                    0.2,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                physics: const PageScrollPhysics(),
+                children: [
+                  //
+                  //  A T T E N D E N C E   V I E W   T Y P E   [CALENDER]
+                  //
+                  SizedBox(
+                    width: screen.width - 20.0,
+                    height: screen.height * 0.7,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            local.calender,
+                            style: const TextStyle(
+                              fontSize: 14,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SingleChildScrollView(
-                              child: Column(
-                            children: [
-                              for (var i in state.list)
-                                Material(
-                                  elevation: 3,
-                                  child: Column(
+                        ),
+                        const SizedBox(height: 5.0),
+                        SizedBox(
+                          width: screen.width,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Column(
+                              children: [
+                                Center(
+                                  child: Material(
+                                    elevation: 2,
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: TableCalendar(
+                                      daysOfWeekHeight: 20.0,
+                                      calendarFormat: CalendarFormat.week,
+                                      locale: isRtl ? "ar" : "en",
+                                      focusedDay: fDay,
+                                      firstDay: day1,
+                                      lastDay: lDay,
+                                      currentDay: cDay,
+                                      startingDayOfWeek:
+                                          StartingDayOfWeek.sunday,
+                                      weekendDays: const [],
+                                      availableGestures: AvailableGestures.none,
+                                      daysOfWeekStyle: DaysOfWeekStyle(
+                                        dowTextFormatter: (date, locale) =>
+                                            intl.DateFormat("EEE", locale)
+                                                .format(date),
+                                        weekdayStyle:
+                                            const TextStyle(fontSize: 10),
+                                      ),
+                                      calendarStyle: CalendarStyle(
+                                          defaultDecoration: BoxDecoration(
+                                            color: Colors.grey.shade200,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          selectedDecoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground,
+                                              shape: BoxShape.circle),
+                                          todayDecoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              shape: BoxShape.circle)),
+                                      onHeaderTapped: null,
+                                      onFormatChanged: (format) {
+                                        print("Format Tapped: $format");
+                                      },
+                                      onPageChanged: (focusedDay) {
+                                        print("OnPageChanged! $focusedDay");
+
+                                        fDay = focusedDay;
+                                      },
+                                      enabledDayPredicate: (day) {
+                                        // for (var i in state.list) {
+                                        //   if (i.date.compareTo(day.copyWith(
+                                        //           isUtc: false)) ==
+                                        //       0) {
+                                        //     return true;
+                                        //   }
+                                        // }
+                                        // return false;
+                                        return true;
+                                      },
+                                      selectedDayPredicate: (day) {
+                                        if (day.compareTo(cDay) == 0 ||
+                                            day.compareTo(sDay) == 0) {
+                                          return true;
+                                        }
+
+                                        return false;
+                                        // if (state is AttenedenceLoadedState) {
+                                        //   for (var i in state.list) {
+                                        //     if (i.date.compareTo(day.copyWith(
+                                        //             isUtc: false)) ==
+                                        //         0) {
+
+                                        //       return true;
+                                        //     }
+                                        //   }
+                                        // }
+
+                                        // return false;
+                                      },
+                                      onDaySelected: (selectedDay, focusedDay) {
+                                        print("selectedDay: $selectedDay "
+                                            "\n"
+                                            "focusedDay:  $focusedDay");
+                                        sDay = selectedDay;
+
+                                        a.clear();
+                                        if (state is AttenedenceLoadedState) {
+                                          for (var i in state.list) {
+                                            if (i.date.compareTo(selectedDay
+                                                    .copyWith(isUtc: false)) ==
+                                                0) {
+                                              a.add(i);
+                                            }
+                                          }
+                                        }
+
+                                        setState(() {});
+                                        // if (state is AttenedenceLoadedState) {
+                                        //   setState(() {
+                                        //     state.list.forEach(
+                                        //       (element) {
+                                        //         if (element.date.day ==
+                                        //             selectedDay.day) {
+                                        //           a.add(element);
+                                        //         }
+                                        //       },
+                                        //     );
+                                        //   });
+                                        // }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  // height: screen.height * 0.25,
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      textDirection: TextDirection.rtl,
+                                      children: [
+                                        const SizedBox(height: 5.0),
+                                        for (var i in a)
+                                          Container(
+                                            margin: const EdgeInsets.all(10.0),
+                                            width: screen.width,
+                                            alignment: Alignment.center,
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Column(
+                                                        children: [
+                                                          Text(
+                                                            local.enteredAt,
+                                                            style:
+                                                                const TextStyle(
+                                                              color: Color
+                                                                  .fromARGB(181,
+                                                                      0, 0, 0),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            // "${i.loginTime.toLocal().hour}:${i.loginTime.toLocal().minute}",
+                                                            intl.DateFormat(
+                                                                    "h:mm a")
+                                                                .format(i
+                                                                    .loginTime),
+                                                            textDirection:
+                                                                TextDirection
+                                                                    .ltr,
+                                                            style:
+                                                                const TextStyle(
+                                                              color: Colors
+                                                                  .black54,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Column(
+                                                        children: [
+                                                          Text(
+                                                            local.exitedAt,
+                                                            style:
+                                                                const TextStyle(
+                                                              color: Color
+                                                                  .fromARGB(181,
+                                                                      0, 0, 0),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            intl.DateFormat(
+                                                                    "h:mm a")
+                                                                .format(i
+                                                                    .loginTime),
+                                                            textDirection:
+                                                                TextDirection
+                                                                    .ltr,
+                                                            style:
+                                                                const TextStyle(
+                                                              color: Colors
+                                                                  .black54,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Divider(
+                                                  color: Colors.grey.shade300,
+                                                  endIndent: 20,
+                                                  indent: 20,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  //
+                  //  A T T E N D E N C E   V I E W   T Y P E   [LIST]
+                  //
+                  // state is AttenedenceLoadedState
+                  //     ?
+                  SizedBox(
+                    width: screen.width - 20.0,
+                    height: screen.height * 0.7,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 15.0),
+                        Text(
+                          local.list,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 15.0, left: 15.0, right: 15.0),
+                            child: Material(
+                              elevation: 3,
+                              borderRadius: BorderRadius.circular(15.0),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Scrollbar(
+                                  interactive: true,
+                                  controller: scrollController,
+                                  child: ListView(
+                                    controller: scrollController,
                                     children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            local.date,
-                                            style: const TextStyle(
-                                              color:
-                                                  Color.fromARGB(181, 0, 0, 0),
-                                              fontWeight: FontWeight.bold,
+                                      SingleChildScrollView(
+                                        child: Table(
+                                          textDirection: TextDirection.rtl,
+                                          children: [
+                                            TableRow(
+                                              children: [
+                                                Center(
+                                                  child: Text(
+                                                    local.date,
+                                                    style: const TextStyle(
+                                                      color: Colors.black54,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Center(
+                                                  child: Text(
+                                                    local.enteredAt,
+                                                    style: const TextStyle(
+                                                      color: Colors.black54,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Center(
+                                                  child: Text(
+                                                    local.exitedAt,
+                                                    style: const TextStyle(
+                                                      color: Colors.black54,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                          Text(
-                                            "${i.date.year}/${i.date.month}/${i.date.day}",
-                                            textDirection: TextDirection.ltr,
-                                            style: const TextStyle(
-                                              color: Colors.black54,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            local.enteredAt,
-                                            textDirection: TextDirection.ltr,
-                                            style: const TextStyle(
-                                              color: Colors.black54,
-                                            ),
-                                          ),
-                                          Text(
-                                            intl.DateFormat("h:mm a")
-                                                .format(i.loginTime),
-                                            textDirection: TextDirection.ltr,
-                                            style: const TextStyle(
-                                              color: Colors.black54,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            local.exitedAt,
-                                            textDirection: TextDirection.ltr,
-                                            style: const TextStyle(
-                                              color: Colors.black54,
-                                            ),
-                                          ),
-                                          Text(
-                                            intl.DateFormat("h:mm a")
-                                                .format(i.loginTime),
-                                            textDirection: TextDirection.ltr,
-                                            style: const TextStyle(
-                                              color: Colors.black54,
-                                            ),
-                                          ),
-                                        ],
+                                            if (state is AttenedenceLoadedState)
+                                              for (var i in state.list)
+                                                TableRow(
+                                                  children: [
+                                                    Center(
+                                                      child: Text(
+                                                        "${i.date.year}/${i.date.month}/${i.date.day}",
+                                                        textDirection:
+                                                            TextDirection.ltr,
+                                                        style: const TextStyle(
+                                                          color: Colors.black54,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Center(
+                                                      child: Text(
+                                                        intl.DateFormat(
+                                                                "h:mm a")
+                                                            .format(
+                                                                i.loginTime),
+                                                        textDirection:
+                                                            TextDirection.ltr,
+                                                        style: const TextStyle(
+                                                          color: Colors.black54,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Center(
+                                                      child: Text(
+                                                        intl.DateFormat(
+                                                                "h:mm a")
+                                                            .format(
+                                                                i.logoutTime),
+                                                        textDirection:
+                                                            TextDirection.ltr,
+                                                        style: const TextStyle(
+                                                          color: Colors.black54,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
-                            ],
-                          )),
-                        ],
-                      ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            } else if (state is AttenedenceErrorState) {
-              print(state.f.runtimeType);
-              print(state.f.getErrorMessage());
+                  )
+                  // : const SizedBox(
+                  //     child: Text("asdasdas\nasdasdasdasd\nasasdasd\n"),
+                  //   ),
+                ],
+              ),
+            );
+            // } else if (state is AttenedenceErrorState) {
+            //   print(state.f.runtimeType);
+            //   print(state.f.getErrorMessage());
 
-              return ReloadScreenWidget(
-                f: state.f,
-                callBack: () {
-                  BlocProvider.of<AttendenceBloc>(context)
-                      .add(GetAttendenceEvent(widget.gym!.id, widget.gym!.pid));
-                },
-              );
-            }
-            return const Center(child: CircularProgressIndicator());
+            //   return ReloadScreenWidget(
+            //     f: state.f,
+            //     callBack: () {
+            //       BlocProvider.of<AttendenceBloc>(context)
+            //           .add(GetAttendenceEvent(widget.gym!.id, widget.gym!.pid));
+            //     },
+            //   );
+            // }
+            // return const Center(child: CircularProgressIndicator());
           },
         ),
         body: Stack(
@@ -474,8 +526,18 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                       width: screen.width,
                       height: screen.height * 0.1,
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(width: 15),
+                          SizedBox(
+                            width: 40,
+                            // height: screen.height * 0.1,
+                            child: IconButton(
+                              onPressed: () => Navigator.pop(context),
+                              icon: const Icon(Icons.arrow_back),
+                              color: Colors.white,
+                              iconSize: 30,
+                            ),
+                          ),
                           Center(
                             child: CachedNetworkImage(
                               imageUrl: "$API"
@@ -488,7 +550,12 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                                 child: Image(image: imageprovider),
                               ),
                               errorWidget: (context, url, error) =>
-                                  const Image(image: AssetImage(APP_LOGO_DARK)),
+                                  const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Image(image: AssetImage(APP_LOGO_DARK)),
+                              ),
+                              placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator()),
                             ),
                           ),
                           const SizedBox(width: 25),
@@ -501,12 +568,19 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
+                                  fontSize: widget.gym != null
+                                      ? widget.gym!.name.length < 14
+                                          ? 20
+                                          : widget.gym!.name.length <= 20
+                                              ? 15
+                                              : 11
+                                      : 0.0,
                                 ),
                               ),
                               Text(
                                 "${local.owner} : ${widget.gym?.ownerName}",
-                                style: TextStyle(
-                                  color: Colors.white,
+                                style: const TextStyle(
+                                  color: Colors.white70,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -561,21 +635,39 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                           ],
                         ),
                         const SizedBox(height: 10.0),
-                        BlocBuilder<PlayerGymBloc, PlayerGymState>(
-                          builder: (context, state) {
-                            return Text(
-                              "${local.balance} : ${state is PlayerInGymLoadedState ? state.data.balance.toInt() : "0"}",
+                        Row(
+                          children: [
+                            Text(
+                              "${local.balance}"
+                              " : ",
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
-                            );
-                          },
+                            ),
+                            BlocBuilder<PlayerGymBloc, PlayerGymState>(
+                              builder: (context, state) {
+                                print("PLAYER: state = ${state.runtimeType}");
+                                if (state is PlayerInGymLoadedState) {
+                                  day1 = state.data.startDate;
+                                }
+                                return Text(
+                                  state is PlayerInGymLoadedState
+                                      ? f.format(state.data.balance)
+                                      : "0",
+                                  textDirection: TextDirection.ltr,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                  // const Divider(),
                 ],
               ),
             ),
@@ -636,9 +728,9 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                                 children: [
                                   Text(
                                     "${local.subscriptions} (${(state is SubsLoadedState) ? state.list.length : "0"})",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: const Color.fromARGB(192, 0, 0, 0),
+                                      color: Color.fromARGB(192, 0, 0, 0),
                                     ),
                                   ),
                                   const SizedBox(height: 10),

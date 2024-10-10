@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:uniceps/features/Auth/views/widgets/Code_Box.dart';
+
+import 'package:uniceps/features/Auth/views/widgets/code_box.dart';
 import 'package:uniceps/features/Auth/views/widgets/background_decoration.dart';
 import 'package:uniceps/features/Auth/views/widgets/password_box.dart';
 
@@ -93,11 +93,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                         borderSide: BorderSide(
                                             color: Colors.grey.shade400),
                                       ),
-                                      border: OutlineInputBorder(),
-                                      label: Text("Email"),
+                                      border: const OutlineInputBorder(),
+                                      label: const Text("Email"),
                                     ),
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                 ],
                               ),
                             ),
@@ -121,7 +121,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                   );
                                 }
                               },
-                              child: Text("OK"),
+                              child: const Text("OK"),
                             ),
                           ],
                         ),

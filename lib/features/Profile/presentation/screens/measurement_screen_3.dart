@@ -1,15 +1,16 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/features/Profile/domain/entities/measrument.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/measure_widget_3.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/main_cubit/locale_cubit.dart';
 
 class MeasurementScreen3 extends StatefulWidget {
-  MeasurementScreen3({super.key});
+  const MeasurementScreen3({super.key});
 
   @override
   State<MeasurementScreen3> createState() => _MeasurementScreen3State();
@@ -41,7 +42,7 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
 
   final duration = const Duration(milliseconds: 500);
 
-  Widget child = SizedBox();
+  Widget child = const SizedBox();
 
   Future<void> animate(bool isNext) async {
     // isLoading = true;
@@ -61,174 +62,181 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
   Widget build(BuildContext context) {
     final screen = MediaQuery.sizeOf(context);
     // final local = AppLocalizations.of(context)!;
+    final isRtl = context.read<LocaleCubit>().state.isRtl();
     print("currentPAge:  $page");
     print("isLoading:  $isLoading");
     return Scaffold(
-      // backgroundColor: Colors.white,
       body: BlocBuilder<MeasurmentBloc, MeasurmentState>(
         builder: (context, state) {
-          if (state is MeasurementLoadedState) {
-            childBuilder(state.list[page]);
-            return GestureDetector(
-              onHorizontalDragEnd: (details) async {
-                if (isLoading) return;
+          return Stack(
+            children: [
+              Builder(
+                builder: (context) {
+                  if (state is MeasurementLoadedState) {
+                    childBuilder(state.list[page]);
+                    return GestureDetector(
+                      onHorizontalDragEnd: (details) async {
+                        if (isLoading) return;
 
-                if (details.primaryVelocity != null &&
-                    details.primaryVelocity! > 0) {
-                  if (page < state.list.length - 1) {
-                    // ++page;
-                    await animate(true);
+                        if (details.primaryVelocity != null &&
+                            details.primaryVelocity! > 0) {
+                          print("Left");
+                          if (page < state.list.length - 1) {
+                            // ++page;
+                            await animate(true);
+                          }
+                        } else if (details.primaryVelocity != null &&
+                            details.primaryVelocity! < 0) {
+                          print("Right");
+                          if (page > 0) {
+                            // --page;
+                            await animate(false);
+                          }
+                        }
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            top: MediaQuery.sizeOf(context).height * 0.1),
+                        child: SizedBox(
+                          width: screen.width,
+                          height: screen.height,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              // const SizedBox(height: 20.0),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  PageTransitionSwitcher(
+                                    duration: const Duration(milliseconds: 500),
+                                    reverse: isLeft,
+                                    transitionBuilder: (child, primaryAnimation,
+                                        secondaryAnimation) {
+                                      return SharedAxisTransition(
+                                        animation: primaryAnimation,
+                                        secondaryAnimation: secondaryAnimation,
+                                        transitionType:
+                                            SharedAxisTransitionType.horizontal,
+                                        child: child,
+                                      );
+                                    },
+                                    child: SizedBox(
+                                      key: ValueKey<int>(page),
+                                      child: child,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 5.0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  } else if (state is MeasurementErrorState) {
+                    return Center(
+                      child: ReloadScreenWidget(
+                          f: state.f,
+                          callBack: () {
+                            BlocProvider.of<MeasurmentBloc>(context)
+                                .add(GetMeasurementsEvent());
+                          }),
+                    );
                   }
-                } else if (details.primaryVelocity != null &&
-                    details.primaryVelocity! < 0) {
-                  if (page > 0) {
-                    // --page;
-                    await animate(false);
-                  }
-                }
-              },
-              child: SafeArea(
-                child: SizedBox(
-                  width: screen.width,
-                  height: screen.height,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  return const Center(child: CircularProgressIndicator());
+                },
+              ),
+              Positioned(
+                top: 20.0,
+                child: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.arrow_back),
+                  iconSize: 30,
+                ),
+              ),
+              if (state is MeasurementLoadedState)
+                Positioned(
+                  bottom: 0.0,
+                  width: MediaQuery.sizeOf(context).width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const SizedBox(height: 10.0),
-                      Column(
-                        children: [
-                          PageTransitionSwitcher(
-                            duration: const Duration(milliseconds: 500),
-                            reverse: isLeft,
-                            transitionBuilder:
-                                (child, primaryAnimation, secondaryAnimation) {
-                              // return SharedAxisTransition(
-                              //   animation: primaryAnimation,
-                              //   secondaryAnimation: secondaryAnimation,
-                              //   transitionType:
-                              //       SharedAxisTransitionType.horizontal,
-                              //   child: SizedBox(
-                              //     child: child,
-                              //   ),
-                              // );
-                              // return Stack(
-                              //   children: [
-                              //     // SlideTransition(
-                              //     //   position: Tween(
-                              //     //           begin: Offset(0.3, 0),
-                              //     //           end: Offset.zero)
-                              //     //       .animate(primaryAnimation),
-                              //     //   child: FadeTransition(
-                              //     //     opacity: primaryAnimation,
-                              //     //     child: child,
-                              //     //   ),
-                              //     // ),
-                              //     // SlideTransition(
-                              //     //   position: Tween(
-                              //     //     begin: Offset.zero,
-                              //     //     end: Offset(-0.3, 0),
-                              //     //   ).animate(primaryAnimation),
-                              //     //   child: FadeTransition(
-                              //     //     opacity:
-                              //     //         Tween<double>(begin: 0.7, end: 0.0)
-                              //     //             .animate(primaryAnimation),
-                              //     //     child: this,
-                              //     //   ),
-                              //     // ),
-                              //     // SharedAxisTransition(
-                              //     //   animation: primaryAnimation,
-                              //     //   secondaryAnimation: primaryAnimation,
-                              //     //   transitionType:
+                      IconButton(
+                        onPressed: () async {
+                          //  RTL  -->  Left (previous)
+                          if (isLoading) return;
 
-                              return SharedAxisTransition(
-                                animation: primaryAnimation,
-                                secondaryAnimation: secondaryAnimation,
-                                transitionType:
-                                    SharedAxisTransitionType.horizontal,
-                                child: child,
-                              );
-                            },
-                            child: SizedBox(
-                              key: ValueKey<int>(page),
-                              child: child,
+                          if (isRtl && page > 0) {
+                            await animate(false);
+                          }
+                          if (!isRtl && page < state.list.length - 1) {
+                            await animate(true);
+                          }
+                        },
+                        icon: Container(
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.grey.shade300,
                             ),
                           ),
-                        ],
+                          child: Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          IconButton(
-                            onPressed: () async {
-                              if (isLoading) return;
-
-                              if (page > 0) {
-                                // --page;
-                                await animate(false);
-                              }
-                            },
-                            icon: Container(
-                              padding: const EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: Colors.white,
-                                border: Border.all(
-                                  color: Colors.grey.shade300,
-                                ),
-                              ),
-                              child: Icon(
-                                Icons.arrow_back_ios_new_rounded,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            DateFormat("dd/MM/yyyy")
-                                .format(state.list[page].checkDate),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              if (isLoading) return;
-                              if (page < state.list.length - 1) {
-                                // ++page;
-                                await animate(true);
-                              }
-                            },
-                            icon: Container(
-                              padding: const EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                border: Border.all(
-                                  color: Colors.grey.shade300,
-                                ),
-                                color: Colors.white,
-                              ),
-                              child: Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                          ),
-                        ],
+                      PageTransitionSwitcher(
+                        duration: const Duration(milliseconds: 500),
+                        reverse: isLeft,
+                        transitionBuilder:
+                            (child, primaryAnimation, secondaryAnimation) =>
+                                SharedAxisTransition(
+                          animation: primaryAnimation,
+                          secondaryAnimation: secondaryAnimation,
+                          transitionType: SharedAxisTransitionType.horizontal,
+                          child: child,
+                        ),
+                        child: Text(
+                          key: ValueKey<String>("$page"),
+                          intl.DateFormat("dd/MM/yyyy")
+                              .format(state.list[page].checkDate),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      const SizedBox(height: 5.0),
+                      IconButton(
+                        onPressed: () async {
+                          //  RTL  -->  Right (Next)
+                          if (isLoading) return;
+                          if (isRtl && page < state.list.length - 1) {
+                            await animate(true);
+                          }
+                          if (!isRtl && page > 0) {
+                            await animate(false);
+                          }
+                        },
+                        icon: Container(
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                            ),
+                            color: Colors.white,
+                          ),
+                          child: Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-            );
-          } else if (state is MeasurementErrorState) {
-            return Center(
-              child: ReloadScreenWidget(
-                  f: state.f,
-                  callBack: () {
-                    BlocProvider.of<MeasurmentBloc>(context)
-                        .add(GetMeasurementsEvent());
-                  }),
-            );
-          }
-          return const Center(child: CircularProgressIndicator());
+            ],
+          );
         },
       ),
     );
@@ -236,10 +244,7 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
 
   void childBuilder(Measurement m) {
     final local = AppLocalizations.of(context)!;
-    final screen = MediaQuery.sizeOf(context);
-    child = SizedBox(
-      width: screen.width,
-      height: screen.height * 0.85,
+    child = SingleChildScrollView(
       child: Column(
         // key: ValueKey<int>(page),
         children: [

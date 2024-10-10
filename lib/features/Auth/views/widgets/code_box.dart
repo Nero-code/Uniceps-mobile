@@ -21,6 +21,8 @@ class _CodeBoxState extends State<CodeBox> {
 
   final _codeFormKey = GlobalKey<FormState>();
 
+  final node = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,8 +37,13 @@ class _CodeBoxState extends State<CodeBox> {
               key: _codeFormKey,
               child: TextFormField(
                 controller: codeCtrl,
+                focusNode: node,
                 keyboardType: TextInputType.number,
                 maxLength: 6,
+                onFieldSubmitted: (value) {
+                  if (value.isEmpty) return;
+                  widget.onPressed(value);
+                },
                 onChanged: (value) {
                   print(value);
                   if (value.contains(RegExp(r"[^0-9]"))) {
@@ -44,6 +51,7 @@ class _CodeBoxState extends State<CodeBox> {
                         .substring(0, codeCtrl.value.text.length - 1);
                   }
                 },
+                onTapOutside: (event) => node.unfocus(),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Invalid Code!';

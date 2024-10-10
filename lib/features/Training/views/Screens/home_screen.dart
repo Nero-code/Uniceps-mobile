@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
@@ -8,7 +7,6 @@ import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/features/Training/views/bloc/current_gym_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
 import 'package:uniceps/features/Training/services/usecases/usecases.dart';
 import 'package:uniceps/features/Training/views/bloc/exercises_bloc.dart';
@@ -23,17 +21,6 @@ import 'package:uniceps/features/Training/views/widgets/training_group(2).dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
 import 'package:uniceps/main_cubit/training_section_cubit.dart';
-
-// final img = [
-//   "1",
-//   "2",
-//   "3",
-//   "4",
-//   "5",
-//   "6",
-//   "7",
-//   "8"
-// ];
 
 class MuscleGroup {
   final String title;
@@ -82,7 +69,8 @@ class _HomeScreenState extends State<HomeScreen>
   final sheetPosition = 0.5;
   // final maxSheetSize = 0.33;
 
-  final duration = const Duration(milliseconds: 500);
+  // final duration = const Duration(milliseconds: 500);
+  final duration = Durations.long1;
   final curve = Curves.easeOutExpo;
 
   int selectedGroup = 0;
@@ -142,6 +130,7 @@ class _HomeScreenState extends State<HomeScreen>
     final local = AppLocalizations.of(context)!;
     final trSections =
         context.read<LocaleCubit>().state.isRtl() ? arTrSections : enTrSections;
+    final isRtl = context.read<LocaleCubit>().state.isRtl();
     return RestorationScope(
       restorationId: "HomePage",
       child: PopScope(
@@ -166,107 +155,6 @@ class _HomeScreenState extends State<HomeScreen>
           }
         },
         child: Scaffold(
-          // backgroundColor: Theme.of(context).colorScheme.background,
-          // appBar: AppBar(
-          //   backgroundColor: Theme.of(context).colorScheme.background,
-          //   title: const Text("Uniceps"),
-          //   bottom: PreferredSize(
-          //     preferredSize: Size(MediaQuery.of(context).size.width, 100),
-          //     child: BlocBuilder<ProfileBloc, ProfileState>(
-          //       builder: (context, playerState) {
-          //         //
-          //         //   H O M E   C A R D
-          //         //
-          //         print(
-          //             "HOME SCREEN: profile state: ${playerState.runtimeType}");
-          //         if (playerState is ProfileLoadedState) {
-          //           return Column(
-          //             children: [
-          //               HomeCard(
-          //                 player: playerState.player,
-          //                 onTap: () {
-          //                   Navigator.pushNamed(context, ROUTE_PROFILE);
-          //                 },
-          //                 onLongPress: () {
-          //                   isGymSheetOpen = true;
-          //                    = 0.2;
-          //                   setState(() {});
-          //                 },
-          //               ),
-          //             ],
-          //           );
-          //         } else if (playerState is ProfileErrorState) {
-          //           return Center(child: Text(local.error));
-          //         } else if (playerState is ProfileInitial ||
-          //             playerState is ProfileSubmittedState) {
-          //           BlocProvider.of<ProfileBloc>(context)
-          //               .add(const GetProfileDataEvent());
-          //           return const SizedBox();
-          //         }
-          //         return const Center(child: CircularProgressIndicator());
-          //       },
-          //     ),
-          //   ),
-          //   actions: [
-          //     IconButton(
-          //       onPressed: () async {
-          //         showDialog(
-          //           context: context,
-          //           builder: (context) =>
-          //               BlocBuilder<ProfileBloc, ProfileState>(
-          //             builder: (context, state) {
-          //               if (state is ProfileLoadedState) {
-          //                 return AlertDialog(
-          //                   // title:
-          //                   content: Column(
-          //                     mainAxisSize: MainAxisSize.min,
-          //                     children: [
-          //                       QrImageView(
-          //                         padding: const EdgeInsets.all(15.0),
-          //                         // data: profile.uid,
-          //                         data: state.player.uid,
-          //                       ),
-          //                       const Divider(),
-          //                       Center(
-          //                         child: Text(
-          //                           state.player.name,
-          //                           style: const TextStyle(
-          //                               fontSize: 25,
-          //                               fontWeight: FontWeight.bold),
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 ).build(context);
-          //               } else if (state is ProfileErrorState) {
-          //                 return Center(
-          //                   child: Text(local.error),
-          //                 );
-          //               }
-          //               return const CircularProgressIndicator();
-          //             },
-          //           ),
-          //         );
-          //       },
-          //       icon: const Icon(Icons.qr_code_scanner),
-          //     ),
-          //     // IconButton(
-          //     //   onPressed: () async {
-          //     //     //
-          //     //     //
-          //     //     //
-          //     //     //    T O   G Y M   H A N D - S H A K E   S C R E E N
-          //     //     //
-          //     //     //
-          //     //     //
-          //     //     // Navigator.pushNamed(context, ROUTE_PRESENCE);
-          //     //     Navigator.pushNamed(context, ROUTE_HANDSHAKE);
-          //     //   },
-          //     //   icon: const Icon(Icons.fitness_center_rounded),
-          //     // ),
-          //   ],
-          // ),
-
           body: SlidingUpPanel(
             backdropEnabled: true,
             color: Colors.white,
@@ -385,51 +273,6 @@ class _HomeScreenState extends State<HomeScreen>
                                         ),
                                       ),
                                     ),
-                                    // Positioned(
-                                    //   bottom: 0.0,
-                                    //   width: MediaQuery.of(context).size.width,
-                                    //   child: ColoredBox(
-                                    //     color: Theme.of(context)
-                                    //         .colorScheme
-                                    //         .background,
-                                    //     child: ActionChip.elevated(
-                                    //       backgroundColor: Theme.of(context)
-                                    //           .colorScheme
-                                    //           .primary,
-                                    //       label: SizedBox(
-                                    //         width: MediaQuery.of(context)
-                                    //                 .size
-                                    //                 .width *
-                                    //             0.5,
-                                    //         child: Center(
-                                    //           child: Text(
-                                    //             local.apply,
-                                    //             style: const TextStyle(
-                                    //               color: Colors.white,
-                                    //               fontWeight: FontWeight.bold,
-                                    //             ),
-                                    //           ),
-                                    //         ),
-                                    //       ),
-                                    //       onPressed: () async {
-                                    //         // if (section != null &&
-                                    //         //     section != currentSection) {
-                                    //         //   await BlocProvider.of<
-                                    //         //               TrainingSectionCubit>(
-                                    //         //           context)
-                                    //         //       .cacheSection(
-                                    //         //           section.toString());
-                                    //         //   daysController
-                                    //         //       .animatePanelToPosition(
-                                    //         //     0.0,
-                                    //         //     duration: duration,
-                                    //         //     curve: curve,
-                                    //         //   );
-                                    //         // }
-                                    //       },
-                                    //     ),
-                                    //   ),
-                                    // ),
                                   ],
                                 ),
                               ),
@@ -466,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen>
               },
               panel: BlocBuilder<CurrentGymBloc, CurrentGymState>(
                 builder: (context, state) {
-                  print("state: ${state.runtimeType}");
+                  print("DEBUG: state: ${state.runtimeType}");
 
                   if (state is CurrentGymLoadedState) {
                     return Stack(
@@ -554,9 +397,13 @@ class _HomeScreenState extends State<HomeScreen>
                       ],
                     );
                   } else if (state is CurrentGymErrorState) {
+                    print("DEBUG: state: ${state.f}");
                     return ReloadScreenWidget(
                       f: state.f,
-                      callBack: () {},
+                      callBack: () {
+                        BlocProvider.of<CurrentGymBloc>(context)
+                            .add(const GetSubscribedToGymEvent());
+                      },
                     );
                   }
 
@@ -692,33 +539,19 @@ class _HomeScreenState extends State<HomeScreen>
                       BlocProvider.of<TrainingBloc>(context)
                           .add(const GetProgramEvent());
 
+                      BlocProvider.of<CurrentGymBloc>(context)
+                          .add(const GetSubscribedToGymEvent());
+
                       BlocProvider.of<ProfileBloc>(context)
                           .add(const GetProfileDataEvent());
-                      await BlocProvider.of<TrainingBloc>(context)
-                          .stream
-                          .skip(1)
-                          .first;
+                      // await BlocProvider.of<TrainingBloc>(context)
+                      //     .stream
+                      //     .skip(1)
+                      //     .first;
                     },
                     child: SafeArea(
                       child: Column(
                         children: [
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.end,
-                          //   children: [
-                          //     IconButton(
-                          //       onPressed: () {
-                          //         Navigator.of(context)
-                          //             .pushNamed(ROUTE_PROFILE);
-                          //       },
-                          //       icon: const Icon(
-                          //         Icons.person,
-                          //         size: 40,
-                          //         color: Colors.white,
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-
                           BlocBuilder<ProfileBloc, ProfileState>(
                             builder: (context, playerState) {
                               //
@@ -749,8 +582,9 @@ class _HomeScreenState extends State<HomeScreen>
                                                         FontWeight.bold),
                                               ),
                                               Text(
-                                                "${playerState.player.name.split(" ")[0]}",
-                                                style: TextStyle(
+                                                playerState.player.name
+                                                    .split(" ")[0],
+                                                style: const TextStyle(
                                                     fontSize: 20,
                                                     color: Colors.white,
                                                     fontWeight:
@@ -765,45 +599,14 @@ class _HomeScreenState extends State<HomeScreen>
                                             },
                                             icon: const Icon(
                                               Icons.person,
-                                              size: 40,
+                                              size: 30,
                                               color: Colors.white,
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                    // SizedBox(
-                                    //   width: MediaQuery.of(context).size.width,
-                                    //   height:
-                                    //       MediaQuery.of(context).size.height *
-                                    //           0.05,
-                                    //   child: Padding(
-                                    //     padding:
-                                    //         const EdgeInsets.only(right: 15.0),
-                                    //     child: Row(
-                                    //       children: [
-                                    //         Text(
-                                    //           "مرحبا, ",
-                                    //           style: TextStyle(
-                                    //               fontSize: 20,
-                                    //               color: Colors.white
-                                    //                   .withAlpha(150),
-                                    //               fontWeight: FontWeight.bold),
-                                    //         ),
-                                    //         Text(
-                                    //           "${playerState.player.name.split(" ")[0]}",
-                                    //           style: TextStyle(
-                                    //               fontSize: 20,
-                                    //               color: Colors.white,
-                                    //               fontWeight: FontWeight.bold),
-                                    //         ),
-                                    //       ],
-                                    //     ),
-                                    //   ),
-                                    // ),
-
-                                    BlocConsumer<CurrentGymBloc,
-                                        CurrentGymState>(
+                                    BlocConsumer<ProfileBloc, ProfileState>(
                                       listener: (context, state) {
                                         print("DEBUG: ${state.runtimeType}");
                                         if (state is CurrentGymUpdatedState) {
@@ -817,61 +620,12 @@ class _HomeScreenState extends State<HomeScreen>
                                         }
                                       },
                                       builder: (context, state) {
-                                        if (state is CurrentGymLoadedState) {
+                                        if (state is ProfileLoadedState) {
                                           return HomeCard(
-                                            section: section ?? local.about,
-                                            myGym: state.current,
-                                            openQRPopup: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) =>
-                                                    BlocBuilder<ProfileBloc,
-                                                        ProfileState>(
-                                                  builder: (context, state) {
-                                                    if (state
-                                                        is ProfileLoadedState) {
-                                                      return AlertDialog(
-                                                        // title:
-                                                        content: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: [
-                                                            QrImageView(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(
-                                                                      15.0),
-                                                              data: state
-                                                                  .player.uid,
-                                                            ),
-                                                            const Divider(),
-                                                            Center(
-                                                              child: Text(
-                                                                state.player
-                                                                    .name,
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        25,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ).build(context);
-                                                    } else if (state
-                                                        is ProfileErrorState) {
-                                                      return Center(
-                                                        child:
-                                                            Text(local.error),
-                                                      );
-                                                    }
-                                                    return const CircularProgressIndicator();
-                                                  },
-                                                ),
-                                              );
-                                            },
+                                            section: section ?? local.map,
+                                            // myGym: state.current,
+                                            player: state.player,
+                                            openQRPopup: () {},
                                             openGymSheet: () {
                                               if (!panelController.isAttached) {
                                                 return;
@@ -892,12 +646,12 @@ class _HomeScreenState extends State<HomeScreen>
                                               daysController
                                                   .animatePanelToPosition(
                                                 1.0,
-                                                duration: duration,
-                                                curve: curve,
+                                                duration: Durations.extralong4,
+                                                curve: Curves.bounceOut,
                                               );
                                             },
                                           );
-                                        } else if (state is GymsErrorState) {
+                                        } else if (state is ProfileErrorState) {
                                           return const SizedBox();
                                         }
                                         return Material(
@@ -914,7 +668,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                     .size
                                                     .height *
                                                 0.18,
-                                            child: Center(
+                                            child: const Center(
                                               child:
                                                   CircularProgressIndicator(),
                                             ),
@@ -972,7 +726,7 @@ class _HomeScreenState extends State<HomeScreen>
                                         MediaQuery.of(context).size.width * 0.8,
                                     height: MediaQuery.of(context).size.height *
                                         0.18,
-                                    child: Center(
+                                    child: const Center(
                                       child: CircularProgressIndicator(),
                                     ),
                                   ),
@@ -1063,18 +817,28 @@ class _HomeScreenState extends State<HomeScreen>
                                 if (details.primaryVelocity == null) {
                                   return;
                                 }
-                                if (details.primaryVelocity! < 0 &&
-                                    selectedGroup > 0) {
-                                  print("Velocity < 0");
-                                  BlocProvider.of<ExercisesBloc>(context).add(
-                                      GetExercisesByFilterEvent(
-                                          trSections[--selectedGroup].num));
-                                } else if (details.primaryVelocity! > 0 &&
-                                    selectedGroup < 7) {
-                                  print("Velocity > 0");
-                                  BlocProvider.of<ExercisesBloc>(context).add(
-                                      GetExercisesByFilterEvent(
-                                          trSections[++selectedGroup].num));
+                                if (details.primaryVelocity! < 0) {
+                                  print("Left");
+                                  if (isRtl && selectedGroup > 0) {
+                                    BlocProvider.of<ExercisesBloc>(context).add(
+                                        GetExercisesByFilterEvent(
+                                            trSections[--selectedGroup].num));
+                                  } else if (!isRtl && selectedGroup < 7) {
+                                    BlocProvider.of<ExercisesBloc>(context).add(
+                                        GetExercisesByFilterEvent(
+                                            trSections[++selectedGroup].num));
+                                  }
+                                } else if (details.primaryVelocity! > 0) {
+                                  print("Right");
+                                  if (isRtl && selectedGroup < 7) {
+                                    BlocProvider.of<ExercisesBloc>(context).add(
+                                        GetExercisesByFilterEvent(
+                                            trSections[++selectedGroup].num));
+                                  } else if (!isRtl && selectedGroup > 0) {
+                                    BlocProvider.of<ExercisesBloc>(context).add(
+                                        GetExercisesByFilterEvent(
+                                            trSections[--selectedGroup].num));
+                                  }
                                 }
                                 exercisesController.animateTo(0.0,
                                     duration: duration, curve: curve);
@@ -1180,11 +944,7 @@ class _HomeScreenState extends State<HomeScreen>
                                               alignment: Alignment.center,
                                               child: ReloadScreenWidget(
                                                 f: state.f,
-                                                callBack: () {
-                                                  BlocProvider.of<TrainingBloc>(
-                                                          context)
-                                                      .add(GetProgramEvent());
-                                                },
+                                                callBack: null,
                                               ),
                                             );
                                           } else if (state
@@ -1199,7 +959,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                       CircularProgressIndicator()),
                                             );
                                           }
-                                          return SizedBox();
+                                          return const SizedBox();
                                         },
                                       );
                                     } else if (tState

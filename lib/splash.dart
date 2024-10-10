@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
+import 'package:uniceps/features/Auth/views/screens/auth_screen_2.dart';
 import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
 
@@ -23,12 +24,20 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // navigate(context);
+    print("------------------------inside Splash-----------------------------");
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
-        print("inside Splash: " + state.runtimeType.toString());
+        // await Future.delayed(const Duration(seconds: 2));
+        print("inside Splash: ${state.runtimeType}");
         if (state is AuthErrorState) {
           print("Splash check 1");
-          Navigator.of(context).pushReplacementNamed(ROUTE_AUTH);
+          Navigator.of(context).pushReplacement(
+            PageRouteBuilder(
+              transitionDuration: Duration.zero,
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  const AuthScreen(),
+            ),
+          );
         } else if (state is AuthAuthenticatedState) {
           print("Splash check 2");
 
@@ -59,61 +68,15 @@ class SplashScreen extends StatelessWidget {
           }
         },
         buildWhen: (_, __) => false,
-        builder: (_, __) => const Scaffold(
+        builder: (_, __) => Scaffold(
           body: Center(
             child: Image(
-                image: AssetImage('images/logo/Logo.png'),
-                height: 150,
-                width: 150),
+                image: const AssetImage('images/logo/Logo.png'),
+                height: MediaQuery.sizeOf(context).width * 0.3,
+                width: MediaQuery.sizeOf(context).width * 0.3),
           ),
         ),
       ),
-      // },
     );
-
-    // return MultiBlocListener(
-    //   listeners: [
-    //     BlocListener<AuthBloc, AuthState>(
-    //       listener: (context, state) async {
-    //         if (state is AuthErrorState) {
-    //           Navigator.pushReplacementNamed(context, ROUTE_AUTH);
-    //         }
-    //       },
-    //     ),
-    //     BlocListener<ProfileBloc, ProfileState>(
-    //       listener: (context, state) async {
-    //         if (state is ProfileErrorState) {
-    //           await Navigator.push(
-    //             context,
-    //             MaterialPageRoute(
-    //               builder: (context) => PlayerInfoScreen(),
-    //             ),
-    //           );
-    //         }
-    //         Navigator.pushReplacementNamed(context, ROUTE_HOME);
-    //       },
-    //     ),
-    //   ],
-    //   child: Scaffold(
-    //     body: Container(
-    //       // decoration: BoxDecoration(
-    //       //   gradient: LinearGradient(
-    //       //     colors: [
-    //       //       mainBlueDark,
-    //       //       mainBlueLight,
-    //       //     ],
-    //       //     begin: Alignment.topLeft,
-    //       //     end: Alignment.bottomRight,
-    //       //   ),
-    //       // ),
-    //       child: const Center(
-    //         child: Image(
-    //             image: AssetImage('images/logo/Logo.png'),
-    //             height: 150,
-    //             width: 150),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }

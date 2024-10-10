@@ -3,18 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
-// import 'package:uniceps/core/helpers/player_screen_arguments.dart';
-// import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
 import 'package:uniceps/features/Auth/views/widgets/auth_box.dart';
-import 'package:uniceps/features/Auth/views/widgets/Code_Box.dart';
+import 'package:uniceps/features/Auth/views/widgets/code_box.dart';
 import 'package:uniceps/features/Auth/views/widgets/background_decoration.dart';
-// import 'package:uniceps/features/Auth/views/widgets/gym_code_box.dart';
-// import 'package:uniceps/features/Auth/views/widgets/password_box.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
 
@@ -28,6 +23,7 @@ import 'package:uniceps/main_cubit/locale_cubit.dart';
 //
 // /////////////////////////////////////////////////////////////////////////////
 
+@Deprecated("[auth_screen_2] is in use because this screen lacks animations")
 class EmailAuthScreen extends StatefulWidget {
   const EmailAuthScreen({super.key});
 
@@ -35,8 +31,9 @@ class EmailAuthScreen extends StatefulWidget {
   State<EmailAuthScreen> createState() => _EmailAuthScreenState();
 }
 
+// ignore: deprecated_member_use_from_same_package
 class _EmailAuthScreenState extends State<EmailAuthScreen>
-    with RestorationMixin {
+    with RestorationMixin, SingleTickerProviderStateMixin {
   RestorableBool isLogin = RestorableBool(false);
 
   RestorableString email = RestorableString(''),
@@ -48,7 +45,13 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
   final duration = const Duration(milliseconds: 500);
   final curve = Curves.easeInOutExpo;
 
+  bool isAnimActive = true;
+
   late PageController _pageController;
+  late AnimationController _controller;
+
+  late final Animation<int> _animation;
+  // late final Animation<Offset> _slideAnimation;
 
   void navOnRestore() async {
     await Future.delayed(const Duration(seconds: 0));
@@ -57,9 +60,35 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
         duration: duration, curve: curve);
   }
 
+  // void endAnimation() async {
+  //   if (isAnimActive) {
+  //     await Future.delayed(duration);
+  //     isAnimActive = false;
+  //     setState(() {});
+  //   }
+  // }
+
   @override
   void initState() {
     _pageController = PageController();
+    _controller = AnimationController(
+      vsync: this,
+      duration: duration,
+    );
+    _animation = Tween<int>(begin: 0, end: 255).animate(
+      CurvedAnimation(parent: _controller, curve: curve),
+    );
+    // _slideAnimation =
+    //     Tween<Offset>(begin: const Offset(.2, .5), end: const Offset(.2, .01))
+    //         .animate(CurvedAnimation(parent: _controller, curve: curve));
+    _controller.addListener(() {
+      if (_controller.isCompleted) {
+        isAnimActive = false;
+        setState(() {});
+      }
+      setState(() {});
+    });
+    _controller.forward();
 
     super.initState();
   }
@@ -67,33 +96,18 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
   @override
   void dispose() {
     _pageController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(
-    //   SystemUiOverlayStyle(
-    //     systemNavigationBarColor: Theme.of(context).colorScheme.background,
-    //     // statusBarBrightness: Brightness.light,
-    //     statusBarIconBrightness: Brightness.dark,
-    //   ),
-    // );
     navOnRestore();
+    // endAnimation();
     return BlocBuilder<LocaleCubit, ChangedLangState>(
       builder: (context, state) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          // floatingActionButton: FloatingActionButton(
-          //   backgroundColor: Colors.black,
-          //   child: const Icon(Icons.home),
-          //   // onPressed: () =>
-          //   //     Navigator.pushReplacementNamed(context, ROUTE_HOME),
-          //   onPressed: () {
-          //     // print("email: ${email.value}");
-          //     BlocProvider.of<AuthBloc>(context).add(AuthCheckEvent());
-          //   },
-          // ),
           body: Stack(
             children: [
               Container(
@@ -158,23 +172,18 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
 
                         if (res != null && !res) {
                           print("check: inside if statement");
-                          // while (Navigator.canPop(context)) {
-                          //   print("check: inside while statement");
-                          //   Navigator.pop(context);
-                          // }
-                          // return;
 
-                          // TODO: Exit Application (for Android)
                           if (Platform.isAndroid) {
+                            // Exit Application (for Android)
                             SystemNavigator.pop();
                           } else if (Platform.isIOS) {
+                            // For IOS
                             exit(0);
                           }
-                          // For IOS
-                          // exit(0);
                         }
                       }
 
+                      // ignore: use_build_context_synchronously
                       Navigator.pushReplacementNamed(context, ROUTE_HOME);
                       //
                       //  Jump to Gym handshake
@@ -204,7 +213,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                   builder: (context, state) {
                     return Stack(
                       children: [
-                        ///   B A C K G R O U N D   P A I N T   T R I A N G L E S
+                        //   B A C K G R O U N D   P A I N T   T R I A N G L E S
                         SizedBox(
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height,
@@ -226,12 +235,15 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                   width:
                                       MediaQuery.of(context).size.height * 0.3,
                                   height:
-                                      MediaQuery.of(context).size.height * 0.32,
+                                      MediaQuery.of(context).size.height * 0.3,
                                   padding: const EdgeInsets.all(25),
                                   alignment: Alignment.center,
-                                  child: const Image(
-                                    image: AssetImage('images/logo/Logo.png'),
-                                  ),
+                                  child: isAnimActive
+                                      ? null
+                                      : const Image(
+                                          image: AssetImage(
+                                              'images/logo/Logo.png'),
+                                        ),
                                 ),
 
                                 ///   M I D D L E   C A R D
@@ -300,7 +312,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                             Navigator.of(context).push(
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                ForgotPasswordScreen(),
+                                                const ForgotPasswordScreen(),
                                           ),
                                         ),
                                       ),
@@ -312,9 +324,6 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                         opacity: !isLogin.value ? 1 : 0,
                                         child: CodeBox(
                                           onPressed: (code) async {
-                                            // currentPage.value = 2;
-                                            // _pageController.animateToPage(2,
-                                            //     duration: duration, curve: curve);
                                             BlocProvider.of<AuthBloc>(context)
                                                 .add(AuthEmailCodeVerifyEvent(
                                                     code: code,
@@ -322,43 +331,6 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                           },
                                         ),
                                       ),
-                                      //
-                                      //    P A S S W O R D   S T E P
-                                      //
-                                      // Opacity(
-                                      //   opacity: !isLogin.value ? 1 : 0,
-                                      //   child: PasswordBox(
-                                      //     onConfirm: (pass) {
-                                      //       BlocProvider.of<AuthBloc>(context).add(
-                                      //         AuthAddNewPasswordEvent(
-                                      //             email: email.value, pass: pass),
-                                      //       );
-                                      //       currentPage.value = 3;
-                                      //       _pageController.animateToPage(3,
-                                      //           duration: duration, curve: curve);
-                                      //     },
-                                      //   ),
-                                      // ),
-
-                                      //
-                                      //    G Y M - H A N D S H A K E   S T E P
-                                      //
-
-                                      // GymCodeBox(
-                                      //   onPressed: (gymCode) {
-                                      //     BlocProvider.of<AuthBloc>(context)
-                                      //         .add(
-                                      //       GymCodeVerifyEvent(
-                                      //           gymCode: gymCode),
-                                      //     );
-                                      //   },
-                                      //   onSkip: () {
-                                      //     Navigator.of(context).pushNamed(
-                                      //         ROUTE_PLAYER_INFO,
-                                      //         arguments: PlayerArguments(
-                                      //             hasData: false));
-                                      //   },
-                                      // ),
                                     ],
                                   ),
                                 ),
@@ -375,21 +347,6 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                             ),
                           ),
                         ),
-                        // Positioned(
-                        //   top: 5,
-                        //   right: 5,
-                        //   child: DropdownButton(
-                        //     items: [
-                        //       DropdownMenuItem(
-                        //         child: Text("English"),
-                        //       ),
-                        //       DropdownMenuItem(
-                        //         child: Text("عربي"),
-                        //       ),
-                        //     ],
-                        //     onChanged: (a) {},
-                        //   ),
-                        // ),
                         if (state is AuthLoadingState)
                           Stack(
                             children: [
@@ -397,16 +354,60 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                 color: const Color.fromARGB(108, 0, 0, 0),
                                 child: Center(
                                   child: Container(
-                                      padding: EdgeInsets.all(30),
+                                      padding: const EdgeInsets.all(30),
                                       decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: CircularProgressIndicator()),
+                                      child: const CircularProgressIndicator()),
                                 ),
                               ),
                             ],
                           ),
+
+                        if (isAnimActive)
+                          Positioned(
+                            top: 0.0,
+                            left: 0.0,
+                            width: MediaQuery.sizeOf(context).width,
+                            height: MediaQuery.sizeOf(context).height,
+                            child: Container(
+                              color: Colors.white
+                                  .withAlpha(255 - _animation.value),
+                            ),
+                          ),
+                        //   C E N T E R   L O G O   A N I M A T I O N
+
+                        AnimatedPositioned(
+                          duration: duration,
+                          top: MediaQuery.sizeOf(context).height *
+                                  0.5 *
+                                  (1 - _animation.value / 255) +
+                              (isAnimActive ? 0.0 : 20.0),
+                          width: MediaQuery.sizeOf(context).width,
+                          child: Container(
+                            width: MediaQuery.of(context).size.height * 0.25,
+                            height: MediaQuery.of(context).size.height * 0.25,
+                            padding: const EdgeInsets.all(25),
+                            alignment: Alignment.center,
+                            child: const Image(
+                              image: AssetImage('images/logo/Logo.png'),
+                            ),
+                          ),
+                        ),
+
+                        // Transform.translate(
+                        //   offset: _slideAnimation.value,
+                        //   child: Container(
+                        //     width: MediaQuery.of(context).size.height * 0.25,
+                        //     height: MediaQuery.of(context).size.height * 0.25,
+                        //     padding: const EdgeInsets.all(25),
+                        //     alignment: Alignment.center,
+                        //     child: const Image(
+                        //       image: AssetImage('images/logo/Logo.png'),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     );
                   },

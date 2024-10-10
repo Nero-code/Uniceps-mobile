@@ -106,6 +106,20 @@ class ProfileRepoImpl implements ProfileRepo {
       try {
         final res = await remote.getSubs(gymId, pid);
         await local.saveSubs(gymId, res);
+        res.forEach((element) => print("DEBUG SUBS: ${element.toJson()}"));
+
+        res.sort((a, b) => b.startDate.compareTo(a.startDate));
+        final l = res.length;
+        for (int i = 0; i < l - 1; i++) {
+          if (res[i].endDate.compareTo(DateTime.now()) < 0) {
+            print("DATE SORT ALGORITHM");
+            print(res[i].endDate);
+            print(DateTime.now());
+            final temp = res[i];
+            res.remove(temp);
+            res.add(temp);
+          }
+        }
         return Right(res);
       } on ServerException {
         print("Server Execption");
@@ -154,8 +168,17 @@ class ProfileRepoImpl implements ProfileRepo {
   Future<Either<Failure, List<Gym>>> getGyms() async {
     if (await checker.hasConnection) {
       try {
+        print("STATE 1");
         final res = await remote.getGyms();
+
+        print("STATE 2");
         final localRes = await local.getSubscribedToGyms();
+
+        print("STATE 3");
+        if (localRes.isEmpty) {
+          print("STATE 4");
+          return Right(res);
+        }
         final list = <GymModel>[];
         for (var i in localRes) {
           print("DEBUG: GETGYMS: ${i.toJson()}");
@@ -172,6 +195,7 @@ class ProfileRepoImpl implements ProfileRepo {
         //     list.add(res[i]);
         //   }
         // }
+
         print("before remove: ${res.length}");
         for (var gym in list) {
           res.forEach((e) {
@@ -271,6 +295,9 @@ class ProfileRepoImpl implements ProfileRepo {
         return Right(res);
       } on NoAttendenceLogFoundException {
         return const Left(NoAttendenceFoundFailure("not a member in the gym"));
+      } on NotAMemberOfGymException {
+        return const Left(
+            NotAMemberOfGymFailure(errorMessage: "not a member in the gym"));
       } on ClientException {
         return Left(NoInternetConnectionFailure(errMsg: ""));
       } on ServerException {
@@ -330,40 +357,58 @@ class ProfileRepoImpl implements ProfileRepo {
   }
 
   @override
-  Future<Either<Failure, PlayerInGym>> getPlayerInGym(String gymId) async {
-    String? pid;
-    try {
-      final list = await local.getSubscribedToGyms();
-      pid = list.firstWhere((gym) => gym.id == gymId).pid;
-    } on EmptyCacheExeption {
-      return Left(NoGymSpecifiedFailure(errMsg: "errMsg"));
-    } catch (e) {
-      print("Gym Not Found, Therefor not a member");
-      return Right(PlayerInGym(gymId: gymId, balance: 0.0, subs: 0));
+  Future<Either<Failure, PlayerInGym>> getPlayerInGym(
+      String gymId, String pid) async {
+    // String? pid;
+    // try {
+    //   final list = await local.getSubscribedToGyms();
+    //   pid = list.firstWhere((gym) => gym.id == gymId).pid;
+    // } on EmptyCacheExeption {
+    //   return Left(NoGymSpecifiedFailure(errMsg: "errMsg"));
+    // } catch (e) {
+    //   print("Gym Not Found, Therefor not a member");
+    //   return Right(PlayerInGym(gymId: gymId, balance: 0.0, subs: 0));
+    // }
+
+    print("------------------GET-PLAYER-IN-GYM----------------------------");
+    print("PLAYER IN GYM: $pid");
+    if (pid.isEmpty) {
+      return const Left(NotAMemberOfGymFailure(errorMessage: ""));
     }
 
     if (await checker.hasConnection) {
+      print("PLAYER IN GYM: Connected!");
       try {
         final player = await remote.getPlayerInGym(gymId, pid);
+        print("PLAYER IN GYM: ${player.balance}");
         // final subs = await remote.getSubs(gymId, pid);
-        final res = PlayerInGym(gymId: gymId, balance: player.balance, subs: 0);
+        final res = PlayerInGym(
+            gymId: gymId, balance: player.balance, startDate: player.startDate);
+        print("PLAYER IN GYM: ${res.balance}");
         await local.savePlayerInGym(res);
         return Right(res);
-      } on NotFoundException {
-        return Left(NotFoundFailure(errMsg: ""));
+      } on NotAMemberOfGymException {
+        return const Left(NotAMemberOfGymFailure(errorMessage: ""));
       } on ClientException {
         return Left(NoInternetConnectionFailure(errMsg: ""));
+      } on ServerException {
+        return Left(ServerFailure(errMsg: ""));
       } catch (e) {
-        return Right(PlayerInGym(gymId: gymId, balance: 0.0, subs: 0));
+        print("Exc = ${e.toString()}");
+        return Left(GeneralPurposFailure(errorMessage: e.toString()));
       }
     } else {
       try {
         final res = await local.getPlayerInGym(gymId);
 
+        print("PLAYER ${res.balance}");
         return Right(res);
+      } on EmptyCacheExeption {
+        print("PLAYER EMPTY");
+        return Left(NotFoundFailure(errMsg: ""));
       } catch (e) {
-        print(e);
-        return Right(PlayerInGym(gymId: gymId, balance: 0.0, subs: 0));
+        print("PLAYER $e");
+        return Left(GeneralPurposFailure(errorMessage: ""));
       }
     }
   }

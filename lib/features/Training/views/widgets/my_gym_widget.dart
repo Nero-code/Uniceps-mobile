@@ -57,6 +57,7 @@ class MyGymWidget extends StatelessWidget {
                   ),
                 ),
                 Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(myGym.name),
                     Text(myGym.ownerName),

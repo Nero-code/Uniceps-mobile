@@ -58,13 +58,13 @@ Future<void> init() async {
   // await profileBox.clear();
   // await trainBox.clear();
   // await lastWeightBox.clear();
-  // await gymsBox.clear();
+  // // await gymsBox.clear();
   // await myGyms.clear();
   // await subsBox.clear();
   // await measureBox.clear();
   // await handshakesBox.clear();
   // await attendenceBox.clear();
-  // await imagesBox.clear();
+  // // await imagesBox.clear();
   // await selectedGym.clear();
   // await playerInGymBox.clear();
 
@@ -73,7 +73,7 @@ Future<void> init() async {
     await profileBox.clear();
     await trainBox.clear();
     await lastWeightBox.clear();
-    await gymsBox.clear();
+    // await gymsBox.clear();
     await myGyms.clear();
     await subsBox.clear();
     await measureBox.clear();

@@ -8,6 +8,6 @@ sealed class PlayerGymEvent extends Equatable {
 }
 
 final class GetPlayerInGymEvent extends PlayerGymEvent {
-  final String gymId;
-  const GetPlayerInGymEvent({required this.gymId});
+  final String gymId, pid;
+  const GetPlayerInGymEvent({required this.gymId, required this.pid});
 }

@@ -36,7 +36,10 @@ class TrainingRepoImple implements TrainingRepo {
         final myGems = await local.cacheSubsToGyms(temp);
         final currentGym = myGems.firstWhere(
           (element) => element.isCurrent,
-          orElse: () => myGems.first,
+          orElse: () {
+            local.setSelectedGym(myGems.first.id);
+            return myGems.first;
+          },
         );
         final weights = await local.getWeights();
         final res = await remote.getTrainingProgram(
@@ -51,16 +54,22 @@ class TrainingRepoImple implements TrainingRepo {
 
         return Right(res);
       } on NoGymSpecifiedException {
-        print("NoGymSpecified EXC");
-        return Left(
-            NoGymSpecifiedFailure(errMsg: "No handshakes found for player"));
+        print("DEBUG: NoGymSpecified yoyo");
+        return const Left(
+            NoTrainingProgramFailure("No handshakes found for player"));
+      } on NoTrainingProgramException {
+        print("DEBUG: NoTrainingProgram yoyo");
+        return const Left(
+            NoTrainingProgramFailure("No handshakes found for player"));
+      } on NotAMemberOfGymException {
+        return Left(NotAMemberOfGymFailure(errorMessage: ""));
       } on ClientException {
         return Left(NoInternetConnectionFailure(errMsg: ""));
       } on ServerException {
-        print("Server EXC");
+        print("DEBUG: Server EXC");
         return Left(ServerFailure(errMsg: "Error happened serverside"));
       } catch (e) {
-        print("GeneralP EXC: ${e.toString()}");
+        print("DEBUG: GeneralP EXC: ${e.toString()}");
         return Left(GeneralPurposFailure(errorMessage: e.toString()));
       }
     } else {
@@ -75,6 +84,14 @@ class TrainingRepoImple implements TrainingRepo {
         tp = res;
 
         return Right(res);
+      } on NotAMemberOfGymException {
+        return const Left(NotAMemberOfGymFailure(errorMessage: ""));
+      } on NoGymSpecifiedException {
+        return Left(NoGymSpecifiedFailure(errMsg: "No Gym Specified"));
+      } on NoTrainingProgramException {
+        print("NoTrainingProgram");
+        return const Left(
+            NoTrainingProgramFailure("No handshakes found for player"));
       } on EmptyCacheExeption {
         print("No TrainingProgram Found: EmptyCacheExeption");
         return Left(OfflineFailure(errorMessage: "no internet"));
@@ -161,30 +178,35 @@ class TrainingRepoImple implements TrainingRepo {
 
   @override
   Future<Either<Failure, List<Gym>>> getSubscribedToGyms() async {
-    print("Debug: 1");
-
     if (await connection.hasConnection) {
       try {
-        print("Debug: 2");
         final res = await remote.getSubscribedToGyms();
+        print("Debug: 3: Subscribed to gym (myGyms) => $res");
         final list = await local.cacheSubsToGyms(res);
 
         return Right(list);
+      } on NoGymSpecifiedException {
+        return Left(NoGymSpecifiedFailure(errMsg: ""));
       } on ClientException {
+        print("SubS: Client EXC");
         return Left(NoInternetConnectionFailure(errMsg: ""));
       } on ServerException {
+        print("SubS: server EXC");
         return Left(ServerFailure(errMsg: ""));
       } on EmptyCacheExeption {
+        print("SubS: empty");
         return Left(NoGymSpecifiedFailure(errMsg: "errMsg"));
       } catch (e) {
+        print("SubS: $e");
         return Left(GeneralPurposFailure(errorMessage: e.toString()));
       }
     } else {
       try {
         final res = await local.getSubscribedToGyms();
         return Right(res);
-      } on EmptyCacheExeption {
-        return Left(EmptyCacheFailure(errorMessage: "No Gyms Specified"));
+      } on NotAMemberOfGymException {
+        return const Left(
+            NotAMemberOfGymFailure(errorMessage: "No Gyms Specified"));
       } catch (e) {
         return Left(GeneralPurposFailure(errorMessage: e.toString()));
       }

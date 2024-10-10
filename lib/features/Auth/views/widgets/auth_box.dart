@@ -34,36 +34,14 @@ class _AuthBoxState extends State<AuthBox> {
 
   bool obscureText = true;
 
+  final node = FocusNode();
+
   @override
   Widget build(BuildContext context) {
-    final local = AppLocalizations.of(context);
+    final local = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          // alignment: Alignment.centerLeft,
-          // decoration: BoxDecoration(
-          //   shape: BoxShape.circle,
-          //   gradient: LinearGradient(
-          //     colors: [
-          //       Theme.of(context).colorScheme.background,
-          //       Color.fromARGB(255, 92, 168, 209),
-          //     ],
-          //   ),
-          // ),
-          child: Text(local!.welcome,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: Colors.grey.shade600, fontWeight: FontWeight.bold)),
-          // child: Center(
-          //   child: Icon(
-          //     Icons.mail_lock_rounded,
-          //     size: 90,
-          //     color: Theme.of(context).colorScheme.onBackground,
-          //   ),
-          // ),
-        ),
-
         ///   B A C K G R O U N D   C A R D
         BackgroundCard(
           back: Colors.transparent,
@@ -74,6 +52,9 @@ class _AuthBoxState extends State<AuthBox> {
               children: [
                 ///   T E X T F I E L D   E M A I L
                 TextFormField(
+                  textDirection: TextDirection.ltr,
+                  textAlign: TextAlign.center,
+                  focusNode: node,
                   controller: emailCtrl,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
@@ -95,6 +76,11 @@ class _AuthBoxState extends State<AuthBox> {
                     labelText: local.email,
                     hintText: "john.doe@gmail.com",
                   ),
+                  onTapOutside: (event) => node.unfocus(),
+                  onFieldSubmitted: (value) {
+                    if (!_authFormkey.currentState!.validate()) return;
+                    widget.signin(emailCtrl.text.trim());
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return local.emailError;
@@ -143,7 +129,6 @@ class _AuthBoxState extends State<AuthBox> {
                 //       return null;
                 //     },
                 //   ),
-
                 // ///   F O R G O T   P A S S W O R D
                 // if (widget.isLogin)
                 //   Material(
@@ -180,16 +165,18 @@ class _AuthBoxState extends State<AuthBox> {
         Container(
           width: MediaQuery.of(context).size.width,
           margin: const EdgeInsets.only(top: 10),
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: ElevatedButton(
             style: ButtonStyle(
-              // shape: MaterialStatePropertyAll<OutlinedBorder>(CircleBorder()),
+              // shape: MaterialStatePropertyAll<OutlinedBorder>(
+              //     BeveledRectangleBorder()),
               backgroundColor: MaterialStatePropertyAll<Color>(
-                Theme.of(context).colorScheme.secondary,
+                Theme.of(context).colorScheme.primary,
               ),
               foregroundColor:
-                  MaterialStatePropertyAll<Color>(Colors.grey.shade800),
+                  MaterialStatePropertyAll<Color>(Colors.grey.shade300),
             ),
+            onLongPress: null,
             onPressed: () {
               if (_authFormkey.currentState!.validate()) {
                 if (widget.isLogin) {

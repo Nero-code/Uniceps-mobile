@@ -1,76 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
-// import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
-// import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
-// import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/screens/measurement_screen_3.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/profile_back_circle.dart';
-// import 'package:uniceps/features/Profile/presentation/widgets/settings_tile.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/settings_tile_2.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-// backgroundColor: Theme.of(context).colorScheme.background,
-// appBar: AppBar(
-//   title: const Text("Uniceps"),
-//   // backgroundColor: Theme.of(context).colorScheme.background,
-//   backgroundColor: Colors.transparent,
-//   actions: [
-//     IconButton(
-//       onPressed: () {
-//         showDialog(
-//             context: context,
-//             builder: (context) {
-//               return AlertDialog(
-//                 title:
-//                     Text(local.logoutAlert),
-//                 content: Text(local
-//                     .logoutAlertContents),
-//                 actions: [
-//                   TextButton(
-//                     onPressed: () {
-//                       Navigator.pop(context);
-//                     },
-//                     child: Text(local.cancel),
-//                   ),
-//                   TextButton(
-//                     onPressed: () async {
-//                       BlocProvider.of<AuthBloc>(context)
-//                           .add(LogoutEvent());
-//                       final bloc =
-//                           await BlocProvider.of<AuthBloc>(context)
-//                               .stream
-//                               .skip(1)
-//                               .first;
-//                       print("Test");
-//                       print("Bloc: ${bloc.runtimeType}");
-//                       if (bloc is AuthLoggedoutState) {
-//                         Navigator.pop(context);
-//                         Navigator.pop(context);
-//                         Navigator.pushReplacementNamed(
-//                             context, ROUTE_AUTH);
-//                       }
-//                     },
-//                     child: Text(local.ok),
-//                   ),
-//                 ],
-//               ).build(context);
-//             });
-//       },
-//       icon: const Icon(Icons.logout_rounded),
-//     ),
-//   ],
-// ),
-
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  bool loggingOut = false;
 
   @override
   Widget build(BuildContext context) {
@@ -89,36 +42,15 @@ class ProfileScreen extends StatelessWidget {
                   child: Center(
                     child: SizedBox(
                       width: screen.width,
-                      height: 20,
+                      height: 15,
                       child: const Image(
                         image: AssetImage("images/logo/Logo_Trio.png"),
                       ),
                     ),
                   ),
                 ),
-                // Container(
-                //   height: MediaQuery.of(context).size.height * 0.3,
-                //   width: MediaQuery.of(context).size.width,
-                //   decoration: BoxDecoration(
-                //     borderRadius: ,
-                //     gradient: LinearGradient(
-                //       colors: [
-                //         Theme.of(context).colorScheme.primary,
-                //         Theme.of(context).colorScheme.secondary,
-                //         // Theme.of(context).colorScheme.background,
-                //       ],
-                //       begin: Alignment.topCenter,
-                //       end: Alignment.bottomCenter,
-                //       stops: const [
-                //         0.1,
-                //         // 0.4,
-                //         1,
-                //       ],
-                //     ),
-                //   ),
-                // ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.35,
+                  height: MediaQuery.of(context).size.height * 0.32,
                   width: MediaQuery.of(context).size.width,
                   child: CustomPaint(
                     painter: ProfileBackgroundCircle(),
@@ -128,96 +60,7 @@ class ProfileScreen extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                              onPressed: () async {
-                                showDialog(
-                                    context: context,
-                                    builder: (c) => AlertDialog(
-                                          title: Text(local.chooseLang),
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              for (var i in Lang.values)
-                                                RadioListTile(
-                                                    title: Text(i == Lang.en
-                                                        ? "English"
-                                                        : "العربية"),
-                                                    value: st.locale
-                                                            .languageCode ==
-                                                        i.name,
-                                                    groupValue: true,
-                                                    onChanged: (newVal) {
-                                                      BlocProvider.of<
-                                                                  LocaleCubit>(
-                                                              context)
-                                                          .changeLanguage(
-                                                              i.name == "en"
-                                                                  ? "en"
-                                                                  : "ar");
-                                                      Navigator.pop(context);
-                                                    }),
-                                            ],
-                                          ),
-                                        ).build(context));
-                              },
-                              icon: Icon(
-                                Icons.language,
-                                size: 30,
-                                color: Colors.white70,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Text(local.logoutAlert),
-                                        content:
-                                            Text(local.logoutAlertContents),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(local.cancel),
-                                          ),
-                                          TextButton(
-                                            onPressed: () async {
-                                              BlocProvider.of<AuthBloc>(context)
-                                                  .add(LogoutEvent());
-                                              final bloc = await BlocProvider
-                                                      .of<AuthBloc>(context)
-                                                  .stream
-                                                  .skip(1)
-                                                  .first;
-                                              print("Test");
-                                              print(
-                                                  "Bloc: ${bloc.runtimeType}");
-                                              if (bloc is AuthLoggedoutState) {
-                                                Navigator.pop(context);
-                                                Navigator.pop(context);
-                                                Navigator.pushReplacementNamed(
-                                                    context, ROUTE_AUTH);
-                                              }
-                                            },
-                                            child: Text(local.ok),
-                                          ),
-                                        ],
-                                      ).build(context);
-                                    });
-                              },
-                              icon: Icon(
-                                Icons.logout,
-                                color: Colors.white70,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: screen.height * 0.05),
                         BlocBuilder<ProfileBloc, ProfileState>(
                           builder: (context, state) {
                             print(state.runtimeType);
@@ -333,12 +176,124 @@ class ProfileScreen extends StatelessWidget {
                                       ));
                                     }),
                                 SettingsTile2(
+                                  icon: Icons.language,
+                                  iconsColor: Colors.blue,
+                                  title: local.language,
+                                  subtitle: "",
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (c) => AlertDialog(
+                                        title: Text(local.chooseLang),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            for (var i in Lang.values)
+                                              RadioListTile(
+                                                  title: Text(i == Lang.en
+                                                      ? "English"
+                                                      : "العربية"),
+                                                  value:
+                                                      st.locale.languageCode ==
+                                                          i.name,
+                                                  groupValue: true,
+                                                  onChanged: (newVal) {
+                                                    BlocProvider.of<
+                                                                LocaleCubit>(
+                                                            context)
+                                                        .changeLanguage(
+                                                            i.name == "en"
+                                                                ? "en"
+                                                                : "ar");
+                                                    Navigator.pop(context);
+                                                  }),
+                                          ],
+                                        ),
+                                      ).build(context),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                SettingsTile2(
                                   icon: Icons.info,
                                   iconsColor: Colors.amber,
                                   title: local.about,
                                   subtitle: "yoyoyoyo",
                                   onPressed: () => Navigator.of(context)
                                       .pushNamed(ROUTE_ABOUT),
+                                ),
+                                SettingsTile2(
+                                  icon: Icons.logout_rounded,
+                                  iconsColor: Colors.red,
+                                  title: local.logout,
+                                  subtitle: "",
+                                  // onPressed: () => Navigator.of(context)
+                                  //     .pushNamed(ROUTE_ABOUT),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text(local.logoutAlert),
+                                          content:
+                                              Text(local.logoutAlertContents),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(local.cancel),
+                                            ),
+                                            TextButton(
+                                              onPressed: () async {
+                                                BlocProvider.of<AuthBloc>(
+                                                        context)
+                                                    .add(LogoutEvent());
+                                                final bloc = await BlocProvider
+                                                        .of<AuthBloc>(context)
+                                                    .stream
+                                                    .skip(1)
+                                                    .first;
+                                                print(
+                                                    "Bloc: ${bloc.runtimeType}");
+                                                if (bloc
+                                                    is AuthLoggedoutState) {
+                                                  Navigator.pop(context);
+                                                  Navigator.pop(context);
+                                                  Navigator
+                                                      .pushReplacementNamed(
+                                                          context, ROUTE_AUTH);
+                                                } else {
+                                                  Navigator.pop(context);
+                                                  ScaffoldMessenger.of(context)
+                                                      .clearSnackBars();
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content:
+                                                          ErrorScreenWidget(
+                                                        f: NoInternetConnectionFailure(
+                                                            errMsg: ""),
+                                                        callback: null,
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              child: Text(
+                                                local.ok,
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                            ),
+                                          ],
+                                        ).build(context);
+                                      },
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -401,7 +356,6 @@ class ProfileScreen extends StatelessWidget {
                         //         });
                         //   },
                         // ),
-
                         // SettingTile(
                         //   icon: Icon(
                         //     Icons.language,
@@ -469,7 +423,6 @@ class ProfileScreen extends StatelessWidget {
                         // //
                         // //      G Y M S   L I S T   O P T I O N
                         // //
-
                         // SettingTile(
                         //   icon: Icon(
                         //     Icons.fitness_center_rounded,
@@ -483,7 +436,6 @@ class ProfileScreen extends StatelessWidget {
                         //     Navigator.pushNamed(context, ROUTE_GYMS_LIST);
                         //   },
                         // ),
-
                         // SettingTile(
                         //   icon: Icon(
                         //     Icons.leaderboard_rounded,
@@ -495,7 +447,6 @@ class ProfileScreen extends StatelessWidget {
                         //     Navigator.pushNamed(context, ROUTE_MEASUREMENTS);
                         //   },
                         // ),
-
                         // //
                         // //      A B O U T   O P T I O N
                         // //
@@ -514,6 +465,26 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                Positioned(
+                  top: 30.0,
+                  child: IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.arrow_back),
+                    iconSize: 30,
+                    color: Colors.white,
+                  ),
+                ),
+                if (loggingOut)
+                  SizedBox(
+                    width: screen.width,
+                    height: screen.height,
+                    child: const ColoredBox(
+                      color: Colors.white,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

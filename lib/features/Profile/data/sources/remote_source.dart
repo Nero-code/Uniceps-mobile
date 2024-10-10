@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
-import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
 import 'package:uniceps/features/Profile/data/models/measurement_model.dart';
@@ -193,8 +192,7 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
   @override
   Future<List<Attendence>> getAllAttendance(String gymId, String pid) async {
     if (pid.isEmpty) {
-      throw EmptyAttendenceFailure(
-          errorMessage: "No Attendence for gym $gymId");
+      throw NoAttendenceLogFoundException();
     }
     final res = await _client.get(
       Uri.parse("$API$HTTP_PRESENCE/$gymId/$pid"),
@@ -281,8 +279,8 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
   Future<PlayerInGym> getPlayerInGym(String gymId, String pid) async {
     final res =
         await _client.get(Uri.parse("$API" "$HTTP_PLAYER" "/$gymId" "/$pid"));
-    print(res.statusCode);
-    print(res.body);
+    print("player in gym: ${res.statusCode}");
+    print("player in gym: ${res.body}");
 
     if (res.statusCode == 200) {
       final map = jsonDecode(res.body);

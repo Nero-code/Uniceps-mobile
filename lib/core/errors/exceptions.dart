@@ -15,3 +15,5 @@ class NoGymSpecifiedException implements Exception {}
 class NoTrainingProgramException implements Exception {}
 
 class NoAttendenceLogFoundException implements Exception {}
+
+class NotAMemberOfGymException implements Exception {}

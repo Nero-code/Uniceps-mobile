@@ -23,23 +23,24 @@ class SettingsTile2 extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Material(
         // elevation: 2,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(15),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
             // color: Colors.white,
             // color: Theme.of(context).colorScheme.secondary.withAlpha(10),
             border: Border.all(
-              color: Color(0xFFCCCCCC),
+              color: const Color(0xFFCCCCCC),
+              width: 0.5,
             ),
           ),
-          padding: const EdgeInsets.all(1.0),
+          // padding: const EdgeInsets.all(1.0),
           child: InkWell(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(15),
             onTap: onPressed,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
@@ -54,18 +55,16 @@ class SettingsTile2 extends StatelessWidget {
                       // color: iconsColor,
                       color: Theme.of(context).colorScheme.primary,
                       icon,
-                      size: 40,
+                      size: 30,
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Center(
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
-                        color: Colors.grey.shade600,
-                      ),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                      color: Colors.grey.shade600,
                     ),
                   ),
                   // Text(

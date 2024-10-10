@@ -80,15 +80,15 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     }
   }
 
+  /// Throws [EmptyCacheExeption]
   @override
   Future<List<GymModel>> getSubscribedToGyms() async {
-    print("Here");
     final list = <GymModel>[];
     for (var i in myGyms.keys) {
       list.add(GymModel.fromJson(myGyms.get(i)!));
     }
     if (list.isEmpty) {
-      throw EmptyCacheExeption();
+      throw NotAMemberOfGymException();
     }
     for (var i in list) {
       if (i.isSelected) {
@@ -155,8 +155,7 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
           "isCurrent": myGyms.get(key)!['id'] == gymId,
         },
       );
-      print(
-          "aasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd: ${myGyms.get(key)}");
+      print("Current gym: ${myGyms.get(key)}");
       list.add(GymModel.fromJson(myGyms.get(key)!));
       print("DEBUG: SET 4");
     }

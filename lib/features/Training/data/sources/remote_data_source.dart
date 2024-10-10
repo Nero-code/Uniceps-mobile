@@ -7,9 +7,9 @@ import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
 import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
-import 'package:uniceps/features/Training/data/models/presence_model.dart';
+// import 'package:uniceps/features/Training/data/models/presence_model.dart';
 import 'package:uniceps/features/Training/data/models/training_prog_model.dart';
-import 'package:uniceps/features/Training/services/entities/avatar.dart';
+// import 'package:uniceps/features/Training/services/entities/avatar.dart';
 
 abstract class RemoteTrainingSource {
   Future<TrainingProgramModel> getTrainingProgram({
@@ -19,8 +19,8 @@ abstract class RemoteTrainingSource {
   });
   Future<List<GymModel>> getGyms();
   Future<List<GymModel>> getSubscribedToGyms();
-  Future<List<PresenceModel>> getPresence(String gymId);
-  Future<Avatar> getAvatar();
+  // Future<List<PresenceModel>> getPresence(String gymId);
+  // Future<Avatar> getAvatar();
 
   Future<List<HandShakeModel>> getAllHandshakes();
 }
@@ -45,6 +45,8 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
   });
 
   ///   This method calls the api with url: GET -> API/routine/gym_id/pid
+  ///
+  ///   throws [EmptyCacheExeption], [ServerException]
   @override
   Future<TrainingProgramModel> getTrainingProgram({
     required String gymId,
@@ -86,7 +88,7 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
     } else if (res.statusCode == 204) {
       throw EmptyCacheExeption();
     }
-    throw Exception();
+    throw ServerException();
   }
 
   @override
@@ -98,19 +100,19 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
       temp.map((e) => list.add(GymModel.fromJson(e)));
       return list;
     }
-    throw Exception();
+    throw ServerException();
   }
 
-  @override
-  Future<List<PresenceModel>> getPresence(String gymId) {
-    throw UnimplementedError();
-  }
+  // @override
+  // Future<List<PresenceModel>> getPresence(String gymId) {
+  //   throw UnimplementedError();
+  // }
 
-  @override
-  Future<Avatar> getAvatar() {
-    // TODO: implement getAvatar
-    throw UnimplementedError();
-  }
+  // @override
+  // Future<Avatar> getAvatar() {
+  //   // TODO: implement getAvatar
+  //   throw UnimplementedError();
+  // }
 
   @override
   Future<List<HandShakeModel>> getAllHandshakes() async {
@@ -143,6 +145,7 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
     throw ServerException();
   }
 
+  /// throws [NoGymSpecifiedException], [ServerException]
   @override
   Future<List<GymModel>> getSubscribedToGyms() async {
     final list = <GymModel>[];
@@ -155,15 +158,17 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
         "x-access-token": userBox.get(HIVE_USER_BOX)!['token'],
       },
     );
-
+    print(res.statusCode);
     if (res.statusCode == 200) {
-      print("Debug: ${res.body}");
+      print("Remote_S: getSubscribedToGyms: ${res.body}");
       for (var i in jsonDecode(res.body)) {
         list.add(GymModel.fromJson(i));
       }
+
+      return list;
     } else if (res.statusCode == 204) {
       throw NoGymSpecifiedException();
     }
-    return list;
+    throw ServerException();
   }
 }
