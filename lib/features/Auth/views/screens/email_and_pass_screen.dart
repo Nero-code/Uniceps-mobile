@@ -8,7 +8,7 @@ import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
 import 'package:uniceps/features/Auth/views/widgets/auth_box.dart';
-import 'package:uniceps/features/Auth/views/widgets/Code_Box.dart';
+import 'package:uniceps/features/Auth/views/widgets/code_box.dart';
 import 'package:uniceps/features/Auth/views/widgets/background_decoration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
@@ -23,6 +23,7 @@ import 'package:uniceps/main_cubit/locale_cubit.dart';
 //
 // /////////////////////////////////////////////////////////////////////////////
 
+@Deprecated("[auth_screen_2] is in use because this screen lacks animations")
 class EmailAuthScreen extends StatefulWidget {
   const EmailAuthScreen({super.key});
 
@@ -30,6 +31,7 @@ class EmailAuthScreen extends StatefulWidget {
   State<EmailAuthScreen> createState() => _EmailAuthScreenState();
 }
 
+// ignore: deprecated_member_use_from_same_package
 class _EmailAuthScreenState extends State<EmailAuthScreen>
     with RestorationMixin, SingleTickerProviderStateMixin {
   RestorableBool isLogin = RestorableBool(false);
@@ -49,7 +51,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
   late AnimationController _controller;
 
   late final Animation<int> _animation;
-  late final Animation<Offset> _slideAnimation;
+  // late final Animation<Offset> _slideAnimation;
 
   void navOnRestore() async {
     await Future.delayed(const Duration(seconds: 0));
@@ -76,9 +78,9 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
     _animation = Tween<int>(begin: 0, end: 255).animate(
       CurvedAnimation(parent: _controller, curve: curve),
     );
-    _slideAnimation =
-        Tween<Offset>(begin: const Offset(.2, .5), end: const Offset(.2, .01))
-            .animate(CurvedAnimation(parent: _controller, curve: curve));
+    // _slideAnimation =
+    //     Tween<Offset>(begin: const Offset(.2, .5), end: const Offset(.2, .01))
+    //         .animate(CurvedAnimation(parent: _controller, curve: curve));
     _controller.addListener(() {
       if (_controller.isCompleted) {
         isAnimActive = false;
@@ -171,8 +173,8 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                         if (res != null && !res) {
                           print("check: inside if statement");
 
-                          // TODO: Exit Application (for Android)
                           if (Platform.isAndroid) {
+                            // Exit Application (for Android)
                             SystemNavigator.pop();
                           } else if (Platform.isIOS) {
                             // For IOS
@@ -181,6 +183,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                         }
                       }
 
+                      // ignore: use_build_context_synchronously
                       Navigator.pushReplacementNamed(context, ROUTE_HOME);
                       //
                       //  Jump to Gym handshake
@@ -309,7 +312,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                             Navigator.of(context).push(
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                ForgotPasswordScreen(),
+                                                const ForgotPasswordScreen(),
                                           ),
                                         ),
                                       ),

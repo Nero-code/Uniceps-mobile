@@ -15,35 +15,47 @@ class GymLogoWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          InkWell(
-            onTap: onPressed,
-            child: Container(
-              decoration: BoxDecoration(
-                border: gym.isCurrent
-                    ? Border.all(
-                        width: 5.0,
-                        // color: Theme.of(context).colorScheme.primary,
-                        color: Theme.of(context).colorScheme.primary,
-                      )
-                    : null,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: CachedNetworkImage(
-                width: 80,
-                height: 80,
-                imageUrl: "$API" "$HTTP_GYMS" "$HTTP_GYM_LOGO" "/${gym.id}",
-                imageBuilder: (context, imageProvider) {
-                  return ClipRRect(
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              border: gym.isCurrent
+                  ? Border.all(
+                      width: 5.0,
+                      // color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.primary,
+                    )
+                  : null,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Material(
+              borderRadius: BorderRadius.circular(25),
+              color: Colors.white,
+              child: InkWell(
+                onTap: onPressed,
+                splashColor: Colors.white,
+                borderRadius: BorderRadius.circular(25),
+                child: CachedNetworkImage(
+                  width: 80,
+                  height: 80,
+                  imageUrl: "$API" "$HTTP_GYMS" "$HTTP_GYM_LOGO" "/${gym.id}",
+                  imageBuilder: (context, imageProvider) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      child: Image(image: imageProvider),
+                    );
+                  },
+                  errorWidget: (_, __, ___) => const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Image(
+                      image: AssetImage(APP_LOGO_DARK),
+                    ),
+                  ),
+                  placeholder: (context, url) => Material(
+                    // color: Colors.white,
                     borderRadius: BorderRadius.circular(25),
-                    child: Image(image: imageProvider),
-                  );
-                },
-                errorWidget: (_, __, ___) => const Image(
-                  image: AssetImage(APP_LOGO_DARK),
-                ),
-                placeholder: (context, url) => const CircleAvatar(
-                  child: Center(
-                    child: CircularProgressIndicator(),
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   ),
                 ),
               ),
@@ -52,10 +64,11 @@ class GymLogoWidget extends StatelessWidget {
           const SizedBox(height: 5.0),
           Text(
             gym.name,
-            style: TextStyle(
-              color: Colors.white,
-              // color: Theme.of(context).colorScheme.primary,
-              fontSize: 12,
+            overflow: TextOverflow.fade,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],

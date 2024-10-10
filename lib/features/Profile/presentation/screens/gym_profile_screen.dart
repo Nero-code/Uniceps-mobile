@@ -15,6 +15,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // import 'package:uniceps/features/Profile/presentation/screens/presence_screen.dart';
 // import 'package:uniceps/features/Training/views/widgets/panal_circle.dart';
 
+@Deprecated("Use GymProfileScreen2 instead")
 class GymProfileScreen extends StatelessWidget {
   const GymProfileScreen({super.key, required this.gym});
 
@@ -27,7 +28,7 @@ class GymProfileScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           BlocProvider.of<PlayerGymBloc>(context)
-              .add(GetPlayerInGymEvent(gymId: gym.id));
+              .add(GetPlayerInGymEvent(gymId: gym.id, pid: gym.pid));
         },
       ),
       // appBar: AppBar(
@@ -136,7 +137,8 @@ class GymProfileScreen extends StatelessWidget {
                                         builder: (context, state) {
                                   if (state is PlayerGymInitial) {
                                     BlocProvider.of<PlayerGymBloc>(context).add(
-                                        GetPlayerInGymEvent(gymId: gym.id));
+                                        GetPlayerInGymEvent(
+                                            gymId: gym.id, pid: gym.pid));
                                   }
                                   print(state.runtimeType);
                                   if (state is PlayerInGymLoadedState) {

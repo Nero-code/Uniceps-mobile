@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-// &0934499662&
-
 @Deprecated("QR Scan from mobile is disabled in this version 1.0.0")
 class QRScannerScreen extends StatefulWidget {
   const QRScannerScreen({super.key});
@@ -19,7 +17,6 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -41,8 +38,8 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                         overlayBuilder: (context, constraints) => Stack(
                           children: [
                             ColorFiltered(
-                              colorFilter: ColorFilter.mode(
-                                const Color.fromARGB(134, 0, 0, 0),
+                              colorFilter: const ColorFilter.mode(
+                                Color.fromARGB(134, 0, 0, 0),
                                 BlendMode.srcOut,
                               ),
                               child: Stack(

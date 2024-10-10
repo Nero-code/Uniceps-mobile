@@ -19,7 +19,48 @@ class ProfileBackgroundCircle extends CustomPainter {
     path.lineTo(size.width, 0);
     path.lineTo(size.width, size.height * perHeight);
     path.conicTo(
-        size.width * 0.5, size.height * conicTo, 0, size.height * perHeight, 1);
+      size.width * 0.5,
+      size.height * conicTo,
+      0,
+      size.height * perHeight,
+      1,
+    );
+
+    // path.conicTo(
+    //   (size.width * 0.9), //              x1
+    //   (size.height * 0.9), //             y1
+    //   (size.width * 0.8), //              x2
+    //   (size.height * 0.9), //            y2
+    //   (1), //                             w
+    // );
+    // path.conicTo(
+    //   (size.width * 0.7), //              x1
+    //   (size.height * 0.9), //             y1
+    //   (size.width * 0.66), //              x2
+    //   (size.height * 0.7), //             y2
+    //   (1), //                             w
+    // );
+    // path.conicTo(
+    //   (size.width * 0.63), //              x1
+    //   (size.height * 0.6), //             y1
+    //   (size.width * 0.5), //              x2
+    //   (size.height * 0.5), //       y2
+    //   (1), //                             w
+    // );
+    // path.conicTo(
+    //   (size.width * 0.3), //              x1
+    //   (size.height * 0.4), //             y1
+    //   (size.width * 0.33), //              x2
+    //   (size.height * 0.7), //       y2
+    //   (1), //                             w
+    // );
+    // path.conicTo(
+    //   (size.width * 0.3), //              x1
+    //   (size.height * 0.5), //   y1
+    //   (size.width * 0.3), //              x2
+    //   (size.height * perHeight), //       y2
+    //   (1), //                             w
+    // );
 
     final paint = Paint()
       ..style = PaintingStyle.fill

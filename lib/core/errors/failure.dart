@@ -105,10 +105,10 @@ class EmptyTrainingDaysFailure implements Failure {
   }
 }
 
-class EmptyAttendenceFailure implements Failure {
+class NotAMemberOfGymFailure implements Failure {
   final String errorMessage;
 
-  const EmptyAttendenceFailure({required this.errorMessage});
+  const NotAMemberOfGymFailure({required this.errorMessage});
   @override
   String getErrorMessage() {
     return errorMessage;

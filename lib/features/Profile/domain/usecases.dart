@@ -49,7 +49,8 @@ class ProfileUsecases {
     return await repo.gymAttendence(gymId, pid);
   }
 
-  Future<Either<Failure, PlayerInGym>> getPlayerInGym(String gymId) async {
-    return await repo.getPlayerInGym(gymId);
+  Future<Either<Failure, PlayerInGym>> getPlayerInGym(
+      String gymId, String pid) async {
+    return await repo.getPlayerInGym(gymId, pid);
   }
 }

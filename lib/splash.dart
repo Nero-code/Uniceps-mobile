@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
+import 'package:uniceps/features/Auth/views/screens/auth_screen_2.dart';
 import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
 
@@ -27,11 +27,17 @@ class SplashScreen extends StatelessWidget {
     print("------------------------inside Splash-----------------------------");
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
-        await Future.delayed(Duration(seconds: 2));
-        print("inside Splash: " + state.runtimeType.toString());
+        // await Future.delayed(const Duration(seconds: 2));
+        print("inside Splash: ${state.runtimeType}");
         if (state is AuthErrorState) {
           print("Splash check 1");
-          Navigator.of(context).pushReplacementNamed(ROUTE_AUTH);
+          Navigator.of(context).pushReplacement(
+            PageRouteBuilder(
+              transitionDuration: Duration.zero,
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  const AuthScreen(),
+            ),
+          );
         } else if (state is AuthAuthenticatedState) {
           print("Splash check 2");
 

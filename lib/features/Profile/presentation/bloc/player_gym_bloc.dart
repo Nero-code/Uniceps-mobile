@@ -13,7 +13,7 @@ class PlayerGymBloc extends Bloc<PlayerGymEvent, PlayerGymState> {
     on<PlayerGymEvent>((event, emit) async {
       if (event is GetPlayerInGymEvent) {
         emit(PlayerInGymLoadingState());
-        final either = await usecases.getPlayerInGym(event.gymId);
+        final either = await usecases.getPlayerInGym(event.gymId, event.pid);
         either.fold((l) => emit(PlayerInGymErrorState(l)),
             (r) => emit(PlayerInGymLoadedState(data: r)));
       }

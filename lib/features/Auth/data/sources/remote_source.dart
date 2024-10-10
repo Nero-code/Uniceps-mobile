@@ -23,7 +23,7 @@ abstract class RemoteAuthSource {
   Future<void> requestPasswordChange(String newPass);
   Future<PlayerModel> getPlayerInfo();
   // Future<bool> isLoggedIn();
-  Future<int> sendNotifyToken(String token);
+  Future<Map<dynamic, dynamic>> sendNotifyToken(String token);
   Future<void> logout();
 }
 
@@ -190,7 +190,8 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
   }
 
   @override
-  Future<int> sendNotifyToken(String token) async {
+  Future<Map<dynamic, dynamic>> sendNotifyToken(String token) async {
+    print("inside sendNotifyToken");
     final res = await client.post(
       Uri.parse(
         "$API" " $HTTP_REGISTER" "$HTTP_REFRESH",
@@ -200,15 +201,24 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
         "x-access-token": userBox.get(HIVE_USER_BOX)!['token'],
       },
     );
-    print("${res.statusCode}");
-    return res.statusCode;
+    print("statusCode: ${res.statusCode}");
+    print("body: ${res.body}");
+
+    if (res.statusCode == 201) {
+      return jsonDecode(res.body);
+    }
+    throw AuthException();
   }
 
   @override
   Future<void> logout() async {
     final res = await client.get(
-      Uri.parse("$API" "$HTTP_REGISTER" "/logout"),
-    );
+        Uri.parse(
+          "$API" "$HTTP_REGISTER" "/logout",
+        ),
+        headers: {
+          'x-access-token': userBox.get(HIVE_USER_BOX)!['token'],
+        });
     print(res.statusCode);
     if (res.statusCode == 200) {
       return;

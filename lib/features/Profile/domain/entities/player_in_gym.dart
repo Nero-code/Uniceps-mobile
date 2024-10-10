@@ -1,26 +1,32 @@
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 
 class PlayerInGym extends Equatable {
   final String gymId;
   final double balance;
-  final int subs;
+  final DateTime startDate;
+  // final int subs;
 
-  const PlayerInGym(
-      {required this.gymId, required this.balance, required this.subs});
+  const PlayerInGym({
+    required this.gymId,
+    required this.balance,
+    required this.startDate,
+  });
 
   factory PlayerInGym.fromJson(Map<dynamic, dynamic> json) {
     return PlayerInGym(
-      gymId: json['gymId'],
+      gymId: json['gym_id'],
       balance: json['balance'],
-      subs: json['subs'],
+      startDate: DateFormat("dd/MM/yyyy").parse(json['subs_date']),
+      // subs: json['subs'],
     );
   }
 
   Map<dynamic, dynamic> toJson() {
     return {
-      'gymId': gymId,
+      'gym_id': gymId,
       'balance': balance,
-      'subs': subs,
+      'subs_date': startDate.toIso8601String(),
     };
   }
 

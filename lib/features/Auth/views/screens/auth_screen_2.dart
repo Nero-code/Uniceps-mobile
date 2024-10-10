@@ -8,7 +8,7 @@ import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
 import 'package:uniceps/features/Auth/views/widgets/auth_box.dart';
-import 'package:uniceps/features/Auth/views/widgets/Code_Box.dart';
+import 'package:uniceps/features/Auth/views/widgets/code_box.dart';
 import 'package:uniceps/features/Auth/views/widgets/back_painter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
@@ -90,7 +90,7 @@ class _AuthScreenState extends State<AuthScreen>
           }
         }),
     );
-    _slideAnimation = Tween<double>(begin: .45, end: .22)
+    _slideAnimation = Tween<double>(begin: .44, end: .22)
         .animate(CurvedAnimation(parent: _controller, curve: curve))
       ..addListener(() {
         setState(() {});
@@ -131,14 +131,14 @@ class _AuthScreenState extends State<AuthScreen>
     return BlocBuilder<LocaleCubit, ChangedLangState>(
       builder: (context, state) {
         return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              isAnimActive = true;
-              _fadeController.reset();
-              _controller.reset();
-              _controller.forward();
-            },
-          ),
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: () {
+          //     isAnimActive = true;
+          //     _fadeController.reset();
+          //     _controller.reset();
+          //     _controller.forward();
+          //   },
+          // ),
           resizeToAvoidBottomInset: false,
           body: Stack(
             children: [
@@ -179,8 +179,8 @@ class _AuthScreenState extends State<AuthScreen>
                         if (res != null && !res) {
                           print("check: inside if statement");
 
-                          // TODO: Exit Application (for Android)
                           if (Platform.isAndroid) {
+                            // Exit Application (for Android)
                             SystemNavigator.pop();
                           } else if (Platform.isIOS) {
                             // For IOS
@@ -189,6 +189,7 @@ class _AuthScreenState extends State<AuthScreen>
                         }
                       }
 
+                      // ignore: use_build_context_synchronously
                       Navigator.pushReplacementNamed(context, ROUTE_HOME);
                       //
                       //  Jump to Gym handshake
@@ -364,7 +365,7 @@ class _AuthScreenState extends State<AuthScreen>
                                               Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  ForgotPasswordScreen(),
+                                                  const ForgotPasswordScreen(),
                                             ),
                                           ),
                                         ),

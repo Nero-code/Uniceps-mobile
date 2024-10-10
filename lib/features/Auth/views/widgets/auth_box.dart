@@ -78,7 +78,7 @@ class _AuthBoxState extends State<AuthBox> {
                   ),
                   onTapOutside: (event) => node.unfocus(),
                   onFieldSubmitted: (value) {
-                    if (value.isEmpty) return;
+                    if (!_authFormkey.currentState!.validate()) return;
                     widget.signin(emailCtrl.text.trim());
                   },
                   validator: (value) {
@@ -129,7 +129,6 @@ class _AuthBoxState extends State<AuthBox> {
                 //       return null;
                 //     },
                 //   ),
-
                 // ///   F O R G O T   P A S S W O R D
                 // if (widget.isLogin)
                 //   Material(
@@ -166,16 +165,18 @@ class _AuthBoxState extends State<AuthBox> {
         Container(
           width: MediaQuery.of(context).size.width,
           margin: const EdgeInsets.only(top: 10),
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: ElevatedButton(
             style: ButtonStyle(
-              // shape: MaterialStatePropertyAll<OutlinedBorder>(CircleBorder()),
+              // shape: MaterialStatePropertyAll<OutlinedBorder>(
+              //     BeveledRectangleBorder()),
               backgroundColor: MaterialStatePropertyAll<Color>(
                 Theme.of(context).colorScheme.primary,
               ),
               foregroundColor:
                   MaterialStatePropertyAll<Color>(Colors.grey.shade300),
             ),
+            onLongPress: null,
             onPressed: () {
               if (_authFormkey.currentState!.validate()) {
                 if (widget.isLogin) {

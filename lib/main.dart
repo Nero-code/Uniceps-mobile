@@ -1,3 +1,4 @@
+import 'package:alert_banner/exports.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/views/screens/auth_screen_2.dart';
-import 'package:uniceps/features/Auth/views/screens/email_and_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
@@ -26,7 +26,6 @@ import 'package:uniceps/features/Profile/presentation/screens/profile_screen.dar
 import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
 import 'package:uniceps/features/Training/views/Screens/gym_handshake_screen.dart';
 import 'package:uniceps/features/Training/views/Screens/home_screen.dart';
-// import 'package:uniceps/features/Profile/presentation/screens/presence_screen.dart';
 import 'package:uniceps/features/Training/views/Screens/qr_scanner_screen.dart';
 import 'package:uniceps/features/Profile/presentation/screens/subs_screen.dart';
 import 'package:uniceps/features/Training/views/bloc/exercises_bloc.dart';
@@ -75,11 +74,37 @@ void main() async {
     print('Got a message whilst in the foreground!');
     print('Message data: ${message.data}');
 
-    if (message.notification != null) {
-      ScaffoldMessenger.of(NavigatorKey.navigatorKey.currentContext!)
-          .showSnackBar(SnackBar(
-        content: Text("${message.notification?.body}"),
-      ));
+    if (message.notification != null &&
+        NavigatorKey.navigatorKey.currentContext != null) {
+      showAlertBanner(
+        NavigatorKey.navigatorKey.currentContext!,
+        () {},
+        Material(
+          elevation: 3,
+          borderRadius: BorderRadius.circular(15),
+          child: Container(
+            width: double.infinity,
+            // height: 50,
+            padding: const EdgeInsets.all(15.0),
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(15)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  message.notification?.title ?? "",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                Text(
+                  message.notification?.body ?? "",
+                  style: const TextStyle(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
     }
   });
 

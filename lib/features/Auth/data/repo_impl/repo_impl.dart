@@ -98,23 +98,29 @@ class AuthRepoImpl implements AuthRepo {
       print("Is Logged in repo");
       final resUser = await local.getUser();
 
+      print("Is Logged in repo: User = ${resUser.toJson()}");
       final nToken = await FirebaseMessaging.instance.getToken();
+      print("Is Logged in repo Token: $nToken");
       if (resUser.notifyToken != nToken && await connection.hasConnection) {
+        print("Is Logged in repo: Before sendNotify");
         final res = await remote.sendNotifyToken(nToken as String);
-        if (res == 200) {
-          await local.saveUser(
-            UserModel.fromJson(
-              {...resUser.toJson(), "notify": nToken},
-            ),
-          );
-        }
+        print("Is Logged in repo: After sendNotify");
+
+        await local.saveUser(
+          UserModel.fromJson(
+            {"id": "id", "token": res['token'], "notify": nToken},
+          ),
+        );
       }
       return const Right(true);
     } on EmptyCacheExeption {
       return const Left(
           EmptyCacheFailure(errorMessage: "Null User || No Token was found"));
+    } on AuthException {
+      print("ServerException");
+      return Left(ServerFailure(errMsg: "errMsg"));
     } catch (e) {
-      print("Exception on Auth " + e.toString());
+      print("Exception on Auth $e");
       return Left(
           EmptyCacheFailure(errorMessage: "Unknown Error: ${e.toString()}"));
     }
@@ -186,7 +192,7 @@ class AuthRepoImpl implements AuthRepo {
         final res = await local.getPlayerInfo();
         return Right(res);
       } catch (e) {
-        return Left(EmptyCacheFailure(errorMessage: ""));
+        return const Left(EmptyCacheFailure(errorMessage: ""));
       }
     }
   }

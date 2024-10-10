@@ -23,5 +23,5 @@ abstract class ProfileRepo {
   Future<Either<Failure, List<HandShake>>> getAllGymHandshake();
   Future<Either<Failure, List<Attendence>>> gymAttendence(
       String gymId, String pid);
-  Future<Either<Failure, PlayerInGym>> getPlayerInGym(String gymId);
+  Future<Either<Failure, PlayerInGym>> getPlayerInGym(String gymId, String pid);
 }

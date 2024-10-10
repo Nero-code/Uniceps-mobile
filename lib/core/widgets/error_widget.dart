@@ -32,41 +32,42 @@ class ErrorScreenWidget extends StatelessWidget {
   }
 
   String errorToTextMapper(BuildContext context, Failure f) {
+    // print("Error Widget ${f.runtimeType}");
     final local = AppLocalizations.of(context)!;
     switch (f.runtimeType) {
-      case NoGymSpecifiedFailure:
-        return local.emptyGymsList;
-      case NoTrainingProgramFailure:
-        return local.empty;
-      case ServerFailure:
+      case const (NoGymSpecifiedFailure):
+        return local.noGymSpecified;
+      case const (NoTrainingProgramFailure):
+        return local.noTrainingProgram;
+      case const (ServerFailure):
         return local.errServerException;
 
       //  E M P T Y   F A I L U R E S
-      case EmptyGymsListFailure:
+      case const (EmptyGymsListFailure):
         return local.emptyGymsList;
-      case EmptyMeasureFailure:
+      case const (EmptyMeasureFailure):
         return local.emptyMeasurements;
-      case EmptySubsFailure:
+      case const (EmptySubsFailure):
         return local.emptySubscriptions;
-      case EmptyAttendenceFailure:
-        return local.emptyAttendence;
-      case EmptyExercisesFailure:
+      case const (NotAMemberOfGymFailure):
+        return local.noGymSpecified;
+      case const (EmptyExercisesFailure):
         return local.emptyExcercises;
-      case EmptyCacheFailure:
+      case const (EmptyCacheFailure):
         return local.empty;
-      case OfflineFailure:
+      case const (OfflineFailure):
         return local.errNoInternet;
-      case DatabaseFailure:
+      case const (DatabaseFailure):
         return local.error;
-      case NoInternetConnectionFailure:
+      case const (NoInternetConnectionFailure):
         return local.errNoInternet;
-      case NotFoundFailure:
+      case const (NotFoundFailure):
         return local.empty;
       // case NoAttendenceFoundFailure:
 
-      case GeneralPurposFailure:
+      case const (GeneralPurposFailure):
       default:
-        return "";
+        return "General Purpose";
     }
   }
 }

@@ -8,6 +8,8 @@ import 'package:intl/intl.dart';
 ///
 
 const APP_NAME = 'Uniceps';
+const APP_VERSION = 'v1.0.0';
+const APP_RELEASE_DATE = '10/10/2024';
 
 const APP_LOGO = "images/logo/Logo.png";
 const APP_LOGO_DARK = "images/logo/Logo-dark.png";
@@ -41,7 +43,7 @@ const IMG_SERVER_DOWN = "server_down.png";
 const IMG_VOID = "void.png";
 const IMG_WARNING = "warning.png";
 const IMG_NO_PROGRAM = "no_program.png";
-const IMG_NO_ATTENDENCE = "attenence_err.png";
+const IMG_NO_ATTENDENCE = "attendence_err.png";
 const IMG_NO_MEASUREMENTS = "measurements_err.png";
 
 ///
@@ -50,6 +52,7 @@ const IMG_NO_MEASUREMENTS = "measurements_err.png";
 ///
 ///
 
+// ignore: non_constant_identifier_names
 final HEADERS = {
   "Content-Type": "application/json",
   "Accept": "application/json",

@@ -22,7 +22,7 @@ class _SubScriptionScreenState extends State<SubScriptionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final gymId = ModalRoute.of(context)!.settings.arguments as String;
+    // final gymId = ModalRoute.of(context)!.settings.arguments as String;
     // final local = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(

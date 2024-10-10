@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -26,7 +25,8 @@ class ReloadScreenWidget extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image(
-              width: MediaQuery.of(context).size.width * 0.75,
+              width: MediaQuery.sizeOf(context).width * 0.5,
+              height: MediaQuery.sizeOf(context).width * 0.5,
               image: AssetImage(
                 errorImageMapper(f),
               ),
@@ -35,8 +35,9 @@ class ReloadScreenWidget extends StatelessWidget {
           SizedBox(height: gapSize),
           Text(errorToTextMapper(context, f)),
           SizedBox(height: gapSize),
-          IconButton(
-              onPressed: callBack, icon: const Icon(Icons.refresh_rounded)),
+          if (callBack != null)
+            IconButton(
+                onPressed: callBack, icon: const Icon(Icons.refresh_rounded)),
         ],
       ),
     );
@@ -44,41 +45,43 @@ class ReloadScreenWidget extends StatelessWidget {
 
   String errorImageMapper(Failure f) {
     switch (f.runtimeType) {
-      case NoGymSpecifiedFailure:
+      case const (NoGymSpecifiedFailure):
         return "$PHOTOS_PATH" "$IMG_EMPTY_2";
 
-      case NoTrainingProgramFailure:
+      case const (NoTrainingProgramFailure):
         return "$PHOTOS_PATH" "$IMG_NO_PROGRAM";
 
-      case ServerFailure:
+      case const (ServerFailure):
         return "$PHOTOS_PATH" "$IMG_SERVER_DOWN";
 
       //  E M P T Y   F A I L U R E S
       // case NoAttendenceFoundFailure:
-      case EmptyAttendenceFailure:
+      case const (NotAMemberOfGymFailure):
+        return "$PHOTOS_PATH" "$IMG_NO_PROGRAM";
+      case const (NoAttendenceFoundFailure):
         return "$PHOTOS_PATH" "$IMG_NO_ATTENDENCE";
-      case EmptyMeasureFailure:
+      case const (EmptyMeasureFailure):
         return "$PHOTOS_PATH" "$IMG_NO_MEASUREMENTS";
-      case EmptyGymsListFailure:
+      case const (EmptyGymsListFailure):
         return "$PHOTOS_PATH" "$IMG_EMPTY";
-      case EmptyTrainingDaysFailure:
-      case EmptySubsFailure:
-      case EmptyCacheFailure:
+      case const (EmptyTrainingDaysFailure):
+      case const (EmptySubsFailure):
+      case const (EmptyCacheFailure):
         return "$PHOTOS_PATH" "$IMG_EMPTY_2";
 
       // case NoInternetConnectionFailure:
-      case OfflineFailure:
+      case const (OfflineFailure):
         return "$PHOTOS_PATH" "$IMG_NO_INTERNET";
-      case DatabaseFailure:
+      case const (DatabaseFailure):
         return "$PHOTOS_PATH" "$IMG_VOID";
 
-      case NotFoundFailure:
+      case const (NotFoundFailure):
         return "$PHOTOS_PATH" "$IMG_BLANK";
 
-      case AuthFailure:
+      case const (AuthFailure):
         return "$PHOTOS_PATH" "$IMG_DESKTOP";
 
-      case GeneralPurposFailure:
+      case const (GeneralPurposFailure):
         return "$PHOTOS_PATH" "$IMG_WARNING";
 
       default:
@@ -89,37 +92,50 @@ class ReloadScreenWidget extends StatelessWidget {
   String errorToTextMapper(BuildContext context, Failure f) {
     final local = AppLocalizations.of(context)!;
     switch (f.runtimeType) {
-      case NoGymSpecifiedFailure:
-        return local.emptyGymsList;
-      case NoTrainingProgramFailure:
-        return local.empty;
-      case ServerFailure:
+      case const (NoGymSpecifiedFailure):
+        return local.noGymSpecified;
+      case const (NoTrainingProgramFailure):
+        return local.noTrainingProgram;
+      case const (ServerFailure):
         return local.errServerException;
 
-      //  E M P T Y   F A I L U R E S
-      case EmptyGymsListFailure:
-        return local.emptyGymsList;
-      case EmptyMeasureFailure:
-        return local.emptyMeasurements;
-      case EmptySubsFailure:
-        return local.emptySubscriptions;
-      case EmptyAttendenceFailure:
+      //
+      case const (NoAttendenceFoundFailure):
         return local.emptyAttendence;
-      case EmptyExercisesFailure:
+
+      //  E M P T Y   F A I L U R E S
+      case const (EmptyGymsListFailure):
+        return local.emptyGymsList;
+      //
+      case const (EmptyMeasureFailure):
+        return local.emptyMeasurements;
+      //
+      case const (EmptySubsFailure):
+        return local.emptySubscriptions;
+      //
+      case const (NotAMemberOfGymFailure):
+        return local.noGymSpecified;
+      //
+      case const (EmptyExercisesFailure):
         return local.emptyExcercises;
-      case EmptyCacheFailure:
+      //
+      case const (EmptyCacheFailure):
         return local.empty;
-      case OfflineFailure:
+      //
+      case const (OfflineFailure):
         return local.errNoInternet;
-      case DatabaseFailure:
+      //
+      case const (DatabaseFailure):
         return local.error;
-      case NoInternetConnectionFailure:
+      //
+      case const (NoInternetConnectionFailure):
         return local.errNoInternet;
-      case NotFoundFailure:
+      //
+      case const (NotFoundFailure):
         return local.empty;
       // case NoAttendenceFoundFailure:
 
-      case GeneralPurposFailure:
+      case const (GeneralPurposFailure):
       default:
         return local.errUnknown;
     }
