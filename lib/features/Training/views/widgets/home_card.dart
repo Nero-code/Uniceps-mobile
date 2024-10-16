@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gradient_circular_progress_indicator/gradient_circular_progress_indicator.dart';
+import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
@@ -29,6 +30,7 @@ class HomeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
+
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.25,
@@ -287,7 +289,8 @@ class HomeCard extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    state.current.end,
+                                    DateFormat("dd/MM/yyyy")
+                                        .format(state.current.end!),
                                     style: const TextStyle(
                                       color: Colors.black54,
                                       fontWeight: FontWeight.bold,
@@ -299,6 +302,7 @@ class HomeCard extends StatelessWidget {
                             } else if (state is CurrentGymErrorState) {
                               return SizedBox(
                                 height: MediaQuery.sizeOf(context).height * 0.1,
+                                width: MediaQuery.sizeOf(context).width * 0.6,
                                 child: ErrorScreenWidget(
                                     f: state.f, callback: null),
                               );
@@ -340,7 +344,7 @@ class HomeCard extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  "${((player.level - player.level.toInt()) * 100).toInt()}%",
+                                  "${((player.level * 100).round() - (player.level.toInt() * 100))}%",
                                   style: const TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.bold,
@@ -363,11 +367,3 @@ class HomeCard extends StatelessWidget {
     );
   }
 }
-
-// double fontsize(String gymName){
-//   switch (gymName.length) {
-//     case 14:
-//       break;
-//     default:
-//   }
-// }

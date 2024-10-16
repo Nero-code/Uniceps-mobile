@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:typed_data';
 
 import 'package:hive_flutter/hive_flutter.dart';
@@ -43,7 +41,7 @@ class ImageCacheManager {
           }
         } catch (e) {
           print("ImageCacheManager Error: ${e.runtimeType} : ${e.toString()}");
-          throw Exception();
+          throw NoInternetException();
         }
       } else {
         map.addAll({"${exs[i]['id']}": imagesCache.get(temp)!});

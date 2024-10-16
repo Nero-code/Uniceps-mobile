@@ -86,7 +86,7 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
         images: images,
       );
     } else if (res.statusCode == 204) {
-      throw EmptyCacheExeption();
+      throw NoTrainingProgramException();
     }
     throw ServerException();
   }

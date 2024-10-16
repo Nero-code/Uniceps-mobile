@@ -1,4 +1,4 @@
-import 'package:intl/intl.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Profile/domain/entities/handshake.dart';
 
 class HandShakeModel extends HandShake {
@@ -19,8 +19,7 @@ class HandShakeModel extends HandShake {
         uid: json['uid'],
         logoUrl: json['logoUrl'],
         status: json['status'],
-        createdAt:
-            DateFormat("EEE, dd MMM yyyy hh:mm:ss").parse(json['created_at']),
+        createdAt: stringToDate(json['created_at']),
       );
 
   Map<String, dynamic> toJson() => {
@@ -29,6 +28,6 @@ class HandShakeModel extends HandShake {
         'logoUrl': logoUrl,
         'uid': uid,
         'status': status,
-        'created_at': DateFormat("EEE, d MMM yyyy hh:mm:ss").format(createdAt),
+        'created_at': dateToString(createdAt),
       };
 }

@@ -3,10 +3,9 @@ import 'dart:typed_data';
 import 'package:get_it/get_it.dart' as di;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
-// import 'dart:io' as io;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
-import 'package:uniceps/core/logs/logger.dart';
 import 'package:uniceps/features/Auth/data/repo_impl/repo_impl.dart';
 import 'package:uniceps/features/Auth/data/sources/local_source.dart';
 import 'package:uniceps/features/Auth/data/sources/remote_source.dart';
@@ -27,6 +26,7 @@ import 'package:uniceps/features/Training/data/sources/local_data_source.dart';
 import 'package:uniceps/features/Training/data/sources/remote_data_source.dart';
 import 'package:uniceps/features/Training/services/repos/repository.dart';
 import 'package:uniceps/features/Training/services/usecases/usecases.dart';
+import 'package:uniceps/update_service.dart';
 // import 'package:uniceps/features/Training/views/bloc/training_bloc.dart';
 
 final sl = di.GetIt.instance;
@@ -58,7 +58,7 @@ Future<void> init() async {
   // await profileBox.clear();
   // await trainBox.clear();
   // await lastWeightBox.clear();
-  // // await gymsBox.clear();
+  // await gymsBox.clear();
   // await myGyms.clear();
   // await subsBox.clear();
   // await measureBox.clear();
@@ -157,6 +157,7 @@ Future<void> init() async {
       local: sl(),
       remote: sl(),
       connection: sl(),
+      logger: sl(),
     ),
   );
   sl.registerLazySingleton<TrainingRepo>(
@@ -164,6 +165,7 @@ Future<void> init() async {
       local: sl(),
       remote: sl(),
       connection: sl(),
+      logger: sl(),
     ),
   );
   sl.registerLazySingleton<ProfileRepo>(
@@ -171,6 +173,7 @@ Future<void> init() async {
       local: sl(),
       remote: sl(),
       checker: sl(),
+      logger: sl(),
     ),
   );
 
@@ -222,5 +225,17 @@ Future<void> init() async {
   sl.registerLazySingleton<InternetConnectionChecker>(
       () => InternetConnectionChecker());
 
-  sl.registerLazySingleton<Logger>(() => Logger());
+  sl.registerLazySingleton<Logger>(
+    () => Logger(
+      level: Level.all,
+      printer: PrettyPrinter(methodCount: 10),
+    ),
+  );
+
+  sl.registerLazySingleton<UpdateService>(
+    () => UpdateService(
+      connectionChecker: sl(),
+      client: sl(),
+    ),
+  );
 }

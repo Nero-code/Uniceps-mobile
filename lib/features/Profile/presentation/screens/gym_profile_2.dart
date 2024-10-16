@@ -29,20 +29,20 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
   DateTime cDay = DateTime.now(), // Current
       fDay = DateTime.now(), // focused
       sDay = DateTime.now(), // selected
-      lDay = DateTime.now(),
-      day1 = DateTime.now(); // last
+      lDay = DateTime.now(), // last
+      day1 = DateTime(2000);
 
   List<Attendence> a = [];
 
   final controller = PanelController();
 
-  final i = Attendence(
-      date: DateTime.now(),
-      loginTime: DateTime.now(),
-      logoutTime: DateTime.now(),
-      gymId: "gymId",
-      pid: "pid",
-      sid: "sid");
+  // final i = Attendence(
+  //     date: DateTime.now(),
+  //     loginTime: DateTime.now(),
+  //     logoutTime: DateTime.now(),
+  //     gymId: "gymId",
+  //     pid: "pid",
+  //     sid: "sid");
 
   final scrollController = ScrollController();
 
@@ -78,6 +78,7 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
         ),
         minHeight: 30,
         maxHeight: screen.height * 0.7,
+        onPanelClosed: () => setState(() {}),
         // color: Color.fromARGB(255, 85, 151, 177),
         panel: BlocBuilder<AttendenceBloc, AttendenceState>(
           builder: (context, state) {
@@ -147,112 +148,137 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                                   child: Material(
                                     elevation: 2,
                                     borderRadius: BorderRadius.circular(15),
-                                    child: TableCalendar(
-                                      daysOfWeekHeight: 20.0,
-                                      calendarFormat: CalendarFormat.week,
-                                      locale: isRtl ? "ar" : "en",
-                                      focusedDay: fDay,
-                                      firstDay: day1,
-                                      lastDay: lDay,
-                                      currentDay: cDay,
-                                      startingDayOfWeek:
-                                          StartingDayOfWeek.sunday,
-                                      weekendDays: const [],
-                                      availableGestures: AvailableGestures.none,
-                                      daysOfWeekStyle: DaysOfWeekStyle(
-                                        dowTextFormatter: (date, locale) =>
-                                            intl.DateFormat("EEE", locale)
-                                                .format(date),
-                                        weekdayStyle:
-                                            const TextStyle(fontSize: 10),
-                                      ),
-                                      calendarStyle: CalendarStyle(
-                                          defaultDecoration: BoxDecoration(
-                                            color: Colors.grey.shade200,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          selectedDecoration: BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground,
-                                              shape: BoxShape.circle),
-                                          todayDecoration: BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary,
-                                              shape: BoxShape.circle)),
-                                      onHeaderTapped: null,
-                                      onFormatChanged: (format) {
-                                        print("Format Tapped: $format");
-                                      },
-                                      onPageChanged: (focusedDay) {
-                                        print("OnPageChanged! $focusedDay");
+                                    child: BlocBuilder<PlayerGymBloc,
+                                            PlayerGymState>(
+                                        builder: (context, pState) {
+                                      // if (pState is PlayerInGymLoadedState) {
 
-                                        fDay = focusedDay;
-                                      },
-                                      enabledDayPredicate: (day) {
-                                        // for (var i in state.list) {
-                                        //   if (i.date.compareTo(day.copyWith(
-                                        //           isUtc: false)) ==
-                                        //       0) {
-                                        //     return true;
-                                        //   }
-                                        // }
-                                        // return false;
-                                        return true;
-                                      },
-                                      selectedDayPredicate: (day) {
-                                        if (day.compareTo(cDay) == 0 ||
-                                            day.compareTo(sDay) == 0) {
+                                      //   day1 = pState.data.startDate;
+                                      //   print("Attendence:: $day1");
+                                      // }
+                                      return TableCalendar(
+                                        daysOfWeekHeight: 20.0,
+                                        calendarFormat: CalendarFormat.week,
+                                        locale: isRtl ? "ar" : "en",
+                                        focusedDay: fDay,
+                                        firstDay: DateTime(2000),
+                                        lastDay: lDay,
+                                        currentDay: cDay,
+                                        startingDayOfWeek:
+                                            StartingDayOfWeek.sunday,
+                                        weekendDays: const [],
+                                        availableGestures:
+                                            AvailableGestures.none,
+                                        daysOfWeekStyle: DaysOfWeekStyle(
+                                          dowTextFormatter: (date, locale) =>
+                                              intl.DateFormat("EEE", locale)
+                                                  .format(date),
+                                          weekdayStyle:
+                                              const TextStyle(fontSize: 10),
+                                        ),
+                                        calendarStyle: CalendarStyle(
+                                            defaultDecoration: BoxDecoration(
+                                              color: Colors.grey.shade200,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            selectedDecoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                shape: BoxShape.circle),
+                                            todayDecoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                                shape: BoxShape.circle)),
+                                        onHeaderTapped: null,
+                                        onFormatChanged: (format) {
+                                          print("Format Tapped: $format");
+                                        },
+                                        onPageChanged: (focusedDay) {
+                                          print("OnPageChanged! $focusedDay");
+
+                                          fDay = focusedDay;
+                                        },
+                                        enabledDayPredicate: (day) {
+                                          // for (var i in state.list) {
+                                          //   if (i.date.compareTo(day.copyWith(
+                                          //           isUtc: false)) ==
+                                          //       0) {
+                                          //     return true;
+                                          //   }
+                                          // }
+                                          // return false;
                                           return true;
-                                        }
+                                        },
+                                        selectedDayPredicate: (day) {
+                                          if (day.compareTo(cDay) == 0 ||
+                                              day.compareTo(sDay) == 0) {
+                                            return true;
+                                          }
 
-                                        return false;
-                                        // if (state is AttenedenceLoadedState) {
-                                        //   for (var i in state.list) {
-                                        //     if (i.date.compareTo(day.copyWith(
-                                        //             isUtc: false)) ==
-                                        //         0) {
+                                          return false;
+                                          // if (state is AttenedenceLoadedState) {
+                                          //   for (var i in state.list) {
+                                          //     if (i.date.compareTo(day.copyWith(
+                                          //             isUtc: false)) ==
+                                          //         0) {
 
-                                        //       return true;
-                                        //     }
-                                        //   }
-                                        // }
+                                          //       return true;
+                                          //     }
+                                          //   }
+                                          // }
 
-                                        // return false;
-                                      },
-                                      onDaySelected: (selectedDay, focusedDay) {
-                                        print("selectedDay: $selectedDay "
-                                            "\n"
-                                            "focusedDay:  $focusedDay");
-                                        sDay = selectedDay;
+                                          // return false;
+                                        },
+                                        onDaySelected:
+                                            (selectedDay, focusedDay) {
+                                          print("selectedDay: $selectedDay "
+                                              "\n"
+                                              "focusedDay:  $focusedDay");
+                                          sDay = selectedDay;
 
-                                        a.clear();
-                                        if (state is AttenedenceLoadedState) {
-                                          for (var i in state.list) {
-                                            if (i.date.compareTo(selectedDay
-                                                    .copyWith(isUtc: false)) ==
-                                                0) {
-                                              a.add(i);
+                                          a.clear();
+                                          if (state is AttenedenceLoadedState) {
+                                            print("Attendence Loaded");
+                                            for (var i in state.list) {
+                                              print(
+                                                  "Attendence Loaded 2 ${i.toJson()}");
+                                              print(
+                                                  "Attendence Loaded 2 ${selectedDay}");
+                                              print(
+                                                  "Attendence: ${DateTime.parse(intl.DateFormat("yyyy-MM-dd").format(i.date))}");
+
+                                              if (selectedDay
+                                                      .copyWith(isUtc: false)
+                                                      .compareTo(DateTime.parse(
+                                                          intl.DateFormat(
+                                                                  "yyyy-MM-dd")
+                                                              .format(
+                                                                  i.date))) ==
+                                                  0) {
+                                                print("Attendence Loaded 3");
+                                                a.add(i);
+                                              }
                                             }
                                           }
-                                        }
-
-                                        setState(() {});
-                                        // if (state is AttenedenceLoadedState) {
-                                        //   setState(() {
-                                        //     state.list.forEach(
-                                        //       (element) {
-                                        //         if (element.date.day ==
-                                        //             selectedDay.day) {
-                                        //           a.add(element);
-                                        //         }
-                                        //       },
-                                        //     );
-                                        //   });
-                                        // }
-                                      },
-                                    ),
+                                          print("Attendence Loaded 4");
+                                          setState(() {});
+                                          // if (state is AttenedenceLoadedState) {
+                                          //   setState(() {
+                                          //     state.list.forEach(
+                                          //       (element) {
+                                          //         if (element.date.day ==
+                                          //             selectedDay.day) {
+                                          //           a.add(element);
+                                          //         }
+                                          //       },
+                                          //     );
+                                          //   });
+                                          // }
+                                        },
+                                      );
+                                    }),
                                   ),
                                 ),
                                 SizedBox(
@@ -325,7 +351,7 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                                                             intl.DateFormat(
                                                                     "h:mm a")
                                                                 .format(i
-                                                                    .loginTime),
+                                                                    .logoutTime),
                                                             textDirection:
                                                                 TextDirection
                                                                     .ltr,
@@ -402,24 +428,27 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                                                   child: Text(
                                                     local.date,
                                                     style: const TextStyle(
-                                                      color: Colors.black54,
-                                                    ),
+                                                        color: Colors.black54,
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
                                                 ),
                                                 Center(
                                                   child: Text(
                                                     local.enteredAt,
                                                     style: const TextStyle(
-                                                      color: Colors.black54,
-                                                    ),
+                                                        color: Colors.black54,
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
                                                 ),
                                                 Center(
                                                   child: Text(
                                                     local.exitedAt,
                                                     style: const TextStyle(
-                                                      color: Colors.black54,
-                                                    ),
+                                                        color: Colors.black54,
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
                                                 ),
                                               ],
@@ -479,25 +508,9 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                       ],
                     ),
                   )
-                  // : const SizedBox(
-                  //     child: Text("asdasdas\nasdasdasdasd\nasasdasd\n"),
-                  //   ),
                 ],
               ),
             );
-            // } else if (state is AttenedenceErrorState) {
-            //   print(state.f.runtimeType);
-            //   print(state.f.getErrorMessage());
-
-            //   return ReloadScreenWidget(
-            //     f: state.f,
-            //     callBack: () {
-            //       BlocProvider.of<AttendenceBloc>(context)
-            //           .add(GetAttendenceEvent(widget.gym!.id, widget.gym!.pid));
-            //     },
-            //   );
-            // }
-            // return const Center(child: CircularProgressIndicator());
           },
         ),
         body: Stack(
@@ -626,7 +639,7 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                               ),
                             ),
                             Text(
-                              " ${widget.gym?.telephone} ",
+                              " ${widget.gym?.phoneNum} ",
                               textDirection: TextDirection.ltr,
                               style: const TextStyle(
                                 color: Colors.white,
@@ -648,13 +661,13 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                             BlocBuilder<PlayerGymBloc, PlayerGymState>(
                               builder: (context, state) {
                                 print("PLAYER: state = ${state.runtimeType}");
-                                if (state is PlayerInGymLoadedState) {
-                                  day1 = state.data.startDate;
-                                }
+
                                 return Text(
                                   state is PlayerInGymLoadedState
                                       ? f.format(state.data.balance)
-                                      : "0",
+                                      : state is PlayerInGymLoadingState
+                                          ? "..."
+                                          : "0",
                                   textDirection: TextDirection.ltr,
                                   style: const TextStyle(
                                     color: Colors.white,

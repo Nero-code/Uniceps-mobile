@@ -39,7 +39,7 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     // var weightsRes = lastWBox.get(HIVE_LAST_WEIGHT_BOX);
     Map<String, double> weights = {};
     if (routine == null || routine.isEmpty) {
-      throw EmptyCacheExeption();
+      throw NoTrainingProgramException();
     }
     print("training Program not null!");
     for (var i in lastWBox.keys) {

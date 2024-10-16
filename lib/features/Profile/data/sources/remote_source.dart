@@ -213,7 +213,7 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
 
       return list;
     } else if (res.statusCode == 204) {
-      return throw NoAttendenceLogFoundException();
+      throw NoAttendenceLogFoundException();
     }
 
     throw ServerException();

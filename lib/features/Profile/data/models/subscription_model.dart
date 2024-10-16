@@ -38,11 +38,6 @@ class SubscriptionModel extends Subscription {
   });
 
   factory SubscriptionModel.fromJson(Map<dynamic, dynamic> temp) {
-    temp.forEach(
-      (key, value) {
-        print("$key: $value " "\n" "${key.runtimeType}: ${value.runtimeType}");
-      },
-    );
     final payments = <Payment>[];
     final json = Map<String, dynamic>.from(temp);
     for (var i in json['payments']) {

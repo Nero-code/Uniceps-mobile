@@ -25,6 +25,7 @@ class _CodeBoxState extends State<CodeBox> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Column(
       children: [
         BackgroundCard(
@@ -54,7 +55,7 @@ class _CodeBoxState extends State<CodeBox> {
                 onTapOutside: (event) => node.unfocus(),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Invalid Code!';
+                    return "";
                   }
                   return null;
                 },
@@ -64,15 +65,15 @@ class _CodeBoxState extends State<CodeBox> {
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey.shade400)),
                   border: const OutlineInputBorder(),
-                  label: Text(AppLocalizations.of(context)!.code),
-                  hintText: '000000',
+                  label: Text(local.code),
+                  hintText: 'xxx xxx',
                 ),
               ),
             ),
           ]),
         ),
         Container(
-          margin: EdgeInsets.all(15),
+          margin: const EdgeInsets.all(15),
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
@@ -80,7 +81,7 @@ class _CodeBoxState extends State<CodeBox> {
                 widget.onPressed(codeCtrl.text.trim());
               }
             },
-            child: Text(AppLocalizations.of(context)!.verifyCode),
+            child: Text(local.verifyCode),
           ),
         ),
       ],

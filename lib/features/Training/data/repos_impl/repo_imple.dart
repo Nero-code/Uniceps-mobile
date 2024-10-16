@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/features/Profile/domain/entities/gym.dart';
@@ -16,11 +17,13 @@ class TrainingRepoImple implements TrainingRepo {
   final LocalTrainingSource local;
   final RemoteTrainingSource remote;
   final InternetConnectionChecker connection;
+  final Logger logger;
 
   TrainingRepoImple({
     required this.local,
     required this.remote,
     required this.connection,
+    required this.logger,
   });
 
   TrainingProgram? tp;
@@ -28,7 +31,8 @@ class TrainingRepoImple implements TrainingRepo {
   @override
   Future<Either<Failure, TrainingProgram>> getTrainingProgram(
       /**String gymId*/) async {
-    print("Training_Feature --> Repo --> getTrainingProgram");
+    // logger.d("Training_Feature --> Repo --> getTrainingProgram");
+    logger.d("Training_Feature --> Repo --> getTrainingProgram");
 
     if (await connection.hasConnection) {
       try {
@@ -47,29 +51,31 @@ class TrainingRepoImple implements TrainingRepo {
           pid: currentGym.pid,
           weights: weights,
         );
-        print("TrainingProgram finished");
+        logger.t("TrainingProgram finished");
 
         await local.saveTrainingProgram(res);
+
+        logger.t("TrainingProgram saved locally");
         tp = res;
 
         return Right(res);
       } on NoGymSpecifiedException {
-        print("DEBUG: NoGymSpecified yoyo");
+        logger.d("DEBUG: NoGymSpecified yoyo");
         return const Left(
             NoTrainingProgramFailure("No handshakes found for player"));
       } on NoTrainingProgramException {
-        print("DEBUG: NoTrainingProgram yoyo");
+        logger.d("DEBUG: NoTrainingProgram yoyo");
         return const Left(
             NoTrainingProgramFailure("No handshakes found for player"));
       } on NotAMemberOfGymException {
-        return Left(NotAMemberOfGymFailure(errorMessage: ""));
+        return const Left(NotAMemberOfGymFailure(errorMessage: ""));
       } on ClientException {
         return Left(NoInternetConnectionFailure(errMsg: ""));
       } on ServerException {
-        print("DEBUG: Server EXC");
+        logger.e("DEBUG: Server EXC");
         return Left(ServerFailure(errMsg: "Error happened serverside"));
       } catch (e) {
-        print("DEBUG: GeneralP EXC: ${e.toString()}");
+        logger.f("DEBUG: GeneralP EXC", error: e);
         return Left(GeneralPurposFailure(errorMessage: e.toString()));
       }
     } else {
@@ -80,23 +86,26 @@ class TrainingRepoImple implements TrainingRepo {
           orElse: () => myGems.first,
         );
         final res = await local.getTrainingProgram(currentGym.id);
-        print("getTrainingProgram finished! ${res.runtimeType}");
+        logger.d("getTrainingProgram finished! ${res.runtimeType}");
         tp = res;
 
         return Right(res);
       } on NotAMemberOfGymException {
+        logger.i("Not a member of any gym");
         return const Left(NotAMemberOfGymFailure(errorMessage: ""));
       } on NoGymSpecifiedException {
+        logger.i("No gym specified");
         return Left(NoGymSpecifiedFailure(errMsg: "No Gym Specified"));
       } on NoTrainingProgramException {
-        print("NoTrainingProgram");
+        logger.d("NoTrainingProgram");
         return const Left(
             NoTrainingProgramFailure("No handshakes found for player"));
       } on EmptyCacheExeption {
-        print("No TrainingProgram Found: EmptyCacheExeption");
+        logger.d("No TrainingProgram Found: EmptyCacheExeption");
         return Left(OfflineFailure(errorMessage: "no internet"));
       } catch (e) {
-        print("Error: $e");
+        logger.e("Training Repo Remote getTrainingProgram Unknown Error",
+            error: e);
         return Left(GeneralPurposFailure(errorMessage: e.toString()));
       }
     }
@@ -105,21 +114,22 @@ class TrainingRepoImple implements TrainingRepo {
   @override
   Future<Either<Failure, List<Exercise>>> getExercisesByFilter(
       int filter) async {
-    print("Get Exercise ByFilter");
+    logger.d("Get Exercise ByFilter");
     if (tp == null) {
       return const Left(
           NoTrainingProgramFailure("repo imple -> getExercisesByFilter"));
     }
-    print("tp not null");
-    print("tp.list : ${tp!.exercises.length}");
+    logger.d("tp not null");
+    logger.d("tp.list : ${tp!.exercises.length}");
     List<Exercise> list = [];
     for (var i in tp!.exercises) {
-      // print("${i.muscleGroup} : $filter");
+      logger.t("${i.muscleGroup} : $filter");
       if (i.muscleGroup == filter) {
         list.add(i);
       }
     }
     if (list.isEmpty) {
+      logger.i("No Exercises found for filter: $filter");
       return Left(EmptyCacheFailure(
           errorMessage: "No Exercises found for filter: $filter"));
     }
@@ -181,23 +191,23 @@ class TrainingRepoImple implements TrainingRepo {
     if (await connection.hasConnection) {
       try {
         final res = await remote.getSubscribedToGyms();
-        print("Debug: 3: Subscribed to gym (myGyms) => $res");
+        logger.t("Debug: 3: Subscribed to gym (myGyms) => $res");
         final list = await local.cacheSubsToGyms(res);
 
         return Right(list);
       } on NoGymSpecifiedException {
         return Left(NoGymSpecifiedFailure(errMsg: ""));
       } on ClientException {
-        print("SubS: Client EXC");
+        logger.d("SubS: remote Client EXC");
         return Left(NoInternetConnectionFailure(errMsg: ""));
       } on ServerException {
-        print("SubS: server EXC");
+        logger.d("SubS: remote server EXC");
         return Left(ServerFailure(errMsg: ""));
       } on EmptyCacheExeption {
-        print("SubS: empty");
+        logger.d("SubS: remote empty");
         return Left(NoGymSpecifiedFailure(errMsg: "errMsg"));
       } catch (e) {
-        print("SubS: $e");
+        logger.f("SubS remote unknown:", error: e);
         return Left(GeneralPurposFailure(errorMessage: e.toString()));
       }
     } else {
@@ -208,6 +218,7 @@ class TrainingRepoImple implements TrainingRepo {
         return const Left(
             NotAMemberOfGymFailure(errorMessage: "No Gyms Specified"));
       } catch (e) {
+        logger.f("SubS local unknown:", error: e);
         return Left(GeneralPurposFailure(errorMessage: e.toString()));
       }
     }
@@ -215,24 +226,24 @@ class TrainingRepoImple implements TrainingRepo {
 
   @override
   Future<Either<Failure, List<Gym>>> setSelectedGym(String gymId) async {
-    print("repo: SetSelectedGym Function:");
+    logger.d("repo: SetSelectedGym Function:");
     try {
       final res = await local.setSelectedGym(gymId);
-      print("local Responce: $res");
+      logger.d("local Responce: $res");
       return Right(res);
     } on ClientException {
       return Left(NoInternetConnectionFailure(errMsg: ""));
     } on ServerException {
       return Left(ServerFailure(errMsg: ""));
     } catch (e) {
-      print(e.toString());
+      logger.d(e.toString());
       return Left(GeneralPurposFailure(errorMessage: "error: ${e.toString()}"));
     }
   }
 
   @override
   Future<Either<Failure, Unit>> saveNewWeight(Map<String, double> val) async {
-    print("inside NewWeight");
+    logger.d("inside NewWeight");
     try {
       await local.saveNewWeight(val);
       final e =
@@ -242,8 +253,8 @@ class TrainingRepoImple implements TrainingRepo {
       final image = e.imageBitMap;
       // final map = e.toJson();
       // map.addAll({"lastWeight": val.values.first});
-      print("Training -> RepoImle -> local saveNewWeight: DATA");
-      print("${{
+      logger.d("Training -> RepoImle -> local saveNewWeight: DATA");
+      logger.d("${{
         ...e.toJson(),
         "lastWaight": val.values.first,
       }}");
@@ -258,7 +269,7 @@ class TrainingRepoImple implements TrainingRepo {
     } on ServerException {
       return Left(ServerFailure(errMsg: ""));
     } catch (e) {
-      print("Training -> RepoImle -> local saveNewWeight: ${e.toString()}");
+      logger.d("Training -> RepoImle -> local saveNewWeight: ${e.toString()}");
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
     return const Right(unit);

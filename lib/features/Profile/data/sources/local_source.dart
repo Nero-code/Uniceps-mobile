@@ -60,6 +60,9 @@ class LocalProfileSourceImpl implements LocalProfileSource {
     if (list.isEmpty) {
       throw EmptyCacheExeption();
     }
+    list.sort((a, b) {
+      return b.checkDate.compareTo(a.checkDate);
+    });
     return list;
   }
 

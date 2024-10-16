@@ -1,12 +1,5 @@
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Profile/domain/entities/gym.dart';
-
-//         "address": "swaida , syria ",
-//         "gym_name": "Unicepse Gym",
-//         "id": "66bdd431f93dffa35e2a1a21",
-//         "logo": "https://trio.com",
-//         "owner_name": "TrioVerse",
-//         "phone_number": "+9639949196917",
-//         "telephone": "+96316240131"
 
 class GymModel extends Gym {
   const GymModel({
@@ -29,13 +22,13 @@ class GymModel extends Gym {
     print("id:         ${json['id']}");
     print("pid:        ${json['pid'] ?? ""}");
     print("name:       ${json['gym_name']}");
-    // print("address:    ${json['address']}");
-    // print("logo:       ${json['logo']}");
-    // print("ownerName:  ${json['owner_name']}");
-    // print("phoneNum:   ${json['phone_number']}");
-    // print("telephone:  ${json['telephone']}");
-    // print("start:      ${json['start'] ?? ""}");
-    // print("end:        ${json['end'] ?? ""}");
+    print("address:    ${json['address']}");
+    print("logo:       ${json['logo']}");
+    print("ownerName:  ${json['owner_name']}");
+    print("phoneNum:   ${json['phone_number']}");
+    print("telephone:  ${json['telephone']}");
+    print("start:      ${json['start'] ?? ""}");
+    print("end:        ${json['end'] ?? ""}");
     print("isSelected: ${json['isSelected'] ?? "null"}");
     print("isCurrent:  ${json['isCurrent'] ?? "null"}");
 
@@ -48,8 +41,8 @@ class GymModel extends Gym {
       ownerName: json['owner_name'],
       phoneNum: json['phone_number'],
       telephone: json['telephone'],
-      start: json['start'] ?? "",
-      end: json['end'] ?? "",
+      start: json['start'] != null ? stringToDate(json['start']) : null,
+      end: json['end'] != null ? stringToDate(json['end']) : null,
       isSelected: json['isSelected'] ?? false,
       isCurrent: json['isCurrent'] ?? false,
       joinedAt: joinedAt,

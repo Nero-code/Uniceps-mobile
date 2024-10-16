@@ -1,9 +1,8 @@
-import 'package:alert_banner/exports.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
@@ -13,21 +12,22 @@ import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/player_gym_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/screens/about_2.dart';
 import 'package:uniceps/features/Training/views/bloc/current_gym_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/screens/about.dart';
+// import 'package:uniceps/features/Profile/presentation/screens/about.dart';
 import 'package:uniceps/features/Profile/presentation/screens/gym_list_screen.dart';
 import 'package:uniceps/features/Profile/presentation/screens/measurement_screen.dart';
 import 'package:uniceps/features/Profile/presentation/screens/profile_screen.dart';
-import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
-import 'package:uniceps/features/Training/views/Screens/gym_handshake_screen.dart';
+// import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
+// import 'package:uniceps/features/Training/views/Screens/gym_handshake_screen.dart';
 import 'package:uniceps/features/Training/views/Screens/home_screen.dart';
-import 'package:uniceps/features/Training/views/Screens/qr_scanner_screen.dart';
-import 'package:uniceps/features/Profile/presentation/screens/subs_screen.dart';
+// import 'package:uniceps/features/Training/views/Screens/qr_scanner_screen.dart';
+// import 'package:uniceps/features/Profile/presentation/screens/subs_screen.dart';
 import 'package:uniceps/features/Training/views/bloc/exercises_bloc.dart';
 import 'package:uniceps/features/Training/views/bloc/training_bloc.dart';
 import 'package:uniceps/firebase_options.dart';
@@ -70,43 +70,21 @@ void main() async {
 
   print('User granted permission: ${settings.authorizationStatus}');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
+  FirebaseMessaging.onMessage.listen(
+    (event) {
+      if (NavigatorKey.navigatorKey.currentState != null &&
+          NavigatorKey.navigatorKey.currentState!.mounted) {
+        ScaffoldMessenger.of(NavigatorKey.navigatorKey.currentState!.context);
+      }
+    },
+  );
 
-    if (message.notification != null &&
-        NavigatorKey.navigatorKey.currentContext != null) {
-      showAlertBanner(
-        NavigatorKey.navigatorKey.currentContext!,
-        () {},
-        Material(
-          elevation: 3,
-          borderRadius: BorderRadius.circular(15),
-          child: Container(
-            width: double.infinity,
-            // height: 50,
-            padding: const EdgeInsets.all(15.0),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(15)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  message.notification?.title ?? "",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                Text(
-                  message.notification?.body ?? "",
-                  style: const TextStyle(),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-  });
+  await FlutterDownloader.initialize(
+    debug: true,
+    ignoreSsl: false,
+  );
+
+  // print(await FirebaseMessaging.instance.getToken());
 
   runApp(const MyApp());
 }
@@ -114,7 +92,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -199,13 +176,13 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocBuilder<LocaleCubit, ChangedLangState>(
         builder: (context, state) {
-          SystemChrome.setSystemUIOverlayStyle(
-            SystemUiOverlayStyle(
-              statusBarColor: Colors.transparent,
-              systemNavigationBarColor:
-                  Theme.of(context).colorScheme.background,
-            ),
-          );
+          // SystemChrome.setSystemUIOverlayStyle(
+          //   SystemUiOverlayStyle(
+          //     statusBarColor: Colors.transparent,
+          //     systemNavigationBarColor:
+          //         Theme.of(context).colorScheme.background,
+          //   ),
+          // );
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             navigatorKey: NavigatorKey.navigatorKey,
@@ -215,10 +192,6 @@ class MyApp extends StatelessWidget {
             restorationScopeId: "root",
             title: 'Uniceps',
             theme: lightTheme.copyWith(textTheme: GoogleFonts.cairoTextTheme()),
-            // darkTheme: ThemeData(
-            //     colorScheme: ColorScheme.fromSeed(
-            //         seedColor: Colors.blue, brightness: Brightness.dark)),
-
             initialRoute: ROUTE_SPLASH,
             routes: {
               ROUTE_SPLASH: (context) => const SplashScreen(),
@@ -231,18 +204,22 @@ class MyApp extends StatelessWidget {
               //     const PlayerInfoScreen(), // NOT REACHABLE FROM HERE
 
               //  MAIN
-              ROUTE_HOME: (context) => HomeScreen(trainingUsecases: di.sl()),
-              ROUTE_HANDSHAKE: (context) => const GymHandShakeScreen(),
-              ROUTE_EXERCISE: (context) => ExercisesPage(),
-              ROUTE_QR_SCANNER: (context) => QRScannerScreen(),
+              ROUTE_HOME: (context) => HomeScreen(
+                    trainingUsecases: di.sl(),
+                    service: di.sl(),
+                  ),
+              // ROUTE_HANDSHAKE: (context) => const GymHandShakeScreen(),
+              // ROUTE_EXERCISE: (context) => ExercisesPage(),
+              // ROUTE_QR_SCANNER: (context) => QRScannerScreen(),
               // ROUTE_PRESENCE: (context) => const PresenceScreen(), //  NOT REACHABLE FROM HERE
-              ROUTE_GYMS_LIST: (context) => GymListScreen(),
+              // ROUTE_SUBSCRIPTIONS: (context) => const SubScriptionScreen(),
 
               //  AUX
               ROUTE_MEASUREMENTS: (context) => const MeasurementScreen(),
-              ROUTE_SUBSCRIPTIONS: (context) => const SubScriptionScreen(),
+              ROUTE_GYMS_LIST: (context) => const GymListScreen(),
               ROUTE_PROFILE: (context) => const ProfileScreen(),
-              ROUTE_ABOUT: (context) => const AboutScreen(),
+              // ROUTE_ABOUT: (context) => const AboutScreen(),
+              ROUTE_ABOUT: (context) => const AboutScreen2(),
             },
           );
         },

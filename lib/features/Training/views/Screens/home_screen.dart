@@ -21,6 +21,7 @@ import 'package:uniceps/features/Training/views/widgets/training_group(2).dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
 import 'package:uniceps/main_cubit/training_section_cubit.dart';
+import 'package:uniceps/update_service.dart';
 
 class MuscleGroup {
   final String title;
@@ -52,9 +53,14 @@ final arTrSections = [
 ];
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key, required this.trainingUsecases});
+  const HomeScreen({
+    super.key,
+    required this.trainingUsecases,
+    required this.service,
+  });
 
   final TrainingUsecases trainingUsecases;
+  final UpdateService service;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -76,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen>
   int selectedGroup = 0;
   bool isGrid = false;
   bool isSheetOpen = false;
+  bool isUpdateChecked = false;
   // double gymSheetPosition = 0.4;
   // double daysSheetPosition = 0.4;
 
@@ -89,7 +96,75 @@ class _HomeScreenState extends State<HomeScreen>
   late final PanelController panelController;
   late final PanelController daysController;
 
-  void openSheet() {}
+  void checkUpdate(BuildContext context) async {
+    if (isUpdateChecked) return;
+    print("update service function started");
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        padding: const EdgeInsets.all(3.0),
+        content: Center(
+          child: Text(
+            AppLocalizations.of(context)!.chackForUpdate,
+            style: const TextStyle(fontSize: 10),
+          ),
+        ),
+      ),
+    );
+
+    if (await widget.service.isUpdateAvailable()) {
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(AppLocalizations.of(context)!.newVersion),
+            actions: [
+              ElevatedButton(
+                onPressed: widget.service.updateAvailable != null &&
+                        widget.service.updateAvailable!.playUrl.isNotEmpty
+                    ? () {
+                        widget.service.updatefromStore();
+                        Navigator.pop(context);
+                      }
+                    : null,
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Play Store"),
+                    SizedBox(
+                      width: 5.0,
+                    ),
+                    Image(
+                      width: 20,
+                      height: 20,
+                      image: AssetImage("images/play_store.png"),
+                    ),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  widget.service.updatefromApi();
+                  Navigator.pop(context);
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("TrioVerse"),
+                    SizedBox(
+                      width: 5.0,
+                    ),
+                    Icon(Icons.download),
+                  ],
+                ),
+              ),
+            ],
+          ).build(context),
+        );
+      }
+    }
+    isUpdateChecked = true;
+  }
 
   // void closeSheets() {
   //   isSheetOpen = false;
@@ -112,6 +187,7 @@ class _HomeScreenState extends State<HomeScreen>
         }
       },
     );
+    checkUpdate(context);
 
     super.initState();
   }
@@ -131,6 +207,7 @@ class _HomeScreenState extends State<HomeScreen>
     final trSections =
         context.read<LocaleCubit>().state.isRtl() ? arTrSections : enTrSections;
     final isRtl = context.read<LocaleCubit>().state.isRtl();
+
     return RestorationScope(
       restorationId: "HomePage",
       child: PopScope(
@@ -405,6 +482,13 @@ class _HomeScreenState extends State<HomeScreen>
                             .add(const GetSubscribedToGymEvent());
                       },
                     );
+                  }
+                  if (state is CurrentGymUpdatedState) {
+                    BlocProvider.of<CurrentGymBloc>(context)
+                        .add(const GetSubscribedToGymEvent());
+
+                    BlocProvider.of<TrainingBloc>(context)
+                        .add(const GetProgramEvent());
                   }
 
                   return const Center(child: CircularProgressIndicator());
@@ -797,11 +881,6 @@ class _HomeScreenState extends State<HomeScreen>
                                         },
                                       ),
                                     ),
-                                    // BlocBuilder<ExercisesBloc, ExercisesState>(
-                                    //   builder: (context, eState) {
-                                    //     if(state is TrainingProgramLoadedState)
-                                    //   },
-                                    // ),
                                   ],
                                 );
                               }
@@ -999,6 +1078,7 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                             ),
                           ),
+
                           // const SizedBox(height: 30),
                           // ),
                           //   ],
@@ -1043,23 +1123,6 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                     ),
                   ),
-                  // SizedBox(
-                  //   width: MediaQuery.of(context).size.width,
-                  //   height: MediaQuery.of(context).size.height,
-                  //   child: ColoredBox(
-                  //     color: Colors.grey.shade700.withAlpha(150),
-                  //   ),
-                  // ),
-
-                  // if (isSheetOpen)
-                  //   SizedBox(
-                  //     width: MediaQuery.of(context).size.width,
-                  //     height: MediaQuery.of(context).size.height,
-                  //     child: ColoredBox(
-                  //       color: Colors.black.withAlpha(100),
-                  //       child: GestureDetector(onTap: closeSheets),
-                  //     ),
-                  //   ),
                 ],
               ),
             ),

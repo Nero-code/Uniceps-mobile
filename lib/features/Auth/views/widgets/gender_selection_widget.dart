@@ -9,22 +9,19 @@ class GenderSelectBox extends StatefulWidget {
   final bool? initialValue;
 
   @override
-  State<GenderSelectBox> createState() {
-    print("initial: $initialValue");
-    return _GenderSelectBoxState(initialValue);
-  }
+  State<GenderSelectBox> createState() =>
+      // ignore: no_logic_in_create_state
+      _GenderSelectBoxState(initialValue);
 }
 
 class _GenderSelectBoxState extends State<GenderSelectBox> {
   bool? isMale;
-  final background = Color.fromARGB(255, 235, 235, 235);
+  final background = const Color.fromARGB(255, 235, 235, 235);
 
   _GenderSelectBoxState(this.isMale);
 
   @override
   Widget build(BuildContext context) {
-    print("IsMale: ${this.isMale} : ${isMale.runtimeType}");
-
     return SizedBox(
       height: MediaQuery.of(context).size.width * 0.2,
       child: Column(

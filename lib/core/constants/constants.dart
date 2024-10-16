@@ -65,7 +65,11 @@ final HEADERS = {
 
 // const FAKE_API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
 // const API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
+/// https://uniceps.trio-verse.com/api/v1
 const API = "https://uniceps.trio-verse.com/api/v1";
+
+/// https://trio-verse.com
+const URL = "https://trio-verse.com";
 const HTTP_REGISTER = "/auth";
 const HTTP_VERIFY_CODE = "/auth/verify";
 const HTTP_REFRESH = "/refresh";
@@ -184,14 +188,14 @@ const HIVE_MEASURE_BOX = "measurements";
 //
 // ////////////////////////////////////////////////////////////////////////// //
 
-/// Pattern: [dd/MM/yyyy]
+/// Pattern: [yyyy-MM-ddThh:mm:ss]
 String dateToString(DateTime date) {
-  return DateFormat("dd/MM/yyyy").format(date);
+  return DateFormat("yyyy-MM-ddThh:mm:ss").format(date);
 }
 
-/// Pattern: [dd/MM/yyyy]
+/// Pattern: [yyyy-MM-ddThh:mm:ss]
 DateTime stringToDate(String source) {
-  return DateFormat("dd/MM/yyyy").parse(source);
+  return DateFormat("yyyy-MM-ddThh:mm:ss").parse(source);
 }
 
 /// Exercises image url parser...

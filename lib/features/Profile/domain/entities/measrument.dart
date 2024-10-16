@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class Measurement extends Equatable {
+  final String id, gymId;
   final double height;
   final double weight;
   final double lArm;
@@ -19,6 +20,8 @@ class Measurement extends Equatable {
   final DateTime checkDate;
 
   const Measurement({
+    required this.id,
+    required this.gymId,
     required this.height,
     required this.weight,
     required this.lArm,
@@ -37,6 +40,5 @@ class Measurement extends Equatable {
     required this.checkDate,
   });
   @override
-  // TODO: implement props
-  List<Object?> get props => [checkDate];
+  List<Object?> get props => [id, gymId];
 }

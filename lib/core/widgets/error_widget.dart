@@ -67,7 +67,7 @@ class ErrorScreenWidget extends StatelessWidget {
 
       case const (GeneralPurposFailure):
       default:
-        return "General Purpose";
+        return local.errUnknown;
     }
   }
 }
