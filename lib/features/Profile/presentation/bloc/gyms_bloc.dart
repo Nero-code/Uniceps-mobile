@@ -13,23 +13,23 @@ class GymsBloc extends Bloc<GymsEvent, GymsState> {
     on<GymsEvent>((event, emit) async {
       if (event is GetAllAvailableGymsEvent) {
         emit(GymsLoadingState());
-        print("Gyms STREAM: before usecase");
+        // print("Gyms STREAM: before usecase");
         final either = await usecases.getGyms();
 
-        print("Gyms STREAM: after usecase");
+        // print("Gyms STREAM: after usecase");
         either.fold(
           (l) => emit(GymsErrorState(f: l)),
           (r) {
             final myGyms = <Gym>[];
 
-            print("Gyms STREAM: inside fold");
+            // print("Gyms STREAM: inside fold");
             while (r.isNotEmpty && r.first.isSelected) {
-              print("Gyms Bloc: GetGyms: Found 1 gym isSelected true");
+              // print("Gyms Bloc: GetGyms: Found 1 gym isSelected true");
               myGyms.add(r.first);
               r.removeAt(0);
             }
 
-            print("Gyms STREAM: Emitting");
+            // print("Gyms STREAM: Emitting");
             emit(GymsLoadedState(
               restList: r,
               myGyms: myGyms,

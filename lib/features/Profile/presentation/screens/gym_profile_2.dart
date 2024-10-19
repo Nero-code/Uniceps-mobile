@@ -13,7 +13,7 @@ import 'package:uniceps/features/Profile/domain/entities/gym.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/player_gym_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/widgets/Subscription_widget_2.dart';
+import 'package:uniceps/features/Profile/presentation/widgets/subscription_widget_2.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
 
 class GymProfileScreen2 extends StatefulWidget {
@@ -82,7 +82,7 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
         // color: Color.fromARGB(255, 85, 151, 177),
         panel: BlocBuilder<AttendenceBloc, AttendenceState>(
           builder: (context, state) {
-            print("presence screen bloc type: ${state.runtimeType}");
+            // print("presence screen bloc type: ${state.runtimeType}");
             if (state is AttendenceInitial) {
               BlocProvider.of<AttendenceBloc>(context).add(
                 GetAttendenceEvent(widget.gym!.id, widget.gym!.pid),
@@ -193,10 +193,10 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                                                 shape: BoxShape.circle)),
                                         onHeaderTapped: null,
                                         onFormatChanged: (format) {
-                                          print("Format Tapped: $format");
+                                          // print("Format Tapped: $format");
                                         },
                                         onPageChanged: (focusedDay) {
-                                          print("OnPageChanged! $focusedDay");
+                                          // print("OnPageChanged! $focusedDay");
 
                                           fDay = focusedDay;
                                         },
@@ -233,21 +233,21 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                                         },
                                         onDaySelected:
                                             (selectedDay, focusedDay) {
-                                          print("selectedDay: $selectedDay "
-                                              "\n"
-                                              "focusedDay:  $focusedDay");
+                                          // print("selectedDay: $selectedDay "
+                                          // "\n"
+                                          // "focusedDay:  $focusedDay");
                                           sDay = selectedDay;
 
                                           a.clear();
                                           if (state is AttenedenceLoadedState) {
-                                            print("Attendence Loaded");
+                                            // print("Attendence Loaded");
                                             for (var i in state.list) {
-                                              print(
-                                                  "Attendence Loaded 2 ${i.toJson()}");
-                                              print(
-                                                  "Attendence Loaded 2 ${selectedDay}");
-                                              print(
-                                                  "Attendence: ${DateTime.parse(intl.DateFormat("yyyy-MM-dd").format(i.date))}");
+                                              // print(
+                                              //     "Attendence Loaded 2 ${i.toJson()}");
+                                              // print(
+                                              //     "Attendence Loaded 2 ${selectedDay}");
+                                              // print(
+                                              //     "Attendence: ${DateTime.parse(intl.DateFormat("yyyy-MM-dd").format(i.date))}");
 
                                               if (selectedDay
                                                       .copyWith(isUtc: false)
@@ -257,12 +257,12 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                                                               .format(
                                                                   i.date))) ==
                                                   0) {
-                                                print("Attendence Loaded 3");
+                                                // print("Attendence Loaded 3");
                                                 a.add(i);
                                               }
                                             }
                                           }
-                                          print("Attendence Loaded 4");
+                                          // print("Attendence Loaded 4");
                                           setState(() {});
                                           // if (state is AttenedenceLoadedState) {
                                           //   setState(() {
@@ -282,7 +282,7 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                                   ),
                                 ),
                                 SizedBox(
-                                  // height: screen.height * 0.25,
+                                  height: screen.height * 0.45,
                                   child: SingleChildScrollView(
                                     child: Column(
                                       mainAxisAlignment:
@@ -660,7 +660,7 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                             ),
                             BlocBuilder<PlayerGymBloc, PlayerGymState>(
                               builder: (context, state) {
-                                print("PLAYER: state = ${state.runtimeType}");
+                                // print("PLAYER: state = ${state.runtimeType}");
 
                                 return Text(
                                   state is PlayerInGymLoadedState

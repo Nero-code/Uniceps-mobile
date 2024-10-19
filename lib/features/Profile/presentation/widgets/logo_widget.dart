@@ -10,7 +10,7 @@ class LogoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(gymId);
+    // print(gymId);
     return CachedNetworkImage(
       width: size,
       height: size,

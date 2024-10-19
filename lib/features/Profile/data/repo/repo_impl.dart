@@ -71,18 +71,7 @@ class ProfileRepoImpl implements ProfileRepo {
   @override
   Future<Either<Failure, Player>> getProfileData() async {
     logger.d("ProfileBloc --> Repo --> getProfileData");
-
-    try {
-      final res = await local.getProfileData();
-      logger.d("profile: local getProfileData");
-      return Right(res);
-    } catch (e) {
-      //  -----------------------------------------------
-      //  NOTE:
-      //  local source should throw empty cach exception.
-      //  but this must not cancel the procedure
-      //  -----------------------------------------------
-    }
+    logger.d(await checker.hasConnection);
 
     if (await checker.hasConnection) {
       try {
@@ -92,7 +81,15 @@ class ProfileRepoImpl implements ProfileRepo {
         logger.d("profile res: $res");
         return Right(res);
       } on ClientException {
-        return Left(NoInternetConnectionFailure(errMsg: ""));
+        logger.i("Internet Exception");
+        try {
+          final res = await local.getProfileData();
+          logger.i("found in local");
+          return Right(res);
+        } catch (e) {
+          logger.i("nothing found");
+          return Left(NoInternetConnectionFailure(errMsg: ""));
+        }
       } on ServerException {
         logger.e("profile repo remote server exception");
         return Left(ServerFailure(errMsg: ""));
@@ -101,24 +98,25 @@ class ProfileRepoImpl implements ProfileRepo {
         return Left(GeneralPurposFailure(errorMessage: ""));
       }
     } else {
-      return Left(NoInternetConnectionFailure(errMsg: ""));
+      // return Left(NoInternetConnectionFailure(errMsg: ""));
 
-      // try {
-      //   final res = await local.getProfileData();
-      //   logger.d("after getProfileData: ${res.toJson()}");
-      //   return Right(res);
-      // } on EmptyCacheExeption {
-      //   logger.d("No RECORD");
-      //   return const Left(EmptyCacheFailure(errorMessage: "No records"));
-      // } catch (e) {
-      //   logger.d("Error: $e");
-      //   return Left(
-      //     GeneralPurposFailure(
-      //         errorMessage: "unknown Error!"
-      //             "\n"
-      //             "Error: ${e.runtimeType} > ${e.toString()}"),
-      //   );
-      // }
+      try {
+        logger.d("before: local getProfileData");
+        final res = await local.getProfileData();
+        logger.d("after getProfileData: ${res.toJson()}");
+        return Right(res);
+      } on EmptyCacheExeption {
+        logger.d("No RECORD");
+        return const Left(EmptyCacheFailure(errorMessage: "No records"));
+      } catch (e) {
+        logger.d("Error: $e");
+        return Left(
+          GeneralPurposFailure(
+              errorMessage: "unknown Error!"
+                  "\n"
+                  "Error: ${e.runtimeType} > ${e.toString()}"),
+        );
+      }
     }
   }
 
@@ -130,7 +128,9 @@ class ProfileRepoImpl implements ProfileRepo {
       try {
         final res = await remote.getSubs(gymId, pid);
         await local.saveSubs(gymId, res);
-        res.forEach((element) => logger.d("DEBUG SUBS: ${element.toJson()}"));
+        for (var element in res) {
+          logger.d("DEBUG SUBS: ${element.toJson()}");
+        }
 
         res.sort((a, b) => b.startDate.compareTo(a.startDate));
         final l = res.length;
@@ -415,7 +415,7 @@ class ProfileRepoImpl implements ProfileRepo {
         final list = await local.getAllHandshakes();
         return Right(list);
       } on EmptyCacheExeption {
-        return Left(EmptyCacheFailure(
+        return const Left(EmptyCacheFailure(
             errorMessage: "No Handshakes found in local box"));
       } catch (e) {
         return Left(GeneralPurposFailure(

@@ -80,14 +80,14 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
 
                         if (details.primaryVelocity != null &&
                             details.primaryVelocity! > 0) {
-                          print("Left");
+                          // print("Left");
                           if (page < state.list.length - 1) {
                             // ++page;
                             await animate(true);
                           }
                         } else if (details.primaryVelocity != null &&
                             details.primaryVelocity! < 0) {
-                          print("Right");
+                          // print("Right");
                           if (page > 0) {
                             // --page;
                             await animate(false);

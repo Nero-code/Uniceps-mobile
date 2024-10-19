@@ -41,7 +41,7 @@ class TrainingDayItem extends StatelessWidget {
               // color: Color(0xFFCCCCCC),
               width: isSelected ? 2.0 : 1.0,
             ),
-            boxShadow: [
+            boxShadow: const [
               // BoxShadow(
               //   offset: const Offset(0.0, 2.0),
               //   color: Colors.grey.shade400,

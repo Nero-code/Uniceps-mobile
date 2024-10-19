@@ -123,7 +123,6 @@ class TrainingRepoImple implements TrainingRepo {
     logger.d("tp.list : ${tp!.exercises.length}");
     List<Exercise> list = [];
     for (var i in tp!.exercises) {
-      logger.t("${i.muscleGroup} : $filter");
       if (i.muscleGroup == filter) {
         list.add(i);
       }

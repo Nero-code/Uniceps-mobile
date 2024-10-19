@@ -51,12 +51,10 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
     // );
     // final args = ModalRoute.of(context)!.settings.arguments as PlayerArguments;
     final local = AppLocalizations.of(context);
-    print("Build()");
+
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
-        print("Inside onPopInvoked");
-        print("Inside onPopInvoked --> context.mounted ${context.mounted}");
         if (didPop) return;
         if (context.mounted) {
           Navigator.pop(context, false);
@@ -65,9 +63,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
       child: Scaffold(
         body: BlocConsumer<ProfileBloc, ProfileState>(
           listener: (context, state) {
-            print("state is: ${state.runtimeType}");
             if (state is ProfileSubmittedState) {
-              print("state is Submitted");
               Navigator.pop(context, true);
               return;
             }
@@ -81,8 +77,6 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
               birthCtl.text = state.player.birthDate;
               male = state.player.gender == Gender.male;
               initial = male;
-              print(male);
-              print("FOUND: Profile already exists");
             }
             return Stack(
               children: [
@@ -320,7 +314,6 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                                   //         male as bool ? Gender.male : Gender.female,
                                   //   ),
                                   // );
-                                  print("Player info screen!!");
 
                                   BlocProvider.of<ProfileBloc>(context).add(
                                     ProfileSubmitEvent(

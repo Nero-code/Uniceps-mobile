@@ -23,8 +23,8 @@ class _GymCodeBoxState extends State<GymCodeBox> {
         BackgroundCard(
           child: Column(
             children: [
-              Text("Please type in the code the Gym Gave you:"),
-              SizedBox(height: 10),
+              const Text("Please type in the code the Gym Gave you:"),
+              const SizedBox(height: 10),
 
               ///   G Y M   C O D E
               Form(
@@ -33,7 +33,6 @@ class _GymCodeBoxState extends State<GymCodeBox> {
                   controller: codeCtrl,
                   maxLength: 6,
                   onChanged: (value) {
-                    print(value);
                     if (value.contains(RegExp(r"[^0-9]"))) {
                       codeCtrl.text = codeCtrl.value.text
                           .substring(0, codeCtrl.value.text.length - 1);
@@ -45,7 +44,7 @@ class _GymCodeBoxState extends State<GymCodeBox> {
                     }
                     return null;
                   },
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     label: Text("Code"),
                   ),
@@ -55,7 +54,7 @@ class _GymCodeBoxState extends State<GymCodeBox> {
           ),
         ),
         Container(
-          margin: EdgeInsets.all(15),
+          margin: const EdgeInsets.all(15),
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
@@ -63,7 +62,7 @@ class _GymCodeBoxState extends State<GymCodeBox> {
                 widget.onPressed(codeCtrl.text);
               }
             },
-            child: Text("OK"),
+            child: const Text("OK"),
           ),
         ),
         Expanded(
@@ -76,7 +75,7 @@ class _GymCodeBoxState extends State<GymCodeBox> {
               style: ButtonStyle(
                   overlayColor: MaterialStateProperty.all<Color>(
                       const Color.fromARGB(68, 158, 158, 158))),
-              child: Text(
+              child: const Text(
                 "SKIP >",
               ),
             ),

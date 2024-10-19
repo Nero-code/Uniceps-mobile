@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:equatable/equatable.dart';
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Profile/domain/entities/subscription.dart';
 
 // {
@@ -38,6 +35,11 @@ class SubscriptionModel extends Subscription {
   });
 
   factory SubscriptionModel.fromJson(Map<dynamic, dynamic> temp) {
+    print(
+        "------------------------Subrcribtions--------------------------------");
+    print(temp['id'].runtimeType);
+    print(temp['pid'].runtimeType);
+    print(temp['gym_id'].runtimeType);
     final payments = <Payment>[];
     final json = Map<String, dynamic>.from(temp);
     for (var i in json['payments']) {
@@ -46,9 +48,9 @@ class SubscriptionModel extends Subscription {
     }
 
     return SubscriptionModel(
-      id: json['id'].toString(),
-      pId: json['pid'].toString(),
-      gymId: json['gym_id'].toString(),
+      id: json['id'],
+      pId: json['pid'],
+      gymId: json['gym_id'],
       sportName: json['sport_name'],
       trainerName: json['trainer_name'],
       discountDes: json['discount_des'],
@@ -56,8 +58,8 @@ class SubscriptionModel extends Subscription {
       price: json['price'],
       paidValue: json['paid_value'],
       discountVal: json['discount_value'],
-      startDate: stringToDate(json['start_date']),
-      endDate: stringToDate(json['end_date']),
+      startDate: DateTime.parse(json['start_date']),
+      endDate: DateTime.parse(json['end_date']),
       payments: payments,
     );
   }
@@ -71,12 +73,12 @@ class SubscriptionModel extends Subscription {
     }
     return {
       "id": id,
-      "pid": pid,
+      "pid": pId,
       "gym_id": gymId,
       "sport_name": sportName,
       "trainer_name": trainerName,
-      "start_date": dateToString(startDate),
-      "end_date": dateToString(endDate),
+      "start_date": startDate.toIso8601String(),
+      "end_date": endDate.toIso8601String(),
       "price": price,
       "discount_value": discountVal,
       "discount_des": discountDes,
@@ -105,6 +107,7 @@ class Payment extends Equatable {
   });
 
   factory Payment.fromJson(Map<String, dynamic> json) {
+    print("------------------------Payments--------------------------------");
     json.forEach(
       (key, value) => print("$key : ${value.runtimeType}"),
     );
@@ -114,7 +117,7 @@ class Payment extends Equatable {
       sId: json['sid'],
       gymId: json['gym_id'],
       value: json['value'],
-      payDate: stringToDate(json['date']),
+      payDate: DateTime.parse(json['date']),
     );
   }
 
@@ -125,7 +128,7 @@ class Payment extends Equatable {
       'sid': sId,
       'gym_id': gymId,
       'value': value,
-      'date': dateToString(payDate),
+      'date': payDate.toIso8601String(),
     };
   }
 

@@ -53,7 +53,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
       ),
       body: BlocBuilder<MeasurmentBloc, MeasurmentState>(
         builder: (context, state) {
-          print(state.runtimeType);
+          // print(state.runtimeType);
           if (state is MeasurmentInitial) {
             BlocProvider.of<MeasurmentBloc>(context)
                 .add(GetMeasurementsEvent());
@@ -62,7 +62,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
             if (state.list.isEmpty) {
               // return Center(child: Text(AppLocalizations.of(context)!.empty));
               return ReloadScreenWidget(
-                  f: EmptyCacheFailure(errorMessage: "asad"),
+                  f: const EmptyCacheFailure(errorMessage: "asad"),
                   callBack: () {
                     BlocProvider.of<MeasurmentBloc>(context)
                         .add(GetMeasurementsEvent());
@@ -204,7 +204,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
             );
             // "Unexpected Error occourd!"
           } else if (state is MeasurementErrorState) {
-            print("Measurement Failure: ${state.f.runtimeType}");
+            // print("Measurement Failure: ${state.f.runtimeType}");
             return Center(
               child: ReloadScreenWidget(
                 f: state.f,

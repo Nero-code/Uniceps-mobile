@@ -51,12 +51,11 @@ class _AuthScreenState extends State<AuthScreen>
   late final Animation<int> _animation;
   late final Animation<double> _slideAnimation, _opacityAnimation;
 
-  void navOnRestore() async {
-    await Future.delayed(const Duration(seconds: 0));
-    print("currentPage: ${currentPage.value}");
-    _pageController.animateToPage(currentPage.value,
-        duration: duration, curve: curve);
-  }
+  // void navOnRestore() async {
+  //   await Future.delayed(const Duration(seconds: 0));
+  //   _pageController.animateToPage(currentPage.value,
+  //       duration: duration, curve: curve);
+  // }
 
   // void endAnimation() async {
   //   if (isAnimActive) {
@@ -126,8 +125,6 @@ class _AuthScreenState extends State<AuthScreen>
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
-    navOnRestore();
-    // endAnimation();
     return BlocBuilder<LocaleCubit, ChangedLangState>(
       builder: (context, lang) {
         return Scaffold(
@@ -146,7 +143,7 @@ class _AuthScreenState extends State<AuthScreen>
                 height: MediaQuery.of(context).size.height,
                 child: BlocConsumer<AuthBloc, AuthState>(
                   listener: (context, state) async {
-                    print(state.runtimeType);
+                    // print(state.runtimeType);
 
                     // AuthCodeSent
                     // AuthNewPass
@@ -159,9 +156,9 @@ class _AuthScreenState extends State<AuthScreen>
                       _pageController.animateToPage(1,
                           duration: duration, curve: curve);
                     } else if (state is AuthDoneState) {
-                      print("Auth State: ${state.runtimeType}");
+                      // print("Auth State: ${state.runtimeType}");
 
-                      print("state.hasData: ${state.hasData}");
+                      // print("state.hasData: ${state.hasData}");
                       if (!state.hasData) {
                         final res = await Navigator.push<bool>(
                           context,
@@ -174,10 +171,10 @@ class _AuthScreenState extends State<AuthScreen>
                           //     hasData: state.hasData, data: state.player),
                         );
 
-                        print("check: if Condition state: $res");
+                        // print("check: if Condition state: $res");
 
                         if (res != null && !res) {
-                          print("check: inside if statement");
+                          // print("check: inside if statement");
 
                           if (Platform.isAndroid) {
                             // Exit Application (for Android)

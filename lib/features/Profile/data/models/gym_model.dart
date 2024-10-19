@@ -1,4 +1,3 @@
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Profile/domain/entities/gym.dart';
 
 class GymModel extends Gym {
@@ -19,18 +18,21 @@ class GymModel extends Gym {
   });
   factory GymModel.fromJson(Map<dynamic, dynamic> json, [DateTime? joinedAt]) {
     print("GymModel Parse Algorithm");
-    print("id:         ${json['id']}");
-    print("pid:        ${json['pid'] ?? ""}");
-    print("name:       ${json['gym_name']}");
-    print("address:    ${json['address']}");
-    print("logo:       ${json['logo']}");
-    print("ownerName:  ${json['owner_name']}");
-    print("phoneNum:   ${json['phone_number']}");
-    print("telephone:  ${json['telephone']}");
-    print("start:      ${json['start'] ?? ""}");
-    print("end:        ${json['end'] ?? ""}");
-    print("isSelected: ${json['isSelected'] ?? "null"}");
-    print("isCurrent:  ${json['isCurrent'] ?? "null"}");
+    // print("id:         ${json['id']}");
+    // print("pid:        ${json['pid'] ?? ""}");
+    // print("name:       ${json['gym_name']}");
+    // print("address:    ${json['address']}");
+    // print("logo:       ${json['logo']}");
+    // print("ownerName:  ${json['owner_name']}");
+    // print("phoneNum:   ${json['phone_number']}");
+    // print("telephone:  ${json['telephone']}");
+    print("start:      ${json['start'].runtimeType}");
+    print("end:        ${json['end'].runtimeType}");
+    // print("created_at:        ${DateTime.parse(json['created_at'])}");
+    // print(json['start'].runtimeType);
+    // print(json['end'].runtimeType);
+    // print("isSelected: ${json['isSelected'] ?? "null"}");
+    // print("isCurrent:  ${json['isCurrent'] ?? "null"}");
 
     return GymModel(
       id: json['id'],
@@ -41,8 +43,8 @@ class GymModel extends Gym {
       ownerName: json['owner_name'],
       phoneNum: json['phone_number'],
       telephone: json['telephone'],
-      start: json['start'] != null ? stringToDate(json['start']) : null,
-      end: json['end'] != null ? stringToDate(json['end']) : null,
+      start: json['start'] != null ? DateTime.parse(json['start']) : null,
+      end: json['start'] != null ? DateTime.parse(json['end']) : null,
       isSelected: json['isSelected'] ?? false,
       isCurrent: json['isCurrent'] ?? false,
       joinedAt: joinedAt,
@@ -59,8 +61,8 @@ class GymModel extends Gym {
       "owner_name": ownerName,
       "phone_number": phoneNum,
       "telephone": telephone,
-      'start': start,
-      'end': end,
+      'start': start?.toIso8601String(),
+      'end': end?.toIso8601String(),
       'isSelected': isSelected,
       'isCurrent': isCurrent,
     };

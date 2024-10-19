@@ -97,45 +97,55 @@ class _GymListScreenState extends State<GymListScreen> {
                         gymsList = state.restList;
 
                         return MyGymWidget(
-                            myGym: state.restList[index],
-                            isSelected: false,
-                            isCurrent: false,
-                            onPressed: () {
-                              BlocProvider.of<SubsBloc>(context).add(
-                                GetSubsEvent(
-                                  gymId: state.restList[index].id,
-                                  pid: "",
+                          myGym: state.restList[index],
+                          isSelected: false,
+                          isCurrent: false,
+                          onPressed: () {
+                            BlocProvider.of<SubsBloc>(context).add(
+                              GetSubsEvent(
+                                gymId: state.restList[index].id,
+                                pid: "",
+                              ),
+                            );
+                            BlocProvider.of<AttendenceBloc>(context).add(
+                              GetAttendenceEvent(
+                                state.restList[index].id,
+                                "",
+                              ),
+                            );
+                            BlocProvider.of<PlayerGymBloc>(context).add(
+                              GetPlayerInGymEvent(
+                                gymId: state.restList[index].id,
+                                pid: "",
+                              ),
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => GymProfileScreen2(
+                                  gym: state.restList[index],
                                 ),
-                              );
-                              BlocProvider.of<AttendenceBloc>(context).add(
-                                GetAttendenceEvent(
-                                  state.restList[index].id,
-                                  "",
-                                ),
-                              );
-                              BlocProvider.of<PlayerGymBloc>(context).add(
-                                GetPlayerInGymEvent(
-                                  gymId: state.restList[index].id,
-                                  pid: "",
-                                ),
-                              );
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => GymProfileScreen2(
-                                    gym: state.restList[index],
-                                  ),
-                                ),
-                              );
-                            });
+                              ),
+                            );
+                          },
+                        );
                       },
                     );
                   } else if (state is GymsErrorState) {
-                    return ReloadScreenWidget(
-                      f: state.f,
-                      callBack: () => BlocProvider.of<GymsBloc>(context).add(
-                        const GetAllAvailableGymsEvent(),
-                      ),
+                    return Column(
+                      children: [
+                        const Expanded(child: SizedBox()),
+                        Expanded(
+                          flex: 2,
+                          child: ReloadScreenWidget(
+                            f: state.f,
+                            callBack: () =>
+                                BlocProvider.of<GymsBloc>(context).add(
+                              const GetAllAvailableGymsEvent(),
+                            ),
+                          ),
+                        ),
+                      ],
                     );
                   }
                   return const Center(
@@ -267,7 +277,7 @@ class _GymListScreenState extends State<GymListScreen> {
                       ),
                     );
                   } else if (state is GymsErrorState) {
-                    return ErrorScreenWidget(f: state.f, callback: null);
+                    return const SizedBox();
                   }
                   return const Center(
                     child: CircularProgressIndicator(),

@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
@@ -35,8 +36,8 @@ class LocalProfileSourceImpl implements LocalProfileSource {
       handshakesBox,
       measurBox;
   final Box<List<dynamic>> subsBox, attendBox;
-
   final Box<bool> selectedGym;
+  final Logger logger;
 
   LocalProfileSourceImpl({
     required this.gymsBox,
@@ -48,6 +49,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
     required this.playerProfilesBox,
     required this.handshakesBox,
     required this.attendBox,
+    required this.logger,
   });
 
   @override
@@ -69,9 +71,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
   @override
   Future<void> saveMeasurements(List<MeasurementModel> list) async {
     for (var i in list) {
-      print("I was right ");
-
-      print(i.checkDate.toString());
+      logger.d(i.checkDate.toString());
       await measurBox.put(i.checkDate.toString(), i.toJson());
     }
   }
@@ -86,10 +86,10 @@ class LocalProfileSourceImpl implements LocalProfileSource {
   // }
   @override
   Future<PlayerModel> getProfileData() async {
-    print(" --> getProfileData");
+    logger.d(" --> getProfileData");
     final res = playerBox.get(HIVE_PROFILE_BOX);
     if (res != null) {
-      print("NOT NULL: $res");
+      logger.d("NOT NULL: $res");
       return PlayerModel.fromJson(res);
     }
     throw EmptyCacheExeption();
@@ -102,11 +102,11 @@ class LocalProfileSourceImpl implements LocalProfileSource {
 
   @override
   Future<List<SubscriptionModel>> getSubs(String gymId) async {
-    print("LocalSubsCheck");
+    logger.d("LocalSubsCheck");
     final res = subsBox.get(gymId);
     final list = <SubscriptionModel>[];
     if (res != null) {
-      print("Local --> Subs --> ${res.runtimeType}");
+      logger.d("Local --> Subs --> ${res.runtimeType}");
       for (var i in res) {
         list.add(SubscriptionModel.fromJson(i));
       }
@@ -196,7 +196,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
       return [];
     }
     for (var i in list) {
-      print("DEBUG: GET SUBS TO GYMS: ${i.toJson()}");
+      logger.d("DEBUG: GET SUBS TO GYMS: ${i.toJson()}");
       if (i.isSelected) {
         list.remove(i);
         list.insert(0, i);
@@ -209,7 +209,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
   Future<PlayerInGym> getPlayerInGym(String gymId) async {
     if (playerProfilesBox.containsKey(gymId)) {
       final res = playerProfilesBox.get(gymId)!;
-      print("PLAYER IN GYM: $res");
+      logger.d("PLAYER IN GYM: $res");
       return PlayerInGym.fromJson(res);
     }
     throw EmptyCacheExeption();

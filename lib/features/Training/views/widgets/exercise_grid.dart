@@ -32,11 +32,12 @@ class ExerciseGridTile extends StatelessWidget {
       // Theme.of(context).colorScheme.secondary
       // :
       // color: Color.fromARGB(255, 228, 228, 228),
-      color: isCompleted ? Color.fromARGB(255, 55, 163, 165) : Colors.white,
-      borderRadius: BorderRadius.all(Radius.circular(15)),
+      color:
+          isCompleted ? const Color.fromARGB(255, 55, 163, 165) : Colors.white,
+      borderRadius: const BorderRadius.all(Radius.circular(15)),
       borderOnForeground: true,
       child: InkWell(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderRadius: const BorderRadius.all(Radius.circular(15)),
         onTapUp: (details) {
           onPressed();
         },

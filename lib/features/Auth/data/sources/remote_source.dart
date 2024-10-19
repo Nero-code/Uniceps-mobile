@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
@@ -29,25 +30,30 @@ abstract class RemoteAuthSource {
 
 class RemoteAuthSourceImpl implements RemoteAuthSource {
   final http.Client client;
-
   final Box<Map<dynamic, dynamic>> userBox;
+  final Logger logger;
 
-  RemoteAuthSourceImpl({required this.client, required this.userBox});
+  RemoteAuthSourceImpl({
+    required this.client,
+    required this.userBox,
+    required this.logger,
+  });
 
   @override
   Future<void> loginWithEmailAndPassword(
       {required String email, required String password}) async {
-    print("START FUNC: loginWithEmailAndPassword()");
+    logger.d("START FUNC: loginWithEmailAndPassword()");
     final res = await client.post(
       Uri.http(API, "/login", {}),
       body: {"email": email, "password": password},
     );
 
     if (res.statusCode == 200) {
-      print(res.body);
+      logger.d(res.body);
       return;
     }
-    print("END   FUNC: loginWithEmailAndPassword():   RES: ${res.statusCode}");
+    logger
+        .d("END   FUNC: loginWithEmailAndPassword():   RES: ${res.statusCode}");
     throw AuthException();
   }
 
@@ -79,18 +85,18 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
       {required String code,
       required String email,
       required String notifyToken}) async {
-    print("START FUNC: verifyCodeSent()");
+    logger.d("START FUNC: verifyCodeSent()");
     final res = await client.post(Uri.parse(API + HTTP_VERIFY_CODE),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(
             {"otp": code, "email": email, "notify_token": notifyToken}));
-    print("VerifyCode --> res.statusCode : ${res.statusCode}");
+    logger.d("VerifyCode --> res.statusCode : ${res.statusCode}");
     if (res.statusCode == 200 || res.statusCode == 201) {
       //
       // Profile Exists
       //
-      print(res.body);
-      print("VerifyCode --> jsonDecode(res.body)['token'] : "
+      logger.d(res.body);
+      logger.d("VerifyCode --> jsonDecode(res.body)['token'] : "
           "${jsonDecode(res.body)['token']}");
       return UserModel(
         id: "id",
@@ -104,7 +110,7 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
       //
       // return jsonDecode(res.body)['token'];
 
-      print(res.body);
+      logger.d(res.body);
       return UserModel(
         id: "id",
         token: jsonDecode(res.body)['token'],
@@ -112,22 +118,22 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
       );
     }
 
-    print("END   FUNC: verifyCodeSent(): RES: ${res.statusCode}");
+    logger.d("END   FUNC: verifyCodeSent(): RES: ${res.statusCode}");
     throw ServerException();
   }
 
   @override
   Future<void> verifyEmail({required String email}) async {
-    print("START FUNC: verifyEmail()");
+    logger.d("START FUNC: verifyEmail()");
     final res = await client.post(Uri.parse(API + HTTP_REGISTER),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode({"email": email}));
     if (res.statusCode == 200) {
-      print(res.body);
+      logger.d(res.body);
       return;
     }
 
-    print("END   FUNC: verifyEmail(): RES: ${res.statusCode}");
+    logger.d("END   FUNC: verifyEmail(): RES: ${res.statusCode}");
     throw Exception();
   }
 
@@ -142,15 +148,15 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
 
   @override
   Future<PlayerModel> getPlayerInfo() async {
-    print("inside GetPlayerInfo");
-    print(userBox.get(HIVE_USER_BOX)!["token"]);
+    logger.d("inside GetPlayerInfo");
+    logger.d(userBox.get(HIVE_USER_BOX)!["token"]);
     final res = await client.get(Uri.parse(API + HTTP_PLAYER_INFO), headers: {
       ...HEADERS,
       "x-access-token": "${userBox.get(HIVE_USER_BOX)!["token"]}",
     });
     if (res.statusCode == 200) {
       final temp = jsonDecode(res.body);
-      print("PlayerProfile: ${{
+      logger.d("PlayerProfile: ${{
         ...temp,
         "email": userBox.get(HIVE_USER_BOX)!['email']
       }}");
@@ -191,7 +197,7 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
 
   @override
   Future<Map<dynamic, dynamic>> sendNotifyToken(String token) async {
-    print("inside sendNotifyToken");
+    logger.d("inside sendNotifyToken");
     final res = await client.post(
       Uri.parse(
         "$API" " $HTTP_REGISTER" "$HTTP_REFRESH",
@@ -201,8 +207,8 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
         "x-access-token": userBox.get(HIVE_USER_BOX)!['token'],
       },
     );
-    print("statusCode: ${res.statusCode}");
-    print("body: ${res.body}");
+    logger.d("statusCode: ${res.statusCode}");
+    logger.d("body: ${res.body}");
 
     if (res.statusCode == 201) {
       return jsonDecode(res.body);
@@ -219,7 +225,7 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
         headers: {
           'x-access-token': userBox.get(HIVE_USER_BOX)!['token'],
         });
-    print(res.statusCode);
+    logger.d(res.statusCode);
     if (res.statusCode == 200) {
       return;
     }

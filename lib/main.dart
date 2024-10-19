@@ -29,6 +29,7 @@ import 'package:uniceps/features/Training/views/Screens/home_screen.dart';
 // import 'package:uniceps/features/Training/views/Screens/qr_scanner_screen.dart';
 // import 'package:uniceps/features/Profile/presentation/screens/subs_screen.dart';
 import 'package:uniceps/features/Training/views/bloc/exercises_bloc.dart';
+import 'package:uniceps/features/Training/views/bloc/progress_bloc.dart';
 import 'package:uniceps/features/Training/views/bloc/training_bloc.dart';
 import 'package:uniceps/firebase_options.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
@@ -41,9 +42,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
 
-  print("Handling a background message: ${message.messageId}");
+  // debugPrint("Handling a background message: ${message.messageId}");
 }
 
 class NavigatorKey {
@@ -68,23 +69,23 @@ void main() async {
     sound: true,
   );
 
-  print('User granted permission: ${settings.authorizationStatus}');
+  debugPrint('User granted permission: ${settings.authorizationStatus}');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onMessage.listen(
-    (event) {
-      if (NavigatorKey.navigatorKey.currentState != null &&
-          NavigatorKey.navigatorKey.currentState!.mounted) {
-        ScaffoldMessenger.of(NavigatorKey.navigatorKey.currentState!.context);
-      }
-    },
-  );
+  // FirebaseMessaging.onMessage.listen(
+  //   (event) {
+  //     if (NavigatorKey.navigatorKey.currentState != null &&
+  //         NavigatorKey.navigatorKey.currentState!.mounted) {
+  //       ScaffoldMessenger.of(NavigatorKey.navigatorKey.currentState!.context);
+  //     }
+  //   },
+  // );
 
   await FlutterDownloader.initialize(
     debug: true,
     ignoreSsl: false,
   );
 
-  // print(await FirebaseMessaging.instance.getToken());
+  // debugPrint(await FirebaseMessaging.instance.getToken());
 
   runApp(const MyApp());
 }
@@ -98,72 +99,84 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthBloc>(
           create: (context) {
-            print("------------------AuthBloc Created!-----------------------");
+            debugPrint(
+                "------------------AuthBloc Created!-----------------------");
             return AuthBloc(usecases: di.sl())..add(AuthCheckEvent());
           },
         ),
         BlocProvider<TrainingBloc>(
           create: (context) {
-            print("------------------TrainingBLoc Created!-------------------");
-            return TrainingBloc(usecases: di.sl())
+            debugPrint(
+                "------------------TrainingBLoc Created!-------------------");
+            return TrainingBloc(usecases: di.sl(), manager: di.sl())
               ..add(const GetProgramEvent());
           },
         ),
         BlocProvider<ExercisesBloc>(
           create: (context) {
-            print("------------------ExercisesBLoc Created!------------------");
+            debugPrint(
+                "------------------ExercisesBLoc Created!------------------");
             return ExercisesBloc(usecases: di.sl());
           },
         ),
         BlocProvider<ProfileBloc>(
           create: (context) {
-            print("------------------ProfileBloc Created!--------------------");
+            debugPrint(
+                "------------------ProfileBloc Created!--------------------");
             return ProfileBloc(usecases: di.sl());
+            // return di.sl()..add(event);
           },
         ),
         BlocProvider<SubsBloc>(
           create: (context) {
-            print("------------------SubsBloc Created!-----------------------");
+            debugPrint(
+                "------------------SubsBloc Created!-----------------------");
             return SubsBloc(usecases: di.sl());
           },
         ),
         BlocProvider<HandshakeBloc>(
           create: (context) {
-            print("------------------HandshakesBloc Created!-----------------");
+            debugPrint(
+                "------------------HandshakesBloc Created!-----------------");
             return HandshakeBloc(usecases: di.sl())
               ..add(GetAllHandShakeEvent());
           },
         ),
         BlocProvider<MeasurmentBloc>(
           create: (context) {
-            print("------------------MeasurmentsBloc Created!----------------");
+            debugPrint(
+                "------------------MeasurmentsBloc Created!----------------");
             return MeasurmentBloc(usecases: di.sl())
               ..add(GetMeasurementsEvent());
           },
         ),
         BlocProvider<GymsBloc>(
           create: (context) {
-            print("------------------GymsBloc Created!-----------------------");
+            debugPrint(
+                "------------------GymsBloc Created!-----------------------");
             return GymsBloc(usecases: di.sl())
               ..add(const GetAllAvailableGymsEvent());
           },
         ),
         BlocProvider(
           create: (context) {
-            print("------------------Current GymsBloc Created!---------------");
+            debugPrint(
+                "------------------Current GymsBloc Created!---------------");
             return CurrentGymBloc(usecases: di.sl())
               ..add(const GetSubscribedToGymEvent());
           },
         ),
         BlocProvider(
           create: (context) {
-            print("------------------Player-Gym Bloc Created!----------------");
+            debugPrint(
+                "------------------Player-Gym Bloc Created!----------------");
             return PlayerGymBloc(usecases: di.sl());
           },
         ),
         BlocProvider<AttendenceBloc>(
           create: (context) {
-            print("------------------AttendenceBloc Created!-----------------");
+            debugPrint(
+                "------------------AttendenceBloc Created!-----------------");
             return AttendenceBloc(di.sl());
           },
         ),
@@ -172,6 +185,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<TrainingSectionCubit>(
           create: (context) => TrainingSectionCubit()..getSection(),
+        ),
+        BlocProvider<ProgressBloc>(
+          create: (context) =>
+              ProgressBloc(di.sl())..add(const ProgressUpdateEvent(0.0)),
         ),
       ],
       child: BlocBuilder<LocaleCubit, ChangedLangState>(
@@ -207,6 +224,7 @@ class MyApp extends StatelessWidget {
               ROUTE_HOME: (context) => HomeScreen(
                     trainingUsecases: di.sl(),
                     service: di.sl(),
+                    manager: di.sl(),
                   ),
               // ROUTE_HANDSHAKE: (context) => const GymHandShakeScreen(),
               // ROUTE_EXERCISE: (context) => ExercisesPage(),

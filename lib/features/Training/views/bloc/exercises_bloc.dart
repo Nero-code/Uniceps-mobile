@@ -12,7 +12,7 @@ class ExercisesBloc extends Bloc<ExercisesEvent, ExercisesState> {
   ExercisesBloc({required this.usecases}) : super(ExercisesInitial()) {
     on<ExercisesEvent>((event, emit) async {
       if (event is GetExercisesByFilterEvent) {
-        print("inside Exercise Bloc: GetExercisesByFilter event");
+        // print("inside Exercise Bloc: GetExercisesByFilter event");
         emit(ExercisesLoadingState());
         final either = await usecases.getExercisesByFilter(event.filter);
         either.fold(
@@ -20,7 +20,7 @@ class ExercisesBloc extends Bloc<ExercisesEvent, ExercisesState> {
           (r) => emit(ExercisesLoadedState(r)),
         );
       } else if (event is UpdateLastWeightEvent) {
-        print("inside Exercise Bloc: UpdateLast weight event");
+        // print("inside Exercise Bloc: UpdateLast weight event");
         emit(ExercisesLoadingState());
         final either = await usecases.saveNewWeight({event.eId: event.newVal});
         either.fold(

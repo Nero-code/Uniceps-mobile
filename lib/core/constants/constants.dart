@@ -190,12 +190,12 @@ const HIVE_MEASURE_BOX = "measurements";
 
 /// Pattern: [yyyy-MM-ddThh:mm:ss]
 String dateToString(DateTime date) {
-  return DateFormat("yyyy-MM-ddThh:mm:ss").format(date);
+  return DateFormat("yyyy-MM-ddThh:mm:ssZ").format(date);
 }
 
 /// Pattern: [yyyy-MM-ddThh:mm:ss]
 DateTime stringToDate(String source) {
-  return DateFormat("yyyy-MM-ddThh:mm:ss").parse(source);
+  return DateFormat("yyyy-MM-ddThh:mm:ssZ").parse(source, true);
 }
 
 /// Exercises image url parser...

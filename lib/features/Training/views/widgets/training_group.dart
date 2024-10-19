@@ -17,7 +17,7 @@ class TrainingGroup extends StatelessWidget {
     return Container(
       height: MediaQuery.of(context).size.height * 0.08,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.horizontal(
+        borderRadius: const BorderRadius.horizontal(
             // right: Radius.circular(local.languageCode == 'en' ? 50 : 0),
             // left: Radius.circular(local.languageCode == 'ar' ? 50 : 0),
             ),
@@ -33,7 +33,7 @@ class TrainingGroup extends StatelessWidget {
             child: Center(
               child: Text(
                 "$order",
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
@@ -45,7 +45,7 @@ class TrainingGroup extends StatelessWidget {
             height: double.infinity,
             color: Theme.of(context).colorScheme.onBackground,
           ),
-          Expanded(
+          const Expanded(
             flex: 4,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -64,7 +64,7 @@ class TrainingGroup extends StatelessWidget {
             margin: EdgeInsets.only(
                 right: local.languageCode == 'en' ? 7 : 0,
                 left: local.languageCode == 'ar' ? 7 : 0),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.white,
             ),

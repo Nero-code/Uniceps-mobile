@@ -63,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(height: screen.height * 0.05),
                         BlocBuilder<ProfileBloc, ProfileState>(
                           builder: (context, state) {
-                            print(state.runtimeType);
+                            // print(state.runtimeType);
                             if (state is ProfileLoadedState) {
                               return Column(
                                 children: [
@@ -133,14 +133,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   title: local.profile,
                                   subtitle: "",
                                   onPressed: () async {
-                                    final res =
-                                        await Navigator.of(context).push(
+                                    await Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             const PlayerInfoScreen(),
                                       ),
                                     );
-                                    print("Profile result: $res");
+                                    // print("Profile result: $res");
                                   },
                                 ),
                                 SettingsTile2(
@@ -172,7 +171,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
                                         builder: (context) =>
-                                            MeasurementScreen3(),
+                                            const MeasurementScreen3(),
                                       ));
                                     }),
                                 SettingsTile2(
@@ -257,35 +256,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     .stream
                                                     .skip(1)
                                                     .first;
-                                                print(
-                                                    "Bloc: ${bloc.runtimeType}");
+                                                // print(
+                                                //     "Bloc: ${bloc.runtimeType}");
                                                 if (bloc
                                                     is AuthLoggedoutState) {
-                                                  Navigator.pop(context);
-                                                  Navigator.pop(context);
-                                                  Navigator
-                                                      .pushReplacementNamed(
-                                                          context, ROUTE_AUTH);
+                                                  if (context.mounted) {
+                                                    Navigator.pop(context);
+                                                    Navigator.pop(context);
+                                                    Navigator
+                                                        .pushReplacementNamed(
+                                                            context,
+                                                            ROUTE_AUTH);
+                                                  }
                                                 } else {
-                                                  Navigator.pop(context);
-                                                  ScaffoldMessenger.of(context)
-                                                      .clearSnackBars();
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content:
-                                                          ErrorScreenWidget(
-                                                        f: NoInternetConnectionFailure(
-                                                            errMsg: ""),
-                                                        callback: null,
+                                                  if (context.mounted) {
+                                                    Navigator.pop(context);
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .clearSnackBars();
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      SnackBar(
+                                                        content:
+                                                            ErrorScreenWidget(
+                                                          f: NoInternetConnectionFailure(
+                                                              errMsg: ""),
+                                                          callback: null,
+                                                        ),
                                                       ),
-                                                    ),
-                                                  );
+                                                    );
+                                                  }
                                                 }
                                               },
                                               child: Text(
                                                 local.ok,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.red),
                                               ),
                                             ),

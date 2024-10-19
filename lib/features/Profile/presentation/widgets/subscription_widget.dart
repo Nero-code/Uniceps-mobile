@@ -13,7 +13,7 @@ class SubscriptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(percent(sub.startDate, sub.endDate));
+    // print(percent(sub.startDate, sub.endDate));
     final local = AppLocalizations.of(context)!;
     // final isRtl = context.read<ChangedLangState>().isRtl();
     // final isRtl = BlocProvider.of<LocaleCubit>(context).state.isRtl();
@@ -98,7 +98,7 @@ int range(DateTime end) {
 
 double percent(DateTime start, DateTime end) {
   final now = DateTime.now();
-  print(end.difference(now).inDays / end.difference(start).inDays);
+  // print(end.difference(now).inDays / end.difference(start).inDays);
   if (now.compareTo(end) < 0) {
     return (end.difference(now).inDays / end.difference(start).inDays);
   }

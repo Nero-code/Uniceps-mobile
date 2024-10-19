@@ -16,20 +16,20 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       (event, emit) async {
         // emit(MeasurementsLoadingState());
 
-        print("Inside profile bloc");
+        // print("Inside profile bloc");
         if (event is GetProfileDataEvent) {
           emit(ProfileLoadingState());
 
-          print("GetProfileDataEvent");
+          // print("GetProfileDataEvent");
           final either = await usecases.getProfileData();
           either.fold(
             (f) => emit(ProfileErrorState(failure: f)),
             (p) => emit(ProfileLoadedState(player: p)),
           );
-          print("profile bloc Finished!");
+          // print("profile bloc Finished!");
         } else if (event is ProfileSubmitEvent) {
           emit(ProfileLoadingState());
-          print("Profile Submit Bloc");
+          // print("Profile Submit Bloc");
           final either = await usecases.submitProfileData(
             event.player,
             isCreate: event.isCreate,
@@ -38,10 +38,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           //   (l) => emit(ProfileErrorState(failure: l)),
           //   (r) => emit(ProfileSubmittedState(player: r)),
           either.fold((l) {
-            print(l.getErrorMessage());
+            // print(l.getErrorMessage());
             emit(ProfileErrorState(failure: l));
           }, (r) {
-            print("DEBUG: profile is: ${r.toString()}");
+            // print("DEBUG: profile is: ${r.toString()}");
             emit(ProfileSubmittedState(player: r));
             // emit(ProfileLoadedState(player: r));
           });

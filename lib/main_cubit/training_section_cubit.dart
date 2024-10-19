@@ -10,12 +10,12 @@ class TrainingSectionCubit extends Cubit<TrainingSectionLoaded> {
     final pref = await SharedPreferences.getInstance();
     await pref.setString("section", section);
     emit(TrainingSectionLoaded(section));
-    print("pref: ${pref.getString("section")}");
+    // print("pref: ${pref.getString("section")}");
   }
 
   Future<String?> getSection() async {
     final pref = await SharedPreferences.getInstance();
-    print("${pref.getString("section")}");
+    // print("${pref.getString("section")}");
     emit(TrainingSectionLoaded(pref.getString("section")));
     return pref.getString("section");
   }

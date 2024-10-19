@@ -153,5 +153,7 @@
   "map": "Daily Routine",
   "availableGyms": "Available Gyms",
   
-  "chackForUpdate": "Checking for updates..."
+  "chackForUpdate": "Checking for updates...",
+
+  "gettingRoutine": "Getting Routine..."
 }

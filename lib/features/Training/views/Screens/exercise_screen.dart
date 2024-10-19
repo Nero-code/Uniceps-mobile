@@ -34,7 +34,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Uniceps",
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -103,7 +103,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
               controller: _controller,
               itemCount: items.length,
               itemBuilder: (context, index) {
-                return ExerciseWidget();
+                return const ExerciseWidget();
               },
             ),
           ),
@@ -117,31 +117,31 @@ class _ExercisesPageState extends State<ExercisesPage> {
                   onPressed: currentPage > 0
                       ? () {
                           _controller.animateToPage(--currentPage,
-                              duration: Duration(milliseconds: 500),
+                              duration: const Duration(milliseconds: 500),
                               curve: Curves.easeOutExpo);
                           setState(() {});
                         }
                       : null,
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_circle_left,
                   ),
                 ),
                 IconButton(
                   onPressed: () {},
                   icon: currentPage == items[0]
-                      ? Icon(Icons.done_rounded, color: Colors.green)
-                      : Icon(Icons.done_outline_rounded),
+                      ? const Icon(Icons.done_rounded, color: Colors.green)
+                      : const Icon(Icons.done_outline_rounded),
                 ),
                 IconButton(
                   onPressed: currentPage < items.length - 1
                       ? () {
                           _controller.animateToPage(++currentPage,
-                              duration: Duration(milliseconds: 500),
+                              duration: const Duration(milliseconds: 500),
                               curve: Curves.easeOutExpo);
                           setState(() {});
                         }
                       : null,
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_circle_right_sharp,
                   ),
                 ),

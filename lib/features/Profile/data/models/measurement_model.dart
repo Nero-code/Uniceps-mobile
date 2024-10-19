@@ -24,7 +24,7 @@ class MeasurementModel extends Measurement {
   });
 
   factory MeasurementModel.fromJson(Map<dynamic, dynamic> json) {
-    print("Measurement: \n$json");
+    // print("Measurement: \n$json");
 
     // print("height:    ${json['height'].runtimeType}");
     // print("weight:    ${json['weight'].runtimeType}");
@@ -61,7 +61,7 @@ class MeasurementModel extends Measurement {
       waist: json['waist'],
       chest: json['chest'],
       hips: json['hips'],
-      checkDate: stringToDate(json['check_date']),
+      checkDate: DateTime.parse(json['check_date']),
       // checkDate: DateTime.now(),
     );
   }

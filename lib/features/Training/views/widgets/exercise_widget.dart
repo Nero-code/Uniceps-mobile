@@ -46,7 +46,7 @@ class ExerciseWidget extends StatelessWidget {
           children: [
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.25,
-              child: Image(
+              child: const Image(
                 image: AssetImage('images/muscle-groups/Leg.png'),
               ),
             ),
@@ -62,7 +62,7 @@ class ExerciseWidget extends StatelessWidget {
                 child: Column(
                   children: [
                     const SizedBox(height: 10),
-                    Text(
+                    const Text(
                         "Description: Play this exercise with cables and dumbells laying on the floor of the gym with no more than 50 Kg of weight on top of you..."),
                     const SizedBox(height: 10),
                     SizedBox(
@@ -72,23 +72,23 @@ class ExerciseWidget extends StatelessWidget {
                         children: [
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.3,
-                            child: TextField(
+                            child: const TextField(
                               decoration: InputDecoration(
                                 isDense: true,
                                 label: Text("Weight (Kg)"),
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           TextButton(
                             onPressed: () {},
-                            child: Text("Add"),
+                            child: const Text("Add"),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Text("Last Weight: 10 Kg"),
+                    const SizedBox(height: 10),
+                    const Text("Last Weight: 10 Kg"),
                   ],
                 ),
               ),

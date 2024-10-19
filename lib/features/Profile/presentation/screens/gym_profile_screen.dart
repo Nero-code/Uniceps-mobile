@@ -7,7 +7,7 @@ import 'package:uniceps/features/Profile/domain/entities/gym.dart';
 // import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/player_gym_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/widgets/Subscription_widget_2.dart';
+import 'package:uniceps/features/Profile/presentation/widgets/subscription_widget_2.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/gyms_list_wave_back.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/logo_widget.dart';
 // import 'package:uniceps/features/Profile/presentation/widgets/subscription_widget.dart';
@@ -140,20 +140,20 @@ class GymProfileScreen extends StatelessWidget {
                                         GetPlayerInGymEvent(
                                             gymId: gym.id, pid: gym.pid));
                                   }
-                                  print(state.runtimeType);
+                                  // print(state.runtimeType);
                                   if (state is PlayerInGymLoadedState) {
                                     final balance =
                                         intl.NumberFormat("###,###,###.##")
                                             .format(state.data.balance);
 
-                                    print("Balance: ${state.data.balance}");
+                                    // print("Balance: ${state.data.balance}");
                                     return Table(
                                       children: [
                                         TableRow(
                                           children: [
                                             Text(
                                               local.balance,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 // fontSize: 20,
                                                 // fontWeight: FontWeight.bold,
                                                 color: Colors.white,
@@ -161,7 +161,7 @@ class GymProfileScreen extends StatelessWidget {
                                             ),
                                             Text(
                                               local.subscriptions,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 // fontSize: 20,
                                                 // fontWeight: FontWeight.bold,
                                                 color: Colors.white,
@@ -179,7 +179,7 @@ class GymProfileScreen extends StatelessWidget {
                                                   balance,
                                                   textDirection:
                                                       TextDirection.ltr,
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     // color: state.data
                                                     //             .balance <=
                                                     //         0
@@ -237,14 +237,14 @@ class GymProfileScreen extends StatelessWidget {
                               children: [
                                 Text(
                                   gym.name,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   ),
                                 ),
                                 Text(
                                   "${local.address} : ${gym.address}",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     // fontSize: 20,
                                     // fontWeight: FontWeight.bold,
                                     color: Colors.white,
@@ -256,7 +256,7 @@ class GymProfileScreen extends StatelessWidget {
                                   children: [
                                     Text(
                                       "${local.phoneNum} : ",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         // fontSize: 20,
                                         // fontWeight: FontWeight.bold,
                                         color: Colors.white,
@@ -265,7 +265,7 @@ class GymProfileScreen extends StatelessWidget {
                                     Text(
                                       "${gym.phoneNum} | ${gym.telephone}",
                                       textDirection: TextDirection.ltr,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         // fontSize: 20,
                                         // fontWeight: FontWeight.bold,
                                         color: Colors.white,
@@ -303,7 +303,7 @@ class GymProfileScreen extends StatelessWidget {
                             ],
                           );
                         } else if (sState is SubsErrorState) {
-                          print(sState.f.runtimeType);
+                          // print(sState.f.runtimeType);
                           if (sState.f is EmptyCacheFailure) {
                             return Center(
                               child: ReloadScreenWidget(

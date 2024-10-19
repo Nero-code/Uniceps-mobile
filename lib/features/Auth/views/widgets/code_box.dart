@@ -46,7 +46,6 @@ class _CodeBoxState extends State<CodeBox> {
                   widget.onPressed(value);
                 },
                 onChanged: (value) {
-                  print(value);
                   if (value.contains(RegExp(r"[^0-9]"))) {
                     codeCtrl.text = codeCtrl.value.text
                         .substring(0, codeCtrl.value.text.length - 1);

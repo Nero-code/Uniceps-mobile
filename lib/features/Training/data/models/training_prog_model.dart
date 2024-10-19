@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Training/data/models/exercise_model.dart';
 import 'package:uniceps/features/Training/services/entities/training_program.dart';
 
@@ -42,9 +41,9 @@ class TrainingProgramModel extends TrainingProgram {
 
     return TrainingProgramModel(
       id: "${json['rid']}",
-      gymId: json['gym_id'],
-      pid: json['pid'],
-      createdAt: stringToDate(json['routine_date']),
+      gymId: json['gym_id'].toString(),
+      pid: json['pid'].toString(),
+      createdAt: DateTime.parse(json['routine_date']),
       daysGroupMap: Map<String, String>.from(json['days_group_map']),
       exercises: list,
     );
@@ -61,7 +60,7 @@ class TrainingProgramModel extends TrainingProgram {
       'rid': id,
       'gym_id': gymId,
       'pid': pid,
-      'routine_date': dateToString(createdAt),
+      'routine_date': createdAt.toString(),
       'days_group_map': daysGroupMap,
       'routine_items': list,
     };

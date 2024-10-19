@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-// import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-// import 'package:path_provider/path_provider.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Training/services/entities/version.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,7 +17,7 @@ class UpdateService {
   });
   Version? updateAvailable;
   Future<bool> isUpdateAvailable() async {
-    print("update service running a check");
+    debugPrint("update service running a check");
     if (await connectionChecker.hasConnection) {
       try {
         final res = await client.get(
@@ -26,11 +25,11 @@ class UpdateService {
               "/${Platform.isAndroid ? "A" : "I"}"),
         );
 
-        print("update service ${res.statusCode}");
+        debugPrint("update service ${res.statusCode}");
         if (res.statusCode == 200) {
-          print("update ${res.body}");
+          debugPrint("update ${res.body}");
           final version = Version.fromJson(jsonDecode(res.body));
-          print("update ${res.body}");
+          debugPrint("update ${res.body}");
           updateAvailable = version;
           return version.versionNum != APP_VERSION;
         } else {
