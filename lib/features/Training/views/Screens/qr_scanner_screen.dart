@@ -48,7 +48,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                                     width: double.infinity,
                                     height: MediaQuery.of(context).size.height *
                                         0.75,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       backgroundBlendMode: BlendMode.dstOut,
                                       color: Colors.black,
                                     ),
@@ -80,7 +80,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                                     0.5),
                             radius: MediaQuery.of(context).size.width * 0.25),
                         onDetect: (capture) {
-                          print(capture.raw);
+                          // print(capture.raw);
                           setState(() {
                             captured = true;
                           });

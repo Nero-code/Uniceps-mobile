@@ -9,7 +9,7 @@ class TempScreen extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
+          const SliverAppBar(
             title: Text("yoyo"),
           ),
           SliverList(

@@ -12,7 +12,7 @@ class HandshakeBloc extends Bloc<HandshakeEvent, HandshakeState> {
   final ProfileUsecases usecases;
   HandshakeBloc({required this.usecases}) : super(HandshakeInitial()) {
     on<HandshakeEvent>((event, emit) async {
-      print("inside handshake bloc");
+      // print("inside handshake bloc");
       emit(HandshakeLoadingState());
       if (event is GetAllHandShakeEvent) {
         final either = await usecases.getAllGymHandShake();

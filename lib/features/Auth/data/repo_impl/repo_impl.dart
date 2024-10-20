@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
@@ -15,11 +16,13 @@ class AuthRepoImpl implements AuthRepo {
   final LocalAuthSource local;
   final RemoteAuthSource remote;
   final InternetConnectionChecker connection;
+  final Logger logger;
 
   AuthRepoImpl({
     required this.local,
     required this.remote,
     required this.connection,
+    required this.logger,
   });
 
   @override
@@ -27,12 +30,15 @@ class AuthRepoImpl implements AuthRepo {
     required String email,
     required String password,
   }) async {
+    logger.t("Auth repo email login");
     if (await connection.hasConnection) {
       try {
         await remote.loginWithEmailAndPassword(
             email: email, password: password);
+        logger.t("user logged in");
         return const Right(true);
       } catch (e) {
+        logger.t("Auth repo unknown error", error: e);
         return Left(AuthFailure(errorMessage: "Wrong email or password!"));
       }
     }
@@ -60,17 +66,17 @@ class AuthRepoImpl implements AuthRepo {
     if (await connection.hasConnection) {
       try {
         final token = await FirebaseMessaging.instance.getToken();
-        print("Firebase Messaging Token: ${token!.length} \n$token");
-        print("Before: Validate Code Func:");
+        logger.d("Firebase Messaging Token: ${token!.length} \n$token");
+        logger.d("Before: Validate Code Func:");
         final res = await remote.verifyCodeSent(
           code: code,
           email: email,
           notifyToken: token,
         );
-        print("Before: Validate Code Func:");
+        logger.d("Before: Validate Code Func:");
 
         await local.saveUser(res);
-        print("saved user: ${local.getUser()}");
+        logger.d("saved user: ${local.getUser()}");
         return const Right(true);
       } catch (e) {
         return Left(ServerFailure(errMsg: ""));
@@ -94,17 +100,18 @@ class AuthRepoImpl implements AuthRepo {
 
   @override
   Future<Either<Failure, bool>> isLoggedIn() async {
+    logger.t("Auth repo isLoggedIn");
     try {
-      print("Is Logged in repo");
+      logger.d("Is Logged in repo");
       final resUser = await local.getUser();
 
-      print("Is Logged in repo: User = ${resUser.toJson()}");
+      logger.d("Is Logged in repo: User = ${resUser.toJson()}");
       final nToken = await FirebaseMessaging.instance.getToken();
-      print("Is Logged in repo Token: $nToken");
+      logger.d("Is Logged in repo Token: $nToken");
       if (resUser.notifyToken != nToken && await connection.hasConnection) {
-        print("Is Logged in repo: Before sendNotify");
+        logger.d("Is Logged in repo: Before sendNotify");
         final res = await remote.sendNotifyToken(nToken as String);
-        print("Is Logged in repo: After sendNotify");
+        logger.d("Is Logged in repo: After sendNotify");
 
         await local.saveUser(
           UserModel.fromJson(
@@ -117,10 +124,10 @@ class AuthRepoImpl implements AuthRepo {
       return const Left(
           EmptyCacheFailure(errorMessage: "Null User || No Token was found"));
     } on AuthException {
-      print("ServerException");
+      logger.d("ServerException");
       return Left(ServerFailure(errMsg: "errMsg"));
     } catch (e) {
-      print("Exception on Auth $e");
+      logger.d("Exception on Auth $e");
       return Left(
           EmptyCacheFailure(errorMessage: "Unknown Error: ${e.toString()}"));
     }

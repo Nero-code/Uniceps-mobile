@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
@@ -29,26 +30,27 @@ abstract class RemoteProfileSource {
 class RemoteProfileSourceImpl implements RemoteProfileSource {
   final http.Client _client;
   final Box<Map<dynamic, dynamic>> userBox, playerBox;
+  final Logger logger;
 
   RemoteProfileSourceImpl({
     required http.Client client,
     required this.userBox,
     required this.playerBox,
+    required this.logger,
   }) : _client = client;
 
   @override
   Future<PlayerModel> getProfileData() async {
-    print("REMOTE-S: GetProfileData()");
-    print("$API$HTTP_PLAYER_INFO");
-    // print("HIVE PlayerBox : ${playerBox.get(HIVE_PROFILE_BOX)}");
+    logger.t("REMOTE-S: GetProfileData()" "\n" "$API$HTTP_PLAYER_INFO");
+    // logger.t("HIVE PlayerBox : ${playerBox.get(HIVE_PROFILE_BOX)}");
 
     final res = await _client.get(Uri.parse("$API$HTTP_PLAYER_INFO"), headers: {
       ...HEADERS,
       "x-access-token": "${userBox.get(HIVE_USER_BOX)!["token"]}",
     });
 
-    print("Remote_S profile res statusCode: ${res.statusCode}");
-    print("Remote_S profile res body: ${res.body}");
+    logger.t("Remote_S profile res statusCode: ${res.statusCode}");
+    logger.t("Remote_S profile res body: ${res.body}");
     if (res.statusCode == 200) {
       return PlayerModel.fromJson({
         ...jsonDecode(res.body),
@@ -61,22 +63,22 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
 // 2024-07-20 14:42:53.030212
   @override
   Future<List<MeasurementModel>> getMeasurements() async {
-    print("inside getMeasurements");
+    logger.t("inside getMeasurements");
 
     final res =
         await _client.get(Uri.parse("$API" "$HTTP_MEASURMENTS"), headers: {
       ...HEADERS,
       "x-access-token": "${userBox.get(HIVE_USER_BOX)!['token']}",
     });
-    print("measurements: ${res.statusCode}");
-    print("measurements: ${res.body}");
-    print("measurements: ${Platform.operatingSystemVersion}");
-    print("measurements: ${{
+    logger.t("measurements: ${res.statusCode}");
+    logger.t("measurements: ${res.body}");
+    logger.t("measurements: ${Platform.operatingSystemVersion}");
+    logger.t("measurements: ${{
       ...HEADERS,
       // "x-access-token": "${userBox.get(HIVE_USER_BOX)!['token']}",
     }} ");
     if (res.statusCode == 200) {
-      print(res.body);
+      logger.t(res.body);
 
       final temp = jsonDecode(res.body) as List<dynamic>;
 
@@ -87,7 +89,7 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
       list.sort((a, b) {
         return b.checkDate.compareTo(a.checkDate);
       });
-      print("check 2: Data sort successful");
+      logger.t("check 2: Data sort successful");
       return list;
     } else if (res.statusCode == 204) {
       throw EmptyCacheExeption();
@@ -97,7 +99,7 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
 
   @override
   Future<List<SubscriptionModel>> getSubs(String gymId, String pid) async {
-    print("Profile ->  RemoteS -> getSubs -> URL: /$gymId/$pid");
+    logger.t("Profile ->  RemoteS -> getSubs -> URL: /$gymId/$pid");
 
     if (pid.isEmpty) {
       throw EmptyCacheExeption();
@@ -105,18 +107,18 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
     final res =
         await _client.get(Uri.parse("$API$HTTP_SUBSCRIPTIONS/$gymId/$pid"));
     final list = <SubscriptionModel>[];
-    print(res.statusCode);
+    logger.t(res.statusCode);
     if (res.statusCode == 200) {
-      print("Subs: ${res.body}");
-      print(jsonDecode(res.body).runtimeType);
+      logger.t("Subs: ${res.body}");
+      logger.t(jsonDecode(res.body).runtimeType);
 
       final subsList = jsonDecode(res.body) as List<dynamic>;
 
-      print("check 3");
+      logger.t("check 3");
       for (var i in subsList) {
         list.add(SubscriptionModel.fromJson(i));
       }
-      print("check 4");
+      logger.t("check 4");
       return list;
     } else if (res.statusCode == 204) {
       throw EmptyCacheExeption();
@@ -134,10 +136,13 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
     });
 
     if (res.statusCode == 200) {
-      print("GetGyms: ${res.body}");
+      logger.t("GetGyms: ");
+      logger.t(jsonDecode(res.body));
       final temp = jsonDecode(res.body) as List;
-      temp.forEach((element) => list.add(GymModel.fromJson(element)));
-      print(temp);
+      for (var element in temp) {
+        list.add(GymModel.fromJson(element));
+      }
+      logger.t(temp);
       return list;
     }
     throw Exception();
@@ -146,12 +151,12 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
   @override
   Future<String> submitProfileData(PlayerModel playerModel,
       {required bool isCreate}) async {
-    print("REMOTE-S: Submit Profile --> Check 1!");
+    logger.t("REMOTE-S: Submit Profile --> Check 1!");
     if (isCreate) {
-      print("REMOTE-S: Submit Profile --> Check 2.1!");
-      // print("REMOTE-S: Submit Profile --> Check 2.1!: $HEADERS");
-      // print("REMOTE-S: Box ${userBox.get("user")!["id"]}");
-      // print("REMOTE-S: player model: ${playerModel.toJson()}");
+      logger.t("REMOTE-S: Submit Profile --> Check 2.1!");
+      // logger.t("REMOTE-S: Submit Profile --> Check 2.1!: $HEADERS");
+      // logger.t("REMOTE-S: Box ${userBox.get("user")!["id"]}");
+      // logger.t("REMOTE-S: player model: ${playerModel.toJson()}");
       final res = await _client.post(
         Uri.parse(API + HTTP_PLAYER_INFO),
         headers: {
@@ -161,15 +166,15 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
         },
         body: jsonEncode(playerModel.toJson()),
       );
-      print("SubmitProfile : POST");
-      print("res statusCode: ${res.statusCode}");
-      print("res body: ${res.body}");
+      logger.t("SubmitProfile : POST");
+      logger.t("res statusCode: ${res.statusCode}");
+      logger.t("res body: ${res.body}");
       if (res.statusCode == 201) {
         return jsonDecode(res.body)['profile_info']['uid'];
       }
     } else {
-      print("REMOTE-S: Submit Profile --> Check 2.2!");
-      print("SubmitProfile : PUT");
+      logger.t("REMOTE-S: Submit Profile --> Check 2.2!");
+      logger.t("SubmitProfile : PUT");
       final res = await _client.put(
         Uri.parse(API + HTTP_PLAYER_INFO),
         headers: {
@@ -179,8 +184,8 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
         body: jsonEncode(playerModel.toJson()),
       );
 
-      print("res: ${res.statusCode}");
-      print("res body: ${res.body}");
+      logger.t("res: ${res.statusCode}");
+      logger.t("res body: ${res.body}");
 
       if (res.statusCode == 200) {
         return jsonDecode(res.body)['user_info']['uid'];
@@ -201,7 +206,7 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
         "x-access-token": userBox.get(HIVE_USER_BOX)!["token"],
       },
     );
-    print("attenence code: ${res.statusCode}");
+    logger.t("attenence code: ${res.statusCode}");
 
     if (res.statusCode == 200) {
       final data = jsonDecode(res.body) as List<dynamic>;
@@ -209,11 +214,11 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
       for (var i in data) {
         list.add(Attendence.fromJson(i));
       }
-      print(list);
+      logger.t(list);
 
       return list;
     } else if (res.statusCode == 204) {
-      return throw NoAttendenceLogFoundException();
+      throw NoAttendenceLogFoundException();
     }
 
     throw ServerException();
@@ -221,7 +226,7 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
 
   @override
   Future<List<HandShakeModel>> getAllHandshake() async {
-    print(
+    logger.t(
         "check 1 inside getAllhandshake: Playerbox.get(): ${playerBox.get(HIVE_PROFILE_BOX)}");
     final temp = <HandShakeModel>[];
     final res = await _client.get(
@@ -238,8 +243,8 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
       // }
       // )
     );
-    print(res.statusCode);
-    print(res.body);
+    logger.t(res.statusCode);
+    logger.t(res.body);
     if (res.statusCode == 200) {
       for (var i in jsonDecode(res.body)) {
         temp.add(HandShakeModel.fromJson(i));
@@ -260,8 +265,8 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
       },
       Uri.parse("$API" "$HTTP_GYMS" "/shakes"),
     );
-    print("status: ${response.statusCode}");
-    print("body: ${jsonDecode(response.body)}");
+    logger.t("status: ${response.statusCode}");
+    logger.t("body: ${jsonDecode(response.body)}");
     if (response.statusCode == 200) {
       final list = <GymModel>[];
       for (var i in jsonDecode(response.body)) {
@@ -279,8 +284,8 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
   Future<PlayerInGym> getPlayerInGym(String gymId, String pid) async {
     final res =
         await _client.get(Uri.parse("$API" "$HTTP_PLAYER" "/$gymId" "/$pid"));
-    print("player in gym: ${res.statusCode}");
-    print("player in gym: ${res.body}");
+    logger.t("player in gym: ${res.statusCode}");
+    logger.t("player in gym: ${res.body}");
 
     if (res.statusCode == 200) {
       final map = jsonDecode(res.body);

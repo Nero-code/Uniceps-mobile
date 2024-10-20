@@ -40,7 +40,7 @@ class ExerciseInfoDialog extends StatelessWidget {
                 TextButton(
                   onPressed: () {
                     if (weightCtl.text.isEmpty) return;
-                    print(double.parse(weightCtl.text));
+                    // print(double.parse(weightCtl.text));
                     onPressed(double.parse(weightCtl.text));
                     weightCtl.clear();
                     Navigator.pop(context);

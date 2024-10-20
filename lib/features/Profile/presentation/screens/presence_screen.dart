@@ -35,13 +35,13 @@ class _PresenceScreenState extends State<PresenceScreen> {
       ),
       body: BlocBuilder<AttendenceBloc, AttendenceState>(
         builder: (context, state) {
-          print("presence screen bloc type: ${state.runtimeType}");
+          // print("presence screen bloc type: ${state.runtimeType}");
 
           if (state is AttenedenceLoadedState) {
-            state.list.forEach((element) {
-              print(element.toJson());
-            });
-            print("length: ${state.list.length}");
+            // for (var element in state.list) {
+            //   print(element.toJson());
+            // }
+            // print("length: ${state.list.length}");
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -62,22 +62,22 @@ class _PresenceScreenState extends State<PresenceScreen> {
                             shape: BoxShape.circle)),
 
                     onHeaderTapped: (focusedDay) {
-                      print("Header tapped: $focusedDay");
+                      // print("Header tapped: $focusedDay");
                     },
                     onFormatChanged: (format) {
-                      print("Format Tapped: $format");
+                      // print("Format Tapped: $format");
                     },
                     onPageChanged: (focusedDay) {
-                      print("OnPageChanged! $focusedDay");
+                      // print("OnPageChanged! $focusedDay");
 
                       fDay = focusedDay;
                     },
                     enabledDayPredicate: (day) {
                       for (var i in state.list) {
-                        print("i: ${i.date}");
-                        print("day: $day");
-                        print(
-                            "compare: ${i.date.compareTo(day.copyWith(isUtc: false))}");
+                        // print("i: ${i.date}");
+                        // print("day: $day");
+                        // print(
+                        //     "compare: ${i.date.compareTo(day.copyWith(isUtc: false))}");
                         if (i.date.compareTo(day.copyWith(isUtc: false)) == 0) {
                           return true;
                         }
@@ -93,38 +93,36 @@ class _PresenceScreenState extends State<PresenceScreen> {
                       return false;
                     },
                     onDaySelected: (selectedDay, focusedDay) {
-                      print(
-                          "selectedDay: $selectedDay \nfocusedDay:  $focusedDay");
+                      // print(
+                      //     "selectedDay: $selectedDay \nfocusedDay:  $focusedDay");
                       sDay = selectedDay;
                       setState(() {
-                        state.list.forEach((element) {
+                        for (var element in state.list) {
                           if (element.date.day == selectedDay.day) {
                             a = element;
                           }
-                        });
+                        }
                       });
                     },
                   ),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      textDirection: TextDirection.rtl,
-                      children: a != null
-                          ? [
-                              Text('Entered At: \n${a!.loginTime}'),
-                              Text('Exited At: \n${a!.logoutTime}'),
-                            ]
-                          : [],
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    textDirection: TextDirection.rtl,
+                    children: a != null
+                        ? [
+                            Text('Entered At: \n${a!.loginTime}'),
+                            Text('Exited At: \n${a!.logoutTime}'),
+                          ]
+                        : [],
                   ),
                 ],
               ),
             );
           } else if (state is AttenedenceErrorState) {
-            print(state.f.runtimeType);
-            print(state.f.getErrorMessage());
+            // print(state.f.runtimeType);
+            // print(state.f.getErrorMessage());
             switch (state.f.runtimeType) {
-              case NoAttendenceFoundFailure:
+              case const (NoAttendenceFoundFailure):
                 return ReloadScreenWidget(
                   f: state.f,
                   callBack: null,

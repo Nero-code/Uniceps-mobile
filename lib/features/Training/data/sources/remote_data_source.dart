@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
@@ -35,12 +36,14 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
   // final Box<Map<String, dynamic>> routineBox;
 
   final ImageCacheManager cacheManager;
+  final Logger logger;
 
   const RemoteTrainingSourceImpl({
     required this.client,
     required this.userBox,
     required this.playerBox,
     required this.cacheManager,
+    required this.logger,
     // required this.lastWBox,
   });
 
@@ -53,7 +56,7 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
     required String pid,
     required Map<String, double> weights,
   }) async {
-    print("HTTP_ROUTE: " "$API" "$HTTP_TRAINING_PROGRAM" "/$gymId" "/$pid");
+    logger.t("HTTP_ROUTE: " "$API" "$HTTP_TRAINING_PROGRAM" "/$gymId" "/$pid");
     final res = await client.get(
         Uri.parse("$API" "$HTTP_TRAINING_PROGRAM" "/$gymId" "/$pid"),
         headers: {
@@ -61,15 +64,15 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
           'x-access-token': userBox.get(HIVE_USER_BOX)!['token'],
         });
 
-    print("status Code is: ${res.statusCode}");
+    logger.t("status Code is: ${res.statusCode}");
 
     if (res.statusCode == 200) {
-      print("status Code is: ${res.statusCode}");
+      logger.t("status Code is: ${res.statusCode}");
       final temp = jsonDecode(res.body);
-      // print("res body: ${res.body}");
+      // logger.t("res body: ${res.body}");
 
-      // print("temp: $temp");
-      // print("weights: $weights");
+      // logger.t("temp: $temp");
+      // logger.t("weights: $weights");
 
       //  /////////////////////////////////
       //
@@ -86,7 +89,7 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
         images: images,
       );
     } else if (res.statusCode == 204) {
-      throw EmptyCacheExeption();
+      throw NoTrainingProgramException();
     }
     throw ServerException();
   }
@@ -103,20 +106,9 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
     throw ServerException();
   }
 
-  // @override
-  // Future<List<PresenceModel>> getPresence(String gymId) {
-  //   throw UnimplementedError();
-  // }
-
-  // @override
-  // Future<Avatar> getAvatar() {
-  //   // TODO: implement getAvatar
-  //   throw UnimplementedError();
-  // }
-
   @override
   Future<List<HandShakeModel>> getAllHandshakes() async {
-    print(
+    logger.t(
         "check 1 inside getCurrenthandshake: Playerbox.get(): ${playerBox.get(HIVE_PROFILE_BOX)}");
     final temp = <HandShakeModel>[];
     final res = await client.get(
@@ -127,19 +119,19 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
         "x-access-token": userBox.get(HIVE_USER_BOX)!["token"],
       },
     );
-    print("hanshakes status code: ${res.statusCode}");
-    print("Handshakes body: ${res.body}");
+    logger.t("hanshakes status code: ${res.statusCode}");
+    logger.t("Handshakes body: ${res.body}");
     if (res.statusCode == 200) {
       for (var i in jsonDecode(res.body)) {
         temp.add(HandShakeModel.fromJson(i));
       }
 
       temp.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      print("Handshakes: $temp");
+      logger.t("Handshakes: $temp");
 
       return temp;
     } else if (res.statusCode == 204) {
-      print("hanshakes status code: ${res.statusCode}");
+      logger.t("hanshakes status code: ${res.statusCode}");
       throw NoGymSpecifiedException();
     }
     throw ServerException();
@@ -158,9 +150,9 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
         "x-access-token": userBox.get(HIVE_USER_BOX)!['token'],
       },
     );
-    print(res.statusCode);
+    logger.t(res.statusCode);
     if (res.statusCode == 200) {
-      print("Remote_S: getSubscribedToGyms: ${res.body}");
+      logger.t("Remote_S: getSubscribedToGyms: ${res.body}");
       for (var i in jsonDecode(res.body)) {
         list.add(GymModel.fromJson(i));
       }

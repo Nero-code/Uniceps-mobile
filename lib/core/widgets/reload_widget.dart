@@ -17,7 +17,6 @@ class ReloadScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Reload Widget: ${errorToTextMapper(context, f)}");
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,

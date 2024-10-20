@@ -48,8 +48,8 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
     // isLoading = true;
     // setState(() {});
     // await Future.delayed(const Duration(milliseconds: 500));
-    print("currentPAge:  $page");
-    print("isLoading:  $isLoading");
+    // print("currentPAge:  $page");
+    // print("isLoading:  $isLoading");
     isLeft = isNext;
     isNext ? ++page : --page;
 
@@ -63,8 +63,8 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
     final screen = MediaQuery.sizeOf(context);
     // final local = AppLocalizations.of(context)!;
     final isRtl = context.read<LocaleCubit>().state.isRtl();
-    print("currentPAge:  $page");
-    print("isLoading:  $isLoading");
+    // print("currentPAge:  $page");
+    // print("isLoading:  $isLoading");
     return Scaffold(
       body: BlocBuilder<MeasurmentBloc, MeasurmentState>(
         builder: (context, state) {
@@ -80,14 +80,14 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
 
                         if (details.primaryVelocity != null &&
                             details.primaryVelocity! > 0) {
-                          print("Left");
+                          // print("Left");
                           if (page < state.list.length - 1) {
                             // ++page;
                             await animate(true);
                           }
                         } else if (details.primaryVelocity != null &&
                             details.primaryVelocity! < 0) {
-                          print("Right");
+                          // print("Right");
                           if (page > 0) {
                             // --page;
                             await animate(false);

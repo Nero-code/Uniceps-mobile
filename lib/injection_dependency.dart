@@ -3,43 +3,30 @@ import 'dart:typed_data';
 import 'package:get_it/get_it.dart' as di;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
-// import 'dart:io' as io;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
-import 'package:uniceps/core/logs/logger.dart';
 import 'package:uniceps/features/Auth/data/repo_impl/repo_impl.dart';
 import 'package:uniceps/features/Auth/data/sources/local_source.dart';
 import 'package:uniceps/features/Auth/data/sources/remote_source.dart';
 import 'package:uniceps/features/Auth/services/repo/repo.dart';
 import 'package:uniceps/features/Auth/services/usecases/usecases.dart';
-// import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Profile/data/repo/repo_impl.dart';
 import 'package:uniceps/features/Profile/data/sources/local_source.dart';
 import 'package:uniceps/features/Profile/data/sources/remote_source.dart';
 import 'package:uniceps/features/Profile/domain/repo.dart';
 import 'package:uniceps/features/Profile/domain/usecases.dart';
-// import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
-// import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
-// import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
-// import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
 import 'package:uniceps/features/Training/data/repos_impl/repo_imple.dart';
 import 'package:uniceps/features/Training/data/sources/local_data_source.dart';
 import 'package:uniceps/features/Training/data/sources/remote_data_source.dart';
 import 'package:uniceps/features/Training/services/repos/repository.dart';
 import 'package:uniceps/features/Training/services/usecases/usecases.dart';
-// import 'package:uniceps/features/Training/views/bloc/training_bloc.dart';
+import 'package:uniceps/update_service.dart';
 
 final sl = di.GetIt.instance;
 
 Future<void> init() async {
   final userBox = await Hive.openBox<Map<dynamic, dynamic>>("User");
-  // final tokenBox = await Hive.openBox<String>("Token");
-  // print("---------------U S E R   B O X------------------");
-  // print("${userBox.keys.first.runtimeType}");
-  // await userBox.put("userKey", {"1": 1});
-  // print("${userBox.get("userKey")}");
-  // print("---------------U S E R   B O X------------------");
-
   final profileBox = await Hive.openBox<Map<dynamic, dynamic>>("Profile");
   final trainBox = await Hive.openBox<Map<dynamic, dynamic>>("Training");
   final lastWeightBox = await Hive.openBox<double>("LastWeight");
@@ -58,7 +45,7 @@ Future<void> init() async {
   // await profileBox.clear();
   // await trainBox.clear();
   // await lastWeightBox.clear();
-  // // await gymsBox.clear();
+  // await gymsBox.clear();
   // await myGyms.clear();
   // await subsBox.clear();
   // await measureBox.clear();
@@ -73,22 +60,23 @@ Future<void> init() async {
     await profileBox.clear();
     await trainBox.clear();
     await lastWeightBox.clear();
-    // await gymsBox.clear();
+    await gymsBox.clear();
     await myGyms.clear();
     await subsBox.clear();
     await measureBox.clear();
     await handshakesBox.clear();
     await attendenceBox.clear();
-    // await imagesBox.clear();
+    await imagesBox.clear();
     await selectedGym.clear();
     await playerInGymBox.clear();
   }
 
-  sl.registerLazySingleton(
+  sl.registerLazySingleton<ImageCacheManager>(
     () => ImageCacheManager(
       imagesCache: imagesBox,
       checker: sl(),
       client: sl(),
+      logger: sl(),
     ),
   );
 
@@ -105,6 +93,7 @@ Future<void> init() async {
       handshakesBox: handshakesBox,
       myGyms: myGyms,
       cacheManager: sl(),
+      logger: sl(),
     ),
   );
   sl.registerLazySingleton<RemoteTrainingSource>(
@@ -113,6 +102,7 @@ Future<void> init() async {
       cacheManager: sl(),
       userBox: userBox,
       playerBox: profileBox,
+      logger: sl(),
     ),
   );
   sl.registerLazySingleton<LocalProfileSource>(
@@ -126,6 +116,7 @@ Future<void> init() async {
       subsBox: subsBox,
       handshakesBox: handshakesBox,
       attendBox: attendenceBox,
+      logger: sl(),
     ),
   );
   sl.registerLazySingleton<RemoteProfileSource>(
@@ -133,6 +124,7 @@ Future<void> init() async {
       client: sl(),
       userBox: userBox,
       playerBox: profileBox,
+      logger: sl(),
     ),
   );
   sl.registerLazySingleton<LocalAuthSource>(
@@ -140,10 +132,15 @@ Future<void> init() async {
       userBox: userBox,
       playerBox: profileBox,
       resetBottun: clear,
+      logger: sl(),
     ),
   );
   sl.registerLazySingleton<RemoteAuthSource>(
-    () => RemoteAuthSourceImpl(client: sl(), userBox: userBox),
+    () => RemoteAuthSourceImpl(
+      client: sl(),
+      userBox: userBox,
+      logger: sl(),
+    ),
   );
 
   ///
@@ -157,6 +154,7 @@ Future<void> init() async {
       local: sl(),
       remote: sl(),
       connection: sl(),
+      logger: sl(),
     ),
   );
   sl.registerLazySingleton<TrainingRepo>(
@@ -164,6 +162,7 @@ Future<void> init() async {
       local: sl(),
       remote: sl(),
       connection: sl(),
+      logger: sl(),
     ),
   );
   sl.registerLazySingleton<ProfileRepo>(
@@ -171,6 +170,7 @@ Future<void> init() async {
       local: sl(),
       remote: sl(),
       checker: sl(),
+      logger: sl(),
     ),
   );
 
@@ -222,5 +222,31 @@ Future<void> init() async {
   sl.registerLazySingleton<InternetConnectionChecker>(
       () => InternetConnectionChecker());
 
-  sl.registerLazySingleton<Logger>(() => Logger());
+  sl.registerLazySingleton<Logger>(
+    () => Logger(
+      level: Level.all,
+      printer: PrettyPrinter(
+        dateTimeFormat: DateTimeFormat.dateAndTime,
+        // printEmojis: false,
+        // noBoxingByDefault: true,
+        colors: true,
+        levelColors: {
+          // https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+          Level.trace: AnsiColor.fg(120),
+          Level.debug: AnsiColor.fg(51),
+          // Level.error: AnsiColor.fg(126),
+          Level.fatal: AnsiColor.fg(196),
+          Level.info: AnsiColor.fg(214),
+          // Level.warning: AnsiColor.fg(90),
+        },
+      ),
+    ),
+  );
+
+  sl.registerLazySingleton<UpdateService>(
+    () => UpdateService(
+      connectionChecker: sl(),
+      client: sl(),
+    ),
+  );
 }

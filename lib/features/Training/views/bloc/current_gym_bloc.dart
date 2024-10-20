@@ -38,7 +38,7 @@ class CurrentGymBloc extends Bloc<CurrentGymEvent, CurrentGymState> {
           },
         );
       } else if (event is SetSelectedGymEvent) {
-        print("DEBUG: Got event ${event.runtimeType}");
+        // print("DEBUG: Got event ${event.runtimeType}");
         emit(CurrentGymLoadingState());
         final either = await usecases.setSelectedGym(event.gymId);
         either.fold((l) => emit(CurrentGymLoadingState()),

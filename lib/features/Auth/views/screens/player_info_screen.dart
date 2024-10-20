@@ -38,23 +38,9 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
     super.initState();
   }
 
-  bool? male;
+  bool? male, initial;
 
   bool isCreate = true, showBackBtn = false;
-
-  // @override
-  // void initState() {
-  //   if (widget.player != null) {
-  //     // nameCtl.text = widget.player!.name;
-  //     // phoneCtl.text = widget.player!.phoneNum;
-  //     // birthCtl.text = widget.player!.birthDate;
-  //     // male = widget.player!.gender == Gender.male;
-  //     print("initState()");
-  //   }
-  //   print("initState()");
-
-  //   super.initState();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -65,12 +51,10 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
     // );
     // final args = ModalRoute.of(context)!.settings.arguments as PlayerArguments;
     final local = AppLocalizations.of(context);
-    print("Build()");
+
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
-        print("Inside onPopInvoked");
-        print("Inside onPopInvoked --> context.mounted ${context.mounted}");
         if (didPop) return;
         if (context.mounted) {
           Navigator.pop(context, false);
@@ -79,9 +63,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
       child: Scaffold(
         body: BlocConsumer<ProfileBloc, ProfileState>(
           listener: (context, state) {
-            print("state is: ${state.runtimeType}");
             if (state is ProfileSubmittedState) {
-              print("state is Submitted");
               Navigator.pop(context, true);
               return;
             }
@@ -94,9 +76,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
               phoneCtl.text = state.player.phoneNum;
               birthCtl.text = state.player.birthDate;
               male = state.player.gender == Gender.male;
-
-              print(male);
-              print("FOUND: Profile already exists");
+              initial = male;
             }
             return Stack(
               children: [
@@ -123,6 +103,9 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
+                            ///
+                            ///   E M A I L   T E X T
+                            ///
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.13,
                               child: Center(
@@ -138,7 +121,9 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                               ),
                             ),
 
+                            ///
                             ///   A P P   L O G O
+                            ///
                             Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
@@ -255,35 +240,6 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                                     ],
                                   ),
 
-                                  ///  H E I G H T
-                                  // TextFormField(
-                                  //   decoration: InputDecoration(
-                                  //     labelText: "Height (cm)",
-                                  //     isDense: true,
-                                  //   ),
-                                  //   maxLength: 3,
-                                  //   validator: (value) {
-                                  //     if (value == null || value.isEmpty) {
-                                  //       return "please put a valid height";
-                                  //     }
-                                  //     return null;
-                                  //   },
-                                  // ),
-
-                                  ///  W E I G H T
-                                  // TextFormField(
-                                  //   decoration: InputDecoration(
-                                  //     labelText: "Weight (Kg)",
-                                  //     isDense: true,
-                                  //   ),
-                                  //   validator: (value) {
-                                  //     if (value == null || value.isEmpty) {
-                                  //       return "please put a valid Weight";
-                                  //     }
-                                  //     return null;
-                                  //   },
-                                  // ),
-
                                   const SizedBox(height: 10),
                                 ],
                               ),
@@ -334,7 +290,8 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                                         birthCtl.text ==
                                             state.player.birthDate &&
                                         phoneCtl.text ==
-                                            state.player.phoneNum) {
+                                            state.player.phoneNum &&
+                                        initial == male) {
                                       ScaffoldMessenger.of(context)
                                           .clearSnackBars();
                                       ScaffoldMessenger.of(context)
@@ -357,7 +314,6 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                                   //         male as bool ? Gender.male : Gender.female,
                                   //   ),
                                   // );
-                                  print("Player info screen!!");
 
                                   BlocProvider.of<ProfileBloc>(context).add(
                                     ProfileSubmitEvent(

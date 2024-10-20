@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:intl/intl.dart';
+import 'package:uniceps/core/constants/constants.dart';
 
 class PlayerInGym extends Equatable {
   final String gymId;
@@ -14,11 +14,15 @@ class PlayerInGym extends Equatable {
   });
 
   factory PlayerInGym.fromJson(Map<dynamic, dynamic> json) {
+    // print("gymId:     ${json['gym_id']}");
+    // print("balance:   ${json['balance']}");
+    // print("startDate: ${json['subs_date'].runtimeType}");
+
     return PlayerInGym(
       gymId: json['gym_id'],
       balance: json['balance'],
-      startDate: DateFormat("dd/MM/yyyy").parse(json['subs_date']),
-      // subs: json['subs'],
+      startDate: stringToDate("${json['subs_date']}"),
+      // startDate: DateFormat("dd/MM/yyyy").parse(json['subs_date']),
     );
   }
 
@@ -26,7 +30,7 @@ class PlayerInGym extends Equatable {
     return {
       'gym_id': gymId,
       'balance': balance,
-      'subs_date': startDate.toIso8601String(),
+      'subs_date': dateToString(startDate),
     };
   }
 

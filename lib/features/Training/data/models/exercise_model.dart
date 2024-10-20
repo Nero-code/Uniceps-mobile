@@ -44,7 +44,7 @@ class ExerciseModel extends Exercise {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'id': id.toString(),
       'ExerciseName': name,
       'ExerciseImage': imageUrl,
       'notes': notes,

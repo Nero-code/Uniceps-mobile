@@ -35,11 +35,11 @@ class _PasswordBoxState extends State<PasswordBox> {
                 TextFormField(
                   controller: passCtrl,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.password_rounded),
                     contentPadding: EdgeInsets.all(10),
                     enabledBorder: OutlineInputBorder(),
-                    border: const OutlineInputBorder(),
+                    border: OutlineInputBorder(),
                     label: Text("New Password"),
                   ),
                   validator: (val) {
@@ -53,11 +53,11 @@ class _PasswordBoxState extends State<PasswordBox> {
                 TextFormField(
                   controller: secondCtrl,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.lock_reset_sharp),
-                    contentPadding: const EdgeInsets.all(10),
+                    contentPadding: EdgeInsets.all(10),
                     enabledBorder: OutlineInputBorder(),
-                    border: const OutlineInputBorder(),
+                    border: OutlineInputBorder(),
                     label: Text("Confirm Password"),
                   ),
                   validator: (val) {
@@ -75,14 +75,11 @@ class _PasswordBoxState extends State<PasswordBox> {
         ElevatedButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              print("pass1");
               if (passCtrl.text == secondCtrl.text) {
-                print("pass2");
                 widget.onConfirm(passCtrl.text);
                 // Navigator.pop(context);
                 return;
               }
-              print("pass3");
               // showDialog(
               //     context: context,
               //     builder: (context) {
@@ -100,14 +97,14 @@ class _PasswordBoxState extends State<PasswordBox> {
               //       ).build(context);
               //     });
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   backgroundColor: Colors.red,
                   content: Text("Passwords do not match!"),
                 ),
               );
             }
           },
-          child: Text("Confirm"),
+          child: const Text("Confirm"),
         ),
       ],
     );

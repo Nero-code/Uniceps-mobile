@@ -17,7 +17,10 @@ final class TrainingProgramLoadedState extends TrainingState {
   const TrainingProgramLoadedState({required this.program});
 }
 
-final class TrainingProgramLoadingState extends TrainingState {}
+final class TrainingProgramLoadingState extends TrainingState {
+  final double percent;
+  const TrainingProgramLoadingState({this.percent = 0.0});
+}
 
 final class TrainingProgramErrorState extends TrainingState {
   final Failure f;

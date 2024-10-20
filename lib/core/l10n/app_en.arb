@@ -24,6 +24,7 @@
   "confirm": "Confirm",
   "add": "Add",
   "update": "Update",
+  "newVersion": "New Version Available",
   "save": "Save",
   "level": "Level:",
   "apply" : "Apply",
@@ -32,6 +33,7 @@
   "logout": "Logout",
   "logoutAlert": "Logout?",
   "logoutAlertContents": "You are about to Logout of the app some of your data may be lost, Are you sure?",
+  "download":"Download",
   
   "price": "Price",
   "discount":"Discount",
@@ -149,5 +151,9 @@
   "days":"Day(s)",
   "date":"Date",
   "map": "Daily Routine",
-  "availableGyms": "Available Gyms"
+  "availableGyms": "Available Gyms",
+  
+  "chackForUpdate": "Checking for updates...",
+
+  "gettingRoutine": "Getting Routine..."
 }

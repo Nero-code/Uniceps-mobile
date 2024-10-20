@@ -51,12 +51,11 @@ class _AuthScreenState extends State<AuthScreen>
   late final Animation<int> _animation;
   late final Animation<double> _slideAnimation, _opacityAnimation;
 
-  void navOnRestore() async {
-    await Future.delayed(const Duration(seconds: 0));
-    print("currentPage: ${currentPage.value}");
-    _pageController.animateToPage(currentPage.value,
-        duration: duration, curve: curve);
-  }
+  // void navOnRestore() async {
+  //   await Future.delayed(const Duration(seconds: 0));
+  //   _pageController.animateToPage(currentPage.value,
+  //       duration: duration, curve: curve);
+  // }
 
   // void endAnimation() async {
   //   if (isAnimActive) {
@@ -126,10 +125,8 @@ class _AuthScreenState extends State<AuthScreen>
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
-    navOnRestore();
-    // endAnimation();
     return BlocBuilder<LocaleCubit, ChangedLangState>(
-      builder: (context, state) {
+      builder: (context, lang) {
         return Scaffold(
           // floatingActionButton: FloatingActionButton(
           //   onPressed: () {
@@ -146,7 +143,7 @@ class _AuthScreenState extends State<AuthScreen>
                 height: MediaQuery.of(context).size.height,
                 child: BlocConsumer<AuthBloc, AuthState>(
                   listener: (context, state) async {
-                    print(state.runtimeType);
+                    // print(state.runtimeType);
 
                     // AuthCodeSent
                     // AuthNewPass
@@ -159,9 +156,9 @@ class _AuthScreenState extends State<AuthScreen>
                       _pageController.animateToPage(1,
                           duration: duration, curve: curve);
                     } else if (state is AuthDoneState) {
-                      print("Auth State: ${state.runtimeType}");
+                      // print("Auth State: ${state.runtimeType}");
 
-                      print("state.hasData: ${state.hasData}");
+                      // print("state.hasData: ${state.hasData}");
                       if (!state.hasData) {
                         final res = await Navigator.push<bool>(
                           context,
@@ -174,10 +171,10 @@ class _AuthScreenState extends State<AuthScreen>
                           //     hasData: state.hasData, data: state.player),
                         );
 
-                        print("check: if Condition state: $res");
+                        // print("check: if Condition state: $res");
 
                         if (res != null && !res) {
-                          print("check: inside if statement");
+                          // print("check: inside if statement");
 
                           if (Platform.isAndroid) {
                             // Exit Application (for Android)
@@ -210,6 +207,14 @@ class _AuthScreenState extends State<AuthScreen>
                       // currentPage.value = 2;
                       // _pageController.animateToPage(2,
                       //     duration: duration, curve: curve);
+                    } else if (state is AuthWrongCodeState) {
+                      ScaffoldMessenger.of(context).clearSnackBars();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(local.codeError),
+                          backgroundColor: Colors.red.shade300,
+                        ),
+                      );
                     }
                     //  else if (state is GymVerifiedState) {
                     //   Navigator.pushReplacementNamed(
@@ -400,23 +405,63 @@ class _AuthScreenState extends State<AuthScreen>
                             ),
                           ),
                         ),
+                        Positioned(
+                          top: 20,
+                          right: 10,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.language,
+                              color: Colors.grey.shade300,
+                              size: 30,
+                            ),
+                            onPressed: () async {
+                              showDialog(
+                                  context: context,
+                                  builder: (c) => AlertDialog(
+                                        title: Text(
+                                            AppLocalizations.of(context)!
+                                                .chooseLang),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            for (var i in Lang.values)
+                                              RadioListTile(
+                                                  title: Text(i == Lang.en
+                                                      ? "English"
+                                                      : "العربية"),
+                                                  value: lang.locale
+                                                          .languageCode ==
+                                                      i.name,
+                                                  groupValue: true,
+                                                  onChanged: (newVal) {
+                                                    BlocProvider.of<
+                                                                LocaleCubit>(
+                                                            context)
+                                                        .changeLanguage(
+                                                            i.name == "en"
+                                                                ? "en"
+                                                                : "ar");
+                                                    Navigator.pop(context);
+                                                  }),
+                                          ],
+                                        ),
+                                      ).build(context));
+                            },
+                          ),
+                        ),
 
                         if (state is AuthLoadingState)
-                          Stack(
-                            children: [
-                              Container(
-                                color: const Color.fromARGB(108, 0, 0, 0),
-                                child: Center(
-                                  child: Container(
-                                      padding: const EdgeInsets.all(30),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: const CircularProgressIndicator()),
-                                ),
-                              ),
-                            ],
+                          ColoredBox(
+                            color: const Color.fromARGB(108, 0, 0, 0),
+                            child: Center(
+                              child: Container(
+                                  padding: const EdgeInsets.all(30),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const CircularProgressIndicator()),
+                            ),
                           ),
 
                         // if (isAnimActive)
@@ -461,44 +506,6 @@ class _AuthScreenState extends State<AuthScreen>
                         // ),
                       ],
                     );
-                  },
-                ),
-              ),
-              Positioned(
-                top: 20,
-                right: 10,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.language,
-                    color: Colors.grey.shade300,
-                    size: 30,
-                  ),
-                  onPressed: () async {
-                    showDialog(
-                        context: context,
-                        builder: (c) => AlertDialog(
-                              title: Text(
-                                  AppLocalizations.of(context)!.chooseLang),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  for (var i in Lang.values)
-                                    RadioListTile(
-                                        title: Text(i == Lang.en
-                                            ? "English"
-                                            : "العربية"),
-                                        value:
-                                            state.locale.languageCode == i.name,
-                                        groupValue: true,
-                                        onChanged: (newVal) {
-                                          BlocProvider.of<LocaleCubit>(context)
-                                              .changeLanguage(
-                                                  i.name == "en" ? "en" : "ar");
-                                          Navigator.pop(context);
-                                        }),
-                                ],
-                              ),
-                            ).build(context));
                   },
                 ),
               ),

@@ -66,7 +66,7 @@ class AboutScreen extends StatelessWidget {
                     local.developers,
                     style: headingStyle,
                   ),
-                  Text(
+                  const Text(
                     "TrioVerse",
                     style: normalStyle,
                   ),

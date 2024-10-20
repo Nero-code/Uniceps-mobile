@@ -54,9 +54,9 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
   }
 
   Widget _buildFront(AppLocalizations local, bool rtl) {
-    print(widget.sub.price);
-    print(widget.sub.paidValue);
-    print(widget.sub.discountVal);
+    // print(widget.sub.price);
+    // print(widget.sub.paidValue);
+    // print(widget.sub.discountVal);
     final isRtl = rtl;
     return Stack(
       key: const ValueKey(true),
@@ -258,7 +258,7 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
   }
 
   Widget _buildRear() {
-    widget.sub.payments?.forEach((e) => print(e.toJson()));
+    // widget.sub.payments?.forEach((e) => print(e.toJson()));
     double size = 14.0;
     if (widget.sub.payments != null && widget.sub.payments!.isNotEmpty) {
       switch (widget.sub.payments!.length) {
@@ -397,7 +397,7 @@ int range(DateTime end) {
 
 double percent(DateTime start, DateTime end) {
   final now = DateTime.now();
-  print(end.difference(now).inDays / end.difference(start).inDays);
+  // print(end.difference(now).inDays / end.difference(start).inDays);
   if (now.compareTo(end) < 0) {
     return ((end.difference(now).inDays + 1) / end.difference(start).inDays);
   }

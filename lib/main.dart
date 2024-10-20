@@ -1,9 +1,8 @@
-import 'package:alert_banner/exports.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
@@ -13,22 +12,24 @@ import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/player_gym_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/screens/about_2.dart';
 import 'package:uniceps/features/Training/views/bloc/current_gym_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/screens/about.dart';
+// import 'package:uniceps/features/Profile/presentation/screens/about.dart';
 import 'package:uniceps/features/Profile/presentation/screens/gym_list_screen.dart';
 import 'package:uniceps/features/Profile/presentation/screens/measurement_screen.dart';
 import 'package:uniceps/features/Profile/presentation/screens/profile_screen.dart';
-import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
-import 'package:uniceps/features/Training/views/Screens/gym_handshake_screen.dart';
+// import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
+// import 'package:uniceps/features/Training/views/Screens/gym_handshake_screen.dart';
 import 'package:uniceps/features/Training/views/Screens/home_screen.dart';
-import 'package:uniceps/features/Training/views/Screens/qr_scanner_screen.dart';
-import 'package:uniceps/features/Profile/presentation/screens/subs_screen.dart';
+// import 'package:uniceps/features/Training/views/Screens/qr_scanner_screen.dart';
+// import 'package:uniceps/features/Profile/presentation/screens/subs_screen.dart';
 import 'package:uniceps/features/Training/views/bloc/exercises_bloc.dart';
+import 'package:uniceps/features/Training/views/bloc/progress_bloc.dart';
 import 'package:uniceps/features/Training/views/bloc/training_bloc.dart';
 import 'package:uniceps/firebase_options.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
@@ -41,9 +42,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
 
-  print("Handling a background message: ${message.messageId}");
+  // debugPrint("Handling a background message: ${message.messageId}");
 }
 
 class NavigatorKey {
@@ -68,45 +69,23 @@ void main() async {
     sound: true,
   );
 
-  print('User granted permission: ${settings.authorizationStatus}');
+  debugPrint('User granted permission: ${settings.authorizationStatus}');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
+  // FirebaseMessaging.onMessage.listen(
+  //   (event) {
+  //     if (NavigatorKey.navigatorKey.currentState != null &&
+  //         NavigatorKey.navigatorKey.currentState!.mounted) {
+  //       ScaffoldMessenger.of(NavigatorKey.navigatorKey.currentState!.context);
+  //     }
+  //   },
+  // );
 
-    if (message.notification != null &&
-        NavigatorKey.navigatorKey.currentContext != null) {
-      showAlertBanner(
-        NavigatorKey.navigatorKey.currentContext!,
-        () {},
-        Material(
-          elevation: 3,
-          borderRadius: BorderRadius.circular(15),
-          child: Container(
-            width: double.infinity,
-            // height: 50,
-            padding: const EdgeInsets.all(15.0),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(15)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  message.notification?.title ?? "",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                Text(
-                  message.notification?.body ?? "",
-                  style: const TextStyle(),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-  });
+  await FlutterDownloader.initialize(
+    debug: true,
+    ignoreSsl: false,
+  );
+
+  // debugPrint(await FirebaseMessaging.instance.getToken());
 
   runApp(const MyApp());
 }
@@ -114,79 +93,90 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
           create: (context) {
-            print("------------------AuthBloc Created!-----------------------");
+            debugPrint(
+                "------------------AuthBloc Created!-----------------------");
             return AuthBloc(usecases: di.sl())..add(AuthCheckEvent());
           },
         ),
         BlocProvider<TrainingBloc>(
           create: (context) {
-            print("------------------TrainingBLoc Created!-------------------");
-            return TrainingBloc(usecases: di.sl())
+            debugPrint(
+                "------------------TrainingBLoc Created!-------------------");
+            return TrainingBloc(usecases: di.sl(), manager: di.sl())
               ..add(const GetProgramEvent());
           },
         ),
         BlocProvider<ExercisesBloc>(
           create: (context) {
-            print("------------------ExercisesBLoc Created!------------------");
+            debugPrint(
+                "------------------ExercisesBLoc Created!------------------");
             return ExercisesBloc(usecases: di.sl());
           },
         ),
         BlocProvider<ProfileBloc>(
           create: (context) {
-            print("------------------ProfileBloc Created!--------------------");
+            debugPrint(
+                "------------------ProfileBloc Created!--------------------");
             return ProfileBloc(usecases: di.sl());
+            // return di.sl()..add(event);
           },
         ),
         BlocProvider<SubsBloc>(
           create: (context) {
-            print("------------------SubsBloc Created!-----------------------");
+            debugPrint(
+                "------------------SubsBloc Created!-----------------------");
             return SubsBloc(usecases: di.sl());
           },
         ),
         BlocProvider<HandshakeBloc>(
           create: (context) {
-            print("------------------HandshakesBloc Created!-----------------");
+            debugPrint(
+                "------------------HandshakesBloc Created!-----------------");
             return HandshakeBloc(usecases: di.sl())
               ..add(GetAllHandShakeEvent());
           },
         ),
         BlocProvider<MeasurmentBloc>(
           create: (context) {
-            print("------------------MeasurmentsBloc Created!----------------");
+            debugPrint(
+                "------------------MeasurmentsBloc Created!----------------");
             return MeasurmentBloc(usecases: di.sl())
               ..add(GetMeasurementsEvent());
           },
         ),
         BlocProvider<GymsBloc>(
           create: (context) {
-            print("------------------GymsBloc Created!-----------------------");
+            debugPrint(
+                "------------------GymsBloc Created!-----------------------");
             return GymsBloc(usecases: di.sl())
               ..add(const GetAllAvailableGymsEvent());
           },
         ),
         BlocProvider(
           create: (context) {
-            print("------------------Current GymsBloc Created!---------------");
+            debugPrint(
+                "------------------Current GymsBloc Created!---------------");
             return CurrentGymBloc(usecases: di.sl())
               ..add(const GetSubscribedToGymEvent());
           },
         ),
         BlocProvider(
           create: (context) {
-            print("------------------Player-Gym Bloc Created!----------------");
+            debugPrint(
+                "------------------Player-Gym Bloc Created!----------------");
             return PlayerGymBloc(usecases: di.sl());
           },
         ),
         BlocProvider<AttendenceBloc>(
           create: (context) {
-            print("------------------AttendenceBloc Created!-----------------");
+            debugPrint(
+                "------------------AttendenceBloc Created!-----------------");
             return AttendenceBloc(di.sl());
           },
         ),
@@ -196,16 +186,20 @@ class MyApp extends StatelessWidget {
         BlocProvider<TrainingSectionCubit>(
           create: (context) => TrainingSectionCubit()..getSection(),
         ),
+        BlocProvider<ProgressBloc>(
+          create: (context) =>
+              ProgressBloc(di.sl())..add(const ProgressUpdateEvent(0.0)),
+        ),
       ],
       child: BlocBuilder<LocaleCubit, ChangedLangState>(
         builder: (context, state) {
-          SystemChrome.setSystemUIOverlayStyle(
-            SystemUiOverlayStyle(
-              statusBarColor: Colors.transparent,
-              systemNavigationBarColor:
-                  Theme.of(context).colorScheme.background,
-            ),
-          );
+          // SystemChrome.setSystemUIOverlayStyle(
+          //   SystemUiOverlayStyle(
+          //     statusBarColor: Colors.transparent,
+          //     systemNavigationBarColor:
+          //         Theme.of(context).colorScheme.background,
+          //   ),
+          // );
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             navigatorKey: NavigatorKey.navigatorKey,
@@ -215,10 +209,6 @@ class MyApp extends StatelessWidget {
             restorationScopeId: "root",
             title: 'Uniceps',
             theme: lightTheme.copyWith(textTheme: GoogleFonts.cairoTextTheme()),
-            // darkTheme: ThemeData(
-            //     colorScheme: ColorScheme.fromSeed(
-            //         seedColor: Colors.blue, brightness: Brightness.dark)),
-
             initialRoute: ROUTE_SPLASH,
             routes: {
               ROUTE_SPLASH: (context) => const SplashScreen(),
@@ -231,18 +221,23 @@ class MyApp extends StatelessWidget {
               //     const PlayerInfoScreen(), // NOT REACHABLE FROM HERE
 
               //  MAIN
-              ROUTE_HOME: (context) => HomeScreen(trainingUsecases: di.sl()),
-              ROUTE_HANDSHAKE: (context) => const GymHandShakeScreen(),
-              ROUTE_EXERCISE: (context) => ExercisesPage(),
-              ROUTE_QR_SCANNER: (context) => QRScannerScreen(),
+              ROUTE_HOME: (context) => HomeScreen(
+                    trainingUsecases: di.sl(),
+                    service: di.sl(),
+                    manager: di.sl(),
+                  ),
+              // ROUTE_HANDSHAKE: (context) => const GymHandShakeScreen(),
+              // ROUTE_EXERCISE: (context) => ExercisesPage(),
+              // ROUTE_QR_SCANNER: (context) => QRScannerScreen(),
               // ROUTE_PRESENCE: (context) => const PresenceScreen(), //  NOT REACHABLE FROM HERE
-              ROUTE_GYMS_LIST: (context) => GymListScreen(),
+              // ROUTE_SUBSCRIPTIONS: (context) => const SubScriptionScreen(),
 
               //  AUX
               ROUTE_MEASUREMENTS: (context) => const MeasurementScreen(),
-              ROUTE_SUBSCRIPTIONS: (context) => const SubScriptionScreen(),
+              ROUTE_GYMS_LIST: (context) => const GymListScreen(),
               ROUTE_PROFILE: (context) => const ProfileScreen(),
-              ROUTE_ABOUT: (context) => const AboutScreen(),
+              // ROUTE_ABOUT: (context) => const AboutScreen(),
+              ROUTE_ABOUT: (context) => const AboutScreen2(),
             },
           );
         },

@@ -25,7 +25,7 @@ class ProfileCard2 extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("${player.name}"),
+              Text(player.name),
               Text(player.birthDate),
               Text(player.phoneNum),
               Text(player.gender == Gender.male ? local.male : local.female),

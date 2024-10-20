@@ -61,7 +61,7 @@ class _GymWidgetState extends State<GymWidget> {
                     //       return const Icon(Icons.fitness_center_outlined);
                     //     },
                     //   ),
-                    SizedBox(width: 15),
+                    const SizedBox(width: 15),
                     Text(
                       i.name,
                     ),

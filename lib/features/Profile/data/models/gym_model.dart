@@ -1,13 +1,5 @@
 import 'package:uniceps/features/Profile/domain/entities/gym.dart';
 
-//         "address": "swaida , syria ",
-//         "gym_name": "Unicepse Gym",
-//         "id": "66bdd431f93dffa35e2a1a21",
-//         "logo": "https://trio.com",
-//         "owner_name": "TrioVerse",
-//         "phone_number": "+9639949196917",
-//         "telephone": "+96316240131"
-
 class GymModel extends Gym {
   const GymModel({
     required super.name,
@@ -26,18 +18,21 @@ class GymModel extends Gym {
   });
   factory GymModel.fromJson(Map<dynamic, dynamic> json, [DateTime? joinedAt]) {
     print("GymModel Parse Algorithm");
-    print("id:         ${json['id']}");
-    print("pid:        ${json['pid'] ?? ""}");
-    print("name:       ${json['gym_name']}");
+    // print("id:         ${json['id']}");
+    // print("pid:        ${json['pid'] ?? ""}");
+    // print("name:       ${json['gym_name']}");
     // print("address:    ${json['address']}");
     // print("logo:       ${json['logo']}");
     // print("ownerName:  ${json['owner_name']}");
     // print("phoneNum:   ${json['phone_number']}");
     // print("telephone:  ${json['telephone']}");
-    // print("start:      ${json['start'] ?? ""}");
-    // print("end:        ${json['end'] ?? ""}");
-    print("isSelected: ${json['isSelected'] ?? "null"}");
-    print("isCurrent:  ${json['isCurrent'] ?? "null"}");
+    print("start:      ${json['start'].runtimeType}");
+    print("end:        ${json['end'].runtimeType}");
+    // print("created_at:        ${DateTime.parse(json['created_at'])}");
+    // print(json['start'].runtimeType);
+    // print(json['end'].runtimeType);
+    // print("isSelected: ${json['isSelected'] ?? "null"}");
+    // print("isCurrent:  ${json['isCurrent'] ?? "null"}");
 
     return GymModel(
       id: json['id'],
@@ -48,8 +43,8 @@ class GymModel extends Gym {
       ownerName: json['owner_name'],
       phoneNum: json['phone_number'],
       telephone: json['telephone'],
-      start: json['start'] ?? "",
-      end: json['end'] ?? "",
+      start: json['start'] != null ? DateTime.parse(json['start']) : null,
+      end: json['start'] != null ? DateTime.parse(json['end']) : null,
       isSelected: json['isSelected'] ?? false,
       isCurrent: json['isCurrent'] ?? false,
       joinedAt: joinedAt,
@@ -66,8 +61,8 @@ class GymModel extends Gym {
       "owner_name": ownerName,
       "phone_number": phoneNum,
       "telephone": telephone,
-      'start': start,
-      'end': end,
+      'start': start?.toIso8601String(),
+      'end': end?.toIso8601String(),
       'isSelected': isSelected,
       'isCurrent': isCurrent,
     };
