@@ -61,10 +61,12 @@ class TrainingRepoImple implements TrainingRepo {
         return Right(res);
       } on NoGymSpecifiedException {
         logger.d("DEBUG: NoGymSpecified yoyo");
+
         return const Left(
             NoTrainingProgramFailure("No handshakes found for player"));
       } on NoTrainingProgramException {
         logger.d("DEBUG: NoTrainingProgram yoyo");
+        // await local.deleteTrainingProgram(gymId);
         return const Left(
             NoTrainingProgramFailure("No handshakes found for player"));
       } on NotAMemberOfGymException {

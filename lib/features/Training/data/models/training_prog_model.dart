@@ -60,7 +60,7 @@ class TrainingProgramModel extends TrainingProgram {
       'rid': id,
       'gym_id': gymId,
       'pid': pid,
-      'routine_date': createdAt.toString(),
+      'routine_date': createdAt.toIso8601String(),
       'days_group_map': daysGroupMap,
       'routine_items': list,
     };

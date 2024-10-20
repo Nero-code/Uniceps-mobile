@@ -197,20 +197,10 @@ class _HomeScreenState extends State<HomeScreen>
 
     FirebaseMessaging.onMessage.listen(
       (event) {
-        // if (NavigatorKey.navigatorKey.currentState != null &&
-        //     NavigatorKey.navigatorKey.currentState!.mounted) {
-        //   ScaffoldMessenger.of(NavigatorKey.navigatorKey.currentState!.context);
-        // }
-
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(
-        //     content: Text("Foreground message ${event.notification?.title}"),
-        //   ),
-        // );
-
         b.showAlertBanner(
           context,
           () {},
+          durationOfStayingOnScreen: const Duration(seconds: 5),
           Material(
             elevation: 3,
             color: Colors.white,

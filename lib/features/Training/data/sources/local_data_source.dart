@@ -1,5 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
@@ -17,6 +18,8 @@ abstract class LocalTrainingSource {
   Future<List<GymModel>> getSubscribedToGyms();
   Future<List<GymModel>> cacheSubsToGyms(List<GymModel> list);
   Future<List<GymModel>> setSelectedGym(String gymId);
+
+  Future<bool> deleteTrainingProgram(String gymId);
 }
 
 class LocalTrainingSourceImpl implements LocalTrainingSource {
@@ -56,6 +59,11 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
 
   @override
   Future<void> saveTrainingProgram(TrainingProgramModel model) async {
+    final old = trainBox.get(model.gymId);
+    if (old != null && old['created_at'] != model.createdAt.toIso8601String()) {
+      final cache = await SharedPreferences.getInstance();
+      await cache.clear();
+    }
     await trainBox.put(model.gymId, model.toJson());
   }
 
@@ -166,5 +174,11 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
       throw EmptyCacheExeption();
     }
     return list;
+  }
+
+  @override
+  Future<bool> deleteTrainingProgram(String gymId) async {
+    await trainBox.delete(gymId);
+    return true;
   }
 }
