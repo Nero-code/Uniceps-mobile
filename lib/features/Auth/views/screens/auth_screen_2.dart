@@ -44,6 +44,7 @@ class _AuthScreenState extends State<AuthScreen>
   final curve = Curves.easeInOutExpo;
 
   bool isAnimActive = true;
+  // bool showEmail = false;
 
   late PageController _pageController;
   late AnimationController _controller, _fadeController;

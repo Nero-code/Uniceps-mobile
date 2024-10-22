@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen>
   // final Logger logger;
   final weightCtl = TextEditingController();
 
-  String? section, currentSection;
+  String? section;
   final sheetPosition = 0.5;
   // final maxSheetSize = 0.33;
 
@@ -341,7 +341,11 @@ class _HomeScreenState extends State<HomeScreen>
                                           const EdgeInsets.only(bottom: 50),
                                       child: Column(
                                         children: [
-                                          const SizedBox(height: 50),
+                                          SizedBox(
+                                            height: 50,
+                                            width: MediaQuery.sizeOf(context)
+                                                .width,
+                                          ),
                                           for (var i in state
                                               .program.daysGroupMap.entries)
                                             TrainingDayItem(
@@ -427,896 +431,839 @@ class _HomeScreenState extends State<HomeScreen>
               },
             ),
             body: SlidingUpPanel(
-              color: Colors.grey.shade100,
-              backdropEnabled: true,
-              controller: panelController,
-              minHeight: 0.0,
-              maxHeight: MediaQuery.of(context).size.height * 0.4,
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(20)),
-              onPanelClosed: () {
-                gymId = '';
-                setState(() {});
-              },
-              panel: BlocBuilder<CurrentGymBloc, CurrentGymState>(
-                builder: (context, state) {
-                  // print("DEBUG: state: ${state.runtimeType}");
+                color: Colors.grey.shade100,
+                backdropEnabled: true,
+                controller: panelController,
+                minHeight: 0.0,
+                maxHeight: MediaQuery.of(context).size.height * 0.4,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(20)),
+                onPanelClosed: () {
+                  gymId = '';
+                  setState(() {});
+                },
+                panel: BlocBuilder<CurrentGymBloc, CurrentGymState>(
+                  builder: (context, state) {
+                    // print("DEBUG: state: ${state.runtimeType}");
 
-                  if (state is CurrentGymLoadedState) {
-                    return Stack(
-                      children: [
-                        SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              const Icon(
+                    if (state is CurrentGymLoadedState) {
+                      return Stack(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: MediaQuery.sizeOf(context).height * 0.05,
+                            ),
+                            child: SingleChildScrollView(
+                              padding: EdgeInsets.only(
+                                bottom: MediaQuery.sizeOf(context).height * 0.1,
+                              ),
+                              child: Column(
+                                children: [
+                                  for (var i in state.myGyms)
+                                    // GymWidget2(
+                                    //     gym: i,
+                                    //     icon: Icon(Icons.ac_unit_sharp),
+                                    //     onPressed: () async {
+                                    //       print("Clicked: $i");
+                                    //       BlocProvider.of<CurrentGymBloc>(context)
+                                    //           .add(SetSelectedGymEvent(gymId: i.id));
+                                    //       final bloc =
+                                    //           await BlocProvider.of<CurrentGymBloc>(
+                                    //                   context)
+                                    //               .stream
+                                    //               .skip(1)
+                                    //               .first;
+                                    //       if (bloc is CurrentGymUpdatedState &&
+                                    //           context.mounted) {
+                                    //         BlocProvider.of<TrainingBloc>(context)
+                                    //             .add(const GetProgramEvent());
+                                    //       }
+                                    //     }),
+
+                                    MyGymWidget(
+                                      myGym: i,
+                                      isCurrent: i.isCurrent,
+                                      isSelected: gymId == i.id,
+                                      onPressed: i.isCurrent
+                                          ? null
+                                          : () {
+                                              gymId = i.id;
+                                              setState(() {});
+                                            },
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 0.0,
+                            width: MediaQuery.sizeOf(context).width,
+                            child: Material(
+                              color: Colors.grey.shade100,
+                              borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(20)),
+                              child: Icon(
                                 Icons.remove_rounded,
                                 size: 40,
                                 color: Colors.grey,
                               ),
-                              // const SizedBox(height: 20),
-                              for (var i in state.myGyms)
-                                // GymWidget2(
-                                //     gym: i,
-                                //     icon: Icon(Icons.ac_unit_sharp),
-                                //     onPressed: () async {
-                                //       print("Clicked: $i");
-                                //       BlocProvider.of<CurrentGymBloc>(context)
-                                //           .add(SetSelectedGymEvent(gymId: i.id));
-                                //       final bloc =
-                                //           await BlocProvider.of<CurrentGymBloc>(
-                                //                   context)
-                                //               .stream
-                                //               .skip(1)
-                                //               .first;
-                                //       if (bloc is CurrentGymUpdatedState &&
-                                //           context.mounted) {
-                                //         BlocProvider.of<TrainingBloc>(context)
-                                //             .add(const GetProgramEvent());
-                                //       }
-                                //     }),
-
-                                MyGymWidget(
-                                  myGym: i,
-                                  isCurrent: i.isCurrent,
-                                  isSelected: gymId == i.id,
-                                  onPressed: i.isCurrent
-                                      ? null
-                                      : () {
-                                          gymId = i.id;
-                                          setState(() {});
-                                        },
-                                ),
-                            ],
+                            ),
                           ),
+                          Positioned(
+                            bottom: 15.0,
+                            width: MediaQuery.of(context).size.width,
+                            height: 30,
+                            child: ActionChip.elevated(
+                              padding: EdgeInsets.zero,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50)),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              label: SizedBox(
+                                width: 150,
+                                child: Center(
+                                  child: Text(
+                                    local.apply,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              onPressed: () {
+                                if (gymId.isNotEmpty) {
+                                  BlocProvider.of<CurrentGymBloc>(context).add(
+                                    SetSelectedGymEvent(gymId: gymId),
+                                  );
+                                }
+                                panelController.animatePanelToPosition(
+                                  0.0,
+                                  duration: duration,
+                                  curve: curve,
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    } else if (state is CurrentGymErrorState) {
+                      // print("DEBUG: state: ${state.f}");
+                      return ReloadScreenWidget(
+                        f: state.f,
+                        callBack: () {
+                          BlocProvider.of<CurrentGymBloc>(context)
+                              .add(const GetSubscribedToGymEvent());
+                        },
+                      );
+                    }
+                    if (state is CurrentGymUpdatedState) {
+                      BlocProvider.of<CurrentGymBloc>(context)
+                          .add(const GetSubscribedToGymEvent());
+
+                      BlocProvider.of<TrainingBloc>(context)
+                          .add(const GetProgramEvent());
+                    }
+
+                    return const Center(child: CircularProgressIndicator());
+                  },
+                ),
+                body: Stack(
+                  children: [
+                    //
+                    //  G R A D I E N T   B A C K G R O U N D
+                    //
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.27,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            // mainBlueDark,
+                            Theme.of(context).colorScheme.primary,
+                            // Theme.of(context).colorScheme.primary,
+                            Theme.of(context).colorScheme.secondary,
+
+                            Theme.of(context).colorScheme.background,
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: const [
+                            0.1,
+                            // 0.5,
+                            0.8,
+                            1,
+                          ],
                         ),
-                        Positioned(
-                          bottom: 15.0,
-                          width: MediaQuery.of(context).size.width,
-                          height: 30,
-                          child: ActionChip.elevated(
-                            padding: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            label: SizedBox(
-                              width: 150,
-                              child: Center(
-                                child: Text(
-                                  local.apply,
-                                  style: const TextStyle(
+                      ),
+                    ),
+
+                    RefreshIndicator(
+                      onRefresh: () async {
+                        BlocProvider.of<TrainingBloc>(context)
+                            .add(const GetProgramEvent());
+
+                        BlocProvider.of<CurrentGymBloc>(context)
+                            .add(const GetSubscribedToGymEvent());
+
+                        BlocProvider.of<ProfileBloc>(context)
+                            .add(const GetProfileDataEvent());
+                        // await BlocProvider.of<TrainingBloc>(context)
+                        //     .stream
+                        //     .skip(1)
+                        //     .first;
+                      },
+                      child: SafeArea(
+                        child: Column(
+                          children: [
+                            BlocBuilder<ProfileBloc, ProfileState>(
+                              builder: (context, playerState) {
+                                if (playerState is ProfileLoadedState) {
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        //
+                                        //  N A M E   A N D   P R O F I L E   B U T T O N
+                                        //
+                                        child: Row(
+                                          textDirection: TextDirection.ltr,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const SizedBox(width: 50),
+                                            //
+                                            //  N A M E
+                                            //
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  local.hello,
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white
+                                                          .withAlpha(150),
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                Text(
+                                                  playerState.player.name
+                                                      .split(" ")[0],
+                                                  style: const TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                            //
+                                            //  P R O F I L E   B U T T O N
+                                            //
+                                            IconButton(
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pushNamed(ROUTE_PROFILE);
+                                              },
+                                              icon: const Icon(
+                                                Icons.person,
+                                                size: 30,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      //
+                                      //   H O M E   C A R D
+                                      //
+                                      BlocListener<CurrentGymBloc,
+                                          CurrentGymState>(
+                                        listener: (context, state) async {
+                                          section = await BlocProvider.of<
+                                                  TrainingSectionCubit>(context)
+                                              .getSection();
+                                          if (state is CurrentGymUpdatedState) {
+                                            BlocProvider.of<CurrentGymBloc>(
+                                                    context)
+                                                .add(
+                                                    const GetSubscribedToGymEvent());
+
+                                            BlocProvider.of<TrainingBloc>(
+                                                    context)
+                                                .add(const GetProgramEvent());
+                                            section = await BlocProvider.of<
+                                                        TrainingSectionCubit>(
+                                                    context)
+                                                .getSection();
+                                            setState(() {});
+
+                                            print("DEBUG HOME:"
+                                                " $section");
+                                          }
+                                        },
+                                        child: HomeCard(
+                                          section: section ?? local.map,
+                                          // myGym: state.current,
+                                          player: playerState.player,
+                                          openQRPopup: () {},
+                                          openGymSheet: () {
+                                            if (!panelController.isAttached) {
+                                              return;
+                                            }
+                                            isSheetOpen = true;
+                                            panelController
+                                                .animatePanelToPosition(
+                                              1.0,
+                                              duration: duration,
+                                              curve: curve,
+                                            );
+                                          },
+                                          openSectionSheet: () {
+                                            if (!daysController.isAttached) {
+                                              return;
+                                            }
+                                            isSheetOpen = true;
+                                            daysController
+                                                .animatePanelToPosition(
+                                              1.0,
+                                              duration: Durations.extralong4,
+                                              curve: Curves.bounceOut,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      // BlocConsumer<CurrentGymBloc,
+                                      //     CurrentGymState>(
+                                      //   listener: (context, state) async {
+                                      //     print("DEBUG HOME CARD PROFILE BLOC:"
+                                      //         " ${state.runtimeType}");
+                                      //     if (state is CurrentGymUpdatedState) {
+                                      //       //
+                                      //       //  NON REACHABLE CODE
+                                      //       //
+                                      //       BlocProvider.of<CurrentGymBloc>(
+                                      //               context)
+                                      //           .add(
+                                      //               const GetSubscribedToGymEvent());
+                                      //       BlocProvider.of<TrainingBloc>(
+                                      //               context)
+                                      //           .add(const GetProgramEvent());
+                                      //       section = await BlocProvider.of<
+                                      //                   TrainingSectionCubit>(
+                                      //               context)
+                                      //           .getSection();
+                                      //       setState(() {});
+                                      //       print("DEBUG HOME:"
+                                      //           " $section");
+                                      //     }
+                                      //   },
+                                      //   builder: (context, state) {
+                                      //     if (state is ProfileLoadedState) {
+                                      //       return HomeCard(
+                                      //         section: section ?? local.map,
+                                      //         // myGym: state.current,
+                                      //         player: playerState.player,
+                                      //         openQRPopup: () {},
+                                      //         openGymSheet: () {
+                                      //           if (!panelController
+                                      //               .isAttached) {
+                                      //             return;
+                                      //           }
+                                      //           isSheetOpen = true;
+                                      //           panelController
+                                      //               .animatePanelToPosition(
+                                      //             1.0,
+                                      //             duration: duration,
+                                      //             curve: curve,
+                                      //           );
+                                      //         },
+                                      //         openSectionSheet: () {
+                                      //           if (!daysController
+                                      //               .isAttached) {
+                                      //             return;
+                                      //           }
+                                      //           isSheetOpen = true;
+                                      //           daysController
+                                      //               .animatePanelToPosition(
+                                      //             1.0,
+                                      //             duration:
+                                      //                 Durations.extralong4,
+                                      //             curve: Curves.bounceOut,
+                                      //           );
+                                      //         },
+                                      //       );
+                                      //     } else if (state
+                                      //         is ProfileErrorState) {
+                                      //       return const SizedBox();
+                                      //     }
+                                      //     return Material(
+                                      //       elevation: 3,
+                                      //       borderRadius:
+                                      //           BorderRadius.circular(15),
+                                      //       color: Colors.white,
+                                      //       child: SizedBox(
+                                      //         width: MediaQuery.of(context)
+                                      //                 .size
+                                      //                 .width *
+                                      //             0.8,
+                                      //         height: MediaQuery.of(context)
+                                      //                 .size
+                                      //                 .height *
+                                      //             0.18,
+                                      //         child: const Center(
+                                      //           child:
+                                      //               CircularProgressIndicator(),
+                                      //         ),
+                                      //       ),
+                                      //     );
+                                      //   },
+                                      // ),
+                                    ],
+                                  );
+                                } else if (playerState is ProfileErrorState) {
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                        top:
+                                            MediaQuery.of(context).size.height *
+                                                0.1),
+                                    child: Material(
+                                      elevation: 3,
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.white,
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.8,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.18,
+                                        child: Center(
+                                          child: ErrorScreenWidget(
+                                            f: playerState.failure,
+                                            callback: () {
+                                              BlocProvider.of<ProfileBloc>(
+                                                      context)
+                                                  .add(
+                                                      const GetProfileDataEvent());
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else if (playerState is ProfileInitial ||
+                                    playerState is ProfileSubmittedState) {
+                                  BlocProvider.of<ProfileBloc>(context)
+                                      .add(const GetProfileDataEvent());
+                                  return const SizedBox();
+                                }
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                      top: MediaQuery.of(context).size.height *
+                                          0.1),
+                                  child: Material(
+                                    elevation: 3,
+                                    borderRadius: BorderRadius.circular(15),
                                     color: Colors.white,
-                                    fontWeight: FontWeight.w900,
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.8,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.18,
+                                      child: const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+
+                            const SizedBox(height: 15.0),
+
+                            //
+                            //    C H O O S E   S E C T I O N   W I D G E T
+                            //
+                            BlocConsumer<TrainingBloc, TrainingState>(
+                              listener: (context, state) {
+                                if (state is TrainingProgramLoadedState) {
+                                  // print("exercise refresh");
+                                  BlocProvider.of<ExercisesBloc>(context)
+                                      .add(const GetExercisesByFilterEvent(1));
+                                  setState(() {
+                                    selectedGroup = 0;
+                                  });
+                                }
+                              },
+                              builder: (context, state) {
+                                if (state is TrainingProgramLoadedState) {
+                                  return Column(
+                                    children: [
+                                      //
+                                      //    F I L T E R S   L I S T V I E W
+                                      //
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.07,
+                                        child: ListView.separated(
+                                          controller: filtersController,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15.0, vertical: 8.0),
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: trSections.length,
+                                          itemBuilder: (context, index) {
+                                            return TrainingGroup2(
+                                              name: trSections[index].title,
+                                              // isSelected:
+                                              //     trSections[selectedGroup].num ==
+                                              //         trSections[index].num,
+                                              isSelected:
+                                                  selectedGroup == index,
+                                              isToday: index > 3,
+                                              onPressed: () {
+                                                BlocProvider.of<ExercisesBloc>(
+                                                        context)
+                                                    .add(
+                                                  GetExercisesByFilterEvent(
+                                                      trSections[index].num),
+                                                );
+                                                setState(() {
+                                                  selectedGroup = index;
+                                                });
+
+                                                exercisesController.animateTo(
+                                                    0.0,
+                                                    duration: duration,
+                                                    curve: curve);
+                                              },
+                                            );
+                                          },
+                                          separatorBuilder: (context, index) {
+                                            return const SizedBox(width: 10);
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }
+                                return const SizedBox();
+                              },
+                            ),
+                            //
+                            //  E X E R C I S E S   L I S T V I E W
+                            //
+                            Expanded(
+                              child: GestureDetector(
+                                onHorizontalDragEnd: (details) {
+                                  if (details.primaryVelocity == null) {
+                                    return;
+                                  }
+                                  if (details.primaryVelocity! < 0) {
+                                    // print("Left");
+                                    if (isRtl && selectedGroup > 0) {
+                                      BlocProvider.of<ExercisesBloc>(context)
+                                          .add(GetExercisesByFilterEvent(
+                                              trSections[--selectedGroup].num));
+                                    } else if (!isRtl && selectedGroup < 7) {
+                                      BlocProvider.of<ExercisesBloc>(context)
+                                          .add(GetExercisesByFilterEvent(
+                                              trSections[++selectedGroup].num));
+                                    }
+                                  } else if (details.primaryVelocity! > 0) {
+                                    // print("Right");
+                                    if (isRtl && selectedGroup < 7) {
+                                      BlocProvider.of<ExercisesBloc>(context)
+                                          .add(GetExercisesByFilterEvent(
+                                              trSections[++selectedGroup].num));
+                                    } else if (!isRtl && selectedGroup > 0) {
+                                      BlocProvider.of<ExercisesBloc>(context)
+                                          .add(GetExercisesByFilterEvent(
+                                              trSections[--selectedGroup].num));
+                                    }
+                                  }
+                                  exercisesController.animateTo(0.0,
+                                      duration: duration, curve: curve);
+                                  setState(() {});
+                                  filtersController.animateTo(
+                                      selectedGroup * 100,
+                                      duration:
+                                          const Duration(milliseconds: 500),
+                                      curve: Curves.easeIn);
+                                },
+                                child: SingleChildScrollView(
+                                  controller: exercisesController,
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
+                                  child:
+                                      BlocBuilder<TrainingBloc, TrainingState>(
+                                    builder: (context, tState) {
+                                      if (tState
+                                          is TrainingProgramLoadedState) {
+                                        isRoutineLoading = false;
+                                        return BlocConsumer<ExercisesBloc,
+                                            ExercisesState>(
+                                          listener: (context, state) async {
+                                            // print(
+                                            //     "Listener state: ${state.runtimeType}");
+
+                                            if (state
+                                                is ExercisesUpdatedState) {
+                                              // BlocProvider.of<ExercisesBloc>(
+                                              //         context)
+                                              //     .add(GetExercisesByFilterEvent(
+                                              //         selectedGroup + 1));
+                                              BlocProvider.of<ExercisesBloc>(
+                                                      context)
+                                                  .add(
+                                                      GetExercisesByFilterEvent(
+                                                          trSections[
+                                                                  selectedGroup]
+                                                              .num));
+                                              // BlocProvider.of<TrainingBloc>(context)
+                                              //     .add(GetProgramEvent());
+                                            }
+                                          },
+                                          builder: (context, state) {
+                                            // print(
+                                            //     "Exercise Bloc State: ${state.runtimeType}");
+                                            if (state is ExercisesLoadedState) {
+                                              // print(
+                                              //     "Exercises Bloc Builder: list: ${state.list.length}");
+                                              return Column(
+                                                children: [
+                                                  for (var ex in state.list)
+                                                    Container(
+                                                      // height: MediaQuery.of(context)
+                                                      //         .size
+                                                      //         .height *
+                                                      //     0.2,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 8.0,
+                                                          vertical: 5.0),
+                                                      child: ExerciseListTile(
+                                                        exercise: ex,
+                                                        isCompleted: completed
+                                                            .contains(ex.id),
+                                                        onPressed: () {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder: (context) =>
+                                                                ExerciseInfoDialog(
+                                                              weightCtl:
+                                                                  weightCtl,
+                                                              e: ex,
+                                                              onPressed:
+                                                                  (newVal) {
+                                                                BlocProvider.of<
+                                                                            ExercisesBloc>(
+                                                                        context)
+                                                                    .add(
+                                                                  UpdateLastWeightEvent(
+                                                                      eId:
+                                                                          ex.id,
+                                                                      newVal:
+                                                                          newVal),
+                                                                );
+                                                              },
+                                                            ),
+                                                          );
+                                                        },
+                                                        onCheck: () {
+                                                          setState(() {
+                                                            if (completed
+                                                                .contains(
+                                                                    ex.id)) {
+                                                              completed.remove(
+                                                                  ex.id);
+                                                            } else {
+                                                              completed
+                                                                  .add(ex.id);
+                                                            }
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                ],
+                                              );
+                                            } else if (state
+                                                is ExercisesErrorState) {
+                                              // print(
+                                              //     "inside blocbuilder ${state.f.runtimeType}");
+                                              return Container(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.5,
+                                                alignment: Alignment.center,
+                                                child: ReloadScreenWidget(
+                                                  f: state.f,
+                                                  callBack: null,
+                                                ),
+                                              );
+                                            } else if (state
+                                                is ExercisesLoadingState) {
+                                              return SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.7,
+                                                child: const Center(
+                                                    child:
+                                                        CircularProgressIndicator()),
+                                              );
+                                            }
+                                            return const SizedBox();
+                                          },
+                                        );
+                                      } else if (tState
+                                          is TrainingProgramErrorState) {
+                                        isRoutineLoading = false;
+                                        return ReloadScreenWidget(
+                                          f: tState.f,
+                                          callBack: () {
+                                            BlocProvider.of<TrainingBloc>(
+                                                    context)
+                                                .add(const GetProgramEvent());
+                                          },
+                                        );
+                                      }
+                                      // else if (tState is TrainingInitial) {
+                                      //   BlocProvider.of<TrainingBloc>(context)
+                                      //       .add(GetProgramEvent());
+                                      // }
+                                      else if (tState
+                                          is TrainingProgramLoadingState) {
+                                        // BlocProvider.of<ExercisesBloc>(context)
+                                        //     .add(ResetExcersiesEvent());
+                                        return SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.4,
+                                          child: Center(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                CircularProgressIndicator(
+                                                  strokeCap: StrokeCap.round,
+                                                  strokeWidth: 3,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                ),
+                                                const SizedBox(height: 15.0),
+                                                Text(local.gettingRoutine),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      return const SizedBox();
+                                      // isRoutineLoading = true;
+                                      // return Opacity(
+                                      //   opacity:
+                                      //       isRoutineLoading ? 1.0 : 0.0,
+                                      //   child: StreamBuilder<double>(
+                                      //       stream: widget
+                                      //           .manager
+                                      //           .loadingBar
+                                      //           .stream as Stream<double>,
+                                      //       builder: (context, snapshot) {
+                                      //         return SizedBox(
+                                      //           height: MediaQuery.sizeOf(
+                                      //                       context)
+                                      //                   .height *
+                                      //               0.4,
+                                      //           width: MediaQuery.sizeOf(
+                                      //                   context)
+                                      //               .width,
+                                      //           child: Center(
+                                      //             child: Text(
+                                      //               "\n-------------------snapshot-----------------\n"
+                                      //               "connection: ${snapshot.connectionState}\n"
+                                      //               "data: ${snapshot.data}\n"
+                                      //               "error: ${snapshot.error}\n",
+                                      //             ),
+                                      //           ),
+                                      //         );
+                                      //       }),
+                                      // );
+                                      // return const SizedBox();
+                                    },
                                   ),
                                 ),
                               ),
                             ),
-                            onPressed: () {
-                              if (gymId.isNotEmpty) {
-                                BlocProvider.of<CurrentGymBloc>(context).add(
-                                  SetSelectedGymEvent(gymId: gymId),
-                                );
-                              }
-                              panelController.animatePanelToPosition(
-                                0.0,
-                                duration: duration,
-                                curve: curve,
-                              );
-                            },
-                          ),
+
+                            // const SizedBox(height: 30),
+                            // ),
+                            //   ],
+                            // ),
+                            // BlocBuilder<HandshakeBloc, HandshakeState>(
+                            //   builder: (context, state) {
+                            //     var  = 0.0;
+                            //     if (state is HandshakeLoadingState) {
+                            //        = 0.2;
+                            //     } else if (state is HandshakeErrorState) {
+                            //        = 0.5;
+                            //     }
+                            //     return DraggableScrollableSheet(
+                            //       initialChildSize: ,
+                            //       minChildSize: 0.0,
+                            //       controller: controller,
+                            //       builder: (context, scrollController) {
+                            //         if (state is HandshakeLoadedState) {
+                            //           return SingleChildScrollView(
+                            //             child: Column(
+                            //               children: [
+                            //                 for (var i = 0; i < 10; i++) Text("$i"),
+                            //               ],
+                            //             ),
+                            //           );
+                            //         } else if (state is HandshakeErrorState) {
+                            //           return ReloadScreenWiget(
+                            //             image: Icon(Icons.error),
+                            //             message: Text(state.f.getErrorMessage()),
+                            //             callBack: IconButton(
+                            //               onPressed: () {},
+                            //               icon: Icon(Icons.refresh),
+                            //             ),
+                            //           );
+                            //         }
+                            //         return const CircularProgressIndicator();
+                            //       },
+                            //     );
+                            //   },
+                            // ),
+                          ],
                         ),
-                      ],
-                    );
-                  } else if (state is CurrentGymErrorState) {
-                    // print("DEBUG: state: ${state.f}");
-                    return ReloadScreenWidget(
-                      f: state.f,
-                      callBack: () {
-                        BlocProvider.of<CurrentGymBloc>(context)
-                            .add(const GetSubscribedToGymEvent());
-                      },
-                    );
-                  }
-                  if (state is CurrentGymUpdatedState) {
-                    BlocProvider.of<CurrentGymBloc>(context)
-                        .add(const GetSubscribedToGymEvent());
-
-                    BlocProvider.of<TrainingBloc>(context)
-                        .add(const GetProgramEvent());
-                  }
-
-                  return const Center(child: CircularProgressIndicator());
-                },
-              ),
-              body: StreamBuilder<double>(
-                  stream: widget.manager.loadingBar.stream as Stream<double>,
-                  builder: (context, snapshot) {
-                    return Stack(
-                      children: [
-                        // CustomScrollView(
-                        //   slivers: [
-                        // SliverAppBar(
-                        //   title: const Text(APP_NAME),
-                        //   actions: [
-                        //     IconButton(
-                        //       onPressed: () {
-                        //         showDialog(
-                        //           context: context,
-                        //           builder: (context) =>
-                        //               BlocBuilder<ProfileBloc, ProfileState>(
-                        //             builder: (context, state) {
-                        //               if (state is ProfileLoadedState) {
-                        //                 return AlertDialog(
-                        //                   // title:
-                        //                   content: Column(
-                        //                     mainAxisSize: MainAxisSize.min,
-                        //                     children: [
-                        //                       QrImageView(
-                        //                         padding: const EdgeInsets.all(15.0),
-                        //                         // data: profile.uid,
-                        //                         data: state.player.uid,
-                        //                       ),
-                        //                       const Divider(),
-                        //                       Center(
-                        //                         child: Text(
-                        //                           state.player.name,
-                        //                           style: const TextStyle(
-                        //                               fontSize: 25,
-                        //                               fontWeight: FontWeight.bold),
-                        //                         ),
-                        //                       ),
-                        //                     ],
-                        //                   ),
-                        //                 ).build(context);
-                        //               } else if (state is ProfileErrorState) {
-                        //                 return Center(
-                        //                   child: Text(local.error),
-                        //                 );
-                        //               }
-                        //               return const CircularProgressIndicator();
-                        //             },
-                        //           ),
-                        //         );
-                        //       },
-                        //       icon: const Icon(Icons.qr_code),
-                        //     ),
-                        //   ],
-                        //   expandedHeight: MediaQuery.of(context).size.height * 0.22,
-                        //   flexibleSpace: FlexibleSpaceBar(
-                        //     background: Container(
-                        //       margin: EdgeInsets.only(
-                        //           top: MediaQuery.of(context).size.height * 0.1),
-                        //       alignment: Alignment.bottomCenter,
-                        //       child: BlocBuilder<ProfileBloc, ProfileState>(
-                        //         builder: (context, playerState) {
-                        //           //
-                        //           //   H O M E   C A R D
-                        //           //
-                        //           print(
-                        //               "HOME SCREEN: profile state: ${playerState.runtimeType}");
-                        //           if (playerState is ProfileLoadedState) {
-                        //             return Column(
-                        //               children: [
-                        //                 HomeCard(
-                        //                   player: playerState.player,
-                        //                   onTap: () {
-                        //                     Navigator.pushNamed(
-                        //                         context, ROUTE_PROFILE);
-                        //                   },
-                        //                 ),
-                        //               ],
-                        //             );
-                        //           } else if (playerState is ProfileErrorState) {
-                        //             return Center(child: Text(local.error));
-                        //           } else if (playerState is ProfileInitial ||
-                        //               playerState is ProfileSubmittedState) {
-                        //             BlocProvider.of<ProfileBloc>(context)
-                        //                 .add(const GetProfileDataEvent());
-                        //             return const SizedBox();
-                        //           }
-                        //           return const Center(
-                        //               child: CircularProgressIndicator());
-                        //         },
-                        //       ),
-                        //     ),
-                        //   ),
-                        //   // actions: [
-                        //   //   IconButton(
-                        //   //     onPressed: () async {
-                        //   //       Navigator.pushNamed(context, ROUTE_QR_SCANNER);
-                        //   //     },
-                        //   //     icon: const Icon(Icons.qr_code_scanner),
-                        //   //   ),
-                        //   // ],
-                        // ),
-
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.27,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                // mainBlueDark,
-                                Theme.of(context).colorScheme.primary,
-                                // Theme.of(context).colorScheme.primary,
-                                Theme.of(context).colorScheme.secondary,
-
-                                Theme.of(context).colorScheme.background,
-                              ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              stops: const [
-                                0.1,
-                                // 0.5,
-                                0.8,
-                                1,
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        RefreshIndicator(
-                          onRefresh: () async {
-                            BlocProvider.of<TrainingBloc>(context)
-                                .add(const GetProgramEvent());
-
-                            BlocProvider.of<CurrentGymBloc>(context)
-                                .add(const GetSubscribedToGymEvent());
-
-                            BlocProvider.of<ProfileBloc>(context)
-                                .add(const GetProfileDataEvent());
-                            // await BlocProvider.of<TrainingBloc>(context)
-                            //     .stream
-                            //     .skip(1)
-                            //     .first;
-                          },
-                          child: SafeArea(
-                            child: Column(
-                              children: [
-                                BlocBuilder<ProfileBloc, ProfileState>(
-                                  builder: (context, playerState) {
-                                    //
-                                    //   H O M E   C A R D
-                                    //
-                                    // print(
-                                    //     "HOME SCREEN: profile state: ${playerState.runtimeType}");
-                                    if (playerState is ProfileLoadedState) {
-                                      return Column(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              textDirection: TextDirection.ltr,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                const SizedBox(width: 50),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      local.hello,
-                                                      style: TextStyle(
-                                                          fontSize: 20,
-                                                          color: Colors.white
-                                                              .withAlpha(150),
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    Text(
-                                                      playerState.player.name
-                                                          .split(" ")[0],
-                                                      style: const TextStyle(
-                                                          fontSize: 20,
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context)
-                                                        .pushNamed(
-                                                            ROUTE_PROFILE);
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.person,
-                                                    size: 30,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          BlocConsumer<ProfileBloc,
-                                              ProfileState>(
-                                            listener: (context, state) {
-                                              // print("DEBUG: ${state.runtimeType}");
-                                              if (state
-                                                  is CurrentGymUpdatedState) {
-                                                BlocProvider.of<CurrentGymBloc>(
-                                                        context)
-                                                    .add(
-                                                        const GetSubscribedToGymEvent());
-
-                                                BlocProvider.of<TrainingBloc>(
-                                                        context)
-                                                    .add(
-                                                        const GetProgramEvent());
-                                              }
-                                            },
-                                            builder: (context, state) {
-                                              if (state is ProfileLoadedState) {
-                                                return HomeCard(
-                                                  section: section ?? local.map,
-                                                  // myGym: state.current,
-                                                  player: state.player,
-                                                  openQRPopup: () {},
-                                                  openGymSheet: () {
-                                                    if (!panelController
-                                                        .isAttached) {
-                                                      return;
-                                                    }
-                                                    isSheetOpen = true;
-                                                    panelController
-                                                        .animatePanelToPosition(
-                                                      1.0,
-                                                      duration: duration,
-                                                      curve: curve,
-                                                    );
-                                                  },
-                                                  openSectionSheet: () {
-                                                    if (!daysController
-                                                        .isAttached) {
-                                                      return;
-                                                    }
-                                                    isSheetOpen = true;
-                                                    daysController
-                                                        .animatePanelToPosition(
-                                                      1.0,
-                                                      duration:
-                                                          Durations.extralong4,
-                                                      curve: Curves.bounceOut,
-                                                    );
-                                                  },
-                                                );
-                                              } else if (state
-                                                  is ProfileErrorState) {
-                                                return const SizedBox();
-                                              }
-                                              return Material(
-                                                elevation: 3,
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                                color: Colors.white,
-                                                child: SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.8,
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.18,
-                                                  child: const Center(
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    } else if (playerState
-                                        is ProfileErrorState) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(
-                                            top: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.1),
-                                        child: Material(
-                                          elevation: 3,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          color: Colors.white,
-                                          child: SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.8,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.18,
-                                            child: Center(
-                                              child: ErrorScreenWidget(
-                                                f: playerState.failure,
-                                                callback: () {
-                                                  BlocProvider.of<ProfileBloc>(
-                                                          context)
-                                                      .add(
-                                                          const GetProfileDataEvent());
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    } else if (playerState is ProfileInitial ||
-                                        playerState is ProfileSubmittedState) {
-                                      BlocProvider.of<ProfileBloc>(context)
-                                          .add(const GetProfileDataEvent());
-                                      return const SizedBox();
-                                    }
-                                    return Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.1),
-                                      child: Material(
-                                        elevation: 3,
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: Colors.white,
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.8,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.18,
-                                          child: const Center(
-                                            child: CircularProgressIndicator(),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-
-                                const SizedBox(height: 15.0),
-
-                                //
-                                //    C H O O S E   S E C T I O N   W I D G E T
-                                //
-                                BlocConsumer<TrainingBloc, TrainingState>(
-                                  listener: (context, state) {
-                                    if (state is TrainingProgramLoadedState) {
-                                      // print("exercise refresh");
-                                      BlocProvider.of<ExercisesBloc>(context)
-                                          .add(const GetExercisesByFilterEvent(
-                                              1));
-                                      setState(() {
-                                        selectedGroup = 0;
-                                      });
-                                    }
-                                  },
-                                  builder: (context, state) {
-                                    if (state is TrainingProgramLoadedState) {
-                                      return Column(
-                                        children: [
-                                          //
-                                          //    F I L T E R S   L I S T V I E W
-                                          //
-                                          SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.07,
-                                            child: ListView.separated(
-                                              controller: filtersController,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 15.0,
-                                                      vertical: 8.0),
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount: trSections.length,
-                                              itemBuilder: (context, index) {
-                                                return TrainingGroup2(
-                                                  name: trSections[index].title,
-                                                  // isSelected:
-                                                  //     trSections[selectedGroup].num ==
-                                                  //         trSections[index].num,
-                                                  isSelected:
-                                                      selectedGroup == index,
-                                                  isToday: index > 3,
-                                                  onPressed: () {
-                                                    BlocProvider.of<
-                                                                ExercisesBloc>(
-                                                            context)
-                                                        .add(
-                                                      GetExercisesByFilterEvent(
-                                                          trSections[index]
-                                                              .num),
-                                                    );
-                                                    setState(() {
-                                                      selectedGroup = index;
-                                                    });
-
-                                                    exercisesController
-                                                        .animateTo(0.0,
-                                                            duration: duration,
-                                                            curve: curve);
-                                                  },
-                                                );
-                                              },
-                                              separatorBuilder:
-                                                  (context, index) {
-                                                return const SizedBox(
-                                                    width: 10);
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    }
-                                    return const SizedBox();
-                                  },
-                                ),
-                                //
-                                //  E X E R C I S E S   L I S T V I E W
-                                //
-                                Expanded(
-                                  child: GestureDetector(
-                                    onHorizontalDragEnd: (details) {
-                                      if (details.primaryVelocity == null) {
-                                        return;
-                                      }
-                                      if (details.primaryVelocity! < 0) {
-                                        // print("Left");
-                                        if (isRtl && selectedGroup > 0) {
-                                          BlocProvider.of<ExercisesBloc>(
-                                                  context)
-                                              .add(GetExercisesByFilterEvent(
-                                                  trSections[--selectedGroup]
-                                                      .num));
-                                        } else if (!isRtl &&
-                                            selectedGroup < 7) {
-                                          BlocProvider.of<ExercisesBloc>(
-                                                  context)
-                                              .add(GetExercisesByFilterEvent(
-                                                  trSections[++selectedGroup]
-                                                      .num));
-                                        }
-                                      } else if (details.primaryVelocity! > 0) {
-                                        // print("Right");
-                                        if (isRtl && selectedGroup < 7) {
-                                          BlocProvider.of<ExercisesBloc>(
-                                                  context)
-                                              .add(GetExercisesByFilterEvent(
-                                                  trSections[++selectedGroup]
-                                                      .num));
-                                        } else if (!isRtl &&
-                                            selectedGroup > 0) {
-                                          BlocProvider.of<ExercisesBloc>(
-                                                  context)
-                                              .add(GetExercisesByFilterEvent(
-                                                  trSections[--selectedGroup]
-                                                      .num));
-                                        }
-                                      }
-                                      exercisesController.animateTo(0.0,
-                                          duration: duration, curve: curve);
-                                      setState(() {});
-                                      filtersController.animateTo(
-                                          selectedGroup * 100,
-                                          duration:
-                                              const Duration(milliseconds: 500),
-                                          curve: Curves.easeIn);
-                                    },
-                                    child: SingleChildScrollView(
-                                      controller: exercisesController,
-                                      physics:
-                                          const AlwaysScrollableScrollPhysics(),
-                                      child: BlocBuilder<TrainingBloc,
-                                          TrainingState>(
-                                        builder: (context, tState) {
-                                          if (tState
-                                              is TrainingProgramLoadedState) {
-                                            isRoutineLoading = false;
-                                            return BlocConsumer<ExercisesBloc,
-                                                ExercisesState>(
-                                              listener: (context, state) async {
-                                                // print(
-                                                //     "Listener state: ${state.runtimeType}");
-
-                                                if (state
-                                                    is ExercisesUpdatedState) {
-                                                  // BlocProvider.of<ExercisesBloc>(
-                                                  //         context)
-                                                  //     .add(GetExercisesByFilterEvent(
-                                                  //         selectedGroup + 1));
-                                                  BlocProvider.of<
-                                                              ExercisesBloc>(
-                                                          context)
-                                                      .add(GetExercisesByFilterEvent(
-                                                          trSections[
-                                                                  selectedGroup]
-                                                              .num));
-                                                  // BlocProvider.of<TrainingBloc>(context)
-                                                  //     .add(GetProgramEvent());
-                                                }
-                                              },
-                                              builder: (context, state) {
-                                                // print(
-                                                //     "Exercise Bloc State: ${state.runtimeType}");
-                                                if (state
-                                                    is ExercisesLoadedState) {
-                                                  // print(
-                                                  //     "Exercises Bloc Builder: list: ${state.list.length}");
-                                                  return Column(
-                                                    children: [
-                                                      for (var ex in state.list)
-                                                        Container(
-                                                          // height: MediaQuery.of(context)
-                                                          //         .size
-                                                          //         .height *
-                                                          //     0.2,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  horizontal:
-                                                                      8.0,
-                                                                  vertical:
-                                                                      5.0),
-                                                          child:
-                                                              ExerciseListTile(
-                                                            exercise: ex,
-                                                            isCompleted:
-                                                                completed
-                                                                    .contains(
-                                                                        ex.id),
-                                                            onPressed: () {
-                                                              showDialog(
-                                                                context:
-                                                                    context,
-                                                                builder:
-                                                                    (context) =>
-                                                                        ExerciseInfoDialog(
-                                                                  weightCtl:
-                                                                      weightCtl,
-                                                                  e: ex,
-                                                                  onPressed:
-                                                                      (newVal) {
-                                                                    BlocProvider.of<ExercisesBloc>(
-                                                                            context)
-                                                                        .add(
-                                                                      UpdateLastWeightEvent(
-                                                                          eId: ex
-                                                                              .id,
-                                                                          newVal:
-                                                                              newVal),
-                                                                    );
-                                                                  },
-                                                                ),
-                                                              );
-                                                            },
-                                                            onCheck: () {
-                                                              setState(() {
-                                                                if (completed
-                                                                    .contains(ex
-                                                                        .id)) {
-                                                                  completed
-                                                                      .remove(ex
-                                                                          .id);
-                                                                } else {
-                                                                  completed.add(
-                                                                      ex.id);
-                                                                }
-                                                              });
-                                                            },
-                                                          ),
-                                                        ),
-                                                    ],
-                                                  );
-                                                } else if (state
-                                                    is ExercisesErrorState) {
-                                                  // print(
-                                                  //     "inside blocbuilder ${state.f.runtimeType}");
-                                                  return Container(
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.5,
-                                                    alignment: Alignment.center,
-                                                    child: ReloadScreenWidget(
-                                                      f: state.f,
-                                                      callBack: null,
-                                                    ),
-                                                  );
-                                                } else if (state
-                                                    is ExercisesLoadingState) {
-                                                  return SizedBox(
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.7,
-                                                    child: const Center(
-                                                        child:
-                                                            CircularProgressIndicator()),
-                                                  );
-                                                }
-                                                return const SizedBox();
-                                              },
-                                            );
-                                          } else if (tState
-                                              is TrainingProgramErrorState) {
-                                            isRoutineLoading = false;
-                                            return ReloadScreenWidget(
-                                              f: tState.f,
-                                              callBack: () {
-                                                BlocProvider.of<TrainingBloc>(
-                                                        context)
-                                                    .add(
-                                                        const GetProgramEvent());
-                                              },
-                                            );
-                                          }
-                                          // else if (tState is TrainingInitial) {
-                                          //   BlocProvider.of<TrainingBloc>(context)
-                                          //       .add(GetProgramEvent());
-                                          // }
-                                          else if (tState
-                                              is TrainingProgramLoadingState) {
-                                            // BlocProvider.of<ExercisesBloc>(context)
-                                            //     .add(ResetExcersiesEvent());
-                                            return SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.4,
-                                              child: Center(
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    CircularProgressIndicator(
-                                                      strokeCap:
-                                                          StrokeCap.round,
-                                                      strokeWidth: 3,
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .primary,
-                                                    ),
-                                                    const SizedBox(
-                                                        height: 15.0),
-                                                    Text(local.gettingRoutine),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                          return const SizedBox();
-                                          // isRoutineLoading = true;
-                                          // return Opacity(
-                                          //   opacity:
-                                          //       isRoutineLoading ? 1.0 : 0.0,
-                                          //   child: StreamBuilder<double>(
-                                          //       stream: widget
-                                          //           .manager
-                                          //           .loadingBar
-                                          //           .stream as Stream<double>,
-                                          //       builder: (context, snapshot) {
-                                          //         return SizedBox(
-                                          //           height: MediaQuery.sizeOf(
-                                          //                       context)
-                                          //                   .height *
-                                          //               0.4,
-                                          //           width: MediaQuery.sizeOf(
-                                          //                   context)
-                                          //               .width,
-                                          //           child: Center(
-                                          //             child: Text(
-                                          //               "\n-------------------snapshot-----------------\n"
-                                          //               "connection: ${snapshot.connectionState}\n"
-                                          //               "data: ${snapshot.data}\n"
-                                          //               "error: ${snapshot.error}\n",
-                                          //             ),
-                                          //           ),
-                                          //         );
-                                          //       }),
-                                          // );
-                                          // return const SizedBox();
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
-                                // const SizedBox(height: 30),
-                                // ),
-                                //   ],
-                                // ),
-                                // BlocBuilder<HandshakeBloc, HandshakeState>(
-                                //   builder: (context, state) {
-                                //     var  = 0.0;
-                                //     if (state is HandshakeLoadingState) {
-                                //        = 0.2;
-                                //     } else if (state is HandshakeErrorState) {
-                                //        = 0.5;
-                                //     }
-                                //     return DraggableScrollableSheet(
-                                //       initialChildSize: ,
-                                //       minChildSize: 0.0,
-                                //       controller: controller,
-                                //       builder: (context, scrollController) {
-                                //         if (state is HandshakeLoadedState) {
-                                //           return SingleChildScrollView(
-                                //             child: Column(
-                                //               children: [
-                                //                 for (var i = 0; i < 10; i++) Text("$i"),
-                                //               ],
-                                //             ),
-                                //           );
-                                //         } else if (state is HandshakeErrorState) {
-                                //           return ReloadScreenWiget(
-                                //             image: Icon(Icons.error),
-                                //             message: Text(state.f.getErrorMessage()),
-                                //             callBack: IconButton(
-                                //               onPressed: () {},
-                                //               icon: Icon(Icons.refresh),
-                                //             ),
-                                //           );
-                                //         }
-                                //         return const CircularProgressIndicator();
-                                //       },
-                                //     );
-                                //   },
-                                // ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        // BlocBuilder<ProgressBloc, ProgressState>(
-                        //   builder: (context, state) {
-                        //     debugPrint("------------progress--------------");
-                        //     debugPrint("${state.runtimeType}");
-                        //     debugPrint("${state.percent}");
-                        //     return state.percent == -1.0
-                        //         ? const SizedBox()
-                        //         : Opacity(
-                        //             opacity: state.percent == -1 ? 0.0 : 1.0,
-                        //             child: SizedBox(
-                        //               height: MediaQuery.sizeOf(context).height,
-                        //               width: MediaQuery.sizeOf(context).width,
-                        //               child: const ColoredBox(
-                        //                   color: Colors.amber,
-                        //                   child: Text("yoyo")),
-                        //             ),
-                        //           );
-                        //   },
-                        // ),
-                      ],
-                    );
-                  }),
-            ),
+                      ),
+                    ),
+                    // BlocBuilder<ProgressBloc, ProgressState>(
+                    //   builder: (context, state) {
+                    //     debugPrint("------------progress--------------");
+                    //     debugPrint("${state.runtimeType}");
+                    //     debugPrint("${state.percent}");
+                    //     return state.percent == -1.0
+                    //         ? const SizedBox()
+                    //         : Opacity(
+                    //             opacity: state.percent == -1 ? 0.0 : 1.0,
+                    //             child: SizedBox(
+                    //               height: MediaQuery.sizeOf(context).height,
+                    //               width: MediaQuery.sizeOf(context).width,
+                    //               child: const ColoredBox(
+                    //                   color: Colors.amber,
+                    //                   child: Text("yoyo")),
+                    //             ),
+                    //           );
+                    //   },
+                    // ),
+                  ],
+                )),
           ),
 
           // } else if(TrainingProgramErrorState) {

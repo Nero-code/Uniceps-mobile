@@ -102,6 +102,7 @@ Future<void> init() async {
       cacheManager: sl(),
       userBox: userBox,
       playerBox: profileBox,
+      trainBox: trainBox,
       logger: sl(),
     ),
   );

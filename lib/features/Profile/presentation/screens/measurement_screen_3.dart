@@ -250,6 +250,7 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            textDirection: TextDirection.rtl,
             children: [
               MeasureWidget3(
                   isLoading: isLoading,
@@ -270,6 +271,7 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            textDirection: TextDirection.rtl,
             children: [
               MeasureWidget3(
                   isLoading: isLoading,
@@ -290,6 +292,7 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            textDirection: TextDirection.rtl,
             children: [
               MeasureWidget3(
                   isLoading: isLoading,
@@ -310,6 +313,7 @@ class _MeasurementScreen3State extends State<MeasurementScreen3>
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            textDirection: TextDirection.rtl,
             children: [
               MeasureWidget3(
                   isLoading: isLoading,

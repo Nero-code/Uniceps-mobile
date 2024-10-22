@@ -30,7 +30,7 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
   final http.Client client;
 
   /// This box is for granting access to user token effeciently
-  final Box<Map<dynamic, dynamic>> userBox, playerBox;
+  final Box<Map<dynamic, dynamic>> userBox, playerBox, trainBox;
   // final Box<Map<String, double>> lastWBox;
 
   // final Box<Map<String, dynamic>> routineBox;
@@ -44,6 +44,7 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
     required this.playerBox,
     required this.cacheManager,
     required this.logger,
+    required this.trainBox,
     // required this.lastWBox,
   });
 
@@ -89,6 +90,7 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
         images: images,
       );
     } else if (res.statusCode == 204) {
+      await trainBox.delete(gymId);
       throw NoTrainingProgramException();
     }
     throw ServerException();

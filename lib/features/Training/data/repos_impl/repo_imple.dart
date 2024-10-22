@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/features/Profile/domain/entities/gym.dart';
@@ -29,9 +30,7 @@ class TrainingRepoImple implements TrainingRepo {
   TrainingProgram? tp;
 
   @override
-  Future<Either<Failure, TrainingProgram>> getTrainingProgram(
-      /**String gymId*/) async {
-    // logger.d("Training_Feature --> Repo --> getTrainingProgram");
+  Future<Either<Failure, TrainingProgram>> getTrainingProgram() async {
     logger.d("Training_Feature --> Repo --> getTrainingProgram");
 
     if (await connection.hasConnection) {
@@ -57,7 +56,8 @@ class TrainingRepoImple implements TrainingRepo {
 
         logger.t("TrainingProgram saved locally");
         tp = res;
-
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.clear();
         return Right(res);
       } on NoGymSpecifiedException {
         logger.d("DEBUG: NoGymSpecified yoyo");
@@ -90,7 +90,8 @@ class TrainingRepoImple implements TrainingRepo {
         final res = await local.getTrainingProgram(currentGym.id);
         logger.d("getTrainingProgram finished! ${res.runtimeType}");
         tp = res;
-
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.clear();
         return Right(res);
       } on NotAMemberOfGymException {
         logger.i("Not a member of any gym");
