@@ -20,6 +20,9 @@ final class TrainingProgramLoadedState extends TrainingState {
 final class TrainingProgramLoadingState extends TrainingState {
   final double percent;
   const TrainingProgramLoadingState({this.percent = 0.0});
+
+  @override
+  List<Object> get props => [percent];
 }
 
 final class TrainingProgramErrorState extends TrainingState {
