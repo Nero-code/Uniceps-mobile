@@ -160,6 +160,10 @@
   "map": "الخطة اليومية",
   "availableGyms": "المنضمون لنا",
 
+  "deleteBtn": "حذف الحساب",
+  "deleteAccount": "حذف الحساب؟",
+  "deleteAccountContent": "انت الان على وشك حذف الحساب الخاص بك لدينا, هل انت متأكد؟",
+
   "chackForUpdate": "جاري التحقق من التحديثات...",
 
   "gettingRoutine": "جاري تحميل البرنامج..."

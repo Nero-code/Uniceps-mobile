@@ -153,6 +153,10 @@
   "map": "Daily Routine",
   "availableGyms": "Available Gyms",
   
+  "deleteBtn": "Delete Account",
+  "deleteAccount": "Delete Account?",
+  "deleteAccountContent": "you are about to delete your account within Uniceps System, Are you sure?",
+
   "chackForUpdate": "Checking for updates...",
 
   "gettingRoutine": "Getting Routine..."

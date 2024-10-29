@@ -9,6 +9,7 @@ import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
+import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/widgets/gender_selection_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
@@ -335,6 +336,66 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                               },
                             ),
                             const SizedBox(height: 10),
+                            if (!isCreate)
+                              ActionChip.elevated(
+                                label: Text(
+                                  local.deleteBtn,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red),
+                                ),
+                                backgroundColor: Colors.red.shade100,
+                                onPressed: () async {
+                                  await showDialog<bool>(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text(local.deleteAccount),
+                                      content: Text(local.deleteAccountContent),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () async {
+                                            Navigator.pop(context, false);
+                                          },
+                                          child: Text(local.cancel),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            BlocProvider.of<AuthBloc>(context)
+                                                .add(DeleteAccountEvent());
+                                            final bloc =
+                                                await BlocProvider.of<AuthBloc>(
+                                                        context)
+                                                    .stream
+                                                    .skip(1)
+                                                    .first;
+
+                                            print(bloc.runtimeType);
+                                            if (bloc
+                                                is AuthDeletedAccountState) {
+                                              debugPrint("Account Deleted");
+                                              BlocProvider.of<AuthBloc>(context)
+                                                  .add(AuthCheckEvent());
+                                              while (
+                                                  Navigator.canPop(context)) {
+                                                Navigator.pop(context);
+                                              }
+                                              Navigator.pushReplacementNamed(
+                                                  context, ROUTE_AUTH);
+                                            } else {
+                                              Navigator.pop(context, false);
+                                            }
+                                          },
+                                          child: Text(
+                                            local.ok,
+                                            style: const TextStyle(
+                                                color: Colors.red),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
                           ],
                         ),
                       ),

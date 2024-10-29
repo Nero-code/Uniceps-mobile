@@ -26,6 +26,8 @@ abstract class RemoteAuthSource {
   // Future<bool> isLoggedIn();
   Future<Map<dynamic, dynamic>> sendNotifyToken(String token);
   Future<void> logout();
+
+  Future<bool> deleteAccount();
 }
 
 class RemoteAuthSourceImpl implements RemoteAuthSource {
@@ -47,7 +49,7 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
       Uri.http(API, "/login", {}),
       body: {"email": email, "password": password},
     );
-
+    logger.d("${res.statusCode}\n${res.body}");
     if (res.statusCode == 200) {
       logger.d(res.body);
       return;
@@ -128,6 +130,7 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
     final res = await client.post(Uri.parse(API + HTTP_REGISTER),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode({"email": email}));
+    logger.d("${res.statusCode}\n${res.body}");
     if (res.statusCode == 200) {
       logger.d(res.body);
       return;
@@ -231,11 +234,19 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
     }
     throw AuthException();
   }
+
+  @override
+  Future<bool> deleteAccount() async {
+    final res =
+        await client.delete(Uri.parse("$API" "$HTTP_REGISTER"), headers: {
+      'x-access-token': userBox.get(HIVE_USER_BOX)!['token'],
+    });
+    logger.d("response: ${res.statusCode} \n${res.body}");
+    if (res.statusCode == 200 ||
+        res.statusCode == 404 ||
+        res.statusCode == 401) {
+      return true;
+    }
+    throw ServerException();
+  }
 }
-
-// final class ApiAuthResponse {
-//   final bool isNew;
-//   final String token;
-
-//   ApiAuthResponse({required this.isNew, required this.token});
-// }

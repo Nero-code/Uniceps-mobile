@@ -203,4 +203,23 @@ class AuthRepoImpl implements AuthRepo {
       }
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> deleteAccount() async {
+    if (await connection.hasConnection) {
+      try {
+        final res = await remote.deleteAccount();
+        await local.localLogout();
+        return Right(res);
+      } on ServerException catch (e, s) {
+        logger.e("ServerException", error: e, stackTrace: s);
+        return Left(ServerFailure(errMsg: ""));
+      } catch (e, s) {
+        logger.f("Deleting Account Error", error: e, stackTrace: s);
+        return Left(GeneralPurposFailure(errorMessage: ""));
+      }
+    }
+
+    return Left(NoInternetConnectionFailure(errMsg: ""));
+  }
 }

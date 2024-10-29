@@ -20,6 +20,8 @@ final class AuthEmailCodeVerifyEvent extends AuthEvent {
   const AuthEmailCodeVerifyEvent({required this.code, required this.email});
 }
 
+final class DeleteAccountEvent extends AuthEvent {}
+
 // final class AuthAddNewPasswordEvent extends AuthEvent {
 //   final String email, pass;
 //   const AuthAddNewPasswordEvent({required this.email, required this.pass});

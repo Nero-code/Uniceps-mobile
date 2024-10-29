@@ -88,6 +88,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           (l) => emit(AuthErrorState(f: l)),
           (r) => emit(AuthLoggedoutState()),
         );
+      } else if (event is DeleteAccountEvent) {
+        print("Delete Account Event");
+        emit(AuthLoadingState());
+        final either = await usecases.deleteAccount();
+        either.fold(
+          (l) => emit(AuthErrorState(f: l)),
+          (r) => emit(AuthDeletedAccountState()),
+        );
       }
     });
   }

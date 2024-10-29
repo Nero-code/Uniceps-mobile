@@ -55,4 +55,8 @@ class AuthUsecases {
   Future<Either<Failure, bool>> logout() async {
     return await repo.logout();
   }
+
+  Future<Either<Failure, bool>> deleteAccount() async {
+    return await repo.deleteAccount();
+  }
 }
