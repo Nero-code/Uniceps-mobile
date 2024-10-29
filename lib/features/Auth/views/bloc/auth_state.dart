@@ -44,3 +44,5 @@ final class GymVerifiedState extends AuthState {}
 final class AuthInvalidCredentialsState extends AuthState {}
 
 final class AuthWrongCodeState extends AuthState {}
+
+final class AuthDeletedAccountState extends AuthState {}

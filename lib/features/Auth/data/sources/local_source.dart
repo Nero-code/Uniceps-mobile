@@ -6,22 +6,6 @@ import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/features/Auth/data/models/user_model.dart';
 
-//  Box("User"):
-//  {
-//    "user":{
-//      "token": String,
-//      "id": String,
-//    }
-//  }
-//
-//
-//  Box("Player"):
-//
-//    "player_info": {
-//
-//    }
-//
-
 abstract class LocalAuthSource {
   Future<UserModel> getUser();
   Future<void> saveUser(UserModel model);

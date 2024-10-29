@@ -40,6 +40,9 @@ class HomeCard extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.25,
       child: Stack(
         children: [
+          //
+          //  D A I L Y   M A P   C A R D
+          //
           Positioned(
             bottom: 0.0,
             width: MediaQuery.of(context).size.width,
@@ -75,6 +78,9 @@ class HomeCard extends StatelessWidget {
               ),
             ),
           ),
+          //
+          //  H O M E   C A R D
+          //
           Container(
             margin:
                 const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 30),
@@ -135,6 +141,9 @@ class HomeCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        //
+                        //  Q R   A N D   S W I T C H   B T N s
+                        //
                         Row(
                           children: [
                             Material(
@@ -222,6 +231,9 @@ class HomeCard extends StatelessWidget {
                             ),
                           ],
                         ),
+                        //
+                        //  G Y M   I N F O   S E C T I O N
+                        //
                         BlocBuilder<CurrentGymBloc, CurrentGymState>(
                           builder: (context, state) {
                             if (state is CurrentGymLoadedState) {
@@ -350,6 +362,9 @@ class HomeCard extends StatelessWidget {
                         ),
                       ],
                     ),
+                    //
+                    //  L E V E L   I N D I C A T O R
+                    //
                     Center(
                       child: SizedBox(
                         width: MediaQuery.of(context).size.height * 0.13,

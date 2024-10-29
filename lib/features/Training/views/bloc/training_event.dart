@@ -22,6 +22,13 @@ final class UpdateLastWeightExerciseEvent extends TrainingEvent {
   });
 }
 
+final class TrainingProgressEvent extends TrainingEvent {
+  final double percent;
+  const TrainingProgressEvent({required this.percent});
+  @override
+  List<Object> get props => [percent];
+}
+
 // final class GetExercisesEvent extends TrainingEvent {
 //   const GetExercisesEvent();
 // }

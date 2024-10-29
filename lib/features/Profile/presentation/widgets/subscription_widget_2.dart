@@ -27,6 +27,7 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
     final isRtl = context.read<LocaleCubit>().state.isRtl();
+
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.5,
       height: MediaQuery.of(context).size.height * 0.3,
@@ -214,7 +215,7 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
                     Row(
                       children: [
                         Text(
-                          "${range(widget.sub.endDate)} ",
+                          "${range(widget.sub.startDate, widget.sub.endDate)} ",
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.primary),
                         ),
@@ -246,7 +247,7 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
             width: 10,
             height: 10,
             decoration: BoxDecoration(
-              color: range(widget.sub.endDate) > 0
+              color: range(widget.sub.startDate, widget.sub.endDate) > 0
                   ? Colors.green.shade300
                   : Colors.red,
               shape: BoxShape.circle,
@@ -387,8 +388,11 @@ class _SubsrciptionWidget2State extends State<SubsrciptionWidget2> {
   }
 }
 
-int range(DateTime end) {
+int range(DateTime start, DateTime end) {
   final now = DateTime.now();
+  if (now.compareTo(start) < 0) {
+    return end.difference(start).inDays;
+  }
   if (now.compareTo(end) < 0) {
     return end.difference(now).inDays + 1;
   }
@@ -397,7 +401,9 @@ int range(DateTime end) {
 
 double percent(DateTime start, DateTime end) {
   final now = DateTime.now();
-  // print(end.difference(now).inDays / end.difference(start).inDays);
+  if (end.compareTo(start) == 0) {
+    return now.compareTo(end) == 0 ? 1.0 : 0.0;
+  }
   if (now.compareTo(end) < 0) {
     return ((end.difference(now).inDays + 1) / end.difference(start).inDays);
   }

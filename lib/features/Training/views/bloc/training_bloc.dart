@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/errors/failure.dart';
@@ -12,40 +14,32 @@ part 'training_state.dart';
 class TrainingBloc extends Bloc<TrainingEvent, TrainingState> {
   final TrainingUsecases usecases;
   final ImageCacheManager manager;
+  StreamSubscription? imagesSubs;
   TrainingBloc({required this.usecases, required this.manager})
       : super(TrainingInitial()) {
-    on<TrainingEvent>((event, emit) async {
-      if (event is GetProgramEvent) {
-        //
-        // G E T   P R O G R A M   E V E N T
-        //
-        emit(const TrainingProgramLoadingState(percent: 0.0));
-
-        final either = await usecases.getTrainingProgram();
-        either.fold(
-          (l) => emit(TrainingProgramErrorState(f: l)),
-          (r) => emit(TrainingProgramLoadedState(program: r)),
-        );
-      }
-      //  else if (event is UpdateLastWeightExerciseEvent) {
+    on<GetProgramEvent>((event, emit) async {
       //
-      // U P D A T E   L A S T   W E I G H T   E V E N T
+      // G E T   P R O G R A M   E V E N T
       //
-      // emit(TrainingProgramLoadingState());
-      // print("inside training Bloc: UpdateWeightEvent");
-      // final either = await usecases.saveNewWeight({event.eId: event.newVal});
-      // either.fold((l) => emit, (r) => emit);
-      // }
+      emit(const TrainingProgramLoadingState(percent: 0.0));
 
-      // else if (event is ChangeFilterEvent) {
-      //   // C H A N G E   F I L T E R
-      //   emit(TrainingProgramLoadingState());
-      //   final either = await usecases.getTrainingProgram();
-      // }
-      //  else if (event is GetExercisesEvent) {
-      //   // G E T   E X E R C I S E S
-      //   emit(TrainingProgramLoadingState());
-      // }
+      final either = await usecases.getTrainingProgram();
+      either.fold(
+        (l) => emit(TrainingProgramErrorState(f: l)),
+        (r) => emit(TrainingProgramLoadedState(program: r)),
+      );
     });
+    on<TrainingProgressEvent>((event, emit) async {
+      emit(TrainingProgramLoadingState(percent: event.percent));
+    });
+    imagesSubs = manager.loadingBar.stream.listen((event) {
+      print("bloc event type: ${event.runtimeType}");
+      add(TrainingProgressEvent(percent: event));
+    });
+  }
+  @override
+  Future<void> close() async {
+    await imagesSubs?.cancel();
+    return super.close();
   }
 }

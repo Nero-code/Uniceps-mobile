@@ -90,10 +90,16 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
             }
 
             // if (state is AttenedenceLoadedState) {
-            // print("Debug: ${state.list.first.date}");
-            // print("Debug: ${state.list.first.loginTime}");
-            // print("Debug: ${state.list.first.logoutTime}");
+            //   print("Debug date: ${state.list.first.date}");
+            //   print("Debug loginTime: ${state.list.first.loginTime}");
+            //   print("Debug logoutTime: ${state.list.first.logoutTime}");
 
+            //   print(
+            //       "Debug LOCAL date: ${state.list[1].date.toUtc().toLocal()}");
+            //   print("Debug LOCAL loginTime: ${state.list[1].loginTime}");
+            //   print(
+            //       "Debug LOCAL logoutTime: ${state.list[1].logoutTime.toUtc()}");
+            // }
             return Container(
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.vertical(
@@ -319,7 +325,8 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                                                             intl.DateFormat(
                                                                     "h:mm a")
                                                                 .format(i
-                                                                    .loginTime),
+                                                                    .loginTime
+                                                                    .toLocal()),
                                                             textDirection:
                                                                 TextDirection
                                                                     .ltr,
@@ -351,7 +358,9 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                                                             intl.DateFormat(
                                                                     "h:mm a")
                                                                 .format(i
-                                                                    .logoutTime),
+                                                                    .logoutTime
+                                                                    .toUtc()
+                                                                    .toLocal()),
                                                             textDirection:
                                                                 TextDirection
                                                                     .ltr,
@@ -471,8 +480,8 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                                                       child: Text(
                                                         intl.DateFormat(
                                                                 "h:mm a")
-                                                            .format(
-                                                                i.loginTime),
+                                                            .format(i.loginTime
+                                                                .toLocal()),
                                                         textDirection:
                                                             TextDirection.ltr,
                                                         style: const TextStyle(
@@ -484,8 +493,8 @@ class _GymProfileScreen2State extends State<GymProfileScreen2> {
                                                       child: Text(
                                                         intl.DateFormat(
                                                                 "h:mm a")
-                                                            .format(
-                                                                i.logoutTime),
+                                                            .format(i.logoutTime
+                                                                .toLocal()),
                                                         textDirection:
                                                             TextDirection.ltr,
                                                         style: const TextStyle(

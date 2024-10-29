@@ -19,17 +19,11 @@ import 'package:uniceps/features/Profile/presentation/bloc/handshake_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
-// import 'package:uniceps/features/Profile/presentation/screens/about.dart';
 import 'package:uniceps/features/Profile/presentation/screens/gym_list_screen.dart';
 import 'package:uniceps/features/Profile/presentation/screens/measurement_screen.dart';
 import 'package:uniceps/features/Profile/presentation/screens/profile_screen.dart';
-// import 'package:uniceps/features/Training/views/Screens/exercise_screen.dart';
-// import 'package:uniceps/features/Training/views/Screens/gym_handshake_screen.dart';
 import 'package:uniceps/features/Training/views/Screens/home_screen.dart';
-// import 'package:uniceps/features/Training/views/Screens/qr_scanner_screen.dart';
-// import 'package:uniceps/features/Profile/presentation/screens/subs_screen.dart';
 import 'package:uniceps/features/Training/views/bloc/exercises_bloc.dart';
-import 'package:uniceps/features/Training/views/bloc/progress_bloc.dart';
 import 'package:uniceps/features/Training/views/bloc/training_bloc.dart';
 import 'package:uniceps/firebase_options.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
@@ -185,10 +179,6 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<TrainingSectionCubit>(
           create: (context) => TrainingSectionCubit()..getSection(),
-        ),
-        BlocProvider<ProgressBloc>(
-          create: (context) =>
-              ProgressBloc(di.sl())..add(const ProgressUpdateEvent(0.0)),
         ),
       ],
       child: BlocBuilder<LocaleCubit, ChangedLangState>(

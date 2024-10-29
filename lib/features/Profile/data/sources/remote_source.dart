@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
@@ -70,13 +69,16 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
       ...HEADERS,
       "x-access-token": "${userBox.get(HIVE_USER_BOX)!['token']}",
     });
-    logger.t("measurements: ${res.statusCode}");
-    logger.t("measurements: ${res.body}");
-    logger.t("measurements: ${Platform.operatingSystemVersion}");
-    logger.t("measurements: ${{
-      ...HEADERS,
-      // "x-access-token": "${userBox.get(HIVE_USER_BOX)!['token']}",
-    }} ");
+
+    logger.t(
+      "measurements status code: ${res.statusCode}"
+      "\n"
+      "measurements body: ${res.body}"
+      "\n"
+      "measurements headers: ${res.headers}",
+    );
+    // logger.t("measurements: ${res.body}");
+
     if (res.statusCode == 200) {
       logger.t(res.body);
 

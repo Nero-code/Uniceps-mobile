@@ -38,8 +38,9 @@ class ImageCacheManager {
     final Map<String, Uint8List> map = {};
     for (int i = 0; i < exs.length; i++) {
       var temp = "${exs[i]['Muscle_Group']}/${exs[i]['ExerciseImage']}";
+      // await Future.delayed(const Duration(milliseconds: 500));
       if (!cacheKeys.contains(temp)) {
-        // logger.d("no image found");
+        // logger.t("downloading image");
         try {
           final response = await client.get(
             headers: {...HEADERS},
@@ -52,7 +53,8 @@ class ImageCacheManager {
             await imagesCache.put(temp, response.bodyBytes);
             map.addAll({"${exs[i]['id']}": response.bodyBytes});
 
-            loadingBar.add((increament += 1 / exs.length));
+            increament += 1 / exs.length;
+            loadingBar.sink.add((increament * 100).round().toDouble());
           } else {
             throw NoInternetException();
           }
@@ -64,7 +66,8 @@ class ImageCacheManager {
       } else {
         // logger.d("-------------------image found!!!");
         map.addAll({"${exs[i]['id']}": imagesCache.get(temp)!});
-        loadingBar.add((increament += (1 / exs.length)));
+        increament += 1 / exs.length;
+        loadingBar.sink.add((increament * 100).round().toDouble());
       }
     }
     // final list = <String,Uint8List>{};
@@ -94,7 +97,8 @@ class ImageCacheManager {
       if (imagesCache.containsKey(key)) {
         images.addAll({"${i['id']}": imagesCache.get(key)!});
 
-        loadingBar.add((increament += 1 / exc.length));
+        increament += 1 / exc.length;
+        loadingBar.sink.add((increament * 100).round().toDouble());
       } else {
         throw EmptyCacheExeption();
       }
