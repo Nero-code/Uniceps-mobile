@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:uniceps/features/Profile/domain/entities/subscription.dart';
+import 'package:uniceps/features/Profile/domain/classes/subscription.dart';
 
 // {
 //             "id": 123,
@@ -35,11 +35,11 @@ class SubscriptionModel extends Subscription {
   });
 
   factory SubscriptionModel.fromJson(Map<dynamic, dynamic> temp) {
-    print(
-        "------------------------Subrcribtions--------------------------------");
-    print(temp['id'].runtimeType);
-    print(temp['pid'].runtimeType);
-    print(temp['gym_id'].runtimeType);
+    // print(
+    //     "------------------------Subrcribtions--------------------------------");
+    // print(temp['id'].runtimeType);
+    // print(temp['pid'].runtimeType);
+    // print(temp['gym_id'].runtimeType);
     final payments = <Payment>[];
     final json = Map<String, dynamic>.from(temp);
     for (var i in json['payments']) {
@@ -107,10 +107,10 @@ class Payment extends Equatable {
   });
 
   factory Payment.fromJson(Map<String, dynamic> json) {
-    print("------------------------Payments--------------------------------");
-    json.forEach(
-      (key, value) => print("$key : ${value.runtimeType}"),
-    );
+    // print("------------------------Payments--------------------------------");
+    // json.forEach(
+    //   (key, value) => print("$key : ${value.runtimeType}"),
+    // );
     return Payment(
       id: json['id'],
       plId: json['pid'],

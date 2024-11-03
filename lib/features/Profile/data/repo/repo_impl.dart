@@ -8,14 +8,13 @@ import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:uniceps/features/Profile/data/sources/local_source.dart';
 import 'package:uniceps/features/Profile/data/sources/remote_source.dart';
-import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
-import 'package:uniceps/features/Profile/domain/entities/handshake.dart';
-import 'package:uniceps/features/Profile/domain/entities/measrument.dart';
-import 'package:uniceps/features/Profile/domain/entities/player_in_gym.dart';
+import 'package:uniceps/features/Profile/domain/classes/attendence.dart';
+import 'package:uniceps/features/Profile/domain/classes/measrument.dart';
+import 'package:uniceps/features/Profile/domain/classes/player_in_gym.dart';
 import 'package:uniceps/features/Profile/domain/repo.dart';
-import 'package:uniceps/features/Profile/domain/entities/subscription.dart';
+import 'package:uniceps/features/Profile/domain/classes/subscription.dart';
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
-import 'package:uniceps/features/Profile/domain/entities/gym.dart';
+import 'package:uniceps/features/Profile/domain/classes/gym.dart';
 
 class ProfileRepoImpl implements ProfileRepo {
   final LocalProfileSource local;
@@ -386,41 +385,6 @@ class ProfileRepoImpl implements ProfileRepo {
             errorMessage:
                 "GeneralP |> Profile -> repoImpl -> local getAttendence"
                 "\n$e"));
-      }
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<HandShake>>> getAllGymHandshake() async {
-    logger.t("profile repo getAllGymHandshake");
-    if (await checker.hasConnection) {
-      try {
-        final list = await remote.getAllHandshake();
-
-        await local.saveHandshakes(list);
-        return Right(list);
-      } on NoGymSpecifiedException {
-        return Left(NoGymSpecifiedFailure(errMsg: "NO Handshakes Found"));
-      } on ClientException {
-        return Left(NoInternetConnectionFailure(errMsg: ""));
-      } on ServerException {
-        return Left(ServerFailure(errMsg: ""));
-      } catch (e) {
-        logger.d(
-            "GeneralPurposFailure! |>>> Profile -> repoImpl -> getAllGymHandshake: ${e.toString()}");
-        return Left(GeneralPurposFailure(errorMessage: e.toString()));
-      }
-    } else {
-      try {
-        final list = await local.getAllHandshakes();
-        return Right(list);
-      } on EmptyCacheExeption {
-        return const Left(EmptyCacheFailure(
-            errorMessage: "No Handshakes found in local box"));
-      } catch (e) {
-        return Left(GeneralPurposFailure(
-            errorMessage:
-                "Unknown err! |>>> Profile -> localS -> getAllHandshakes: ${e.toString()}"));
       }
     }
   }

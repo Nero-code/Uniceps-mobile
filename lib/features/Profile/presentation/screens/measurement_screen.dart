@@ -1,32 +1,23 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/core/errors/failure.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:uniceps/core/widgets/reload_widget.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
-// import 'package:uniceps/core/Themes/light_theme.dart';
+import 'package:uniceps/features/Profile/domain/classes/measrument.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/measurement/measurment_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/measure_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/main_cubit/locale_cubit.dart';
 
-class MeasurementScreen extends StatefulWidget {
-  const MeasurementScreen({super.key});
+class MeasurementScreen3 extends StatefulWidget {
+  const MeasurementScreen3({super.key});
 
   @override
-  State<MeasurementScreen> createState() => _MeasurementScreenState();
+  State<MeasurementScreen3> createState() => _MeasurementScreen3State();
 }
 
-class _MeasurementScreenState extends State<MeasurementScreen> {
-  // final numbers = [180, 70, 0, 120, 95, 0, 30, 76, 30];
-  // final trImgPng = [
-  //   "Height.png",
-  //   "Weight.png",
-  //   "Neck.png",
-  //   "Shoulder.png",
-  //   "Chest.png",
-  //   "Waist.png",
-  //   "ForeArm.png",
-  //   "Thigh.png",
-  //   "Leg.png",
-  // ];
+class _MeasurementScreen3State extends State<MeasurementScreen3>
+    with TickerProviderStateMixin {
   final trImg = [
     "Height.jpg",
     "Weight.jpg",
@@ -35,189 +26,320 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
     "Chest.jpg",
     "Waist.jpg",
     "ForeArm.jpg",
+    "ForeArm_r.jpg",
     "Thigh.jpg",
+    "Thigh_r.jpg",
+    "Leg_l.jpg",
     "Leg.jpg",
     'hips.jpg',
   ];
 
-  int currentPage = 0;
+  int page = 0;
+
+  bool isLoading = false;
+
+  bool isLeft = false;
+
+  final duration = const Duration(milliseconds: 500);
+
+  Widget child = const SizedBox();
+
+  Future<void> animate(bool isNext) async {
+    // isLoading = true;
+    // setState(() {});
+    // await Future.delayed(const Duration(milliseconds: 500));
+    // print("currentPAge:  $page");
+    // print("isLoading:  $isLoading");
+    isLeft = isNext;
+    isNext ? ++page : --page;
+
+    // isLoading = false;
+    // childBuilder();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
+    final screen = MediaQuery.sizeOf(context);
+    // final local = AppLocalizations.of(context)!;
+    final isRtl = context.read<LocaleCubit>().state.isRtl();
+    // print("currentPAge:  $page");
+    // print("isLoading:  $isLoading");
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 236, 236, 236),
-      appBar: AppBar(
-        title: const Text("Uniceps"),
-        // backgroundColor: Theme.of(context).colorScheme.background,
-        backgroundColor: const Color.fromARGB(255, 236, 236, 236),
-      ),
       body: BlocBuilder<MeasurmentBloc, MeasurmentState>(
         builder: (context, state) {
-          // print(state.runtimeType);
-          if (state is MeasurmentInitial) {
-            BlocProvider.of<MeasurmentBloc>(context)
-                .add(GetMeasurementsEvent());
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is MeasurementLoadedState) {
-            if (state.list.isEmpty) {
-              // return Center(child: Text(AppLocalizations.of(context)!.empty));
-              return ReloadScreenWidget(
-                  f: const EmptyCacheFailure(errorMessage: "asad"),
-                  callBack: () {
-                    BlocProvider.of<MeasurmentBloc>(context)
-                        .add(GetMeasurementsEvent());
-                  });
-            }
-            return Column(
-              children: [
-                SizedBox(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: IconButton(
-                              icon: const Icon(Icons.arrow_back_ios_new),
-                              onPressed: state.list.length > 1
-                                  ? () {
-                                      setState(() {
-                                        if (currentPage > 0) {
-                                          --currentPage;
-                                        }
-                                      });
-                                    }
-                                  : null,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Center(
-                            child: Text(
-                              "${state.list[currentPage].checkDate.year}/"
-                              "${state.list[currentPage].checkDate.month}/"
-                              "${state.list[currentPage].checkDate.day}",
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
+          return Stack(
+            children: [
+              Builder(
+                builder: (context) {
+                  if (state is MeasurementLoadedState) {
+                    childBuilder(state.list[page]);
+                    return GestureDetector(
+                      onHorizontalDragEnd: (details) async {
+                        if (isLoading) return;
+
+                        if (details.primaryVelocity != null &&
+                            details.primaryVelocity! > 0) {
+                          // print("Left");
+                          if (page < state.list.length - 1) {
+                            // ++page;
+                            await animate(true);
+                          }
+                        } else if (details.primaryVelocity != null &&
+                            details.primaryVelocity! < 0) {
+                          // print("Right");
+                          if (page > 0) {
+                            // --page;
+                            await animate(false);
+                          }
+                        }
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            top: MediaQuery.sizeOf(context).height * 0.1),
+                        child: SizedBox(
+                          width: screen.width,
+                          height: screen.height,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              // const SizedBox(height: 20.0),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  PageTransitionSwitcher(
+                                    duration: const Duration(milliseconds: 500),
+                                    reverse: isLeft,
+                                    transitionBuilder: (child, primaryAnimation,
+                                        secondaryAnimation) {
+                                      return SharedAxisTransition(
+                                        animation: primaryAnimation,
+                                        secondaryAnimation: secondaryAnimation,
+                                        transitionType:
+                                            SharedAxisTransitionType.horizontal,
+                                        child: child,
+                                      );
+                                    },
+                                    child: SizedBox(
+                                      key: ValueKey<int>(page),
+                                      child: child,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
+                              const SizedBox(height: 5.0),
+                            ],
                           ),
                         ),
-                        Expanded(
-                          child: Center(
-                            child: IconButton(
-                              icon:
-                                  const Icon(Icons.arrow_forward_ios_outlined),
-                              onPressed: state.list.length > 1
-                                  ? () {
-                                      setState(() {
-                                        if (currentPage <
-                                            state.list.length - 1) {
-                                          ++currentPage;
-                                        }
-                                      });
-                                    }
-                                  : null,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  } else if (state is MeasurementErrorState) {
+                    return Center(
+                      child: ReloadScreenWidget(
+                          f: state.f,
+                          callBack: () {
+                            BlocProvider.of<MeasurmentBloc>(context)
+                                .add(GetMeasurementsEvent());
+                          }),
+                    );
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                },
+              ),
+              Positioned(
+                top: 20.0,
+                child: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.arrow_back),
+                  iconSize: 30,
                 ),
-                Expanded(
-                  child: ListView(
+              ),
+              if (state is MeasurementLoadedState)
+                Positioned(
+                  bottom: 0.0,
+                  width: MediaQuery.sizeOf(context).width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      MeasureWidget(
-                        title: AppLocalizations.of(context)!.height,
-                        isSymmetric: true,
-                        lValue: state.list[currentPage].height,
-                        image: trImg[0],
+                      IconButton(
+                        onPressed: () async {
+                          //  RTL  -->  Left (previous)
+                          if (isLoading) return;
+
+                          if (isRtl && page > 0) {
+                            await animate(false);
+                          }
+                          if (!isRtl && page < state.list.length - 1) {
+                            await animate(true);
+                          }
+                        },
+                        icon: Container(
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
                       ),
-                      MeasureWidget(
-                        title: AppLocalizations.of(context)!.weight,
-                        isSymmetric: true,
-                        lValue: state.list[currentPage].weight,
-                        isCm: false,
-                        image: trImg[1],
+                      PageTransitionSwitcher(
+                        duration: const Duration(milliseconds: 500),
+                        reverse: isLeft,
+                        transitionBuilder:
+                            (child, primaryAnimation, secondaryAnimation) =>
+                                SharedAxisTransition(
+                          animation: primaryAnimation,
+                          secondaryAnimation: secondaryAnimation,
+                          transitionType: SharedAxisTransitionType.horizontal,
+                          child: child,
+                        ),
+                        child: Text(
+                          key: ValueKey<String>("$page"),
+                          intl.DateFormat("dd/MM/yyyy")
+                              .format(state.list[page].checkDate),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      MeasureWidget(
-                        title: AppLocalizations.of(context)!.nick,
-                        isSymmetric: true,
-                        lValue: state.list[currentPage].neck,
-                        image: trImg[2],
-                      ),
-                      MeasureWidget(
-                        title: AppLocalizations.of(context)!.shoulders,
-                        isSymmetric: true,
-                        lValue: state.list[currentPage].shoulders,
-                        image: trImg[3],
-                      ),
-                      MeasureWidget(
-                        title: AppLocalizations.of(context)!.chest,
-                        isSymmetric: true,
-                        lValue: state.list[currentPage].chest,
-                        image: trImg[4],
-                      ),
-                      MeasureWidget(
-                        title: AppLocalizations.of(context)!.waist,
-                        isSymmetric: true,
-                        lValue: state.list[currentPage].waist,
-                        image: trImg[5],
-                      ),
-                      MeasureWidget(
-                        title: AppLocalizations.of(context)!.arms,
-                        isSymmetric: state.list[currentPage].lArm ==
-                            state.list[currentPage].rArm,
-                        lValue: state.list[currentPage].lArm,
-                        rValue: state.list[currentPage].rArm,
-                        image: trImg[6],
-                      ),
-                      MeasureWidget(
-                        title: AppLocalizations.of(context)!.thighs,
-                        isSymmetric: state.list[currentPage].lThigh ==
-                            state.list[currentPage].rThigh,
-                        lValue: state.list[currentPage].lThigh,
-                        rValue: state.list[currentPage].rThigh,
-                        image: trImg[7],
-                      ),
-                      MeasureWidget(
-                        title: AppLocalizations.of(context)!.legs,
-                        isSymmetric: state.list[currentPage].lLeg ==
-                            state.list[currentPage].rLeg,
-                        lValue: state.list[currentPage].lLeg,
-                        rValue: state.list[currentPage].rLeg,
-                        image: trImg[8],
-                      ),
-                      MeasureWidget(
-                        title: AppLocalizations.of(context)!.hips,
-                        isSymmetric: true,
-                        lValue: state.list[currentPage].hips,
-                        image: trImg[9],
+                      IconButton(
+                        onPressed: () async {
+                          //  RTL  -->  Right (Next)
+                          if (isLoading) return;
+                          if (isRtl && page < state.list.length - 1) {
+                            await animate(true);
+                          }
+                          if (!isRtl && page > 0) {
+                            await animate(false);
+                          }
+                        },
+                        icon: Container(
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                            ),
+                            color: Colors.white,
+                          ),
+                          child: Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            );
-            // "Unexpected Error occourd!"
-          } else if (state is MeasurementErrorState) {
-            // print("Measurement Failure: ${state.f.runtimeType}");
-            return Center(
-              child: ReloadScreenWidget(
-                f: state.f,
-                callBack: () {
-                  BlocProvider.of<MeasurmentBloc>(context)
-                      .add(GetMeasurementsEvent());
-                },
-              ),
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
+            ],
+          );
         },
+      ),
+    );
+  }
+
+  void childBuilder(Measurement m) {
+    final local = AppLocalizations.of(context)!;
+    child = SingleChildScrollView(
+      child: Column(
+        // key: ValueKey<int>(page),
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            textDirection: TextDirection.rtl,
+            children: [
+              MeasureWidget(
+                  isLoading: isLoading,
+                  image: trImg[0],
+                  title: local.height,
+                  value: m.height),
+              MeasureWidget(
+                  isLoading: isLoading,
+                  image: trImg[2],
+                  title: local.nick,
+                  value: m.neck),
+              MeasureWidget(
+                  isLoading: isLoading,
+                  image: trImg[3],
+                  title: local.shoulders,
+                  value: m.shoulders),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            textDirection: TextDirection.rtl,
+            children: [
+              MeasureWidget(
+                  isLoading: isLoading,
+                  image: trImg[6],
+                  title: local.lArm,
+                  value: m.lArm),
+              MeasureWidget(
+                  isLoading: isLoading,
+                  image: trImg[4],
+                  title: local.chest,
+                  value: m.chest),
+              MeasureWidget(
+                  isLoading: isLoading,
+                  image: trImg[7],
+                  title: local.rArm,
+                  value: m.rArm),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            textDirection: TextDirection.rtl,
+            children: [
+              MeasureWidget(
+                  isLoading: isLoading,
+                  image: trImg[8],
+                  title: local.lThigh,
+                  value: m.lThigh),
+              MeasureWidget(
+                  isLoading: isLoading,
+                  image: trImg[5],
+                  title: local.waist,
+                  value: m.waist),
+              MeasureWidget(
+                  isLoading: isLoading,
+                  image: trImg[9],
+                  title: local.rThigh,
+                  value: m.rThigh),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            textDirection: TextDirection.rtl,
+            children: [
+              MeasureWidget(
+                  isLoading: isLoading,
+                  image: trImg[10],
+                  title: local.lLeg,
+                  value: m.lLeg), // rLeg
+              MeasureWidget(
+                  isLoading: isLoading,
+                  image: trImg[12],
+                  title: local.hips,
+                  value: m.hips),
+
+              MeasureWidget(
+                  isLoading: isLoading,
+                  image: trImg[11],
+                  title: local.rLeg,
+                  value: m.rLeg),
+            ],
+          ),
+          MeasureWidget(
+              isLoading: isLoading,
+              image: trImg[1],
+              title: local.weight,
+              isCm: false,
+              value: m.weight),
+        ],
       ),
     );
   }

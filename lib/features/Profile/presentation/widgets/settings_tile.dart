@@ -1,50 +1,80 @@
 import 'package:flutter/material.dart';
 
-class SettingTile extends StatelessWidget {
-  const SettingTile({
+class SettingsTile extends StatelessWidget {
+  const SettingsTile({
     super.key,
-    required this.title,
-    required this.onPressed,
-    required this.isRtl,
     required this.icon,
-    this.color = Colors.white,
+    required this.title,
+    required this.subtitle,
+    required this.iconsColor,
+    this.backColor = Colors.white54,
+    required this.onPressed,
   });
 
-  final Widget icon;
-  final String title;
+  final IconData icon;
+  final String title, subtitle;
+  final Color iconsColor, backColor;
   final VoidCallback onPressed;
-  final bool isRtl;
-  final Color color;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
       child: Material(
-        elevation: 3,
-        color: color,
-        child: InkWell(
-          onTap: onPressed,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              children: [
-                icon,
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(title),
-                      const Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: Colors.grey,
-                        size: 15,
-                      ),
-                    ],
+        // elevation: 2,
+        borderRadius: BorderRadius.circular(15),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            // color: Colors.white,
+            // color: Theme.of(context).colorScheme.secondary.withAlpha(10),
+            border: Border.all(
+              color: const Color(0xFFCCCCCC),
+              width: 0.5,
+            ),
+          ),
+          // padding: const EdgeInsets.all(1.0),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(15),
+            onTap: onPressed,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      // color:
+                      // Theme.of(context).colorScheme.secondary.withAlpha(30),
+                      // color: iconsColor.withAlpha(20),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Icon(
+                      // color: iconsColor,
+                      color: Theme.of(context).colorScheme.primary,
+                      icon,
+                      size: 30,
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 10),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                  // Text(
+                  //   subtitle,
+                  //   style: TextStyle(
+                  //     color: Colors.grey,
+                  //     fontSize: 10,
+                  //   ),
+                  // ),
+                ],
+              ),
             ),
           ),
         ),

@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
-import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
 import 'package:uniceps/features/Training/data/models/training_prog_model.dart';
 
 /// Abstract class [LocalTrainingSource] for SoC
@@ -14,7 +13,6 @@ abstract class LocalTrainingSource {
   Future<Map<String, double>> getWeights();
   Future<void> saveNewWeight(Map<String, double> val);
 
-  Future<void> saveHandshakes(List<HandShakeModel> list);
   Future<List<GymModel>> getSubscribedToGyms();
   Future<List<GymModel>> cacheSubsToGyms(List<GymModel> list);
   Future<List<GymModel>> setSelectedGym(String gymId);
@@ -81,13 +79,6 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
   @override
   Future<void> saveNewWeight(Map<String, double> val) async {
     await lastWBox.put(val.keys.first, val.values.first);
-  }
-
-  @override
-  Future<void> saveHandshakes(List<HandShakeModel> list) async {
-    for (var i in list) {
-      await handshakesBox.put(i.gymId, i.toJson());
-    }
   }
 
   /// Throws [EmptyCacheExeption]

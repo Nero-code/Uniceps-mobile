@@ -6,12 +6,12 @@ import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/measurment_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/screens/measurement_screen_3.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/gyms/gyms_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/measurement/measurment_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/profile/profile_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/screens/measurement_screen.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/profile_back_circle.dart';
-import 'package:uniceps/features/Profile/presentation/widgets/settings_tile_2.dart';
+import 'package:uniceps/features/Profile/presentation/widgets/settings_tile.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -127,7 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           children: [
                             TableRow(
                               children: [
-                                SettingsTile2(
+                                SettingsTile(
                                   icon: Icons.account_circle,
                                   iconsColor: Colors.deepOrange,
                                   title: local.profile,
@@ -142,7 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     // print("Profile result: $res");
                                   },
                                 ),
-                                SettingsTile2(
+                                SettingsTile(
                                   icon: Icons.fitness_center_rounded,
                                   iconsColor: Colors.blue,
                                   title: local.gyms,
@@ -158,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             TableRow(
                               children: [
-                                SettingsTile2(
+                                SettingsTile(
                                     icon: Icons.leaderboard,
                                     iconsColor: Colors.green,
                                     title: local.measurements,
@@ -174,7 +174,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             const MeasurementScreen3(),
                                       ));
                                     }),
-                                SettingsTile2(
+                                SettingsTile(
                                   icon: Icons.language,
                                   iconsColor: Colors.blue,
                                   title: local.language,
@@ -216,7 +216,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             TableRow(
                               children: [
-                                SettingsTile2(
+                                SettingsTile(
                                   icon: Icons.info,
                                   iconsColor: Colors.amber,
                                   title: local.about,
@@ -224,7 +224,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   onPressed: () => Navigator.of(context)
                                       .pushNamed(ROUTE_ABOUT),
                                 ),
-                                SettingsTile2(
+                                SettingsTile(
                                   icon: Icons.logout_rounded,
                                   iconsColor: Colors.red,
                                   title: local.logout,

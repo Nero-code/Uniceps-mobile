@@ -1,5 +1,5 @@
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/features/Profile/domain/entities/measrument.dart';
+import 'package:uniceps/features/Profile/domain/classes/measrument.dart';
 
 class MeasurementModel extends Measurement {
   const MeasurementModel({

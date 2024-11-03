@@ -4,13 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
-import 'package:uniceps/features/Profile/domain/entities/gym.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/gyms_bloc.dart';
+import 'package:uniceps/features/Profile/domain/classes/gym.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/attendence/attendence_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/gyms/gyms_bloc.dart';
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import 'package:uniceps/features/Profile/presentation/bloc/player_gym_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/screens/gym_profile_2.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/player_gym/player_gym_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/subscription/subs_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/screens/gym_profile.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/gym_logo_widget.dart';
 import 'package:uniceps/features/Profile/presentation/widgets/gyms_list_wave_back.dart';
 import 'package:uniceps/features/Training/views/widgets/my_gym_widget.dart';
@@ -122,7 +122,7 @@ class _GymListScreenState extends State<GymListScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => GymProfileScreen2(
+                                builder: (context) => GymProfileScreen(
                                   gym: state.restList[index],
                                 ),
                               ),
@@ -249,7 +249,7 @@ class _GymListScreenState extends State<GymListScreen> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    GymProfileScreen2(
+                                                    GymProfileScreen(
                                                   gym: i,
                                                 ),
                                               ),
@@ -393,7 +393,7 @@ class _GymListScreenState extends State<GymListScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => GymProfileScreen2(
+                                        builder: (context) => GymProfileScreen(
                                           gym: searchRes.isEmpty
                                               ? gymsList[index]
                                               : searchRes[index],

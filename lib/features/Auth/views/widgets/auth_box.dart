@@ -2,12 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:uniceps/features/Auth/views/widgets/background_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-///    Animated Switcher's First card.
-///
-///    This box is simply for the email and password to Authenticate the player
-///
-///
-
 class AuthBox extends StatefulWidget {
   const AuthBox({
     super.key,

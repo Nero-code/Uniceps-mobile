@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/subscription/subs_bloc.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 ///

@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/errors/failure.dart';
-import 'package:uniceps/features/Profile/domain/entities/gym.dart';
-import 'package:uniceps/features/Training/services/usecases/usecases.dart';
+import 'package:uniceps/features/Profile/domain/classes/gym.dart';
+import 'package:uniceps/features/Training/services/commands/usecases.dart';
 
 part 'current_gym_event.dart';
 part 'current_gym_state.dart';

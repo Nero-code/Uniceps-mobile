@@ -3,12 +3,12 @@ import 'package:logger/logger.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
-import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
+// import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
 import 'package:uniceps/features/Profile/data/models/measurement_model.dart';
 import 'package:uniceps/features/Profile/data/models/subscription_model.dart';
-import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
+import 'package:uniceps/features/Profile/domain/classes/attendence.dart';
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
-import 'package:uniceps/features/Profile/domain/entities/player_in_gym.dart';
+import 'package:uniceps/features/Profile/domain/classes/player_in_gym.dart';
 
 abstract class LocalProfileSource {
   Future<List<MeasurementModel>> getMeasurements();
@@ -19,8 +19,8 @@ abstract class LocalProfileSource {
   Future<void> saveSubs(String gymId, List<SubscriptionModel> list);
   Future<List<GymModel>> getGyms();
   Future<void> saveGyms(List<GymModel> list);
-  Future<List<HandShakeModel>> getAllHandshakes();
-  Future<void> saveHandshakes(List<HandShakeModel> list);
+  // Future<List<HandShakeModel>> getAllHandshakes();
+  // Future<void> saveHandshakes(List<HandShakeModel> list);
   Future<List<Attendence>> getAttendenceAtGym(String gymId);
   Future<void> saveAttenenceAtGym(String gymId, List<Attendence> list);
   Future<List<GymModel>> getSubscribedToGyms();
@@ -142,24 +142,24 @@ class LocalProfileSourceImpl implements LocalProfileSource {
     }
   }
 
-  @override
-  Future<List<HandShakeModel>> getAllHandshakes() async {
-    final list = <HandShakeModel>[];
-    for (var i in handshakesBox.keys) {
-      list.add(HandShakeModel.fromJson(Map.from(handshakesBox.get(i)!)));
-    }
-    if (list.isEmpty) {
-      throw EmptyCacheExeption();
-    }
-    return list;
-  }
+  // @override
+  // Future<List<HandShakeModel>> getAllHandshakes() async {
+  //   final list = <HandShakeModel>[];
+  //   for (var i in handshakesBox.keys) {
+  //     list.add(HandShakeModel.fromJson(Map.from(handshakesBox.get(i)!)));
+  //   }
+  //   if (list.isEmpty) {
+  //     throw EmptyCacheExeption();
+  //   }
+  //   return list;
+  // }
 
-  @override
-  Future<void> saveHandshakes(List<HandShakeModel> list) async {
-    for (var i in list) {
-      await handshakesBox.put(i.gymId, i.toJson());
-    }
-  }
+  // @override
+  // Future<void> saveHandshakes(List<HandShakeModel> list) async {
+  //   for (var i in list) {
+  //     await handshakesBox.put(i.gymId, i.toJson());
+  //   }
+  // }
 
   @override
   Future<List<Attendence>> getAttendenceAtGym(String gymId) async {

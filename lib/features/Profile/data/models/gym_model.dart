@@ -1,4 +1,4 @@
-import 'package:uniceps/features/Profile/domain/entities/gym.dart';
+import 'package:uniceps/features/Profile/domain/classes/gym.dart';
 
 class GymModel extends Gym {
   const GymModel({
@@ -17,7 +17,7 @@ class GymModel extends Gym {
     super.joinedAt,
   });
   factory GymModel.fromJson(Map<dynamic, dynamic> json, [DateTime? joinedAt]) {
-    print("GymModel Parse Algorithm");
+    // print("GymModel Parse Algorithm");
     // print("id:         ${json['id']}");
     // print("pid:        ${json['pid'] ?? ""}");
     // print("name:       ${json['gym_name']}");
@@ -26,8 +26,8 @@ class GymModel extends Gym {
     // print("ownerName:  ${json['owner_name']}");
     // print("phoneNum:   ${json['phone_number']}");
     // print("telephone:  ${json['telephone']}");
-    print("start:      ${json['start'].runtimeType}");
-    print("end:        ${json['end'].runtimeType}");
+    // print("start:      ${json['start'].runtimeType}");
+    // print("end:        ${json['end'].runtimeType}");
     // print("created_at:        ${DateTime.parse(json['created_at'])}");
     // print(json['start'].runtimeType);
     // print(json['end'].runtimeType);

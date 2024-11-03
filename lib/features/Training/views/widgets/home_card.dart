@@ -9,10 +9,10 @@ import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/player_gym_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/subs_bloc.dart';
-import 'package:uniceps/features/Profile/presentation/screens/gym_profile_2.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/attendence/attendence_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/player_gym/player_gym_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/subscription/subs_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/screens/gym_profile.dart';
 import 'package:uniceps/features/Training/views/bloc/current_gym_bloc.dart';
 
 class HomeCard extends StatelessWidget {
@@ -264,7 +264,7 @@ class HomeCard extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                GymProfileScreen2(
+                                                GymProfileScreen(
                                                     gym: state.current)),
                                       );
                                     },

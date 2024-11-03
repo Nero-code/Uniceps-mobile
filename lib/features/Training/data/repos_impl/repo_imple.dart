@@ -5,8 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
-import 'package:uniceps/features/Profile/domain/entities/gym.dart';
-import 'package:uniceps/features/Profile/domain/entities/handshake.dart';
+import 'package:uniceps/features/Profile/domain/classes/gym.dart';
 import 'package:uniceps/features/Training/data/models/exercise_model.dart';
 import 'package:uniceps/features/Training/data/sources/local_data_source.dart';
 import 'package:uniceps/features/Training/data/sources/remote_data_source.dart';
@@ -168,24 +167,6 @@ class TrainingRepoImple implements TrainingRepo {
       return const Right(true);
     }
     return const Right(false);
-  }
-
-  @override
-  Future<Either<Failure, HandShake>> getCurrentHandshake() async {
-    if (await connection.hasConnection) {
-      try {
-        final res = await remote.getAllHandshakes();
-        await local.saveHandshakes(res);
-        return Right(res.first);
-      } on NoGymSpecifiedException {
-        return Left(NoGymSpecifiedFailure(errMsg: "no handshakes found"));
-      } on ServerException {
-        return Left(ServerFailure(errMsg: "Server Side Error"));
-      } catch (e) {
-        return Left(GeneralPurposFailure(errorMessage: e.toString()));
-      }
-    }
-    return Left(OfflineFailure(errorMessage: "no internet"));
   }
 
   @override

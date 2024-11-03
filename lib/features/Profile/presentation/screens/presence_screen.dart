@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
-import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
+import 'package:uniceps/features/Profile/domain/classes/attendence.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/attendence/attendence_bloc.dart';
 
 class PresenceScreen extends StatefulWidget {
   const PresenceScreen({

@@ -5,13 +5,13 @@ import 'package:logger/logger.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
-import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
+// import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
 import 'package:uniceps/features/Profile/data/models/measurement_model.dart';
 import 'package:uniceps/features/Profile/data/models/subscription_model.dart';
-import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
+import 'package:uniceps/features/Profile/domain/classes/attendence.dart';
 import "package:http/http.dart" as http;
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
-import 'package:uniceps/features/Profile/domain/entities/player_in_gym.dart';
+import 'package:uniceps/features/Profile/domain/classes/player_in_gym.dart';
 
 abstract class RemoteProfileSource {
   Future<PlayerModel> getProfileData();
@@ -20,7 +20,7 @@ abstract class RemoteProfileSource {
   Future<List<MeasurementModel>> getMeasurements();
   Future<List<SubscriptionModel>> getSubs(String gymId, String pid);
   Future<List<GymModel>> getGyms();
-  Future<List<HandShakeModel>> getAllHandshake();
+  // Future<List<HandShakeModel>> getAllHandshake();
   Future<List<Attendence>> getAllAttendance(String gymId, String pid);
   Future<List<GymModel>> getSubscribedToGyms();
   Future<PlayerInGym> getPlayerInGym(String gymId, String pid);
@@ -226,37 +226,37 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
     throw ServerException();
   }
 
-  @override
-  Future<List<HandShakeModel>> getAllHandshake() async {
-    logger.t(
-        "check 1 inside getAllhandshake: Playerbox.get(): ${playerBox.get(HIVE_PROFILE_BOX)}");
-    final temp = <HandShakeModel>[];
-    final res = await _client.get(
-      Uri.parse(
-          "$API$HTTP_HANDSHAKE/${playerBox.get(HIVE_PROFILE_BOX)!['uid']}"),
-      headers: {
-        ...HEADERS,
-        "x-access-token": userBox.get(HIVE_USER_BOX)!["token"],
-      },
-      // body: jsonEncode({
-      //   "gym_id": 11,
-      //   "uid": 336563653,
-      //   "pid": 123456789,
-      // }
-      // )
-    );
-    logger.t(res.statusCode);
-    logger.t(res.body);
-    if (res.statusCode == 200) {
-      for (var i in jsonDecode(res.body)) {
-        temp.add(HandShakeModel.fromJson(i));
-      }
-      return temp;
-    } else if (res.statusCode == 204) {
-      throw NoGymSpecifiedException();
-    }
-    throw ServerException();
-  }
+  // @override
+  // Future<List<HandShakeModel>> getAllHandshake() async {
+  //   logger.t(
+  //       "check 1 inside getAllhandshake: Playerbox.get(): ${playerBox.get(HIVE_PROFILE_BOX)}");
+  //   final temp = <HandShakeModel>[];
+  //   final res = await _client.get(
+  //     Uri.parse(
+  //         "$API$HTTP_HANDSHAKE/${playerBox.get(HIVE_PROFILE_BOX)!['uid']}"),
+  //     headers: {
+  //       ...HEADERS,
+  //       "x-access-token": userBox.get(HIVE_USER_BOX)!["token"],
+  //     },
+  //     // body: jsonEncode({
+  //     //   "gym_id": 11,
+  //     //   "uid": 336563653,
+  //     //   "pid": 123456789,
+  //     // }
+  //     // )
+  //   );
+  //   logger.t(res.statusCode);
+  //   logger.t(res.body);
+  //   if (res.statusCode == 200) {
+  //     for (var i in jsonDecode(res.body)) {
+  //       temp.add(HandShakeModel.fromJson(i));
+  //     }
+  //     return temp;
+  //   } else if (res.statusCode == 204) {
+  //     throw NoGymSpecifiedException();
+  //   }
+  //   throw ServerException();
+  // }
 
   @override
   Future<List<GymModel>> getSubscribedToGyms() async {

@@ -7,10 +7,7 @@ import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
-import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
-// import 'package:uniceps/features/Training/data/models/presence_model.dart';
 import 'package:uniceps/features/Training/data/models/training_prog_model.dart';
-// import 'package:uniceps/features/Training/services/entities/avatar.dart';
 
 abstract class RemoteTrainingSource {
   Future<TrainingProgramModel> getTrainingProgram({
@@ -22,8 +19,6 @@ abstract class RemoteTrainingSource {
   Future<List<GymModel>> getSubscribedToGyms();
   // Future<List<PresenceModel>> getPresence(String gymId);
   // Future<Avatar> getAvatar();
-
-  Future<List<HandShakeModel>> getAllHandshakes();
 }
 
 class RemoteTrainingSourceImpl implements RemoteTrainingSource {
@@ -104,37 +99,6 @@ class RemoteTrainingSourceImpl implements RemoteTrainingSource {
       final temp = jsonDecode(res.body)['data'] as List<Map<String, dynamic>>;
       temp.map((e) => list.add(GymModel.fromJson(e)));
       return list;
-    }
-    throw ServerException();
-  }
-
-  @override
-  Future<List<HandShakeModel>> getAllHandshakes() async {
-    logger.t(
-        "check 1 inside getCurrenthandshake: Playerbox.get(): ${playerBox.get(HIVE_PROFILE_BOX)}");
-    final temp = <HandShakeModel>[];
-    final res = await client.get(
-      Uri.parse(
-          "$API$HTTP_HANDSHAKE/${playerBox.get(HIVE_PROFILE_BOX)!['uid']}"),
-      headers: {
-        ...HEADERS,
-        "x-access-token": userBox.get(HIVE_USER_BOX)!["token"],
-      },
-    );
-    logger.t("hanshakes status code: ${res.statusCode}");
-    logger.t("Handshakes body: ${res.body}");
-    if (res.statusCode == 200) {
-      for (var i in jsonDecode(res.body)) {
-        temp.add(HandShakeModel.fromJson(i));
-      }
-
-      temp.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      logger.t("Handshakes: $temp");
-
-      return temp;
-    } else if (res.statusCode == 204) {
-      logger.t("hanshakes status code: ${res.statusCode}");
-      throw NoGymSpecifiedException();
     }
     throw ServerException();
   }

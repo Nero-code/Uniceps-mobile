@@ -2,13 +2,13 @@ import 'package:dartz/dartz.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
-import 'package:uniceps/features/Profile/domain/entities/attendence.dart';
-import 'package:uniceps/features/Profile/domain/entities/handshake.dart';
-import 'package:uniceps/features/Profile/domain/entities/measrument.dart';
-import 'package:uniceps/features/Profile/domain/entities/player_in_gym.dart';
-import 'package:uniceps/features/Profile/domain/entities/subscription.dart';
+import 'package:uniceps/features/Profile/domain/classes/attendence.dart';
+// import 'package:uniceps/features/Profile/domain/entities/handshake.dart';
+import 'package:uniceps/features/Profile/domain/classes/measrument.dart';
+import 'package:uniceps/features/Profile/domain/classes/player_in_gym.dart';
+import 'package:uniceps/features/Profile/domain/classes/subscription.dart';
 import 'package:uniceps/features/Profile/data/models/gym_model.dart';
-import 'package:uniceps/features/Profile/domain/entities/gym.dart';
+import 'package:uniceps/features/Profile/domain/classes/gym.dart';
 
 abstract class ProfileRepo {
   Future<Either<Failure, Player>> getProfileData();
@@ -19,8 +19,6 @@ abstract class ProfileRepo {
   Future<Either<Failure, List<Measurement>>> getMeasurement();
   Future<Either<Failure, List<Subscription>>> getSubscriptions(
       String gymId, String pid);
-  // Future<Either<Failure, Unit>> changeLanguage();
-  Future<Either<Failure, List<HandShake>>> getAllGymHandshake();
   Future<Either<Failure, List<Attendence>>> gymAttendence(
       String gymId, String pid);
   Future<Either<Failure, PlayerInGym>> getPlayerInGym(String gymId, String pid);

@@ -5,7 +5,7 @@ import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
 import 'package:uniceps/features/Auth/views/screens/auth_screen.dart';
 import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
+import 'package:uniceps/features/Profile/presentation/bloc/profile/profile_bloc.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

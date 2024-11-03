@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/features/Profile/domain/entities/gym.dart';
+import 'package:uniceps/features/Profile/domain/classes/gym.dart';
 
 class GymLogoWidget extends StatelessWidget {
   const GymLogoWidget({super.key, required this.gym, required this.onPressed});

@@ -6,7 +6,7 @@ import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
 // import 'package:uniceps/features/Training/services/entities/exercise.dart';
 import 'package:uniceps/features/Training/services/entities/training_program.dart';
-import 'package:uniceps/features/Training/services/usecases/usecases.dart';
+import 'package:uniceps/features/Training/services/commands/usecases.dart';
 
 part 'training_event.dart';
 part 'training_state.dart';
