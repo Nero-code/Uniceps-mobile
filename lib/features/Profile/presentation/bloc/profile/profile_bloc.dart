@@ -26,6 +26,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProfileSubmitEvent>(
       (event, emit) async {
         emit(ProfileLoadingState());
+
         final either = await usecases.submitProfileData(
           event.player,
           isCreate: event.isCreate,

@@ -1,75 +1,62 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:uniceps/main_cubit/locale_cubit.dart';
 
 class TrainingGroup extends StatelessWidget {
   const TrainingGroup({
     super.key,
-    required this.order,
+    this.isSelected = false,
+    this.isToday = false,
+    required this.onPressed,
+    // required this.image,
+    required this.name,
   });
 
-  final int order;
+  final VoidCallback onPressed;
+  final String name;
+  final bool isSelected;
+  final bool isToday;
 
   @override
   Widget build(BuildContext context) {
-    var local = BlocProvider.of<LocaleCubit>(context).state.locale;
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.08,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.horizontal(
-            // right: Radius.circular(local.languageCode == 'en' ? 50 : 0),
-            // left: Radius.circular(local.languageCode == 'ar' ? 50 : 0),
-            ),
-        color: Colors.grey.shade300,
-      ),
-      // margin: EdgeInsets.only(
-      //     right: local.languageCode == 'en' ? 15 : 0,
-      //     left: local.languageCode == 'ar' ? 15 : 0),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: Text(
-                "$order",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-          ),
-          Container(
-            width: 2,
-            height: double.infinity,
-            color: Theme.of(context).colorScheme.onBackground,
-          ),
-          const Expanded(
-            flex: 4,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return SizedBox(
+      // width: MediaQuery.of(context).size.width * 0.3,
+      width: 100,
+      child: Material(
+        borderRadius: BorderRadius.circular(10),
+        // color: Colors.white,
+        // border: Border.all(
+        //   width: 2,
+        //   color: isSelected
+        //       ? Theme.of(context).colorScheme.primary
+        //       : Theme.of(context).colorScheme.background,
+        // ),
+        elevation: 1.5,
+        color:
+            isSelected ? Theme.of(context).colorScheme.primary : Colors.white,
+
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: onPressed,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Training Group Name",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Expanded(
+                  flex: 2,
+                  child: Center(
+                    child: Text(
+                      name,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: isSelected ? Colors.white : Colors.black54),
+                    ),
+                  ),
                 ),
-                Text("Number of Excersises: 3"),
               ],
             ),
           ),
-          Container(
-            width: 45,
-            height: 45,
-            margin: EdgeInsets.only(
-                right: local.languageCode == 'en' ? 7 : 0,
-                left: local.languageCode == 'ar' ? 7 : 0),
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

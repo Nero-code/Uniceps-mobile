@@ -3,7 +3,6 @@ import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/features/Auth/services/enitites/player.dart';
 import 'package:uniceps/features/Profile/domain/classes/attendence.dart';
-// import 'package:uniceps/features/Profile/domain/entities/handshake.dart';
 import 'package:uniceps/features/Profile/domain/classes/measrument.dart';
 import 'package:uniceps/features/Profile/domain/classes/player_in_gym.dart';
 import 'package:uniceps/features/Profile/domain/classes/subscription.dart';

@@ -3,7 +3,6 @@ import 'package:logger/logger.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/features/Auth/data/models/player_model.dart';
-// import 'package:uniceps/features/Profile/data/models/handshake_model.dart';
 import 'package:uniceps/features/Profile/data/models/measurement_model.dart';
 import 'package:uniceps/features/Profile/data/models/subscription_model.dart';
 import 'package:uniceps/features/Profile/domain/classes/attendence.dart';

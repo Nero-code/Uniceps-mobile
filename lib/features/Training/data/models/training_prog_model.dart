@@ -35,7 +35,6 @@ class TrainingProgramModel extends TrainingProgram {
       });
       list.add(ExerciseModel.fromJson(i));
     }
-    // list.sort((a, b) => a.muscleGroup.compareTo(b.muscleGroup));
 
     list.sort((a, b) => a.itemOrder.compareTo(b.itemOrder));
 

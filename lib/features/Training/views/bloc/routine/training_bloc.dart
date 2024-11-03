@@ -33,7 +33,7 @@ class TrainingBloc extends Bloc<TrainingEvent, TrainingState> {
       emit(TrainingProgramLoadingState(percent: event.percent));
     });
     imagesSubs = manager.loadingBar.stream.listen((event) {
-      print("bloc event type: ${event.runtimeType}");
+      // print("bloc event type: ${event.runtimeType}");
       add(TrainingProgressEvent(percent: event));
     });
   }

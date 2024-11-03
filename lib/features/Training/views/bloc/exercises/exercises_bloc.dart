@@ -10,16 +10,17 @@ part 'exercises_state.dart';
 class ExercisesBloc extends Bloc<ExercisesEvent, ExercisesState> {
   final TrainingUsecases usecases;
   ExercisesBloc({required this.usecases}) : super(ExercisesInitial()) {
-    on<ExercisesEvent>((event, emit) async {
-      if (event is GetExercisesByFilterEvent) {
-        // print("inside Exercise Bloc: GetExercisesByFilter event");
-        emit(ExercisesLoadingState());
-        final either = await usecases.getExercisesByFilter(event.filter);
-        either.fold(
-          (l) => emit(ExercisesErrorState(l)),
-          (r) => emit(ExercisesLoadedState(r)),
-        );
-      } else if (event is UpdateLastWeightEvent) {
+    on<GetExercisesByFilterEvent>((event, emit) async {
+      // print("inside Exercise Bloc: GetExercisesByFilter event");
+      emit(ExercisesLoadingState());
+      final either = await usecases.getExercisesByFilter(event.filter);
+      either.fold(
+        (l) => emit(ExercisesErrorState(l)),
+        (r) => emit(ExercisesLoadedState(r)),
+      );
+    });
+    on<UpdateLastWeightEvent>(
+      (event, emit) async {
         // print("inside Exercise Bloc: UpdateLast weight event");
         emit(ExercisesLoadingState());
         final either = await usecases.saveNewWeight({event.eId: event.newVal});
@@ -27,7 +28,7 @@ class ExercisesBloc extends Bloc<ExercisesEvent, ExercisesState> {
           (l) => emit(ExercisesErrorState(l)),
           (r) => emit(ExercisesUpdatedState()),
         );
-      }
-    });
+      },
+    );
   }
 }

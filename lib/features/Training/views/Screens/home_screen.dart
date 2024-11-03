@@ -8,20 +8,20 @@ import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
-import 'package:uniceps/features/Training/views/bloc/current_gym_bloc.dart';
+import 'package:uniceps/features/Training/views/bloc/current_gym/current_gym_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:uniceps/features/Training/services/commands/usecases.dart';
-import 'package:uniceps/features/Training/views/bloc/exercises_bloc.dart';
-import 'package:uniceps/features/Training/views/bloc/training_bloc.dart';
-import 'package:uniceps/features/Training/views/widgets/exercise_info.dart';
+import 'package:uniceps/features/Training/views/bloc/exercises/exercises_bloc.dart';
+import 'package:uniceps/features/Training/views/bloc/routine/training_bloc.dart';
+import 'package:uniceps/features/Training/views/widgets/exercise_alert.dart';
 import 'package:uniceps/features/Training/views/widgets/exercise_list.dart';
 import 'package:uniceps/features/Training/views/widgets/home_card.dart';
-import 'package:uniceps/features/Training/views/widgets/my_gym_widget.dart';
-import 'package:uniceps/features/Training/views/widgets/panal_circle.dart';
+import 'package:uniceps/features/Training/views/widgets/mygym_widget.dart';
+import 'package:uniceps/features/Training/views/widgets/sliding_panal_decoration.dart';
 import 'package:uniceps/features/Training/views/widgets/progress_widget.dart';
 import 'package:uniceps/features/Training/views/widgets/training_day_list_item.dart';
-import 'package:uniceps/features/Training/views/widgets/training_group(2).dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/features/Training/views/widgets/training_group.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
 import 'package:uniceps/main_cubit/training_section_cubit.dart';
 import 'package:uniceps/update_service.dart';
@@ -327,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen>
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width,
                                 child: CustomPaint(
-                                  painter: PanaleCirclePainter(),
+                                  painter: SlidingPanalPainter(),
                                 ),
                               ),
                             ),
@@ -503,7 +503,7 @@ class _HomeScreenState extends State<HomeScreen>
                             color: Colors.grey.shade100,
                             borderRadius: const BorderRadius.vertical(
                                 top: Radius.circular(20)),
-                            child: Icon(
+                            child: const Icon(
                               Icons.remove_rounded,
                               size: 40,
                               color: Colors.grey,
@@ -687,19 +687,23 @@ class _HomeScreenState extends State<HomeScreen>
                                             .getSection();
                                         if (state is CurrentGymUpdatedState) {
                                           BlocProvider.of<CurrentGymBloc>(
+                                                  // ignore: use_build_context_synchronously
                                                   context)
                                               .add(
                                                   const GetSubscribedToGymEvent());
 
-                                          BlocProvider.of<TrainingBloc>(context)
-                                              .add(const GetProgramEvent());
+                                          BlocProvider.of<TrainingBloc>(
+                                              // ignore: use_build_context_synchronously
+                                              context).add(const GetProgramEvent());
                                           section = await BlocProvider.of<
-                                                  TrainingSectionCubit>(context)
+                                                      TrainingSectionCubit>(
+                                                  // ignore: use_build_context_synchronously
+                                                  context)
                                               .getSection();
                                           setState(() {});
 
-                                          print("DEBUG HOME:"
-                                              " $section");
+                                          // print("DEBUG HOME:"
+                                          //     " $section");
                                         }
                                       },
                                       child: HomeCard(
@@ -825,7 +829,7 @@ class _HomeScreenState extends State<HomeScreen>
                                         scrollDirection: Axis.horizontal,
                                         itemCount: trSections.length,
                                         itemBuilder: (context, index) {
-                                          return TrainingGroup2(
+                                          return TrainingGroup(
                                             name: trSections[index].title,
                                             // isSelected:
                                             //     trSections[selectedGroup].num ==

@@ -13,7 +13,7 @@ import 'package:uniceps/features/Profile/presentation/bloc/attendence/attendence
 import 'package:uniceps/features/Profile/presentation/bloc/player_gym/player_gym_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/subscription/subs_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/screens/gym_profile.dart';
-import 'package:uniceps/features/Training/views/bloc/current_gym_bloc.dart';
+import 'package:uniceps/features/Training/views/bloc/current_gym/current_gym_bloc.dart';
 
 class HomeCard extends StatelessWidget {
   const HomeCard({

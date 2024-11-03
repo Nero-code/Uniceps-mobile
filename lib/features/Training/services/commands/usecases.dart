@@ -10,9 +10,8 @@ class TrainingUsecases {
 
   TrainingUsecases({required TrainingRepo repo}) : _repo = repo;
 
-  Future<Either<Failure, TrainingProgram>> getTrainingProgram(
-      /**String gymId*/) async {
-    return await _repo.getTrainingProgram(/**gymId*/);
+  Future<Either<Failure, TrainingProgram>> getTrainingProgram() async {
+    return await _repo.getTrainingProgram();
   }
 
   Future<Either<Failure, List<Exercise>>> getExercisesByFilter(
