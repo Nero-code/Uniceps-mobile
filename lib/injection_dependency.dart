@@ -6,22 +6,22 @@ import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
-import 'package:uniceps/features/Auth/data/repo_impl/repo_impl.dart';
-import 'package:uniceps/features/Auth/data/sources/local_source.dart';
-import 'package:uniceps/features/Auth/data/sources/remote_source.dart';
-import 'package:uniceps/features/Auth/services/repo/repo.dart';
-import 'package:uniceps/features/Auth/services/usecases/usecases.dart';
-import 'package:uniceps/features/Profile/data/repo/repo_impl.dart';
-import 'package:uniceps/features/Profile/data/sources/local_source.dart';
-import 'package:uniceps/features/Profile/data/sources/remote_source.dart';
-import 'package:uniceps/features/Profile/domain/repo.dart';
-import 'package:uniceps/features/Profile/domain/usecases.dart';
-import 'package:uniceps/features/Training/data/repos_impl/repo_imple.dart';
-import 'package:uniceps/features/Training/data/sources/local_data_source.dart';
-import 'package:uniceps/features/Training/data/sources/remote_data_source.dart';
-import 'package:uniceps/features/Training/services/repos/repository.dart';
-import 'package:uniceps/features/Training/services/usecases/usecases.dart';
-import 'package:uniceps/update_service.dart';
+import 'package:uniceps/app/Auth/data/repo_impl/repo_impl.dart';
+import 'package:uniceps/app/Auth/data/sources/local_source.dart';
+import 'package:uniceps/app/Auth/data/sources/remote_source.dart';
+import 'package:uniceps/app/Auth/services/repo/repo.dart';
+import 'package:uniceps/app/Auth/services/usecases/usecases.dart';
+import 'package:uniceps/app/Profile/data/repo/repo_impl.dart';
+import 'package:uniceps/app/Profile/data/sources/local_source.dart';
+import 'package:uniceps/app/Profile/data/sources/remote_source.dart';
+import 'package:uniceps/app/Profile/domain/repo.dart';
+import 'package:uniceps/app/Profile/domain/commands/usecases.dart';
+import 'package:uniceps/app/Training/data/repos_impl/repo_imple.dart';
+import 'package:uniceps/app/Training/data/sources/local_data_source.dart';
+import 'package:uniceps/app/Training/data/sources/remote_data_source.dart';
+import 'package:uniceps/app/Training/services/repos/repository.dart';
+import 'package:uniceps/app/Training/services/commands/usecases.dart';
+import 'package:uniceps/core/helpers/update_service.dart';
 
 final sl = di.GetIt.instance;
 
@@ -233,11 +233,11 @@ Future<void> init() async {
         colors: true,
         levelColors: {
           // https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
-          Level.trace: AnsiColor.fg(120),
-          Level.debug: AnsiColor.fg(51),
+          Level.trace: const AnsiColor.fg(120),
+          Level.debug: const AnsiColor.fg(51),
           // Level.error: AnsiColor.fg(126),
-          Level.fatal: AnsiColor.fg(196),
-          Level.info: AnsiColor.fg(214),
+          Level.fatal: const AnsiColor.fg(196),
+          Level.info: const AnsiColor.fg(214),
           // Level.warning: AnsiColor.fg(90),
         },
       ),
