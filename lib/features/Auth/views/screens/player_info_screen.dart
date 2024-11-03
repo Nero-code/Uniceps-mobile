@@ -45,12 +45,6 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(
-    //   SystemUiOverlayStyle(
-    //       systemNavigationBarColor: Theme.of(context).colorScheme.background,
-    //       statusBarIconBrightness: Brightness.dark),
-    // );
-    // final args = ModalRoute.of(context)!.settings.arguments as PlayerArguments;
     final local = AppLocalizations.of(context);
 
     return PopScope(
@@ -304,18 +298,6 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                                     }
                                   }
 
-                                  // Navigator.pushReplacementNamed(context, ROUTE_HOME);
-                                  // Navigator.pop(context);
-                                  // widget.onSave(
-                                  //   Player(
-                                  //     name: nameCtl.text,
-                                  //     phoneNum: phoneCtl.text,
-                                  //     birthDate: birthCtl.text,
-                                  //     gender:
-                                  //         male as bool ? Gender.male : Gender.female,
-                                  //   ),
-                                  // );
-
                                   BlocProvider.of<ProfileBloc>(context).add(
                                     ProfileSubmitEvent(
                                       isCreate: isCreate,
@@ -340,7 +322,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                               ActionChip.elevated(
                                 label: Text(
                                   local.deleteBtn,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.red),
                                 ),
@@ -369,7 +351,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                                                     .skip(1)
                                                     .first;
 
-                                            print(bloc.runtimeType);
+                                            debugPrint("${bloc.runtimeType}");
                                             if (bloc
                                                 is AuthDeletedAccountState) {
                                               debugPrint("Account Deleted");

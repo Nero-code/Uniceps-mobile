@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:uniceps/features/Auth/views/widgets/background_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-////////////////////////////////////////////////////////////////////////////////
-///   This box is used to put the gym code so the player can subscribe to it.
-///   it is given from the gym
-/// ////////////////////////////////////////////////////////////////////////////
-
 class CodeBox extends StatefulWidget {
   const CodeBox({super.key, required this.onPressed});
 
@@ -31,8 +26,9 @@ class _CodeBoxState extends State<CodeBox> {
         BackgroundCard(
           child: Column(children: [
             Text(AppLocalizations.of(context)!.verify),
-
-            ///   C O D E
+            //
+            //   C O D E
+            //
             const SizedBox(height: 10),
             Form(
               key: _codeFormKey,

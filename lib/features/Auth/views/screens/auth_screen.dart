@@ -5,23 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
-import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
 import 'package:uniceps/features/Auth/views/widgets/auth_box.dart';
 import 'package:uniceps/features/Auth/views/widgets/code_box.dart';
 import 'package:uniceps/features/Auth/views/widgets/back_painter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
-
-// /////////////////////////////////////////////////////////////////////////////
-//
-//    This is the email authentication screen for which the user will sign in
-//    to the system.
-//
-//    StatefulWidget is not neccessary because the state-manegement (BLOC) will
-//    handle the changes in UI...
-//
-// /////////////////////////////////////////////////////////////////////////////
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -51,20 +40,6 @@ class _AuthScreenState extends State<AuthScreen>
 
   late final Animation<int> _animation;
   late final Animation<double> _slideAnimation, _opacityAnimation;
-
-  // void navOnRestore() async {
-  //   await Future.delayed(const Duration(seconds: 0));
-  //   _pageController.animateToPage(currentPage.value,
-  //       duration: duration, curve: curve);
-  // }
-
-  // void endAnimation() async {
-  //   if (isAnimActive) {
-  //     await Future.delayed(duration);
-  //     isAnimActive = false;
-  //     setState(() {});
-  //   }
-  // }
 
   @override
   void initState() {
@@ -129,14 +104,6 @@ class _AuthScreenState extends State<AuthScreen>
     return BlocBuilder<LocaleCubit, ChangedLangState>(
       builder: (context, lang) {
         return Scaffold(
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: () {
-          //     isAnimActive = true;
-          //     _fadeController.reset();
-          //     _controller.reset();
-          //     _controller.forward();
-          //   },
-          // ),
           resizeToAvoidBottomInset: false,
           body: Stack(
             children: [
@@ -144,11 +111,6 @@ class _AuthScreenState extends State<AuthScreen>
                 height: MediaQuery.of(context).size.height,
                 child: BlocConsumer<AuthBloc, AuthState>(
                   listener: (context, state) async {
-                    // print(state.runtimeType);
-
-                    // AuthCodeSent
-                    // AuthNewPass
-                    // AuthDone
                     if (state is AuthCodeSentState) {
                       //
                       //  Jump to Code input
@@ -157,9 +119,6 @@ class _AuthScreenState extends State<AuthScreen>
                       _pageController.animateToPage(1,
                           duration: duration, curve: curve);
                     } else if (state is AuthDoneState) {
-                      // print("Auth State: ${state.runtimeType}");
-
-                      // print("state.hasData: ${state.hasData}");
                       if (!state.hasData) {
                         final res = await Navigator.push<bool>(
                           context,
@@ -167,16 +126,9 @@ class _AuthScreenState extends State<AuthScreen>
                             builder: (context) =>
                                 const PlayerInfoScreen(player: null),
                           ),
-                          // ROUTE_PLAYER_INFO,
-                          // arguments: PlayerArguments(
-                          //     hasData: state.hasData, data: state.player),
                         );
 
-                        // print("check: if Condition state: $res");
-
                         if (res != null && !res) {
-                          // print("check: inside if statement");
-
                           if (Platform.isAndroid) {
                             // Exit Application (for Android)
                             SystemNavigator.pop();
@@ -189,25 +141,6 @@ class _AuthScreenState extends State<AuthScreen>
 
                       // ignore: use_build_context_synchronously
                       Navigator.pushReplacementNamed(context, ROUTE_HOME);
-                      //
-                      //  Jump to Gym handshake
-                      //
-
-                      // state.player;
-                      // Navigator.of(context).pushReplacementNamed(
-                      //   ROUTE_PLAYER_INFO,
-                      //   arguments: {
-                      //     "isEdit": false,
-                      //     "data": const Player(
-                      //         name: "name",
-                      //         phoneNum: "phoneNum",
-                      //         birthDate: "birthDate",
-                      //         gender: Gender.male),
-                      //   },
-                      // );
-                      // currentPage.value = 2;
-                      // _pageController.animateToPage(2,
-                      //     duration: duration, curve: curve);
                     } else if (state is AuthWrongCodeState) {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -217,27 +150,10 @@ class _AuthScreenState extends State<AuthScreen>
                         ),
                       );
                     }
-                    //  else if (state is GymVerifiedState) {
-                    //   Navigator.pushReplacementNamed(
-                    //       context, ROUTE_PLAYER_INFO);
-                    // }
                   },
                   builder: (context, state) {
                     return Stack(
                       children: [
-                        //   B A C K G R O U N D   P A I N T   T R I A N G L E S
-                        // SizedBox(
-                        //   width: MediaQuery.of(context).size.width,
-                        //   height: MediaQuery.of(context).size.height,
-                        //   child: CustomPaint(
-                        //     painter: TriPainter(
-                        //       mainColor:
-                        //           Theme.of(context).colorScheme.secondary,
-                        //       secondary:
-                        //           Theme.of(context).colorScheme.secondary,
-                        //     ),
-                        //   ),
-                        // ),
                         Positioned(
                           top: (1 - _animation.value / 255) *
                               -MediaQuery.sizeOf(context).height *
@@ -316,41 +232,12 @@ class _AuthScreenState extends State<AuthScreen>
                                         //    E M A I L - I N P U T   S T E P  # 0
                                         //
                                         AuthBox(
-                                          isLogin: isLogin.value,
-                                          onChangeType: () {
-                                            setState(() {
-                                              isLogin.value = !isLogin.value;
-                                            });
-                                          },
-                                          login: (e, p) async {
-                                            context.read<AuthBloc>().add(
-                                                  LoginWithEmailAndPassEvent(
-                                                      email: e, pass: p),
-                                                );
-                                            await context
-                                                .read<AuthBloc>()
-                                                .stream
-                                                .skip(1)
-                                                .first;
-
-                                            // BlocProvider.of<AuthBloc>(context).add(
-                                            //   LoginWithEmailAndPassEvent(
-                                            //       email: e, pass: p),
-                                            // );
-                                            email.value = e;
-                                            pass.value = p;
-                                            // currentPage.value = 3;
-
-                                            // _pageController.animateToPage(3,
-                                            //     duration: duration,
-                                            //     curve: Curves.easeOutExpo);
-                                          },
                                           signin: (e) async {
                                             context.read<AuthBloc>().add(
                                                   EmailSigninRequestEvent(
-                                                      email: e
-                                                          .trim()
-                                                          .toLowerCase()),
+                                                    email:
+                                                        e.trim().toLowerCase(),
+                                                  ),
                                                 );
                                             await context
                                                 .read<AuthBloc>()
@@ -358,22 +245,9 @@ class _AuthScreenState extends State<AuthScreen>
                                                 .skip(1)
                                                 .first;
 
-                                            // BlocProvider.of<AuthBloc>(context).add(
-                                            //   EmailSigninRequestEvent(email: e),
-                                            // );
                                             email.value =
                                                 e.trim().toLowerCase();
-                                            // currentPage.value = 1;
-                                            // _pageController.animateToPage(1,
-                                            //     duration: duration, curve: curve);
                                           },
-                                          onForgot: () =>
-                                              Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const ForgotPasswordScreen(),
-                                            ),
-                                          ),
                                         ),
 
                                         //
@@ -384,9 +258,12 @@ class _AuthScreenState extends State<AuthScreen>
                                           child: CodeBox(
                                             onPressed: (code) async {
                                               BlocProvider.of<AuthBloc>(context)
-                                                  .add(AuthEmailCodeVerifyEvent(
-                                                      code: code,
-                                                      email: email.value));
+                                                  .add(
+                                                AuthEmailCodeVerifyEvent(
+                                                  code: code,
+                                                  email: email.value,
+                                                ),
+                                              );
                                             },
                                           ),
                                         ),
@@ -465,18 +342,6 @@ class _AuthScreenState extends State<AuthScreen>
                             ),
                           ),
 
-                        // if (isAnimActive)
-                        //   Positioned(
-                        //     top: 0.0,
-                        //     left: 0.0,
-                        //     width: MediaQuery.sizeOf(context).width,
-                        //     height: MediaQuery.sizeOf(context).height,
-                        //     child: Container(
-                        //       color: Colors.white
-                        //           .withAlpha(255 - _animation.value),
-                        //     ),
-                        //   ),
-
                         //   C E N T E R   L O G O   A N I M A T I O N
                         if (isAnimActive)
                           Positioned(
@@ -492,19 +357,6 @@ class _AuthScreenState extends State<AuthScreen>
                               ),
                             ),
                           ),
-
-                        // Transform.translate(
-                        //   offset: _slideAnimation.value,
-                        //   child: Container(
-                        //     width: MediaQuery.of(context).size.height * 0.25,
-                        //     height: MediaQuery.of(context).size.height * 0.25,
-                        //     padding: const EdgeInsets.all(25),
-                        //     alignment: Alignment.center,
-                        //     child: const Image(
-                        //       image: AssetImage('images/logo/Logo.png'),
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     );
                   },

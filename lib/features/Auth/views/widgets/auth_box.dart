@@ -9,18 +9,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 ///
 
 class AuthBox extends StatefulWidget {
-  const AuthBox(
-      {super.key,
-      required this.login,
-      required this.signin,
-      required this.onForgot,
-      required this.onChangeType,
-      required this.isLogin});
+  const AuthBox({
+    super.key,
+    required this.signin,
+  });
 
-  final void Function(String email, String pass) login;
   final void Function(String email) signin;
-  final VoidCallback onForgot, onChangeType;
-  final bool isLogin;
 
   @override
   State<AuthBox> createState() => _AuthBoxState();
@@ -89,73 +83,6 @@ class _AuthBoxState extends State<AuthBox> {
                   },
                 ),
                 const SizedBox(height: 10),
-
-                // ///   T E X T F I E L D   P A S S W O R D
-                // if (widget.isLogin)
-                //   TextFormField(
-                //     controller: passwCtrl,
-                //     decoration: InputDecoration(
-                //       enabledBorder: OutlineInputBorder(
-                //         borderSide: BorderSide(color: Colors.grey.shade400),
-                //       ),
-                //       contentPadding: EdgeInsets.all(10),
-                //       prefixIcon: Icon(Icons.lock, color: Colors.grey.shade600),
-                //       // isDense: true,
-                //       border: OutlineInputBorder(
-                //         borderSide: BorderSide(
-                //           color: Colors.blue,
-                //         ),
-                //       ),
-                //       labelText: "Password",
-                //       hintText: "123456789",
-                //       suffixIcon: IconButton(
-                //         iconSize: 25,
-                //         splashRadius: 10,
-                //         onPressed: () {
-                //           setState(() {
-                //             obscureText = !obscureText;
-                //           });
-                //         },
-                //         icon: Icon(obscureText
-                //             ? Icons.visibility_off
-                //             : Icons.visibility),
-                //       ),
-                //     ),
-                //     obscureText: obscureText,
-                //     validator: (value) {
-                //       if (value == null || value.isEmpty) {
-                //         return "Please enter a password";
-                //       }
-                //       return null;
-                //     },
-                //   ),
-                // ///   F O R G O T   P A S S W O R D
-                // if (widget.isLogin)
-                //   Material(
-                //     color: Colors.transparent,
-                //     child: Padding(
-                //       padding: const EdgeInsets.only(top: 8.0),
-                //       child: InkWell(
-                //         splashColor: Colors.grey.shade400,
-                //         borderRadius: BorderRadius.circular(15),
-                //         onTapUp: (_) {
-                //           Navigator.of(context)
-                //               .pushNamed(ROUTE_FORGOT_PASSWORD);
-                //         },
-                //         child: Padding(
-                //           padding: const EdgeInsets.all(5.0),
-                //           child: Text(
-                //             "Forgot password?",
-                //             style: TextStyle(
-                //               color: Colors.blue,
-                //               fontSize: 10,
-                //               fontWeight: FontWeight.bold,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
               ],
             ),
           ),
@@ -179,16 +106,11 @@ class _AuthBoxState extends State<AuthBox> {
             onLongPress: null,
             onPressed: () {
               if (_authFormkey.currentState!.validate()) {
-                if (widget.isLogin) {
-                  widget.login(emailCtrl.text, passwCtrl.text);
-                } else {
-                  widget.signin(emailCtrl.text.trim());
-                }
+                widget.signin(emailCtrl.text.trim());
               }
             },
             child: Padding(
               padding: const EdgeInsets.all(0.0),
-              // child: Text(widget.isLogin ? "Login" : "Sign in"),
               child: Text(
                 local.signin,
                 style: const TextStyle(fontWeight: FontWeight.bold),
@@ -197,58 +119,6 @@ class _AuthBoxState extends State<AuthBox> {
           ),
         ),
         const SizedBox(height: 20),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   children: [
-        //     Container(
-        //       color: Colors.grey,
-        //       height: 1,
-        //       width: MediaQuery.of(context).size.width * 0.2,
-        //     ),
-        //     SizedBox(
-        //       child: Material(
-        //         color: const Color.fromARGB(78, 158, 158, 158),
-        //         borderRadius: BorderRadius.circular(10),
-        //         child: InkWell(
-        //           borderRadius: BorderRadius.circular(10),
-        //           onTap: widget.onChangeType,
-        //           child: Padding(
-        //             padding: const EdgeInsets.symmetric(
-        //                 horizontal: 8.0, vertical: 3.0),
-        //             child: Text(
-        //               widget.isLogin
-        //                   ? "don't have an account?"
-        //                   : "already have an account?",
-        //               style: TextStyle(color: Colors.black, fontSize: 10),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //     Container(
-        //       color: Colors.grey,
-        //       height: 1,
-        //       width: MediaQuery.of(context).size.width * 0.2,
-        //     ),
-        //   ],
-        // ),
-        // Container(
-        //   width: double.infinity,
-        //   margin: const EdgeInsets.only(top: 10),
-        //   padding: const EdgeInsets.symmetric(horizontal: 15),
-        //   child: TextButton(
-        //     onPressed: () {
-        //       if (_authFormkey.currentState!.validate()) {
-        //         if (widget.isLogin) {
-        //           widget.login(emailCtrl.text, passwCtrl.text);
-        //         } else {
-        //           widget.signin(emailCtrl.text);
-        //         }
-        //       }
-        //     },
-        //     child: Text(widget.isLogin ? "SignIn" : "Login"),
-        //   ),
-        // ),
       ],
     );
   }

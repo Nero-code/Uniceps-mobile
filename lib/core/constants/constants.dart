@@ -63,10 +63,11 @@ final HEADERS = {
   "build-number": Platform.operatingSystemVersion,
 };
 
-// const FAKE_API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
-// const API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
-/// https://uniceps.trio-verse.com/api/v1
-const API = "https://uniceps.trio-verse.com/api/v1";
+/// TESTING URL
+const API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
+
+/// PRODUCTION URL
+// const API = "https://uniceps.trio-verse.com/api/v1";
 
 /// https://trio-verse.com
 const URL = "https://trio-verse.com";

@@ -10,23 +10,17 @@ import 'package:uniceps/features/Auth/data/models/user_model.dart';
 // import 'package:uniceps/features/Auth/services/enitites/player.dart';
 
 abstract class RemoteAuthSource {
-  Future<void> loginWithEmailAndPassword({
-    required String email,
-    required String password,
-  });
   Future<void> verifyEmail({required String email});
   Future<UserModel> verifyCodeSent(
       {required String code,
       required String email,
       required String notifyToken});
-  Future<void> verifyGymCode({required String gymCode});
-  Future<void> uploadPlayerInfo({required PlayerModel player});
-  Future<void> requestPasswordChange(String newPass);
-  Future<PlayerModel> getPlayerInfo();
-  // Future<bool> isLoggedIn();
-  Future<Map<dynamic, dynamic>> sendNotifyToken(String token);
-  Future<void> logout();
 
+  Future<void> uploadPlayerInfo({required PlayerModel player});
+  Future<PlayerModel> getPlayerInfo();
+  Future<Map<dynamic, dynamic>> sendNotifyToken(String token);
+
+  Future<void> logout();
   Future<bool> deleteAccount();
 }
 
@@ -40,32 +34,6 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
     required this.userBox,
     required this.logger,
   });
-
-  @override
-  Future<void> loginWithEmailAndPassword(
-      {required String email, required String password}) async {
-    logger.d("START FUNC: loginWithEmailAndPassword()");
-    final res = await client.post(
-      Uri.http(API, "/login", {}),
-      body: {"email": email, "password": password},
-    );
-    logger.d("${res.statusCode}\n${res.body}");
-    if (res.statusCode == 200) {
-      logger.d(res.body);
-      return;
-    }
-    logger
-        .d("END   FUNC: loginWithEmailAndPassword():   RES: ${res.statusCode}");
-    throw AuthException();
-  }
-
-  @override
-  Future<void> requestPasswordChange(String newPass) async {
-    final res = await getIt('/login', {});
-    if (res.statusCode != 200) {
-      throw Exception();
-    }
-  }
 
   @override
   Future<void> uploadPlayerInfo({required PlayerModel player}) async {
@@ -141,15 +109,6 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
   }
 
   @override
-  Future<void> verifyGymCode({required String gymCode}) async {
-    final res = await client
-        .post(Uri.parse("$API/Auth/verify_gym"), body: {"gym_code": gymCode});
-    if (res.statusCode != 200) {
-      throw Exception();
-    }
-  }
-
-  @override
   Future<PlayerModel> getPlayerInfo() async {
     logger.d("inside GetPlayerInfo");
     logger.d(userBox.get(HIVE_USER_BOX)!["token"]);
@@ -168,12 +127,6 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
     }
     throw ServerException();
   }
-
-  // @override
-  // Future<bool> isLoggedIn() {
-  //   final res = await
-  //   throw ;
-  // }
 
   ///
   ///   H E L P E R   M E T H O D   FOR HTTP CLIENT

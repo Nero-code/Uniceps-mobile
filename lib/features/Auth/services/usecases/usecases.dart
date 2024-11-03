@@ -9,18 +9,18 @@ class AuthUsecases {
 
   AuthUsecases({required this.repo});
 
-  Future<Either<Failure, bool>> checkGymCode({required String gymCode}) async {
-    return await repo.checkGymCode(gymCode: gymCode);
-  }
+  // Future<Either<Failure, bool>> checkGymCode({required String gymCode}) async {
+  //   return await repo.checkGymCode(gymCode: gymCode);
+  // }
 
   Future<Either<Failure, bool>> emailSignin({required String email}) async {
     return await repo.signinWithEmail(email: email);
   }
 
-  Future<Either<Failure, bool>> emailLogin(
-      {required String email, required String password}) async {
-    return await repo.emailLogin(email: email, password: password);
-  }
+  // Future<Either<Failure, bool>> emailLogin(
+  //     {required String email, required String password}) async {
+  //   return await repo.emailLogin(email: email, password: password);
+  // }
 
   Future<Either<Failure, bool>> validateCode(
       {required String code,
@@ -39,9 +39,9 @@ class AuthUsecases {
   //   return repo.addNewPassword(email: email, pass: pass);
   // }
 
-  Future<Either<Failure, bool>> changePassword({required String pass}) async {
-    return await repo.changePassword(pass: pass);
-  }
+  // Future<Either<Failure, bool>> changePassword({required String pass}) async {
+  //   return await repo.changePassword(pass: pass);
+  // }
 
   Future<Either<Failure, bool>> submitProfile(
       {required PlayerModel player}) async {

@@ -26,26 +26,6 @@ class AuthRepoImpl implements AuthRepo {
   });
 
   @override
-  Future<Either<Failure, bool>> emailLogin({
-    required String email,
-    required String password,
-  }) async {
-    logger.t("Auth repo email login");
-    if (await connection.hasConnection) {
-      try {
-        await remote.loginWithEmailAndPassword(
-            email: email, password: password);
-        logger.t("user logged in");
-        return const Right(true);
-      } catch (e) {
-        logger.t("Auth repo unknown error", error: e);
-        return Left(AuthFailure(errorMessage: "Wrong email or password!"));
-      }
-    }
-    return Left(OfflineFailure(errorMessage: "No Internet Connection!"));
-  }
-
-  @override
   Future<Either<Failure, bool>> signinWithEmail({required String email}) async {
     if (await connection.hasConnection) {
       try {
@@ -83,19 +63,6 @@ class AuthRepoImpl implements AuthRepo {
       }
     }
     return Left(OfflineFailure(errorMessage: ""));
-  }
-
-  @override
-  Future<Either<Failure, bool>> checkGymCode({required String gymCode}) async {
-    if (await connection.hasConnection) {
-      try {
-        await remote.verifyGymCode(gymCode: gymCode);
-        return const Right(true);
-      } catch (e) {
-        return Left(GeneralPurposFailure(errorMessage: "not verified"));
-      }
-    }
-    return Left(OfflineFailure(errorMessage: "no internet connection!"));
   }
 
   @override
@@ -156,16 +123,22 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> changePassword({required String pass}) async {
+  Future<Either<Failure, bool>> deleteAccount() async {
     if (await connection.hasConnection) {
       try {
-        await remote.requestPasswordChange(pass);
-        return const Right(true);
-      } catch (e) {
-        return Left(ServerFailure(errMsg: "Unknown exception!"));
+        final res = await remote.deleteAccount();
+        await local.localLogout();
+        return Right(res);
+      } on ServerException catch (e, s) {
+        logger.e("ServerException", error: e, stackTrace: s);
+        return Left(ServerFailure(errMsg: ""));
+      } catch (e, s) {
+        logger.f("Deleting Account Error", error: e, stackTrace: s);
+        return Left(GeneralPurposFailure(errorMessage: ""));
       }
     }
-    return Left(OfflineFailure(errorMessage: "No Internet!"));
+
+    return Left(NoInternetConnectionFailure(errMsg: ""));
   }
 
   @override
@@ -202,24 +175,5 @@ class AuthRepoImpl implements AuthRepo {
         return const Left(EmptyCacheFailure(errorMessage: ""));
       }
     }
-  }
-
-  @override
-  Future<Either<Failure, bool>> deleteAccount() async {
-    if (await connection.hasConnection) {
-      try {
-        final res = await remote.deleteAccount();
-        await local.localLogout();
-        return Right(res);
-      } on ServerException catch (e, s) {
-        logger.e("ServerException", error: e, stackTrace: s);
-        return Left(ServerFailure(errMsg: ""));
-      } catch (e, s) {
-        logger.f("Deleting Account Error", error: e, stackTrace: s);
-        return Left(GeneralPurposFailure(errorMessage: ""));
-      }
-    }
-
-    return Left(NoInternetConnectionFailure(errMsg: ""));
   }
 }

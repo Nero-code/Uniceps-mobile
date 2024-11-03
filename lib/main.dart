@@ -7,9 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/features/Auth/views/screens/auth_screen_2.dart';
+import 'package:uniceps/features/Auth/views/screens/auth_screen.dart';
 import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
-import 'package:uniceps/features/Auth/views/screens/forgot_pass_screen.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/attendence_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/bloc/player_gym_bloc.dart';
 import 'package:uniceps/features/Profile/presentation/screens/about_2.dart';
@@ -204,11 +203,8 @@ class MyApp extends StatelessWidget {
               ROUTE_SPLASH: (context) => const SplashScreen(),
 
               //  AUTH
-              // ROUTE_AUTH: (context) => const EmailAuthScreen(),
               ROUTE_AUTH: (context) => const AuthScreen(),
-              ROUTE_FORGOT_PASSWORD: (context) => const ForgotPasswordScreen(),
-              // ROUTE_PLAYER_INFO: (context) =>
-              //     const PlayerInfoScreen(), // NOT REACHABLE FROM HERE
+              ROUTE_PROFILE: (context) => const ProfileScreen(),
 
               //  MAIN
               ROUTE_HOME: (context) => HomeScreen(
@@ -216,17 +212,10 @@ class MyApp extends StatelessWidget {
                     service: di.sl(),
                     manager: di.sl(),
                   ),
-              // ROUTE_HANDSHAKE: (context) => const GymHandShakeScreen(),
-              // ROUTE_EXERCISE: (context) => ExercisesPage(),
-              // ROUTE_QR_SCANNER: (context) => QRScannerScreen(),
-              // ROUTE_PRESENCE: (context) => const PresenceScreen(), //  NOT REACHABLE FROM HERE
-              // ROUTE_SUBSCRIPTIONS: (context) => const SubScriptionScreen(),
 
               //  AUX
               ROUTE_MEASUREMENTS: (context) => const MeasurementScreen(),
               ROUTE_GYMS_LIST: (context) => const GymListScreen(),
-              ROUTE_PROFILE: (context) => const ProfileScreen(),
-              // ROUTE_ABOUT: (context) => const AboutScreen(),
               ROUTE_ABOUT: (context) => const AboutScreen2(),
             },
           );
