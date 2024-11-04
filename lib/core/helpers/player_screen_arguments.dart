@@ -1,4 +1,4 @@
-import 'package:uniceps/app/Auth/services/enitites/player.dart';
+import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
 
 final class PlayerArguments {
   final bool hasData;
