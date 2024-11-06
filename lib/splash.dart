@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/app/Auth/views/bloc/auth_bloc.dart';
-import 'package:uniceps/app/Auth/views/screens/auth_screen.dart';
-import 'package:uniceps/app/Auth/views/screens/player_info_screen.dart';
-import 'package:uniceps/app/Profile/presentation/bloc/profile/profile_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/authentication/auth_bloc.dart';
+import 'package:uniceps/app/presentation/screens/auth_page/auth/screens/auth_screen.dart';
+import 'package:uniceps/app/presentation/screens/auth_page/auth/screens/player_info_screen.dart';
+import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

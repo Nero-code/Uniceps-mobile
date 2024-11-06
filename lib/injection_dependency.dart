@@ -6,21 +6,21 @@ import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
-import 'package:uniceps/app/Auth/data/repo_impl/repo_impl.dart';
-import 'package:uniceps/app/Auth/data/sources/local_source.dart';
-import 'package:uniceps/app/Auth/data/sources/remote_source.dart';
-import 'package:uniceps/app/Auth/services/repo/repo.dart';
-import 'package:uniceps/app/Auth/services/usecases/usecases.dart';
-import 'package:uniceps/app/Profile/data/repo/repo_impl.dart';
-import 'package:uniceps/app/Profile/data/sources/local_source.dart';
-import 'package:uniceps/app/Profile/data/sources/remote_source.dart';
-import 'package:uniceps/app/Profile/domain/repo.dart';
-import 'package:uniceps/app/Profile/domain/commands/usecases.dart';
-import 'package:uniceps/app/Training/data/repos_impl/repo_imple.dart';
-import 'package:uniceps/app/Training/data/sources/local_data_source.dart';
-import 'package:uniceps/app/Training/data/sources/remote_data_source.dart';
-import 'package:uniceps/app/Training/services/repos/repository.dart';
-import 'package:uniceps/app/Training/services/commands/usecases.dart';
+import 'package:uniceps/app/data/auth_repo_impl.dart';
+import 'package:uniceps/app/data/sources/local/auth_local_source.dart';
+import 'package:uniceps/app/data/sources/remote/auth_remote_source.dart';
+import 'package:uniceps/app/contracts/auth_repo.dart';
+import 'package:uniceps/app/domain/commands/auth_usecases/auth_usecases.dart';
+import 'package:uniceps/app/data/profile_repo_impl.dart';
+import 'package:uniceps/app/data/sources/local/profile_local_source.dart';
+import 'package:uniceps/app/data/sources/remote/profile_remote_source.dart';
+import 'package:uniceps/app/contracts/profile_repo.dart';
+import 'package:uniceps/app/domain/commands/profile_usecases/profile_usecases.dart';
+import 'package:uniceps/app/data/training_repo_imple.dart';
+import 'package:uniceps/app/data/sources/local/training_local_data_source.dart';
+import 'package:uniceps/app/data/sources/remote/training_remote_data_source.dart';
+import 'package:uniceps/app/contracts/training_repository.dart';
+import 'package:uniceps/app/domain/commands/training_usecases/training_usecases.dart';
 import 'package:uniceps/core/helpers/update_service.dart';
 
 final sl = di.GetIt.instance;
@@ -112,7 +112,7 @@ Future<void> init() async {
       myGyms: myGyms,
       playerProfilesBox: playerInGymBox,
       selectedGym: selectedGym,
-      measurBox: measureBox,
+      measureBox: measureBox,
       playerBox: profileBox,
       subsBox: subsBox,
       handshakesBox: handshakesBox,
