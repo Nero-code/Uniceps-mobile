@@ -107,6 +107,10 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     return list;
   }
 
+  /// Caches List of Gyms the player has joined.
+  ///
+  /// Preserves the state of the gym at the local level such as
+  /// the [isSelected] and [isCurrent] properties which are basicaly the same
   @override
   Future<List<GymModel>> cacheSubsToGyms(List<GymModel> list) async {
     logger.t("Cacheing MyGyms: ${list.length}");

@@ -23,7 +23,7 @@ class AttendenceModel extends Attendence {
       sid: json['sid'] ?? "",
     );
   }
-
+  @override
   Map<String, dynamic> toJson() {
     return {
       'date': date.toIso8601String(),

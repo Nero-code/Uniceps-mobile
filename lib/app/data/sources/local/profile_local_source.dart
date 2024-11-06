@@ -18,8 +18,6 @@ abstract class LocalProfileSource {
   Future<void> saveSubs(String gymId, List<SubscriptionModel> list);
   Future<List<GymModel>> getGyms();
   Future<void> saveGyms(List<GymModel> list);
-  // Future<List<HandShakeModel>> getAllHandshakes();
-  // Future<void> saveHandshakes(List<HandShakeModel> list);
   Future<List<Attendence>> getAttendenceAtGym(String gymId);
   Future<void> saveAttenenceAtGym(String gymId, List<Attendence> list);
   Future<List<GymModel>> getSubscribedToGyms();
@@ -33,7 +31,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
       playerProfilesBox,
       playerBox,
       handshakesBox,
-      measurBox;
+      measureBox;
   final Box<List<dynamic>> subsBox, attendBox;
   final Box<bool> selectedGym;
   final Logger logger;
@@ -43,7 +41,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
     required this.myGyms,
     required this.selectedGym,
     required this.subsBox,
-    required this.measurBox,
+    required this.measureBox,
     required this.playerBox,
     required this.playerProfilesBox,
     required this.handshakesBox,
@@ -51,11 +49,14 @@ class LocalProfileSourceImpl implements LocalProfileSource {
     required this.logger,
   });
 
+  /// fetches data from [measureBox] based on:
+  ///
+  /// Node [ID] : Value [Map]
   @override
   Future<List<MeasurementModel>> getMeasurements() async {
     final list = <MeasurementModel>[];
-    for (var i in measurBox.keys) {
-      list.add(MeasurementModel.fromJson(measurBox.get(i)!));
+    for (var i in measureBox.keys) {
+      list.add(MeasurementModel.fromJson(measureBox.get(i)!));
     }
 
     if (list.isEmpty) {
@@ -67,22 +68,17 @@ class LocalProfileSourceImpl implements LocalProfileSource {
     return list;
   }
 
+  /// Caches Measurements based on:
+  ///
+  /// Node [ID] : Value [Map]
   @override
   Future<void> saveMeasurements(List<MeasurementModel> list) async {
+    logger.d("saveMsList ${list.length}");
     for (var i in list) {
-      logger.d(i.checkDate.toString());
-      await measurBox.put(i.checkDate.toString(), i.toJson());
+      await measureBox.put(i.id, i.toJson());
     }
   }
 
-  // Future<void> changeLanguage({required Lang lang}) async {
-  //   await box.put(
-  //     "prefs",
-  //     {
-  //       "lang": lang,
-  //     },
-  //   );
-  // }
   @override
   Future<PlayerModel> getProfileData() async {
     logger.d(" --> getProfileData");
@@ -121,16 +117,25 @@ class LocalProfileSourceImpl implements LocalProfileSource {
 
   @override
   Future<List<GymModel>> getGyms() async {
-    final list = <GymModel>[];
-    final res = gymsBox.toMap();
+    // final list = <GymModel>[];
+    // final res = gymsBox.toMap();
+    // if (res.isEmpty) {
+    //   throw EmptyCacheExeption();
+    // }
+    // res.forEach((key, value) {
+    //   list.add(GymModel.fromJson(value));
+    // });
+    // return list;
 
-    if (res.isEmpty) {
+    final list = <GymModel>[];
+    for (var key in gymsBox.keys) {
+      list.add(GymModel.fromJson(gymsBox.get(key)!));
+    }
+
+    if (list.isEmpty) {
       throw EmptyCacheExeption();
     }
 
-    res.forEach((key, value) {
-      list.add(GymModel.fromJson(value));
-    });
     return list;
   }
 
@@ -140,25 +145,6 @@ class LocalProfileSourceImpl implements LocalProfileSource {
       await gymsBox.put(i.id, i.toJson());
     }
   }
-
-  // @override
-  // Future<List<HandShakeModel>> getAllHandshakes() async {
-  //   final list = <HandShakeModel>[];
-  //   for (var i in handshakesBox.keys) {
-  //     list.add(HandShakeModel.fromJson(Map.from(handshakesBox.get(i)!)));
-  //   }
-  //   if (list.isEmpty) {
-  //     throw EmptyCacheExeption();
-  //   }
-  //   return list;
-  // }
-
-  // @override
-  // Future<void> saveHandshakes(List<HandShakeModel> list) async {
-  //   for (var i in list) {
-  //     await handshakesBox.put(i.gymId, i.toJson());
-  //   }
-  // }
 
   @override
   Future<List<Attendence>> getAttendenceAtGym(String gymId) async {

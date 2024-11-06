@@ -112,7 +112,7 @@ Future<void> init() async {
       myGyms: myGyms,
       playerProfilesBox: playerInGymBox,
       selectedGym: selectedGym,
-      measurBox: measureBox,
+      measureBox: measureBox,
       playerBox: profileBox,
       subsBox: subsBox,
       handshakesBox: handshakesBox,
