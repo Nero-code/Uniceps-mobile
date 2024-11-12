@@ -13,16 +13,27 @@ import 'package:uniceps/app/domain/models/profile_models/gym_model.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/player_in_gym.dart';
 
 abstract class RemoteProfileSource {
-  Future<PlayerModel> getProfileData();
+  //  Duplicated
+  Future<PlayerModel> getProfileData(); // MIGRATION DONE
   Future<String> submitProfileData(PlayerModel playerModel,
-      {required bool isCreate});
-  Future<List<MeasurementModel>> getMeasurements();
-  Future<List<SubscriptionModel>> getSubs(String gymId, String pid);
-  Future<List<GymModel>> getGyms();
-  // Future<List<HandShakeModel>> getAllHandshake();
-  Future<List<Attendence>> getAllAttendance(String gymId, String pid);
-  Future<List<GymModel>> getSubscribedToGyms();
-  Future<PlayerInGym> getPlayerInGym(String gymId, String pid);
+      {required bool isCreate}); // MIGRATION DONE
+
+  //  Measurements Responsibility
+  Future<List<MeasurementModel>> getMeasurements(); // MIGRATION DONE
+
+  //  Subscriptions Responsibility
+  Future<List<SubscriptionModel>> getSubs(
+      String gymId, String pid); // MIGRATION DONE
+
+  //  Gyms Responsibility
+  Future<List<GymModel>> getGyms(); // MIGRATION DONE
+  Future<List<GymModel>> getSubscribedToGyms(); // MIGRATION DONE
+  Future<PlayerInGym> getPlayerInGym(
+      String gymId, String pid); // MIGRATION DONE
+
+  //  Attendence Responsibility
+  Future<List<Attendence>> getAllAttendance(
+      String gymId, String pid); // MIGRATION DONE
 }
 
 class RemoteProfileSourceImpl implements RemoteProfileSource {

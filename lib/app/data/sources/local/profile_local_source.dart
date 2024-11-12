@@ -10,16 +10,27 @@ import 'package:uniceps/app/domain/models/profile_models/gym_model.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/player_in_gym.dart';
 
 abstract class LocalProfileSource {
+  // Measurements Responsibility
   Future<List<MeasurementModel>> getMeasurements();
   Future<void> saveMeasurements(List<MeasurementModel> list);
+
+  // Profile Responsibility
   Future<PlayerModel> getProfileData();
   Future<void> savePlayerData(PlayerModel model);
+
+  // Subscriptions Responsibility
   Future<List<SubscriptionModel>> getSubs(String gymId);
   Future<void> saveSubs(String gymId, List<SubscriptionModel> list);
+
+  // Gyms Responsibility
   Future<List<GymModel>> getGyms();
   Future<void> saveGyms(List<GymModel> list);
+
+  // Attendence Responsibility
   Future<List<Attendence>> getAttendenceAtGym(String gymId);
   Future<void> saveAttenenceAtGym(String gymId, List<Attendence> list);
+
+  // MyGyms Responsibility
   Future<List<GymModel>> getSubscribedToGyms();
   Future<PlayerInGym> getPlayerInGym(String gymId);
   Future<void> savePlayerInGym(PlayerInGym playerInGym);

@@ -8,16 +8,19 @@ import 'package:uniceps/app/domain/models/training_models/training_prog_model.da
 
 /// Abstract class [LocalTrainingSource] for SoC
 abstract class LocalTrainingSource {
+  // Training Resposibility
   Future<TrainingProgramModel> getTrainingProgram(String gymId);
   Future<void> saveTrainingProgram(TrainingProgramModel model);
+  Future<bool> deleteTrainingProgram(String gymId);
+
+  // Weights Resposibility
   Future<Map<String, double>> getWeights();
   Future<void> saveNewWeight(Map<String, double> val);
 
-  Future<List<GymModel>> getSubscribedToGyms();
-  Future<List<GymModel>> cacheSubsToGyms(List<GymModel> list);
+  // Duplicated Resposibility
+  Future<List<GymModel>> getSubscribedToGyms(); // Duplicated
+  Future<List<GymModel>> cacheSubsToGyms(List<GymModel> list); // Duplicated
   Future<List<GymModel>> setSelectedGym(String gymId);
-
-  Future<bool> deleteTrainingProgram(String gymId);
 }
 
 class LocalTrainingSourceImpl implements LocalTrainingSource {

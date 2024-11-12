@@ -63,6 +63,22 @@ android {
         // For Firebase
         multiDexEnabled true
     }
+    
+    // flavorDimensions "default"
+    // productFlavors {
+    //     dev {
+    //         dimension "default"
+    //         applicationIdSuffix ".dev"
+    //     }
+    //     testing {
+    //         dimension "default"
+    //         applicationIdSuffix ".testing"
+    //     }
+    //     production {
+    //         dimension "default"
+    //     }
+    // }
+    
     signingConfigs {
         release {
             keyAlias keystoreProperties['keyAlias']

@@ -11,6 +11,7 @@ class PlayerModel extends Player {
     required super.level,
     required super.email,
   });
+
   factory PlayerModel.fromJson(Map<dynamic, dynamic> json) {
     return PlayerModel(
       uid: json['uid'] ?? "",
