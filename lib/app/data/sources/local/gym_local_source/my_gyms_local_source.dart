@@ -45,7 +45,7 @@ class MyGymsDBService implements IMyGymsLocalSource {
   }
 
   @override
-  Future<List<GymModel>> cacheSubsToGyms(List<GymModel> list) async {
+  Future<void> cacheSubsToGyms(List<GymModel> list) async {
     logger.t("Cacheing MyGyms: ${list.length}");
 
     final List<GymModel> localList = [];
@@ -72,7 +72,7 @@ class MyGymsDBService implements IMyGymsLocalSource {
       await myGyms.put(i.id, i.toJson());
       localList.add(i);
     }
-    return localList;
+    // return localList;
   }
 
   @override

@@ -5,23 +5,25 @@ import 'package:uniceps/app/domain/models/auth_models/user_model.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
-abstract class LocalUserSource {
+abstract class IUserLocalSource {
   Future<UserModel> getUser();
   Future<void> saveUser(UserModel model);
   Future<bool> isLoggedIn();
   Future<void> localLogout();
 }
 
-class LocalUserSourceImpl implements LocalUserSource {
+class LocalUserSourceImpl implements IUserLocalSource {
   final Box<Map<dynamic, dynamic>> userBox, playerBox;
   final Future<void> Function() resetBottun;
   final Logger logger;
+  final FirebaseMessaging firebaseMessaging;
 
   const LocalUserSourceImpl({
     required this.userBox,
     required this.playerBox,
     required this.resetBottun,
     required this.logger,
+    required this.firebaseMessaging,
   });
 
   @override
@@ -53,7 +55,7 @@ class LocalUserSourceImpl implements LocalUserSource {
 
     logger.d("User in Box: $user");
     if (user == null || !user.containsKey("token")) throw EmptyCacheExeption();
-    final notify = await FirebaseMessaging.instance.getToken();
+    final notify = await firebaseMessaging.getToken();
     if (notify != user['notify']) {
       user.addAll({'notify': notify});
       userBox.put(HIVE_USER_BOX, user);
@@ -63,7 +65,7 @@ class LocalUserSourceImpl implements LocalUserSource {
 
   @override
   Future<void> localLogout() async {
-    await FirebaseMessaging.instance.deleteToken();
+    await firebaseMessaging.deleteToken();
     await resetBottun();
   }
 }

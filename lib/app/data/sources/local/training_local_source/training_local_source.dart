@@ -17,11 +17,6 @@ abstract class ITrainingLocalSource {
 }
 
 class TrainingDBService implements ITrainingLocalSource {
-  final Box<Map<dynamic, dynamic>> trainBox;
-  final Box<double> lastWBox;
-  final ImageCacheManager cacheManager;
-  final Logger logger;
-
   const TrainingDBService({
     required this.trainBox,
     required this.lastWBox,
@@ -29,9 +24,16 @@ class TrainingDBService implements ITrainingLocalSource {
     required this.logger,
   });
 
+  final Box<Map<dynamic, dynamic>> trainBox;
+  final Box<double> lastWBox;
+  final ImageCacheManager cacheManager;
+  final Logger logger;
+
+  final title = "TrainingDBService";
+
   @override
   Future<TrainingProgramModel> getTrainingProgram(String gymId) async {
-    logger.t("Local_S --> getTrainingProgram");
+    logger.t("$title --> getTrainingProgram");
     final routine = trainBox.get(gymId);
     // var weightsRes = lastWBox.get(HIVE_LAST_WEIGHT_BOX);
     Map<String, double> weights = {};
@@ -57,6 +59,7 @@ class TrainingDBService implements ITrainingLocalSource {
   ///
   @override
   Future<void> saveTrainingProgram(TrainingProgramModel model) async {
+    logger.t("$title --> saveTrainingProgram");
     final old = trainBox.get(model.gymId);
     if (old != null && old['created_at'] != model.createdAt.toIso8601String()) {
       final cache = await SharedPreferences.getInstance();
@@ -67,7 +70,7 @@ class TrainingDBService implements ITrainingLocalSource {
 
   @override
   Future<Map<String, double>> getWeights() async {
-    logger.t("Inside local getWeight:");
+    logger.t("$title --> getWeight:");
     final Map<String, double> weights = {};
     for (var i in lastWBox.keys) {
       weights.addAll({"$i": lastWBox.get(i) as double});
@@ -76,7 +79,7 @@ class TrainingDBService implements ITrainingLocalSource {
     return weights;
   }
 
-  /// REFACTOR IDEA
+  /// REFACTOR IDEA ~~~~~~ (NO)
   ///
   /// we may need to put wieghts within the excersise model directly,
   /// this means we need an exersises box to store them in, which in
@@ -84,11 +87,13 @@ class TrainingDBService implements ITrainingLocalSource {
   ///
   @override
   Future<void> saveNewWeight(Map<String, double> val) async {
+    logger.t("$title --> saveNewWeight:");
     await lastWBox.put(val.keys.first, val.values.first);
   }
 
   @override
   Future<bool> deleteTrainingProgram(String gymId) async {
+    logger.t("$title --> deleteTrainingProgram:");
     await trainBox.delete(gymId);
     return true;
   }

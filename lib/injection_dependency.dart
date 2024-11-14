@@ -1,10 +1,18 @@
 import 'dart:typed_data';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart' as di;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
+import 'package:uniceps/app/data/sources/local/auth_local_source/user_local_source.dart';
+import 'package:uniceps/app/data/sources/local/gym_local_source/attendence_local_source.dart';
+import 'package:uniceps/app/data/sources/local/gym_local_source/gyms_local_source.dart';
+import 'package:uniceps/app/data/sources/local/gym_local_source/my_gyms_local_source.dart';
+import 'package:uniceps/app/data/sources/local/gym_local_source/subscriptions_local_source.dart';
+import 'package:uniceps/app/data/sources/local/profile_local_source/measurements_local_source.dart';
+import 'package:uniceps/app/data/sources/local/training_local_source/training_local_source.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
 import 'package:uniceps/app/data/auth_repo_impl.dart';
 import 'package:uniceps/app/data/sources/local/auth_local_source.dart';
@@ -80,12 +88,84 @@ Future<void> init() async {
     ),
   );
 
-  ///////                             ///
-  //////                             ////
-  /////   D A T A   S O U R C E S   /////
-  ////                             //////
-  ///                             ///////
+  //////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+  ///
+  ///   L O C A L   S O U R C E S
+  ///
+  //////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
 
+  //////////////////////////////////////////////////////////////////////////////
+  /////////
+  ////////
+  ///////
+  //////      A U T H   S O U R C E S
+  /////
+  ////
+  ///
+  //
+
+  sl.registerLazySingleton<IUserLocalSource>(() => LocalUserSourceImpl(
+        userBox: userBox,
+        playerBox: profileBox,
+        resetBottun: clear,
+        logger: sl(),
+        firebaseMessaging: FirebaseMessaging.instance,
+      ));
+
+  sl.registerLazySingleton<IAttendenceLocalSource>(
+      () => AttendenceLocalService(attendBox: attendenceBox));
+
+  sl.registerLazySingleton<IGymsLocalSource>(
+      () => GymsDBService(gymsBox: gymsBox));
+
+  sl.registerLazySingleton<IMyGymsLocalSource>(() => MyGymsDBService(
+      myGyms: myGyms, playerProfilesBox: profileBox, logger: sl()));
+
+  sl.registerLazySingleton<ISubscriptionsLocalSource>(
+      () => SubscriptionsDBService(subsBox: subsBox, logger: sl()));
+
+  sl.registerLazySingleton<IMeasurementsSource>(
+      () => MeasurementsDBService(measureBox: measureBox, logger: sl()));
+
+  sl.registerLazySingleton<ITrainingLocalSource>(() => TrainingDBService(
+      trainBox: trainBox,
+      lastWBox: lastWeightBox,
+      cacheManager: sl(),
+      logger: sl()));
+
+  //////////////////////////////////////////////////////////////////////////////
+  /////////
+  ////////
+  ///////
+  //////      P R O F I L E   S O U R C E S
+  /////
+  ////
+  ///
+  //
+
+  //////////////////////////////////////////////////////////////////////////////
+  /////////
+  ////////
+  ///////
+  //////      T R A I N I N G   S O U R C E S
+  /////
+  ////
+  ///
+  //
+
+  //////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+  ///
+  ///   R E M O T E   S O U R C E S
+  ///
+  //////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   sl.registerLazySingleton<LocalTrainingSource>(
     () => LocalTrainingSourceImpl(
       trainBox: trainBox,
