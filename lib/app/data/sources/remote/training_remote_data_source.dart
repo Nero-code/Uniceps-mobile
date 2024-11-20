@@ -6,8 +6,8 @@ import 'package:logger/logger.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
-import 'package:uniceps/app/domain/models/profile_models/gym_model.dart';
-import 'package:uniceps/app/domain/models/training_models/training_prog_model.dart';
+import 'package:uniceps/app/data/models/profile_models/gym_model.dart';
+import 'package:uniceps/app/data/models/training_models/training_prog_model.dart';
 
 abstract class RemoteTrainingSource {
   Future<TrainingProgramModel> getTrainingProgram({

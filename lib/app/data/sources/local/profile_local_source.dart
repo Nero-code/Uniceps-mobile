@@ -2,38 +2,40 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
-import 'package:uniceps/app/domain/models/auth_models/player_model.dart';
-import 'package:uniceps/app/domain/models/profile_models/measurement_model.dart';
-import 'package:uniceps/app/domain/models/profile_models/subscription_model.dart';
+import 'package:uniceps/app/data/models/auth_models/player_model.dart';
+import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
+import 'package:uniceps/app/data/models/profile_models/subscription_model.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/attendence.dart';
-import 'package:uniceps/app/domain/models/profile_models/gym_model.dart';
+import 'package:uniceps/app/data/models/profile_models/gym_model.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/player_in_gym.dart';
 
 abstract class LocalProfileSource {
   // Measurements Responsibility
-  Future<List<MeasurementModel>> getMeasurements();
-  Future<void> saveMeasurements(List<MeasurementModel> list);
+  Future<List<MeasurementModel>> getMeasurements(); // MIGRATION DONE
+  Future<void> saveMeasurements(List<MeasurementModel> list); // MIGRATION DONE
 
   // Profile Responsibility
-  Future<PlayerModel> getProfileData();
-  Future<void> savePlayerData(PlayerModel model);
+  Future<PlayerModel> getProfileData(); // MIGRATION DONE
+  Future<void> savePlayerData(PlayerModel model); // MIGRATION DONE
 
   // Subscriptions Responsibility
-  Future<List<SubscriptionModel>> getSubs(String gymId);
-  Future<void> saveSubs(String gymId, List<SubscriptionModel> list);
+  Future<List<SubscriptionModel>> getSubs(String gymId); // MIGRATION DONE
+  Future<void> saveSubs(
+      String gymId, List<SubscriptionModel> list); // MIGRATION DONE
 
   // Gyms Responsibility
-  Future<List<GymModel>> getGyms();
-  Future<void> saveGyms(List<GymModel> list);
+  Future<List<GymModel>> getGyms(); // MIGRATION DONE
+  Future<void> saveGyms(List<GymModel> list); // MIGRATION DONE
 
   // Attendence Responsibility
-  Future<List<Attendence>> getAttendenceAtGym(String gymId);
-  Future<void> saveAttenenceAtGym(String gymId, List<Attendence> list);
+  Future<List<Attendence>> getAttendenceAtGym(String gymId); // MIGRATION DONE
+  Future<void> saveAttenenceAtGym(
+      String gymId, List<Attendence> list); // MIGRATION DONE
 
   // MyGyms Responsibility
-  Future<List<GymModel>> getSubscribedToGyms();
-  Future<PlayerInGym> getPlayerInGym(String gymId);
-  Future<void> savePlayerInGym(PlayerInGym playerInGym);
+  Future<List<GymModel>> getSubscribedToGyms(); // MIGRATION DONE
+  Future<PlayerInGym> getPlayerInGym(String gymId); // MIGRATION DONE
+  Future<void> savePlayerInGym(PlayerInGym playerInGym); // MIGRATION DONE
 }
 
 class LocalProfileSourceImpl implements LocalProfileSource {

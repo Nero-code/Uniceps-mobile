@@ -6,7 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
-import 'package:uniceps/app/data/sources/local/auth_local_source/user_local_source.dart';
+import 'package:uniceps/app/data/sources/local/auth_local_source/account_local_source.dart';
 import 'package:uniceps/app/data/sources/local/gym_local_source/attendence_local_source.dart';
 import 'package:uniceps/app/data/sources/local/gym_local_source/gyms_local_source.dart';
 import 'package:uniceps/app/data/sources/local/gym_local_source/my_gyms_local_source.dart';
@@ -17,17 +17,17 @@ import 'package:uniceps/core/helpers/image_cache_manager.dart';
 import 'package:uniceps/app/data/auth_repo_impl.dart';
 import 'package:uniceps/app/data/sources/local/auth_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/auth_remote_source.dart';
-import 'package:uniceps/app/contracts/auth_repo.dart';
+import 'package:uniceps/app/domain/contracts/auth_repo.dart';
 import 'package:uniceps/app/domain/commands/auth_usecases/auth_usecases.dart';
 import 'package:uniceps/app/data/profile_repo_impl.dart';
 import 'package:uniceps/app/data/sources/local/profile_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/profile_remote_source.dart';
-import 'package:uniceps/app/contracts/profile_repo.dart';
+import 'package:uniceps/app/domain/contracts/profile_repo.dart';
 import 'package:uniceps/app/domain/commands/profile_usecases/profile_usecases.dart';
 import 'package:uniceps/app/data/training_repo_imple.dart';
 import 'package:uniceps/app/data/sources/local/training_local_data_source.dart';
 import 'package:uniceps/app/data/sources/remote/training_remote_data_source.dart';
-import 'package:uniceps/app/contracts/training_repository.dart';
+import 'package:uniceps/app/domain/contracts/training_repository.dart';
 import 'package:uniceps/app/domain/commands/training_usecases/training_usecases.dart';
 import 'package:uniceps/core/helpers/update_service.dart';
 
@@ -108,9 +108,9 @@ Future<void> init() async {
   ///
   //
 
-  sl.registerLazySingleton<IUserLocalSource>(() => LocalUserSourceImpl(
+  sl.registerLazySingleton<AccountLocalSourceImpl>(() => AccountLocalSourceImpl(
         userBox: userBox,
-        playerBox: profileBox,
+        // playerBox: profileBox,
         resetBottun: clear,
         logger: sl(),
         firebaseMessaging: FirebaseMessaging.instance,
@@ -128,7 +128,7 @@ Future<void> init() async {
   sl.registerLazySingleton<ISubscriptionsLocalSource>(
       () => SubscriptionsDBService(subsBox: subsBox, logger: sl()));
 
-  sl.registerLazySingleton<IMeasurementsSource>(
+  sl.registerLazySingleton<IMeasurementsLocalSource>(
       () => MeasurementsDBService(measureBox: measureBox, logger: sl()));
 
   sl.registerLazySingleton<ITrainingLocalSource>(() => TrainingDBService(

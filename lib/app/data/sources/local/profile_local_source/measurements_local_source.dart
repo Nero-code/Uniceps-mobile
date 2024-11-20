@@ -1,15 +1,15 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
-import 'package:uniceps/app/domain/models/profile_models/measurement_model.dart';
+import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
-abstract class IMeasurementsSource {
+abstract class IMeasurementsLocalSource {
   // Measurements Responsibility
   Future<List<MeasurementModel>> getMeasurements();
   Future<void> saveMeasurements(List<MeasurementModel> list);
 }
 
-class MeasurementsDBService implements IMeasurementsSource {
+class MeasurementsDBService implements IMeasurementsLocalSource {
   MeasurementsDBService({
     required this.measureBox,
     required this.logger,

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
-import 'package:uniceps/app/domain/models/profile_models/measurement_model.dart';
+import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 

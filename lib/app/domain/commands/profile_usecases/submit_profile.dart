@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:uniceps/app/contracts/profile_repo.dart';
+import 'package:uniceps/app/domain/contracts/profile_repo.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
 import 'package:uniceps/app/domain/commands/i_command.dart';
-import 'package:uniceps/app/domain/models/auth_models/player_model.dart';
+import 'package:uniceps/app/data/models/auth_models/player_model.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class CommandSubmitProfile implements ICommand {

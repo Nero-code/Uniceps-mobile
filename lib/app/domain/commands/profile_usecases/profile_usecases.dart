@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/core/errors/failure.dart';
-import 'package:uniceps/app/domain/models/auth_models/player_model.dart';
+import 'package:uniceps/app/data/models/auth_models/player_model.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/attendence.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/player_in_gym.dart';
-import 'package:uniceps/app/contracts/profile_repo.dart';
+import 'package:uniceps/app/domain/contracts/profile_repo.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/subscription.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/gym.dart';
 

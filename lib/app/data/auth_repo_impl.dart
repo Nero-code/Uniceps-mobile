@@ -4,13 +4,13 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
-import 'package:uniceps/app/domain/models/auth_models/player_model.dart';
-import 'package:uniceps/app/domain/models/auth_models/user_model.dart';
+import 'package:uniceps/app/data/models/auth_models/player_model.dart';
+import 'package:uniceps/app/data/models/auth_models/user_model.dart';
 // import 'package:uniceps/features/Auth/data/models/user_model.dart';
 import 'package:uniceps/app/data/sources/local/auth_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/auth_remote_source.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
-import 'package:uniceps/app/contracts/auth_repo.dart';
+import 'package:uniceps/app/domain/contracts/auth_repo.dart';
 
 class AuthRepoImpl implements AuthRepo {
   final LocalAuthSource local;

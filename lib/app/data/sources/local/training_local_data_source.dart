@@ -3,24 +3,28 @@ import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
-import 'package:uniceps/app/domain/models/profile_models/gym_model.dart';
-import 'package:uniceps/app/domain/models/training_models/training_prog_model.dart';
+import 'package:uniceps/app/data/models/profile_models/gym_model.dart';
+import 'package:uniceps/app/data/models/training_models/training_prog_model.dart';
 
 /// Abstract class [LocalTrainingSource] for SoC
 abstract class LocalTrainingSource {
   // Training Resposibility
-  Future<TrainingProgramModel> getTrainingProgram(String gymId);
-  Future<void> saveTrainingProgram(TrainingProgramModel model);
-  Future<bool> deleteTrainingProgram(String gymId);
+  Future<TrainingProgramModel> getTrainingProgram(
+      String gymId); // MIGRATION DONE
+  Future<void> saveTrainingProgram(
+      TrainingProgramModel model); // MIGRATION DONE
+  Future<bool> deleteTrainingProgram(String gymId); // MIGRATION DONE
 
   // Weights Resposibility
-  Future<Map<String, double>> getWeights();
-  Future<void> saveNewWeight(Map<String, double> val);
+  Future<Map<String, double>> getWeights(); // MIGRATION DONE
+  Future<void> saveNewWeight(Map<String, double> val); // MIGRATION DONE
 
   // Duplicated Resposibility
-  Future<List<GymModel>> getSubscribedToGyms(); // Duplicated
-  Future<List<GymModel>> cacheSubsToGyms(List<GymModel> list); // Duplicated
-  Future<List<GymModel>> setSelectedGym(String gymId);
+  Future<List<GymModel>>
+      getSubscribedToGyms(); // Duplicated    // MIGRATION DONE
+  Future<List<GymModel>> cacheSubsToGyms(
+      List<GymModel> list); // Duplicated   // MIGRATION DONE
+  Future<List<GymModel>> setSelectedGym(String gymId); // MIGRATION DONE
 }
 
 class LocalTrainingSourceImpl implements LocalTrainingSource {

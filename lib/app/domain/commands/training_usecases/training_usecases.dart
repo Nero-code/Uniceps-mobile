@@ -3,7 +3,7 @@ import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/gym.dart';
 import 'package:uniceps/app/domain/classes/training_entities/exercise.dart';
 import 'package:uniceps/app/domain/classes/training_entities/training_program.dart';
-import 'package:uniceps/app/contracts/training_repository.dart';
+import 'package:uniceps/app/domain/contracts/training_repository.dart';
 
 class TrainingUsecases {
   final TrainingRepo _repo;

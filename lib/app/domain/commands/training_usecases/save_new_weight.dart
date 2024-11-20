@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:uniceps/app/contracts/training_repository.dart';
+import 'package:uniceps/app/domain/contracts/training_repository.dart';
 import 'package:uniceps/app/domain/commands/i_command.dart';
 import 'package:uniceps/core/errors/failure.dart';
 

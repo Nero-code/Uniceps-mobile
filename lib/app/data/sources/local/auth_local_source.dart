@@ -3,16 +3,17 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
-import 'package:uniceps/app/domain/models/auth_models/player_model.dart';
-import 'package:uniceps/app/domain/models/auth_models/user_model.dart';
+import 'package:uniceps/app/data/models/auth_models/player_model.dart';
+import 'package:uniceps/app/data/models/auth_models/user_model.dart';
 
 abstract class LocalAuthSource {
-  Future<UserModel> getUser();
-  Future<void> saveUser(UserModel model);
-  Future<bool> isLoggedIn();
-  Future<void> localLogout();
-  Future<PlayerModel> getPlayerInfo();
-  Future<void> savePlayerInfo(PlayerModel playerModel);
+  Future<UserModel> getUser(); // MIGRATION DONE
+  Future<void> saveUser(UserModel model); // MIGRATION DONE
+  Future<bool> isLoggedIn(); // MIGRATION DONE      // DUPLICATED
+  Future<void> localLogout(); // MIGRATION DONE
+  Future<PlayerModel> getPlayerInfo(); // MIGRATION DONE      // DUPLICATED
+  Future<void> savePlayerInfo(
+      PlayerModel playerModel); // MIGRATION DONE       //DUPLICATED
 }
 
 class LocalAuthSourceImple implements LocalAuthSource {

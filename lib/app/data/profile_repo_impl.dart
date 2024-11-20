@@ -4,16 +4,16 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
-import 'package:uniceps/app/domain/models/auth_models/player_model.dart';
+import 'package:uniceps/app/data/models/auth_models/player_model.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
 import 'package:uniceps/app/data/sources/local/profile_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/profile_remote_source.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/attendence.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/player_in_gym.dart';
-import 'package:uniceps/app/contracts/profile_repo.dart';
+import 'package:uniceps/app/domain/contracts/profile_repo.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/subscription.dart';
-import 'package:uniceps/app/domain/models/profile_models/gym_model.dart';
+import 'package:uniceps/app/data/models/profile_models/gym_model.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/gym.dart';
 
 class ProfileRepoImpl implements ProfileRepo {
@@ -291,11 +291,11 @@ class ProfileRepoImpl implements ProfileRepo {
     }
   }
 
-  @override
-  Future<void> saveGyms(List<GymModel> list) async {
-    logger.t("profile repo saveGyms $list");
-    await local.saveGyms(list);
-  }
+  // @override
+  // Future<void> saveGyms(List<GymModel> list) async {
+  //   logger.t("profile repo saveGyms $list");
+  //   await local.saveGyms(list);
+  // }
 
   @override
   Future<Either<Failure, Player>> submitProfileData(PlayerModel playerModel,

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/errors/failure.dart';
-import 'package:uniceps/app/domain/models/auth_models/player_model.dart';
+import 'package:uniceps/app/data/models/auth_models/player_model.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
 import 'package:uniceps/app/domain/commands/profile_usecases/profile_usecases.dart';
 

@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:uniceps/app/data/sources/local/auth_local_source/user_local_source.dart';
+import 'package:uniceps/app/data/sources/local/auth_local_source/account_local_source.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
@@ -14,7 +14,7 @@ import '../../data_layer_test.mocks.dart';
 @GenerateNiceMocks([
   MockSpec<http.Client>(),
   MockSpec<hive.Box>(),
-  MockSpec<LocalUserSourceImpl>(),
+  MockSpec<AccountLocalSourceImpl>(),
   MockSpec<FirebaseMessaging>(),
 ])
 void main() {
@@ -27,11 +27,11 @@ void main() {
   // });
   group("Local Data Layer Tests", () {
     final userBox = MockBox<Map<dynamic, dynamic>>();
-    final playerBox = MockBox<Map<dynamic, dynamic>>();
+    // final playerBox = MockBox<Map<dynamic, dynamic>>();
     final mockFirebaseMessaging = MockFirebaseMessaging();
-    final userSource = LocalUserSourceImpl(
+    final userSource = AccountLocalSourceImpl(
       userBox: userBox,
-      playerBox: playerBox,
+      // playerBox: playerBox,
       resetBottun: () async {},
       logger: Logger(),
       firebaseMessaging: mockFirebaseMessaging,

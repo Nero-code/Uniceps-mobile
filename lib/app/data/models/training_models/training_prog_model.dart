@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:uniceps/app/domain/models/training_models/exercise_model.dart';
+import 'package:uniceps/app/data/models/training_models/exercise_model.dart';
 import 'package:uniceps/app/domain/classes/training_entities/training_program.dart';
 
 class TrainingProgramModel extends TrainingProgram {

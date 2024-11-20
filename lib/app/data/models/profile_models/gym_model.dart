@@ -47,7 +47,7 @@ class GymModel extends Gym {
       end: json['start'] != null ? DateTime.parse(json['end']) : null,
       isSelected: json['isSelected'] ?? false,
       isCurrent: json['isCurrent'] ?? false,
-      joinedAt: joinedAt,
+      joinedAt: joinedAt, //  DEPRECATED
     );
   }
 

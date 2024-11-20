@@ -1,26 +1,25 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
-import 'package:uniceps/app/domain/models/auth_models/user_model.dart';
+import 'package:uniceps/app/data/models/auth_models/user_model.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
-abstract class IUserLocalSource {
+abstract class IAccountLocalSource {
   Future<UserModel> getUser();
   Future<void> saveUser(UserModel model);
   Future<bool> isLoggedIn();
   Future<void> localLogout();
 }
 
-class LocalUserSourceImpl implements IUserLocalSource {
-  final Box<Map<dynamic, dynamic>> userBox, playerBox;
+class AccountLocalSourceImpl implements IAccountLocalSource {
+  final Box<Map<dynamic, dynamic>> userBox;
   final Future<void> Function() resetBottun;
   final Logger logger;
   final FirebaseMessaging firebaseMessaging;
 
-  const LocalUserSourceImpl({
+  const AccountLocalSourceImpl({
     required this.userBox,
-    required this.playerBox,
     required this.resetBottun,
     required this.logger,
     required this.firebaseMessaging,

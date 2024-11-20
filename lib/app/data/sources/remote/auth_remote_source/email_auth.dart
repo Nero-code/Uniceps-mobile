@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
-import 'package:uniceps/app/domain/models/auth_models/user_model.dart';
+import 'package:uniceps/app/data/models/auth_models/user_model.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
@@ -14,12 +14,6 @@ abstract class I2FAuthService {
       {required String code,
       required String credential,
       required String notifyToken});
-
-  // Future<Map<dynamic, dynamic>> sendNotifyToken(String token);
-
-  // Future<void> logout();
-  // Future<bool> deleteAccount();
-  // Future<bool> isLoggedIn();
 }
 
 class EmailAuthService implements I2FAuthService {

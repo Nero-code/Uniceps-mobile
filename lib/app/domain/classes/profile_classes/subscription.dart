@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:uniceps/app/domain/models/profile_models/subscription_model.dart';
+import 'package:uniceps/app/data/models/profile_models/subscription_model.dart';
 
 // {
 //             "id": 123,

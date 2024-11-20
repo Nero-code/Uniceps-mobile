@@ -7,7 +7,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
-import 'package:uniceps/app/domain/models/auth_models/player_model.dart';
+import 'package:uniceps/app/data/models/auth_models/player_model.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
 import 'package:uniceps/app/presentation/blocs/authentication/auth_bloc.dart';
 import 'package:uniceps/app/presentation/screens/auth_page/auth/widgets/gender_selection_widget.dart';

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:uniceps/app/domain/models/training_models/exercise_model.dart';
+import 'package:uniceps/app/data/models/training_models/exercise_model.dart';
 
 class TrainingProgram extends Equatable {
   final String id, gymId, pid;

@@ -14,9 +14,9 @@ import 'package:http/http.dart' as _i2;
 import 'package:logger/logger.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i10;
-import 'package:uniceps/app/data/sources/local/auth_local_source/user_local_source.dart'
+import 'package:uniceps/app/data/sources/local/auth_local_source/account_local_source.dart'
     as _i12;
-import 'package:uniceps/app/domain/models/auth_models/user_model.dart' as _i5;
+import 'package:uniceps/app/data/models/auth_models/user_model.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -706,7 +706,7 @@ class MockBox<E> extends _i1.Mock implements _i3.Box<E> {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLocalUserSourceImpl extends _i1.Mock
-    implements _i12.LocalUserSourceImpl {
+    implements _i12.AccountLocalSourceImpl {
   @override
   _i3.Box<Map<dynamic, dynamic>> get userBox => (super.noSuchMethod(
         Invocation.getter(#userBox),
@@ -720,18 +720,18 @@ class MockLocalUserSourceImpl extends _i1.Mock
         ),
       ) as _i3.Box<Map<dynamic, dynamic>>);
 
-  @override
-  _i3.Box<Map<dynamic, dynamic>> get playerBox => (super.noSuchMethod(
-        Invocation.getter(#playerBox),
-        returnValue: _FakeBox_2<Map<dynamic, dynamic>>(
-          this,
-          Invocation.getter(#playerBox),
-        ),
-        returnValueForMissingStub: _FakeBox_2<Map<dynamic, dynamic>>(
-          this,
-          Invocation.getter(#playerBox),
-        ),
-      ) as _i3.Box<Map<dynamic, dynamic>>);
+  // @override
+  // _i3.Box<Map<dynamic, dynamic>> get playerBox => (super.noSuchMethod(
+  //       Invocation.getter(#playerBox),
+  //       returnValue: _FakeBox_2<Map<dynamic, dynamic>>(
+  //         this,
+  //         Invocation.getter(#playerBox),
+  //       ),
+  //       returnValueForMissingStub: _FakeBox_2<Map<dynamic, dynamic>>(
+  //         this,
+  //         Invocation.getter(#playerBox),
+  //       ),
+  //     ) as _i3.Box<Map<dynamic, dynamic>>);
 
   @override
   _i8.Future<void> Function() get resetBottun => (super.noSuchMethod(

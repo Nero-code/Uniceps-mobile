@@ -6,12 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/gym.dart';
-import 'package:uniceps/app/domain/models/training_models/exercise_model.dart';
+import 'package:uniceps/app/data/models/training_models/exercise_model.dart';
 import 'package:uniceps/app/data/sources/local/training_local_data_source.dart';
 import 'package:uniceps/app/data/sources/remote/training_remote_data_source.dart';
 import 'package:uniceps/app/domain/classes/training_entities/exercise.dart';
 import 'package:uniceps/app/domain/classes/training_entities/training_program.dart';
-import 'package:uniceps/app/contracts/training_repository.dart';
+import 'package:uniceps/app/domain/contracts/training_repository.dart';
 
 class TrainingRepoImple implements TrainingRepo {
   final LocalTrainingSource local;
