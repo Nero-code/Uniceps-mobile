@@ -9,10 +9,13 @@ part 'attendence_state.dart';
 
 class AttendenceBloc extends Bloc<AttendenceEvent, AttendenceState> {
   final ProfileUsecases usecases;
-  AttendenceBloc(this.usecases) : super(AttendenceInitial()) {
+  // final CommandGetAttendenceAtGym getAttendenceAtGym;
+  AttendenceBloc(this.usecases /**, this.getAttendenceAtGym*/)
+      : super(AttendenceInitial()) {
     on<GetAttendenceEvent>((event, emit) async {
       emit(AttenedenceLoadingState());
       final either = await usecases.gymAttendance(event.gymId, event.pid);
+      // final either2 = await getAttendenceAtGym(event.gymId, event.pid);
       either.fold(
         (l) => emit(AttenedenceErrorState(l)),
         (r) => emit(AttenedenceLoadedState(r)),

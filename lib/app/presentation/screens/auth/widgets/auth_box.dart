@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/app/presentation/screens/auth_page/auth/widgets/background_card.dart';
+import 'package:uniceps/app/presentation/screens/auth/widgets/background_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthBox extends StatefulWidget {

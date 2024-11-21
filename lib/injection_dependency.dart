@@ -309,7 +309,7 @@ Future<void> init() async {
       printer: PrettyPrinter(
         dateTimeFormat: DateTimeFormat.dateAndTime,
         // printEmojis: false,
-        // noBoxingByDefault: true,
+        noBoxingByDefault: true,
         colors: true,
         levelColors: {
           // https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
