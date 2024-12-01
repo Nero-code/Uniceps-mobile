@@ -29,7 +29,7 @@ abstract class LocalProfileSource {
 
   // Attendence Responsibility
   Future<List<Attendence>> getAttendenceAtGym(String gymId); // MIGRATION DONE
-  Future<void> saveAttenenceAtGym(
+  Future<void> saveAttendenceAtGym(
       String gymId, List<Attendence> list); // MIGRATION DONE
 
   // MyGyms Responsibility
@@ -87,6 +87,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
   @override
   Future<void> saveMeasurements(List<MeasurementModel> list) async {
     logger.d("saveMsList ${list.length}");
+    await measureBox.clear();
     for (var i in list) {
       await measureBox.put(i.id, i.toJson());
     }
@@ -154,6 +155,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
 
   @override
   Future<void> saveGyms(List<GymModel> list) async {
+    await gymsBox.clear();
     for (var i in list) {
       await gymsBox.put(i.id, i.toJson());
     }
@@ -176,7 +178,7 @@ class LocalProfileSourceImpl implements LocalProfileSource {
   }
 
   @override
-  Future<void> saveAttenenceAtGym(String gymId, List<Attendence> list) async {
+  Future<void> saveAttendenceAtGym(String gymId, List<Attendence> list) async {
     final temp = <Map>[];
     for (var i in list) {
       temp.add(i.toJson());

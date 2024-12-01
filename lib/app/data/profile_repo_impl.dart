@@ -350,7 +350,7 @@ class ProfileRepoImpl implements ProfileRepo {
 
         logger.t("saving new data");
 
-        await local.saveAttenenceAtGym(gymId, res);
+        await local.saveAttendenceAtGym(gymId, res);
 
         logger.t("Attenence --> RepoImpl --> Remote gymAttendence DONE");
 

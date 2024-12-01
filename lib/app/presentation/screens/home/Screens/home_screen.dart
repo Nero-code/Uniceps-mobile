@@ -35,24 +35,24 @@ class MuscleGroup {
 }
 
 final enTrSections = [
-  const MuscleGroup("Chest", 1),
-  const MuscleGroup("Back", 3),
-  const MuscleGroup("Biceps", 5),
-  const MuscleGroup("Triceps", 6),
-  const MuscleGroup("Shoulder", 2),
   const MuscleGroup("Legs", 4),
   const MuscleGroup("Calves", 7),
+  const MuscleGroup("Chest", 1),
+  const MuscleGroup("Back", 3),
+  const MuscleGroup("Shoulder", 2),
+  const MuscleGroup("Biceps", 5),
+  const MuscleGroup("Triceps", 6),
   const MuscleGroup("Abs", 8),
 ];
 
 final arTrSections = [
-  const MuscleGroup("صدر", 1),
-  const MuscleGroup("ظهر", 3),
-  const MuscleGroup("باي", 5),
-  const MuscleGroup("تراي", 6),
-  const MuscleGroup("أكتاف", 2),
   const MuscleGroup("أرجل", 4),
   const MuscleGroup("بطة الرجل", 7),
+  const MuscleGroup("صدر", 1),
+  const MuscleGroup("ظهر", 3),
+  const MuscleGroup("أكتاف", 2),
+  const MuscleGroup("باي", 5),
+  const MuscleGroup("تراي", 6),
   const MuscleGroup("معدة", 8),
 ];
 

@@ -1,5 +1,6 @@
 import 'package:uniceps/app/domain/classes/profile_classes/gym.dart';
 
+/// GymModel class is a generic class for both { Gyms and MyGyms }
 class GymModel extends Gym {
   const GymModel({
     required super.name,
@@ -44,7 +45,7 @@ class GymModel extends Gym {
       phoneNum: json['phone_number'],
       telephone: json['telephone'],
       start: json['start'] != null ? DateTime.parse(json['start']) : null,
-      end: json['start'] != null ? DateTime.parse(json['end']) : null,
+      end: json['end'] != null ? DateTime.parse(json['end']) : null,
       isSelected: json['isSelected'] ?? false,
       isCurrent: json['isCurrent'] ?? false,
       joinedAt: joinedAt, //  DEPRECATED

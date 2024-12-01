@@ -5,6 +5,10 @@ import 'package:uniceps/app/data/models/auth_models/user_model.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
+/// Abstraction for **account management** locally.
+///
+/// Authentication is not a part of the account creation process but it depends
+/// on local storage to store the Authenticated User.
 abstract class IAccountLocalSource {
   Future<UserModel> getUser();
   Future<void> saveUser(UserModel model);
@@ -25,6 +29,7 @@ class AccountLocalSourceImpl implements IAccountLocalSource {
     required this.firebaseMessaging,
   });
 
+  ///
   @override
   Future<UserModel> getUser() async {
     logger.d("Inside Local getUser!");
