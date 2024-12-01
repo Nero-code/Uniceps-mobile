@@ -29,11 +29,14 @@ class AccountLocalSourceImpl implements IAccountLocalSource {
     required this.firebaseMessaging,
   });
 
+  /// Reads a `UserModel` from `userBox`.
   ///
+  /// Checks for *nullability*.
+  ///
+  /// Throws [EmptyCacheExeption]
   @override
   Future<UserModel> getUser() async {
     logger.d("Inside Local getUser!");
-    // logger.d("${userBox.get(HIVE_USER_BOX)}");
     final res = userBox.get(HIVE_USER_BOX);
     logger.d(res);
     if (res == null || res.isEmpty) {
@@ -42,6 +45,9 @@ class AccountLocalSourceImpl implements IAccountLocalSource {
     return UserModel.fromJson(res);
   }
 
+  /// Saves `UserModel` in `userBox`.
+  ///
+  /// Clears `userBox` then adds new data.
   @override
   Future<void> saveUser(UserModel model) async {
     logger.d("LOCAL SAVE USER: clear count: ${await userBox.clear()}");
@@ -50,6 +56,11 @@ class AccountLocalSourceImpl implements IAccountLocalSource {
     logger.d("DATA SAVED! ${userBox.get(HIVE_USER_BOX)}");
   }
 
+  /// Reads `UserModel` from `userBox`.
+  ///
+  /// Checks for *nullability* OR `'token'` key exists
+  ///
+  /// Throws [EmptyCachExeption].
   @override
   Future<bool> isLoggedIn() async {
     logger.d("check 1: Inside Local isLoggedIn ");
@@ -67,6 +78,22 @@ class AccountLocalSourceImpl implements IAccountLocalSource {
     return true;
   }
 
+  /// Deletes [FirebaseMessaging] token.
+  ///
+  /// Clears local DBs:
+  /// * `userBox`
+  /// * `profileBox`
+  /// * `trainBox`
+  /// * `lastWeightBox`
+  /// * `gymsBox`
+  /// * `myGyms`
+  /// * `subsBox`
+  /// * `measureBox`
+  /// * `handshakesBox`
+  /// * `attendenceBox`
+  /// * `imagesBox`
+  /// * `selectedGym`
+  /// * `playerInGymBox`
   @override
   Future<void> localLogout() async {
     await firebaseMessaging.deleteToken();
