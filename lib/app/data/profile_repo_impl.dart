@@ -324,6 +324,9 @@ class ProfileRepoImpl implements ProfileRepo {
       } on ServerException {
         logger.e("Submit Profile --> ServerEXception");
         return Left(ServerFailure(errMsg: "Server Error"));
+      } on MethodNotAllowedException {
+        logger.t("Guest Mode tried to edit profile");
+        return const Left(MethodNotAllowedFailure("Not Allowed"));
       } catch (e) {
         logger.f("Submit Profile --> GeneralEXception", error: e);
         return Left(GeneralPurposFailure(errorMessage: e.toString()));

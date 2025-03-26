@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:uniceps/app/data/models/auth_models/user_model.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/app/data/models/auth_models/player_model.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
@@ -30,4 +31,6 @@ abstract class AuthRepo {
   //     {required String email, required String pass});
 
   // Future<Either<Failure, bool>> changePassword({required String pass});
+
+  Future<Either<Failure, UserModel>> loginAsGuest();
 }

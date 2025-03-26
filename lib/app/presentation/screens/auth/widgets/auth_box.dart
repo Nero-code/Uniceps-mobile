@@ -6,9 +6,11 @@ class AuthBox extends StatefulWidget {
   const AuthBox({
     super.key,
     required this.signin,
+    required this.guestMode,
   });
 
   final void Function(String email) signin;
+  final void Function() guestMode;
 
   @override
   State<AuthBox> createState() => _AuthBoxState();
@@ -113,6 +115,35 @@ class _AuthBoxState extends State<AuthBox> {
           ),
         ),
         const SizedBox(height: 20),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                height: 1.0,
+                color: Colors.grey.shade300,
+              ),
+            ),
+            Text(local.or),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                height: 1.0,
+                color: Colors.grey.shade300,
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+                child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: ElevatedButton(
+                  onPressed: widget.guestMode, child: Text(local.guestMode)),
+            )),
+          ],
+        ),
       ],
     );
   }

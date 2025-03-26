@@ -183,6 +183,8 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
       logger.t("res body: ${res.body}");
       if (res.statusCode == 201) {
         return jsonDecode(res.body)['profile_info']['uid'];
+      } else if (res.statusCode == 403) {
+        throw MethodNotAllowedException();
       }
     } else {
       logger.t("REMOTE-S: Submit Profile --> Check 2.2!");
@@ -201,6 +203,8 @@ class RemoteProfileSourceImpl implements RemoteProfileSource {
 
       if (res.statusCode == 200) {
         return jsonDecode(res.body)['user_info']['uid'];
+      } else if (res.statusCode == 403) {
+        throw MethodNotAllowedException();
       }
     }
     throw ServerException();

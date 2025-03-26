@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/domain/commands/auth_usecases/guest_mode_login.dart';
 import 'package:uniceps/core/errors/failure.dart';
 // import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
@@ -10,8 +11,10 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthUsecases usecases;
+  final GuestModeUsecase guestMode;
 
-  AuthBloc({required this.usecases}) : super(AuthInitial()) {
+  AuthBloc({required this.usecases, required this.guestMode})
+      : super(AuthInitial()) {
     on<AuthEvent>((event, emit) async {
       if (event is AuthCheckEvent) {
         // bool isLogged = false;
@@ -95,6 +98,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         either.fold(
           (l) => emit(AuthErrorState(f: l)),
           (r) => emit(AuthDeletedAccountState()),
+        );
+      } else if (event is AuthGuestModeEvent) {
+        final either = await guestMode();
+        either.fold(
+          (l) => emit(AuthErrorState(f: l)),
+          (r) => emit(AuthGuestModeDoneState()),
         );
       }
     });

@@ -19,6 +19,7 @@
   
   "ok": "OK",
   "no": "No",
+  "or": "OR",
   "cancel": "Cancel",
   "skip": "SKIP >",
   "confirm": "Confirm",
@@ -158,6 +159,8 @@
   "deleteAccountContent": "you are about to delete your account within Uniceps System, Are you sure?",
 
   "chackForUpdate": "Checking for updates...",
+  "gettingRoutine": "Getting Routine...",
 
-  "gettingRoutine": "Getting Routine..."
+  "guestMode": "Guest Mode",
+  "guestModeEditErr": "Guest mode not allowed to edit"
 }

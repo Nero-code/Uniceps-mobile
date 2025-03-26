@@ -22,10 +22,11 @@ final class AuthEmailCodeVerifyEvent extends AuthEvent {
 
 final class DeleteAccountEvent extends AuthEvent {}
 
-// final class AuthAddNewPasswordEvent extends AuthEvent {
-//   final String email, pass;
-//   const AuthAddNewPasswordEvent({required this.email, required this.pass});
-// }
+///
+///   Guest Mode
+///
+
+final class AuthGuestModeEvent extends AuthEvent {}
 
 ///
 ///   Main Login

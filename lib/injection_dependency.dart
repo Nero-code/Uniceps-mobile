@@ -13,6 +13,7 @@ import 'package:uniceps/app/data/sources/local/gym_local_source/my_gyms_local_so
 import 'package:uniceps/app/data/sources/local/gym_local_source/subscriptions_local_source.dart';
 import 'package:uniceps/app/data/sources/local/profile_local_source/measurements_local_source.dart';
 import 'package:uniceps/app/data/sources/local/training_local_source/training_local_source.dart';
+import 'package:uniceps/app/domain/commands/auth_usecases/guest_mode_login.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
 import 'package:uniceps/app/data/auth_repo_impl.dart';
 import 'package:uniceps/app/data/sources/local/auth_local_source.dart';
@@ -262,19 +263,17 @@ Future<void> init() async {
   //////////////////////////////////////////////////////////////////////////////
 
   sl.registerLazySingleton<AuthUsecases>(
-    () => AuthUsecases(
-      repo: sl(),
-    ),
+    () => AuthUsecases(repo: sl()),
   );
   sl.registerLazySingleton<TrainingUsecases>(
-    () => TrainingUsecases(
-      repo: sl(),
-    ),
+    () => TrainingUsecases(repo: sl()),
   );
   sl.registerLazySingleton<ProfileUsecases>(
-    () => ProfileUsecases(
-      repo: sl(),
-    ),
+    () => ProfileUsecases(repo: sl()),
+  );
+
+  sl.registerLazySingleton<GuestModeUsecase>(
+    () => GuestModeUsecase(authRepo: sl()),
   );
 
   //////////////////////////////////////////////////////////////////////////////
@@ -309,7 +308,7 @@ Future<void> init() async {
       printer: PrettyPrinter(
         dateTimeFormat: DateTimeFormat.dateAndTime,
         // printEmojis: false,
-        noBoxingByDefault: true,
+        // noBoxingByDefault: true,
         colors: true,
         levelColors: {
           // https://en.wikipedia.org/wiki/ANSI_escape_code#Colors

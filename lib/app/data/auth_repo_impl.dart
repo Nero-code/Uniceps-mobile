@@ -65,6 +65,7 @@ class AuthRepoImpl implements AuthRepo {
     return Left(OfflineFailure(errorMessage: ""));
   }
 
+  // TODO: NEEDS MIGRATION
   @override
   Future<Either<Failure, bool>> isLoggedIn() async {
     logger.t("Auth repo isLoggedIn");
@@ -73,28 +74,40 @@ class AuthRepoImpl implements AuthRepo {
       final resUser = await local.getUser();
 
       logger.d("Is Logged in repo: User = ${resUser.toJson()}");
+
+      if (resUser.email == "uniceps@test.com") return const Right(true);
+
       final nToken = await FirebaseMessaging.instance.getToken();
       logger.d("Is Logged in repo Token: $nToken");
-      if (resUser.notifyToken != nToken && await connection.hasConnection) {
-        logger.d("Is Logged in repo: Before sendNotify");
-        final res = await remote.sendNotifyToken(nToken as String);
-        logger.d("Is Logged in repo: After sendNotify");
 
+      if (await connection.hasConnection) {
+        logger.d("Is Logged in repo: Before sendNotify");
+        final res = await remote.sendNotifyToken(nToken ?? "");
+        logger.d("Is Logged in repo: After sendNotify");
+        logger.e("res: $res");
         await local.saveUser(
-          UserModel.fromJson(
-            {"id": "id", "token": res['token'], "notify": nToken},
-          ),
+          UserModel.fromJson({
+            "id": "id",
+            "email": resUser.email,
+            "token": res['token'],
+            "notify": nToken ?? "",
+          }),
         );
       }
       return const Right(true);
     } on EmptyCacheExeption {
       return const Left(
           EmptyCacheFailure(errorMessage: "Null User || No Token was found"));
+    } on AuthUnautherizedException {
+      logger.d("Not autherized! token not valid!");
+      local.localLogout();
+      return const Left(AuthUnautherizedFailure(""));
     } on AuthException {
       logger.d("ServerException");
+
       return Left(ServerFailure(errMsg: "errMsg"));
     } catch (e) {
-      logger.d("Exception on Auth $e");
+      logger.d("Exception on Auth: $e");
       return Left(
           EmptyCacheFailure(errorMessage: "Unknown Error: ${e.toString()}"));
     }
@@ -103,6 +116,46 @@ class AuthRepoImpl implements AuthRepo {
     //   }
     // }
   }
+
+  // @override
+  // Future<Either<Failure, bool>> isLoggedIn() async {
+  //   logger.t("Auth repo isLoggedIn");
+  //   try {
+  //     logger.d("Is Logged in repo");
+  //     final resUser = await local.getUser();
+  //     logger.d("Is Logged in repo: User = ${resUser.toJson()}");
+  //     if (resUser.email == "uniceps@test.com") return const Right(true);
+  //     final nToken = await FirebaseMessaging.instance.getToken();
+  //     logger.d("Is Logged in repo Token: $nToken");
+  //     if (resUser.notifyToken != nToken && await connection.hasConnection) {
+  //       logger.d("Is Logged in repo: Before sendNotify");
+  //       final res = await remote.sendNotifyToken(nToken ?? "");
+  //       logger.d("Is Logged in repo: After sendNotify");
+  //       await local.saveUser(
+  //         UserModel.fromJson({
+  //           "id": "id",
+  //           "token": res['token'],
+  //           "notify": nToken ?? "",
+  //         }),
+  //       );
+  //     }
+  //     return const Right(true);
+  //   } on EmptyCacheExeption {
+  //     return const Left(
+  //         EmptyCacheFailure(errorMessage: "Null User || No Token was found"));
+  //   } on AuthException {
+  //     logger.d("ServerException");
+  //     return Left(ServerFailure(errMsg: "errMsg"));
+  //   } catch (e) {
+  //     logger.d("Exception on Auth $e");
+  //     return Left(
+  //         EmptyCacheFailure(errorMessage: "Unknown Error: ${e.toString()}"));
+  //   }
+  //   // if(await connection.hasConnection){
+  //   //   try{
+  //   //   }
+  //   // }
+  // }
 
   @override
   Future<Either<Failure, bool>> logout() async {
@@ -175,5 +228,23 @@ class AuthRepoImpl implements AuthRepo {
         return const Left(EmptyCacheFailure(errorMessage: ""));
       }
     }
+  }
+
+  //  TODO: Needs Migration
+  @override
+  Future<Either<Failure, UserModel>> loginAsGuest() async {
+    if (await connection.hasConnection) {
+      try {
+        final res = await remote.loginAsGuest();
+        await local.saveUser(res);
+        return Right(res);
+      } on ServerException {
+        return Left(ServerFailure(errMsg: ""));
+      } catch (e) {
+        logger.e("Error in guest mode", error: e);
+        return Left(NotFoundFailure(errMsg: e.toString()));
+      }
+    }
+    return Left(NoInternetConnectionFailure(errMsg: ""));
   }
 }

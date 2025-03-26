@@ -149,6 +149,8 @@ class _AuthScreenState extends State<AuthScreen>
                           backgroundColor: Colors.red.shade300,
                         ),
                       );
+                    } else if (state is AuthGuestModeDoneState) {
+                      Navigator.of(context).pushReplacementNamed(ROUTE_HOME);
                     }
                   },
                   builder: (context, state) {
@@ -247,6 +249,10 @@ class _AuthScreenState extends State<AuthScreen>
 
                                             email.value =
                                                 e.trim().toLowerCase();
+                                          },
+                                          guestMode: () {
+                                            BlocProvider.of<AuthBloc>(context)
+                                                .add(AuthGuestModeEvent());
                                           },
                                         ),
 

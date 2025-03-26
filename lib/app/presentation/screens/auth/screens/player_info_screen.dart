@@ -67,6 +67,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
             if (state is ProfileLoadedState) {
               isCreate = false;
               showBackBtn = true;
+              email = state.player.email;
               nameCtl.text = state.player.name;
               phoneCtl.text = state.player.phoneNum;
               birthCtl.text = state.player.birthDate;
@@ -86,9 +87,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                   top: 0.0,
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * 0.3,
-                  child: CustomPaint(
-                    painter: ProfileBackgroundCircle(),
-                  ),
+                  child: CustomPaint(painter: ProfileBackgroundCircle()),
                 ),
                 SafeArea(
                   child: Form(
@@ -297,7 +296,16 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                                       return;
                                     }
                                   }
-
+                                  if (email == "uniceps@test.com") {
+                                    ScaffoldMessenger.of(context)
+                                        .clearSnackBars();
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(local.guestModeEditErr),
+                                      ),
+                                    );
+                                    return;
+                                  }
                                   BlocProvider.of<ProfileBloc>(context).add(
                                     ProfileSubmitEvent(
                                       isCreate: isCreate,
@@ -342,6 +350,19 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                                         ),
                                         TextButton(
                                           onPressed: () async {
+                                            if (email == "uniceps@test.com") {
+                                              ScaffoldMessenger.of(context)
+                                                  .clearSnackBars();
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                      local.guestModeEditErr),
+                                                ),
+                                              );
+                                              Navigator.pop(context);
+                                              return;
+                                            }
                                             BlocProvider.of<AuthBloc>(context)
                                                 .add(DeleteAccountEvent());
                                             final bloc =

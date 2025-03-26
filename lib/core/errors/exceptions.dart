@@ -1,5 +1,7 @@
 class AuthException implements Exception {}
 
+class AuthUnautherizedException implements Exception {}
+
 class ServerException implements Exception {}
 
 class DataBaseException implements Exception {}
@@ -17,3 +19,5 @@ class NoTrainingProgramException implements Exception {}
 class NoAttendenceLogFoundException implements Exception {}
 
 class NotAMemberOfGymException implements Exception {}
+
+class MethodNotAllowedException implements Exception {}

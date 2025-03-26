@@ -4,13 +4,13 @@ import 'package:uniceps/app/data/models/auth_models/player_model.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
-abstract class IProfileSource {
+abstract class IProfileLocalSource {
   // Profile Responsibility
   Future<PlayerModel> getProfileData();
   Future<void> savePlayerData(PlayerModel model);
 }
 
-class ProfileLocalSource implements IProfileSource {
+class ProfileLocalSource implements IProfileLocalSource {
   const ProfileLocalSource({
     required this.playerBox,
     required this.logger,

@@ -117,7 +117,9 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
   /// Caches List of Gyms the player has joined.
   ///
   /// Preserves the state of the gym at the local level such as
-  /// the [isSelected] and [isCurrent] properties which are basicaly the same
+  /// the [isSelected] and [isCurrent] properties.
+  ///
+  /// [Read More](/home/posiden/Data/Flutter_Apps/uniceps/lib/app/domain/classes/profile_classes/gym.dart)
   @override
   Future<List<GymModel>> cacheSubsToGyms(List<GymModel> list) async {
     /// Caching gyms is a little bit tricky, Because:
@@ -125,9 +127,10 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     /// First, We need to get the list of already stored MyGyms in the system,
     /// and these models have an important property called [isSelected / isCurrent]
     ///
-    /// Then, we must update all gyms while preserving the isSelected state.
-    /// thank goodness that this property is singular and not some advanced
-    /// managing model for the current gym.
+    /// Then, we must update all gyms while preserving the [isSelected] and
+    /// [isCurrent] state.
+    /// thank goodness that this property is singular and not some advanced model
+    /// managing for the current gym.
     ///
     /// NOTE: isSelected property is used to seperate Gyms from MyGyms in BLoC
     logger.t("Cacheing MyGyms: ${list.length}");
@@ -143,14 +146,14 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
       /// Then we check if the gym already exists locally.
       if (localList.contains(i)) {
         /// If so, we take the isSelected and isCurrent properties from element
-        /// [i] and add it to temporary [map]
+        /// [i] in [list] and add it to temporary [map]
         final map = i.toJson();
         map.addAll({
           "isSelected": localList[localList.indexOf(i)].isSelected,
           "isCurrent": localList[localList.indexOf(i)].isCurrent,
         });
 
-        /// Create a new updated object with the old values
+        /// Create a new updated object with the old [is]Flags
         final updatedGym = GymModel.fromJson(map);
 
         logger.t("Removing GYM-MODEL ITEM:");
@@ -161,7 +164,7 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
         localList.add(updatedGym);
         await myGyms.put(i.id, map);
 
-        /// Continue is used so the rest of the for loop wouldn't execute
+        /// Continue is used so the rest of the `for` loop is ignored
         continue;
       }
 
@@ -172,13 +175,23 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
     return localList;
   }
 
+  /// Updates a Gym to become **Current**.
+  ///
+  /// Checks for *availablity*  >>  ABSURD
+  ///
+  /// Throws [EmptyCacheExeption].
   @override
   Future<List<GymModel>> setSelectedGym(String gymId) async {
     logger.t("DEBUG: SET 1");
     if (!myGyms.containsKey(gymId)) {
+      ///
+      /// In What World Would This Execute???
+      ///
       throw EmptyCacheExeption();
     }
+
     logger.t("DEBUG: SET 2");
+
     final List<GymModel> list = [];
     for (var key in myGyms.keys) {
       logger.t("DEBUG: SET 3 isCurrent: ${myGyms.get(key)!['id'] == gymId}");
@@ -190,8 +203,11 @@ class LocalTrainingSourceImpl implements LocalTrainingSource {
           "isCurrent": myGyms.get(key)!['id'] == gymId,
         },
       );
+
       logger.t("Current gym: ${myGyms.get(key)}");
+
       list.add(GymModel.fromJson(myGyms.get(key)!));
+
       logger.t("DEBUG: SET 4");
     }
     logger.t("DEBUG: SET 5 $list");

@@ -23,6 +23,8 @@ abstract class RemoteAuthSource {
   Future<PlayerModel> getPlayerInfo(); // Duplicated     // MIGRATION DONE
 
   Future<Map<dynamic, dynamic>> sendNotifyToken(String token); // MIGRATION DONE
+
+  Future<UserModel> loginAsGuest();
 }
 
 class RemoteAuthSourceImpl implements RemoteAuthSource {
@@ -155,20 +157,23 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
   @override
   Future<Map<dynamic, dynamic>> sendNotifyToken(String token) async {
     logger.d("inside sendNotifyToken");
-    final res = await client.post(
+    final res = await client.put(
       Uri.parse(
-        "$API" " $HTTP_REGISTER" "$HTTP_REFRESH",
+        "$API" "$HTTP_REGISTER" "$HTTP_REFRESH",
       ),
       headers: {
         ...HEADERS,
         "x-access-token": userBox.get(HIVE_USER_BOX)!['token'],
       },
+      body: jsonEncode({"notify_token": token}),
     );
     logger.d("statusCode: ${res.statusCode}");
     logger.d("body: ${res.body}");
 
     if (res.statusCode == 201) {
       return jsonDecode(res.body);
+    } else if (res.statusCode == 401) {
+      throw AuthUnautherizedException();
     }
     throw AuthException();
   }
@@ -202,5 +207,23 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
       return true;
     }
     throw ServerException();
+  }
+
+  //  TODO: Needs Migration
+  @override
+  Future<UserModel> loginAsGuest() async {
+    final res = await client.get(Uri.parse("$API/guest"));
+    logger.t(res);
+    if (res.statusCode == 200) {
+      logger.t(res.body);
+
+      final json = jsonDecode(res.body) as Map<String, dynamic>;
+      json.addAll({"id": "id"});
+
+      return UserModel.fromJson(json);
+    } else if (res.statusCode == 500) {
+      throw ServerException();
+    }
+    throw NotFoundException();
   }
 }

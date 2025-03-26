@@ -76,7 +76,8 @@ class MyApp extends StatelessWidget {
           create: (context) {
             debugPrint(
                 "------------------AuthBloc Created!-----------------------");
-            return AuthBloc(usecases: di.sl())..add(AuthCheckEvent());
+            return AuthBloc(usecases: di.sl(), guestMode: di.sl())
+              ..add(AuthCheckEvent());
           },
         ),
         BlocProvider<TrainingBloc>(
