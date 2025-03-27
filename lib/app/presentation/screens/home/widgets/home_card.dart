@@ -12,7 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/app/presentation/blocs/attendence/attendence_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/player_gym/player_gym_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/subscription/subs_bloc.dart';
-import 'package:uniceps/app/presentation/screens/profile_page/settings/screens/gym_profile.dart';
+import 'package:uniceps/app/presentation/screens/profile/settings/screens/gym_profile.dart';
 import 'package:uniceps/app/presentation/blocs/current_gym/current_gym_bloc.dart';
 
 class HomeCard extends StatelessWidget {

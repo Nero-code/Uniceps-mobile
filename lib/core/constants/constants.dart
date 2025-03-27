@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 // import 'package:uniceps/core/environments/env.dart';
 
@@ -66,10 +67,12 @@ final HEADERS = {
 
 /// TESTING URL
 // const API = Env.baseUrl;
-// const API = "https://uniapi-ui65lw0m.b4a.run/api/v1";
+const API = kDebugMode || kProfileMode
+    ? "https://uniapi-ui65lw0m.b4a.run/api/v1"
+    : "https://uniceps.trio-verse.com/api/v1";
 
 /// PRODUCTION URL
-const API = "https://uniceps.trio-verse.com/api/v1";
+// const API = "https://uniceps.trio-verse.com/api/v1";
 
 /// https://trio-verse.com
 const URL = "https://trio-verse.com";

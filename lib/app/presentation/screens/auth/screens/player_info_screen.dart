@@ -13,7 +13,7 @@ import 'package:uniceps/app/presentation/blocs/authentication/auth_bloc.dart';
 import 'package:uniceps/app/presentation/screens/auth/widgets/gender_selection_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';
-import 'package:uniceps/app/presentation/screens/profile_page/settings/widgets/profile_back_circle.dart';
+import 'package:uniceps/app/presentation/screens/profile/settings/widgets/profile_back_circle.dart';
 
 class PlayerInfoScreen extends StatefulWidget {
   const PlayerInfoScreen({super.key, /**required this.onSave,*/ this.player});

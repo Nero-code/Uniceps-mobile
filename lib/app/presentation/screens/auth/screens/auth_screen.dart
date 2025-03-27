@@ -186,7 +186,7 @@ class _AuthScreenState extends State<AuthScreen>
                           child: Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Theme.of(context).colorScheme.background,
+                              color: Theme.of(context).colorScheme.surface,
                             ),
                             child: SizedBox(
                               height: MediaQuery.sizeOf(context).width * 0.75,

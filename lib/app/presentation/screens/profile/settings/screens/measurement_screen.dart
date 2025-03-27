@@ -5,7 +5,7 @@ import 'package:intl/intl.dart' as intl;
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/app/presentation/blocs/measurement/measurment_bloc.dart';
-import 'package:uniceps/app/presentation/screens/profile_page/settings/widgets/measure_widget.dart';
+import 'package:uniceps/app/presentation/screens/profile/settings/widgets/measure_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
 

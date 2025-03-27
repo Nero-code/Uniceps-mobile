@@ -10,9 +10,9 @@ import 'package:uniceps/app/presentation/blocs/gyms/gyms_bloc.dart';
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import 'package:uniceps/app/presentation/blocs/player_gym/player_gym_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/subscription/subs_bloc.dart';
-import 'package:uniceps/app/presentation/screens/profile_page/settings/screens/gym_profile.dart';
-import 'package:uniceps/app/presentation/screens/profile_page/settings/widgets/gym_logo_widget.dart';
-import 'package:uniceps/app/presentation/screens/profile_page/settings/widgets/gyms_list_wave_back.dart';
+import 'package:uniceps/app/presentation/screens/profile/settings/screens/gym_profile.dart';
+import 'package:uniceps/app/presentation/screens/profile/settings/widgets/gym_logo_widget.dart';
+import 'package:uniceps/app/presentation/screens/profile/settings/widgets/gyms_list_wave_back.dart';
 import 'package:uniceps/app/presentation/screens/home/widgets/mygym_widget.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
 

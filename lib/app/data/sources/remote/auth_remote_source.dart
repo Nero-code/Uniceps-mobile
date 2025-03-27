@@ -213,7 +213,7 @@ class RemoteAuthSourceImpl implements RemoteAuthSource {
   @override
   Future<UserModel> loginAsGuest() async {
     final res = await client.get(Uri.parse("$API/guest"));
-    logger.t(res);
+    logger.t("${res.statusCode} : ${res.body}");
     if (res.statusCode == 200) {
       logger.t(res.body);
 

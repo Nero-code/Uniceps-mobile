@@ -14,7 +14,7 @@ class BackgroundCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
-        color: back ?? Theme.of(context).colorScheme.background,
+        color: back ?? Theme.of(context).colorScheme.surface,
       ),
       child: child,
     );

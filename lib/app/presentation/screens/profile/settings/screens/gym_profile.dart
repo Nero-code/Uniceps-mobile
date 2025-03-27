@@ -13,7 +13,7 @@ import 'package:uniceps/app/domain/classes/profile_classes/gym.dart';
 import 'package:uniceps/app/presentation/blocs/attendence/attendence_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/player_gym/player_gym_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/subscription/subs_bloc.dart';
-import 'package:uniceps/app/presentation/screens/profile_page/settings/widgets/subscription_widget.dart';
+import 'package:uniceps/app/presentation/screens/profile/settings/widgets/subscription_widget.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
 
 class GymProfileScreen extends StatefulWidget {

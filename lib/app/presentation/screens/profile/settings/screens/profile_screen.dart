@@ -9,9 +9,9 @@ import 'package:uniceps/app/presentation/screens/auth/screens/player_info_screen
 import 'package:uniceps/app/presentation/blocs/gyms/gyms_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/measurement/measurment_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';
-import 'package:uniceps/app/presentation/screens/profile_page/settings/screens/measurement_screen.dart';
-import 'package:uniceps/app/presentation/screens/profile_page/settings/widgets/profile_back_circle.dart';
-import 'package:uniceps/app/presentation/screens/profile_page/settings/widgets/settings_tile.dart';
+import 'package:uniceps/app/presentation/screens/profile/settings/screens/measurement_screen.dart';
+import 'package:uniceps/app/presentation/screens/profile/settings/widgets/profile_back_circle.dart';
+import 'package:uniceps/app/presentation/screens/profile/settings/widgets/settings_tile.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -90,9 +90,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Container(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .background,
+                                      color:
+                                          Theme.of(context).colorScheme.surface,
                                     ),
                                     padding: const EdgeInsets.all(30),
                                     child: const Image(
