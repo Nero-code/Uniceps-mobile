@@ -169,6 +169,8 @@
   "gettingRoutine": "جاري تحميل البرنامج...",
 
   "guestMode": "الدخول كزائر",
-  "guestModeEditErr": "لا يمكن تعديل معلومات الزائر"
+  "guestModeEditErr": "لا يمكن تعديل معلومات الزائر",
+
+  "commingSoon": "قريبا!"
  
 }

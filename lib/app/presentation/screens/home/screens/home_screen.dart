@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:uniceps/app/presentation/screens/home/dialogs/comming_soon_dialog.dart';
+import 'package:uniceps/app/presentation/screens/routine/routine_selection_screen.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
@@ -102,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   late final PanelController panelController;
   late final PanelController daysController;
+  late final StreamSubscription streamSubscription;
 
   void checkUpdate(BuildContext context) async {
     if (isUpdateChecked) return;
@@ -196,51 +202,53 @@ class _HomeScreenState extends State<HomeScreen>
     );
     checkUpdate(context);
 
-    FirebaseMessaging.onMessage.listen(
+    streamSubscription = FirebaseMessaging.onMessage.listen(
       (event) {
-        b.showAlertBanner(
-          context,
-          () {},
-          durationOfStayingOnScreen: const Duration(seconds: 5),
-          Material(
-            elevation: 3,
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Icon(
-                        Icons.circle_notifications_rounded,
-                        color: secondaryBlue,
-                        size: 40,
-                      ),
-                      Text(
-                        "${event.notification?.title}",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+        if (context.mounted) {
+          b.showAlertBanner(
+            context,
+            () {},
+            durationOfStayingOnScreen: const Duration(seconds: 5),
+            Material(
+              elevation: 3,
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Icon(
+                          Icons.circle_notifications_rounded,
+                          color: secondaryBlue,
+                          size: 40,
                         ),
-                      ),
-                      const Icon(
-                        Icons.circle_notifications_rounded,
-                        color: Colors.transparent,
-                        size: 40,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    "${event.notification?.body}",
-                  ),
-                ],
+                        Text(
+                          "${event.notification?.title}",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Icon(
+                          Icons.circle_notifications_rounded,
+                          color: Colors.transparent,
+                          size: 40,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10.0),
+                    Text(
+                      "${event.notification?.body}",
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
+          );
+        }
       },
     );
 
@@ -249,10 +257,11 @@ class _HomeScreenState extends State<HomeScreen>
 
 // Dispose the controllers to prevent memory leaks
   @override
-  void dispose() {
+  void dispose() async {
     filtersController.dispose();
     exercisesController.dispose();
     weightCtl.dispose();
+    await streamSubscription.cancel();
     super.dispose();
   }
 
@@ -262,12 +271,13 @@ class _HomeScreenState extends State<HomeScreen>
     final trSections =
         context.read<LocaleCubit>().state.isRtl() ? arTrSections : enTrSections;
     final isRtl = context.read<LocaleCubit>().state.isRtl();
+    final screenSize = MediaQuery.sizeOf(context);
 
     return RestorationScope(
       restorationId: "HomePage",
       child: PopScope(
         canPop: false,
-        onPopInvoked: (didPop) {
+        onPopInvokedWithResult: (didPop, result) {
           if (didPop) return;
           if (isSheetOpen) {
             panelController.animatePanelToPosition(
@@ -292,7 +302,7 @@ class _HomeScreenState extends State<HomeScreen>
             color: Colors.white,
             controller: daysController,
             minHeight: 0.0,
-            maxHeight: MediaQuery.of(context).size.height,
+            maxHeight: screenSize.height,
             padding: EdgeInsets.zero,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
             panel: BlocBuilder<TrainingBloc, TrainingState>(
@@ -304,7 +314,7 @@ class _HomeScreenState extends State<HomeScreen>
                         child: Stack(
                           children: [
                             SizedBox(
-                              width: MediaQuery.of(context).size.width,
+                              width: screenSize.width,
                               child: const ClipRRect(
                                 borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(30),
@@ -325,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen>
                           children: [
                             Expanded(
                               child: SizedBox(
-                                width: MediaQuery.of(context).size.width,
+                                width: screenSize.width,
                                 child: CustomPaint(
                                   painter: SlidingPanalPainter(),
                                 ),
@@ -379,11 +389,11 @@ class _HomeScreenState extends State<HomeScreen>
                                     ),
                                     Positioned(
                                       top: 0.0,
-                                      width: MediaQuery.of(context).size.width,
+                                      width: screenSize.width,
                                       child: ColoredBox(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .background,
+                                            .surface,
                                         child: Column(
                                           children: [
                                             Text(
@@ -436,7 +446,7 @@ class _HomeScreenState extends State<HomeScreen>
               backdropEnabled: true,
               controller: panelController,
               minHeight: 0.0,
-              maxHeight: MediaQuery.of(context).size.height * 0.4,
+              maxHeight: screenSize.height * 0.4,
               borderRadius:
                   const BorderRadius.vertical(top: Radius.circular(20)),
               onPanelClosed: () {
@@ -512,7 +522,7 @@ class _HomeScreenState extends State<HomeScreen>
                         ),
                         Positioned(
                           bottom: 15.0,
-                          width: MediaQuery.of(context).size.width,
+                          width: screenSize.width,
                           height: 30,
                           child: ActionChip.elevated(
                             padding: EdgeInsets.zero,
@@ -575,8 +585,8 @@ class _HomeScreenState extends State<HomeScreen>
                   //  G R A D I E N T   B A C K G R O U N D
                   //
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.27,
-                    width: MediaQuery.of(context).size.width,
+                    height: screenSize.height * 0.27,
+                    width: screenSize.width,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -585,7 +595,7 @@ class _HomeScreenState extends State<HomeScreen>
                           // Theme.of(context).colorScheme.primary,
                           Theme.of(context).colorScheme.secondary,
 
-                          Theme.of(context).colorScheme.background,
+                          Theme.of(context).colorScheme.surface,
                         ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -741,18 +751,14 @@ class _HomeScreenState extends State<HomeScreen>
                               } else if (playerState is ProfileErrorState) {
                                 return Padding(
                                   padding: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.height *
-                                          0.1),
+                                      top: screenSize.height * 0.1),
                                   child: Material(
                                     elevation: 3,
                                     borderRadius: BorderRadius.circular(15),
                                     color: Colors.white,
                                     child: SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.8,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.18,
+                                      width: screenSize.width * 0.8,
+                                      height: screenSize.height * 0.18,
                                       child: Center(
                                         child: ErrorScreenWidget(
                                           f: playerState.failure,
@@ -775,17 +781,14 @@ class _HomeScreenState extends State<HomeScreen>
                               }
                               return Padding(
                                 padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.1),
+                                    top: screenSize.height * 0.1),
                                 child: Material(
                                   elevation: 3,
                                   borderRadius: BorderRadius.circular(15),
                                   color: Colors.white,
                                   child: SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.8,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.18,
+                                    width: screenSize.width * 0.8,
+                                    height: screenSize.height * 0.18,
                                     child: const Center(
                                       child: CircularProgressIndicator(),
                                     ),
@@ -819,9 +822,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     //    F I L T E R S   L I S T V I E W
                                     //
                                     SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.07,
+                                      height: screenSize.height * 0.07,
                                       child: ListView.separated(
                                         controller: filtersController,
                                         padding: const EdgeInsets.symmetric(
@@ -1036,9 +1037,7 @@ class _HomeScreenState extends State<HomeScreen>
                                         is TrainingProgramLoadingState) {
                                       isRoutineLoading = true;
                                       return SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.4,
+                                        height: screenSize.height * 0.4,
                                         child: ProgressWidget(
                                             percent: tState.percent),
                                       );
@@ -1050,6 +1049,48 @@ class _HomeScreenState extends State<HomeScreen>
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0.0,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.teal, Colors.lime],
+                        ),
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          splashColor: Colors.black,
+                          // onTap: () =>
+                          onTap: () => kDebugMode
+                              ? Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const RoutineSelectionScreen(),
+                                  ))
+                              : showDialog(
+                                  context: context,
+                                  builder: (_) => const CommingSoonDialog(),
+                                ),
+
+                          child: SizedBox(
+                            width: screenSize.width,
+                            height: 30,
+                            child: Center(
+                              child: Text(
+                                local.commingSoon,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),

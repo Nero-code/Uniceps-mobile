@@ -19,7 +19,7 @@ import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/subscription/subs_bloc.dart';
 import 'package:uniceps/app/presentation/screens/profile/settings/screens/gym_list_screen.dart';
 import 'package:uniceps/app/presentation/screens/profile/settings/screens/profile_screen.dart';
-import 'package:uniceps/app/presentation/screens/home/Screens/home_screen.dart';
+import 'package:uniceps/app/presentation/screens/home/screens/home_screen.dart';
 import 'package:uniceps/app/presentation/blocs/exercises/exercises_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/routine/training_bloc.dart';
 import 'package:uniceps/firebase_options.dart';

@@ -162,5 +162,7 @@
   "gettingRoutine": "Getting Routine...",
 
   "guestMode": "Guest Mode",
-  "guestModeEditErr": "Guest mode not allowed to edit"
+  "guestModeEditErr": "Guest mode not allowed to edit",
+  
+  "commingSoon": "Comming Soon!"
 }
