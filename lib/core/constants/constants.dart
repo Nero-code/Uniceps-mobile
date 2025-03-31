@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 // import 'package:uniceps/core/environments/env.dart';
 
 ///
@@ -26,6 +27,28 @@ enum ThemeType { light, dark }
 const List<String> languageCodes = ['ar', 'en'];
 
 const DATE_PATTERN = "dd/MM/yyyy";
+
+final enTrSections = [
+  const MuscleGroup(groupName: "Legs", id: 4),
+  const MuscleGroup(groupName: "Calves", id: 7),
+  const MuscleGroup(groupName: "Chest", id: 1),
+  const MuscleGroup(groupName: "Back", id: 3),
+  const MuscleGroup(groupName: "Shoulder", id: 2),
+  const MuscleGroup(groupName: "Biceps", id: 5),
+  const MuscleGroup(groupName: "Triceps", id: 6),
+  const MuscleGroup(groupName: "Abs", id: 8),
+];
+
+final arTrSections = [
+  const MuscleGroup(groupName: "أرجل", id: 4),
+  const MuscleGroup(groupName: "بطة الرجل", id: 7),
+  const MuscleGroup(groupName: "صدر", id: 1),
+  const MuscleGroup(groupName: "ظهر", id: 3),
+  const MuscleGroup(groupName: "أكتاف", id: 2),
+  const MuscleGroup(groupName: "باي", id: 5),
+  const MuscleGroup(groupName: "تراي", id: 6),
+  const MuscleGroup(groupName: "معدة", id: 8),
+];
 
 ///   A P P   I M A G E S
 

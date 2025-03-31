@@ -21,7 +21,7 @@ import 'package:uniceps/app/presentation/screens/profile/settings/screens/gym_li
 import 'package:uniceps/app/presentation/screens/profile/settings/screens/profile_screen.dart';
 import 'package:uniceps/app/presentation/screens/home/screens/home_screen.dart';
 import 'package:uniceps/app/presentation/blocs/exercises/exercises_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/routine/training_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/training/training_bloc.dart';
 import 'package:uniceps/firebase_options.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/main_cubit/locale_cubit.dart';

@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 import 'package:uniceps/app/presentation/screens/home/dialogs/comming_soon_dialog.dart';
-import 'package:uniceps/app/presentation/screens/routine/routine_selection_screen.dart';
+import 'package:uniceps/app/presentation/screens/routine/routine_management_screen.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/helpers/image_cache_manager.dart';
@@ -17,7 +18,7 @@ import 'package:uniceps/app/presentation/blocs/current_gym/current_gym_bloc.dart
 import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';
 import 'package:uniceps/app/domain/commands/training_usecases/training_usecases.dart';
 import 'package:uniceps/app/presentation/blocs/exercises/exercises_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/routine/training_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/training/training_bloc.dart';
 import 'package:uniceps/app/presentation/screens/home/widgets/exercise_alert.dart';
 import 'package:uniceps/app/presentation/screens/home/widgets/exercise_list.dart';
 import 'package:uniceps/app/presentation/screens/home/widgets/home_card.dart';
@@ -32,33 +33,26 @@ import 'package:uniceps/main_cubit/training_section_cubit.dart';
 import 'package:uniceps/core/helpers/update_service.dart';
 import 'package:alert_banner/exports.dart' as b;
 
-class MuscleGroup {
-  final String title;
-  final int num;
-
-  const MuscleGroup(this.title, this.num);
-}
-
 final enTrSections = [
-  const MuscleGroup("Legs", 4),
-  const MuscleGroup("Calves", 7),
-  const MuscleGroup("Chest", 1),
-  const MuscleGroup("Back", 3),
-  const MuscleGroup("Shoulder", 2),
-  const MuscleGroup("Biceps", 5),
-  const MuscleGroup("Triceps", 6),
-  const MuscleGroup("Abs", 8),
+  const MuscleGroup(groupName: "Legs", id: 4),
+  const MuscleGroup(groupName: "Calves", id: 7),
+  const MuscleGroup(groupName: "Chest", id: 1),
+  const MuscleGroup(groupName: "Back", id: 3),
+  const MuscleGroup(groupName: "Shoulder", id: 2),
+  const MuscleGroup(groupName: "Biceps", id: 5),
+  const MuscleGroup(groupName: "Triceps", id: 6),
+  const MuscleGroup(groupName: "Abs", id: 8),
 ];
 
 final arTrSections = [
-  const MuscleGroup("أرجل", 4),
-  const MuscleGroup("بطة الرجل", 7),
-  const MuscleGroup("صدر", 1),
-  const MuscleGroup("ظهر", 3),
-  const MuscleGroup("أكتاف", 2),
-  const MuscleGroup("باي", 5),
-  const MuscleGroup("تراي", 6),
-  const MuscleGroup("معدة", 8),
+  const MuscleGroup(groupName: "أرجل", id: 4),
+  const MuscleGroup(groupName: "بطة الرجل", id: 7),
+  const MuscleGroup(groupName: "صدر", id: 1),
+  const MuscleGroup(groupName: "ظهر", id: 3),
+  const MuscleGroup(groupName: "أكتاف", id: 2),
+  const MuscleGroup(groupName: "باي", id: 5),
+  const MuscleGroup(groupName: "تراي", id: 6),
+  const MuscleGroup(groupName: "معدة", id: 8),
 ];
 
 class HomeScreen extends StatefulWidget {
@@ -206,6 +200,7 @@ class _HomeScreenState extends State<HomeScreen>
       (event) {
         if (context.mounted) {
           b.showAlertBanner(
+            // ignore: use_build_context_synchronously
             context,
             () {},
             durationOfStayingOnScreen: const Duration(seconds: 5),
@@ -831,7 +826,7 @@ class _HomeScreenState extends State<HomeScreen>
                                         itemCount: trSections.length,
                                         itemBuilder: (context, index) {
                                           return TrainingGroup(
-                                            name: trSections[index].title,
+                                            name: trSections[index].groupName,
                                             // isSelected:
                                             //     trSections[selectedGroup].num ==
                                             //         trSections[index].num,
@@ -842,7 +837,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                       context)
                                                   .add(
                                                 GetExercisesByFilterEvent(
-                                                    trSections[index].num),
+                                                    trSections[index].id!),
                                               );
                                               setState(() {
                                                 selectedGroup = index;
@@ -879,22 +874,22 @@ class _HomeScreenState extends State<HomeScreen>
                                   if (isRtl && selectedGroup > 0) {
                                     BlocProvider.of<ExercisesBloc>(context).add(
                                         GetExercisesByFilterEvent(
-                                            trSections[--selectedGroup].num));
+                                            trSections[--selectedGroup].id!));
                                   } else if (!isRtl && selectedGroup < 7) {
                                     BlocProvider.of<ExercisesBloc>(context).add(
                                         GetExercisesByFilterEvent(
-                                            trSections[++selectedGroup].num));
+                                            trSections[++selectedGroup].id!));
                                   }
                                 } else if (details.primaryVelocity! > 0) {
                                   // print("Right");
                                   if (isRtl && selectedGroup < 7) {
                                     BlocProvider.of<ExercisesBloc>(context).add(
                                         GetExercisesByFilterEvent(
-                                            trSections[++selectedGroup].num));
+                                            trSections[++selectedGroup].id!));
                                   } else if (!isRtl && selectedGroup > 0) {
                                     BlocProvider.of<ExercisesBloc>(context).add(
                                         GetExercisesByFilterEvent(
-                                            trSections[--selectedGroup].num));
+                                            trSections[--selectedGroup].id!));
                                   }
                                 }
                                 exercisesController.animateTo(0.0,
@@ -926,7 +921,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                     context)
                                                 .add(GetExercisesByFilterEvent(
                                                     trSections[selectedGroup]
-                                                        .num));
+                                                        .id!));
                                             // BlocProvider.of<TrainingBloc>(context)
                                             //     .add(GetProgramEvent());
                                           }
@@ -1070,7 +1065,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        const RoutineSelectionScreen(),
+                                        RoutineManagementScreen(),
                                   ))
                               : showDialog(
                                   context: context,

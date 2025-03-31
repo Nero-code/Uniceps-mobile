@@ -1,27 +1,121 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class ExercisesSelectionScreen extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:uniceps/app/data/models/training_models/exercise_v2_model.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
+import 'package:uniceps/app/presentation/screens/routine/exercises_list_tab.dart';
+import 'package:uniceps/core/fakes/exercises_json.dart';
+
+class ExercisesSelectionScreen extends StatefulWidget {
   const ExercisesSelectionScreen({super.key});
 
   @override
+  State<ExercisesSelectionScreen> createState() =>
+      _ExercisesSelectionScreenState();
+}
+
+class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  var groups = <MuscleGroup>[];
+
+  final enTrSections = [
+    const MuscleGroup(groupName: "Legs", id: 4),
+    const MuscleGroup(groupName: "Calves", id: 7),
+    const MuscleGroup(groupName: "Chest", id: 1),
+    const MuscleGroup(groupName: "Back", id: 3),
+    const MuscleGroup(groupName: "Shoulder", id: 2),
+    const MuscleGroup(groupName: "Biceps", id: 5),
+    const MuscleGroup(groupName: "Triceps", id: 6),
+    const MuscleGroup(groupName: "Abs", id: 8),
+  ];
+
+  final arTrSections = [
+    const MuscleGroup(groupName: "أرجل", id: 4),
+    const MuscleGroup(groupName: "بطة الرجل", id: 7),
+    const MuscleGroup(groupName: "صدر", id: 1),
+    const MuscleGroup(groupName: "ظهر", id: 3),
+    const MuscleGroup(groupName: "أكتاف", id: 2),
+    const MuscleGroup(groupName: "باي", id: 5),
+    const MuscleGroup(groupName: "تراي", id: 6),
+    const MuscleGroup(groupName: "معدة", id: 8),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    groups = arTrSections;
+    _tabController = TabController(length: groups.length, vsync: this);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _tabController.dispose();
+    _tabController = TabController(length: groups.length, vsync: this);
+  }
+
+  Map<MuscleGroup, List<ExerciseV2>> lists = {};
+  List<ExerciseV2> allExercises = [];
+
+  Future<Map<MuscleGroup, List<ExerciseV2>>> getExercisesFiltered() async {
+    print("started Future");
+
+    final m = jsonDecode(exercisesJson) as List<dynamic>;
+
+    for (var i in m) {
+      print(i);
+      allExercises.add(ExerciseV2Model.fromJson(i));
+    }
+    m.map(print);
+    List<ExerciseV2> filteredEx = [];
+    for (var g in arTrSections) {
+      var item = allExercises.where(
+        (e) => e.muscleGroup == g.id,
+      );
+      // print("found item: ${item.id} : ${item.muscleGroup}");
+      filteredEx.addAll(item);
+      print(filteredEx.length);
+      lists.addAll({g: filteredEx});
+      filteredEx = [];
+    }
+
+    return lists;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 20,
-      child: Scaffold(
-        appBar: AppBar(
-          bottom: TabBar(
-            isScrollable: true,
-            tabs: [
-              for (int i = 0; i < 20; i++) Tab(text: "group $i"),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            for (int i = 0; i < 20; i++) Text("$i"),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("exercises"),
+        bottom: TabBar(
+          tabAlignment: TabAlignment.start,
+          controller: _tabController,
+          isScrollable: true,
+          tabs: [
+            ...groups.map((group) => Tab(text: group.groupName)),
           ],
         ),
       ),
+      body: FutureBuilder<Map<MuscleGroup, List<ExerciseV2>>>(
+          future: getExercisesFiltered(),
+          builder: (context, snapshot) {
+            return TabBarView(
+              controller: _tabController,
+              children: snapshot.hasData
+                  ? snapshot.data!.keys
+                      .map((group) => ExercisesListTab(
+                            list: snapshot.data![group]!,
+                          ))
+                      .toList()
+                  : [
+                      ...groups.map((group) =>
+                          Text("${group.groupName}: ${snapshot.error}")),
+                    ],
+            );
+          }),
     );
   }
 }

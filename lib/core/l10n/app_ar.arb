@@ -171,6 +171,11 @@
   "guestMode": "الدخول كزائر",
   "guestModeEditErr": "لا يمكن تعديل معلومات الزائر",
 
+
+  "newRoutine": "برنامج",
+  "sortDays": "ترتيب الايام",
+
+
   "commingSoon": "قريبا!"
  
 }

@@ -164,5 +164,10 @@
   "guestMode": "Guest Mode",
   "guestModeEditErr": "Guest mode not allowed to edit",
   
+
+  "newRoutine": "New Routine",
+  "sortDays": "Sort Days",
+
+
   "commingSoon": "Comming Soon!"
 }
