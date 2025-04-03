@@ -4,9 +4,19 @@ import 'package:uniceps/app/presentation/screens/routine/widgets/routine_grid_ti
 import 'package:uniceps/app/presentation/screens/routine/widgets/routine_tile.dart';
 import 'package:uniceps/core/fakes/routine_fakes.dart';
 
-class RoutineManagementScreen extends StatelessWidget {
+class RoutineManagementScreen extends StatefulWidget {
   const RoutineManagementScreen({super.key});
+
+  @override
+  State<RoutineManagementScreen> createState() =>
+      _RoutineManagementScreenState();
+}
+
+class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
   final gridSpacing = 6.0;
+
+  bool isGridView = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +32,7 @@ class RoutineManagementScreen extends StatelessWidget {
         ),
         child: const Icon(Icons.add),
       ),
-      body: false
+      body: isGridView
           ? GridView(
               padding: EdgeInsets.all(gridSpacing),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

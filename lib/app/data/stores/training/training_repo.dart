@@ -4,7 +4,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/app/data/models/training_models/exercise_model.dart';
-import 'package:uniceps/app/data/sources/local/training_local_source/training_local_source.dart';
+import 'package:uniceps/app/data/sources/local/dal_training_local_source/training_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/training_remote_source/training_remote_source.dart';
 import 'package:uniceps/app/domain/classes/training_entities/exercise.dart';
 import 'package:uniceps/app/domain/classes/training_entities/training_program.dart';

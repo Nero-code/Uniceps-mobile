@@ -3,7 +3,7 @@ import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/auth_models/player_model.dart';
-import 'package:uniceps/app/data/sources/local/profile_local_source/profile_local_source.dart';
+import 'package:uniceps/app/data/sources/local/dal_profile_local_source/profile_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/profile_remote_source/profile_remote_source.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
 import 'package:uniceps/app/domain/contracts/profile_repo/i_profile_service.dart';

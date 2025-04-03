@@ -13,4 +13,14 @@ class ExerciseV2 {
   final int muscleGroup;
   final String name, imageUrl;
   final Uint8List? imageBitMap;
+
+  @override
+  String toString() {
+    return """{
+    id: $id,
+    name: $name,
+    muscleGroup: $muscleGroup,
+    imageUrl: $imageUrl,
+  }""";
+  }
 }

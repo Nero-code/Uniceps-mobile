@@ -3,7 +3,7 @@ import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/domain/contracts/profile_repo/i_measurement_service.dart';
-import 'package:uniceps/app/data/sources/local/profile_local_source/measurements_local_source.dart';
+import 'package:uniceps/app/data/sources/local/dal_profile_local_source/measurements_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/profile_remote_source/measurements_remote_source.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/core/errors/exceptions.dart';

@@ -63,6 +63,8 @@ dependencies:
   flutter_downloader: ^1.11.8
   path_provider: ^2.1.4
   logger: ^2.4.0
+  drift: ^2.19.1+1
+  drift_flutter: ^0.2.0
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +79,7 @@ dev_dependencies:
   mockito: ^5.4.4
   build_runner: ^2.4.9
   faker: ^2.2.0
+  drift_dev: ^2.19.1
 
 # Flutter launcher icons Creates App Logo for all platforms
 flutter_launcher_icons:

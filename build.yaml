@@ -1,0 +1,18 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          # To use ISO 8601 strings
+          # store_date_time_values_as_text: true
+          store_date_time_values_as_text: true # (default=false)
+
+          # databases: # Required: A name for the database and it's path
+            # my_database: lib/app/data/sources/local/database.dart
+
+          # The directory where the test files are stored: 
+          # test_dir: test/drift/ # (default)
+
+          # The directory where the schema files are stored:
+          # schema_dir: lib/app/data/sources/local/drift_schemas/  # (default)
+          

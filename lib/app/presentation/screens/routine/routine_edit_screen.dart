@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
 import 'package:uniceps/app/presentation/dialogs/days_sorting_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/exercises_selection_screen.dart';
-import 'package:uniceps/app/presentation/screens/routine/widgets/exercise_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/app/presentation/screens/routine/widgets/routine_item_widget.dart';
 
 class RoutineEditScreen extends StatefulWidget {
   const RoutineEditScreen({super.key, this.routineId});
@@ -177,17 +178,24 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
               children: [
                 Expanded(
                   flex: 9,
-                  child: GridView(
+                  child: ListView(
                     padding: const EdgeInsets.all(10.0),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 16 / 16,
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 8.0,
-                      crossAxisSpacing: 8.0,
-                    ),
+                    // gridDelegate:
+                    //     const SliverGridDelegateWithFixedCrossAxisCount(
+                    //   childAspectRatio: 16 / 16,
+                    //   crossAxisCount: 2,
+                    //   mainAxisSpacing: 8.0,
+                    //   crossAxisSpacing: 8.0,
+                    // ),
                     children: [0, 1, 2, 3]
-                        .map<ExerciseWidget>((e) => const ExerciseWidget())
+                        .map<RoutineItemWidget>((e) => const RoutineItemWidget(
+                              exercise: ExerciseV2(
+                                  id: null,
+                                  muscleGroup: 1,
+                                  name: "name",
+                                  imageUrl: "imageUrl",
+                                  imageBitMap: null),
+                            ))
                         .toList(),
                   ),
                 ),

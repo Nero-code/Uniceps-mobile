@@ -59,29 +59,32 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen>
 
   Map<MuscleGroup, List<ExerciseV2>> lists = {};
   List<ExerciseV2> allExercises = [];
+  List<ExerciseV2> selectedExercises = [];
 
   Future<Map<MuscleGroup, List<ExerciseV2>>> getExercisesFiltered() async {
+    if (lists.isNotEmpty) return lists;
     print("started Future");
 
     final m = jsonDecode(exercisesJson) as List<dynamic>;
 
     for (var i in m) {
-      print(i);
       allExercises.add(ExerciseV2Model.fromJson(i));
     }
-    m.map(print);
-    List<ExerciseV2> filteredEx = [];
+    final List<ExerciseV2> filteredEx = [];
     for (var g in arTrSections) {
-      var item = allExercises.where(
-        (e) => e.muscleGroup == g.id,
-      );
+      var item = allExercises.where((e) => e.muscleGroup == g.id);
       // print("found item: ${item.id} : ${item.muscleGroup}");
       filteredEx.addAll(item);
-      print(filteredEx.length);
-      lists.addAll({g: filteredEx});
-      filteredEx = [];
+      print("filteredExercises: ${filteredEx.length}");
+      filteredEx.where((i) {
+        // print("filteredEx items: $i");
+        return false;
+      });
+      lists.addAll({g: List.from(filteredEx)});
+      // print("litsts: ${lists.length}");
+      filteredEx.clear();
     }
-
+    print("finished Future");
     return lists;
   }
 
@@ -89,33 +92,40 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("exercises"),
+        title: const Text("exercises"),
         bottom: TabBar(
           tabAlignment: TabAlignment.start,
           controller: _tabController,
           isScrollable: true,
-          tabs: [
-            ...groups.map((group) => Tab(text: group.groupName)),
-          ],
+          tabs: [...groups.map((group) => Tab(text: group.groupName))],
         ),
       ),
       body: FutureBuilder<Map<MuscleGroup, List<ExerciseV2>>>(
-          future: getExercisesFiltered(),
-          builder: (context, snapshot) {
-            return TabBarView(
-              controller: _tabController,
-              children: snapshot.hasData
-                  ? snapshot.data!.keys
-                      .map((group) => ExercisesListTab(
-                            list: snapshot.data![group]!,
-                          ))
-                      .toList()
-                  : [
-                      ...groups.map((group) =>
-                          Text("${group.groupName}: ${snapshot.error}")),
-                    ],
-            );
-          }),
+        future: getExercisesFiltered(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const SizedBox();
+          }
+          return TabBarView(
+            controller: _tabController,
+            children: snapshot.hasData
+                ? snapshot.data!.keys
+                    .map((group) => ExercisesListTab(
+                          list: snapshot.data![group]!,
+                          onSelect: (exercise, isSelected) {
+                            isSelected
+                                ? selectedExercises.remove(exercise)
+                                : selectedExercises.add(exercise);
+                          },
+                        ))
+                    .toList()
+                : [
+                    // ...groups.map((group) =>
+                    //     Text("${group.groupName}: ${snapshot.error}")),
+                  ],
+          );
+        },
+      ),
     );
   }
 }
