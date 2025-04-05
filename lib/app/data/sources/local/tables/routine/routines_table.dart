@@ -5,6 +5,7 @@ class Routines extends Table {
   IntColumn get apiId => integer().nullable()();
 
   TextColumn get name => text().withLength(min: 1, max: 50)();
+  TextColumn get description => text().nullable()();
 
   BoolColumn get isCurrent => boolean().clientDefault(() => false)();
 

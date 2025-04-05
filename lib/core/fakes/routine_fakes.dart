@@ -9,22 +9,30 @@ import 'package:uniceps/core/fakes/exercises_json.dart';
 
 final fakeRoutine = Routine(
   id: null,
+  apiId: null,
+  issuerId: 0,
+  description: null,
   name: "Circular",
   createdAt: DateTime.now(),
   updatedAt: DateTime.now(),
   trainingDays: [
     RoutineDay(
       id: null,
+      apiId: null,
       name: "All",
       index: 0,
       exercises: (jsonDecode(exercisesJson) as List)
           .map((e) => RoutineItem(
                 id: null,
+                apiId: null,
                 exercise: ExerciseV2Model.fromJson(e),
                 sets: const [
-                  RoutineSets(id: null, index: 0, reps: 12, weight: null),
-                  RoutineSets(id: null, index: 1, reps: 10, weight: null),
-                  RoutineSets(id: null, index: 2, reps: 08, weight: null),
+                  RoutineSets(
+                      id: null, apiId: null, index: 0, reps: 12, weight: null),
+                  RoutineSets(
+                      id: null, apiId: null, index: 1, reps: 10, weight: null),
+                  RoutineSets(
+                      id: null, apiId: null, index: 2, reps: 08, weight: null),
                 ],
               ))
           .toList(),

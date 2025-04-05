@@ -21,6 +21,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
     5,
     (index) => RoutineDay(
       id: null,
+      apiId: null,
       name: "day $index",
       index: index,
       exercises: [],
@@ -145,6 +146,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                         days.add(
                           RoutineDay(
                             id: null,
+                            apiId: null,
                             name: "day ${days.length}",
                             index: days.length,
                             exercises: [],
@@ -191,6 +193,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                         .map<RoutineItemWidget>((e) => const RoutineItemWidget(
                               exercise: ExerciseV2(
                                   id: null,
+                                  apiId: null,
                                   muscleGroup: 1,
                                   name: "name",
                                   imageUrl: "imageUrl",

@@ -3,13 +3,14 @@ import 'package:flutter/foundation.dart';
 class ExerciseV2 {
   const ExerciseV2({
     required this.id,
+    required this.apiId,
     required this.muscleGroup,
     required this.name,
     required this.imageUrl,
     required this.imageBitMap,
   });
 
-  final int? id;
+  final int? id, apiId;
   final int muscleGroup;
   final String name, imageUrl;
   final Uint8List? imageBitMap;
