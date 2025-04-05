@@ -14,7 +14,7 @@ import 'package:uniceps/app/data/sources/local/dal_gyms/subscriptions_local_sour
 import 'package:uniceps/app/data/sources/local/dal_profile/measurements_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_training/training_local_source.dart';
 import 'package:uniceps/app/domain/commands/auth_usecases/guest_mode_login.dart';
-import 'package:uniceps/core/helpers/image_cache_manager.dart';
+import 'package:uniceps/app/services/image_cache_manager.dart';
 import 'package:uniceps/app/data/auth_repo_impl.dart';
 import 'package:uniceps/app/data/sources/local/auth_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/auth_remote_source.dart';
@@ -30,7 +30,7 @@ import 'package:uniceps/app/data/sources/local/training_local_data_source.dart';
 import 'package:uniceps/app/data/sources/remote/training_remote_data_source.dart';
 import 'package:uniceps/app/domain/contracts/training_repository.dart';
 import 'package:uniceps/app/domain/commands/training_usecases/training_usecases.dart';
-import 'package:uniceps/core/helpers/update_service.dart';
+import 'package:uniceps/app/services/update_service.dart';
 
 final sl = di.GetIt.instance;
 

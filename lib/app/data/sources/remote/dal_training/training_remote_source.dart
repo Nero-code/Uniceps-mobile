@@ -6,7 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/training_models/training_prog_model.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
-import 'package:uniceps/core/helpers/image_cache_manager.dart';
+import 'package:uniceps/app/services/image_cache_manager.dart';
 
 abstract class ITrainingRemoteSource {
   Future<TrainingProgramModel> getTrainingProgram({

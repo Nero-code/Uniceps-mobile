@@ -11,7 +11,7 @@ import 'package:uniceps/app/presentation/screens/home/dialogs/comming_soon_dialo
 import 'package:uniceps/app/presentation/screens/routine/routine_management_screen.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/core/helpers/image_cache_manager.dart';
+import 'package:uniceps/app/services/image_cache_manager.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/app/presentation/blocs/current_gym/current_gym_bloc.dart';
@@ -30,7 +30,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/app/presentation/screens/home/widgets/training_group.dart';
 import 'package:uniceps/main_cubit/locale_cubit.dart';
 import 'package:uniceps/main_cubit/training_section_cubit.dart';
-import 'package:uniceps/core/helpers/update_service.dart';
+import 'package:uniceps/app/services/update_service.dart';
 import 'package:alert_banner/exports.dart' as b;
 
 final enTrSections = [

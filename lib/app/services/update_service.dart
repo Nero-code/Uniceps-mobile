@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/core/helpers/version.dart';
+import 'package:uniceps/app/services/version.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UpdateService {

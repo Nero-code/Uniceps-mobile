@@ -3,7 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/app/data/models/training_models/training_prog_model.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
-import 'package:uniceps/core/helpers/image_cache_manager.dart';
+import 'package:uniceps/app/services/image_cache_manager.dart';
 
 abstract class ITrainingLocalSource {
   // Training Resposibility
