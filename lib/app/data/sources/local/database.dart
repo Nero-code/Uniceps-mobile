@@ -1,12 +1,12 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:uniceps/app/data/sources/local/schema_versions.dart';
-import 'package:uniceps/app/data/sources/local/tables/days_group_table.dart';
-import 'package:uniceps/app/data/sources/local/tables/exercise_groups_table.dart';
-import 'package:uniceps/app/data/sources/local/tables/exercises_table.dart';
-import 'package:uniceps/app/data/sources/local/tables/routine_items_table.dart';
-import 'package:uniceps/app/data/sources/local/tables/routines_table.dart';
-import 'package:uniceps/app/data/sources/local/tables/sets_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/routine/days_group_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/routine/exercise_groups_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/routine/exercises_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/routine/routine_items_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/routine/routines_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/routine/sets_table.dart';
 
 part 'database.g.dart';
 

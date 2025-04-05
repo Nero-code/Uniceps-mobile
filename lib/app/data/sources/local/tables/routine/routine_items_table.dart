@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:uniceps/app/data/sources/local/tables/days_group_table.dart';
-import 'package:uniceps/app/data/sources/local/tables/exercises_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/routine/days_group_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/routine/exercises_table.dart';
 
 // part 'database.g.dart';
 

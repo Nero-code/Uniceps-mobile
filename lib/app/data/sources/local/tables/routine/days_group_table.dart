@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:uniceps/app/data/sources/local/tables/routines_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/routine/routines_table.dart';
 
 // part 'database.g.dart';
 

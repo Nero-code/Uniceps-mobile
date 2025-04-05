@@ -5,7 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:uniceps/app/data/models/auth_models/user_model.dart';
-import 'package:uniceps/app/data/sources/local/dal_auth_local_source/account_local_source.dart';
+import 'package:uniceps/app/data/sources/local/dal_auth/account_local_source.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 

@@ -14,7 +14,7 @@ import 'package:http/http.dart' as _i2;
 import 'package:logger/logger.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i10;
-import 'package:uniceps/app/data/sources/local/dal_auth_local_source/account_local_source.dart'
+import 'package:uniceps/app/data/sources/local/dal_auth/account_local_source.dart'
     as _i12;
 import 'package:uniceps/app/data/models/auth_models/user_model.dart' as _i5;
 

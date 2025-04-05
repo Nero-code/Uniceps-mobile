@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:uniceps/app/data/sources/remote/auth_remote_source/email_auth.dart';
+import 'package:uniceps/app/data/sources/remote/dal_auth/email_auth.dart';
 import 'package:uniceps/app/data/models/auth_models/user_model.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
