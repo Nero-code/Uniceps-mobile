@@ -19,20 +19,37 @@ final fakeRoutine = Routine(
     RoutineDay(
       id: null,
       apiId: null,
+      routineId: 0,
       name: "All",
       index: 0,
       exercises: (jsonDecode(exercisesJson) as List)
           .map((e) => RoutineItem(
                 id: null,
                 apiId: null,
+                dayId: 0,
                 exercise: ExerciseV2Model.fromJson(e),
                 sets: const [
-                  RoutineSets(
-                      id: null, apiId: null, index: 0, reps: 12, weight: null),
-                  RoutineSets(
-                      id: null, apiId: null, index: 1, reps: 10, weight: null),
-                  RoutineSets(
-                      id: null, apiId: null, index: 2, reps: 08, weight: null),
+                  RoutineSet(
+                      id: null,
+                      apiId: null,
+                      routineItemId: 0,
+                      index: 0,
+                      reps: 12,
+                      weight: null),
+                  RoutineSet(
+                      id: null,
+                      apiId: null,
+                      routineItemId: 0,
+                      index: 1,
+                      reps: 10,
+                      weight: null),
+                  RoutineSet(
+                      id: null,
+                      apiId: null,
+                      routineItemId: 0,
+                      index: 2,
+                      reps: 08,
+                      weight: null),
                 ],
               ))
           .toList(),

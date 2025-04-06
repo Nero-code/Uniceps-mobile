@@ -11,7 +11,6 @@ class RoutineRepoImpl implements RoutineRepo {
   final RoutineLocalSource _localSource;
   final RoutineRemoteSource _remoteSource;
   final InternetConnectionChecker _internet;
-  final ClientHelper _clientHelper;
 
   const RoutineRepoImpl(
       {required RoutineLocalSource localSource,
@@ -20,13 +19,16 @@ class RoutineRepoImpl implements RoutineRepo {
       required ClientHelper clientHelper})
       : _localSource = localSource,
         _remoteSource = remoteSource,
-        _internet = internet,
-        _clientHelper = clientHelper;
+        _internet = internet;
 
   @override
   Future<Either<Failure, List<Routine>>> getAllRoutines() async {
     if (await _internet.hasConnection) {
-      try {} catch (e) {}
+      try {
+        final res = await _remoteSource.getAllRoutines();
+        await _localSource.saveRoutines(res);
+        return Right(res);
+      } catch (e) {}
     } else {
       try {} catch (e) {}
     }

@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 abstract class RoutineRepo {

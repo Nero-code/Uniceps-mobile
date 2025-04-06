@@ -13,5 +13,5 @@ class RoutineItem {
   final int? id, apiId;
   final int dayId;
   final ExerciseV2 exercise;
-  final List<RoutineSets> sets;
+  final List<RoutineSet> sets;
 }
