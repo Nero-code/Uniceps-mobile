@@ -104,6 +104,9 @@ const HTTP_VERIFY_CODE = "/auth/verify";
 const HTTP_REFRESH = "/refresh";
 const HTTP_HANDSHAKE = "/handshake";
 
+const HTTP_REFRESH_TOKEN = '';
+const HTTP_ACCESS_TOKEN = '';
+
 const HTTP_PLAYER_INFO = "/profile";
 const HTTP_PLAYER = "/player";
 
