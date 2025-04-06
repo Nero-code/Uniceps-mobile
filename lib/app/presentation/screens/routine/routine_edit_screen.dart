@@ -22,6 +22,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
     (index) => RoutineDay(
       id: null,
       apiId: null,
+      routineId: 0,
       name: "day $index",
       index: index,
       exercises: [],
@@ -147,6 +148,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                           RoutineDay(
                             id: null,
                             apiId: null,
+                            routineId: 0,
                             name: "day ${days.length}",
                             index: days.length,
                             exercises: [],

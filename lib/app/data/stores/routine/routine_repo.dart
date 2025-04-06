@@ -4,7 +4,7 @@ import 'package:uniceps/app/data/sources/local/dal_routine/routine_local_source.
 import 'package:uniceps/app/data/sources/remote/client_helper.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/routine_remote_source.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/routine_service.dart';
+import 'package:uniceps/app/domain/contracts/routine_repo/routine_management_service.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class RoutineRepoImpl implements RoutineRepo {

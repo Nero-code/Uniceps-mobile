@@ -23,4 +23,7 @@ class RoutineDto extends Routine implements BaseDTO {
         updatedAt: json['updatedAt'],
         trainingDays: json['trainingDays)'],
       );
+
+  @override
+  Map<String, dynamic> toJson() => {};
 }

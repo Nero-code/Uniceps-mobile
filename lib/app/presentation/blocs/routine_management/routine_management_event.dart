@@ -7,29 +7,25 @@ sealed class RoutineManagementEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class AddDayEvent extends RoutineManagementEvent {
-  final String initialDayName;
-  const AddDayEvent({required this.initialDayName});
+//
+//  Routine Events
+//
+class CreateRoutineEvent extends RoutineManagementEvent {
+  final Routine routineToCreate;
+  const CreateRoutineEvent({required this.routineToCreate});
 }
 
-class RemoveDayEvent extends RoutineManagementEvent {
-  final RoutineDay day;
-  const RemoveDayEvent({required this.day});
+class UpdateRoutineEvent extends RoutineManagementEvent {
+  final Routine routineToUpdate;
+  const UpdateRoutineEvent({required this.routineToUpdate});
 }
 
-class RenameDayEvent extends RoutineManagementEvent {
-  final RoutineDay day;
-  const RenameDayEvent({required this.day});
+class DeleteRoutineEvent extends RoutineManagementEvent {
+  final Routine routineToDelete;
+  const DeleteRoutineEvent({required this.routineToDelete});
 }
 
-class AddExerciseEvent extends RoutineManagementEvent {}
-
-class RemoveExerciseEvent extends RoutineManagementEvent {}
-
-class ReorderExerciseEvent extends RoutineManagementEvent {}
-
-class AddSetsEvent extends RoutineManagementEvent {}
-
-class RemoveSetEvent extends RoutineManagementEvent {}
-
-class ReorderSetsEvent extends RoutineManagementEvent {}
+class ShareRoutineEvent extends RoutineManagementEvent {
+  final Routine routineToShare;
+  const ShareRoutineEvent({required this.routineToShare});
+}

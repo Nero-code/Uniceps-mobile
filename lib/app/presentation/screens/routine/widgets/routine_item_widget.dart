@@ -13,10 +13,28 @@ class RoutineItemWidget extends StatefulWidget {
 }
 
 class _RoutineItemWidgetState extends State<RoutineItemWidget> {
-  final List<RoutineSets> sets = const [
-    RoutineSets(id: null, apiId: null, index: 0, reps: 12, weight: null),
-    RoutineSets(id: null, apiId: null, index: 1, reps: 10, weight: null),
-    RoutineSets(id: null, apiId: null, index: 2, reps: 8, weight: null),
+  final List<RoutineSet> sets = const [
+    RoutineSet(
+        id: null,
+        apiId: null,
+        routineItemId: 0,
+        index: 0,
+        reps: 12,
+        weight: null),
+    RoutineSet(
+        id: null,
+        apiId: null,
+        routineItemId: 0,
+        index: 1,
+        reps: 10,
+        weight: null),
+    RoutineSet(
+        id: null,
+        apiId: null,
+        routineItemId: 0,
+        index: 2,
+        reps: 8,
+        weight: null),
   ];
 
   @override

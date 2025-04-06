@@ -5,11 +5,13 @@ class RoutineItem {
   const RoutineItem({
     required this.id,
     required this.apiId,
+    required this.dayId,
     required this.exercise,
     required this.sets,
   });
 
   final int? id, apiId;
+  final int dayId;
   final ExerciseV2 exercise;
   final List<RoutineSets> sets;
 }
