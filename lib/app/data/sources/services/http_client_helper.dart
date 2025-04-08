@@ -4,12 +4,13 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:uniceps/app/data/models/base_dto.dart';
-import 'package:uniceps/app/data/sources/remote/token_service.dart';
+import 'package:uniceps/app/data/sources/services/client_helper.dart';
+import 'package:uniceps/app/data/sources/services/token_service.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
-class ClientHelper {
-  const ClientHelper(
+class HttpClientHelper implements ClientHelper {
+  const HttpClientHelper(
       {required Client client, required TokenService tokenService})
       : _tokenService = tokenService,
         _client = client;
@@ -22,6 +23,7 @@ class ClientHelper {
   Client get client => _client;
   TokenService get tokenService => _tokenService;
 
+  @override
   Future<T> getHandler<T extends BaseDTO>(
       String urlPart, T Function(Map<String, dynamic> json) fromJson,
       [Map<String, String>? queryParams]) async {
@@ -42,6 +44,7 @@ class ClientHelper {
     return fromJson((res.body as Map)[dataNodeInResponse]);
   }
 
+  @override
   Future<List<T>> getListHandler<T extends BaseDTO>(
       String urlPart, T Function(Map<String, dynamic>) fromJson,
       [Map<String, String>? queryParams]) async {
@@ -68,13 +71,14 @@ class ClientHelper {
     return data.map((e) => fromJson(e)).toList();
   }
 
+  @override
   Future<T?> postHandler<T extends BaseDTO>(
     String urlPart,
     Map<String, dynamic> body, {
     T Function(Map<String, dynamic> json)? fromJson,
     void Function(Map<String, dynamic> body)? orElse,
   }) async {
-    print(API + urlPart);
+    if (kDebugMode) print(API + urlPart);
 
     final res = await _client.post(
       Uri.https("$API" "$urlPart"),
@@ -88,8 +92,10 @@ class ClientHelper {
     //   rethrow;
     // }
     // print(res.realUri);
-    print("postHandler code: ${res.statusCode}");
-    print("postHandler body: ${res.body}");
+    if (kDebugMode) {
+      print("postHandler code: ${res.statusCode}");
+      print("postHandler body: ${res.body}");
+    }
 
     if (res.statusCode == HttpStatus.created) {
       if (fromJson != null) {
@@ -106,6 +112,7 @@ class ClientHelper {
     return null;
   }
 
+  @override
   Future<void> putHandler(
     String urlPart,
     Map<String, dynamic> body,
@@ -125,6 +132,7 @@ class ClientHelper {
     print("putHandler body: ${res.body}");
   }
 
+  @override
   Future<void> deleteHandler(
     String urlPart,
     Map<String, dynamic> body,
@@ -138,43 +146,11 @@ class ClientHelper {
     //   if (e is DioException) _catchException(e);
     //   rethrow;
     // }
-    print("deleteHandler code: ${res.statusCode}");
-    print("deleteHandler body: ${res.body}");
-
-    // switch (res.statusCode) {
-    //   case HttpStatus.noContent:
-    //     return;
-    //   case HttpStatus.ok:
-    //     return;
-    //   case HttpStatus.created:
-    //     return;
-    //   case HttpStatus.badRequest:
-    //     throw DuplicateActionException();
-    //   case HttpStatus.notFound:
-    //     throw DuplicateActionException();
-    //   case HttpStatus.badGateway:
-    //     throw ServerDownException();
-    //   default:
-    //     throw Exception(res.body);
-    // }
+    if (kDebugMode) {
+      print("deleteHandler code: ${res.statusCode}");
+      print("deleteHandler body: ${res.body}");
+    }
   }
-
-  // String mapStatusCodeToAction(http.Response res) {
-  //   switch (res.statusCode) {
-  //     case HttpStatus.ok:
-  //       return res.body;
-  //     case HttpStatus.created:
-  //       return res.body;
-  //     case HttpStatus.badRequest:
-  //       throw DuplicateActionException();
-  //     case HttpStatus.notFound:
-  //       throw DuplicateActionException();
-  //     case HttpStatus.badGateway:
-  //       throw ServerDownException();
-  //     default:
-  //       throw Exception(res.body);
-  //   }
-  // }
 
   Future<Map<String, String>> getHeader() async {
     final session = await _tokenService.session;

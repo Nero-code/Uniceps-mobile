@@ -30,6 +30,12 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
           GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 50),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _isCurrentMeta =
       const VerificationMeta('isCurrent');
   @override
@@ -58,7 +64,7 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
       defaultValue: currentDateAndTime);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, apiId, name, isCurrent, createdAt, updatedAt];
+      [id, apiId, name, description, isCurrent, createdAt, updatedAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -81,6 +87,12 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
     }
     if (data.containsKey('is_current')) {
       context.handle(_isCurrentMeta,
@@ -109,6 +121,8 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
           .read(DriftSqlType.int, data['${effectivePrefix}api_id']),
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description']),
       isCurrent: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}is_current'])!,
       createdAt: attachedDatabase.typeMapping
@@ -128,6 +142,7 @@ class Routine extends DataClass implements Insertable<Routine> {
   final int id;
   final int? apiId;
   final String name;
+  final String? description;
   final bool isCurrent;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -135,6 +150,7 @@ class Routine extends DataClass implements Insertable<Routine> {
       {required this.id,
       this.apiId,
       required this.name,
+      this.description,
       required this.isCurrent,
       required this.createdAt,
       required this.updatedAt});
@@ -146,6 +162,9 @@ class Routine extends DataClass implements Insertable<Routine> {
       map['api_id'] = Variable<int>(apiId);
     }
     map['name'] = Variable<String>(name);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
     map['is_current'] = Variable<bool>(isCurrent);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
@@ -158,6 +177,9 @@ class Routine extends DataClass implements Insertable<Routine> {
       apiId:
           apiId == null && nullToAbsent ? const Value.absent() : Value(apiId),
       name: Value(name),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
       isCurrent: Value(isCurrent),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
@@ -171,6 +193,7 @@ class Routine extends DataClass implements Insertable<Routine> {
       id: serializer.fromJson<int>(json['id']),
       apiId: serializer.fromJson<int?>(json['apiId']),
       name: serializer.fromJson<String>(json['name']),
+      description: serializer.fromJson<String?>(json['description']),
       isCurrent: serializer.fromJson<bool>(json['isCurrent']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
@@ -183,6 +206,7 @@ class Routine extends DataClass implements Insertable<Routine> {
       'id': serializer.toJson<int>(id),
       'apiId': serializer.toJson<int?>(apiId),
       'name': serializer.toJson<String>(name),
+      'description': serializer.toJson<String?>(description),
       'isCurrent': serializer.toJson<bool>(isCurrent),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
@@ -193,6 +217,7 @@ class Routine extends DataClass implements Insertable<Routine> {
           {int? id,
           Value<int?> apiId = const Value.absent(),
           String? name,
+          Value<String?> description = const Value.absent(),
           bool? isCurrent,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
@@ -200,6 +225,7 @@ class Routine extends DataClass implements Insertable<Routine> {
         id: id ?? this.id,
         apiId: apiId.present ? apiId.value : this.apiId,
         name: name ?? this.name,
+        description: description.present ? description.value : this.description,
         isCurrent: isCurrent ?? this.isCurrent,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
@@ -209,6 +235,8 @@ class Routine extends DataClass implements Insertable<Routine> {
       id: data.id.present ? data.id.value : this.id,
       apiId: data.apiId.present ? data.apiId.value : this.apiId,
       name: data.name.present ? data.name.value : this.name,
+      description:
+          data.description.present ? data.description.value : this.description,
       isCurrent: data.isCurrent.present ? data.isCurrent.value : this.isCurrent,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
@@ -221,6 +249,7 @@ class Routine extends DataClass implements Insertable<Routine> {
           ..write('id: $id, ')
           ..write('apiId: $apiId, ')
           ..write('name: $name, ')
+          ..write('description: $description, ')
           ..write('isCurrent: $isCurrent, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
@@ -229,8 +258,8 @@ class Routine extends DataClass implements Insertable<Routine> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, apiId, name, isCurrent, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+      id, apiId, name, description, isCurrent, createdAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -238,6 +267,7 @@ class Routine extends DataClass implements Insertable<Routine> {
           other.id == this.id &&
           other.apiId == this.apiId &&
           other.name == this.name &&
+          other.description == this.description &&
           other.isCurrent == this.isCurrent &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
@@ -247,6 +277,7 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
   final Value<int> id;
   final Value<int?> apiId;
   final Value<String> name;
+  final Value<String?> description;
   final Value<bool> isCurrent;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
@@ -254,6 +285,7 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
     this.id = const Value.absent(),
     this.apiId = const Value.absent(),
     this.name = const Value.absent(),
+    this.description = const Value.absent(),
     this.isCurrent = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -262,6 +294,7 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
     this.id = const Value.absent(),
     this.apiId = const Value.absent(),
     required String name,
+    this.description = const Value.absent(),
     this.isCurrent = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -270,6 +303,7 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
     Expression<int>? id,
     Expression<int>? apiId,
     Expression<String>? name,
+    Expression<String>? description,
     Expression<bool>? isCurrent,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
@@ -278,6 +312,7 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
       if (id != null) 'id': id,
       if (apiId != null) 'api_id': apiId,
       if (name != null) 'name': name,
+      if (description != null) 'description': description,
       if (isCurrent != null) 'is_current': isCurrent,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
@@ -288,6 +323,7 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
       {Value<int>? id,
       Value<int?>? apiId,
       Value<String>? name,
+      Value<String?>? description,
       Value<bool>? isCurrent,
       Value<DateTime>? createdAt,
       Value<DateTime>? updatedAt}) {
@@ -295,6 +331,7 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
       id: id ?? this.id,
       apiId: apiId ?? this.apiId,
       name: name ?? this.name,
+      description: description ?? this.description,
       isCurrent: isCurrent ?? this.isCurrent,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -312,6 +349,9 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
     }
     if (isCurrent.present) {
       map['is_current'] = Variable<bool>(isCurrent.value);
@@ -331,6 +371,7 @@ class RoutinesCompanion extends UpdateCompanion<Routine> {
           ..write('id: $id, ')
           ..write('apiId: $apiId, ')
           ..write('name: $name, ')
+          ..write('description: $description, ')
           ..write('isCurrent: $isCurrent, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
@@ -1886,12 +1927,16 @@ abstract class _$AppDatabase extends GeneratedDatabase {
           ),
         ],
       );
+  @override
+  DriftDatabaseOptions get options =>
+      const DriftDatabaseOptions(storeDateTimeAsText: true);
 }
 
 typedef $$RoutinesTableCreateCompanionBuilder = RoutinesCompanion Function({
   Value<int> id,
   Value<int?> apiId,
   required String name,
+  Value<String?> description,
   Value<bool> isCurrent,
   Value<DateTime> createdAt,
   Value<DateTime> updatedAt,
@@ -1900,6 +1945,7 @@ typedef $$RoutinesTableUpdateCompanionBuilder = RoutinesCompanion Function({
   Value<int> id,
   Value<int?> apiId,
   Value<String> name,
+  Value<String?> description,
   Value<bool> isCurrent,
   Value<DateTime> createdAt,
   Value<DateTime> updatedAt,
@@ -1925,6 +1971,7 @@ class $$RoutinesTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<int?> apiId = const Value.absent(),
             Value<String> name = const Value.absent(),
+            Value<String?> description = const Value.absent(),
             Value<bool> isCurrent = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> updatedAt = const Value.absent(),
@@ -1933,6 +1980,7 @@ class $$RoutinesTableTableManager extends RootTableManager<
             id: id,
             apiId: apiId,
             name: name,
+            description: description,
             isCurrent: isCurrent,
             createdAt: createdAt,
             updatedAt: updatedAt,
@@ -1941,6 +1989,7 @@ class $$RoutinesTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<int?> apiId = const Value.absent(),
             required String name,
+            Value<String?> description = const Value.absent(),
             Value<bool> isCurrent = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> updatedAt = const Value.absent(),
@@ -1949,6 +1998,7 @@ class $$RoutinesTableTableManager extends RootTableManager<
             id: id,
             apiId: apiId,
             name: name,
+            description: description,
             isCurrent: isCurrent,
             createdAt: createdAt,
             updatedAt: updatedAt,
@@ -1971,6 +2021,11 @@ class $$RoutinesTableFilterComposer
 
   ColumnFilters<String> get name => $state.composableBuilder(
       column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get description => $state.composableBuilder(
+      column: $state.table.description,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -2031,6 +2086,11 @@ class $$RoutinesTableOrderingComposer
 
   ColumnOrderings<String> get name => $state.composableBuilder(
       column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get description => $state.composableBuilder(
+      column: $state.table.description,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 

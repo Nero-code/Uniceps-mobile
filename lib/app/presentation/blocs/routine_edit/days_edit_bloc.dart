@@ -13,11 +13,11 @@ class DaysEditBloc extends Bloc<DaysEditEvent, DaysEditState> {
       : _usecases = usecases,
         super(DaysEditInitial()) {
     on<AddDayEvent>((event, emit) async {
-      // final either = await _usecases.addDay(event.day);
-      // either.fold(
-      //   (f) => emit(DaysEditErrorState(failure: f)),
-      //   (s) => emit(DaysEditLoadedState(days: s)),
-      // );
+      final either = await _usecases.addDay(event.day);
+      either.fold(
+        (f) => emit(DaysEditErrorState(failure: f)),
+        (s) => emit(DaysEditLoadedState(days: s)),
+      );
     });
     on<RemoveDayEvent>((event, emit) async {
       // TODO: implement event handler

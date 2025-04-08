@@ -20,13 +20,14 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
   var days = List.generate(
     5,
     (index) => RoutineDay(
-      id: null,
-      apiId: null,
-      routineId: 0,
-      name: "day $index",
-      index: index,
-      exercises: [],
-    ),
+        id: null,
+        apiId: null,
+        routineId: 0,
+        name: "day $index",
+        index: index,
+        exercises: [],
+        version: 0,
+        isSynced: false),
   );
 
   late TabController tabController;
@@ -34,14 +35,12 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
 
   @override
   void initState() {
-    print("init state");
     tabController = TabController(length: 1, vsync: this);
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    print("didChangeDependecies");
     super.didChangeDependencies();
     tabController.dispose();
     tabController = TabController(length: days.length + 1, vsync: this);
@@ -146,13 +145,14 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                   onPressed: () => setState(() {
                         days.add(
                           RoutineDay(
-                            id: null,
-                            apiId: null,
-                            routineId: 0,
-                            name: "day ${days.length}",
-                            index: days.length,
-                            exercises: [],
-                          ),
+                              id: null,
+                              apiId: null,
+                              routineId: 0,
+                              name: "day ${days.length}",
+                              index: days.length,
+                              exercises: [],
+                              version: 0,
+                              isSynced: false),
                         );
                         tabController.dispose();
                         tabController = TabController(
@@ -194,12 +194,13 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                     children: [0, 1, 2, 3]
                         .map<RoutineItemWidget>((e) => const RoutineItemWidget(
                               exercise: ExerciseV2(
-                                  id: null,
-                                  apiId: null,
-                                  muscleGroup: 1,
-                                  name: "name",
-                                  imageUrl: "imageUrl",
-                                  imageBitMap: null),
+                                id: null,
+                                apiId: null,
+                                muscleGroup: 1,
+                                name: "name",
+                                imageUrl: "imageUrl",
+                                imageBitMap: null,
+                              ),
                             ))
                         .toList(),
                   ),

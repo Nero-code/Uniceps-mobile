@@ -20,13 +20,17 @@ class _RoutineItemWidgetState extends State<RoutineItemWidget> {
         routineItemId: 0,
         index: 0,
         reps: 12,
-        weight: null),
+        weight: null,
+        version: 0,
+        isSynced: false),
     RoutineSet(
         id: null,
         apiId: null,
         routineItemId: 0,
         index: 1,
         reps: 10,
+        version: 0,
+        isSynced: false,
         weight: null),
     RoutineSet(
         id: null,
@@ -34,6 +38,8 @@ class _RoutineItemWidgetState extends State<RoutineItemWidget> {
         routineItemId: 0,
         index: 2,
         reps: 8,
+        version: 0,
+        isSynced: false,
         weight: null),
   ];
 

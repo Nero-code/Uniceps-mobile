@@ -5,13 +5,15 @@ class RoutineDay {
     required this.id,
     required this.apiId,
     required this.routineId,
+    required this.version,
     required this.name,
     required this.index,
     required this.exercises,
+    required this.isSynced,
   });
   final int? id, apiId;
-  final int routineId;
+  final int index, routineId, version;
   final String name;
-  final int index;
   final List<RoutineItem> exercises;
+  final bool isSynced;
 }

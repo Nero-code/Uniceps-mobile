@@ -6,12 +6,15 @@ class RoutineItem {
     required this.id,
     required this.apiId,
     required this.dayId,
+    required this.version,
     required this.exercise,
     required this.sets,
+    required this.isSynced,
   });
 
   final int? id, apiId;
-  final int dayId;
+  final int dayId, version;
   final ExerciseV2 exercise;
   final List<RoutineSet> sets;
+  final bool isSynced;
 }
