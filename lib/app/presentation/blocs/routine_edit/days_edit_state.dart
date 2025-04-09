@@ -14,6 +14,8 @@ final class DaysEditLoadingState extends DaysEditState {}
 final class DaysEditLoadedState extends DaysEditState {
   final List<RoutineDay> days;
   const DaysEditLoadedState({required this.days});
+  @override
+  List<Object> get props => [days.length];
 }
 
 final class DaysEditErrorState extends DaysEditState {

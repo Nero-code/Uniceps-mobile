@@ -10,6 +10,8 @@ sealed class RoutineManagementEvent extends Equatable {
 //
 //  Routine Events
 //
+class GetRoutinesEvent extends RoutineManagementEvent {}
+
 class CreateRoutineEvent extends RoutineManagementEvent {
   final Routine routineToCreate;
   const CreateRoutineEvent({required this.routineToCreate});

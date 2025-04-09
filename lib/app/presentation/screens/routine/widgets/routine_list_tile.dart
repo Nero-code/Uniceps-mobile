@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class RoutineTile extends StatelessWidget {
-  const RoutineTile({super.key, required this.onTap});
+class RoutineListTile extends StatelessWidget {
+  const RoutineListTile(
+      {super.key, required this.routine, required this.onTap});
 
+  final Routine routine;
   final void Function() onTap;
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
@@ -18,42 +24,42 @@ class RoutineTile extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(15.0),
           onTap: onTap,
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
                 // shared - name
                 Row(
                   children: [
-                    Icon(Icons.title_rounded, size: 18),
-                    SizedBox(width: 8.0),
+                    const Icon(Icons.title_rounded, size: 18),
+                    const SizedBox(width: 8.0),
                     Text(
-                      "Routine #1",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      routine.name,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 Row(children: [
-                  Icon(Icons.history, size: 18),
-                  SizedBox(width: 8.0),
+                  const Icon(Icons.history, size: 18),
+                  const SizedBox(width: 8.0),
                   Text(
-                    "2022/01/11",
-                    style: TextStyle(),
+                    DateFormat.yMd().format(routine.createdAt),
+                    style: const TextStyle(),
                   ),
-                  SizedBox(width: 8.0),
+                  const SizedBox(width: 8.0),
                   Text(
-                    "3 Day(s)",
-                    style: TextStyle(),
+                    "${routine.trainingDays.length} ${local.days}",
+                    style: const TextStyle(),
                   ),
                 ]),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 Row(children: [
                   Icon(Icons.share_rounded, size: 18),
                   SizedBox(width: 8.0),
                   Text(
-                    "3 persons",
+                    "3 ${local.about}",
                     style: TextStyle(),
                   ),
                   SizedBox(width: 8.0),

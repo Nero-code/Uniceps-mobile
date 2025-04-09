@@ -8,9 +8,10 @@ part 'sets_edit_event.dart';
 part 'sets_edit_state.dart';
 
 class SetsEditBloc extends Bloc<SetsEditEvent, SetsEditState> {
-  final RoutineEditUsecases _editUsecases;
-  SetsEditBloc({required RoutineEditUsecases editUsecases})
-      : _editUsecases = editUsecases,
+  // final RoutineEditUsecases _editUsecases;
+  SetsEditBloc()
+      :
+        //  _editUsecases = editUsecases,
         super(SetsEditInitial()) {
     on<AddSetsEvent>((event, emit) {
       // TODO: implement event handler

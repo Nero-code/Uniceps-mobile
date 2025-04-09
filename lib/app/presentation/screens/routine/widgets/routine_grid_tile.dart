@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RoutineGridTile extends StatelessWidget {
   const RoutineGridTile({
@@ -14,6 +15,7 @@ class RoutineGridTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(6.0),
       decoration: BoxDecoration(
@@ -60,11 +62,11 @@ class RoutineGridTile extends StatelessWidget {
                   style: const TextStyle(fontSize: 11),
                 ),
               ),
-              const Expanded(
+              Expanded(
                 flex: 2,
                 child: Text(
-                  "Day(s): 300",
-                  style: TextStyle(fontSize: 10),
+                  "${routine.trainingDays.length} ${local.days}",
+                  style: const TextStyle(fontSize: 10),
                 ),
               ),
             ],

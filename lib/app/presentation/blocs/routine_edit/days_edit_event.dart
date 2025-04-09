@@ -10,9 +10,14 @@ sealed class DaysEditEvent extends Equatable {
 //
 //  Days Events
 //
+class GetDaysEvent extends DaysEditEvent {
+  final int routineId;
+  const GetDaysEvent({required this.routineId});
+}
+
 class AddDayEvent extends DaysEditEvent {
-  final RoutineDay day;
-  const AddDayEvent({required this.day});
+  // final RoutineDay day;
+  // const AddDayEvent({required this.day});
 }
 
 class RemoveDayEvent extends DaysEditEvent {

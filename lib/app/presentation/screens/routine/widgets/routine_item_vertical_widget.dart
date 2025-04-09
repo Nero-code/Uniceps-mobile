@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
 import 'package:uniceps/core/constants/constants.dart';
 
-class RoutineItemWidget extends StatefulWidget {
-  const RoutineItemWidget({super.key, required this.exercise});
+class RoutineItemVerticalWidget extends StatefulWidget {
+  const RoutineItemVerticalWidget({super.key, required this.item});
 
-  final ExerciseV2 exercise;
+  final RoutineItem item;
 
   @override
-  State<RoutineItemWidget> createState() => _RoutineItemWidgetState();
+  State<RoutineItemVerticalWidget> createState() =>
+      _RoutineItemVerticalWidgetState();
 }
 
-class _RoutineItemWidgetState extends State<RoutineItemWidget> {
+class _RoutineItemVerticalWidgetState extends State<RoutineItemVerticalWidget> {
   final List<RoutineSet> sets = const [
     RoutineSet(
         id: null,
@@ -59,12 +60,12 @@ class _RoutineItemWidgetState extends State<RoutineItemWidget> {
           AspectRatio(
             aspectRatio: 16 / 9,
             child: Image.network(
-              imgUrlParser(widget.exercise.muscleGroup, "6"),
+              imgUrlParser(widget.item.exercise.muscleGroup, "6"),
             ),
           ),
           const Divider(),
-          Text(widget.exercise.name),
-          Text("Muscle Group: ${widget.exercise.muscleGroup}"),
+          Text(widget.item.exercise.name),
+          Text("Muscle Group: ${widget.item.exercise.muscleGroup}"),
           // const Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
