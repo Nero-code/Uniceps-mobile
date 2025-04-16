@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DaysSortingDialog extends StatefulWidget {
   const DaysSortingDialog(
@@ -23,6 +24,7 @@ class _DaysSortingDialogState extends State<DaysSortingDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!;
     return AlertDialog(
       title: const Text("title"),
       content: Container(
@@ -53,21 +55,29 @@ class _DaysSortingDialogState extends State<DaysSortingDialog> {
                   ))
               .toList(),
           onReorder: (oldIndex, newIndex) {
-            print("$oldIndex : $newIndex");
+            print("onReorder: $oldIndex : $newIndex");
             final item = reorderedList.removeAt(oldIndex);
+
+            print("onReorder 1: $reorderedList");
             reorderedList.insert(
                 newIndex - (newIndex > oldIndex ? 1 : 0), item);
+
+            print("onReorder 2: $reorderedList");
             setState(() {});
           },
         ),
       ),
       actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(locale.cancel),
+        ),
         ElevatedButton(
           onPressed: () {
             widget.onReorder(reorderedList);
-            Navigator.pop(context);
+            Navigator.pop(context, reorderedList);
           },
-          child: const Text("Done"),
+          child: Text(locale.ok),
         ),
       ],
     );

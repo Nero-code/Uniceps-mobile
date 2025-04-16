@@ -8,13 +8,13 @@ part 'sets_edit_event.dart';
 part 'sets_edit_state.dart';
 
 class SetsEditBloc extends Bloc<SetsEditEvent, SetsEditState> {
-  // final RoutineEditUsecases _editUsecases;
-  SetsEditBloc()
-      :
-        //  _editUsecases = editUsecases,
-        super(SetsEditInitial()) {
-    on<AddSetsEvent>((event, emit) {
-      // TODO: implement event handler
+  final List<RoutineSet> sets = [];
+  // final RoutineEditUsecases editUsecases;
+  SetsEditBloc() : super(SetsEditInitial()) {
+    on<AddSetEvent>((event, emit) {
+      // emit(SetsEditLoadingState());
+      sets.add(event.set);
+      emit(SetsEditLoadedState(sets: sets));
     });
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 import 'package:uniceps/core/constants/constants.dart';
@@ -6,14 +7,17 @@ class ExerciseGridWidget extends StatelessWidget {
   const ExerciseGridWidget({
     super.key,
     required this.exercise,
+    this.index = 0,
     this.isSelected = false,
   });
 
   final ExerciseV2 exercise;
+  final int index;
   final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
+    // final screenSize = MediaQuery.sizeOf(context);
     return AnimatedContainer(
       duration: Durations.short4,
       decoration: BoxDecoration(
@@ -25,9 +29,44 @@ class ExerciseGridWidget extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(5.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Image.network(imgUrlParser(exercise.muscleGroup, exercise.imageUrl)),
+          Expanded(
+            flex: 3,
+            child: CachedNetworkImage(
+              imageUrl:
+                  imgUrlParser(exercise.muscleGroup.id, exercise.imageUrl),
+              progressIndicatorBuilder: (context, url, progress) => Center(
+                child: CircularProgressIndicator(value: progress.progress),
+              ),
+              errorWidget: (context, url, error) => Center(
+                child: Icon(
+                  Icons.broken_image_rounded,
+                  size: 40,
+                  color: Colors.red.shade300,
+                ),
+              ),
+            ),
+
+            // Image.network(
+            //   imgUrlParser(exercise.muscleGroup.id, exercise.imageUrl),
+            //   frameBuilder: (context, child, frame, wasSynchronouslyLoaded) =>
+            //       Center(child: child),
+            //   loadingBuilder: (context, child, loadingProgress) =>
+            //       loadingProgress != null
+            //           ? Center(
+            //               child: CircularProgressIndicator(
+            //                 value: loadingProgress.cumulativeBytesLoaded /
+            //                     loadingProgress.expectedTotalBytes!,
+            //               ),
+            //             )
+            //           : child,
+            //   errorBuilder: (context, error, stackTrace) => Icon(
+            //     Icons.error,
+            //     color: Colors.red,
+            //   ),
+            // ),
+          ),
+
           // const FlutterLogo(size: 100),
           // Image.network(
           //   imgUrlParser(exercise.muscleGroup, exercise.imageUrl),

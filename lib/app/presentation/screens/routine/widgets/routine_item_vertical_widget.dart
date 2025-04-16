@@ -21,7 +21,6 @@ class _RoutineItemVerticalWidgetState extends State<RoutineItemVerticalWidget> {
         routineItemId: 0,
         index: 0,
         reps: 12,
-        weight: null,
         version: 0,
         isSynced: false),
     RoutineSet(
@@ -31,8 +30,7 @@ class _RoutineItemVerticalWidgetState extends State<RoutineItemVerticalWidget> {
         index: 1,
         reps: 10,
         version: 0,
-        isSynced: false,
-        weight: null),
+        isSynced: false),
     RoutineSet(
         id: null,
         apiId: null,
@@ -40,8 +38,7 @@ class _RoutineItemVerticalWidgetState extends State<RoutineItemVerticalWidget> {
         index: 2,
         reps: 8,
         version: 0,
-        isSynced: false,
-        weight: null),
+        isSynced: false)
   ];
 
   @override
@@ -60,7 +57,7 @@ class _RoutineItemVerticalWidgetState extends State<RoutineItemVerticalWidget> {
           AspectRatio(
             aspectRatio: 16 / 9,
             child: Image.network(
-              imgUrlParser(widget.item.exercise.muscleGroup, "6"),
+              imgUrlParser(widget.item.exercise.muscleGroup.id, "6"),
             ),
           ),
           const Divider(),

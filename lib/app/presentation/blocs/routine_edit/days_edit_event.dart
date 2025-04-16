@@ -16,8 +16,8 @@ class GetDaysEvent extends DaysEditEvent {
 }
 
 class AddDayEvent extends DaysEditEvent {
-  // final RoutineDay day;
-  // const AddDayEvent({required this.day});
+  final RoutineDay day;
+  const AddDayEvent({required this.day});
 }
 
 class RemoveDayEvent extends DaysEditEvent {
@@ -31,6 +31,10 @@ class RenameDayEvent extends DaysEditEvent {
 }
 
 class ReorderDaysEvent extends DaysEditEvent {
+  final int version;
   final List<RoutineDay> newOrder;
-  const ReorderDaysEvent({required this.newOrder});
+  const ReorderDaysEvent({required this.newOrder, this.version = 0});
+
+  @override
+  List<Object> get props => [newOrder.length, version];
 }

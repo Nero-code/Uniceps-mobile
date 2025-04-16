@@ -14,7 +14,6 @@ RoutineSetDto _$RoutineSetDtoFromJson(Map<String, dynamic> json) =>
       version: (json['version'] as num).toInt(),
       index: (json['index'] as num).toInt(),
       reps: (json['reps'] as num).toInt(),
-      weight: (json['weight'] as num?)?.toDouble(),
       isSynced: json['isSynced'] as bool,
     );
 
@@ -26,6 +25,5 @@ Map<String, dynamic> _$RoutineSetDtoToJson(RoutineSetDto instance) =>
       'index': instance.index,
       'reps': instance.reps,
       'version': instance.version,
-      'weight': instance.weight,
       'isSynced': instance.isSynced,
     };

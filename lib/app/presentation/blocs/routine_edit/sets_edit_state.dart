@@ -14,6 +14,8 @@ final class SetsEditLoadingState extends SetsEditState {}
 final class SetsEditLoadedState extends SetsEditState {
   final List<RoutineSet> sets;
   const SetsEditLoadedState({required this.sets});
+  @override
+  List<Object> get props => [];
 }
 
 final class SetsEditErrorState extends SetsEditState {

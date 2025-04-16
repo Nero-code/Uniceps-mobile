@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/exercises_v2/exercises_v2_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/routine_edit/days_edit_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/routine_edit/items_edit_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/routine_edit/sets_edit_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/routine_management/routine_management_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
+import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_create_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/routine_edit_screen.dart';
 import 'package:uniceps/app/presentation/screens/routine/widgets/routine_grid_tile.dart';
 import 'package:uniceps/app/presentation/screens/routine/widgets/routine_list_tile.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
-import 'package:uniceps/injection_dependency.dart' as di;
+// import 'package:uniceps/injection_dependency.dart' as di;
 
 class RoutineManagementScreen extends StatefulWidget {
   const RoutineManagementScreen({super.key});
@@ -23,19 +28,36 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => RoutineManagementBloc()..add(GetRoutinesEvent()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (_) => RoutineManagementBloc()..add(GetRoutinesEvent())),
+        // BlocProvider(create: (context) => DaysEditBloc()),
+        // BlocProvider(create: (context) => ItemsEditBloc()),
+        // BlocProvider(create: (context) => SetsEditBloc()),
+        // BlocProvider(create: (context) => ExercisesV2Bloc()),
+      ],
       child: Scaffold(
           appBar: AppBar(
             title: const Text("My Routines"),
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const RoutineEditScreen(routineId: 0),
-              ),
-            ),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (_) => RoutineCreateDialog(
+                        onCreate: (routineName) async {
+                          BlocProvider.of<RoutineManagementBloc>(context)
+                              .add(CreateRoutineEvent(name: routineName));
+                        },
+                      ));
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => const RoutineEditScreen(routineId: 0),
+              //   ),
+              // );
+            },
             child: const Icon(Icons.add),
           ),
           body: BlocBuilder<RoutineManagementBloc, RoutineManagementState>(
@@ -70,15 +92,14 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
                     children: state.routines.map(
                       (e) {
                         return RoutineListTile(
-                          routine: e,
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  RoutineEditScreen(routineId: e.id ?? 0),
-                            ),
-                          ),
-                        );
+                            routine: e,
+                            onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        RoutineEditScreen(routineId: e.id ?? 0),
+                                  ),
+                                ));
                       },
                     ).toList(),
                   );

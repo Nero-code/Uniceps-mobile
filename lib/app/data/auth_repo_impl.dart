@@ -73,18 +73,20 @@ class AuthRepoImpl implements AuthRepo {
       logger.d("Is Logged in repo");
       final resUser = await local.getUser();
 
-      logger.d("Is Logged in repo: User = ${resUser.toJson()}");
-
       if (resUser.email == "uniceps@test.com") return const Right(true);
-
-      final nToken = await FirebaseMessaging.instance.getToken();
+      String? nToken;
+      try {
+        nToken = await FirebaseMessaging.instance.getToken();
+      } catch (e) {
+        logger.i(e.toString());
+      }
       logger.d("Is Logged in repo Token: $nToken");
 
       if (await connection.hasConnection) {
         logger.d("Is Logged in repo: Before sendNotify");
         final res = await remote.sendNotifyToken(nToken ?? "");
         logger.d("Is Logged in repo: After sendNotify");
-        logger.e("res: $res");
+        logger.d("res: $res");
         await local.saveUser(
           UserModel.fromJson({
             "id": "id",

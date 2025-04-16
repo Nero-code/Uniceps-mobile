@@ -28,7 +28,6 @@ extension RoutineSetExtension on RoutineSet {
       version: version,
       index: index,
       reps: reps,
-      weight: weight,
       isSynced: isSynced);
 }
 

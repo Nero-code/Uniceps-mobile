@@ -23,7 +23,7 @@ class _ExercisesListTabState extends State<ExercisesListTab>
     super.build(context);
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        childAspectRatio: 1.1,
+        childAspectRatio: 1,
         crossAxisCount: 2,
         mainAxisSpacing: spacing,
         crossAxisSpacing: spacing,
@@ -37,6 +37,7 @@ class _ExercisesListTabState extends State<ExercisesListTab>
             ExerciseGridWidget(
               isSelected: selectedIds.contains(widget.list[index].id),
               exercise: widget.list[index],
+              index: index % 6 + 1,
             ),
             Material(
               color: Colors.transparent,

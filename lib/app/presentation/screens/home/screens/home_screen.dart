@@ -33,26 +33,37 @@ import 'package:uniceps/main_cubit/training_section_cubit.dart';
 import 'package:uniceps/app/services/update_service.dart';
 import 'package:alert_banner/exports.dart' as b;
 
-final enTrSections = [
-  const MuscleGroup(groupName: "Legs", id: 4),
-  const MuscleGroup(groupName: "Calves", id: 7),
-  const MuscleGroup(groupName: "Chest", id: 1),
-  const MuscleGroup(groupName: "Back", id: 3),
-  const MuscleGroup(groupName: "Shoulder", id: 2),
-  const MuscleGroup(groupName: "Biceps", id: 5),
-  const MuscleGroup(groupName: "Triceps", id: 6),
-  const MuscleGroup(groupName: "Abs", id: 8),
-];
+// final enTrSections = [
+//   const MuscleGroup(groupName: "Legs", id: 4),
+//   const MuscleGroup(groupName: "Calves", id: 7),
+//   const MuscleGroup(groupName: "Chest", id: 1),
+//   const MuscleGroup(groupName: "Back", id: 3),
+//   const MuscleGroup(groupName: "Shoulder", id: 2),
+//   const MuscleGroup(groupName: "Biceps", id: 5),
+//   const MuscleGroup(groupName: "Triceps", id: 6),
+//   const MuscleGroup(groupName: "Abs", id: 8),
+// ];
 
-final arTrSections = [
-  const MuscleGroup(groupName: "أرجل", id: 4),
-  const MuscleGroup(groupName: "بطة الرجل", id: 7),
-  const MuscleGroup(groupName: "صدر", id: 1),
-  const MuscleGroup(groupName: "ظهر", id: 3),
-  const MuscleGroup(groupName: "أكتاف", id: 2),
-  const MuscleGroup(groupName: "باي", id: 5),
-  const MuscleGroup(groupName: "تراي", id: 6),
-  const MuscleGroup(groupName: "معدة", id: 8),
+// final arTrSections = [
+//   const MuscleGroup(groupName: "أرجل", id: 4),
+//   const MuscleGroup(groupName: "بطة الرجل", id: 7),
+//   const MuscleGroup(groupName: "صدر", id: 1),
+//   const MuscleGroup(groupName: "ظهر", id: 3),
+//   const MuscleGroup(groupName: "أكتاف", id: 2),
+//   const MuscleGroup(groupName: "باي", id: 5),
+//   const MuscleGroup(groupName: "تراي", id: 6),
+//   const MuscleGroup(groupName: "معدة", id: 8),
+// ];
+
+final trSections = [
+  const MuscleGroup(enGroupName: "Legs", arGroupName: "أرجل", id: 4),
+  const MuscleGroup(enGroupName: "Calves", arGroupName: "بطة الرجل", id: 7),
+  const MuscleGroup(enGroupName: "Chest", arGroupName: "صدر", id: 1),
+  const MuscleGroup(enGroupName: "Back", arGroupName: "ظهر", id: 3),
+  const MuscleGroup(enGroupName: "Shoulder", arGroupName: "أكتاف", id: 2),
+  const MuscleGroup(enGroupName: "Biceps", arGroupName: "باي", id: 5),
+  const MuscleGroup(enGroupName: "Triceps", arGroupName: "تراي", id: 6),
+  const MuscleGroup(enGroupName: "Abs", arGroupName: "معدة", id: 8),
 ];
 
 class HomeScreen extends StatefulWidget {
@@ -103,21 +114,26 @@ class _HomeScreenState extends State<HomeScreen>
   late final PanelController daysController;
   late final StreamSubscription streamSubscription;
 
+  void addPostFrameCallback(Function callback) =>
+      WidgetsBinding.instance.addPostFrameCallback((_) => callback());
+
   void checkUpdate(BuildContext context) async {
     if (isUpdateChecked) return;
     // print("update service function started");
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        padding: const EdgeInsets.all(3.0),
-        content: Center(
-          child: Text(
-            AppLocalizations.of(context)!.chackForUpdate,
-            style: const TextStyle(fontSize: 10),
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          padding: const EdgeInsets.all(3.0),
+          content: Center(
+            child: Text(
+              AppLocalizations.of(context)!.chackForUpdate,
+              style: const TextStyle(fontSize: 10),
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
 
     if (await widget.service.isUpdateAvailable()) {
       if (context.mounted) {
@@ -194,7 +210,8 @@ class _HomeScreenState extends State<HomeScreen>
         }
       },
     );
-    checkUpdate(context);
+
+    addPostFrameCallback(() => checkUpdate(context));
 
     streamSubscription = FirebaseMessaging.onMessage.listen(
       (event) {
@@ -263,10 +280,14 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
-    final trSections =
-        context.read<LocaleCubit>().state.isRtl() ? arTrSections : enTrSections;
     final isRtl = context.read<LocaleCubit>().state.isRtl();
     final screenSize = MediaQuery.sizeOf(context);
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.dark,
+          statusBarIconBrightness: Brightness.light),
+    );
 
     return RestorationScope(
       restorationId: "HomePage",
@@ -292,6 +313,7 @@ class _HomeScreenState extends State<HomeScreen>
           }
         },
         child: Scaffold(
+          drawer: Drawer(),
           body: SlidingUpPanel(
             backdropEnabled: true,
             color: Colors.white,
@@ -826,7 +848,12 @@ class _HomeScreenState extends State<HomeScreen>
                                         itemCount: trSections.length,
                                         itemBuilder: (context, index) {
                                           return TrainingGroup(
-                                            name: trSections[index].groupName,
+                                            name: context
+                                                    .read<LocaleCubit>()
+                                                    .state
+                                                    .isRtl()
+                                                ? trSections[index].arGroupName
+                                                : trSections[index].enGroupName,
                                             // isSelected:
                                             //     trSections[selectedGroup].num ==
                                             //         trSections[index].num,
@@ -837,7 +864,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                       context)
                                                   .add(
                                                 GetExercisesByFilterEvent(
-                                                    trSections[index].id!),
+                                                    trSections[index].id),
                                               );
                                               setState(() {
                                                 selectedGroup = index;
@@ -874,22 +901,22 @@ class _HomeScreenState extends State<HomeScreen>
                                   if (isRtl && selectedGroup > 0) {
                                     BlocProvider.of<ExercisesBloc>(context).add(
                                         GetExercisesByFilterEvent(
-                                            trSections[--selectedGroup].id!));
+                                            trSections[--selectedGroup].id));
                                   } else if (!isRtl && selectedGroup < 7) {
                                     BlocProvider.of<ExercisesBloc>(context).add(
                                         GetExercisesByFilterEvent(
-                                            trSections[++selectedGroup].id!));
+                                            trSections[++selectedGroup].id));
                                   }
                                 } else if (details.primaryVelocity! > 0) {
                                   // print("Right");
                                   if (isRtl && selectedGroup < 7) {
                                     BlocProvider.of<ExercisesBloc>(context).add(
                                         GetExercisesByFilterEvent(
-                                            trSections[++selectedGroup].id!));
+                                            trSections[++selectedGroup].id));
                                   } else if (!isRtl && selectedGroup > 0) {
                                     BlocProvider.of<ExercisesBloc>(context).add(
                                         GetExercisesByFilterEvent(
-                                            trSections[--selectedGroup].id!));
+                                            trSections[--selectedGroup].id));
                                   }
                                 }
                                 exercisesController.animateTo(0.0,
@@ -921,7 +948,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                     context)
                                                 .add(GetExercisesByFilterEvent(
                                                     trSections[selectedGroup]
-                                                        .id!));
+                                                        .id));
                                             // BlocProvider.of<TrainingBloc>(context)
                                             //     .add(GetProgramEvent());
                                           }

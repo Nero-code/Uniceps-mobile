@@ -28,27 +28,27 @@ const List<String> languageCodes = ['ar', 'en'];
 
 const DATE_PATTERN = "dd/MM/yyyy";
 
-final enTrSections = [
-  const MuscleGroup(groupName: "Legs", id: 4),
-  const MuscleGroup(groupName: "Calves", id: 7),
-  const MuscleGroup(groupName: "Chest", id: 1),
-  const MuscleGroup(groupName: "Back", id: 3),
-  const MuscleGroup(groupName: "Shoulder", id: 2),
-  const MuscleGroup(groupName: "Biceps", id: 5),
-  const MuscleGroup(groupName: "Triceps", id: 6),
-  const MuscleGroup(groupName: "Abs", id: 8),
+final trSections = [
+  const MuscleGroup(enGroupName: "Legs", arGroupName: "أرجل", id: 4),
+  const MuscleGroup(enGroupName: "Calves", arGroupName: "بطة الرجل", id: 7),
+  const MuscleGroup(enGroupName: "Chest", arGroupName: "صدر", id: 1),
+  const MuscleGroup(enGroupName: "Back", arGroupName: "ظهر", id: 3),
+  const MuscleGroup(enGroupName: "Shoulder", arGroupName: "أكتاف", id: 2),
+  const MuscleGroup(enGroupName: "Biceps", arGroupName: "باي", id: 5),
+  const MuscleGroup(enGroupName: "Triceps", arGroupName: "تراي", id: 6),
+  const MuscleGroup(enGroupName: "Abs", arGroupName: "معدة", id: 8),
 ];
 
-final arTrSections = [
-  const MuscleGroup(groupName: "أرجل", id: 4),
-  const MuscleGroup(groupName: "بطة الرجل", id: 7),
-  const MuscleGroup(groupName: "صدر", id: 1),
-  const MuscleGroup(groupName: "ظهر", id: 3),
-  const MuscleGroup(groupName: "أكتاف", id: 2),
-  const MuscleGroup(groupName: "باي", id: 5),
-  const MuscleGroup(groupName: "تراي", id: 6),
-  const MuscleGroup(groupName: "معدة", id: 8),
-];
+// final arTrSections = [
+//   const MuscleGroup(arGroupName: "أرجل", id: 4),
+//   const MuscleGroup(arGroupName: "بطة الرجل", id: 7),
+//   const MuscleGroup(arGroupName: "صدر", id: 1),
+//   const MuscleGroup(arGroupName: "ظهر", id: 3),
+//   const MuscleGroup(arGroupName: "أكتاف", id: 2),
+//   const MuscleGroup(arGroupName: "باي", id: 5),
+//   const MuscleGroup(arGroupName: "تراي", id: 6),
+//   const MuscleGroup(arGroupName: "معدة", id: 8),
+// ];
 
 ///   A P P   I M A G E S
 

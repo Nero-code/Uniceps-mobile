@@ -17,7 +17,6 @@ class UpdateService {
   });
   Version? updateAvailable;
   Future<bool> isUpdateAvailable() async {
-    debugPrint("update service running a check");
     if (await connectionChecker.hasConnection) {
       try {
         final res = await client.get(
@@ -27,9 +26,7 @@ class UpdateService {
 
         debugPrint("update service ${res.statusCode}");
         if (res.statusCode == 200) {
-          debugPrint("update ${res.body}");
           final version = Version.fromJson(jsonDecode(res.body));
-          debugPrint("update ${res.body}");
           updateAvailable = version;
           return version.versionNum != APP_VERSION;
         } else {

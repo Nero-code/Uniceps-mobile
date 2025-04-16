@@ -39,7 +39,6 @@ final fakeRoutine = Routine(
                         routineItemId: 0,
                         index: 0,
                         reps: 12,
-                        weight: null,
                         version: 0,
                         isSynced: false),
                     RoutineSet(
@@ -48,7 +47,6 @@ final fakeRoutine = Routine(
                         routineItemId: 0,
                         index: 1,
                         reps: 10,
-                        weight: null,
                         version: 0,
                         isSynced: false),
                     RoutineSet(
@@ -57,7 +55,6 @@ final fakeRoutine = Routine(
                         routineItemId: 0,
                         index: 2,
                         reps: 08,
-                        weight: null,
                         version: 0,
                         isSynced: false),
                   ],

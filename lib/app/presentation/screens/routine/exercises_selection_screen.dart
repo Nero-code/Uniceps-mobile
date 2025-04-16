@@ -1,9 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/data/models/training_models/exercise_v2_model.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
+import 'package:uniceps/app/presentation/blocs/exercises_v2/exercises_v2_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/exercises_v2/muscle_group_bloc.dart';
 import 'package:uniceps/app/presentation/screens/routine/exercises_list_tab.dart';
 import 'package:uniceps/core/fakes/exercises_json.dart';
 
@@ -21,32 +24,21 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen>
 
   var groups = <MuscleGroup>[];
 
-  final enTrSections = [
-    const MuscleGroup(groupName: "Legs", id: 4),
-    const MuscleGroup(groupName: "Calves", id: 7),
-    const MuscleGroup(groupName: "Chest", id: 1),
-    const MuscleGroup(groupName: "Back", id: 3),
-    const MuscleGroup(groupName: "Shoulder", id: 2),
-    const MuscleGroup(groupName: "Biceps", id: 5),
-    const MuscleGroup(groupName: "Triceps", id: 6),
-    const MuscleGroup(groupName: "Abs", id: 8),
-  ];
-
-  final arTrSections = [
-    const MuscleGroup(groupName: "أرجل", id: 4),
-    const MuscleGroup(groupName: "بطة الرجل", id: 7),
-    const MuscleGroup(groupName: "صدر", id: 1),
-    const MuscleGroup(groupName: "ظهر", id: 3),
-    const MuscleGroup(groupName: "أكتاف", id: 2),
-    const MuscleGroup(groupName: "باي", id: 5),
-    const MuscleGroup(groupName: "تراي", id: 6),
-    const MuscleGroup(groupName: "معدة", id: 8),
+  final trSections = [
+    const MuscleGroup(enGroupName: "Legs", arGroupName: "أرجل", id: 4),
+    const MuscleGroup(enGroupName: "Calves", arGroupName: "بطة الرجل", id: 7),
+    const MuscleGroup(enGroupName: "Chest", arGroupName: "صدر", id: 1),
+    const MuscleGroup(enGroupName: "Back", arGroupName: "ظهر", id: 3),
+    const MuscleGroup(enGroupName: "Shoulder", arGroupName: "أكتاف", id: 2),
+    const MuscleGroup(enGroupName: "Biceps", arGroupName: "باي", id: 5),
+    const MuscleGroup(enGroupName: "Triceps", arGroupName: "تراي", id: 6),
+    const MuscleGroup(enGroupName: "Abs", arGroupName: "معدة", id: 8),
   ];
 
   @override
   void initState() {
     super.initState();
-    groups = arTrSections;
+    groups = trSections;
     _tabController = TabController(length: groups.length, vsync: this);
   }
 
@@ -71,8 +63,8 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen>
       allExercises.add(ExerciseV2Model.fromJson(i));
     }
     final List<ExerciseV2> filteredEx = [];
-    for (var g in arTrSections) {
-      var item = allExercises.where((e) => e.muscleGroup == g.id);
+    for (var g in trSections) {
+      var item = allExercises.where((e) => e.muscleGroup.id == g.id);
       // print("found item: ${item.id} : ${item.muscleGroup}");
       filteredEx.addAll(item);
       print("filteredExercises: ${filteredEx.length}");
@@ -90,41 +82,53 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("exercises"),
-        bottom: TabBar(
-          tabAlignment: TabAlignment.start,
-          controller: _tabController,
-          isScrollable: true,
-          tabs: [...groups.map((group) => Tab(text: group.groupName))],
-        ),
-      ),
-      body: FutureBuilder<Map<MuscleGroup, List<ExerciseV2>>>(
-        future: getExercisesFiltered(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const SizedBox();
-          }
-          return TabBarView(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (context) =>
+                MuscleGroupBloc()..add(GetMuscleGroupsEvent())),
+        BlocProvider(create: (context) => ExercisesV2Bloc()),
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("exercises"),
+          bottom: TabBar(
+            tabAlignment: TabAlignment.start,
             controller: _tabController,
-            children: snapshot.hasData
-                ? snapshot.data!.keys
-                    .map((group) => ExercisesListTab(
-                          list: snapshot.data![group]!,
-                          onSelect: (exercise, isSelected) {
-                            isSelected
-                                ? selectedExercises.remove(exercise)
-                                : selectedExercises.add(exercise);
-                          },
-                        ))
-                    .toList()
-                : [
-                    // ...groups.map((group) =>
-                    //     Text("${group.groupName}: ${snapshot.error}")),
-                  ],
-          );
-        },
+            isScrollable: true,
+            tabs: [...groups.map((group) => Tab(text: group.arGroupName))],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => Navigator.pop(context, selectedExercises),
+          child: const Icon(Icons.done),
+        ),
+        body: FutureBuilder<Map<MuscleGroup, List<ExerciseV2>>>(
+          future: getExercisesFiltered(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const SizedBox();
+            }
+            return TabBarView(
+              controller: _tabController,
+              children: snapshot.hasData
+                  ? snapshot.data!.keys
+                      .map((group) => ExercisesListTab(
+                            list: snapshot.data![group]!,
+                            onSelect: (exercise, isSelected) {
+                              isSelected
+                                  ? selectedExercises.remove(exercise)
+                                  : selectedExercises.add(exercise);
+                            },
+                          ))
+                      .toList()
+                  : [
+                      // ...groups.map((group) =>
+                      //     Text("${group.groupName}: ${snapshot.error}")),
+                    ],
+            );
+          },
+        ),
       ),
     );
   }

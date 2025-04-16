@@ -14,7 +14,6 @@ class RoutineSetDto extends RoutineSet implements BaseDTO {
       required super.version,
       required super.index,
       required super.reps,
-      required super.weight,
       required super.isSynced});
 
   factory RoutineSetDto.fromJson(Map<String, dynamic> json) =>

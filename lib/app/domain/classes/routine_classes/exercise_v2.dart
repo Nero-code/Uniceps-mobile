@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 
 class ExerciseV2 {
   const ExerciseV2({
@@ -11,7 +12,7 @@ class ExerciseV2 {
   });
 
   final int? id, apiId;
-  final int muscleGroup;
+  final MuscleGroup muscleGroup;
   final String name, imageUrl;
   final Uint8List? imageBitMap;
 
