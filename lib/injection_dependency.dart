@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart' as di;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -12,8 +13,29 @@ import 'package:uniceps/app/data/sources/local/dal_gyms/gyms_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_gyms/my_gyms_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_gyms/subscriptions_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_profile/measurements_local_source.dart';
+import 'package:uniceps/app/data/sources/local/dal_routine/routine_days_local_source.dart';
+import 'package:uniceps/app/data/sources/local/dal_routine/routine_items_local_source.dart';
+import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart';
+import 'package:uniceps/app/data/sources/local/dal_routine/routine_sets_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_training/training_local_source.dart';
+import 'package:uniceps/app/data/sources/local/database.dart';
+import 'package:uniceps/app/data/sources/remote/dal_routine/routine_management_remote_source.dart';
+import 'package:uniceps/app/data/sources/services/client_helper.dart';
+import 'package:uniceps/app/data/sources/services/http_client_helper.dart';
+import 'package:uniceps/app/data/sources/services/token_service.dart';
+import 'package:uniceps/app/data/stores/routine/routine_days_repo.dart';
+import 'package:uniceps/app/data/stores/routine/routine_items_repo.dart';
+import 'package:uniceps/app/data/stores/routine/routine_management_repo.dart';
+import 'package:uniceps/app/data/stores/routine/routine_sets_repo.dart';
 import 'package:uniceps/app/domain/commands/auth_usecases/guest_mode_login.dart';
+import 'package:uniceps/app/domain/commands/routine_management/routine_days_commands.dart';
+import 'package:uniceps/app/domain/commands/routine_management/routine_items_commands.dart';
+import 'package:uniceps/app/domain/commands/routine_management/routine_management_commands.dart';
+import 'package:uniceps/app/domain/commands/routine_management/routine_sets_commands.dart';
+import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_days_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_items_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_sets_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_management_contract.dart';
 import 'package:uniceps/app/services/image_cache_manager.dart';
 import 'package:uniceps/app/data/auth_repo_impl.dart';
 import 'package:uniceps/app/data/sources/local/auth_local_source.dart';
@@ -35,6 +57,10 @@ import 'package:uniceps/app/services/update_service.dart';
 final sl = di.GetIt.instance;
 
 Future<void> init() async {
+  //////////////////////////////////////////////////////////////////////////////
+  ///   D A T A B A S E S
+  //////////////////////////////////////////////////////////////////////////////
+
   final userBox = await Hive.openBox<Map<dynamic, dynamic>>("User");
   final profileBox = await Hive.openBox<Map<dynamic, dynamic>>("Profile");
   final trainBox = await Hive.openBox<Map<dynamic, dynamic>>("Training");
@@ -80,6 +106,10 @@ Future<void> init() async {
     await playerInGymBox.clear();
   }
 
+  final appDataBase = AppDatabase();
+
+  sl.registerLazySingleton<AppDatabase>(() => appDataBase);
+
   sl.registerLazySingleton<ImageCacheManager>(
     () => ImageCacheManager(
       imagesCache: imagesBox,
@@ -89,17 +119,6 @@ Future<void> init() async {
     ),
   );
 
-  //////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
-  ///
-  ///   L O C A L   S O U R C E S
-  ///
-  //////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
-
-  //////////////////////////////////////////////////////////////////////////////
   /////////
   ////////
   ///////
@@ -138,35 +157,39 @@ Future<void> init() async {
       cacheManager: sl(),
       logger: sl()));
 
-  //////////////////////////////////////////////////////////////////////////////
   /////////
   ////////
   ///////
-  //////      P R O F I L E   S O U R C E S
+  //////      R O U T I N E   S O U R C E S
   /////
   ////
   ///
   //
 
   //////////////////////////////////////////////////////////////////////////////
-  /////////
-  ////////
-  ///////
-  //////      T R A I N I N G   S O U R C E S
-  /////
-  ////
-  ///
-  //
+  ///   L O C A L   S O U R C E S
+  //////////////////////////////////////////////////////////////////////////////
+  sl.registerLazySingleton<IRoutineManagementLocalSourceContract>(
+      () => RoutineManagementLocalSourceImpl(database: sl()));
+
+  sl.registerLazySingleton<IRoutineDaysLocalSourceContract>(
+      () => RoutineDaysLocalSourceImpl(dataBase: sl()));
+
+  sl.registerLazySingleton<IRoutineItemsLocalSourceContract>(
+      () => RoutineItemsLocalSourceImpl());
+
+  sl.registerLazySingleton<IRoutineSetsLocalSourceContract>(
+      () => RoutineSetsLocalSourceImpl());
 
   //////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
-  ///
   ///   R E M O T E   S O U R C E S
+  //////////////////////////////////////////////////////////////////////////////
+
+  sl.registerLazySingleton<IRoutineManagementRemoteSourceContract>(
+      () => RoutineManagementRemoteSourceImpl());
+
   ///
-  //////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
+  ///
   sl.registerLazySingleton<LocalTrainingSource>(
     () => LocalTrainingSourceImpl(
       trainBox: trainBox,
@@ -225,6 +248,30 @@ Future<void> init() async {
     ),
   );
 
+  /////////
+  ////////
+  ///////
+  //////      R E P O S I T O R I E S  -  V 2
+  /////
+  ////
+  ///
+  //
+
+  sl.registerLazySingleton<IRoutineManagementContract>(
+      () => RoutineManagementRepo(
+            localSource: sl(),
+            remoteSource: sl(),
+            internet: sl(),
+            clientHelper: sl(),
+          ));
+
+  sl.registerLazySingleton<IRoutineDaysContract>(
+      () => RoutineDaysRepo(localSource: sl()));
+  sl.registerLazySingleton<IRoutineItemsContract>(
+      () => RoutineItemsRepo(localSource: sl()));
+  sl.registerLazySingleton<IRoutineSetsContract>(
+      () => RoutineSetsRepo(localSource: sl()));
+
   ///
   ///
   ///   R E P O S I T O R I E S
@@ -255,6 +302,22 @@ Future<void> init() async {
       logger: sl(),
     ),
   );
+
+  //////////////////////////////////////////////////////////////////////////////
+  ///
+  ///   U S E C A S E S  -  V 2
+  ///
+  //////////////////////////////////////////////////////////////////////////////
+
+  sl.registerLazySingleton<RoutineManagementCommands>(
+      () => RoutineManagementCommands(sl()));
+
+  sl.registerLazySingleton<RoutineDaysCommands>(
+      () => RoutineDaysCommands(repo: sl()));
+  sl.registerLazySingleton<RoutineItemsCommands>(
+      () => RoutineItemsCommands(repo: sl()));
+  sl.registerLazySingleton<RoutineSetsCommands>(
+      () => RoutineSetsCommands(repo: sl()));
 
   //////////////////////////////////////////////////////////////////////////////
   ///
@@ -297,7 +360,15 @@ Future<void> init() async {
 
   final client = http.Client();
   // final c = io.HttpClient()..connectionTimeout = const Duration(seconds: 30);
-  sl.registerLazySingleton<http.Client>(() => client);
+  sl.registerLazySingleton(() => client);
+
+  const secureStorage = FlutterSecureStorage();
+
+  sl.registerLazySingleton(
+      () => TokenService(storage: secureStorage, client: sl()));
+
+  sl.registerLazySingleton<ClientHelper>(
+      () => HttpClientHelper(client: sl(), tokenService: sl()));
 
   sl.registerLazySingleton<InternetConnectionChecker>(
       () => InternetConnectionChecker());

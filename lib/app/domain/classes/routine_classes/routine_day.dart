@@ -45,7 +45,7 @@ class RoutineDay {
   // isSynced:  $isSynced
   @override
   String toString() {
-    return """
+    return """\n
   name:      $name
   index:     $index
 """;

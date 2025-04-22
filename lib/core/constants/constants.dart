@@ -52,24 +52,24 @@ final trSections = [
 
 ///   A P P   I M A G E S
 
-const PHOTOS_PATH = "images/photos/";
+// const PHOTOS_PATH = "images/photos/";
 
-const IMG_BACK = "back.png";
-const IMG_BLANK = "blank.png";
-const IMG_CONTROL_PANAL = "control_panal.png";
-const IMG_DEPARTING = "departing.png";
-const IMG_DESKTOP = "desktop.png";
-const IMG_EMPTY = "empty.png";
-const IMG_EMPTY_2 = "empty_2.png";
-const IMG_MEMORY = "memory.png";
-const IMG_NO_INTERNET = "noInternet.png";
-const IMG_SERVER_ERROR = "server_error.png";
-const IMG_SERVER_DOWN = "server_down.png";
-const IMG_VOID = "void.png";
-const IMG_WARNING = "warning.png";
-const IMG_NO_PROGRAM = "no_program.png";
-const IMG_NO_ATTENDENCE = "attendence_err.png";
-const IMG_NO_MEASUREMENTS = "measurements_err.png";
+const IMG_BACK = "images/photos/back.png";
+const IMG_BLANK = "images/photos/blank.png";
+const IMG_CONTROL_PANAL = "images/photos/control_panal.png";
+const IMG_DEPARTING = "images/photos/departing.png";
+const IMG_DESKTOP = "images/photos/desktop.png";
+const IMG_EMPTY = "images/photos/empty.png";
+const IMG_EMPTY_2 = "images/photos/empty_2.png";
+const IMG_MEMORY = "images/photos/memory.png";
+const IMG_NO_INTERNET = "images/photos/noInternet.png";
+const IMG_SERVER_ERROR = "images/photos/server_error.png";
+const IMG_SERVER_DOWN = "images/photos/server_down.png";
+const IMG_VOID = "images/photos/void.png";
+const IMG_WARNING = "images/photos/warning.png";
+const IMG_NO_PROGRAM = "images/photos/no_program.png";
+const IMG_NO_ATTENDENCE = "images/photos/attendence_err.png";
+const IMG_NO_MEASUREMENTS = "images/photos/measurements_err.png";
 
 ///
 ///
@@ -236,5 +236,5 @@ String imgUrlParser(int muscleG, String imgName) {
       "$HTTP_IMAGES"
       "/$muscleG"
       "/$imgName"
-      ".jpg";
+      ".png";
 }

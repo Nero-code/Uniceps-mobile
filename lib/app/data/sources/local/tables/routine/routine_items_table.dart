@@ -8,8 +8,11 @@ class RoutineItems extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get apiId => integer().nullable()();
   IntColumn get index => integer()();
+  IntColumn get version => integer().clientDefault(() => 0)();
 
   TextColumn get notes => text().nullable()();
+
+  BoolColumn get isSynced => boolean().clientDefault(() => false)();
 
   // Foreign Keys
   IntColumn get exercise => integer().references(Exercises, #id,

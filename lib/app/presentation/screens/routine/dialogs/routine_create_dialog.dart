@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class RoutineCreateDialog extends StatelessWidget {
-  RoutineCreateDialog({super.key, required this.onCreate});
+class RoutineNameDialog extends StatelessWidget {
+  RoutineNameDialog(
+      {super.key,
+      required this.initialName,
+      this.title = "",
+      required this.onSubmit});
 
-  final void Function(String name) onCreate;
+  final String initialName, title;
+  final void Function(String name) onSubmit;
 
   final controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
+    controller.text = initialName;
     return AlertDialog(
       scrollable: true,
       icon: const Icon(
@@ -38,6 +44,9 @@ class RoutineCreateDialog extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
+            if (controller.text.isEmpty || controller.text == initialName)
+              return;
+            onSubmit(controller.text.trim());
             Navigator.pop(context);
           },
           child: Text(locale.ok),

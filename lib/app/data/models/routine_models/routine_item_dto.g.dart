@@ -11,6 +11,7 @@ RoutineItemDto _$RoutineItemDtoFromJson(Map<String, dynamic> json) =>
       id: (json['id'] as num?)?.toInt(),
       apiId: (json['apiId'] as num?)?.toInt(),
       dayId: (json['dayId'] as num).toInt(),
+      index: (json['index'] as num).toInt(),
       version: (json['version'] as num).toInt(),
       exerciseV2Dto:
           ExerciseV2Dto.fromJson(json['exerciseV2Dto'] as Map<String, dynamic>),
@@ -25,6 +26,7 @@ Map<String, dynamic> _$RoutineItemDtoToJson(RoutineItemDto instance) =>
       'id': instance.id,
       'apiId': instance.apiId,
       'dayId': instance.dayId,
+      'index': instance.index,
       'version': instance.version,
       'isSynced': instance.isSynced,
       'exerciseV2Dto': instance.exerciseV2Dto.toJson(),

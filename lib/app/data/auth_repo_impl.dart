@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
@@ -108,6 +109,14 @@ class AuthRepoImpl implements AuthRepo {
       logger.d("ServerException");
 
       return Left(ServerFailure(errMsg: "errMsg"));
+    } on ClientException {
+      try {
+        await local.getUser();
+        return const Right(true);
+      } catch (e) {
+        logger.e("tried fetch user again and still failed");
+        return const Right(false);
+      }
     } catch (e) {
       logger.d("Exception on Auth: $e");
       return Left(

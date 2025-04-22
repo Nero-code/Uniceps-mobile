@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uniceps/app/data/models/base_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_day_dto.dart';
+import 'package:uniceps/app/data/sources/local/database.dart' as db;
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 
 // part 'routine_dto.freezed.dart';
@@ -14,7 +15,7 @@ class RoutineDto extends Routine implements BaseDTO {
   const RoutineDto({
     required super.id,
     required super.apiId,
-    required super.issuerId,
+    // required super.issuerId,
     required super.version,
     required super.name,
     required super.description,
@@ -29,6 +30,22 @@ class RoutineDto extends Routine implements BaseDTO {
 
   factory RoutineDto.fromJson(Map<String, dynamic> json) =>
       _$RoutineDtoFromJson(json);
+
+  factory RoutineDto.fromTable(db.Routine r,
+          [List<db.DaysGroupData> trainingDays = const []]) =>
+      RoutineDto(
+        id: r.id,
+        apiId: r.apiId,
+        // issuerId: r.issuerId,
+        version: r.version,
+        name: r.name,
+        description: r.description,
+        createdAt: r.createdAt,
+        updatedAt: r.updatedAt,
+        trainingDaysDto:
+            trainingDays.map((day) => RoutineDayDto.fromTable(day)).toList(),
+        isSynced: r.isSynced,
+      );
 
   @override
   Map<String, dynamic> toJson() => _$RoutineDtoToJson(this);

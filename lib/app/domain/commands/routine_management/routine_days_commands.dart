@@ -1,13 +1,19 @@
 import 'package:dartz/dartz.dart';
+import 'package:uniceps/app/data/stores/routine/routine_days_repo.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/domain/commands/i_command.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/routine_edit_service.dart';
+import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_days_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
-class RoutineEditUsecases implements ICommand {
-  final RoutineEditRepo _repo;
-  const RoutineEditUsecases({required RoutineEditRepo repo}) : _repo = repo;
+class RoutineDaysCommands implements ICommand {
+  final IRoutineDaysContract _repo;
+
+  const RoutineDaysCommands({required RoutineDaysRepo repo}) : _repo = repo;
+
+  Future<Either<Failure, List<RoutineDay>>> getDaysUnderRoutine(
+      int routineId) async {
+    return await _repo.getDaysUnderRoutine(routineId);
+  }
 
   Future<Either<Failure, List<RoutineDay>>> addDay(RoutineDay day) async {
     return await _repo.addDay(day);
@@ -24,14 +30,5 @@ class RoutineEditUsecases implements ICommand {
   Future<Either<Failure, List<RoutineDay>>> reorderDays(
       List<RoutineDay> days) async {
     return await _repo.reorderDays(days);
-  }
-
-  Future<Either<Failure, List<RoutineItem>>> addItem(RoutineItem item) async {
-    return await _repo.addItem(item);
-  }
-
-  Future<Either<Failure, List<RoutineItem>>> removeItem(
-      RoutineItem item) async {
-    return await _repo.removeItem(item);
   }
 }

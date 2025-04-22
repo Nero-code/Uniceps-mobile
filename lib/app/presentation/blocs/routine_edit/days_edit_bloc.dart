@@ -1,50 +1,50 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
+import 'package:uniceps/app/domain/commands/routine_management/routine_days_commands.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 part 'days_edit_event.dart';
 part 'days_edit_state.dart';
 
 class DaysEditBloc extends Bloc<DaysEditEvent, DaysEditState> {
-  // final RoutineEditUsecases _usecases;
+  final RoutineDaysCommands _commands;
   List<RoutineDay> days = [];
-  DaysEditBloc()
-      :
-        //  _usecases = usecases,
+  DaysEditBloc({required RoutineDaysCommands commands})
+      : _commands = commands,
         super(DaysEditInitial()) {
     on<GetDaysEvent>((event, emit) async {
       emit(DaysEditLoadingState());
-      emit(DaysEditLoadedState(days: days));
+
+      final either = await _commands.getDaysUnderRoutine(event.routineId);
+      either.fold(
+        (l) => emit(DaysEditErrorState(failure: l)),
+        (r) => emit(DaysEditLoadedState(days: r)),
+      );
     });
     on<AddDayEvent>((event, emit) async {
-      // final either = await _usecases.addDay(event.day);
-      // either.fold(
-      //   (f) => emit(DaysEditErrorState(failure: f)),
-      //   (s) => emit(DaysEditLoadedState(days: s)),
-      // );
-      print("inside Days Bloc: ${days.length}");
       emit(DaysEditLoadingState());
+
       days.add(event.day);
 
-      print("inside Days Bloc: ${days.length}");
       emit(DaysEditLoadedState(days: days));
     });
     on<RemoveDayEvent>((event, emit) async {
       emit(DaysEditLoadingState());
+
       days.removeAt(event.day.index);
       for (int i = event.day.index; i < days.length; i++) {
-        days[i] = days[i].copyWith(index: i - 1);
+        days[i] = days[i].copyWith(index: i);
       }
+
       emit(DaysEditLoadedState(days: days));
     });
     on<RenameDayEvent>((event, emit) async {
       emit(DaysEditLoadingState());
-      print(days);
+
       days.removeAt(event.day.index);
-      print(days);
       days.insert(event.day.index, event.day);
-      print(days);
+
       emit(DaysEditLoadedState(days: days));
     });
     on<ReorderDaysEvent>((event, emit) async {

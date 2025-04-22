@@ -5,10 +5,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RoutineListTile extends StatelessWidget {
   const RoutineListTile(
-      {super.key, required this.routine, required this.onTap});
+      {super.key,
+      required this.routine,
+      required this.onTap,
+      required this.onLongPress});
 
   final Routine routine;
-  final void Function() onTap;
+  final void Function() onTap, onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +27,7 @@ class RoutineListTile extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(15.0),
           onTap: onTap,
+          onLongPress: onLongPress,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(

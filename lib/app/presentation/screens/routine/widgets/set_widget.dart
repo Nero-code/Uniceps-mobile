@@ -84,6 +84,7 @@ class _SetWidgetState extends State<SetWidget> {
                     onSubmitted: (val) {
                       BlocProvider.of<SetsEditBloc>(context).add(
                         AddSetEvent(
+                          itemId: widget.routineItemId,
                           set: RoutineSet(
                               id: null,
                               apiId: null,

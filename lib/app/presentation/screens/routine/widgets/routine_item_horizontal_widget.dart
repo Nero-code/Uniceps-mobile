@@ -12,7 +12,7 @@ class RoutineItemHorizontalWidget extends StatefulWidget {
       {super.key, required this.item, required this.onTap});
 
   final RoutineItem item;
-  final void Function() onTap;
+  final void Function(int itemId) onTap;
   @override
   State<RoutineItemHorizontalWidget> createState() =>
       _RoutineItemHorizontalWidgetState();
@@ -60,7 +60,7 @@ class _RoutineItemHorizontalWidgetState
             //   isExpanded = !isExpanded;
             //   setState(() {});
             // },
-            onTap: widget.onTap,
+            onTap: () => widget.onTap(widget.item.id!),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,

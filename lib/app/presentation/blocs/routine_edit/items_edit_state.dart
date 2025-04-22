@@ -12,9 +12,10 @@ final class ItemsEditInitial extends ItemsEditState {}
 final class ItemsEditLoadingState extends ItemsEditState {}
 
 final class ItemsEditLoadedState extends ItemsEditState {
+  final int dayId;
   final List<RoutineItem> items;
 
-  const ItemsEditLoadedState({required this.items});
+  const ItemsEditLoadedState({required this.dayId, required this.items});
 }
 
 final class ItemsEditErrorState extends ItemsEditState {

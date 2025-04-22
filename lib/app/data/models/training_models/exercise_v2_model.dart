@@ -1,5 +1,4 @@
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 import 'package:uniceps/core/constants/constants.dart';
 
 class ExerciseV2Model extends ExerciseV2 {

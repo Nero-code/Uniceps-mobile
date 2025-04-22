@@ -9,7 +9,6 @@ part of 'routine_dto.dart';
 RoutineDto _$RoutineDtoFromJson(Map<String, dynamic> json) => RoutineDto(
       id: (json['id'] as num?)?.toInt(),
       apiId: (json['apiId'] as num?)?.toInt(),
-      issuerId: (json['issuerId'] as num).toInt(),
       version: (json['version'] as num).toInt(),
       name: json['name'] as String,
       description: json['description'] as String?,
@@ -27,7 +26,6 @@ Map<String, dynamic> _$RoutineDtoToJson(RoutineDto instance) =>
       'id': instance.id,
       'apiId': instance.apiId,
       'version': instance.version,
-      'issuerId': instance.issuerId,
       'name': instance.name,
       'description': instance.description,
       'isCurrent': instance.isCurrent,

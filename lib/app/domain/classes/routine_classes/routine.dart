@@ -6,7 +6,7 @@ class Routine {
   const Routine({
     required this.id,
     required this.apiId,
-    required this.issuerId,
+    // required this.issuerId,
     required this.version,
     required this.name,
     required this.description,
@@ -18,10 +18,33 @@ class Routine {
   });
 
   final int? id, apiId;
-  final int version, issuerId;
+  final int version;
   final String name;
   final String? description;
   final bool isCurrent, isSynced;
   final DateTime createdAt, updatedAt;
   final List<RoutineDay> trainingDays;
+
+  Routine copyWith({
+    int? id,
+    int? apiId,
+    int? version,
+    String? name,
+    String? description,
+    bool? isCurrent,
+    bool? isSynced,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    List<RoutineDay>? trainingDays,
+  }) =>
+      Routine(
+          id: id ?? this.id,
+          apiId: apiId ?? this.apiId,
+          version: version ?? this.version,
+          name: name ?? this.name,
+          description: description ?? this.description,
+          createdAt: createdAt ?? this.createdAt,
+          updatedAt: updatedAt ?? this.updatedAt,
+          trainingDays: trainingDays ?? this.trainingDays,
+          isSynced: isSynced ?? this.isSynced);
 }

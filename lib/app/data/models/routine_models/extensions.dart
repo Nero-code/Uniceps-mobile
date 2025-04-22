@@ -10,6 +10,16 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
 
 extension ExerciseV2Extension on ExerciseV2 {
+  RoutineItem toModel(int dayId, int index) => RoutineItem(
+      id: id,
+      apiId: apiId,
+      dayId: dayId,
+      index: index,
+      version: 0,
+      exercise: this,
+      sets: [],
+      isSynced: false);
+
   ExerciseV2Dto asDto() => ExerciseV2Dto(
         id: id,
         apiId: apiId,
@@ -36,6 +46,7 @@ extension RoutineItemExtension on RoutineItem {
       id: id,
       apiId: apiId,
       dayId: dayId,
+      index: index,
       version: version,
       exerciseV2Dto: exercise.asDto(),
       setsDto: sets.map((e) => e.asDto()).toList(),
@@ -58,7 +69,6 @@ extension RoutineExtension on Routine {
   RoutineDto asDto() => RoutineDto(
       id: id,
       apiId: apiId,
-      issuerId: issuerId,
       version: version,
       name: name,
       description: description,

@@ -10,7 +10,6 @@ import 'package:uniceps/core/fakes/exercises_json.dart';
 final fakeRoutine = Routine(
   id: null,
   apiId: null,
-  issuerId: 0,
   description: null,
   version: 0,
   isSynced: false,
@@ -29,6 +28,7 @@ final fakeRoutine = Routine(
                   id: null,
                   apiId: null,
                   dayId: 0,
+                  index: 0,
                   version: 0,
                   isSynced: false,
                   exercise: ExerciseV2Model.fromJson(e),

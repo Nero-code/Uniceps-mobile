@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/core/constants/constants.dart';
 
 class TokenService {
   TokenService(
-      {required SharedPreferences storage, required http.Client client})
+      {required FlutterSecureStorage storage, required http.Client client})
       : _client = client,
         _storage = storage;
 
   late final http.Client _client;
-  final SharedPreferences _storage;
+  final FlutterSecureStorage _storage;
   // late String? _refreshToken;
   Session? _session;
 
@@ -34,12 +34,12 @@ class TokenService {
 
   Future<bool> _createSession() async {
     print("createSession");
-    if (!_storage.containsKey('refresh')) return false;
+    if (!await _storage.containsKey(key: 'refresh')) return false;
 
     print("createSession => found a token");
     print("createSession => session hasExpired(${_session?.hasExpired})");
 
-    final refreshToken = _storage.getString('refresh') as String;
+    final refreshToken = _storage.read(key: 'refresh') as String;
     if (_session == null || _session!.hasExpired) {
       try {
         final res = await _client.post(
@@ -69,15 +69,15 @@ class TokenService {
   Future<bool> ensureRefreshTokenIsValid() async {
     print("ensureTokenIsValid");
     // if no token, then use is not logged in
-    if (!_storage.containsKey('refresh')) return false;
+    if (!await _storage.containsKey(key: 'refresh')) return false;
     print("ensureTokenIsValid => found a token");
-    final refreshToken = _storage.getString('refresh') as String;
-    final issuedAt = DateTime.parse(_storage.getString('issuedAt') as String);
+    final refreshToken = _storage.read(key: 'refresh') as String;
+    final issuedAt = DateTime.parse(_storage.read(key: 'issuedAt') as String);
 
     //  if token time-to-live < 15 days then it's up-to-date
     if (issuedAt.difference(DateTime.now()).inDays < 15) return true;
     if (issuedAt.difference(DateTime.now()).inDays > 30) {
-      _storage.clear();
+      _storage.deleteAll();
       return false;
     }
     if (_session == null) return true;

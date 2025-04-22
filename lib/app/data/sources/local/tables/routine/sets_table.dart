@@ -6,6 +6,9 @@ class Sets extends Table {
   IntColumn get apiId => integer().nullable()();
   IntColumn get roundIndex => integer()();
   IntColumn get repsCount => integer()();
+  IntColumn get version => integer().clientDefault(() => 0)();
+
+  BoolColumn get isSynced => boolean().clientDefault(() => false)();
 
   // Foreign Key
   IntColumn get routineItemId => integer().references(Routines, #id,

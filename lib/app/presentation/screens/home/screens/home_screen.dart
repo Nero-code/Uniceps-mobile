@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
+import 'package:uniceps/app/presentation/blocs/routine_management/routine_management_bloc.dart';
 import 'package:uniceps/app/presentation/screens/home/dialogs/comming_soon_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/routine_management_screen.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
@@ -32,6 +33,7 @@ import 'package:uniceps/main_cubit/locale_cubit.dart';
 import 'package:uniceps/main_cubit/training_section_cubit.dart';
 import 'package:uniceps/app/services/update_service.dart';
 import 'package:alert_banner/exports.dart' as b;
+import 'package:uniceps/injection_dependency.dart' as di;
 
 // final enTrSections = [
 //   const MuscleGroup(groupName: "Legs", id: 4),
@@ -1091,8 +1093,14 @@ class _HomeScreenState extends State<HomeScreen>
                               ? Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        RoutineManagementScreen(),
+                                    builder: (context) => BlocProvider(
+                                      create: (context) =>
+                                          RoutineManagementBloc(
+                                              routineManagementUsecases:
+                                                  di.sl())
+                                            ..add(GetRoutinesEvent()),
+                                      child: RoutineManagementScreen(),
+                                    ),
                                   ))
                               : showDialog(
                                   context: context,

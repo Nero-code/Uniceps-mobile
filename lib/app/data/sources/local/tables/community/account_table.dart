@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart';
 
-class Account extends Table {
+class Accounts extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get apiId => integer().autoIncrement()();
+  IntColumn get apiId => integer()();
 
   TextColumn get name => text().withLength(min: 1, max: 50)();
   TextColumn get phone => text().withLength(min: 1, max: 20)();

@@ -8,10 +8,11 @@ class RoutineGridTile extends StatelessWidget {
     super.key,
     required this.routine,
     required this.onTap,
+    required this.onLongPress,
   });
 
   final Routine routine;
-  final void Function() onTap;
+  final void Function() onTap, onLongPress;
 
   @override
   Widget build(BuildContext context) {

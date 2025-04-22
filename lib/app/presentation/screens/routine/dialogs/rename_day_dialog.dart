@@ -35,7 +35,7 @@ class RenameDayDialog extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          onPressed: () {},
+          onPressed: () => Navigator.pop(context),
           child: Text(locale.cancel),
         ),
         ElevatedButton(
