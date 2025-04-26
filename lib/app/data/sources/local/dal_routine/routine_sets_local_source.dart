@@ -1,28 +1,53 @@
+import 'package:drift/drift.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_set_dto.dart';
+import 'package:uniceps/app/data/sources/local/database.dart';
 
 abstract class IRoutineSetsLocalSourceContract {
   //  R O U T I N E   S E T S   S E C T I O N
   Future<List<RoutineSetDto>> getItemSets(int itemId);
   Future<void> addSets(List<RoutineSetDto> listToAdd);
-  Future<void> removeSets(List<RoutineSetDto> listToRemove);
+  // Future<void> removeSets(List<RoutineSetDto> listToRemove);
 }
 
 class RoutineSetsLocalSourceImpl implements IRoutineSetsLocalSourceContract {
+  final AppDatabase _database;
+
+  const RoutineSetsLocalSourceImpl({required AppDatabase database})
+      : _database = database;
+
   @override
-  Future<void> addSets(List<RoutineSetDto> listToAdd) {
-    // TODO: implement addSets
-    throw UnimplementedError();
+  Future<List<RoutineSetDto>> getItemSets(int itemId) async {
+    final res = (await (_database.select(_database.routineSets)
+              ..where((f) => f.routineItemId.equals(itemId))
+              ..orderBy([(u) => OrderingTerm(expression: u.roundIndex)]))
+            .get())
+        .map((item) => RoutineSetDto.fromTable(item))
+        .toList();
+
+    return res;
   }
 
   @override
-  Future<List<RoutineSetDto>> getItemSets(int itemId) {
-    // TODO: implement getItemSets
-    throw UnimplementedError();
+  Future<List<RoutineSetDto>> addSets(List<RoutineSetDto> listToAdd) async {
+    final result = <RoutineSetDto>[];
+    await (_database.delete(_database.routineSets)
+          ..where((f) => f.routineItemId.equals(listToAdd.first.routineItemId)))
+        .go();
+    for (final set in listToAdd) {
+      final setId = await (_database.into(_database.routineSets))
+          .insert(RoutineSetsCompanion.insert(
+        roundIndex: set.index,
+        repsCount: set.reps,
+        routineItemId: set.routineItemId,
+      ));
+      result.add(set.copyWith(id: setId));
+    }
+    return result;
   }
 
-  @override
-  Future<void> removeSets(List<RoutineSetDto> listToRemove) {
-    // TODO: implement removeSets
-    throw UnimplementedError();
-  }
+  // @override
+  // Future<void> removeSets(List<RoutineSetDto> listToRemove) async {
+  //   // implement removeSets
+  //   throw UnimplementedError();
+  // }
 }

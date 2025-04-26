@@ -23,7 +23,7 @@ class _ExercisesListTabState extends State<ExercisesListTab>
     super.build(context);
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        childAspectRatio: 1,
+        childAspectRatio: 0.8,
         crossAxisCount: 2,
         mainAxisSpacing: spacing,
         crossAxisSpacing: spacing,
@@ -49,14 +49,14 @@ class _ExercisesListTabState extends State<ExercisesListTab>
                   if (!selectedIds.contains(widget.list[index].id)) {
                     print("added");
                     // --------------------------------------
-                    // State management code, Replace by bloc
+                    // Add exercise here and parent widget and notify
                     selectedIds.add(widget.list[index].id!);
                     widget.onSelect(widget.list[index], false);
                     // --------------------------------------
                   } else {
                     print("removed");
                     // --------------------------------------
-                    // State management code, Replace by bloc
+                    // Remove exercise here and parent widget and notify
                     selectedIds.remove(widget.list[index].id!);
                     widget.onSelect(widget.list[index], true);
                     // --------------------------------------
@@ -72,9 +72,6 @@ class _ExercisesListTabState extends State<ExercisesListTab>
     );
   }
 
-  // With bloc state management we don't need this property
-  // since all data are stored in the state, not even a statful
-  // widget is required... only if animations are present
   @override
   bool get wantKeepAlive => selectedIds.isNotEmpty;
 }

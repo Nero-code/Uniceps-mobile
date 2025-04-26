@@ -13,8 +13,9 @@ class RoutineItemsCommands implements ICommand {
     return await _repo.getItemsUnderDay(dayId);
   }
 
-  Future<Either<Failure, List<RoutineItem>>> addItem(RoutineItem item) async {
-    return await _repo.addItem(item);
+  Future<Either<Failure, List<RoutineItem>>> addItems(
+      List<RoutineItem> items) async {
+    return await _repo.addItems(items);
   }
 
   Future<Either<Failure, List<RoutineItem>>> removeItem(

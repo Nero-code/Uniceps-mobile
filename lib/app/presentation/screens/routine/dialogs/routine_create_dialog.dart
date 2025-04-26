@@ -44,8 +44,6 @@ class RoutineNameDialog extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            if (controller.text.isEmpty || controller.text == initialName)
-              return;
             onSubmit(controller.text.trim());
             Navigator.pop(context);
           },

@@ -7,7 +7,7 @@ class ErrorScreenWidget extends StatelessWidget {
   const ErrorScreenWidget({
     super.key,
     required this.f,
-    required this.callback,
+    this.callback,
     this.gapSize = 5.0,
   });
 

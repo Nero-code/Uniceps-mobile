@@ -43,7 +43,7 @@ class _DaysSortingDialogState extends State<DaysSortingDialog> {
           // ),
           children: widget.days
               .map((day) => ListTile(
-                    key: Key("${day.index}"),
+                    key: Key("${day.id!}"),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0)),
                     title: Text(day.name),

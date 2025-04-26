@@ -42,7 +42,7 @@ class _SetsEditScreenState extends State<SetsEditScreen> {
                   children: [
                     Image(
                       image: NetworkImage(
-                        imgUrlParser(widget.item.exercise.muscleGroup.id,
+                        imgUrlParser(widget.item.exercise.muscleGroup.apiId,
                             widget.item.exercise.imageUrl),
                       ),
                     ),

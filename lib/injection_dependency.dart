@@ -19,9 +19,10 @@ import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_lo
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_sets_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_training/training_local_source.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
-import 'package:uniceps/app/data/sources/remote/dal_routine/routine_management_remote_source.dart';
+// import 'package:uniceps/app/data/sources/remote/dal_routine/routine_management_remote_source.dart';
 import 'package:uniceps/app/data/sources/services/client_helper.dart';
 import 'package:uniceps/app/data/sources/services/http_client_helper.dart';
+import 'package:uniceps/app/data/sources/services/media_helper.dart';
 import 'package:uniceps/app/data/sources/services/token_service.dart';
 import 'package:uniceps/app/data/stores/routine/routine_days_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_items_repo.dart';
@@ -75,6 +76,9 @@ Future<void> init() async {
   final selectedGym = await Hive.openBox<bool>("SelectedGym");
   final playerInGymBox =
       await Hive.openBox<Map<dynamic, dynamic>>("PlayerInGym");
+
+  ///  V2   R E Q U I R E D
+  final imagesCache = await Hive.openBox<Uint8List>("ExerciseImages");
 
   // await userBox.clear();
   // await profileBox.clear();
@@ -176,17 +180,20 @@ Future<void> init() async {
       () => RoutineDaysLocalSourceImpl(dataBase: sl()));
 
   sl.registerLazySingleton<IRoutineItemsLocalSourceContract>(
-      () => RoutineItemsLocalSourceImpl());
+      () => RoutineItemsLocalSourceImpl(
+            database: sl(),
+            imagesCache: imagesCache,
+          ));
 
   sl.registerLazySingleton<IRoutineSetsLocalSourceContract>(
-      () => RoutineSetsLocalSourceImpl());
+      () => RoutineSetsLocalSourceImpl(database: sl()));
 
   //////////////////////////////////////////////////////////////////////////////
   ///   R E M O T E   S O U R C E S
   //////////////////////////////////////////////////////////////////////////////
 
-  sl.registerLazySingleton<IRoutineManagementRemoteSourceContract>(
-      () => RoutineManagementRemoteSourceImpl());
+  // sl.registerLazySingleton<IRoutineManagementRemoteSourceContract>(
+  //     () => RoutineManagementRemoteSourceImpl());
 
   ///
   ///
@@ -260,7 +267,7 @@ Future<void> init() async {
   sl.registerLazySingleton<IRoutineManagementContract>(
       () => RoutineManagementRepo(
             localSource: sl(),
-            remoteSource: sl(),
+            // remoteSource: sl(),
             internet: sl(),
             clientHelper: sl(),
           ));
@@ -268,7 +275,7 @@ Future<void> init() async {
   sl.registerLazySingleton<IRoutineDaysContract>(
       () => RoutineDaysRepo(localSource: sl()));
   sl.registerLazySingleton<IRoutineItemsContract>(
-      () => RoutineItemsRepo(localSource: sl()));
+      () => RoutineItemsRepo(localSource: sl(), mediaHelper: sl()));
   sl.registerLazySingleton<IRoutineSetsContract>(
       () => RoutineSetsRepo(localSource: sl()));
 
@@ -310,7 +317,7 @@ Future<void> init() async {
   //////////////////////////////////////////////////////////////////////////////
 
   sl.registerLazySingleton<RoutineManagementCommands>(
-      () => RoutineManagementCommands(sl()));
+      () => RoutineManagementCommands(repo: sl()));
 
   sl.registerLazySingleton<RoutineDaysCommands>(
       () => RoutineDaysCommands(repo: sl()));
@@ -370,6 +377,8 @@ Future<void> init() async {
   sl.registerLazySingleton<ClientHelper>(
       () => HttpClientHelper(client: sl(), tokenService: sl()));
 
+  sl.registerLazySingleton<MediaHelper>(() => ImageMediaHelper(
+      imagesCache: imagesCache, checker: sl(), client: client));
   sl.registerLazySingleton<InternetConnectionChecker>(
       () => InternetConnectionChecker());
 

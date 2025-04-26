@@ -16,9 +16,13 @@ class RoutineDaysRepo implements IRoutineDaysContract {
   @override
   Future<Either<Failure, List<RoutineDay>>> getDaysUnderRoutine(
       int routineId) async {
+    print("getDaysUnderRoutine:");
+    print("Current Routine Days Initial Len: ${currentRoutineDays.length}");
     try {
       currentRoutineDays.clear();
       currentRoutineDays.addAll(await _localSource.getDays(routineId));
+
+      print("Current Routine Days Len: ${currentRoutineDays.length}");
       return Right(currentRoutineDays);
     } catch (e) {
       return Left(EmptyCacheFailure(errorMessage: e.toString()));
@@ -27,9 +31,12 @@ class RoutineDaysRepo implements IRoutineDaysContract {
 
   @override
   Future<Either<Failure, List<RoutineDay>>> addDay(RoutineDay day) async {
+    print("addDay:");
+    print("Current Routine Days Initial Len: ${currentRoutineDays.length}");
     try {
-      await _localSource.addDay(day.asDto());
-      currentRoutineDays.add(day);
+      final dayWithId = await _localSource.addDay(day.asDto());
+      currentRoutineDays.add(dayWithId);
+      print("Current Routine Days Len: ${currentRoutineDays.length}");
       return Right(currentRoutineDays);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
@@ -63,9 +70,27 @@ class RoutineDaysRepo implements IRoutineDaysContract {
   Future<Either<Failure, List<RoutineDay>>> reorderDays(
       List<RoutineDay> days) async {
     try {
-      await _localSource.saveOrder(days.map((day) => day.asDto()).toList());
-      currentRoutineDays.replaceRange(0, days.length, days);
-      return Right(currentRoutineDays);
+      print("days reorder algorithm");
+      for (int i = 0; i < days.length; i++) {
+        print("$i : ${days[i].index} : ${days[i].id}");
+      }
+
+      final newOrder =
+          await _localSource.saveOrder(days.map((day) => day.asDto()).toList());
+      print("newOrder algorithm");
+      for (int i = 0; i < days.length; i++) {
+        print("$i : ${days[i].index} : ${days[i].id}");
+      }
+      currentRoutineDays.clear();
+      currentRoutineDays.addAll(newOrder);
+      print("currentRoutineDays reorder algorithm");
+      for (int i = 0; i < currentRoutineDays.length; i++) {
+        print(
+            "$i : ${currentRoutineDays[i].index} : ${currentRoutineDays[i].id}");
+      }
+
+      print("reorderDays : repo : after");
+      return Right(List.from([...currentRoutineDays]));
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }

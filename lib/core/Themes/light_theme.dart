@@ -38,9 +38,9 @@ ThemeData lightTheme = ThemeData(
     seedColor: mainBlue,
     primary: mainBlueLight,
     secondary: secondaryBlue,
-    background: back2,
+    // background: back2,
     secondaryContainer: secondaryBlue,
-    onBackground: mainBlueDark,
+    // onBackground: mainBlueDark,
     onPrimaryContainer: themeDark,
     onPrimary: color5,
     surfaceTint: Colors.transparent, // AppBar transparent layer on scroll...

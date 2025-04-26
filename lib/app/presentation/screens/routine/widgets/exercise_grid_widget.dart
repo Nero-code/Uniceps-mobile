@@ -18,8 +18,7 @@ class ExerciseGridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final screenSize = MediaQuery.sizeOf(context);
-    return AnimatedContainer(
-      duration: Durations.short4,
+    return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
         // color: isSelected ? Colors.green :
@@ -34,7 +33,7 @@ class ExerciseGridWidget extends StatelessWidget {
             flex: 3,
             child: CachedNetworkImage(
               imageUrl:
-                  imgUrlParser(exercise.muscleGroup.id, exercise.imageUrl),
+                  imgUrlParser(exercise.muscleGroup.apiId, exercise.imageUrl),
               progressIndicatorBuilder: (context, url, progress) => Center(
                 child: CircularProgressIndicator(value: progress.progress),
               ),

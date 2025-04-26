@@ -11,7 +11,14 @@ import 'package:uniceps/app/data/sources/local/tables/routine/sets_table.dart';
 part 'database.g.dart';
 
 @DriftDatabase(
-  tables: [Routines, DaysGroup, RoutineItems, Sets, Exercises, ExerciseGroups],
+  tables: [
+    Routines,
+    DaysGroup,
+    RoutineItems,
+    RoutineSets,
+    Exercises,
+    ExerciseGroups
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   // After generating code, this class needs to define a `schemaVersion` getter

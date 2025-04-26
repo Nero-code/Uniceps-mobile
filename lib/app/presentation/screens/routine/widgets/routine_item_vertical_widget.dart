@@ -57,7 +57,7 @@ class _RoutineItemVerticalWidgetState extends State<RoutineItemVerticalWidget> {
           AspectRatio(
             aspectRatio: 16 / 9,
             child: Image.network(
-              imgUrlParser(widget.item.exercise.muscleGroup.id, "6"),
+              imgUrlParser(widget.item.exercise.muscleGroup.apiId, "6"),
             ),
           ),
           const Divider(),

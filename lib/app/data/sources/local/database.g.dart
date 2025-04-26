@@ -145,7 +145,7 @@ class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
   }
 
   @override
-  get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Routine map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -574,7 +574,7 @@ class $DaysGroupTable extends DaysGroup
   }
 
   @override
-  get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   DaysGroupData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -859,8 +859,8 @@ class $ExerciseGroupsTable extends ExerciseGroups
   static const VerificationMeta _apiIdMeta = const VerificationMeta('apiId');
   @override
   late final GeneratedColumn<int> apiId = GeneratedColumn<int>(
-      'api_id', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+      'api_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
   static const VerificationMeta _arNameMeta = const VerificationMeta('arName');
   @override
   late final GeneratedColumn<String> arName = GeneratedColumn<String>(
@@ -889,6 +889,8 @@ class $ExerciseGroupsTable extends ExerciseGroups
     if (data.containsKey('api_id')) {
       context.handle(
           _apiIdMeta, apiId.isAcceptableOrUnknown(data['api_id']!, _apiIdMeta));
+    } else if (isInserting) {
+      context.missing(_apiIdMeta);
     }
     if (data.containsKey('ar_name')) {
       context.handle(_arNameMeta,
@@ -906,7 +908,7 @@ class $ExerciseGroupsTable extends ExerciseGroups
   }
 
   @override
-  get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   ExerciseGroup map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -914,7 +916,7 @@ class $ExerciseGroupsTable extends ExerciseGroups
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       apiId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}api_id']),
+          .read(DriftSqlType.int, data['${effectivePrefix}api_id'])!,
       arName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}ar_name'])!,
       enName: attachedDatabase.typeMapping
@@ -930,21 +932,19 @@ class $ExerciseGroupsTable extends ExerciseGroups
 
 class ExerciseGroup extends DataClass implements Insertable<ExerciseGroup> {
   final int id;
-  final int? apiId;
+  final int apiId;
   final String arName;
   final String enName;
   const ExerciseGroup(
       {required this.id,
-      this.apiId,
+      required this.apiId,
       required this.arName,
       required this.enName});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    if (!nullToAbsent || apiId != null) {
-      map['api_id'] = Variable<int>(apiId);
-    }
+    map['api_id'] = Variable<int>(apiId);
     map['ar_name'] = Variable<String>(arName);
     map['en_name'] = Variable<String>(enName);
     return map;
@@ -953,8 +953,7 @@ class ExerciseGroup extends DataClass implements Insertable<ExerciseGroup> {
   ExerciseGroupsCompanion toCompanion(bool nullToAbsent) {
     return ExerciseGroupsCompanion(
       id: Value(id),
-      apiId:
-          apiId == null && nullToAbsent ? const Value.absent() : Value(apiId),
+      apiId: Value(apiId),
       arName: Value(arName),
       enName: Value(enName),
     );
@@ -965,7 +964,7 @@ class ExerciseGroup extends DataClass implements Insertable<ExerciseGroup> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ExerciseGroup(
       id: serializer.fromJson<int>(json['id']),
-      apiId: serializer.fromJson<int?>(json['apiId']),
+      apiId: serializer.fromJson<int>(json['apiId']),
       arName: serializer.fromJson<String>(json['arName']),
       enName: serializer.fromJson<String>(json['enName']),
     );
@@ -975,20 +974,17 @@ class ExerciseGroup extends DataClass implements Insertable<ExerciseGroup> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'apiId': serializer.toJson<int?>(apiId),
+      'apiId': serializer.toJson<int>(apiId),
       'arName': serializer.toJson<String>(arName),
       'enName': serializer.toJson<String>(enName),
     };
   }
 
   ExerciseGroup copyWith(
-          {int? id,
-          Value<int?> apiId = const Value.absent(),
-          String? arName,
-          String? enName}) =>
+          {int? id, int? apiId, String? arName, String? enName}) =>
       ExerciseGroup(
         id: id ?? this.id,
-        apiId: apiId.present ? apiId.value : this.apiId,
+        apiId: apiId ?? this.apiId,
         arName: arName ?? this.arName,
         enName: enName ?? this.enName,
       );
@@ -1026,7 +1022,7 @@ class ExerciseGroup extends DataClass implements Insertable<ExerciseGroup> {
 
 class ExerciseGroupsCompanion extends UpdateCompanion<ExerciseGroup> {
   final Value<int> id;
-  final Value<int?> apiId;
+  final Value<int> apiId;
   final Value<String> arName;
   final Value<String> enName;
   const ExerciseGroupsCompanion({
@@ -1037,10 +1033,11 @@ class ExerciseGroupsCompanion extends UpdateCompanion<ExerciseGroup> {
   });
   ExerciseGroupsCompanion.insert({
     this.id = const Value.absent(),
-    this.apiId = const Value.absent(),
+    required int apiId,
     required String arName,
     required String enName,
-  })  : arName = Value(arName),
+  })  : apiId = Value(apiId),
+        arName = Value(arName),
         enName = Value(enName);
   static Insertable<ExerciseGroup> custom({
     Expression<int>? id,
@@ -1058,7 +1055,7 @@ class ExerciseGroupsCompanion extends UpdateCompanion<ExerciseGroup> {
 
   ExerciseGroupsCompanion copyWith(
       {Value<int>? id,
-      Value<int?>? apiId,
+      Value<int>? apiId,
       Value<String>? arName,
       Value<String>? enName}) {
     return ExerciseGroupsCompanion(
@@ -1124,6 +1121,12 @@ class $ExercisesTable extends Exercises
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _imageUrlMeta =
+      const VerificationMeta('imageUrl');
+  @override
+  late final GeneratedColumn<String> imageUrl = GeneratedColumn<String>(
+      'image_url', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _muscleGroupMeta =
       const VerificationMeta('muscleGroup');
   @override
@@ -1134,7 +1137,8 @@ class $ExercisesTable extends Exercises
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES exercise_groups (id)'));
   @override
-  List<GeneratedColumn> get $columns => [id, apiId, name, muscleGroup];
+  List<GeneratedColumn> get $columns =>
+      [id, apiId, name, imageUrl, muscleGroup];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1158,6 +1162,12 @@ class $ExercisesTable extends Exercises
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
+    if (data.containsKey('image_url')) {
+      context.handle(_imageUrlMeta,
+          imageUrl.isAcceptableOrUnknown(data['image_url']!, _imageUrlMeta));
+    } else if (isInserting) {
+      context.missing(_imageUrlMeta);
+    }
     if (data.containsKey('muscle_group')) {
       context.handle(
           _muscleGroupMeta,
@@ -1170,7 +1180,7 @@ class $ExercisesTable extends Exercises
   }
 
   @override
-  get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Exercise map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -1181,6 +1191,8 @@ class $ExercisesTable extends Exercises
           .read(DriftSqlType.int, data['${effectivePrefix}api_id']),
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      imageUrl: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}image_url'])!,
       muscleGroup: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}muscle_group'])!,
     );
@@ -1196,11 +1208,13 @@ class Exercise extends DataClass implements Insertable<Exercise> {
   final int id;
   final int? apiId;
   final String name;
+  final String imageUrl;
   final int muscleGroup;
   const Exercise(
       {required this.id,
       this.apiId,
       required this.name,
+      required this.imageUrl,
       required this.muscleGroup});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1210,6 +1224,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       map['api_id'] = Variable<int>(apiId);
     }
     map['name'] = Variable<String>(name);
+    map['image_url'] = Variable<String>(imageUrl);
     map['muscle_group'] = Variable<int>(muscleGroup);
     return map;
   }
@@ -1220,6 +1235,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       apiId:
           apiId == null && nullToAbsent ? const Value.absent() : Value(apiId),
       name: Value(name),
+      imageUrl: Value(imageUrl),
       muscleGroup: Value(muscleGroup),
     );
   }
@@ -1231,6 +1247,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       id: serializer.fromJson<int>(json['id']),
       apiId: serializer.fromJson<int?>(json['apiId']),
       name: serializer.fromJson<String>(json['name']),
+      imageUrl: serializer.fromJson<String>(json['imageUrl']),
       muscleGroup: serializer.fromJson<int>(json['muscleGroup']),
     );
   }
@@ -1241,6 +1258,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       'id': serializer.toJson<int>(id),
       'apiId': serializer.toJson<int?>(apiId),
       'name': serializer.toJson<String>(name),
+      'imageUrl': serializer.toJson<String>(imageUrl),
       'muscleGroup': serializer.toJson<int>(muscleGroup),
     };
   }
@@ -1249,11 +1267,13 @@ class Exercise extends DataClass implements Insertable<Exercise> {
           {int? id,
           Value<int?> apiId = const Value.absent(),
           String? name,
+          String? imageUrl,
           int? muscleGroup}) =>
       Exercise(
         id: id ?? this.id,
         apiId: apiId.present ? apiId.value : this.apiId,
         name: name ?? this.name,
+        imageUrl: imageUrl ?? this.imageUrl,
         muscleGroup: muscleGroup ?? this.muscleGroup,
       );
   Exercise copyWithCompanion(ExercisesCompanion data) {
@@ -1261,6 +1281,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       id: data.id.present ? data.id.value : this.id,
       apiId: data.apiId.present ? data.apiId.value : this.apiId,
       name: data.name.present ? data.name.value : this.name,
+      imageUrl: data.imageUrl.present ? data.imageUrl.value : this.imageUrl,
       muscleGroup:
           data.muscleGroup.present ? data.muscleGroup.value : this.muscleGroup,
     );
@@ -1272,13 +1293,14 @@ class Exercise extends DataClass implements Insertable<Exercise> {
           ..write('id: $id, ')
           ..write('apiId: $apiId, ')
           ..write('name: $name, ')
+          ..write('imageUrl: $imageUrl, ')
           ..write('muscleGroup: $muscleGroup')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, apiId, name, muscleGroup);
+  int get hashCode => Object.hash(id, apiId, name, imageUrl, muscleGroup);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1286,6 +1308,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
           other.id == this.id &&
           other.apiId == this.apiId &&
           other.name == this.name &&
+          other.imageUrl == this.imageUrl &&
           other.muscleGroup == this.muscleGroup);
 }
 
@@ -1293,30 +1316,36 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
   final Value<int> id;
   final Value<int?> apiId;
   final Value<String> name;
+  final Value<String> imageUrl;
   final Value<int> muscleGroup;
   const ExercisesCompanion({
     this.id = const Value.absent(),
     this.apiId = const Value.absent(),
     this.name = const Value.absent(),
+    this.imageUrl = const Value.absent(),
     this.muscleGroup = const Value.absent(),
   });
   ExercisesCompanion.insert({
     this.id = const Value.absent(),
     this.apiId = const Value.absent(),
     required String name,
+    required String imageUrl,
     required int muscleGroup,
   })  : name = Value(name),
+        imageUrl = Value(imageUrl),
         muscleGroup = Value(muscleGroup);
   static Insertable<Exercise> custom({
     Expression<int>? id,
     Expression<int>? apiId,
     Expression<String>? name,
+    Expression<String>? imageUrl,
     Expression<int>? muscleGroup,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (apiId != null) 'api_id': apiId,
       if (name != null) 'name': name,
+      if (imageUrl != null) 'image_url': imageUrl,
       if (muscleGroup != null) 'muscle_group': muscleGroup,
     });
   }
@@ -1325,11 +1354,13 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
       {Value<int>? id,
       Value<int?>? apiId,
       Value<String>? name,
+      Value<String>? imageUrl,
       Value<int>? muscleGroup}) {
     return ExercisesCompanion(
       id: id ?? this.id,
       apiId: apiId ?? this.apiId,
       name: name ?? this.name,
+      imageUrl: imageUrl ?? this.imageUrl,
       muscleGroup: muscleGroup ?? this.muscleGroup,
     );
   }
@@ -1346,6 +1377,9 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
+    if (imageUrl.present) {
+      map['image_url'] = Variable<String>(imageUrl.value);
+    }
     if (muscleGroup.present) {
       map['muscle_group'] = Variable<int>(muscleGroup.value);
     }
@@ -1358,6 +1392,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
           ..write('id: $id, ')
           ..write('apiId: $apiId, ')
           ..write('name: $name, ')
+          ..write('imageUrl: $imageUrl, ')
           ..write('muscleGroup: $muscleGroup')
           ..write(')'))
         .toString();
@@ -1412,26 +1447,26 @@ class $RoutineItemsTable extends RoutineItems
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("is_synced" IN (0, 1))'),
       clientDefault: () => false);
-  static const VerificationMeta _exerciseMeta =
-      const VerificationMeta('exercise');
+  static const VerificationMeta _exerciseIdMeta =
+      const VerificationMeta('exerciseId');
   @override
-  late final GeneratedColumn<int> exercise = GeneratedColumn<int>(
-      'exercise', aliasedName, false,
+  late final GeneratedColumn<int> exerciseId = GeneratedColumn<int>(
+      'exercise_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES exercises (id) ON UPDATE CASCADE ON DELETE CASCADE'));
-  static const VerificationMeta _dayMeta = const VerificationMeta('day');
+  static const VerificationMeta _dayIdMeta = const VerificationMeta('dayId');
   @override
-  late final GeneratedColumn<int> day = GeneratedColumn<int>(
-      'day', aliasedName, false,
+  late final GeneratedColumn<int> dayId = GeneratedColumn<int>(
+      'day_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES days_group (id) ON UPDATE CASCADE ON DELETE CASCADE'));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, apiId, index, version, notes, isSynced, exercise, day];
+      [id, apiId, index, version, notes, isSynced, exerciseId, dayId];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1467,23 +1502,25 @@ class $RoutineItemsTable extends RoutineItems
       context.handle(_isSyncedMeta,
           isSynced.isAcceptableOrUnknown(data['is_synced']!, _isSyncedMeta));
     }
-    if (data.containsKey('exercise')) {
-      context.handle(_exerciseMeta,
-          exercise.isAcceptableOrUnknown(data['exercise']!, _exerciseMeta));
-    } else if (isInserting) {
-      context.missing(_exerciseMeta);
-    }
-    if (data.containsKey('day')) {
+    if (data.containsKey('exercise_id')) {
       context.handle(
-          _dayMeta, day.isAcceptableOrUnknown(data['day']!, _dayMeta));
+          _exerciseIdMeta,
+          exerciseId.isAcceptableOrUnknown(
+              data['exercise_id']!, _exerciseIdMeta));
     } else if (isInserting) {
-      context.missing(_dayMeta);
+      context.missing(_exerciseIdMeta);
+    }
+    if (data.containsKey('day_id')) {
+      context.handle(
+          _dayIdMeta, dayId.isAcceptableOrUnknown(data['day_id']!, _dayIdMeta));
+    } else if (isInserting) {
+      context.missing(_dayIdMeta);
     }
     return context;
   }
 
   @override
-  get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   RoutineItem map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -1500,10 +1537,10 @@ class $RoutineItemsTable extends RoutineItems
           .read(DriftSqlType.string, data['${effectivePrefix}notes']),
       isSynced: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}is_synced'])!,
-      exercise: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}exercise'])!,
-      day: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}day'])!,
+      exerciseId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}exercise_id'])!,
+      dayId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}day_id'])!,
     );
   }
 
@@ -1520,8 +1557,8 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
   final int version;
   final String? notes;
   final bool isSynced;
-  final int exercise;
-  final int day;
+  final int exerciseId;
+  final int dayId;
   const RoutineItem(
       {required this.id,
       this.apiId,
@@ -1529,8 +1566,8 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
       required this.version,
       this.notes,
       required this.isSynced,
-      required this.exercise,
-      required this.day});
+      required this.exerciseId,
+      required this.dayId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1544,8 +1581,8 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
       map['notes'] = Variable<String>(notes);
     }
     map['is_synced'] = Variable<bool>(isSynced);
-    map['exercise'] = Variable<int>(exercise);
-    map['day'] = Variable<int>(day);
+    map['exercise_id'] = Variable<int>(exerciseId);
+    map['day_id'] = Variable<int>(dayId);
     return map;
   }
 
@@ -1559,8 +1596,8 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
       notes:
           notes == null && nullToAbsent ? const Value.absent() : Value(notes),
       isSynced: Value(isSynced),
-      exercise: Value(exercise),
-      day: Value(day),
+      exerciseId: Value(exerciseId),
+      dayId: Value(dayId),
     );
   }
 
@@ -1574,8 +1611,8 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
       version: serializer.fromJson<int>(json['version']),
       notes: serializer.fromJson<String?>(json['notes']),
       isSynced: serializer.fromJson<bool>(json['isSynced']),
-      exercise: serializer.fromJson<int>(json['exercise']),
-      day: serializer.fromJson<int>(json['day']),
+      exerciseId: serializer.fromJson<int>(json['exerciseId']),
+      dayId: serializer.fromJson<int>(json['dayId']),
     );
   }
   @override
@@ -1588,8 +1625,8 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
       'version': serializer.toJson<int>(version),
       'notes': serializer.toJson<String?>(notes),
       'isSynced': serializer.toJson<bool>(isSynced),
-      'exercise': serializer.toJson<int>(exercise),
-      'day': serializer.toJson<int>(day),
+      'exerciseId': serializer.toJson<int>(exerciseId),
+      'dayId': serializer.toJson<int>(dayId),
     };
   }
 
@@ -1600,8 +1637,8 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
           int? version,
           Value<String?> notes = const Value.absent(),
           bool? isSynced,
-          int? exercise,
-          int? day}) =>
+          int? exerciseId,
+          int? dayId}) =>
       RoutineItem(
         id: id ?? this.id,
         apiId: apiId.present ? apiId.value : this.apiId,
@@ -1609,8 +1646,8 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
         version: version ?? this.version,
         notes: notes.present ? notes.value : this.notes,
         isSynced: isSynced ?? this.isSynced,
-        exercise: exercise ?? this.exercise,
-        day: day ?? this.day,
+        exerciseId: exerciseId ?? this.exerciseId,
+        dayId: dayId ?? this.dayId,
       );
   RoutineItem copyWithCompanion(RoutineItemsCompanion data) {
     return RoutineItem(
@@ -1620,8 +1657,9 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
       version: data.version.present ? data.version.value : this.version,
       notes: data.notes.present ? data.notes.value : this.notes,
       isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
-      exercise: data.exercise.present ? data.exercise.value : this.exercise,
-      day: data.day.present ? data.day.value : this.day,
+      exerciseId:
+          data.exerciseId.present ? data.exerciseId.value : this.exerciseId,
+      dayId: data.dayId.present ? data.dayId.value : this.dayId,
     );
   }
 
@@ -1634,15 +1672,15 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
           ..write('version: $version, ')
           ..write('notes: $notes, ')
           ..write('isSynced: $isSynced, ')
-          ..write('exercise: $exercise, ')
-          ..write('day: $day')
+          ..write('exerciseId: $exerciseId, ')
+          ..write('dayId: $dayId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, apiId, index, version, notes, isSynced, exercise, day);
+  int get hashCode => Object.hash(
+      id, apiId, index, version, notes, isSynced, exerciseId, dayId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1653,8 +1691,8 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
           other.version == this.version &&
           other.notes == this.notes &&
           other.isSynced == this.isSynced &&
-          other.exercise == this.exercise &&
-          other.day == this.day);
+          other.exerciseId == this.exerciseId &&
+          other.dayId == this.dayId);
 }
 
 class RoutineItemsCompanion extends UpdateCompanion<RoutineItem> {
@@ -1664,8 +1702,8 @@ class RoutineItemsCompanion extends UpdateCompanion<RoutineItem> {
   final Value<int> version;
   final Value<String?> notes;
   final Value<bool> isSynced;
-  final Value<int> exercise;
-  final Value<int> day;
+  final Value<int> exerciseId;
+  final Value<int> dayId;
   const RoutineItemsCompanion({
     this.id = const Value.absent(),
     this.apiId = const Value.absent(),
@@ -1673,8 +1711,8 @@ class RoutineItemsCompanion extends UpdateCompanion<RoutineItem> {
     this.version = const Value.absent(),
     this.notes = const Value.absent(),
     this.isSynced = const Value.absent(),
-    this.exercise = const Value.absent(),
-    this.day = const Value.absent(),
+    this.exerciseId = const Value.absent(),
+    this.dayId = const Value.absent(),
   });
   RoutineItemsCompanion.insert({
     this.id = const Value.absent(),
@@ -1683,11 +1721,11 @@ class RoutineItemsCompanion extends UpdateCompanion<RoutineItem> {
     this.version = const Value.absent(),
     this.notes = const Value.absent(),
     this.isSynced = const Value.absent(),
-    required int exercise,
-    required int day,
+    required int exerciseId,
+    required int dayId,
   })  : index = Value(index),
-        exercise = Value(exercise),
-        day = Value(day);
+        exerciseId = Value(exerciseId),
+        dayId = Value(dayId);
   static Insertable<RoutineItem> custom({
     Expression<int>? id,
     Expression<int>? apiId,
@@ -1695,8 +1733,8 @@ class RoutineItemsCompanion extends UpdateCompanion<RoutineItem> {
     Expression<int>? version,
     Expression<String>? notes,
     Expression<bool>? isSynced,
-    Expression<int>? exercise,
-    Expression<int>? day,
+    Expression<int>? exerciseId,
+    Expression<int>? dayId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1705,8 +1743,8 @@ class RoutineItemsCompanion extends UpdateCompanion<RoutineItem> {
       if (version != null) 'version': version,
       if (notes != null) 'notes': notes,
       if (isSynced != null) 'is_synced': isSynced,
-      if (exercise != null) 'exercise': exercise,
-      if (day != null) 'day': day,
+      if (exerciseId != null) 'exercise_id': exerciseId,
+      if (dayId != null) 'day_id': dayId,
     });
   }
 
@@ -1717,8 +1755,8 @@ class RoutineItemsCompanion extends UpdateCompanion<RoutineItem> {
       Value<int>? version,
       Value<String?>? notes,
       Value<bool>? isSynced,
-      Value<int>? exercise,
-      Value<int>? day}) {
+      Value<int>? exerciseId,
+      Value<int>? dayId}) {
     return RoutineItemsCompanion(
       id: id ?? this.id,
       apiId: apiId ?? this.apiId,
@@ -1726,8 +1764,8 @@ class RoutineItemsCompanion extends UpdateCompanion<RoutineItem> {
       version: version ?? this.version,
       notes: notes ?? this.notes,
       isSynced: isSynced ?? this.isSynced,
-      exercise: exercise ?? this.exercise,
-      day: day ?? this.day,
+      exerciseId: exerciseId ?? this.exerciseId,
+      dayId: dayId ?? this.dayId,
     );
   }
 
@@ -1752,11 +1790,11 @@ class RoutineItemsCompanion extends UpdateCompanion<RoutineItem> {
     if (isSynced.present) {
       map['is_synced'] = Variable<bool>(isSynced.value);
     }
-    if (exercise.present) {
-      map['exercise'] = Variable<int>(exercise.value);
+    if (exerciseId.present) {
+      map['exercise_id'] = Variable<int>(exerciseId.value);
     }
-    if (day.present) {
-      map['day'] = Variable<int>(day.value);
+    if (dayId.present) {
+      map['day_id'] = Variable<int>(dayId.value);
     }
     return map;
   }
@@ -1770,18 +1808,19 @@ class RoutineItemsCompanion extends UpdateCompanion<RoutineItem> {
           ..write('version: $version, ')
           ..write('notes: $notes, ')
           ..write('isSynced: $isSynced, ')
-          ..write('exercise: $exercise, ')
-          ..write('day: $day')
+          ..write('exerciseId: $exerciseId, ')
+          ..write('dayId: $dayId')
           ..write(')'))
         .toString();
   }
 }
 
-class $SetsTable extends Sets with TableInfo<$SetsTable, Set> {
+class $RoutineSetsTable extends RoutineSets
+    with TableInfo<$RoutineSetsTable, RoutineSet> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $SetsTable(this.attachedDatabase, [this._alias]);
+  $RoutineSetsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -1842,9 +1881,9 @@ class $SetsTable extends Sets with TableInfo<$SetsTable, Set> {
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'sets';
+  static const String $name = 'routine_sets';
   @override
-  VerificationContext validateIntegrity(Insertable<Set> instance,
+  VerificationContext validateIntegrity(Insertable<RoutineSet> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1889,11 +1928,11 @@ class $SetsTable extends Sets with TableInfo<$SetsTable, Set> {
   }
 
   @override
-  get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Set map(Map<String, dynamic> data, {String? tablePrefix}) {
+  RoutineSet map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Set(
+    return RoutineSet(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       apiId: attachedDatabase.typeMapping
@@ -1912,12 +1951,12 @@ class $SetsTable extends Sets with TableInfo<$SetsTable, Set> {
   }
 
   @override
-  $SetsTable createAlias(String alias) {
-    return $SetsTable(attachedDatabase, alias);
+  $RoutineSetsTable createAlias(String alias) {
+    return $RoutineSetsTable(attachedDatabase, alias);
   }
 }
 
-class Set extends DataClass implements Insertable<Set> {
+class RoutineSet extends DataClass implements Insertable<RoutineSet> {
   final int id;
   final int? apiId;
   final int roundIndex;
@@ -1925,7 +1964,7 @@ class Set extends DataClass implements Insertable<Set> {
   final int version;
   final bool isSynced;
   final int routineItemId;
-  const Set(
+  const RoutineSet(
       {required this.id,
       this.apiId,
       required this.roundIndex,
@@ -1948,8 +1987,8 @@ class Set extends DataClass implements Insertable<Set> {
     return map;
   }
 
-  SetsCompanion toCompanion(bool nullToAbsent) {
-    return SetsCompanion(
+  RoutineSetsCompanion toCompanion(bool nullToAbsent) {
+    return RoutineSetsCompanion(
       id: Value(id),
       apiId:
           apiId == null && nullToAbsent ? const Value.absent() : Value(apiId),
@@ -1961,10 +2000,10 @@ class Set extends DataClass implements Insertable<Set> {
     );
   }
 
-  factory Set.fromJson(Map<String, dynamic> json,
+  factory RoutineSet.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Set(
+    return RoutineSet(
       id: serializer.fromJson<int>(json['id']),
       apiId: serializer.fromJson<int?>(json['apiId']),
       roundIndex: serializer.fromJson<int>(json['roundIndex']),
@@ -1988,7 +2027,7 @@ class Set extends DataClass implements Insertable<Set> {
     };
   }
 
-  Set copyWith(
+  RoutineSet copyWith(
           {int? id,
           Value<int?> apiId = const Value.absent(),
           int? roundIndex,
@@ -1996,7 +2035,7 @@ class Set extends DataClass implements Insertable<Set> {
           int? version,
           bool? isSynced,
           int? routineItemId}) =>
-      Set(
+      RoutineSet(
         id: id ?? this.id,
         apiId: apiId.present ? apiId.value : this.apiId,
         roundIndex: roundIndex ?? this.roundIndex,
@@ -2005,8 +2044,8 @@ class Set extends DataClass implements Insertable<Set> {
         isSynced: isSynced ?? this.isSynced,
         routineItemId: routineItemId ?? this.routineItemId,
       );
-  Set copyWithCompanion(SetsCompanion data) {
-    return Set(
+  RoutineSet copyWithCompanion(RoutineSetsCompanion data) {
+    return RoutineSet(
       id: data.id.present ? data.id.value : this.id,
       apiId: data.apiId.present ? data.apiId.value : this.apiId,
       roundIndex:
@@ -2022,7 +2061,7 @@ class Set extends DataClass implements Insertable<Set> {
 
   @override
   String toString() {
-    return (StringBuffer('Set(')
+    return (StringBuffer('RoutineSet(')
           ..write('id: $id, ')
           ..write('apiId: $apiId, ')
           ..write('roundIndex: $roundIndex, ')
@@ -2040,7 +2079,7 @@ class Set extends DataClass implements Insertable<Set> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Set &&
+      (other is RoutineSet &&
           other.id == this.id &&
           other.apiId == this.apiId &&
           other.roundIndex == this.roundIndex &&
@@ -2050,7 +2089,7 @@ class Set extends DataClass implements Insertable<Set> {
           other.routineItemId == this.routineItemId);
 }
 
-class SetsCompanion extends UpdateCompanion<Set> {
+class RoutineSetsCompanion extends UpdateCompanion<RoutineSet> {
   final Value<int> id;
   final Value<int?> apiId;
   final Value<int> roundIndex;
@@ -2058,7 +2097,7 @@ class SetsCompanion extends UpdateCompanion<Set> {
   final Value<int> version;
   final Value<bool> isSynced;
   final Value<int> routineItemId;
-  const SetsCompanion({
+  const RoutineSetsCompanion({
     this.id = const Value.absent(),
     this.apiId = const Value.absent(),
     this.roundIndex = const Value.absent(),
@@ -2067,7 +2106,7 @@ class SetsCompanion extends UpdateCompanion<Set> {
     this.isSynced = const Value.absent(),
     this.routineItemId = const Value.absent(),
   });
-  SetsCompanion.insert({
+  RoutineSetsCompanion.insert({
     this.id = const Value.absent(),
     this.apiId = const Value.absent(),
     required int roundIndex,
@@ -2078,7 +2117,7 @@ class SetsCompanion extends UpdateCompanion<Set> {
   })  : roundIndex = Value(roundIndex),
         repsCount = Value(repsCount),
         routineItemId = Value(routineItemId);
-  static Insertable<Set> custom({
+  static Insertable<RoutineSet> custom({
     Expression<int>? id,
     Expression<int>? apiId,
     Expression<int>? roundIndex,
@@ -2098,7 +2137,7 @@ class SetsCompanion extends UpdateCompanion<Set> {
     });
   }
 
-  SetsCompanion copyWith(
+  RoutineSetsCompanion copyWith(
       {Value<int>? id,
       Value<int?>? apiId,
       Value<int>? roundIndex,
@@ -2106,7 +2145,7 @@ class SetsCompanion extends UpdateCompanion<Set> {
       Value<int>? version,
       Value<bool>? isSynced,
       Value<int>? routineItemId}) {
-    return SetsCompanion(
+    return RoutineSetsCompanion(
       id: id ?? this.id,
       apiId: apiId ?? this.apiId,
       roundIndex: roundIndex ?? this.roundIndex,
@@ -2146,7 +2185,7 @@ class SetsCompanion extends UpdateCompanion<Set> {
 
   @override
   String toString() {
-    return (StringBuffer('SetsCompanion(')
+    return (StringBuffer('RoutineSetsCompanion(')
           ..write('id: $id, ')
           ..write('apiId: $apiId, ')
           ..write('roundIndex: $roundIndex, ')
@@ -2167,13 +2206,19 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ExerciseGroupsTable exerciseGroups = $ExerciseGroupsTable(this);
   late final $ExercisesTable exercises = $ExercisesTable(this);
   late final $RoutineItemsTable routineItems = $RoutineItemsTable(this);
-  late final $SetsTable sets = $SetsTable(this);
+  late final $RoutineSetsTable routineSets = $RoutineSetsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [routines, daysGroup, exerciseGroups, exercises, routineItems, sets];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        routines,
+        daysGroup,
+        exerciseGroups,
+        exercises,
+        routineItems,
+        routineSets
+      ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
         [
@@ -2223,14 +2268,14 @@ abstract class _$AppDatabase extends GeneratedDatabase {
             on: TableUpdateQuery.onTableName('routines',
                 limitUpdateKind: UpdateKind.delete),
             result: [
-              TableUpdate('sets', kind: UpdateKind.delete),
+              TableUpdate('routine_sets', kind: UpdateKind.delete),
             ],
           ),
           WritePropagation(
             on: TableUpdateQuery.onTableName('routines',
                 limitUpdateKind: UpdateKind.update),
             result: [
-              TableUpdate('sets', kind: UpdateKind.update),
+              TableUpdate('routine_sets', kind: UpdateKind.update),
             ],
           ),
         ],
@@ -2282,17 +2327,17 @@ final class $$RoutinesTableReferences
         manager.$state.copyWith(prefetchedData: cache));
   }
 
-  static MultiTypedResultKey<$SetsTable, List<Set>> _setsRefsTable(
-          _$AppDatabase db) =>
-      MultiTypedResultKey.fromTable(db.sets,
-          aliasName:
-              $_aliasNameGenerator(db.routines.id, db.sets.routineItemId));
+  static MultiTypedResultKey<$RoutineSetsTable, List<RoutineSet>>
+      _routineSetsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.routineSets,
+              aliasName: $_aliasNameGenerator(
+                  db.routines.id, db.routineSets.routineItemId));
 
-  $$SetsTableProcessedTableManager get setsRefs {
-    final manager = $$SetsTableTableManager($_db, $_db.sets)
+  $$RoutineSetsTableProcessedTableManager get routineSetsRefs {
+    final manager = $$RoutineSetsTableTableManager($_db, $_db.routineSets)
         .filter((f) => f.routineItemId.id($_item.id));
 
-    final cache = $_typedResult.readTableOrNull(_setsRefsTable($_db));
+    final cache = $_typedResult.readTableOrNull(_routineSetsRefsTable($_db));
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
@@ -2355,19 +2400,19 @@ class $$RoutinesTableFilterComposer
     return f(composer);
   }
 
-  Expression<bool> setsRefs(
-      Expression<bool> Function($$SetsTableFilterComposer f) f) {
-    final $$SetsTableFilterComposer composer = $composerBuilder(
+  Expression<bool> routineSetsRefs(
+      Expression<bool> Function($$RoutineSetsTableFilterComposer f) f) {
+    final $$RoutineSetsTableFilterComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.id,
-        referencedTable: $db.sets,
+        referencedTable: $db.routineSets,
         getReferencedColumn: (t) => t.routineItemId,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$SetsTableFilterComposer(
+            $$RoutineSetsTableFilterComposer(
               $db: $db,
-              $table: $db.sets,
+              $table: $db.routineSets,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -2471,19 +2516,19 @@ class $$RoutinesTableAnnotationComposer
     return f(composer);
   }
 
-  Expression<T> setsRefs<T extends Object>(
-      Expression<T> Function($$SetsTableAnnotationComposer a) f) {
-    final $$SetsTableAnnotationComposer composer = $composerBuilder(
+  Expression<T> routineSetsRefs<T extends Object>(
+      Expression<T> Function($$RoutineSetsTableAnnotationComposer a) f) {
+    final $$RoutineSetsTableAnnotationComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.id,
-        referencedTable: $db.sets,
+        referencedTable: $db.routineSets,
         getReferencedColumn: (t) => t.routineItemId,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$SetsTableAnnotationComposer(
+            $$RoutineSetsTableAnnotationComposer(
               $db: $db,
-              $table: $db.sets,
+              $table: $db.routineSets,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -2504,7 +2549,7 @@ class $$RoutinesTableTableManager extends RootTableManager<
     $$RoutinesTableUpdateCompanionBuilder,
     (Routine, $$RoutinesTableReferences),
     Routine,
-    PrefetchHooks Function({bool daysGroupRefs, bool setsRefs})> {
+    PrefetchHooks Function({bool daysGroupRefs, bool routineSetsRefs})> {
   $$RoutinesTableTableManager(_$AppDatabase db, $RoutinesTable table)
       : super(TableManagerState(
           db: db,
@@ -2563,12 +2608,13 @@ class $$RoutinesTableTableManager extends RootTableManager<
               .map((e) =>
                   (e.readTable(table), $$RoutinesTableReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback: ({daysGroupRefs = false, setsRefs = false}) {
+          prefetchHooksCallback: (
+              {daysGroupRefs = false, routineSetsRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
                 if (daysGroupRefs) db.daysGroup,
-                if (setsRefs) db.sets
+                if (routineSetsRefs) db.routineSets
               ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
@@ -2585,13 +2631,14 @@ class $$RoutinesTableTableManager extends RootTableManager<
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.routineId == item.id),
                         typedResults: items),
-                  if (setsRefs)
+                  if (routineSetsRefs)
                     await $_getPrefetchedData(
                         currentTable: table,
                         referencedTable:
-                            $$RoutinesTableReferences._setsRefsTable(db),
+                            $$RoutinesTableReferences._routineSetsRefsTable(db),
                         managerFromTypedResult: (p0) =>
-                            $$RoutinesTableReferences(db, table, p0).setsRefs,
+                            $$RoutinesTableReferences(db, table, p0)
+                                .routineSetsRefs,
                         referencedItemsForCurrentItem:
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.routineItemId == item.id),
@@ -2614,7 +2661,7 @@ typedef $$RoutinesTableProcessedTableManager = ProcessedTableManager<
     $$RoutinesTableUpdateCompanionBuilder,
     (Routine, $$RoutinesTableReferences),
     Routine,
-    PrefetchHooks Function({bool daysGroupRefs, bool setsRefs})>;
+    PrefetchHooks Function({bool daysGroupRefs, bool routineSetsRefs})>;
 typedef $$DaysGroupTableCreateCompanionBuilder = DaysGroupCompanion Function({
   Value<int> id,
   Value<int?> apiId,
@@ -2655,11 +2702,11 @@ final class $$DaysGroupTableReferences
       _routineItemsRefsTable(_$AppDatabase db) =>
           MultiTypedResultKey.fromTable(db.routineItems,
               aliasName:
-                  $_aliasNameGenerator(db.daysGroup.id, db.routineItems.day));
+                  $_aliasNameGenerator(db.daysGroup.id, db.routineItems.dayId));
 
   $$RoutineItemsTableProcessedTableManager get routineItemsRefs {
     final manager = $$RoutineItemsTableTableManager($_db, $_db.routineItems)
-        .filter((f) => f.day.id($_item.id));
+        .filter((f) => f.dayId.id($_item.id));
 
     final cache = $_typedResult.readTableOrNull(_routineItemsRefsTable($_db));
     return ProcessedTableManager(
@@ -2720,7 +2767,7 @@ class $$DaysGroupTableFilterComposer
         composer: this,
         getCurrentColumn: (t) => t.id,
         referencedTable: $db.routineItems,
-        getReferencedColumn: (t) => t.day,
+        getReferencedColumn: (t) => t.dayId,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -2837,7 +2884,7 @@ class $$DaysGroupTableAnnotationComposer
         composer: this,
         getCurrentColumn: (t) => t.id,
         referencedTable: $db.routineItems,
-        getReferencedColumn: (t) => t.day,
+        getReferencedColumn: (t) => t.dayId,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -2958,9 +3005,9 @@ class $$DaysGroupTableTableManager extends RootTableManager<
                         managerFromTypedResult: (p0) =>
                             $$DaysGroupTableReferences(db, table, p0)
                                 .routineItemsRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) =>
-                                referencedItems.where((e) => e.day == item.id),
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.dayId == item.id),
                         typedResults: items)
                 ];
               },
@@ -2984,14 +3031,14 @@ typedef $$DaysGroupTableProcessedTableManager = ProcessedTableManager<
 typedef $$ExerciseGroupsTableCreateCompanionBuilder = ExerciseGroupsCompanion
     Function({
   Value<int> id,
-  Value<int?> apiId,
+  required int apiId,
   required String arName,
   required String enName,
 });
 typedef $$ExerciseGroupsTableUpdateCompanionBuilder = ExerciseGroupsCompanion
     Function({
   Value<int> id,
-  Value<int?> apiId,
+  Value<int> apiId,
   Value<String> arName,
   Value<String> enName,
 });
@@ -3150,7 +3197,7 @@ class $$ExerciseGroupsTableTableManager extends RootTableManager<
               $$ExerciseGroupsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<int?> apiId = const Value.absent(),
+            Value<int> apiId = const Value.absent(),
             Value<String> arName = const Value.absent(),
             Value<String> enName = const Value.absent(),
           }) =>
@@ -3162,7 +3209,7 @@ class $$ExerciseGroupsTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<int?> apiId = const Value.absent(),
+            required int apiId,
             required String arName,
             required String enName,
           }) =>
@@ -3220,12 +3267,14 @@ typedef $$ExercisesTableCreateCompanionBuilder = ExercisesCompanion Function({
   Value<int> id,
   Value<int?> apiId,
   required String name,
+  required String imageUrl,
   required int muscleGroup,
 });
 typedef $$ExercisesTableUpdateCompanionBuilder = ExercisesCompanion Function({
   Value<int> id,
   Value<int?> apiId,
   Value<String> name,
+  Value<String> imageUrl,
   Value<int> muscleGroup,
 });
 
@@ -3247,14 +3296,14 @@ final class $$ExercisesTableReferences
   }
 
   static MultiTypedResultKey<$RoutineItemsTable, List<RoutineItem>>
-      _routineItemsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
-          db.routineItems,
-          aliasName:
-              $_aliasNameGenerator(db.exercises.id, db.routineItems.exercise));
+      _routineItemsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.routineItems,
+              aliasName: $_aliasNameGenerator(
+                  db.exercises.id, db.routineItems.exerciseId));
 
   $$RoutineItemsTableProcessedTableManager get routineItemsRefs {
     final manager = $$RoutineItemsTableTableManager($_db, $_db.routineItems)
-        .filter((f) => f.exercise.id($_item.id));
+        .filter((f) => f.exerciseId.id($_item.id));
 
     final cache = $_typedResult.readTableOrNull(_routineItemsRefsTable($_db));
     return ProcessedTableManager(
@@ -3279,6 +3328,9 @@ class $$ExercisesTableFilterComposer
 
   ColumnFilters<String> get name => $composableBuilder(
       column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get imageUrl => $composableBuilder(
+      column: $table.imageUrl, builder: (column) => ColumnFilters(column));
 
   $$ExerciseGroupsTableFilterComposer get muscleGroup {
     final $$ExerciseGroupsTableFilterComposer composer = $composerBuilder(
@@ -3306,7 +3358,7 @@ class $$ExercisesTableFilterComposer
         composer: this,
         getCurrentColumn: (t) => t.id,
         referencedTable: $db.routineItems,
-        getReferencedColumn: (t) => t.exercise,
+        getReferencedColumn: (t) => t.exerciseId,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -3339,6 +3391,9 @@ class $$ExercisesTableOrderingComposer
 
   ColumnOrderings<String> get name => $composableBuilder(
       column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get imageUrl => $composableBuilder(
+      column: $table.imageUrl, builder: (column) => ColumnOrderings(column));
 
   $$ExerciseGroupsTableOrderingComposer get muscleGroup {
     final $$ExerciseGroupsTableOrderingComposer composer = $composerBuilder(
@@ -3379,6 +3434,9 @@ class $$ExercisesTableAnnotationComposer
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
 
+  GeneratedColumn<String> get imageUrl =>
+      $composableBuilder(column: $table.imageUrl, builder: (column) => column);
+
   $$ExerciseGroupsTableAnnotationComposer get muscleGroup {
     final $$ExerciseGroupsTableAnnotationComposer composer = $composerBuilder(
         composer: this,
@@ -3405,7 +3463,7 @@ class $$ExercisesTableAnnotationComposer
         composer: this,
         getCurrentColumn: (t) => t.id,
         referencedTable: $db.routineItems,
-        getReferencedColumn: (t) => t.exercise,
+        getReferencedColumn: (t) => t.exerciseId,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -3447,24 +3505,28 @@ class $$ExercisesTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<int?> apiId = const Value.absent(),
             Value<String> name = const Value.absent(),
+            Value<String> imageUrl = const Value.absent(),
             Value<int> muscleGroup = const Value.absent(),
           }) =>
               ExercisesCompanion(
             id: id,
             apiId: apiId,
             name: name,
+            imageUrl: imageUrl,
             muscleGroup: muscleGroup,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<int?> apiId = const Value.absent(),
             required String name,
+            required String imageUrl,
             required int muscleGroup,
           }) =>
               ExercisesCompanion.insert(
             id: id,
             apiId: apiId,
             name: name,
+            imageUrl: imageUrl,
             muscleGroup: muscleGroup,
           ),
           withReferenceMapper: (p0) => p0
@@ -3514,9 +3576,9 @@ class $$ExercisesTableTableManager extends RootTableManager<
                         managerFromTypedResult: (p0) =>
                             $$ExercisesTableReferences(db, table, p0)
                                 .routineItemsRefs,
-                        referencedItemsForCurrentItem: (item,
-                                referencedItems) =>
-                            referencedItems.where((e) => e.exercise == item.id),
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.exerciseId == item.id),
                         typedResults: items)
                 ];
               },
@@ -3545,8 +3607,8 @@ typedef $$RoutineItemsTableCreateCompanionBuilder = RoutineItemsCompanion
   Value<int> version,
   Value<String?> notes,
   Value<bool> isSynced,
-  required int exercise,
-  required int day,
+  required int exerciseId,
+  required int dayId,
 });
 typedef $$RoutineItemsTableUpdateCompanionBuilder = RoutineItemsCompanion
     Function({
@@ -3556,34 +3618,35 @@ typedef $$RoutineItemsTableUpdateCompanionBuilder = RoutineItemsCompanion
   Value<int> version,
   Value<String?> notes,
   Value<bool> isSynced,
-  Value<int> exercise,
-  Value<int> day,
+  Value<int> exerciseId,
+  Value<int> dayId,
 });
 
 final class $$RoutineItemsTableReferences
     extends BaseReferences<_$AppDatabase, $RoutineItemsTable, RoutineItem> {
   $$RoutineItemsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $ExercisesTable _exerciseTable(_$AppDatabase db) =>
+  static $ExercisesTable _exerciseIdTable(_$AppDatabase db) =>
       db.exercises.createAlias(
-          $_aliasNameGenerator(db.routineItems.exercise, db.exercises.id));
+          $_aliasNameGenerator(db.routineItems.exerciseId, db.exercises.id));
 
-  $$ExercisesTableProcessedTableManager get exercise {
+  $$ExercisesTableProcessedTableManager get exerciseId {
     final manager = $$ExercisesTableTableManager($_db, $_db.exercises)
-        .filter((f) => f.id($_item.exercise));
-    final item = $_typedResult.readTableOrNull(_exerciseTable($_db));
+        .filter((f) => f.id($_item.exerciseId));
+    final item = $_typedResult.readTableOrNull(_exerciseIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
   }
 
-  static $DaysGroupTable _dayTable(_$AppDatabase db) => db.daysGroup
-      .createAlias($_aliasNameGenerator(db.routineItems.day, db.daysGroup.id));
+  static $DaysGroupTable _dayIdTable(_$AppDatabase db) =>
+      db.daysGroup.createAlias(
+          $_aliasNameGenerator(db.routineItems.dayId, db.daysGroup.id));
 
-  $$DaysGroupTableProcessedTableManager get day {
+  $$DaysGroupTableProcessedTableManager get dayId {
     final manager = $$DaysGroupTableTableManager($_db, $_db.daysGroup)
-        .filter((f) => f.id($_item.day));
-    final item = $_typedResult.readTableOrNull(_dayTable($_db));
+        .filter((f) => f.id($_item.dayId));
+    final item = $_typedResult.readTableOrNull(_dayIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
@@ -3617,10 +3680,10 @@ class $$RoutineItemsTableFilterComposer
   ColumnFilters<bool> get isSynced => $composableBuilder(
       column: $table.isSynced, builder: (column) => ColumnFilters(column));
 
-  $$ExercisesTableFilterComposer get exercise {
+  $$ExercisesTableFilterComposer get exerciseId {
     final $$ExercisesTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.exercise,
+        getCurrentColumn: (t) => t.exerciseId,
         referencedTable: $db.exercises,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
@@ -3637,10 +3700,10 @@ class $$RoutineItemsTableFilterComposer
     return composer;
   }
 
-  $$DaysGroupTableFilterComposer get day {
+  $$DaysGroupTableFilterComposer get dayId {
     final $$DaysGroupTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.day,
+        getCurrentColumn: (t) => t.dayId,
         referencedTable: $db.daysGroup,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
@@ -3685,10 +3748,10 @@ class $$RoutineItemsTableOrderingComposer
   ColumnOrderings<bool> get isSynced => $composableBuilder(
       column: $table.isSynced, builder: (column) => ColumnOrderings(column));
 
-  $$ExercisesTableOrderingComposer get exercise {
+  $$ExercisesTableOrderingComposer get exerciseId {
     final $$ExercisesTableOrderingComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.exercise,
+        getCurrentColumn: (t) => t.exerciseId,
         referencedTable: $db.exercises,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
@@ -3705,10 +3768,10 @@ class $$RoutineItemsTableOrderingComposer
     return composer;
   }
 
-  $$DaysGroupTableOrderingComposer get day {
+  $$DaysGroupTableOrderingComposer get dayId {
     final $$DaysGroupTableOrderingComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.day,
+        getCurrentColumn: (t) => t.dayId,
         referencedTable: $db.daysGroup,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
@@ -3753,10 +3816,10 @@ class $$RoutineItemsTableAnnotationComposer
   GeneratedColumn<bool> get isSynced =>
       $composableBuilder(column: $table.isSynced, builder: (column) => column);
 
-  $$ExercisesTableAnnotationComposer get exercise {
+  $$ExercisesTableAnnotationComposer get exerciseId {
     final $$ExercisesTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.exercise,
+        getCurrentColumn: (t) => t.exerciseId,
         referencedTable: $db.exercises,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
@@ -3773,10 +3836,10 @@ class $$RoutineItemsTableAnnotationComposer
     return composer;
   }
 
-  $$DaysGroupTableAnnotationComposer get day {
+  $$DaysGroupTableAnnotationComposer get dayId {
     final $$DaysGroupTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.day,
+        getCurrentColumn: (t) => t.dayId,
         referencedTable: $db.daysGroup,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
@@ -3805,7 +3868,7 @@ class $$RoutineItemsTableTableManager extends RootTableManager<
     $$RoutineItemsTableUpdateCompanionBuilder,
     (RoutineItem, $$RoutineItemsTableReferences),
     RoutineItem,
-    PrefetchHooks Function({bool exercise, bool day})> {
+    PrefetchHooks Function({bool exerciseId, bool dayId})> {
   $$RoutineItemsTableTableManager(_$AppDatabase db, $RoutineItemsTable table)
       : super(TableManagerState(
           db: db,
@@ -3823,8 +3886,8 @@ class $$RoutineItemsTableTableManager extends RootTableManager<
             Value<int> version = const Value.absent(),
             Value<String?> notes = const Value.absent(),
             Value<bool> isSynced = const Value.absent(),
-            Value<int> exercise = const Value.absent(),
-            Value<int> day = const Value.absent(),
+            Value<int> exerciseId = const Value.absent(),
+            Value<int> dayId = const Value.absent(),
           }) =>
               RoutineItemsCompanion(
             id: id,
@@ -3833,8 +3896,8 @@ class $$RoutineItemsTableTableManager extends RootTableManager<
             version: version,
             notes: notes,
             isSynced: isSynced,
-            exercise: exercise,
-            day: day,
+            exerciseId: exerciseId,
+            dayId: dayId,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -3843,8 +3906,8 @@ class $$RoutineItemsTableTableManager extends RootTableManager<
             Value<int> version = const Value.absent(),
             Value<String?> notes = const Value.absent(),
             Value<bool> isSynced = const Value.absent(),
-            required int exercise,
-            required int day,
+            required int exerciseId,
+            required int dayId,
           }) =>
               RoutineItemsCompanion.insert(
             id: id,
@@ -3853,8 +3916,8 @@ class $$RoutineItemsTableTableManager extends RootTableManager<
             version: version,
             notes: notes,
             isSynced: isSynced,
-            exercise: exercise,
-            day: day,
+            exerciseId: exerciseId,
+            dayId: dayId,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (
@@ -3862,7 +3925,7 @@ class $$RoutineItemsTableTableManager extends RootTableManager<
                     $$RoutineItemsTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({exercise = false, day = false}) {
+          prefetchHooksCallback: ({exerciseId = false, dayId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
@@ -3879,24 +3942,24 @@ class $$RoutineItemsTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic>>(state) {
-                if (exercise) {
+                if (exerciseId) {
                   state = state.withJoin(
                     currentTable: table,
-                    currentColumn: table.exercise,
+                    currentColumn: table.exerciseId,
                     referencedTable:
-                        $$RoutineItemsTableReferences._exerciseTable(db),
+                        $$RoutineItemsTableReferences._exerciseIdTable(db),
                     referencedColumn:
-                        $$RoutineItemsTableReferences._exerciseTable(db).id,
+                        $$RoutineItemsTableReferences._exerciseIdTable(db).id,
                   ) as T;
                 }
-                if (day) {
+                if (dayId) {
                   state = state.withJoin(
                     currentTable: table,
-                    currentColumn: table.day,
+                    currentColumn: table.dayId,
                     referencedTable:
-                        $$RoutineItemsTableReferences._dayTable(db),
+                        $$RoutineItemsTableReferences._dayIdTable(db),
                     referencedColumn:
-                        $$RoutineItemsTableReferences._dayTable(db).id,
+                        $$RoutineItemsTableReferences._dayIdTable(db).id,
                   ) as T;
                 }
 
@@ -3921,8 +3984,9 @@ typedef $$RoutineItemsTableProcessedTableManager = ProcessedTableManager<
     $$RoutineItemsTableUpdateCompanionBuilder,
     (RoutineItem, $$RoutineItemsTableReferences),
     RoutineItem,
-    PrefetchHooks Function({bool exercise, bool day})>;
-typedef $$SetsTableCreateCompanionBuilder = SetsCompanion Function({
+    PrefetchHooks Function({bool exerciseId, bool dayId})>;
+typedef $$RoutineSetsTableCreateCompanionBuilder = RoutineSetsCompanion
+    Function({
   Value<int> id,
   Value<int?> apiId,
   required int roundIndex,
@@ -3931,7 +3995,8 @@ typedef $$SetsTableCreateCompanionBuilder = SetsCompanion Function({
   Value<bool> isSynced,
   required int routineItemId,
 });
-typedef $$SetsTableUpdateCompanionBuilder = SetsCompanion Function({
+typedef $$RoutineSetsTableUpdateCompanionBuilder = RoutineSetsCompanion
+    Function({
   Value<int> id,
   Value<int?> apiId,
   Value<int> roundIndex,
@@ -3941,12 +4006,13 @@ typedef $$SetsTableUpdateCompanionBuilder = SetsCompanion Function({
   Value<int> routineItemId,
 });
 
-final class $$SetsTableReferences
-    extends BaseReferences<_$AppDatabase, $SetsTable, Set> {
-  $$SetsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+final class $$RoutineSetsTableReferences
+    extends BaseReferences<_$AppDatabase, $RoutineSetsTable, RoutineSet> {
+  $$RoutineSetsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $RoutinesTable _routineItemIdTable(_$AppDatabase db) => db.routines
-      .createAlias($_aliasNameGenerator(db.sets.routineItemId, db.routines.id));
+  static $RoutinesTable _routineItemIdTable(_$AppDatabase db) =>
+      db.routines.createAlias(
+          $_aliasNameGenerator(db.routineSets.routineItemId, db.routines.id));
 
   $$RoutinesTableProcessedTableManager get routineItemId {
     final manager = $$RoutinesTableTableManager($_db, $_db.routines)
@@ -3958,8 +4024,9 @@ final class $$SetsTableReferences
   }
 }
 
-class $$SetsTableFilterComposer extends Composer<_$AppDatabase, $SetsTable> {
-  $$SetsTableFilterComposer({
+class $$RoutineSetsTableFilterComposer
+    extends Composer<_$AppDatabase, $RoutineSetsTable> {
+  $$RoutineSetsTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -4005,8 +4072,9 @@ class $$SetsTableFilterComposer extends Composer<_$AppDatabase, $SetsTable> {
   }
 }
 
-class $$SetsTableOrderingComposer extends Composer<_$AppDatabase, $SetsTable> {
-  $$SetsTableOrderingComposer({
+class $$RoutineSetsTableOrderingComposer
+    extends Composer<_$AppDatabase, $RoutineSetsTable> {
+  $$RoutineSetsTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -4052,9 +4120,9 @@ class $$SetsTableOrderingComposer extends Composer<_$AppDatabase, $SetsTable> {
   }
 }
 
-class $$SetsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $SetsTable> {
-  $$SetsTableAnnotationComposer({
+class $$RoutineSetsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $RoutineSetsTable> {
+  $$RoutineSetsTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -4100,28 +4168,28 @@ class $$SetsTableAnnotationComposer
   }
 }
 
-class $$SetsTableTableManager extends RootTableManager<
+class $$RoutineSetsTableTableManager extends RootTableManager<
     _$AppDatabase,
-    $SetsTable,
-    Set,
-    $$SetsTableFilterComposer,
-    $$SetsTableOrderingComposer,
-    $$SetsTableAnnotationComposer,
-    $$SetsTableCreateCompanionBuilder,
-    $$SetsTableUpdateCompanionBuilder,
-    (Set, $$SetsTableReferences),
-    Set,
+    $RoutineSetsTable,
+    RoutineSet,
+    $$RoutineSetsTableFilterComposer,
+    $$RoutineSetsTableOrderingComposer,
+    $$RoutineSetsTableAnnotationComposer,
+    $$RoutineSetsTableCreateCompanionBuilder,
+    $$RoutineSetsTableUpdateCompanionBuilder,
+    (RoutineSet, $$RoutineSetsTableReferences),
+    RoutineSet,
     PrefetchHooks Function({bool routineItemId})> {
-  $$SetsTableTableManager(_$AppDatabase db, $SetsTable table)
+  $$RoutineSetsTableTableManager(_$AppDatabase db, $RoutineSetsTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$SetsTableFilterComposer($db: db, $table: table),
+              $$RoutineSetsTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$SetsTableOrderingComposer($db: db, $table: table),
+              $$RoutineSetsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$SetsTableAnnotationComposer($db: db, $table: table),
+              $$RoutineSetsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<int?> apiId = const Value.absent(),
@@ -4131,7 +4199,7 @@ class $$SetsTableTableManager extends RootTableManager<
             Value<bool> isSynced = const Value.absent(),
             Value<int> routineItemId = const Value.absent(),
           }) =>
-              SetsCompanion(
+              RoutineSetsCompanion(
             id: id,
             apiId: apiId,
             roundIndex: roundIndex,
@@ -4149,7 +4217,7 @@ class $$SetsTableTableManager extends RootTableManager<
             Value<bool> isSynced = const Value.absent(),
             required int routineItemId,
           }) =>
-              SetsCompanion.insert(
+              RoutineSetsCompanion.insert(
             id: id,
             apiId: apiId,
             roundIndex: roundIndex,
@@ -4159,8 +4227,10 @@ class $$SetsTableTableManager extends RootTableManager<
             routineItemId: routineItemId,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) =>
-                  (e.readTable(table), $$SetsTableReferences(db, table, e)))
+              .map((e) => (
+                    e.readTable(table),
+                    $$RoutineSetsTableReferences(db, table, e)
+                  ))
               .toList(),
           prefetchHooksCallback: ({routineItemId = false}) {
             return PrefetchHooks(
@@ -4184,9 +4254,9 @@ class $$SetsTableTableManager extends RootTableManager<
                     currentTable: table,
                     currentColumn: table.routineItemId,
                     referencedTable:
-                        $$SetsTableReferences._routineItemIdTable(db),
+                        $$RoutineSetsTableReferences._routineItemIdTable(db),
                     referencedColumn:
-                        $$SetsTableReferences._routineItemIdTable(db).id,
+                        $$RoutineSetsTableReferences._routineItemIdTable(db).id,
                   ) as T;
                 }
 
@@ -4200,17 +4270,17 @@ class $$SetsTableTableManager extends RootTableManager<
         ));
 }
 
-typedef $$SetsTableProcessedTableManager = ProcessedTableManager<
+typedef $$RoutineSetsTableProcessedTableManager = ProcessedTableManager<
     _$AppDatabase,
-    $SetsTable,
-    Set,
-    $$SetsTableFilterComposer,
-    $$SetsTableOrderingComposer,
-    $$SetsTableAnnotationComposer,
-    $$SetsTableCreateCompanionBuilder,
-    $$SetsTableUpdateCompanionBuilder,
-    (Set, $$SetsTableReferences),
-    Set,
+    $RoutineSetsTable,
+    RoutineSet,
+    $$RoutineSetsTableFilterComposer,
+    $$RoutineSetsTableOrderingComposer,
+    $$RoutineSetsTableAnnotationComposer,
+    $$RoutineSetsTableCreateCompanionBuilder,
+    $$RoutineSetsTableUpdateCompanionBuilder,
+    (RoutineSet, $$RoutineSetsTableReferences),
+    RoutineSet,
     PrefetchHooks Function({bool routineItemId})>;
 
 class $AppDatabaseManager {
@@ -4226,5 +4296,6 @@ class $AppDatabaseManager {
       $$ExercisesTableTableManager(_db, _db.exercises);
   $$RoutineItemsTableTableManager get routineItems =>
       $$RoutineItemsTableTableManager(_db, _db.routineItems);
-  $$SetsTableTableManager get sets => $$SetsTableTableManager(_db, _db.sets);
+  $$RoutineSetsTableTableManager get routineSets =>
+      $$RoutineSetsTableTableManager(_db, _db.routineSets);
 }

@@ -9,7 +9,7 @@ part 'days_edit_state.dart';
 
 class DaysEditBloc extends Bloc<DaysEditEvent, DaysEditState> {
   final RoutineDaysCommands _commands;
-  List<RoutineDay> days = [];
+
   DaysEditBloc({required RoutineDaysCommands commands})
       : _commands = commands,
         super(DaysEditInitial()) {
@@ -25,39 +25,41 @@ class DaysEditBloc extends Bloc<DaysEditEvent, DaysEditState> {
     on<AddDayEvent>((event, emit) async {
       emit(DaysEditLoadingState());
 
-      days.add(event.day);
-
-      emit(DaysEditLoadedState(days: days));
+      final either = await _commands.addDay(event.day);
+      either.fold(
+        (l) => emit(DaysEditErrorState(failure: l)),
+        (r) => emit(DaysEditLoadedState(days: r)),
+      );
     });
     on<RemoveDayEvent>((event, emit) async {
       emit(DaysEditLoadingState());
 
-      days.removeAt(event.day.index);
-      for (int i = event.day.index; i < days.length; i++) {
-        days[i] = days[i].copyWith(index: i);
-      }
-
-      emit(DaysEditLoadedState(days: days));
+      final either = await _commands.removeDay(event.day);
+      either.fold(
+        (l) => emit(DaysEditErrorState(failure: l)),
+        (r) => emit(DaysEditLoadedState(days: r)),
+      );
     });
     on<RenameDayEvent>((event, emit) async {
       emit(DaysEditLoadingState());
 
-      days.removeAt(event.day.index);
-      days.insert(event.day.index, event.day);
-
-      emit(DaysEditLoadedState(days: days));
+      final either = await _commands.renameDay(event.day);
+      either.fold(
+        (l) => emit(DaysEditErrorState(failure: l)),
+        (r) => emit(DaysEditLoadedState(days: r)),
+      );
     });
     on<ReorderDaysEvent>((event, emit) async {
       emit(DaysEditLoadingState());
-
-      days = [];
-      for (int i = 0; i < event.newOrder.length; i++) {
-        days.add(event.newOrder[i].copyWith(index: i));
-        print("Added day: ${event.newOrder[i].toString()}");
-      }
-      print("reorderEvent filled $days");
-
-      emit(DaysEditLoadedState(days: days, version: event.version + 1));
+      // final reorderedList = event.newOrder
+      //     .map((day) => day.copyWith(index: event.newOrder.indexOf(day)));
+      print("reorderVersion: ${event.version}");
+      final either = await _commands.reorderDays(event.newOrder);
+      either.fold(
+        (l) => emit(DaysEditErrorState(failure: l)),
+        (r) => emit(
+            DaysEditLoadedState(days: List.from(r), version: event.version)),
+      );
     });
   }
 }

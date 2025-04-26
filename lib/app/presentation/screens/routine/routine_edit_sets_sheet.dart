@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
 import 'package:uniceps/app/presentation/screens/routine/widgets/set_widget.dart';
 import 'package:uniceps/core/constants/constants.dart';
 

@@ -8,6 +8,7 @@ class Exercises extends Table {
   IntColumn get apiId => integer().nullable()();
 
   TextColumn get name => text()();
+  TextColumn get imageUrl => text()();
 
   // Foreign Key
   IntColumn get muscleGroup => integer().references(ExerciseGroups, #id)();

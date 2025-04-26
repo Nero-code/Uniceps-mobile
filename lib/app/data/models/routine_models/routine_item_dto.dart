@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uniceps/app/data/models/base_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_v2_dto.dart';
@@ -28,19 +27,38 @@ class RoutineItemDto extends RoutineItem implements BaseDTO {
   factory RoutineItemDto.fromJson(Map<String, dynamic> json) =>
       _$RoutineItemDtoFromJson(json);
 
-  factory RoutineItemDto.fromTable(db.RoutineItem item, db.Exercise exercise,
-          db.ExerciseGroup group, String imageUrl, Uint8List? imageBitMap,
-          [List<db.Set> sets = const []]) =>
+  factory RoutineItemDto.fromTable(db.RoutineItem item, ExerciseV2Dto exercise,
+          [List<db.RoutineSet> sets = const []]) =>
       RoutineItemDto(
           id: item.id,
           apiId: item.apiId,
-          dayId: item.day,
+          dayId: item.dayId,
           index: item.index,
           version: item.version,
-          exerciseV2Dto:
-              ExerciseV2Dto.fromTable(exercise, group, imageUrl, imageBitMap),
+          exerciseV2Dto: exercise,
           setsDto: sets.map((set) => RoutineSetDto.fromTable(set)).toList(),
           isSynced: item.isSynced);
+
+  RoutineItemDto copyDtoWith({
+    int? id,
+    int? apiId,
+    int? dayId,
+    int? index,
+    int? version,
+    ExerciseV2Dto? exerciseV2Dto,
+    List<RoutineSetDto>? setsDto,
+    bool? isSynced,
+  }) =>
+      RoutineItemDto(
+        id: id ?? this.id,
+        apiId: apiId ?? this.apiId,
+        dayId: dayId ?? this.dayId,
+        index: index ?? this.index,
+        version: version ?? this.version,
+        exerciseV2Dto: exerciseV2Dto ?? this.exerciseV2Dto,
+        setsDto: setsDto ?? this.setsDto,
+        isSynced: isSynced ?? this.isSynced,
+      );
 
   @override
   Map<String, dynamic> toJson() => _$RoutineItemDtoToJson(this);

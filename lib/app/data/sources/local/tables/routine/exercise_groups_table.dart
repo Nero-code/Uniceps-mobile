@@ -4,7 +4,7 @@ import 'package:drift/drift.dart';
 
 class ExerciseGroups extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get apiId => integer().nullable()();
+  IntColumn get apiId => integer()();
 
   TextColumn get arName => text()();
   TextColumn get enName => text()();

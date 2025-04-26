@@ -29,14 +29,14 @@ const List<String> languageCodes = ['ar', 'en'];
 const DATE_PATTERN = "dd/MM/yyyy";
 
 final trSections = [
-  const MuscleGroup(enGroupName: "Legs", arGroupName: "أرجل", id: 4),
-  const MuscleGroup(enGroupName: "Calves", arGroupName: "بطة الرجل", id: 7),
-  const MuscleGroup(enGroupName: "Chest", arGroupName: "صدر", id: 1),
-  const MuscleGroup(enGroupName: "Back", arGroupName: "ظهر", id: 3),
-  const MuscleGroup(enGroupName: "Shoulder", arGroupName: "أكتاف", id: 2),
-  const MuscleGroup(enGroupName: "Biceps", arGroupName: "باي", id: 5),
-  const MuscleGroup(enGroupName: "Triceps", arGroupName: "تراي", id: 6),
-  const MuscleGroup(enGroupName: "Abs", arGroupName: "معدة", id: 8),
+  const MuscleGroup(apiId: 4, enGroupName: "Legs", arGroupName: "أرجل"),
+  const MuscleGroup(apiId: 7, enGroupName: "Calves", arGroupName: "بطة الرجل"),
+  const MuscleGroup(apiId: 1, enGroupName: "Chest", arGroupName: "صدر"),
+  const MuscleGroup(apiId: 3, enGroupName: "Back", arGroupName: "ظهر"),
+  const MuscleGroup(apiId: 2, enGroupName: "Shoulder", arGroupName: "أكتاف"),
+  const MuscleGroup(apiId: 5, enGroupName: "Biceps", arGroupName: "باي"),
+  const MuscleGroup(apiId: 6, enGroupName: "Triceps", arGroupName: "تراي"),
+  const MuscleGroup(apiId: 8, enGroupName: "Abs", arGroupName: "معدة"),
 ];
 
 // final arTrSections = [

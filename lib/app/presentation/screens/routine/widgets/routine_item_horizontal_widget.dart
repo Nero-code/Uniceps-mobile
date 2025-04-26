@@ -80,7 +80,7 @@ class _RoutineItemHorizontalWidgetState
                       SizedBox(
                         width: screenSize.width * 0.4,
                         child: Image.network(
-                          imgUrlParser(widget.item.exercise.muscleGroup.id,
+                          imgUrlParser(widget.item.exercise.muscleGroup.apiId,
                               widget.item.exercise.imageUrl),
                         ),
                       ),

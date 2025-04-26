@@ -6,7 +6,8 @@ import 'package:uniceps/core/errors/failure.dart';
 
 class RoutineManagementCommands implements ICommand {
   final IRoutineManagementContract _repo;
-  const RoutineManagementCommands(this._repo);
+  const RoutineManagementCommands({required IRoutineManagementContract repo})
+      : _repo = repo;
 
   Future<Either<Failure, List<Routine>>> getAllRoutines() async =>
       await _repo.getAllRoutines();

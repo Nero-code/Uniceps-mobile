@@ -118,14 +118,14 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
                             print("selected option: $res");
                             switch (res) {
                               case Option.edit:
-                                _renameRoutine(
-                                    e.name,
-                                    (name) =>
-                                        BlocProvider.of<RoutineManagementBloc>(
-                                                context)
-                                            .add(UpdateRoutineEvent(
-                                                routineToUpdate:
-                                                    e.copyWith(name: name))));
+                                _renameRoutine(e.name, (name) {
+                                  if (name == e.name) return;
+                                  BlocProvider.of<RoutineManagementBloc>(
+                                          context)
+                                      .add(UpdateRoutineEvent(
+                                          routineToUpdate:
+                                              e.copyWith(name: name)));
+                                });
                                 break;
 
                               case Option.delete:

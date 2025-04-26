@@ -33,6 +33,22 @@ class ExerciseV2Dto extends ExerciseV2 implements BaseDTO {
           imageUrl: imageUrl,
           imageBitMap: imageBitMap);
 
+  ExerciseV2Dto copywith({
+    int? id,
+    int? apiId,
+    MuscleGroup? muscleGroup,
+    String? name,
+    String? imageUrl,
+    Uint8List? imageBitMap,
+  }) =>
+      ExerciseV2Dto(
+          id: id ?? this.id,
+          apiId: apiId ?? this.apiId,
+          muscleGroup: muscleGroup ?? this.muscleGroup,
+          name: name ?? this.name,
+          imageUrl: imageUrl ?? this.imageUrl,
+          imageBitMap: imageBitMap ?? this.imageBitMap);
+
   @override
   Map<String, dynamic> toJson() => {
         'id': id,

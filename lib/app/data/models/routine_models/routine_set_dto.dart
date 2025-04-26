@@ -20,14 +20,33 @@ class RoutineSetDto extends RoutineSet implements BaseDTO {
   factory RoutineSetDto.fromJson(Map<String, dynamic> json) =>
       _$RoutineSetDtoFromJson(json);
 
-  factory RoutineSetDto.fromTable(db.Set set) => RoutineSetDto(
-      id: set.id,
-      apiId: set.apiId,
-      routineItemId: set.routineItemId,
-      version: set.version,
-      index: set.roundIndex,
-      reps: set.repsCount,
-      isSynced: set.isSynced);
+  factory RoutineSetDto.fromTable(db.RoutineSet setItem) => RoutineSetDto(
+      id: setItem.id,
+      apiId: setItem.apiId,
+      routineItemId: setItem.routineItemId,
+      version: setItem.version,
+      index: setItem.roundIndex,
+      reps: setItem.repsCount,
+      isSynced: setItem.isSynced);
+
+  @override
+  RoutineSetDto copyWith({
+    int? id,
+    int? apiId,
+    int? routineItemId,
+    int? index,
+    int? reps,
+    int? version,
+    bool? isSynced,
+  }) =>
+      RoutineSetDto(
+          id: id ?? this.id,
+          apiId: apiId ?? this.apiId,
+          routineItemId: routineItemId ?? this.routineItemId,
+          version: version ?? this.version,
+          index: index ?? this.index,
+          reps: reps ?? this.reps,
+          isSynced: isSynced ?? this.isSynced);
 
   @override
   Map<String, dynamic> toJson() => _$RoutineSetDtoToJson(this);

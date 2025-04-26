@@ -15,8 +15,8 @@ class RoutineItems extends Table {
   BoolColumn get isSynced => boolean().clientDefault(() => false)();
 
   // Foreign Keys
-  IntColumn get exercise => integer().references(Exercises, #id,
+  IntColumn get exerciseId => integer().references(Exercises, #id,
       onUpdate: KeyAction.cascade, onDelete: KeyAction.cascade)();
-  IntColumn get day => integer().references(DaysGroup, #id,
+  IntColumn get dayId => integer().references(DaysGroup, #id,
       onUpdate: KeyAction.cascade, onDelete: KeyAction.cascade)();
 }
