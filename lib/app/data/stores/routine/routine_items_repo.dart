@@ -69,7 +69,20 @@ class RoutineItemsRepo implements IRoutineItemsContract {
       final orderedList = await _localSource
           .reorderItems(items.map((item) => item.asDto()).toList());
 
-      return Right(orderedList);
+      // ------------------------------------------
+      // To reorder the list we need to:
+      //
+      // First to remove all items that have
+      // old indexes...
+      for (final i in items) {
+        itemsBuffer.removeWhere((item) => item.id == i.id);
+      }
+      // ------------------------------------------
+      // Second insert all items with updated index
+      itemsBuffer.addAll(orderedList);
+      // ------------------------------------------
+
+      return Right(itemsBuffer);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
