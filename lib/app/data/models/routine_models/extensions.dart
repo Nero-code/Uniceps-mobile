@@ -1,13 +1,24 @@
 import 'package:uniceps/app/data/models/routine_models/exercise_v2_dto.dart';
+import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_day_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_set_dto.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
+
+extension MuscleGroupExtension on MuscleGroup {
+  MuscleGroupDto asDto() => MuscleGroupDto(
+        id: id,
+        apiId: apiId,
+        arGroupName: arGroupName,
+        enGroupName: enGroupName,
+      );
+}
 
 extension ExerciseV2Extension on ExerciseV2 {
   RoutineItem toModel(int dayId, int index) => RoutineItem(
@@ -23,7 +34,7 @@ extension ExerciseV2Extension on ExerciseV2 {
   ExerciseV2Dto asDto() => ExerciseV2Dto(
         id: id,
         apiId: apiId,
-        muscleGroup: muscleGroup,
+        muscleGroupId: muscleGroupId,
         name: name,
         imageUrl: imageUrl,
         imageBitMap: imageBitMap,

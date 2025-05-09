@@ -91,11 +91,13 @@ final HEADERS = {
 /// TESTING URL
 // const API = Env.baseUrl;
 const API = kDebugMode || kProfileMode
-    ? "https://uniapi-ui65lw0m.b4a.run/api/v1"
-    : "https://uniceps.trio-verse.com/api/v1";
+    ? r"https://uniapi-ui65lw0m.b4a.run/api/v1"
+    : r"https://uniceps.trio-verse.com/api/v1";
+
+const API_V2 = r"yazanash-001-site1.anytempurl.com";
 
 /// PRODUCTION URL
-// const API = "https://uniceps.trio-verse.com/api/v1";
+// const API = r"https://uniceps.trio-verse.com/api/v1";
 
 /// https://trio-verse.com
 const URL = "https://trio-verse.com";
@@ -103,6 +105,7 @@ const HTTP_REGISTER = "/auth";
 const HTTP_VERIFY_CODE = "/auth/verify";
 const HTTP_REFRESH = "/refresh";
 const HTTP_HANDSHAKE = "/handshake";
+const HTTP_GUEST_MODE = "/guest";
 
 const HTTP_REFRESH_TOKEN = '';
 const HTTP_ACCESS_TOKEN = '';
@@ -117,6 +120,9 @@ const HTTP_TRAINING_PROGRAM = "/routines";
 const HTTP_IMAGES = "/images";
 const HTTP_SUBSCRIPTIONS = "/subscription";
 const HTTP_MEASURMENTS = "/metrics";
+
+const HTTP_MUSCLE_GROUPS = "/api/MuscleGroup";
+const HTTP_EXERCISES = "/api/Exercise";
 
 const HTTP_PRESENCE = "/attendances";
 const HTTP_GYMS = "/gyms";

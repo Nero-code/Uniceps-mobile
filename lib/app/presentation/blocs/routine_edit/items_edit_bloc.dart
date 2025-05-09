@@ -22,6 +22,7 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
         (r) => emit(ItemsEditLoadedState(dayId: event.dayId, items: r)),
       );
     });
+
     on<AddRoutineItemsEvent>((event, emit) async {
       emit(ItemsEditLoadingState());
 
@@ -32,11 +33,28 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
         (r) => emit(ItemsEditLoadedState(dayId: event.dayId, items: r)),
       );
     });
+
     on<RemoveRoutineItemEvent>((event, emit) async {
       emit(ItemsEditLoadingState());
     });
+
     on<ReorderRoutineItemsEvent>((event, emit) async {
-      emit(ItemsEditLoadingState());
+      for (final i in event.newOrder) {
+        print("${i.exercise.name} : ${i.id} : ${i.index}");
+      }
+      final list = <RoutineItem>[];
+      for (int i = 0; i < event.newOrder.length; i++) {
+        list.add(event.newOrder[i].copyWith(index: i));
+      }
+      for (final i in list) {
+        print("${i.exercise.name} : ${i.id} : ${i.index}");
+      }
+      final either = await _commands.reorderItems(list);
+      either.fold(
+        (l) => emit(ItemsEditErrorState(failure: l)),
+        (r) => emit(ItemsEditLoadedState(
+            dayId: event.dayId, items: r, version: event.version + 1)),
+      );
     });
   }
 }

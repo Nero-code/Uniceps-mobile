@@ -12,7 +12,7 @@ final class ExercisesV2Initial extends ExercisesV2State {}
 final class ExercisesV2LoadingState extends ExercisesV2State {}
 
 final class ExercisesV2LoadedState extends ExercisesV2State {
-  final List<ExerciseV2Dto> list;
+  final List<ExerciseV2> list;
 
   const ExercisesV2LoadedState({required this.list});
 }

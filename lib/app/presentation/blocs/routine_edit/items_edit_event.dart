@@ -24,8 +24,8 @@ class RemoveRoutineItemEvent extends ItemsEditEvent {
 }
 
 class ReorderRoutineItemsEvent extends ItemsEditEvent {
+  final int version;
   final List<RoutineItem> newOrder;
-
   const ReorderRoutineItemsEvent(
-      {required super.dayId, required this.newOrder});
+      {required super.dayId, required this.newOrder, this.version = 0});
 }

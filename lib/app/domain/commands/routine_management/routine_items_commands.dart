@@ -22,4 +22,9 @@ class RoutineItemsCommands implements ICommand {
       RoutineItem item) async {
     return await _repo.removeItem(item);
   }
+
+  Future<Either<Failure, List<RoutineItem>>> reorderItems(
+      List<RoutineItem> items) async {
+    return await _repo.reorderItems(items);
+  }
 }

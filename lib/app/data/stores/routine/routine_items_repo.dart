@@ -4,7 +4,6 @@ import 'package:uniceps/app/data/sources/local/dal_routine/routine_items_local_s
 import 'package:uniceps/app/data/sources/services/media_helper.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_items_contract.dart';
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class RoutineItemsRepo implements IRoutineItemsContract {
@@ -16,17 +15,23 @@ class RoutineItemsRepo implements IRoutineItemsContract {
 
   final IRoutineItemsLocalSourceContract _localSource;
   final MediaHelper _mediaHelper;
-  final Map<int, List<RoutineItem>> lazyItemsBuffer = {};
+  // final Map<int, List<RoutineItem>> lazyItemsBuffer = {};
+  final itemsBuffer = <RoutineItem>[];
+  final loadedDays = <int>[];
 
   @override
   Future<Either<Failure, List<RoutineItem>>> getItemsUnderDay(int dayId) async {
     try {
       final res = await _localSource.getItemsByDay(dayId);
-      if (!lazyItemsBuffer.containsKey(dayId)) {
-        lazyItemsBuffer
-            .addAll({dayId: res.map((day) => day as RoutineItem).toList()});
+      // if (!lazyItemsBuffer.containsKey(dayId)) {
+      //   lazyItemsBuffer
+      //       .addAll({dayId: res.map((day) => day as RoutineItem).toList()});
+      // }
+      if (!loadedDays.contains(dayId)) {
+        itemsBuffer.addAll(res);
+        loadedDays.add(dayId);
       }
-      return Right(lazyItemsBuffer[dayId]!);
+      return Right(itemsBuffer);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
@@ -36,14 +41,22 @@ class RoutineItemsRepo implements IRoutineItemsContract {
   Future<Either<Failure, List<RoutineItem>>> addItems(
       List<RoutineItem> items) async {
     try {
-      await _mediaHelper.saveExerciseImages(items
-          .map((item) => imgUrlParser(
-              item.exercise.muscleGroup.apiId, item.exercise.imageUrl))
-          .toList());
+      await _mediaHelper.saveExerciseImages(
+          items.map((item) => item.exercise.imageUrl).toList());
       final itemsWithIdsList = await _localSource
           .addItems(items.map((item) => item.asDto()).toList());
-      lazyItemsBuffer[items.first.dayId]!.addAll(itemsWithIdsList);
-      return Right(lazyItemsBuffer[items.first.dayId]!);
+
+      // -------------------------------------------
+      // TODO null check operator used on null value
+      // if (!lazyItemsBuffer.containsKey(items.first.dayId)) {
+      //   lazyItemsBuffer.addAll({items.first.dayId: []});
+      // }
+      // lazyItemsBuffer[items.first.dayId]!.addAll(itemsWithIdsList);
+      // -------------------------------------------
+
+      itemsBuffer.addAll(itemsWithIdsList);
+
+      return Right(itemsBuffer);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
@@ -53,9 +66,10 @@ class RoutineItemsRepo implements IRoutineItemsContract {
   Future<Either<Failure, List<RoutineItem>>> reorderItems(
       List<RoutineItem> items) async {
     try {
-      await _localSource
+      final orderedList = await _localSource
           .reorderItems(items.map((item) => item.asDto()).toList());
-      return Right(items);
+
+      return Right(orderedList);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
@@ -66,8 +80,12 @@ class RoutineItemsRepo implements IRoutineItemsContract {
       RoutineItem item) async {
     try {
       await _localSource.removeItem(item.asDto());
-      lazyItemsBuffer[item.dayId]!.remove(item);
-      return Right(lazyItemsBuffer[item.dayId]!);
+
+      // lazyItemsBuffer[item.dayId]!.remove(item);
+
+      itemsBuffer.removeWhere((element) => element.id == item.id);
+
+      return Right(itemsBuffer);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
@@ -76,8 +94,9 @@ class RoutineItemsRepo implements IRoutineItemsContract {
   @override
   Future<Either<Failure, Unit>> removeDayItems(int dayId) async {
     try {
-      if (!lazyItemsBuffer.containsKey(dayId)) return const Right(unit);
-      lazyItemsBuffer.remove(dayId);
+      // if (!lazyItemsBuffer.containsKey(dayId)) return const Right(unit);
+      // lazyItemsBuffer.remove(dayId);
+      itemsBuffer.removeWhere((element) => element.dayId == dayId);
       return const Right(unit);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));

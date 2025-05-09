@@ -5,22 +5,16 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:uniceps/app/data/models/base_dto.dart';
 import 'package:uniceps/app/data/sources/services/client_helper.dart';
-import 'package:uniceps/app/data/sources/services/token_service.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
-class HttpClientHelper implements ClientHelper {
-  const HttpClientHelper(
-      {required Client client, required TokenService tokenService})
-      : _tokenService = tokenService,
-        _client = client;
+class NoTokenHttpClientHelper implements ClientHelper {
+  const NoTokenHttpClientHelper({required Client client}) : _client = client;
 
   final Client _client;
-  final TokenService _tokenService;
-  final dataNodeInResponse = 'data';
+  // final dataNodeInResponse = 'data';
 
   ///  For more custom behaivuar
   Client get client => _client;
-  TokenService get tokenService => _tokenService;
 
   @override
   Future<T> getHandler<T extends BaseDTO>(String api, String urlPart,
@@ -28,8 +22,7 @@ class HttpClientHelper implements ClientHelper {
       [Map<String, String>? queryParams]) async {
     final Response res;
     // try {
-    res = await _client.get(Uri.https(api, urlPart, queryParams),
-        headers: await getHeader());
+    res = await _client.get(Uri.https(api, urlPart, queryParams));
     // } catch (e) {
     //   print("caught Exception in getHandler ${e.toString()}");
     //   if (e is DioException) _catchException(e);
@@ -40,7 +33,7 @@ class HttpClientHelper implements ClientHelper {
       print("getHandler body: ${res.body}");
     }
 
-    return fromJson((res.body as Map)[dataNodeInResponse]);
+    return fromJson(jsonDecode(res.body));
   }
 
   @override
@@ -50,8 +43,7 @@ class HttpClientHelper implements ClientHelper {
     print("getListHandler: ${api + urlPart}");
     final Response res;
     // try {
-    res = await _client.get(Uri.https(api, urlPart, queryParams),
-        headers: await getHeader());
+    res = await _client.get(Uri.https(api, urlPart, queryParams));
     // } catch (e) {
     //   print(e.toString());
     //   if (e is DioException) _catchException(e);
@@ -62,7 +54,7 @@ class HttpClientHelper implements ClientHelper {
       print("getListHandler body: ${res.body}");
     }
 
-    final data = jsonDecode(res.body)[dataNodeInResponse] as Iterable;
+    final data = jsonDecode(res.body) as Iterable;
     if (data.isEmpty) {
       throw EmptyResponseException();
     }
@@ -82,7 +74,6 @@ class HttpClientHelper implements ClientHelper {
 
     final res = await _client.post(
       Uri.https("$api" "$urlPart"),
-      headers: await getHeader(),
       body: body,
     );
 
@@ -102,7 +93,7 @@ class HttpClientHelper implements ClientHelper {
         // return fromJson(jsonDecode(
         //     (res.body))[dataNodeInResponse]);
 
-        return fromJson(jsonDecode(res.body)[dataNodeInResponse]);
+        return fromJson(jsonDecode(res.body));
       }
       if (orElse != null) {
         orElse(res.body as Map<String, dynamic>);
@@ -120,7 +111,6 @@ class HttpClientHelper implements ClientHelper {
   ) async {
     final res = await _client.put(
       Uri.https("$api" "$urlPart"),
-      headers: await getHeader(),
       body: body,
     );
     _mapStatusToError(res);
@@ -142,8 +132,7 @@ class HttpClientHelper implements ClientHelper {
     final Response res;
 
     // try {
-    res = await _client.delete(Uri.https("$api" "$urlPart"),
-        headers: await getHeader(), body: body);
+    res = await _client.delete(Uri.https("$api" "$urlPart"), body: body);
     // } catch (e) {
     //   if (e is DioException) _catchException(e);
     //   rethrow;
@@ -152,20 +141,6 @@ class HttpClientHelper implements ClientHelper {
       print("deleteHandler code: ${res.statusCode}");
       print("deleteHandler body: ${res.body}");
     }
-  }
-
-  Future<Map<String, String>> getHeader() async {
-    final session = await _tokenService.session;
-    if (session == null) {
-      throw SessionGenerationException();
-    }
-    return {
-      // 'Content-Type': 'application/json; charset=UTF-8',
-      // "charset": "utf-8",
-      // "Accept-Charset": "utf-8",
-      // 'Accept': 'application/json; charset=UTF-8',
-      'Authorization': "Bearer ${session.accessToken}",
-    };
   }
 }
 

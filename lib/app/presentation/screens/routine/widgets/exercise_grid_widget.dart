@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
-import 'package:uniceps/core/constants/constants.dart';
 
 class ExerciseGridWidget extends StatelessWidget {
   const ExerciseGridWidget({
@@ -32,8 +31,7 @@ class ExerciseGridWidget extends StatelessWidget {
           Expanded(
             flex: 3,
             child: CachedNetworkImage(
-              imageUrl:
-                  imgUrlParser(exercise.muscleGroup.apiId, exercise.imageUrl),
+              imageUrl: exercise.imageUrl,
               progressIndicatorBuilder: (context, url, progress) => Center(
                 child: CircularProgressIndicator(value: progress.progress),
               ),

@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart' as di;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -13,26 +12,29 @@ import 'package:uniceps/app/data/sources/local/dal_gyms/gyms_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_gyms/my_gyms_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_gyms/subscriptions_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_profile/measurements_local_source.dart';
+import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_days_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_items_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_sets_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_training/training_local_source.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
-// import 'package:uniceps/app/data/sources/remote/dal_routine/routine_management_remote_source.dart';
+import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
 import 'package:uniceps/app/data/sources/services/client_helper.dart';
-import 'package:uniceps/app/data/sources/services/http_client_helper.dart';
 import 'package:uniceps/app/data/sources/services/media_helper.dart';
-import 'package:uniceps/app/data/sources/services/token_service.dart';
+import 'package:uniceps/app/data/sources/services/no_token_http_client.dart';
+import 'package:uniceps/app/data/stores/routine/exercises_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_days_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_items_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_management_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_sets_repo.dart';
 import 'package:uniceps/app/domain/commands/auth_usecases/guest_mode_login.dart';
+import 'package:uniceps/app/domain/commands/routine_management/exercises_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_days_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_items_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_management_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_sets_commands.dart';
+import 'package:uniceps/app/domain/contracts/routine_repo/i_exercises_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_days_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_items_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_sets_contract.dart';
@@ -188,6 +190,9 @@ Future<void> init() async {
   sl.registerLazySingleton<IRoutineSetsLocalSourceContract>(
       () => RoutineSetsLocalSourceImpl(database: sl()));
 
+  sl.registerLazySingleton<IExercisesLocalSourceContract>(
+      () => ExercisesLocalSource(database: sl()));
+
   //////////////////////////////////////////////////////////////////////////////
   ///   R E M O T E   S O U R C E S
   //////////////////////////////////////////////////////////////////////////////
@@ -255,6 +260,9 @@ Future<void> init() async {
     ),
   );
 
+  sl.registerLazySingleton<IExercisesRemoteSourceContract>(
+      () => ExercisesRemoteSourceImpl(clientHelper: sl()));
+
   /////////
   ////////
   ///////
@@ -278,6 +286,9 @@ Future<void> init() async {
       () => RoutineItemsRepo(localSource: sl(), mediaHelper: sl()));
   sl.registerLazySingleton<IRoutineSetsContract>(
       () => RoutineSetsRepo(localSource: sl()));
+
+  sl.registerLazySingleton<IExercisesContract>(() =>
+      ExercisesRepo(internet: sl(), remoteSource: sl(), localSource: sl()));
 
   ///
   ///
@@ -326,6 +337,9 @@ Future<void> init() async {
   sl.registerLazySingleton<RoutineSetsCommands>(
       () => RoutineSetsCommands(repo: sl()));
 
+  sl.registerLazySingleton<ExercisesCommands>(
+      () => ExercisesCommands(repo: sl()));
+
   //////////////////////////////////////////////////////////////////////////////
   ///
   ///   U S E C A S E S
@@ -369,13 +383,8 @@ Future<void> init() async {
   // final c = io.HttpClient()..connectionTimeout = const Duration(seconds: 30);
   sl.registerLazySingleton(() => client);
 
-  const secureStorage = FlutterSecureStorage();
-
-  sl.registerLazySingleton(
-      () => TokenService(storage: secureStorage, client: sl()));
-
   sl.registerLazySingleton<ClientHelper>(
-      () => HttpClientHelper(client: sl(), tokenService: sl()));
+      () => NoTokenHttpClientHelper(client: sl()));
 
   sl.registerLazySingleton<MediaHelper>(() => ImageMediaHelper(
       imagesCache: imagesCache, checker: sl(), client: client));

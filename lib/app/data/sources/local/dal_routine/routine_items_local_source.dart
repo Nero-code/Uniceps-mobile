@@ -3,17 +3,18 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_v2_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
+// This is the Routine Items Local Source package abstraction
 abstract class IRoutineItemsLocalSourceContract {
   //  R O U T I N E   I T E M S   S E C T I O N
   Future<List<RoutineItemDto>> getItemsByDay(int dayId);
   Future<List<RoutineItemDto>> addItems(List<RoutineItemDto> list);
-  Future<void> reorderItems(List<RoutineItemDto> list);
+  Future<List<RoutineItemDto>> reorderItems(List<RoutineItemDto> list);
   Future<void> removeItem(RoutineItemDto item);
 }
 
+// This is the concrete Routine Items Local Source implementation
 class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
   final AppDatabase _database;
   final Box<Uint8List> _imagesCache;
@@ -27,6 +28,7 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
   Future<List<RoutineItemDto>> getItemsByDay(int dayId) async {
     // Our main list to populate.
     final result = <RoutineItemDto>[];
+
     // Starting with database query to get items under the `dayId`
     final items = await (_database.select(_database.routineItems)
           ..where((f) => f.dayId.equals(dayId)))
@@ -57,14 +59,15 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
       // trying to get routine image, there's a problem if the image is not
       // found for some reason, that's why we throw a database exception in
       // this circumstance...
-      if (!_imagesCache
-          .containsKey(imgUrlParser(ex.muscleGroup, ex.imageUrl))) {
-        throw DataBaseException();
-      }
+      if (!_imagesCache.containsKey(ex.imageUrl)) throw DataBaseException();
+
       final img = _imagesCache.get(ex.imageUrl)!;
 
       // ------------------------------------------------------------------
-      // Insert into our main list the (item, exercise, sets)
+      // @UPDATE:
+      // SQL has a way to get data from multiple tables called `JOIN`.
+      // Its main functionality is to group rows based on a specific condition,
+      // like a shared id or foreign key...
       result.add(
         RoutineItemDto.fromTable(
             items[i], ExerciseV2Dto.fromTable(ex, mg, ex.imageUrl, img), sets),
@@ -76,16 +79,17 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
   @override
   Future<List<RoutineItemDto>> addItems(List<RoutineItemDto> list) async {
     final result = <RoutineItemDto>[];
+
     for (final i in list) {
       // ------------------------------------------------------------------
       // Inserting muscle group into database and updating old if exists
-      final mg = await _database.into(_database.exerciseGroups).insertReturning(
-          ExerciseGroupsCompanion.insert(
-              apiId: i.exerciseV2Dto.muscleGroup.apiId,
-              arName: i.exerciseV2Dto.muscleGroup.arGroupName,
-              enName: i.exerciseV2Dto.muscleGroup.enGroupName),
-          onConflict: DoUpdate((update) => ExerciseGroupsCompanion.custom(
-              arName: update.arName, enName: update.enName)));
+      // final mg = await _database.into(_database.exerciseGroups).insertReturning(
+      //     ExerciseGroupsCompanion.insert(
+      //         apiId: i.exerciseV2Dto.muscleGroup.apiId,
+      //         arName: i.exerciseV2Dto.muscleGroup.arGroupName,
+      //         enName: i.exerciseV2Dto.muscleGroup.enGroupName),
+      //     onConflict: DoUpdate((update) => ExerciseGroupsCompanion.custom(
+      //         arName: update.arName, enName: update.enName)));
 
       // -----------------------------------------------------------------
       // Inserting Exercise into database after muscle-group because of
@@ -95,13 +99,13 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
                 apiId: Value(i.exerciseV2Dto.apiId),
                 name: i.exerciseV2Dto.name,
                 imageUrl: i.exerciseV2Dto.imageUrl,
-                muscleGroup: mg.id),
+                muscleGroup: i.exerciseV2Dto.muscleGroupId),
             onConflict: DoNothing(),
           );
 
       // -----------------------------------------------------------------
       // Getting image bitmap from cache for item update.
-      final img = _imagesCache.get(imgUrlParser(mg.apiId, ex.imageUrl));
+      final img = _imagesCache.get(ex.imageUrl);
 
       // -----------------------------------------------------------------
       // Finally, Inserting RoutineItem into database, but not getting neither
@@ -130,14 +134,20 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
   }
 
   @override
-  Future<void> reorderItems(List<RoutineItemDto> list) async {
-    for (final i in list) {
-      await (_database.update(_database.routineItems)
-            ..where((f) => f.id.equals(i.id!)))
-          .replace(RoutineItemsCompanion(
-              index: Value(i.index),
-              version: Value(i.version + 1),
+  Future<List<RoutineItemDto>> reorderItems(List<RoutineItemDto> list) async {
+    final res = <RoutineItemDto>[];
+
+    for (int i = 0; i < list.length; i++) {
+      final row = await (_database.update(_database.routineItems)
+            ..where((f) => f.id.equals(list[i].id!)))
+          .writeReturning(RoutineItemsCompanion(
+              index: Value(i),
+              version: Value(list[i].version + 1),
               isSynced: const Value(false)));
+
+      res.add(RoutineItemDto.fromTable(row.first, list[i].exerciseV2Dto));
     }
+
+    return res;
   }
 }

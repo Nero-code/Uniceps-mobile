@@ -30,9 +30,14 @@ class RoutineSetsLocalSourceImpl implements IRoutineSetsLocalSourceContract {
   @override
   Future<List<RoutineSetDto>> addSets(List<RoutineSetDto> listToAdd) async {
     final result = <RoutineSetDto>[];
+
+    // First, we delete all occurences of any lingering sets as a flush before
+    // any writing because sets are not auto-saved.
     await (_database.delete(_database.routineSets)
           ..where((f) => f.routineItemId.equals(listToAdd.first.routineItemId)))
         .go();
+
+    // Then, we start inserting sets with fresh new ids and values.
     for (final set in listToAdd) {
       final setId = await (_database.into(_database.routineSets))
           .insert(RoutineSetsCompanion.insert(

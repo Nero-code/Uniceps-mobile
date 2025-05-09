@@ -7,6 +7,7 @@ import 'package:uniceps/app/data/models/routine_models/extensions.dart' as ext;
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
+import 'package:uniceps/app/presentation/blocs/exercises_v2/muscle_group_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/routine_edit/days_edit_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/routine_edit/items_edit_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/routine_edit/sets_edit_bloc.dart';
@@ -206,7 +207,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
             create: (context) => DaysEditBloc(commands: di.sl())
               ..add(GetDaysEvent(routineId: widget.routineId))),
         BlocProvider(create: (context) => ItemsEditBloc(commands: di.sl())),
-        BlocProvider(create: (context) => SetsEditBloc()),
+        BlocProvider(create: (context) => SetsEditBloc(commands: di.sl())),
       ],
       child: Stack(
         children: [
@@ -228,7 +229,12 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                         final res = await Navigator.push<List<ExerciseV2>>(
                             context,
                             MaterialPageRoute(
-                              builder: (c) => const ExercisesSelectionScreen(),
+                              builder: (c) => BlocProvider(
+                                create: (context) =>
+                                    MuscleGroupBloc(commands: di.sl())
+                                      ..add(GetMuscleGroupsEvent()),
+                                child: const ExercisesSelectionScreen(),
+                              ),
                             ));
                         if (res == null) {
                           if (context.mounted) {
