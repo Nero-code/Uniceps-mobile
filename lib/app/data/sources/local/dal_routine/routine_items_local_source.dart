@@ -94,14 +94,39 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
       // -----------------------------------------------------------------
       // Inserting Exercise into database after muscle-group because of
       // foreign key constraints
-      final ex = await _database.into(_database.exercises).insertReturning(
-            ExercisesCompanion.insert(
-                apiId: Value(i.exerciseV2Dto.apiId),
-                name: i.exerciseV2Dto.name,
-                imageUrl: i.exerciseV2Dto.imageUrl,
-                muscleGroup: i.exerciseV2Dto.muscleGroupId),
-            onConflict: DoNothing(),
-          );
+
+      late final Exercise ex;
+      final oldEx = await (_database.select(_database.exercises)
+            ..where((f) => f.apiId.equals(i.apiId!)))
+          .get();
+
+      if (oldEx.isEmpty) {
+        ex = await _database.into(_database.exercises).insertReturning(
+              ExercisesCompanion.insert(
+                  apiId: Value(i.exerciseV2Dto.apiId),
+                  name: i.exerciseV2Dto.name,
+                  imageUrl: i.exerciseV2Dto.imageUrl,
+                  muscleGroup: i.exerciseV2Dto.muscleGroupId),
+              // onConflict: DoUpdate((old) => ExercisesCompanion.custom(
+              //       id: i.id == null ? null : Constant(i.id!),
+              //       apiId: old.apiId,
+              //       name: Constant(i.exerciseV2Dto.name),
+              //       imageUrl: Constant(i.exerciseV2Dto.imageUrl),
+              //       muscleGroup: Constant(i.exerciseV2Dto.muscleGroupId),
+              //     )),
+            );
+      } else {
+        ex = (await (_database.update(_database.exercises)
+                  ..where((f) => f.apiId.equals(i.apiId!)))
+                .writeReturning(ExercisesCompanion.custom(
+          id: Constant(oldEx.first.id),
+          apiId: Constant(oldEx.first.apiId),
+          name: Constant(oldEx.first.name),
+          imageUrl: Constant(oldEx.first.imageUrl),
+          muscleGroup: Constant(oldEx.first.muscleGroup),
+        )))
+            .single;
+      }
 
       // -----------------------------------------------------------------
       // Getting image bitmap from cache for item update.

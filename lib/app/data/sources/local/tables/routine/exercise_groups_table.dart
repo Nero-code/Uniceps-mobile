@@ -8,4 +8,10 @@ class ExerciseGroups extends Table {
 
   TextColumn get arName => text()();
   TextColumn get enName => text()();
+
+  // Unique Columns
+  @override
+  List<Set<Column<Object>>> get uniqueKeys => [
+        {apiId}
+      ];
 }

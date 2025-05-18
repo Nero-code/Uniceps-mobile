@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RoutineItemHorizontalWidget extends StatefulWidget {
   const RoutineItemHorizontalWidget(
@@ -76,7 +76,7 @@ class _RoutineItemHorizontalWidgetState
                 child: Column(
                   children: [
                     Text(widget.item.exercise.name, maxLines: 2),
-                    Text("Muscle Group: "),
+                    const Text("Muscle Group: "),
                   ],
                 ),
               )

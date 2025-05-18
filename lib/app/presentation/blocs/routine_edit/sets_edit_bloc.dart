@@ -8,30 +8,65 @@ part 'sets_edit_event.dart';
 part 'sets_edit_state.dart';
 
 class SetsEditBloc extends Bloc<SetsEditEvent, SetsEditState> {
-  List<RoutineSet> sets = [];
+  // List<RoutineSet> sets = [];
   final RoutineSetsCommands _commands;
   SetsEditBloc({required RoutineSetsCommands commands})
       : _commands = commands,
         super(SetsEditInitial()) {
-    on<GetSetsforRoutineEvent>((event, emit) async {
+    on<GetSetsforRoutineItemEvent>((event, emit) async {
       emit(SetsEditLoadingState());
 
       final either = await _commands.getItemSets(event.itemId);
       either.fold(
         (l) => emit(SetsEditErrorState(failure: l)),
-        (r) => emit(SetsEditLoadedState(itemId: event.itemId, sets: r)),
+        (r) {
+          // sets = r;
+          emit(SetsEditLoadedState(itemId: event.itemId, sets: r));
+        },
       );
     });
-    on<AddSetEvent>((event, emit) {
-      // emit(SetsEditLoadingState());
-      sets.add(event.set);
-      emit(SetsEditLoadedState(itemId: event.itemId, sets: sets));
+
+    on<AddSetEvent>((event, emit) async {
+      emit(SetsEditLoadingState());
+
+      // sets.add(event.rSet);
+
+      final either = await _commands.addItemSets(event.itemId, event.oldSets);
+      either.fold(
+        (l) => emit(SetsEditErrorState(failure: l)),
+        (r) => emit(SetsEditLoadedState(sets: r, itemId: event.itemId)),
+      );
+
+      // emit(SetsEditLoadedState(itemId: event.itemId, sets: sets));
     });
 
-    on<SaveSetsEvent>((event, emit) {});
+    on<SaveSetsEvent>((event, emit) async {
+      emit(SetsEditLoadingState());
 
-    // on<UpdateSetEvent>((event, emit) {});
+      final either = await _commands.saveAllSets(event.sets);
+      either.fold(
+        (l) => emit(SetsEditErrorState(failure: l)),
+        (r) => emit(SetsEditLoadedState(sets: r, itemId: event.itemId)),
+      );
+    });
 
-    // on<RemoveSetEvent>((event, emit) {});
+    on<UpdateSetEvent>((event, emit) async {
+      final either = await _commands.updateSet(event.set);
+      either.fold(
+        (l) => emit(SetsEditErrorState(failure: l)),
+        (r) => emit(SetsEditLoadedState(sets: r, itemId: event.itemId)),
+      );
+    });
+
+    on<RemoveSetEvent>((event, emit) async {
+      emit(SetsEditLoadingState());
+
+      final either = await _commands.removeItemSet(event.set);
+      either.fold(
+        (l) => emit(SetsEditErrorState(failure: l)),
+        (r) => emit(
+            SetsEditLoadedState(sets: List.from([...r]), itemId: event.itemId)),
+      );
+    });
   }
 }

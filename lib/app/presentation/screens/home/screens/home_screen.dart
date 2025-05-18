@@ -315,7 +315,7 @@ class _HomeScreenState extends State<HomeScreen>
           }
         },
         child: Scaffold(
-          drawer: Drawer(),
+          drawer: const Drawer(),
           body: SlidingUpPanel(
             backdropEnabled: true,
             color: Colors.white,
@@ -1099,7 +1099,7 @@ class _HomeScreenState extends State<HomeScreen>
                                               routineManagementUsecases:
                                                   di.sl())
                                             ..add(GetRoutinesEvent()),
-                                      child: RoutineManagementScreen(),
+                                      child: const RoutineManagementScreen(),
                                     ),
                                   ))
                               : showDialog(

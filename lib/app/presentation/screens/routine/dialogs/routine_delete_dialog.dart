@@ -8,8 +8,8 @@ class RoutineDeleteDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     return AlertDialog(
-      icon: Icon(Icons.delete, color: Colors.red, size: 40),
-      title: Text("Delete?"),
+      icon: const Icon(Icons.delete, color: Colors.red, size: 40),
+      title: const Text("Delete?"),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),

@@ -55,7 +55,7 @@ class _PresenceScreenState extends State<PresenceScreen> {
                     availableGestures: AvailableGestures.horizontalSwipe,
                     calendarStyle: CalendarStyle(
                         selectedDecoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.onBackground,
+                            color: Theme.of(context).colorScheme.onSurface,
                             shape: BoxShape.circle),
                         todayDecoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.secondary,

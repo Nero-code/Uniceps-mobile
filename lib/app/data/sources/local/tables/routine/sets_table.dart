@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:uniceps/app/data/sources/local/tables/routine/routines_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/routine/routine_items_table.dart';
 
 class RoutineSets extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -11,6 +11,6 @@ class RoutineSets extends Table {
   BoolColumn get isSynced => boolean().clientDefault(() => false)();
 
   // Foreign Key
-  IntColumn get routineItemId => integer().references(Routines, #id,
+  IntColumn get routineItemId => integer().references(RoutineItems, #id,
       onDelete: KeyAction.cascade, onUpdate: KeyAction.cascade)();
 }

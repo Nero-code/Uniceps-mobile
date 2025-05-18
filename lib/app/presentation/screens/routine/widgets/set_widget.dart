@@ -9,14 +9,12 @@ class SetWidget extends StatefulWidget {
     super.key,
     required this.index,
     required this.routineItemId,
-
-    // required this.set,
-
+    required this.set,
     required this.controller,
     required this.onRemove,
   });
 
-  // final RoutineSet set;
+  final RoutineSet set;
   final TextEditingController controller;
   final int index, routineItemId;
   final void Function() onRemove;
@@ -26,7 +24,7 @@ class SetWidget extends StatefulWidget {
 }
 
 class _SetWidgetState extends State<SetWidget> {
-  bool changesNeedsSave = true;
+  final _focusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -36,8 +34,8 @@ class _SetWidgetState extends State<SetWidget> {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            if (changesNeedsSave)
-              Icon(Icons.error_outline_sharp, size: 20, color: Colors.red),
+            // if (changesNeedsSave)
+            //   Icon(Icons.error_outline_sharp, size: 20, color: Colors.red),
             Expanded(
               child: Center(
                 child: Text(
@@ -56,6 +54,14 @@ class _SetWidgetState extends State<SetWidget> {
                 child: SizedBox(
                   width: 60,
                   child: TextField(
+                    focusNode: _focusNode,
+                    onTap: () {
+                      if (!_focusNode.hasFocus) {
+                        widget.controller.selection = TextSelection(
+                            baseOffset: 0,
+                            extentOffset: widget.controller.text.length);
+                      }
+                    },
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
@@ -80,22 +86,11 @@ class _SetWidgetState extends State<SetWidget> {
                             required isFocused,
                             required maxLength}) =>
                         const SizedBox(),
-                    onChanged: (_) => setState(() => changesNeedsSave = true),
                     onSubmitted: (val) {
-                      BlocProvider.of<SetsEditBloc>(context).add(
-                        AddSetEvent(
+                      BlocProvider.of<SetsEditBloc>(context).add(UpdateSetEvent(
                           itemId: widget.routineItemId,
-                          set: RoutineSet(
-                              id: null,
-                              apiId: null,
-                              routineItemId: widget.routineItemId,
-                              version: 0,
-                              index: widget.index,
-                              reps: int.parse(widget.controller.text),
-                              isSynced: false),
-                        ),
-                      );
-                      changesNeedsSave = false;
+                          set: widget.set.copyWith(
+                              reps: int.parse(widget.controller.text))));
                     },
                   ),
                 ),

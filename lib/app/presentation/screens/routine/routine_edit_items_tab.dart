@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/presentation/blocs/routine_edit/items_edit_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/routine_edit/sets_edit_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/screens/routine/widgets/routine_item_horizontal_widget.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/injection_dependency.dart' as di;
 
 class RoutineItemEditTab extends StatefulWidget {
   const RoutineItemEditTab(
@@ -27,8 +24,8 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab>
     // final screenSize = MediaQuery.sizeOf(context);
     // print("items length: ${items.length}");
     return BlocBuilder<ItemsEditBloc, ItemsEditState>(
-      builder: (bcontext, state) {
-        // print("builder ${state.runtimeType}");
+      builder: (context, state) {
+        print("builder ${widget.dayId}");
         if (state is ItemsEditInitial) {
           BlocProvider.of<ItemsEditBloc>(context)
               .add(GetRoutineDayItemsEvent(dayId: widget.dayId));
@@ -51,9 +48,7 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab>
 
                 BlocProvider.of<ItemsEditBloc>(context).add(
                     ReorderRoutineItemsEvent(
-                        dayId: widget.dayId,
-                        newOrder: list,
-                        version: state.version));
+                        newOrder: list, version: state.version));
               },
               children: [
                 //

@@ -5,11 +5,13 @@ class RoutineNameDialog extends StatelessWidget {
   RoutineNameDialog(
       {super.key,
       required this.initialName,
-      this.title = "",
+      required this.title,
       required this.onSubmit});
 
   final String initialName, title;
   final void Function(String name) onSubmit;
+
+  final _node = FocusNode();
 
   final controller = TextEditingController();
 
@@ -24,8 +26,15 @@ class RoutineNameDialog extends StatelessWidget {
         color: Colors.blueGrey,
         size: 60,
       ),
-      title: Text("Add Routine"),
+      title: Text(title),
       content: TextField(
+        focusNode: _node,
+        onTap: () {
+          if (!_node.hasFocus) {
+            controller.selection = TextSelection(
+                baseOffset: 0, extentOffset: controller.text.length);
+          }
+        },
         controller: controller,
         decoration: InputDecoration(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),

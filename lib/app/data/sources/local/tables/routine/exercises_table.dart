@@ -12,4 +12,10 @@ class Exercises extends Table {
 
   // Foreign Key
   IntColumn get muscleGroup => integer().references(ExerciseGroups, #id)();
+
+  // Unique Columns
+  @override
+  List<Set<Column<Object>>> get uniqueKeys => [
+        {apiId}
+      ];
 }

@@ -7,19 +7,18 @@ sealed class SetsEditEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetSetsforRoutineEvent extends SetsEditEvent {
-  const GetSetsforRoutineEvent({required super.itemId});
+class GetSetsforRoutineItemEvent extends SetsEditEvent {
+  const GetSetsforRoutineItemEvent({required super.itemId});
 }
 
 class AddSetEvent extends SetsEditEvent {
-  final RoutineSet set;
+  final List<RoutineSet> oldSets;
 
-  const AddSetEvent({required super.itemId, required this.set});
+  const AddSetEvent({required super.itemId, required this.oldSets});
 }
 
 class UpdateSetEvent extends SetsEditEvent {
   final RoutineSet set;
-
   const UpdateSetEvent({required super.itemId, required this.set});
 }
 

@@ -54,7 +54,7 @@ class _SetsEditScreenState extends State<SetsEditScreen> {
           SliverReorderableList(
             itemBuilder: (context, index) {
               // return SetWidget(key: ValueKey(index));
-              return SizedBox();
+              return const SizedBox();
             },
             itemCount: sets.length,
             onReorder: (oldIndex, newIndex) {

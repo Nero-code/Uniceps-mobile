@@ -19,6 +19,7 @@ import 'package:uniceps/app/presentation/screens/routine/dialogs/days_sorting_di
 import 'package:uniceps/app/presentation/screens/routine/dialogs/rename_day_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/exercises_selection_screen.dart';
 import 'package:uniceps/app/presentation/screens/routine/routine_edit_items_tab.dart';
+import 'package:uniceps/app/presentation/screens/routine/routine_edit_sets_sheet.dart';
 import 'package:uniceps/app/presentation/screens/routine/widgets/day_tab_widget.dart';
 import 'package:uniceps/core/extensions.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
@@ -245,7 +246,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                         if (context.mounted) {
                           BlocProvider.of<ItemsEditBloc>(context).add(
                             AddRoutineItemsEvent(
-                                dayId: days[selectedIndex].id!,
                                 items: res
                                     .map(
                                       (e) => e.toModel(
@@ -276,7 +276,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                         //   return const SizedBox();
                         // }
                         print("days state type: ${state.runtimeType}");
-
                         print("days state length: ${state.days.length}");
 
                         if (currentDay == null) {
@@ -399,7 +398,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                             Expanded(
                                 child: PageView(
                               controller: pageController,
-                              // itemCount: state.days.length,
                               onPageChanged: (value) => setState(() {
                                 selectedIndex = value;
 
@@ -410,32 +408,37 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                                     duration: Durations.medium4,
                                     curve: Curves.linear);
                               }),
-                              // children: state.days
-                              //     .map((e) => RoutineItemEditTab(
-                              //           dayId: e.id!,
-                              //           onItemTap: (itemId) {
-                              //             routineItemId = itemId;
-                              //             BlocProvider.of<SetsEditBloc>(context)
-                              //                 .add(GetSetsforRoutineEvent(
-                              //                     itemId: itemId));
-
-                              //             panelController.open();
-                              //           },
-                              //         ))
-                              //     .toList(),
                               children: [
-                                for (int i = 0; i < state.days.length; i++)
-                                  RoutineItemEditTab(
-                                    dayId: state.days[i].id!,
-                                    onItemTap: (itemId) {
-                                      routineItemId = itemId;
-                                      BlocProvider.of<SetsEditBloc>(context)
-                                          .add(GetSetsforRoutineEvent(
-                                              itemId: itemId));
+                                // for (int i = 0; i < state.days.length; i++)
+                                //   RoutineItemEditTab(
+                                //     dayId: state.days[i].id!,
+                                //     onItemTap: (itemId) {
+                                //       routineItemId = itemId;
+                                //       BlocProvider.of<SetsEditBloc>(context)
+                                //           .add(GetSetsforRoutineItemEvent(
+                                //               itemId: itemId));
 
-                                      panelController.open();
-                                    },
-                                  ),
+                                //       panelController.open();
+                                //     },
+                                //   ),
+                                ...state.days.map(
+                                  (day) {
+                                    BlocProvider.of<ItemsEditBloc>(context).add(
+                                        GetRoutineDayItemsEvent(
+                                            dayId: day.id!));
+                                    return RoutineItemEditTab(
+                                      dayId: day.id!,
+                                      onItemTap: (itemId) {
+                                        routineItemId = itemId;
+                                        BlocProvider.of<SetsEditBloc>(context)
+                                            .add(GetSetsforRoutineItemEvent(
+                                                itemId: itemId));
+
+                                        panelController.open();
+                                      },
+                                    );
+                                  },
+                                )
                               ],
                             )),
                           ],
@@ -449,69 +452,57 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                       return const LoadingPage();
                     },
                   ),
-                  // SlidingUpPanel(
-                  //     minHeight: 0.0,
-                  //     maxHeight: screenSize.height * 0.75,
-                  //     controller: panelController,
-                  //     borderRadius:
-                  //         const BorderRadius.vertical(top: Radius.circular(15)),
-                  //     backdropEnabled: true,
-                  //     panel: SizedBox()
-                  //     // RoutineSetsSheet(routineItemId: , sets: sets, onSave: onSave, onRemove: onRemove)
-                  //     // BlocBuilder<SetsEditBloc, SetsEditState>(
-                  //     //   builder: (context, state) {
-                  //     //     if (state is SetsEditLoadedState) {
-                  //     //       return Container(
-                  //     //           decoration: const BoxDecoration(
-                  //     //               borderRadius: BorderRadius.vertical(
-                  //     //                   top: Radius.circular(15))),
-                  //     //           child: RoutineSetsSheet(
-                  //     //             routineItemId: state.itemId,
-                  //     //             sets: state.sets,
-                  //     //             onSave: (sets) {},
-                  //     //             onRemove: (set) {},
-                  //     //           ));
-                  //     //     } else if (state is SetsEditErrorState) {
-                  //     //       return const ErrorPage();
-                  //     //     }
-                  //     //     return const LoadingPage();
-                  //     //   },
-                  //     // ),
-                  //     ),
                 ],
               ),
             ),
           ),
           SlidingUpPanel(
-              minHeight: 0.0,
-              maxHeight: screenSize.height * 0.75,
-              controller: panelController,
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(15)),
-              backdropEnabled: true,
-              panel: Scaffold(
-                  // body: RoutineSetsSheet(routineItemId: routineItemId),
-                  )
-              // BlocBuilder<SetsEditBloc, SetsEditState>(
-              //   builder: (context, state) {
-              //     if (state is SetsEditLoadedState) {
-              //       return Container(
-              //           decoration: const BoxDecoration(
-              //               borderRadius: BorderRadius.vertical(
-              //                   top: Radius.circular(15))),
-              //           child: RoutineSetsSheet(
-              //             routineItemId: state.itemId,
-              //             sets: state.sets,
-              //             onSave: (sets) {},
-              //             onRemove: (set) {},
-              //           ));
-              //     } else if (state is SetsEditErrorState) {
-              //       return const ErrorPage();
-              //     }
-              //     return const LoadingPage();
-              //   },
-              // ),
+            minHeight: 0.0,
+            maxHeight: screenSize.height * 0.75,
+            controller: panelController,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+            backdropEnabled: true,
+            panel: Scaffold(
+              body: BlocSelector<ItemsEditBloc, ItemsEditState,
+                  List<RoutineItem>?>(
+                selector: (state) {
+                  return state is ItemsEditLoadedState ? state.items : null;
+                },
+                builder: (context, items) {
+                  return BlocBuilder<SetsEditBloc, SetsEditState>(
+                    builder: (context, setsState) {
+                      if (items != null) {
+                        RoutineItem? selectedItem;
+                        try {
+                          selectedItem = items.firstWhere(
+                              (element) => element.id == routineItemId);
+                        } catch (e) {}
+                        if (setsState is SetsEditLoadedState &&
+                            selectedItem != null) {
+                          return RoutineSetsSheet(
+                            itemId: selectedItem.id!,
+                            sets: setsState.sets,
+                            onSave: panelController.close,
+                            onDelete: () async {
+                              BlocProvider.of<ItemsEditBloc>(context).add(
+                                  RemoveRoutineItemEvent(
+                                      exercise: selectedItem!));
+                              routineItemId = null;
+                              await panelController.close();
+                            },
+                          );
+                        } else if (setsState is SetsEditErrorState) {
+                          return ErrorScreenWidget(f: setsState.failure);
+                        }
+                        return const LoadingPage();
+                      }
+                      return const SizedBox();
+                    },
+                  );
+                },
               ),
+            ),
+          ),
         ],
       ),
     );

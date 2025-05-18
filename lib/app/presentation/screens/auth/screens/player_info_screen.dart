@@ -121,7 +121,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
                             Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Theme.of(context).colorScheme.background,
+                                color: Theme.of(context).colorScheme.surface,
                               ),
                               child: const Icon(
                                 Icons.account_circle,

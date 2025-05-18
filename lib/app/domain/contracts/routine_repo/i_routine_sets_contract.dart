@@ -6,8 +6,10 @@ abstract class IRoutineSetsContract {
   //  ROUTINE SETS EDIT
   Future<Either<Failure, List<RoutineSet>>> getItemSets(int itemId);
   Future<Either<Failure, List<RoutineSet>>> addItemSets(
-      List<RoutineSet> setsToAdd);
-  Future<Either<Failure, List<RoutineSet>>> removeItemSet(
-      RoutineSet setToRemove);
+      int itemId, List<RoutineSet> oldSets);
+  Future<Either<Failure, List<RoutineSet>>> removeItemSet(RoutineSet setToRmv);
+  Future<Either<Failure, List<RoutineSet>>> saveAllSets(
+      List<RoutineSet> allSets);
+  Future<Either<Failure, List<RoutineSet>>> updateSet(RoutineSet updated);
   Future<Either<Failure, Unit>> removeAllItemSets(int itemId);
 }

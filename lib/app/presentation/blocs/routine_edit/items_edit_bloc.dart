@@ -13,15 +13,21 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
   ItemsEditBloc({required RoutineItemsCommands commands})
       : _commands = commands,
         super(ItemsEditInitial()) {
-    on<GetRoutineDayItemsEvent>((event, emit) async {
-      emit(ItemsEditLoadingState());
+    on<GetRoutineDayItemsEvent>(
+      (event, emit) async {
+        // if(state is ItemsEditLoadedState){
+        //   if(state.)
+        // }
+        emit(ItemsEditLoadingState());
 
-      final either = await _commands.getItemsUnderDay(event.dayId);
-      either.fold(
-        (l) => emit(ItemsEditErrorState(failure: l)),
-        (r) => emit(ItemsEditLoadedState(dayId: event.dayId, items: r)),
-      );
-    });
+        final either = await _commands.getItemsUnderDay(event.dayId);
+        either.fold(
+          (l) => emit(ItemsEditErrorState(failure: l)),
+          (r) => emit(ItemsEditLoadedState(items: r)),
+        );
+      },
+      transformer: (events, mapper) => events.asyncExpand(mapper),
+    );
 
     on<AddRoutineItemsEvent>((event, emit) async {
       emit(ItemsEditLoadingState());
@@ -30,7 +36,7 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
       final either = await _commands.addItems(event.items);
       either.fold(
         (l) => emit(ItemsEditErrorState(failure: l)),
-        (r) => emit(ItemsEditLoadedState(dayId: event.dayId, items: r)),
+        (r) => emit(ItemsEditLoadedState(items: r)),
       );
     });
 
@@ -52,8 +58,7 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
       final either = await _commands.reorderItems(list);
       either.fold(
         (l) => emit(ItemsEditErrorState(failure: l)),
-        (r) => emit(ItemsEditLoadedState(
-            dayId: event.dayId, items: r, version: event.version + 1)),
+        (r) => emit(ItemsEditLoadedState(items: r, version: event.version + 1)),
       );
     });
   }

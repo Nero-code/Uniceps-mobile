@@ -190,7 +190,7 @@ class _GymProfileScreenState extends State<GymProfileScreen> {
                                             selectedDecoration: BoxDecoration(
                                                 color: Theme.of(context)
                                                     .colorScheme
-                                                    .onBackground,
+                                                    .onSurface,
                                                 shape: BoxShape.circle),
                                             todayDecoration: BoxDecoration(
                                                 color: Theme.of(context)

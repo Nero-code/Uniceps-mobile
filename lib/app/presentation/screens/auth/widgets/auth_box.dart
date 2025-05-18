@@ -93,11 +93,11 @@ class _AuthBoxState extends State<AuthBox> {
             style: ButtonStyle(
               // shape: MaterialStatePropertyAll<OutlinedBorder>(
               //     BeveledRectangleBorder()),
-              backgroundColor: MaterialStatePropertyAll<Color>(
+              backgroundColor: WidgetStatePropertyAll<Color>(
                 Theme.of(context).colorScheme.primary,
               ),
               foregroundColor:
-                  MaterialStatePropertyAll<Color>(Colors.grey.shade300),
+                  WidgetStatePropertyAll<Color>(Colors.grey.shade300),
             ),
             onLongPress: null,
             onPressed: () {

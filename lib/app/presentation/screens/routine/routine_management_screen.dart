@@ -28,8 +28,8 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
       String initial, void Function(String name) onCreate) async {
     showDialog(
       context: context,
-      builder: (_) =>
-          RoutineNameDialog(initialName: initial, onSubmit: onCreate),
+      builder: (_) => RoutineNameDialog(
+          title: "Create Routine", initialName: initial, onSubmit: onCreate),
     );
   }
 
@@ -37,8 +37,8 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
       String initial, void Function(String name) onCreate) async {
     showDialog(
       context: context,
-      builder: (_) =>
-          RoutineNameDialog(initialName: initial, onSubmit: onCreate),
+      builder: (_) => RoutineNameDialog(
+          title: "Rename Routine", initialName: initial, onSubmit: onCreate),
     );
   }
 

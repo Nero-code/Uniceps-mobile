@@ -60,14 +60,14 @@ class RoutineListTile extends StatelessWidget {
                 ]),
                 const SizedBox(height: 8.0),
                 Row(children: [
-                  Icon(Icons.share_rounded, size: 18),
-                  SizedBox(width: 8.0),
+                  const Icon(Icons.share_rounded, size: 18),
+                  const SizedBox(width: 8.0),
                   Text(
                     "3 ${local.about}",
-                    style: TextStyle(),
+                    style: const TextStyle(),
                   ),
-                  SizedBox(width: 8.0),
-                  Text(
+                  const SizedBox(width: 8.0),
+                  const Text(
                     "0 teams",
                     style: TextStyle(),
                   ),

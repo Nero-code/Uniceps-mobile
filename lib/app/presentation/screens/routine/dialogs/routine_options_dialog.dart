@@ -24,7 +24,7 @@ class RoutineOptionsDialog extends StatelessWidget {
             width: 75,
             border: Border.all(color: Colors.blueGrey, width: 2.0),
             borderRadius: 10.0,
-            child: Column(
+            child: const Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.text_fields_rounded, color: Colors.blueGrey),
@@ -41,7 +41,7 @@ class RoutineOptionsDialog extends StatelessWidget {
             width: 75,
             border: Border.all(color: Colors.red.shade300, width: 2.0),
             borderRadius: 10.0,
-            child: Column(
+            child: const Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.delete, color: Colors.red),

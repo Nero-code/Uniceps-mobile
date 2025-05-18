@@ -29,7 +29,7 @@ class ExerciseListTile extends StatelessWidget {
           width: 2.0,
           color: isCompleted
               ? Theme.of(context).colorScheme.secondary
-              : Theme.of(context).colorScheme.background,
+              : Theme.of(context).colorScheme.surface,
         ),
       ),
       child: Material(
@@ -132,7 +132,7 @@ class ExerciseListTile extends StatelessWidget {
                     width: 25,
                     height: 25,
                     child: Checkbox(
-                      checkColor: theme.background,
+                      checkColor: theme.surface,
                       activeColor: theme.secondary,
                       side: const BorderSide(width: 0.5, color: Colors.grey),
                       shape: RoundedRectangleBorder(

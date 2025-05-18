@@ -13,8 +13,8 @@ class DayAddDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     return AlertDialog(
-      icon: Icon(Icons.text_fields_rounded),
-      title: Text("Add Day"),
+      icon: const Icon(Icons.text_fields_rounded),
+      title: const Text("Add Day"),
       content: TextField(
         controller: _controller,
         decoration: InputDecoration(
