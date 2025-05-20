@@ -19,6 +19,10 @@ class RoutineManagementCommands implements ICommand {
   Future<Either<Failure, List<Routine>>> updateRoutine(Routine routine) async =>
       await _repo.updateRoutine(routine);
 
+  Future<Either<Failure, List<Routine>>> setCurrentRoutine(
+          Routine routine) async =>
+      await _repo.setCurrentRoutine(routine);
+
   Future<Either<Failure, List<Routine>>> deleteRoutine(Routine routine) async =>
       await _repo.deleteRoutine(routine);
 

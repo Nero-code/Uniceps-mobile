@@ -5,6 +5,7 @@ import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_create_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_delete_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_options_dialog.dart';
+import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_set_current_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/routine_edit_days_screen.dart';
 import 'package:uniceps/app/presentation/screens/routine/widgets/routine_grid_tile.dart';
 import 'package:uniceps/app/presentation/screens/routine/widgets/routine_list_tile.dart';
@@ -49,99 +50,155 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
     );
   }
 
+  void _setCurrentRoutine(void Function() onConfirm) async {
+    showDialog(
+        context: context,
+        builder: (_) => RoutineSetCurrentDialog(onConfirm: onConfirm));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: const Text("My Routines"),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => _createRoutine(
-            "routine $routinesLength",
-            (name) async => BlocProvider.of<RoutineManagementBloc>(context)
-                .add(CreateRoutineEvent(name: name)),
-          ),
-          child: const Icon(Icons.add),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () => _createRoutine(
+        //     "routine $routinesLength",
+        //     (name) async => BlocProvider.of<RoutineManagementBloc>(context)
+        //         .add(CreateRoutineEvent(name: name)),
+        //   ),
+        //   child: const Icon(Icons.add),
+        // ),
         body: BlocBuilder<RoutineManagementBloc, RoutineManagementState>(
           builder: (context, state) {
             if (state is RoutineManagementLoadedState) {
               routinesLength = state.routines.length + 1;
-              if (isGridView) {
-                return GridView(
-                  padding: EdgeInsets.all(gridSpacing),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 1.3,
-                    crossAxisCount: 2,
-                    mainAxisSpacing: gridSpacing,
-                    crossAxisSpacing: gridSpacing,
-                  ),
-                  children: state.routines.map(
-                    (e) {
-                      return RoutineGridTile(
-                        routine: e,
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RoutineEditScreen(
-                              routineId: e.id!,
-                              routineName: e.name,
-                            ),
+
+              return Stack(
+                children: [
+                  isGridView
+                      ? GridView(
+                          // padding: EdgeInsets.all(gridSpacing),
+                          padding: const EdgeInsets.only(bottom: 50.0),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: 1.3,
+                            crossAxisCount: 2,
+                            mainAxisSpacing: gridSpacing,
+                            crossAxisSpacing: gridSpacing,
                           ),
-                        ),
-                        onLongPress: () {},
-                      );
-                    },
-                  ).toList(),
-                );
-              } else {
-                return ListView(
-                  children: state.routines.map(
-                    (e) {
-                      return RoutineListTile(
-                          routine: e,
-                          onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RoutineEditScreen(
-                                    routineId: e.id!,
-                                    routineName: e.name,
+                          children: state.routines.map(
+                            (e) {
+                              return RoutineGridTile(
+                                routine: e,
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RoutineEditScreen(
+                                      routineId: e.id!,
+                                      routineName: e.name,
+                                    ),
                                   ),
                                 ),
-                              ),
-                          onLongPress: () async {
-                            final res = await showDialog<Option>(
-                                context: context,
-                                builder: (context) =>
-                                    RoutineOptionsDialog(routineName: e.name));
+                                onLongPress: () {},
+                              );
+                            },
+                          ).toList(),
+                        )
+                      : ListView(
+                          padding: const EdgeInsets.only(bottom: 50.0),
+                          children: state.routines
+                              .map(
+                                (e) => RoutineListTile(
+                                    routine: e,
+                                    onTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                RoutineEditScreen(
+                                              routineId: e.id!,
+                                              routineName: e.name,
+                                            ),
+                                          ),
+                                        ),
+                                    onLongPress: () async {
+                                      final res = await showDialog<Option>(
+                                          context: context,
+                                          builder: (context) =>
+                                              RoutineOptionsDialog(
+                                                  routineName: e.name));
 
-                            print("selected option: $res");
-                            switch (res) {
-                              case Option.edit:
-                                _renameRoutine(e.name, (name) {
-                                  if (name == e.name) return;
-                                  BlocProvider.of<RoutineManagementBloc>(
-                                          context)
-                                      .add(UpdateRoutineEvent(
-                                          routineToUpdate:
-                                              e.copyWith(name: name)));
-                                });
-                                break;
+                                      // print("selected option: $res");
+                                      switch (res) {
+                                        case Option.edit:
+                                          _renameRoutine(e.name, (name) {
+                                            if (name == e.name) return;
+                                            BlocProvider.of<
+                                                        RoutineManagementBloc>(
+                                                    context)
+                                                .add(UpdateRoutineEvent(
+                                                    routineToUpdate: e.copyWith(
+                                                        name: name)));
+                                          });
+                                          break;
 
-                              case Option.delete:
-                                _deleteRoutine(() =>
-                                    BlocProvider.of<RoutineManagementBloc>(
-                                            context)
-                                        .add(DeleteRoutineEvent(
-                                            routineToDelete: e)));
-                                break;
-                              default:
-                            }
-                          });
-                    },
-                  ).toList(),
-                );
-              }
+                                        case Option.delete:
+                                          _deleteRoutine(() => BlocProvider.of<
+                                                      RoutineManagementBloc>(
+                                                  context)
+                                              .add(DeleteRoutineEvent(
+                                                  routineToDelete: e)));
+                                          break;
+
+                                        case Option.setCurrent:
+                                          _setCurrentRoutine(() => BlocProvider
+                                                  .of<RoutineManagementBloc>(
+                                                      context)
+                                              .add(SetCurrentRoutineEvent(
+                                                  routine: e,
+                                                  version: state.version)));
+                                          break;
+                                        default:
+                                      }
+                                    }),
+                              )
+                              .toList(),
+                        ),
+                  Positioned(
+                      bottom: 0.0,
+                      width: MediaQuery.sizeOf(context).width,
+                      child: Material(
+                        color: const Color.fromARGB(255, 59, 146, 146),
+                        // color: Theme.of(context).colorScheme.secondary,
+                        child: InkWell(
+                          child: const Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.add, color: Colors.white),
+                                Text(
+                                  "Add Routine",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          onTap: () => _createRoutine(
+                            "routine $routinesLength",
+                            (name) async =>
+                                BlocProvider.of<RoutineManagementBloc>(context)
+                                    .add(CreateRoutineEvent(name: name)),
+                          ),
+                        ),
+                      ))
+                ],
+              );
             } else if (state is RoutineManagementErrorState) {
               return ReloadScreenWidget(
                   f: state.failure,

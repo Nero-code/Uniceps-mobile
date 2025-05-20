@@ -7,6 +7,7 @@ import 'package:uniceps/app/data/models/routine_models/extensions.dart' as ext;
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
+import 'package:uniceps/app/presentation/blocs/exercises_v2/exercises_v2_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/exercises_v2/muscle_group_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/routine_edit/days_edit_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/routine_edit/items_edit_bloc.dart';
@@ -96,7 +97,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
               builder: (bcontext, child) =>
                   SizeTransition(sizeFactor: animation, child: child),
               child: Material(
-                color: Colors.white,
+                color: Colors.transparent,
                 borderRadius: BorderRadius.circular(5),
                 child: DayEditFlaotingMenu(
                   onEdit: () async {
@@ -230,10 +231,18 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                         final res = await Navigator.push<List<ExerciseV2>>(
                             context,
                             MaterialPageRoute(
-                              builder: (c) => BlocProvider(
-                                create: (context) =>
-                                    MuscleGroupBloc(commands: di.sl())
-                                      ..add(GetMuscleGroupsEvent()),
+                              builder: (c) => MultiBlocProvider(
+                                providers: [
+                                  BlocProvider(
+                                    create: (context) =>
+                                        MuscleGroupBloc(commands: di.sl())
+                                          ..add(GetMuscleGroupsEvent()),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) =>
+                                        ExercisesV2Bloc(commands: di.sl()),
+                                  ),
+                                ],
                                 child: const ExercisesSelectionScreen(),
                               ),
                             ));
@@ -257,9 +266,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                           );
                         }
                       },
-                      child: const Icon(
-                        Icons.add,
-                      ),
+                      child: const Icon(Icons.add),
                     );
                   }
                   return const SizedBox();
@@ -348,8 +355,11 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                                               (deleted) =>
                                                   BlocProvider.of<DaysEditBloc>(
                                                           context)
-                                                      .add(RemoveDayEvent(
-                                                          day: deleted)),
+                                                      .add(
+                                                RemoveDayEvent(
+                                                  dayToRemove: deleted,
+                                                ),
+                                              ),
                                             );
                                             break;
                                           default:
@@ -365,7 +375,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                                     icon: const Icon(Icons.add),
                                     onPressed: () {
                                       _addDay(
-                                        "day ${state.days.length}",
+                                        "day ${state.days.length + 1}",
                                         (name) => BlocProvider.of<DaysEditBloc>(
                                                 context)
                                             .add(
@@ -476,7 +486,9 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                         try {
                           selectedItem = items.firstWhere(
                               (element) => element.id == routineItemId);
-                        } catch (e) {}
+                        } catch (e) {
+                          selectedItem = null;
+                        }
                         if (setsState is SetsEditLoadedState &&
                             selectedItem != null) {
                           return RoutineSetsSheet(

@@ -76,7 +76,7 @@ class _RoutineItemHorizontalWidgetState
                 child: Column(
                   children: [
                     Text(widget.item.exercise.name, maxLines: 2),
-                    const Text("Muscle Group: "),
+                    const Text("Muscle Group: "), // TODO: Translate
                   ],
                 ),
               )

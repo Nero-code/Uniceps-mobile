@@ -46,6 +46,19 @@ class RoutineManagementBloc
       );
     });
 
+    on<SetCurrentRoutineEvent>(
+      (event, emit) async {
+        emit(RoutineManagementLoadingState());
+
+        final either = await _usecases.setCurrentRoutine(event.routine);
+        either.fold(
+          (l) => emit(RoutineManagementErrorState(failure: l)),
+          (r) => emit(RoutineManagementLoadedState(
+              routines: r, version: event.version + 1)),
+        );
+      },
+    );
+
     on<DeleteRoutineEvent>((event, emit) async {
       emit(RoutineManagementLoadingState());
 

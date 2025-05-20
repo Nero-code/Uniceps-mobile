@@ -62,14 +62,15 @@ class _RoutineItemVerticalWidgetState extends State<RoutineItemVerticalWidget> {
           ),
           const Divider(),
           Text(widget.item.exercise.name),
-          Text("Muscle Group: ${widget.item.exercise.muscleGroupId}"),
+          Text(
+              "Muscle Group: ${widget.item.exercise.muscleGroupId}"), // TODO: Translate
           // const Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: sets
                 .map((set) => Column(
                       children: [
-                        Text("Round ${set.index}"),
+                        Text("Round ${set.index}"), // TODO: Translate
                         Text("${set.reps} "),
                       ],
                     ))

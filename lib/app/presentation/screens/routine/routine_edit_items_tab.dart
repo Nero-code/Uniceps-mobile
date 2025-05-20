@@ -93,7 +93,7 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab>
                     image: const AssetImage(IMG_BLANK),
                   ),
                   const SizedBox(height: 10),
-                  const Text("no items, try the (+) button"),
+                  const Text("no items, try the (+) button"), // TODO: Translate
                 ],
               ),
             );
@@ -106,68 +106,6 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab>
           ));
         }
         return const LoadingPage();
-
-        // if (items.isNotEmpty) {
-        //   return ReorderableListView(
-        //     buildDefaultDragHandles: true,
-        //     onReorder: (oldIndex, newIndex) {
-        //       final list = items;
-        //       final item = list.removeAt(oldIndex);
-
-        //       list.insert(newIndex - (newIndex > oldIndex ? 1 : 0), item);
-
-        //       BlocProvider.of<ItemsEditBloc>(context).add(
-        //           ReorderRoutineItemsEvent(
-        //               dayId: widget.dayId, newOrder: list,version: state));
-        //     },
-        //     children: [
-        //       //
-        //       // R O U T I N E   I T E M
-        //       //
-        //       ...items.map((item) => RoutineItemHorizontalWidget(
-        //           key: ValueKey(item.id!),
-        //           item: item,
-        //           onTap: widget.onItemTap)),
-        //       // ...items.map((item) => RoutineItemVerticalWidget(item: item)),
-        //       //
-
-        //       //
-        //       // P L A C E H O L D E R
-        //       //
-
-        //       // RoutineItemAddPlacholder(onAdd: (list) {
-        //       //   items.addAll(
-        //       //     list.map(
-        //       //       (ex) => RoutineItem(
-        //       //           id: null,
-        //       //           apiId: null,
-        //       //           dayId: widget.dayId,
-        //       //           version: 0,
-        //       //           exercise: ex,
-        //       //           sets: [],
-        //       //           isSynced: false),
-        //       //     ),
-        //       //   );
-        //       //   print(list.length);
-        //       //   setState(() {});
-        //       // }),
-        //     ],
-        //   );
-        // } else {
-        //   return Center(
-        //     child: Column(
-        //       mainAxisSize: MainAxisSize.min,
-        //       children: [
-        //         Image(
-        //           width: MediaQuery.sizeOf(context).width * 0.5,
-        //           image: const AssetImage(IMG_BLANK),
-        //         ),
-        //         const SizedBox(height: 10),
-        //         const Text("no items, try the (+) button"),
-        //       ],
-        //     ),
-        //   );
-        // }
       },
     );
   }

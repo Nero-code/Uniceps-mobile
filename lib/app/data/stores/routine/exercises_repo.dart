@@ -71,7 +71,7 @@ class ExercisesRepo implements IExercisesContract {
     if (await _internet.hasConnection) {
       try {
         final res = await _remoteSource.getExercisesByGroup(group.asDto());
-        return Right(res);
+        return Right(res.where((e) => e.muscleGroupId == group.apiId).toList());
       } catch (e) {
         return Left(ServerFailure(errMsg: e.toString()));
       }

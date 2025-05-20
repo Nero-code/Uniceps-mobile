@@ -44,6 +44,7 @@ class RoutineDto extends Routine implements BaseDTO {
         updatedAt: r.updatedAt,
         trainingDaysDto:
             trainingDays.map((day) => RoutineDayDto.fromTable(day)).toList(),
+        isCurrent: r.isCurrent,
         isSynced: r.isSynced,
       );
 

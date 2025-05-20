@@ -96,7 +96,10 @@ class RoutineItemsRepo implements IRoutineItemsContract {
 
       // lazyItemsBuffer[item.dayId]!.remove(item);
 
-      itemsBuffer.removeWhere((element) => element.id == item.id);
+      itemsBuffer
+        ..removeWhere((element) => element.id == item.id)
+        ..forEach((i) =>
+            i.index > item.index ? i = i.copyWith(index: i.index - 1) : null);
 
       return Right(itemsBuffer);
     } catch (e) {

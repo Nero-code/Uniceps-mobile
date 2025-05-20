@@ -14,13 +14,11 @@ class GetRoutineDayItemsEvent extends ItemsEditEvent {
 
 class AddRoutineItemsEvent extends ItemsEditEvent {
   final List<RoutineItem> items;
-
   const AddRoutineItemsEvent({required this.items});
 }
 
 class RemoveRoutineItemEvent extends ItemsEditEvent {
   final RoutineItem exercise;
-
   const RemoveRoutineItemEvent({required this.exercise});
 }
 

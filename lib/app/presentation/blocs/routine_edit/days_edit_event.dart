@@ -21,8 +21,8 @@ class AddDayEvent extends DaysEditEvent {
 }
 
 class RemoveDayEvent extends DaysEditEvent {
-  final RoutineDay day;
-  const RemoveDayEvent({required this.day});
+  final RoutineDay dayToRemove;
+  const RemoveDayEvent({required this.dayToRemove});
 }
 
 class RenameDayEvent extends DaysEditEvent {

@@ -48,6 +48,12 @@ class RoutineDaysRepo implements IRoutineDaysContract {
     try {
       await _localSource.removeDay(day.asDto());
       currentRoutineDays.remove(day);
+      for (int i = day.index; i < currentRoutineDays.length; i++) {
+        print("currentRoutineDays ----> ${currentRoutineDays[i].index} : $i");
+        currentRoutineDays[i] = currentRoutineDays[i].copyWith(index: i);
+      }
+      await _localSource
+          .saveOrder(currentRoutineDays.map((day) => day.asDto()).toList());
       return Right(currentRoutineDays);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));

@@ -12,9 +12,11 @@ final class ExercisesV2Initial extends ExercisesV2State {}
 final class ExercisesV2LoadingState extends ExercisesV2State {}
 
 final class ExercisesV2LoadedState extends ExercisesV2State {
-  final List<ExerciseV2> list;
+  final List<ExerciseV2> list, selected;
+  const ExercisesV2LoadedState({required this.list, required this.selected});
 
-  const ExercisesV2LoadedState({required this.list});
+  @override
+  List<Object> get props => [list.length, selected.length];
 }
 
 final class ExercisesV2ErrorState extends ExercisesV2State {

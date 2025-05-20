@@ -79,6 +79,17 @@ class RoutineManagementRepo implements IRoutineManagementContract {
   }
 
   @override
+  Future<Either<Failure, List<Routine>>> setCurrentRoutine(
+      Routine routine) async {
+    try {
+      final res = await _localSource.setCurrentRoutine(routine.asDto());
+      return Right(res);
+    } catch (e) {
+      return Left(DatabaseFailure(errorMsg: e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, Unit>> shareRoutine(
       Routine routine, int userId) async {
     try {

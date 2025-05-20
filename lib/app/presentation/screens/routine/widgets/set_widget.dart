@@ -34,8 +34,6 @@ class _SetWidgetState extends State<SetWidget> {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            // if (changesNeedsSave)
-            //   Icon(Icons.error_outline_sharp, size: 20, color: Colors.red),
             Expanded(
               child: Center(
                 child: Text(

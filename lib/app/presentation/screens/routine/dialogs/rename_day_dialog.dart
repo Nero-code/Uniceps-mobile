@@ -14,7 +14,7 @@ class RenameDayDialog extends StatelessWidget {
     final locale = AppLocalizations.of(context)!;
     return AlertDialog(
       icon: const Icon(Icons.edit),
-      title: const Text("Change Name"),
+      title: const Text("Change Name"), // TODO: Translate
       content: TextField(
         controller: controller,
         decoration: InputDecoration(

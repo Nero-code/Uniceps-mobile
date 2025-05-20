@@ -26,7 +26,7 @@ class _DaysSortingDialogState extends State<DaysSortingDialog> {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     return AlertDialog(
-      title: const Text("title"),
+      title: const Text("title"), // TODO: Translate
       content: Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey.shade300),

@@ -34,7 +34,7 @@ class DaysEditBloc extends Bloc<DaysEditEvent, DaysEditState> {
     on<RemoveDayEvent>((event, emit) async {
       emit(DaysEditLoadingState());
 
-      final either = await _commands.removeDay(event.day);
+      final either = await _commands.removeDay(event.dayToRemove);
       either.fold(
         (l) => emit(DaysEditErrorState(failure: l)),
         (r) => emit(DaysEditLoadedState(days: r)),

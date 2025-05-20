@@ -10,7 +10,7 @@ part 'exercises_v2_state.dart';
 
 class ExercisesV2Bloc extends Bloc<ExercisesV2Event, ExercisesV2State> {
   final ExercisesCommands _commands;
-
+  final selectedExercises = <ExerciseV2>[];
   ExercisesV2Bloc({required ExercisesCommands commands})
       : _commands = commands,
         super(ExercisesV2Initial()) {
@@ -21,11 +21,19 @@ class ExercisesV2Bloc extends Bloc<ExercisesV2Event, ExercisesV2State> {
       emit(ExercisesV2LoadingState());
 
       final either = await _commands.getExercisesByGroup(event.filter);
-      either.fold((l) => emit(ExercisesV2ErrorState(failure: l)),
-          (r) => emit(ExercisesV2LoadedState(list: r)));
+      either.fold(
+          (l) => emit(ExercisesV2ErrorState(failure: l)),
+          (r) => emit(
+              ExercisesV2LoadedState(list: r, selected: selectedExercises)));
     });
     on<AddOrRemoveExerciseEvent>((event, emit) {
-      // TODO: implement event handler
+      if (event.isAdd) {
+        selectedExercises.add(event.exerciseV2);
+      } else {
+        selectedExercises.remove(event.exerciseV2);
+      }
+      emit(
+          ExercisesV2LoadedState(list: event.all, selected: selectedExercises));
     });
   }
 }

@@ -19,9 +19,9 @@ class DayDeleteDialog extends StatelessWidget {
         color: Colors.red.shade300,
         size: 40,
       ),
-      title: Text("Delete? ${dayToDelete.name}"),
+      title: Text("Delete? ${dayToDelete.name}"), // TODO: Translate
       content: Text(
-          "are you sure you want to delete ${dayToDelete.name} all exercises under it will be lost?"),
+          "are you sure you want to delete ${dayToDelete.name} all exercises under it will be lost?"), // TODO: Translate
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),

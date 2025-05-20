@@ -5,6 +5,7 @@ import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 import 'package:uniceps/app/presentation/blocs/exercises_v2/exercises_v2_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/screens/routine/widgets/exercise_grid_widget.dart';
+import 'package:uniceps/injection_dependency.dart' as di;
 
 class ExercisesListTab extends StatefulWidget {
   const ExercisesListTab({
@@ -28,67 +29,71 @@ class _ExercisesListTabState extends State<ExercisesListTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return BlocBuilder<ExercisesV2Bloc, ExercisesV2State>(
-      builder: (context, state) {
-        if (state is ExercisesV2Initial) {
-          BlocProvider.of<ExercisesV2Bloc>(context)
-              .add(GetExercisesByFilterEvent(filter: widget.muscleGroup));
-        }
-        if (state is ExercisesV2LoadedState) {
-          return GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 0.8,
-              crossAxisCount: 2,
-              mainAxisSpacing: spacing,
-              crossAxisSpacing: spacing,
-            ),
-            padding: EdgeInsets.all(spacing),
-            itemCount: state.list.length,
-            itemBuilder: (context, index) {
-              print("selectedIDs: ${selectedIds.length}");
-              return Stack(
-                children: [
-                  ExerciseGridWidget(
-                    isSelected: selectedIds.contains(state.list[index].apiId),
-                    exercise: state.list[index],
-                    index: index % 6 + 1,
-                  ),
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      splashColor: const Color.fromARGB(30, 158, 158, 158),
-                      highlightColor: const Color.fromARGB(30, 158, 158, 158),
-                      borderRadius: BorderRadius.circular(15.0),
-                      onTap: () {
-                        if (!selectedIds.contains(state.list[index].apiId)) {
-                          print("added");
-                          // ----------------------------------------------
-                          // Add exercise here and parent widget and notify
-                          selectedIds.add(state.list[index].apiId!);
-                          widget.onSelect(state.list[index], false);
-                          // ----------------------------------------------
-                        } else {
-                          print("removed");
-                          // -------------------------------------------------
-                          // Remove exercise here and parent widget and notify
-                          selectedIds.remove(state.list[index].apiId!);
-                          widget.onSelect(state.list[index], true);
-                          // -------------------------------------------------
-                        }
-                        setState(() {});
-                      },
-                      child: const SizedBox.expand(),
+    return BlocProvider(
+      create: (context) => ExercisesV2Bloc(commands: di.sl()),
+      lazy: false,
+      child: BlocBuilder<ExercisesV2Bloc, ExercisesV2State>(
+        builder: (context, state) {
+          if (state is ExercisesV2Initial) {
+            BlocProvider.of<ExercisesV2Bloc>(context)
+                .add(GetExercisesByFilterEvent(filter: widget.muscleGroup));
+          }
+          if (state is ExercisesV2LoadedState) {
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: 0.8,
+                crossAxisCount: 2,
+                mainAxisSpacing: spacing,
+                crossAxisSpacing: spacing,
+              ),
+              padding: EdgeInsets.all(spacing),
+              itemCount: state.list.length,
+              itemBuilder: (context, index) {
+                print("selectedIDs: ${selectedIds.length}");
+                return Stack(
+                  children: [
+                    ExerciseGridWidget(
+                      isSelected: selectedIds.contains(state.list[index].apiId),
+                      exercise: state.list[index],
+                      index: index % 6 + 1,
                     ),
-                  ),
-                ],
-              );
-            },
-          );
-        } else if (state is ExercisesV2ErrorState) {
-          return Center(child: Text(state.failure.getErrorMessage()));
-        }
-        return const LoadingPage();
-      },
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        splashColor: const Color.fromARGB(30, 158, 158, 158),
+                        highlightColor: const Color.fromARGB(30, 158, 158, 158),
+                        borderRadius: BorderRadius.circular(15.0),
+                        onTap: () {
+                          if (!selectedIds.contains(state.list[index].apiId)) {
+                            print("added");
+                            // -------------------------------------------------
+                            // Add exercise here and parent widget and notify
+                            selectedIds.add(state.list[index].apiId!);
+                            widget.onSelect(state.list[index], false);
+                            // -------------------------------------------------
+                          } else {
+                            print("removed");
+                            // -------------------------------------------------
+                            // Remove exercise here and parent widget and notify
+                            selectedIds.remove(state.list[index].apiId!);
+                            widget.onSelect(state.list[index], true);
+                            // -------------------------------------------------
+                          }
+                          setState(() {});
+                        },
+                        child: const SizedBox.expand(),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          } else if (state is ExercisesV2ErrorState) {
+            return Center(child: Text(state.failure.getErrorMessage()));
+          }
+          return const LoadingPage();
+        },
+      ),
     );
   }
 

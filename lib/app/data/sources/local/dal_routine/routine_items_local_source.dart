@@ -156,6 +156,18 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
     await (_database.delete(_database.routineItems)
           ..where((f) => f.id.equals(item.id!)))
         .go();
+
+    final old = await (_database.select(_database.routineItems)
+          ..where((f) => f.dayId.equals(item.dayId))
+          ..where((f2) => f2.index.isBiggerOrEqualValue(item.index)))
+        .get();
+    for (final i in old) {
+      await (_database.update(_database.routineItems)
+            ..where((f) => f.id.equals(i.id)))
+          .write(RoutineItemsCompanion.custom(
+        index: Constant(i.index - 1),
+      ));
+    }
   }
 
   @override

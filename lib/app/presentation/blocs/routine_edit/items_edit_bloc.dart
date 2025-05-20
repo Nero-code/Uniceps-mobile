@@ -42,6 +42,12 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
 
     on<RemoveRoutineItemEvent>((event, emit) async {
       emit(ItemsEditLoadingState());
+
+      final either = await _commands.removeItem(event.exercise);
+      either.fold(
+        (l) => emit(ItemsEditErrorState(failure: l)),
+        (r) => emit(ItemsEditLoadedState(items: r)),
+      );
     });
 
     on<ReorderRoutineItemsEvent>((event, emit) async {

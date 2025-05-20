@@ -13,10 +13,10 @@ class ExercisesCommands implements ICommand {
     return await _repo.getExercises();
   }
 
-  Future<Either<Failure, List<ExerciseV2>>> getExercisesByFilter(
-      String filter) async {
-    return await _repo.getExercisesByFilter(filter);
-  }
+  // Future<Either<Failure, List<ExerciseV2>>> getExercisesByFilter(
+  //     String filter) async {
+  //   return await _repo.getExercisesByFilter(filter);
+  // }
 
   Future<Either<Failure, List<ExerciseV2>>> getExercisesByGroup(
       MuscleGroup filter) async {

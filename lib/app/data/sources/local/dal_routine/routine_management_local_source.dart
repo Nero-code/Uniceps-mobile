@@ -6,6 +6,7 @@ abstract class IRoutineManagementLocalSourceContract {
   Future<List<RoutineDto>> getAllRoutines();
   Future<RoutineDto> createRoutine(String routineName);
   Future<RoutineDto> updateRoutine(RoutineDto dto);
+  Future<List<RoutineDto>> setCurrentRoutine(RoutineDto dto);
   Future<void> deleteRoutine(RoutineDto dto);
   Future<void> saveRoutines(List<RoutineDto> list);
   Future<void> shareRoutine(RoutineDto dto);
@@ -41,8 +42,22 @@ class RoutineManagementLocalSourceImpl
   Future<RoutineDto> updateRoutine(RoutineDto dto) async {
     await (_database.update(_database.routines)
           ..where((f) => f.id.equals(dto.id!)))
-        .write(RoutinesCompanion(name: Value(dto.name)));
+        .write(RoutinesCompanion.custom(name: Constant(dto.name)));
     return dto;
+  }
+
+  @override
+  Future<List<RoutineDto>> setCurrentRoutine(RoutineDto dto) async {
+    await (_database.update(_database.routines)
+          ..where((f) => f.isCurrent.equals(true)))
+        .write(RoutinesCompanion.custom(isCurrent: const Constant(false)));
+
+    await (_database.update(_database.routines)
+          ..where((f) => f.id.equals(dto.id!)))
+        .write(RoutinesCompanion.custom(isCurrent: const Constant(true)));
+
+    final res = await _database.select(_database.routines).get();
+    return res.map((r) => RoutineDto.fromTable(r)).toList();
   }
 
   @override

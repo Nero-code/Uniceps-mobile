@@ -7,14 +7,25 @@ class LoadingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Container(
-      width: 50,
-      height: 50,
-      padding: const EdgeInsets.all(16.0),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
+      width: 45,
+      height: 45,
+      padding: const EdgeInsets.all(13.0),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0.0, 2.0),
+              color: Colors.grey.shade300,
+              blurRadius: 4,
+              spreadRadius: 1,
+            )
+          ]),
+      child: CircularProgressIndicator(
+        strokeWidth: 5.0,
+        strokeCap: StrokeCap.round,
+        color: Theme.of(context).colorScheme.secondary,
       ),
-      child: const CircularProgressIndicator(strokeCap: StrokeCap.round),
     ));
   }
 }

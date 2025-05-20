@@ -22,6 +22,12 @@ class UpdateRoutineEvent extends RoutineManagementEvent {
   const UpdateRoutineEvent({required this.routineToUpdate});
 }
 
+class SetCurrentRoutineEvent extends RoutineManagementEvent {
+  final Routine routine;
+  final int version;
+  const SetCurrentRoutineEvent({required this.routine, this.version = 0});
+}
+
 class DeleteRoutineEvent extends RoutineManagementEvent {
   final Routine routineToDelete;
   const DeleteRoutineEvent({required this.routineToDelete});
