@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/routine_edit/items_edit_bloc.dart';
+import 'package:uniceps/app/presentation/screens/routine/blocs/routine_edit/items_edit_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/screens/routine/widgets/routine_item_horizontal_widget.dart';
 import 'package:uniceps/core/constants/constants.dart';

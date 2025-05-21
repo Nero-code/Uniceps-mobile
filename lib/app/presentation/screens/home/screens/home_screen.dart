@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
-import 'package:uniceps/app/presentation/blocs/routine_management/routine_management_bloc.dart';
+import 'package:uniceps/app/presentation/screens/routine/blocs/routine_management/routine_management_bloc.dart';
 import 'package:uniceps/app/presentation/screens/home/dialogs/comming_soon_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/routine_management_screen.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';

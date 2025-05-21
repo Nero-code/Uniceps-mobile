@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/routine_management/routine_management_bloc.dart';
+import 'package:uniceps/app/presentation/screens/routine/blocs/routine_management/routine_management_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_create_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_delete_dialog.dart';

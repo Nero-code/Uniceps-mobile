@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
-import 'package:uniceps/app/presentation/blocs/routine_edit/sets_edit_bloc.dart';
+import 'package:uniceps/app/presentation/screens/routine/blocs/routine_edit/sets_edit_bloc.dart';
 
 class SetWidget extends StatefulWidget {
   const SetWidget({
