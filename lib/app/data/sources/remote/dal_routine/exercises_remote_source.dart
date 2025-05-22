@@ -36,7 +36,7 @@ class ExercisesRemoteSourceImpl implements IExercisesRemoteSourceContract {
 
   @override
   Future<List<ExerciseV2Dto>> getExercisesByGroup(MuscleGroupDto group) async {
-    return await _clientHelper.getListHandler(
-        API_V2, HTTP_EXERCISES, (json) => ExerciseV2Dto.fromJson(json));
+    return await _clientHelper.getListHandler(API_V2, HTTP_EXERCISES,
+        (json) => ExerciseV2Dto.fromJson(json), {'id': "${group.apiId}"});
   }
 }

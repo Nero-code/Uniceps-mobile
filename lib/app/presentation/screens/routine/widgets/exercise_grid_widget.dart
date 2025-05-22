@@ -68,11 +68,16 @@ class ExerciseGridWidget extends StatelessWidget {
           // Image.network(
           //   imgUrlParser(exercise.muscleGroup, exercise.imageUrl),
           // ),
-          Text(
-            exercise.name,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+          Divider(color: Colors.grey.shade100),
+          Expanded(
+            child: Center(
+              child: Text(
+                exercise.name,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ),
         ],
       ),

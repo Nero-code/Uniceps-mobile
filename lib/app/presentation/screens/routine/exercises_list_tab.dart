@@ -49,13 +49,12 @@ class _ExercisesListTabState extends State<ExercisesListTab>
               padding: EdgeInsets.all(spacing),
               itemCount: state.list.length,
               itemBuilder: (context, index) {
-                print("selectedIDs: ${selectedIds.length}");
                 return Stack(
                   children: [
                     ExerciseGridWidget(
                       isSelected: selectedIds.contains(state.list[index].apiId),
                       exercise: state.list[index],
-                      index: index % 6 + 1,
+                      index: index,
                     ),
                     Material(
                       color: Colors.transparent,
@@ -98,7 +97,7 @@ class _ExercisesListTabState extends State<ExercisesListTab>
   }
 
   @override
-  bool get wantKeepAlive => selectedIds.isNotEmpty;
+  bool get wantKeepAlive => true;
 }
 
 // import 'package:flutter/material.dart';
