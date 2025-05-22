@@ -45,46 +45,46 @@ class ReloadScreenWidget extends StatelessWidget {
   String errorImageMapper(Failure f) {
     switch (f.runtimeType) {
       case const (NoGymSpecifiedFailure):
-        return "$PHOTOS_PATH" "$IMG_EMPTY_2";
+        return IMG_EMPTY_2;
 
       case const (NoTrainingProgramFailure):
-        return "$PHOTOS_PATH" "$IMG_NO_PROGRAM";
+        return IMG_NO_PROGRAM;
 
       case const (ServerFailure):
-        return "$PHOTOS_PATH" "$IMG_SERVER_DOWN";
+        return IMG_SERVER_DOWN;
 
       //  E M P T Y   F A I L U R E S
       // case NoAttendenceFoundFailure:
       case const (NotAMemberOfGymFailure):
-        return "$PHOTOS_PATH" "$IMG_NO_PROGRAM";
+        return IMG_NO_PROGRAM;
       case const (NoAttendenceFoundFailure):
-        return "$PHOTOS_PATH" "$IMG_NO_ATTENDENCE";
+        return IMG_NO_ATTENDENCE;
       case const (EmptyMeasureFailure):
-        return "$PHOTOS_PATH" "$IMG_NO_MEASUREMENTS";
+        return IMG_NO_MEASUREMENTS;
       case const (EmptyGymsListFailure):
-        return "$PHOTOS_PATH" "$IMG_EMPTY";
+        return IMG_EMPTY;
       case const (EmptyTrainingDaysFailure):
       case const (EmptySubsFailure):
       case const (EmptyCacheFailure):
-        return "$PHOTOS_PATH" "$IMG_EMPTY_2";
+        return IMG_EMPTY_2;
 
       // case NoInternetConnectionFailure:
       case const (OfflineFailure):
-        return "$PHOTOS_PATH" "$IMG_NO_INTERNET";
+        return IMG_NO_INTERNET;
       case const (DatabaseFailure):
-        return "$PHOTOS_PATH" "$IMG_VOID";
+        return IMG_VOID;
 
       case const (NotFoundFailure):
-        return "$PHOTOS_PATH" "$IMG_BLANK";
+        return IMG_BLANK;
 
       case const (AuthFailure):
-        return "$PHOTOS_PATH" "$IMG_DESKTOP";
+        return IMG_DESKTOP;
 
       case const (GeneralPurposFailure):
-        return "$PHOTOS_PATH" "$IMG_WARNING";
+        return IMG_WARNING;
 
       default:
-        return "$PHOTOS_PATH" "$IMG_WARNING";
+        return IMG_WARNING;
     }
   }
 

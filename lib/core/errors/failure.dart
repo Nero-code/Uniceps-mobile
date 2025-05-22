@@ -51,6 +51,13 @@ class InvalidCodeFailure implements Failure {
   }
 }
 
+class AuthUnautherizedFailure implements Failure {
+  final String errMsg;
+  const AuthUnautherizedFailure(this.errMsg);
+  @override
+  String getErrorMessage() => errMsg;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 ///   D A T A B A S E   F A I L U R E S
 ////////////////////////////////////////////////////////////////////////////////
@@ -178,6 +185,14 @@ class NoTrainingProgramFailure implements Failure {
 class NoAttendenceFoundFailure implements Failure {
   final String errMsg;
   const NoAttendenceFoundFailure(this.errMsg);
+
+  @override
+  String getErrorMessage() => errMsg;
+}
+
+class MethodNotAllowedFailure implements Failure {
+  final String errMsg;
+  const MethodNotAllowedFailure(this.errMsg);
 
   @override
   String getErrorMessage() => errMsg;

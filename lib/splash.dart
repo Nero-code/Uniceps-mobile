@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/features/Auth/views/bloc/auth_bloc.dart';
-import 'package:uniceps/features/Auth/views/screens/auth_screen_2.dart';
-import 'package:uniceps/features/Auth/views/screens/player_info_screen.dart';
-import 'package:uniceps/features/Profile/presentation/bloc/profile_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/authentication/auth_bloc.dart';
+import 'package:uniceps/app/presentation/screens/auth/screens/auth_screen.dart';
+import 'package:uniceps/app/presentation/screens/auth/screens/player_info_screen.dart';
+import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -24,13 +24,13 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // navigate(context);
-    print("------------------------inside Splash-----------------------------");
+    // print("------------------------inside Splash-----------------------------");
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         // await Future.delayed(const Duration(seconds: 2));
-        print("inside Splash: ${state.runtimeType}");
+        // print("inside Splash: ${state.runtimeType}");
         if (state is AuthErrorState) {
-          print("Splash check 1");
+          // print("Splash check 1");
           Navigator.of(context).pushReplacement(
             PageRouteBuilder(
               transitionDuration: Duration.zero,
@@ -39,11 +39,11 @@ class SplashScreen extends StatelessWidget {
             ),
           );
         } else if (state is AuthAuthenticatedState) {
-          print("Splash check 2");
+          // print("Splash check 2");
 
           BlocProvider.of<ProfileBloc>(context)
               .add(const GetProfileDataEvent());
-          print("Splash check 5");
+          // print("Splash check 5");
         }
       },
       child: BlocConsumer<ProfileBloc, ProfileState>(
@@ -51,7 +51,7 @@ class SplashScreen extends StatelessWidget {
         //     state is AuthAuthenticatedState,
         listener: (context, profileState) async {
           // print("Splash: --> Auth State:    ${authState.runtimeType}");
-          print("Splash: --> Profile State: ${profileState.runtimeType}");
+          // print("Splash: --> Profile State: ${profileState.runtimeType}");
           if (profileState is ProfileLoadedState) {
             Navigator.pushReplacementNamed(context, ROUTE_HOME);
           } else if (profileState is ProfileErrorState) {
@@ -63,6 +63,7 @@ class SplashScreen extends StatelessWidget {
               // Navigator.pop(context);
               SystemNavigator.pop();
             } else {
+              // ignore: use_build_context_synchronously
               Navigator.pushReplacementNamed(context, ROUTE_HOME);
             }
           }
