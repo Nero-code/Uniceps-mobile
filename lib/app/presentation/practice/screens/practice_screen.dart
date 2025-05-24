@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:uniceps/app/presentation/practice/widgets/practice_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/presentation/practice/cubit/stopwatch_cubit.dart';
+import 'package:uniceps/app/presentation/practice/widgets/round_widget.dart';
+import 'package:uniceps/core/constants/constants.dart';
 
 class PracticeScreen extends StatefulWidget {
   const PracticeScreen({super.key});
@@ -11,32 +14,48 @@ class PracticeScreen extends StatefulWidget {
 }
 
 class _PracticeScreenState extends State<PracticeScreen> {
+  // ---------------------------------------------------------------------------
+  // TIMER Logic and STOPWATCH variables and functions are put here.
   final _stopwatch = Stopwatch();
   Timer? _timer;
 
-  void _startStopWatch() {
-    _stopwatch.start();
-    _timer =
-        Timer.periodic(const Duration(seconds: 1), (timer) => setState(() {}));
-  }
+  // void startStopWatch() {
+  //   _stopwatch.start();
+  //   _timer =
+  //       Timer.periodic(const Duration(seconds: 1), (timer) => setState(() {}));
+  // }
 
-  void _stopStopwatch() {
-    _stopwatch.stop();
-    _timer?.cancel();
-  }
+  // void stopStopwatch() {
+  //   _stopwatch.stop();
+  //   _timer?.cancel();
+  // }
 
-  void _resetStopwatch() {
-    _stopwatch.reset();
-    setState(() {});
-  }
+  // void resetStopwatch() {
+  //   _stopwatch.reset();
+  //   setState(() {});
+  // }
 
-  String formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String hours = twoDigits(duration.inHours);
-    String minutes = twoDigits(duration.inMinutes.remainder(60));
-    String seconds = twoDigits(duration.inSeconds.remainder(60));
+  // String formatDuration(Duration duration) {
+  //   String twoDigits(int n) => n.toString().padLeft(2, "0");
+  //   String hours = twoDigits(duration.inHours);
+  //   String minutes = twoDigits(duration.inMinutes.remainder(60));
+  //   String seconds = twoDigits(duration.inSeconds.remainder(60));
 
-    return "$hours:$minutes:$seconds";
+  //   return "$hours:$minutes:$seconds";
+  // }
+
+  // ---------------------------------------------------------------------------
+
+  // ---------------------------------------------------------------------------
+  // Expansion list variable and flags will be put here.
+
+  int? expandedIndex;
+
+  // ---------------------------------------------------------------------------
+  @override
+  void initState() {
+    super.initState();
+    // startStopWatch();
   }
 
   @override
@@ -48,41 +67,103 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        centerTitle: true,
-        title: Text(
-          formatDuration(_stopwatch.elapsed),
-          style: TextStyle(
-            fontWeight: FontWeight.w100,
-            color: Colors.grey.shade700,
-            fontSize: 26,
+    final screenSize = MediaQuery.sizeOf(context);
+    return BlocProvider(
+      create: (context) => StopwatchCubit(),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          centerTitle: true,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("day 1"),
+              BlocBuilder<StopwatchCubit, StopwatchState>(
+                builder: (context, state) {
+                  if (!state.isRunning) {
+                    BlocProvider.of<StopwatchCubit>(context).startStopWatch();
+                  }
+                  return Text(
+                    // formatDuration(_stopwatch.elapsed),
+                    state.time,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w100,
+                      color: Colors.grey.shade700,
+                      fontSize: 26,
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
         ),
+        body: Stack(
+          children: [
+            SizedBox.expand(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(bottom: 100),
+                child: ExpansionPanelList(
+                  expansionCallback: (panelIndex, isExpanded) {
+                    print(
+                        "Expansion Function: $panelIndex : $isExpanded : $expandedIndex");
+
+                    isExpanded
+                        ? expandedIndex = panelIndex
+                        : expandedIndex = null;
+                    setState(() {});
+                  },
+                  children: [0, 1, 2, 3]
+                      .map(
+                        (i) => ExpansionPanel(
+                          isExpanded: expandedIndex == i,
+                          canTapOnHeader: true,
+                          headerBuilder: (context, isExpanded) {
+                            print("widget isExpanded: $isExpanded");
+                            return Container(
+                              margin: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Row(
+                                children: [
+                                  Image(
+                                      image: const AssetImage(IMG_BACK),
+                                      width: screenSize.width * 0.3),
+                                  const Text("name name name"),
+                                ],
+                              ),
+                            );
+                          },
+                          body: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [0, 1, 2, 3]
+                                .map((i) => RoundWidget(
+                                    index: i + 1,
+                                    controller: null,
+                                    lastWeight: null))
+                                .toList(),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0.0,
+              width: screenSize.width,
+              child: Container(
+                height: 60,
+                padding: const EdgeInsets.all(8.0),
+                color: Colors.white,
+                child: ElevatedButton(
+                    onPressed: () {}, child: const Icon(Icons.bolt)),
+              ),
+            ),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Colors.white,
-        child: _stopwatch.isRunning
-            ? const Icon(Icons.pause, size: 25)
-            : const Icon(Icons.play_arrow_rounded, size: 30),
-        onPressed: () {
-          if (_stopwatch.isRunning) {
-            _stopStopwatch();
-          } else {
-            _startStopWatch();
-          }
-          setState(() {});
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      body: ListView.builder(
-          padding: const EdgeInsets.only(top: 20, bottom: 10),
-          itemCount: 4,
-          itemBuilder: (context, index) {
-            return PracticeWidget(isExpanded: index == 0);
-          }),
     );
   }
 }

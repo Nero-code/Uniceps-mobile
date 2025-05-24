@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:uniceps/core/widgets/box_botton.dart';
 
 class RoundWidget extends StatelessWidget {
@@ -6,32 +7,57 @@ class RoundWidget extends StatelessWidget {
       {super.key,
       required this.controller,
       required this.index,
-      required this.lasWeight});
+      required this.lastWeight});
   final TextEditingController? controller;
   final int index;
-  final double? lasWeight;
+  final double? lastWeight;
 
   final expanded = const <int>[0, 1, 2, 3];
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("$index"),
-          Text("${lasWeight ?? "--"}"),
-          SizedBox(
-            width: 40,
-            child: TextField(
-              controller: controller,
-              textAlign: TextAlign.center,
-              decoration: const InputDecoration(
-                label: Center(child: Text("00")),
-                isDense: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 5),
-                border: OutlineInputBorder(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("$index",
+                style: const TextStyle(fontWeight: FontWeight.normal)),
+          ),
+          Expanded(
+            child: Center(
+              child: Text(
+                "${lastWeight ?? "---"} Kg",
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: SizedBox(
+                width: 60,
+                child: TextField(
+                  controller: controller,
+                  textAlign: TextAlign.center,
+                  maxLength: 5,
+                  buildCounter: (_,
+                          {required currentLength,
+                          required isFocused,
+                          required maxLength}) =>
+                      null,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.deny(RegExp(r"[^0-9^\.]"))
+                  ],
+                  decoration: InputDecoration(
+                    hintText: "00",
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                ),
               ),
             ),
           ),
