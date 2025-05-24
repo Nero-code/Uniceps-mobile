@@ -79,7 +79,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       body: ListView.builder(
           padding: const EdgeInsets.only(top: 20, bottom: 10),
-          itemCount: 5,
+          itemCount: 4,
           itemBuilder: (context, index) {
             return PracticeWidget(isExpanded: index == 0);
           }),
