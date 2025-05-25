@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/practice/cubit/stopwatch_cubit.dart';
-import 'package:uniceps/app/presentation/practice/widgets/round_widget.dart';
-import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/app/presentation/practice/widgets/practice_body.dart';
+import 'package:uniceps/app/presentation/practice/widgets/practice_header.dart';
 
 class PracticeScreen extends StatefulWidget {
   const PracticeScreen({super.key});
@@ -103,49 +103,23 @@ class _PracticeScreenState extends State<PracticeScreen> {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.only(bottom: 100),
                 child: ExpansionPanelList(
+                  expandedHeaderPadding: EdgeInsets.zero,
                   expansionCallback: (panelIndex, isExpanded) {
-                    print(
-                        "Expansion Function: $panelIndex : $isExpanded : $expandedIndex");
-
                     isExpanded
                         ? expandedIndex = panelIndex
                         : expandedIndex = null;
                     setState(() {});
                   },
                   children: [0, 1, 2, 3]
-                      .map(
-                        (i) => ExpansionPanel(
-                          isExpanded: expandedIndex == i,
-                          canTapOnHeader: true,
-                          headerBuilder: (context, isExpanded) {
-                            print("widget isExpanded: $isExpanded");
-                            return Container(
-                              margin: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Row(
-                                children: [
-                                  Image(
-                                      image: const AssetImage(IMG_BACK),
-                                      width: screenSize.width * 0.3),
-                                  const Text("name name name"),
-                                ],
-                              ),
-                            );
-                          },
-                          body: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [0, 1, 2, 3]
-                                .map((i) => RoundWidget(
-                                    index: i + 1,
-                                    controller: null,
-                                    lastWeight: null))
-                                .toList(),
-                          ),
-                        ),
-                      )
+                      .map((i) => ExpansionPanel(
+                            backgroundColor:
+                                const Color.fromARGB(255, 250, 250, 250),
+                            isExpanded: expandedIndex == i,
+                            canTapOnHeader: true,
+                            headerBuilder: (context, isExpanded) =>
+                                const PracticeHeader(),
+                            body: const PracticeBody(sets: [0, 1, 2, 3]),
+                          ))
                       .toList(),
                 ),
               ),
@@ -158,7 +132,16 @@ class _PracticeScreenState extends State<PracticeScreen> {
                 padding: const EdgeInsets.all(8.0),
                 color: Colors.white,
                 child: ElevatedButton(
-                    onPressed: () {}, child: const Icon(Icons.bolt)),
+                    onPressed: () {},
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.bolt, size: 25),
+                        Text("Finish",
+                            style: TextStyle(
+                                fontWeight: FontWeight.normal, fontSize: 16)),
+                      ],
+                    )),
               ),
             ),
           ],
