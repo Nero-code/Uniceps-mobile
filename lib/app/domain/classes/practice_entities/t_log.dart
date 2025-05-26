@@ -1,6 +1,6 @@
 class TLog {
   final int? id;
-
+  final int sessionId;
   // Exercise Data
   final int exerciseId;
   final int exerciseIndex;
@@ -18,6 +18,7 @@ class TLog {
 
   const TLog({
     required this.id,
+    required this.sessionId,
     required this.exerciseId,
     required this.exerciseIndex,
     required this.setIndex,

@@ -2246,9 +2246,19 @@ class $TSessionsTable extends TSessions
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: const Constant(0));
+  static const VerificationMeta _isSyncedMeta =
+      const VerificationMeta('isSynced');
+  @override
+  late final GeneratedColumn<bool> isSynced = GeneratedColumn<bool>(
+      'is_synced', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_synced" IN (0, 1))'),
+      defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
-      [tsId, startedAt, finishedAt, apiId, version];
+      [tsId, startedAt, finishedAt, apiId, version, isSynced];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2283,6 +2293,10 @@ class $TSessionsTable extends TSessions
       context.handle(_versionMeta,
           version.isAcceptableOrUnknown(data['version']!, _versionMeta));
     }
+    if (data.containsKey('is_synced')) {
+      context.handle(_isSyncedMeta,
+          isSynced.isAcceptableOrUnknown(data['is_synced']!, _isSyncedMeta));
+    }
     return context;
   }
 
@@ -2302,6 +2316,8 @@ class $TSessionsTable extends TSessions
           .read(DriftSqlType.int, data['${effectivePrefix}api_id']),
       version: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}version'])!,
+      isSynced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_synced'])!,
     );
   }
 
@@ -2317,12 +2333,14 @@ class TSession extends DataClass implements Insertable<TSession> {
   final DateTime? finishedAt;
   final int? apiId;
   final int version;
+  final bool isSynced;
   const TSession(
       {required this.tsId,
       required this.startedAt,
       this.finishedAt,
       this.apiId,
-      required this.version});
+      required this.version,
+      required this.isSynced});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2335,6 +2353,7 @@ class TSession extends DataClass implements Insertable<TSession> {
       map['api_id'] = Variable<int>(apiId);
     }
     map['version'] = Variable<int>(version);
+    map['is_synced'] = Variable<bool>(isSynced);
     return map;
   }
 
@@ -2348,6 +2367,7 @@ class TSession extends DataClass implements Insertable<TSession> {
       apiId:
           apiId == null && nullToAbsent ? const Value.absent() : Value(apiId),
       version: Value(version),
+      isSynced: Value(isSynced),
     );
   }
 
@@ -2360,6 +2380,7 @@ class TSession extends DataClass implements Insertable<TSession> {
       finishedAt: serializer.fromJson<DateTime?>(json['finishedAt']),
       apiId: serializer.fromJson<int?>(json['apiId']),
       version: serializer.fromJson<int>(json['version']),
+      isSynced: serializer.fromJson<bool>(json['isSynced']),
     );
   }
   @override
@@ -2371,6 +2392,7 @@ class TSession extends DataClass implements Insertable<TSession> {
       'finishedAt': serializer.toJson<DateTime?>(finishedAt),
       'apiId': serializer.toJson<int?>(apiId),
       'version': serializer.toJson<int>(version),
+      'isSynced': serializer.toJson<bool>(isSynced),
     };
   }
 
@@ -2379,13 +2401,15 @@ class TSession extends DataClass implements Insertable<TSession> {
           DateTime? startedAt,
           Value<DateTime?> finishedAt = const Value.absent(),
           Value<int?> apiId = const Value.absent(),
-          int? version}) =>
+          int? version,
+          bool? isSynced}) =>
       TSession(
         tsId: tsId ?? this.tsId,
         startedAt: startedAt ?? this.startedAt,
         finishedAt: finishedAt.present ? finishedAt.value : this.finishedAt,
         apiId: apiId.present ? apiId.value : this.apiId,
         version: version ?? this.version,
+        isSynced: isSynced ?? this.isSynced,
       );
   TSession copyWithCompanion(TSessionsCompanion data) {
     return TSession(
@@ -2395,6 +2419,7 @@ class TSession extends DataClass implements Insertable<TSession> {
           data.finishedAt.present ? data.finishedAt.value : this.finishedAt,
       apiId: data.apiId.present ? data.apiId.value : this.apiId,
       version: data.version.present ? data.version.value : this.version,
+      isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
     );
   }
 
@@ -2405,13 +2430,15 @@ class TSession extends DataClass implements Insertable<TSession> {
           ..write('startedAt: $startedAt, ')
           ..write('finishedAt: $finishedAt, ')
           ..write('apiId: $apiId, ')
-          ..write('version: $version')
+          ..write('version: $version, ')
+          ..write('isSynced: $isSynced')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(tsId, startedAt, finishedAt, apiId, version);
+  int get hashCode =>
+      Object.hash(tsId, startedAt, finishedAt, apiId, version, isSynced);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2420,7 +2447,8 @@ class TSession extends DataClass implements Insertable<TSession> {
           other.startedAt == this.startedAt &&
           other.finishedAt == this.finishedAt &&
           other.apiId == this.apiId &&
-          other.version == this.version);
+          other.version == this.version &&
+          other.isSynced == this.isSynced);
 }
 
 class TSessionsCompanion extends UpdateCompanion<TSession> {
@@ -2429,12 +2457,14 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
   final Value<DateTime?> finishedAt;
   final Value<int?> apiId;
   final Value<int> version;
+  final Value<bool> isSynced;
   const TSessionsCompanion({
     this.tsId = const Value.absent(),
     this.startedAt = const Value.absent(),
     this.finishedAt = const Value.absent(),
     this.apiId = const Value.absent(),
     this.version = const Value.absent(),
+    this.isSynced = const Value.absent(),
   });
   TSessionsCompanion.insert({
     this.tsId = const Value.absent(),
@@ -2442,6 +2472,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
     this.finishedAt = const Value.absent(),
     this.apiId = const Value.absent(),
     this.version = const Value.absent(),
+    this.isSynced = const Value.absent(),
   }) : startedAt = Value(startedAt);
   static Insertable<TSession> custom({
     Expression<int>? tsId,
@@ -2449,6 +2480,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
     Expression<DateTime>? finishedAt,
     Expression<int>? apiId,
     Expression<int>? version,
+    Expression<bool>? isSynced,
   }) {
     return RawValuesInsertable({
       if (tsId != null) 'ts_id': tsId,
@@ -2456,6 +2488,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
       if (finishedAt != null) 'finished_at': finishedAt,
       if (apiId != null) 'api_id': apiId,
       if (version != null) 'version': version,
+      if (isSynced != null) 'is_synced': isSynced,
     });
   }
 
@@ -2464,13 +2497,15 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
       Value<DateTime>? startedAt,
       Value<DateTime?>? finishedAt,
       Value<int?>? apiId,
-      Value<int>? version}) {
+      Value<int>? version,
+      Value<bool>? isSynced}) {
     return TSessionsCompanion(
       tsId: tsId ?? this.tsId,
       startedAt: startedAt ?? this.startedAt,
       finishedAt: finishedAt ?? this.finishedAt,
       apiId: apiId ?? this.apiId,
       version: version ?? this.version,
+      isSynced: isSynced ?? this.isSynced,
     );
   }
 
@@ -2492,6 +2527,9 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
     if (version.present) {
       map['version'] = Variable<int>(version.value);
     }
+    if (isSynced.present) {
+      map['is_synced'] = Variable<bool>(isSynced.value);
+    }
     return map;
   }
 
@@ -2502,7 +2540,8 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
           ..write('startedAt: $startedAt, ')
           ..write('finishedAt: $finishedAt, ')
           ..write('apiId: $apiId, ')
-          ..write('version: $version')
+          ..write('version: $version, ')
+          ..write('isSynced: $isSynced')
           ..write(')'))
         .toString();
   }
@@ -5159,6 +5198,7 @@ typedef $$TSessionsTableCreateCompanionBuilder = TSessionsCompanion Function({
   Value<DateTime?> finishedAt,
   Value<int?> apiId,
   Value<int> version,
+  Value<bool> isSynced,
 });
 typedef $$TSessionsTableUpdateCompanionBuilder = TSessionsCompanion Function({
   Value<int> tsId,
@@ -5166,6 +5206,7 @@ typedef $$TSessionsTableUpdateCompanionBuilder = TSessionsCompanion Function({
   Value<DateTime?> finishedAt,
   Value<int?> apiId,
   Value<int> version,
+  Value<bool> isSynced,
 });
 
 final class $$TSessionsTableReferences
@@ -5212,6 +5253,9 @@ class $$TSessionsTableFilterComposer
   ColumnFilters<int> get version => $composableBuilder(
       column: $table.version, builder: (column) => ColumnFilters(column));
 
+  ColumnFilters<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnFilters(column));
+
   Expression<bool> tLogsRefs(
       Expression<bool> Function($$TLogsTableFilterComposer f) f) {
     final $$TLogsTableFilterComposer composer = $composerBuilder(
@@ -5257,6 +5301,9 @@ class $$TSessionsTableOrderingComposer
 
   ColumnOrderings<int> get version => $composableBuilder(
       column: $table.version, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnOrderings(column));
 }
 
 class $$TSessionsTableAnnotationComposer
@@ -5282,6 +5329,9 @@ class $$TSessionsTableAnnotationComposer
 
   GeneratedColumn<int> get version =>
       $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<bool> get isSynced =>
+      $composableBuilder(column: $table.isSynced, builder: (column) => column);
 
   Expression<T> tLogsRefs<T extends Object>(
       Expression<T> Function($$TLogsTableAnnotationComposer a) f) {
@@ -5333,6 +5383,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
             Value<DateTime?> finishedAt = const Value.absent(),
             Value<int?> apiId = const Value.absent(),
             Value<int> version = const Value.absent(),
+            Value<bool> isSynced = const Value.absent(),
           }) =>
               TSessionsCompanion(
             tsId: tsId,
@@ -5340,6 +5391,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
             finishedAt: finishedAt,
             apiId: apiId,
             version: version,
+            isSynced: isSynced,
           ),
           createCompanionCallback: ({
             Value<int> tsId = const Value.absent(),
@@ -5347,6 +5399,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
             Value<DateTime?> finishedAt = const Value.absent(),
             Value<int?> apiId = const Value.absent(),
             Value<int> version = const Value.absent(),
+            Value<bool> isSynced = const Value.absent(),
           }) =>
               TSessionsCompanion.insert(
             tsId: tsId,
@@ -5354,6 +5407,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
             finishedAt: finishedAt,
             apiId: apiId,
             version: version,
+            isSynced: isSynced,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (
