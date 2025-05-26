@@ -62,7 +62,7 @@ class SessionCompleteDialog extends StatelessWidget {
                     child: const Text("Great!"),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
               ],
             ),
           ),
