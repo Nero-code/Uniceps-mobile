@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/practice/cubit/stopwatch_cubit.dart';
+import 'package:uniceps/app/presentation/practice/dialogs/session_complete_dialog.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_body.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_header.dart';
 
@@ -132,7 +133,11 @@ class _PracticeScreenState extends State<PracticeScreen> {
                 padding: const EdgeInsets.all(8.0),
                 color: Colors.white,
                 child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => const SessionCompleteDialog());
+                    },
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
