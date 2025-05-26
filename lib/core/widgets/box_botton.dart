@@ -5,6 +5,7 @@ class BoxBotton extends StatelessWidget {
     super.key,
     this.width,
     this.height,
+    this.padding,
     this.child,
     this.border,
     this.focusedBorder,
@@ -17,7 +18,7 @@ class BoxBotton extends StatelessWidget {
     this.activeChild,
   });
 
-  final double? width, height;
+  final double? width, height, padding;
   final double borderRadius;
   final BoxBorder? border, focusedBorder;
 
@@ -48,7 +49,7 @@ class BoxBotton extends StatelessWidget {
               : BorderRadius.circular(borderRadius - 1),
           onTap: onTap,
           child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(padding ?? 8.0),
               child: isActive ? child : activeChild ?? child),
         ),
       ),

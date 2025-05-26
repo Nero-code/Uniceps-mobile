@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/presentation/practice/screens/practice_screen.dart';
 import 'package:uniceps/app/presentation/screens/routine/blocs/routine_management/routine_management_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_create_dialog.dart';
@@ -61,6 +62,15 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("My Routines"),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const PracticeScreen()),
+                  );
+                },
+                icon: const Icon(Icons.fitness_center))
+          ],
         ),
         // floatingActionButton: FloatingActionButton(
         //   onPressed: () => _createRoutine(
