@@ -11,6 +11,7 @@ import 'package:uniceps/app/data/sources/local/dal_gyms/attendence_local_source.
 import 'package:uniceps/app/data/sources/local/dal_gyms/gyms_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_gyms/my_gyms_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_gyms/subscriptions_local_source.dart';
+import 'package:uniceps/app/data/sources/local/dal_practice/t_session_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_profile/measurements_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_days_local_source.dart';
@@ -23,17 +24,20 @@ import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_sou
 import 'package:uniceps/app/data/sources/services/client_helper.dart';
 import 'package:uniceps/app/data/sources/services/media_helper.dart';
 import 'package:uniceps/app/data/sources/services/no_token_http_client.dart';
+import 'package:uniceps/app/data/stores/practice/practice_repo.dart';
 import 'package:uniceps/app/data/stores/routine/exercises_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_days_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_items_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_management_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_sets_repo.dart';
 import 'package:uniceps/app/domain/commands/auth_usecases/guest_mode_login.dart';
+import 'package:uniceps/app/domain/commands/practice_usecases/practice_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/exercises_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_days_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_items_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_management_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_sets_commands.dart';
+import 'package:uniceps/app/domain/contracts/practice_repo/practice_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine_repo/i_exercises_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_days_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_items_contract.dart';
@@ -175,6 +179,10 @@ Future<void> init() async {
   //////////////////////////////////////////////////////////////////////////////
   ///   L O C A L   S O U R C E S
   //////////////////////////////////////////////////////////////////////////////
+
+  sl.registerLazySingleton<ITSessionLocalSourceContract>(
+      () => TSessionLocalSource(database: sl(), imagesCache: imagesCache));
+
   sl.registerLazySingleton<IRoutineManagementLocalSourceContract>(
       () => RoutineManagementLocalSourceImpl(database: sl()));
 
@@ -272,6 +280,9 @@ Future<void> init() async {
   ///
   //
 
+  sl.registerLazySingleton<IPracticeContract>(
+      () => PracticeRepo(localSource: sl()));
+
   sl.registerLazySingleton<IRoutineManagementContract>(
       () => RoutineManagementRepo(
             localSource: sl(),
@@ -326,6 +337,9 @@ Future<void> init() async {
   ///   U S E C A S E S  -  V 2
   ///
   //////////////////////////////////////////////////////////////////////////////
+
+  sl.registerLazySingleton<PracticeCommands>(
+      () => PracticeCommands(repo: sl()));
 
   sl.registerLazySingleton<RoutineManagementCommands>(
       () => RoutineManagementCommands(repo: sl()));

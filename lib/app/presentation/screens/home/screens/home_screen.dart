@@ -7,6 +7,9 @@ import 'package:flutter/services.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
+import 'package:uniceps/app/presentation/practice/blocs/current_routine/current_routine_cubit.dart';
+import 'package:uniceps/app/presentation/practice/blocs/session/session_bloc.dart';
+import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/screens/routine/blocs/routine_management/routine_management_bloc.dart';
 import 'package:uniceps/app/presentation/screens/home/dialogs/comming_soon_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/routine_management_screen.dart';
@@ -115,6 +118,8 @@ class _HomeScreenState extends State<HomeScreen>
   late final PanelController panelController;
   late final PanelController daysController;
   late final StreamSubscription streamSubscription;
+
+  final routineController = PanelController();
 
   void addPostFrameCallback(Function callback) =>
       WidgetsBinding.instance.addPostFrameCallback((_) => callback());
@@ -315,7 +320,6 @@ class _HomeScreenState extends State<HomeScreen>
           }
         },
         child: Scaffold(
-          drawer: const Drawer(),
           body: SlidingUpPanel(
             backdropEnabled: true,
             color: Colors.white,
@@ -1120,6 +1124,128 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                             ),
                           ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: kToolbarHeight * 0.6,
+                    left: 15.0,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            routineController.open();
+                          },
+                          icon: const Icon(Icons.fitness_center),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SlidingUpPanel(
+                    maxHeight: screenSize.height - kToolbarHeight,
+                    minHeight: 0.0,
+                    controller: routineController,
+                    panel: MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          lazy: false,
+                          create: (context) =>
+                              CurrentRoutineCubit(commands: di.sl())
+                                ..getCurrentRoutine(),
+                        ),
+                        BlocProvider(
+                          lazy: false,
+                          create: (context) => SessionBloc(commands: di.sl())
+                            ..add(GetLastActiveSessionEvent()),
+                        ),
+                      ],
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            BlocBuilder<CurrentRoutineCubit,
+                                CurrentRoutineState>(
+                              builder: (context, routineState) {
+                                if (routineState is CurrentRoutineLoadedState) {
+                                  return BlocBuilder<SessionBloc, SessionState>(
+                                    builder: (context, sessionState) {
+                                      print(routineState.runtimeType);
+                                      if (routineState
+                                          is NoActiveSessionState) {
+                                        return Column(
+                                          children: [
+                                            const Text("noActiveSesion"),
+                                            ElevatedButton(
+                                                onPressed: () {
+                                                  context
+                                                      .read<SessionBloc>()
+                                                      .add(StartSessionEvent(
+                                                          dayId: routineState
+                                                              .routine
+                                                              .trainingDays
+                                                              .first
+                                                              .id!));
+                                                },
+                                                child: const Icon(Icons.add)),
+                                          ],
+                                        );
+                                      } else if (sessionState
+                                          is SessionLoadedState) {
+                                        return ElevatedButton(
+                                            onPressed: () {},
+                                            child: const Text(
+                                                "sessionState is Loaded"));
+                                      } else if (sessionState
+                                          is NoActiveSessionState) {
+                                        return const Text("NoSession");
+                                      } else if (sessionState
+                                          is SessionErrorState) {
+                                        return SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              Text(sessionState.failure
+                                                  .getErrorMessage()),
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    context.read<SessionBloc>().add(
+                                                        GetLastActiveSessionEvent());
+                                                  },
+                                                  child: const Icon(
+                                                      Icons.refresh)),
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                      return const LoadingPage();
+                                    },
+                                  );
+                                } else if (routineState
+                                    is CurrentRoutineErrorState) {
+                                  return SizedBox(
+                                    height: screenSize.height - 50,
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          Text(routineState.failure
+                                              .getErrorMessage()),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              context
+                                                  .read<CurrentRoutineCubit>()
+                                                  .getCurrentRoutine();
+                                            },
+                                            child: const Icon(Icons.refresh),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return const LoadingPage();
+                              },
+                            ),
+                          ],
                         ),
                       ),
                     ),

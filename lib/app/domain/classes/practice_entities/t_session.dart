@@ -2,7 +2,7 @@ import 'package:uniceps/app/domain/classes/practice_entities/t_log.dart';
 
 class TSession {
   final int? id;
-
+  final int dayId;
   final List<TLog> logs;
   final DateTime createdAt;
   final DateTime? finishedAt;
@@ -13,6 +13,7 @@ class TSession {
 
   const TSession({
     required this.id,
+    required this.dayId,
     required this.logs,
     required this.apiId,
     required this.createdAt,

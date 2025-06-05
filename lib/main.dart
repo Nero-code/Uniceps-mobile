@@ -28,6 +28,7 @@ import 'package:uniceps/main_cubit/locale_cubit.dart';
 import 'package:uniceps/main_cubit/training_section_cubit.dart';
 import 'package:uniceps/splash.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/app/presentation/home/screens/temporary_screen.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
@@ -173,23 +174,25 @@ class MyApp extends StatelessWidget {
             restorationScopeId: "root",
             title: 'Uniceps',
             theme: lightTheme.copyWith(textTheme: GoogleFonts.cairoTextTheme()),
-            initialRoute: ROUTE_SPLASH,
+            // initialRoute: ROUTE_SPLASH,
+            initialRoute: "/temp",
             routes: {
-              ROUTE_SPLASH: (context) => const SplashScreen(),
+              "/temp": (context) => TemporaryScreen(),
+              // ROUTE_SPLASH: (context) => const SplashScreen(),
 
               //  AUTH
-              ROUTE_AUTH: (context) => const AuthScreen(),
-              ROUTE_PROFILE: (context) => const ProfileScreen(),
+              // ROUTE_AUTH: (context) => const AuthScreen(),
+              // ROUTE_PROFILE: (context) => const ProfileScreen(),
 
               //  MAIN
-              ROUTE_HOME: (context) => HomeScreen(
-                    trainingUsecases: di.sl(),
-                    service: di.sl(),
-                    manager: di.sl(),
-                  ),
+              // ROUTE_HOME: (context) => HomeScreen(
+              //       trainingUsecases: di.sl(),
+              //       service: di.sl(),
+              //       manager: di.sl(),
+              //     ),
 
-              //  AUX
-              ROUTE_GYMS_LIST: (context) => const GymListScreen(),
+              // //  AUX
+              // ROUTE_GYMS_LIST: (context) => const GymListScreen(),
               ROUTE_ABOUT: (context) => const AboutScreen(),
             },
           );

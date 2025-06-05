@@ -30,28 +30,21 @@ class TLog {
     this.isSynced = false,
   });
 
-  // TLog copywith({
-  //   int? id,
-  //   int? exerciseId,
-  //   int? exerciseIndex,
-  //   int? setIndex,
-  //   int? reps,
-  //   double? weight,
-  //   DateTime? completedAt,
-  //   int? apiId,
-  //   int? version,
-  //   bool? isSynced,
-  // }) =>
-  //     TLog(
-  //       id: id ?? this.id,
-  //       exerciseId: exerciseId ?? this.exerciseId,
-  //       exerciseIndex: exerciseIndex ?? this.exerciseIndex,
-  //       setIndex: setIndex ?? this.setIndex,
-  //       reps: reps ?? this.reps,
-  //       weight: weight ?? this.weight,
-  //       completedAt: completedAt ?? this.completedAt,
-  //       apiId: apiId ?? this.apiId,
-  //       version: version ?? this.version,
-  //       isSynced: isSynced ?? this.isSynced,
-  //     );
+  TLog copywith({
+    double? weight,
+    DateTime? completedAt,
+  }) =>
+      TLog(
+        id: id,
+        sessionId: sessionId,
+        exerciseId: exerciseId,
+        exerciseIndex: exerciseIndex,
+        setIndex: setIndex,
+        reps: reps,
+        weight: weight ?? this.weight,
+        completedAt: completedAt ?? this.completedAt,
+        apiId: apiId ?? apiId,
+        version: version,
+        isSynced: isSynced,
+      );
 }

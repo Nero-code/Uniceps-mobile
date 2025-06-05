@@ -2221,6 +2221,11 @@ class $TSessionsTable extends TSessions
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _dayIdMeta = const VerificationMeta('dayId');
+  @override
+  late final GeneratedColumn<int> dayId = GeneratedColumn<int>(
+      'day_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
   static const VerificationMeta _startedAtMeta =
       const VerificationMeta('startedAt');
   @override
@@ -2258,7 +2263,7 @@ class $TSessionsTable extends TSessions
       defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
-      [tsId, startedAt, finishedAt, apiId, version, isSynced];
+      [tsId, dayId, startedAt, finishedAt, apiId, version, isSynced];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2272,6 +2277,12 @@ class $TSessionsTable extends TSessions
     if (data.containsKey('ts_id')) {
       context.handle(
           _tsIdMeta, tsId.isAcceptableOrUnknown(data['ts_id']!, _tsIdMeta));
+    }
+    if (data.containsKey('day_id')) {
+      context.handle(
+          _dayIdMeta, dayId.isAcceptableOrUnknown(data['day_id']!, _dayIdMeta));
+    } else if (isInserting) {
+      context.missing(_dayIdMeta);
     }
     if (data.containsKey('started_at')) {
       context.handle(_startedAtMeta,
@@ -2308,6 +2319,8 @@ class $TSessionsTable extends TSessions
     return TSession(
       tsId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}ts_id'])!,
+      dayId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}day_id'])!,
       startedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}started_at'])!,
       finishedAt: attachedDatabase.typeMapping
@@ -2329,6 +2342,7 @@ class $TSessionsTable extends TSessions
 
 class TSession extends DataClass implements Insertable<TSession> {
   final int tsId;
+  final int dayId;
   final DateTime startedAt;
   final DateTime? finishedAt;
   final int? apiId;
@@ -2336,6 +2350,7 @@ class TSession extends DataClass implements Insertable<TSession> {
   final bool isSynced;
   const TSession(
       {required this.tsId,
+      required this.dayId,
       required this.startedAt,
       this.finishedAt,
       this.apiId,
@@ -2345,6 +2360,7 @@ class TSession extends DataClass implements Insertable<TSession> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['ts_id'] = Variable<int>(tsId);
+    map['day_id'] = Variable<int>(dayId);
     map['started_at'] = Variable<DateTime>(startedAt);
     if (!nullToAbsent || finishedAt != null) {
       map['finished_at'] = Variable<DateTime>(finishedAt);
@@ -2360,6 +2376,7 @@ class TSession extends DataClass implements Insertable<TSession> {
   TSessionsCompanion toCompanion(bool nullToAbsent) {
     return TSessionsCompanion(
       tsId: Value(tsId),
+      dayId: Value(dayId),
       startedAt: Value(startedAt),
       finishedAt: finishedAt == null && nullToAbsent
           ? const Value.absent()
@@ -2376,6 +2393,7 @@ class TSession extends DataClass implements Insertable<TSession> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return TSession(
       tsId: serializer.fromJson<int>(json['tsId']),
+      dayId: serializer.fromJson<int>(json['dayId']),
       startedAt: serializer.fromJson<DateTime>(json['startedAt']),
       finishedAt: serializer.fromJson<DateTime?>(json['finishedAt']),
       apiId: serializer.fromJson<int?>(json['apiId']),
@@ -2388,6 +2406,7 @@ class TSession extends DataClass implements Insertable<TSession> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'tsId': serializer.toJson<int>(tsId),
+      'dayId': serializer.toJson<int>(dayId),
       'startedAt': serializer.toJson<DateTime>(startedAt),
       'finishedAt': serializer.toJson<DateTime?>(finishedAt),
       'apiId': serializer.toJson<int?>(apiId),
@@ -2398,6 +2417,7 @@ class TSession extends DataClass implements Insertable<TSession> {
 
   TSession copyWith(
           {int? tsId,
+          int? dayId,
           DateTime? startedAt,
           Value<DateTime?> finishedAt = const Value.absent(),
           Value<int?> apiId = const Value.absent(),
@@ -2405,6 +2425,7 @@ class TSession extends DataClass implements Insertable<TSession> {
           bool? isSynced}) =>
       TSession(
         tsId: tsId ?? this.tsId,
+        dayId: dayId ?? this.dayId,
         startedAt: startedAt ?? this.startedAt,
         finishedAt: finishedAt.present ? finishedAt.value : this.finishedAt,
         apiId: apiId.present ? apiId.value : this.apiId,
@@ -2414,6 +2435,7 @@ class TSession extends DataClass implements Insertable<TSession> {
   TSession copyWithCompanion(TSessionsCompanion data) {
     return TSession(
       tsId: data.tsId.present ? data.tsId.value : this.tsId,
+      dayId: data.dayId.present ? data.dayId.value : this.dayId,
       startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
       finishedAt:
           data.finishedAt.present ? data.finishedAt.value : this.finishedAt,
@@ -2427,6 +2449,7 @@ class TSession extends DataClass implements Insertable<TSession> {
   String toString() {
     return (StringBuffer('TSession(')
           ..write('tsId: $tsId, ')
+          ..write('dayId: $dayId, ')
           ..write('startedAt: $startedAt, ')
           ..write('finishedAt: $finishedAt, ')
           ..write('apiId: $apiId, ')
@@ -2438,12 +2461,13 @@ class TSession extends DataClass implements Insertable<TSession> {
 
   @override
   int get hashCode =>
-      Object.hash(tsId, startedAt, finishedAt, apiId, version, isSynced);
+      Object.hash(tsId, dayId, startedAt, finishedAt, apiId, version, isSynced);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is TSession &&
           other.tsId == this.tsId &&
+          other.dayId == this.dayId &&
           other.startedAt == this.startedAt &&
           other.finishedAt == this.finishedAt &&
           other.apiId == this.apiId &&
@@ -2453,6 +2477,7 @@ class TSession extends DataClass implements Insertable<TSession> {
 
 class TSessionsCompanion extends UpdateCompanion<TSession> {
   final Value<int> tsId;
+  final Value<int> dayId;
   final Value<DateTime> startedAt;
   final Value<DateTime?> finishedAt;
   final Value<int?> apiId;
@@ -2460,6 +2485,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
   final Value<bool> isSynced;
   const TSessionsCompanion({
     this.tsId = const Value.absent(),
+    this.dayId = const Value.absent(),
     this.startedAt = const Value.absent(),
     this.finishedAt = const Value.absent(),
     this.apiId = const Value.absent(),
@@ -2468,14 +2494,17 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
   });
   TSessionsCompanion.insert({
     this.tsId = const Value.absent(),
+    required int dayId,
     required DateTime startedAt,
     this.finishedAt = const Value.absent(),
     this.apiId = const Value.absent(),
     this.version = const Value.absent(),
     this.isSynced = const Value.absent(),
-  }) : startedAt = Value(startedAt);
+  })  : dayId = Value(dayId),
+        startedAt = Value(startedAt);
   static Insertable<TSession> custom({
     Expression<int>? tsId,
+    Expression<int>? dayId,
     Expression<DateTime>? startedAt,
     Expression<DateTime>? finishedAt,
     Expression<int>? apiId,
@@ -2484,6 +2513,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
   }) {
     return RawValuesInsertable({
       if (tsId != null) 'ts_id': tsId,
+      if (dayId != null) 'day_id': dayId,
       if (startedAt != null) 'started_at': startedAt,
       if (finishedAt != null) 'finished_at': finishedAt,
       if (apiId != null) 'api_id': apiId,
@@ -2494,6 +2524,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
 
   TSessionsCompanion copyWith(
       {Value<int>? tsId,
+      Value<int>? dayId,
       Value<DateTime>? startedAt,
       Value<DateTime?>? finishedAt,
       Value<int?>? apiId,
@@ -2501,6 +2532,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
       Value<bool>? isSynced}) {
     return TSessionsCompanion(
       tsId: tsId ?? this.tsId,
+      dayId: dayId ?? this.dayId,
       startedAt: startedAt ?? this.startedAt,
       finishedAt: finishedAt ?? this.finishedAt,
       apiId: apiId ?? this.apiId,
@@ -2514,6 +2546,9 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
     final map = <String, Expression>{};
     if (tsId.present) {
       map['ts_id'] = Variable<int>(tsId.value);
+    }
+    if (dayId.present) {
+      map['day_id'] = Variable<int>(dayId.value);
     }
     if (startedAt.present) {
       map['started_at'] = Variable<DateTime>(startedAt.value);
@@ -2537,6 +2572,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
   String toString() {
     return (StringBuffer('TSessionsCompanion(')
           ..write('tsId: $tsId, ')
+          ..write('dayId: $dayId, ')
           ..write('startedAt: $startedAt, ')
           ..write('finishedAt: $finishedAt, ')
           ..write('apiId: $apiId, ')
@@ -5194,6 +5230,7 @@ typedef $$RoutineSetsTableProcessedTableManager = ProcessedTableManager<
     PrefetchHooks Function({bool routineItemId})>;
 typedef $$TSessionsTableCreateCompanionBuilder = TSessionsCompanion Function({
   Value<int> tsId,
+  required int dayId,
   required DateTime startedAt,
   Value<DateTime?> finishedAt,
   Value<int?> apiId,
@@ -5202,6 +5239,7 @@ typedef $$TSessionsTableCreateCompanionBuilder = TSessionsCompanion Function({
 });
 typedef $$TSessionsTableUpdateCompanionBuilder = TSessionsCompanion Function({
   Value<int> tsId,
+  Value<int> dayId,
   Value<DateTime> startedAt,
   Value<DateTime?> finishedAt,
   Value<int?> apiId,
@@ -5240,6 +5278,9 @@ class $$TSessionsTableFilterComposer
   });
   ColumnFilters<int> get tsId => $composableBuilder(
       column: $table.tsId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get dayId => $composableBuilder(
+      column: $table.dayId, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get startedAt => $composableBuilder(
       column: $table.startedAt, builder: (column) => ColumnFilters(column));
@@ -5290,6 +5331,9 @@ class $$TSessionsTableOrderingComposer
   ColumnOrderings<int> get tsId => $composableBuilder(
       column: $table.tsId, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<int> get dayId => $composableBuilder(
+      column: $table.dayId, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<DateTime> get startedAt => $composableBuilder(
       column: $table.startedAt, builder: (column) => ColumnOrderings(column));
 
@@ -5317,6 +5361,9 @@ class $$TSessionsTableAnnotationComposer
   });
   GeneratedColumn<int> get tsId =>
       $composableBuilder(column: $table.tsId, builder: (column) => column);
+
+  GeneratedColumn<int> get dayId =>
+      $composableBuilder(column: $table.dayId, builder: (column) => column);
 
   GeneratedColumn<DateTime> get startedAt =>
       $composableBuilder(column: $table.startedAt, builder: (column) => column);
@@ -5379,6 +5426,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
               $$TSessionsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> tsId = const Value.absent(),
+            Value<int> dayId = const Value.absent(),
             Value<DateTime> startedAt = const Value.absent(),
             Value<DateTime?> finishedAt = const Value.absent(),
             Value<int?> apiId = const Value.absent(),
@@ -5387,6 +5435,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
           }) =>
               TSessionsCompanion(
             tsId: tsId,
+            dayId: dayId,
             startedAt: startedAt,
             finishedAt: finishedAt,
             apiId: apiId,
@@ -5395,6 +5444,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             Value<int> tsId = const Value.absent(),
+            required int dayId,
             required DateTime startedAt,
             Value<DateTime?> finishedAt = const Value.absent(),
             Value<int?> apiId = const Value.absent(),
@@ -5403,6 +5453,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
           }) =>
               TSessionsCompanion.insert(
             tsId: tsId,
+            dayId: dayId,
             startedAt: startedAt,
             finishedAt: finishedAt,
             apiId: apiId,

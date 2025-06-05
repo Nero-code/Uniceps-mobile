@@ -22,7 +22,8 @@ class _RoutineItemVerticalWidgetState extends State<RoutineItemVerticalWidget> {
         index: 0,
         reps: 12,
         version: 0,
-        isSynced: false),
+        isSynced: false,
+        weight: null),
     RoutineSet(
         id: null,
         apiId: null,
@@ -30,7 +31,8 @@ class _RoutineItemVerticalWidgetState extends State<RoutineItemVerticalWidget> {
         index: 1,
         reps: 10,
         version: 0,
-        isSynced: false),
+        isSynced: false,
+        weight: null),
     RoutineSet(
         id: null,
         apiId: null,
@@ -38,7 +40,8 @@ class _RoutineItemVerticalWidgetState extends State<RoutineItemVerticalWidget> {
         index: 2,
         reps: 8,
         version: 0,
-        isSynced: false)
+        isSynced: false,
+        weight: null)
   ];
 
   @override

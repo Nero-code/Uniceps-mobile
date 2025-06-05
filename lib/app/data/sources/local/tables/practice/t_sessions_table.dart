@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 
 class TSessions extends Table {
   late final tsId = integer().autoIncrement()();
+  late final dayId = integer()();
 
   late final startedAt = dateTime()();
   late final finishedAt = dateTime().nullable()();

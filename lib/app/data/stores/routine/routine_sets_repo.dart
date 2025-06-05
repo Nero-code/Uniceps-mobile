@@ -38,6 +38,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
             version: 0,
             index: setsToAdd.length,
             reps: 0,
+            weight: null,
             isSynced: false)
       ]);
 

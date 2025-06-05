@@ -15,7 +15,6 @@ class RoutineDto extends Routine implements BaseDTO {
   const RoutineDto({
     required super.id,
     required super.apiId,
-    // required super.issuerId,
     required super.version,
     required super.name,
     required super.description,
@@ -32,18 +31,16 @@ class RoutineDto extends Routine implements BaseDTO {
       _$RoutineDtoFromJson(json);
 
   factory RoutineDto.fromTable(db.Routine r,
-          [List<db.DaysGroupData> trainingDays = const []]) =>
+          [List<RoutineDayDto> days = const []]) =>
       RoutineDto(
         id: r.id,
         apiId: r.apiId,
-        // issuerId: r.issuerId,
         version: r.version,
         name: r.name,
         description: r.description,
         createdAt: r.createdAt,
         updatedAt: r.updatedAt,
-        trainingDaysDto:
-            trainingDays.map((day) => RoutineDayDto.fromTable(day)).toList(),
+        trainingDaysDto: days,
         isCurrent: r.isCurrent,
         isSynced: r.isSynced,
       );

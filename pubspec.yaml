@@ -63,11 +63,13 @@ dependencies:
   flutter_downloader: ^1.11.8
   path_provider: ^2.1.4
   logger: ^2.4.0
-  drift: ^2.19.1+1
+  # drift: ^2.19.1+1
+  drift: ^2.23.1
   drift_flutter: ^0.2.0
   freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
   flutter_secure_storage: ^9.2.4
+  sqlite3_flutter_libs: ^0.5.33
 
 dev_dependencies:
   flutter_test:
@@ -82,7 +84,7 @@ dev_dependencies:
   mockito: ^5.4.4
   build_runner: ^2.4.9
   faker: ^2.2.0
-  drift_dev: ^2.19.1
+  drift_dev: ^2.23.1
   freezed: ^3.0.0-0.0.dev
   json_serializable: ^6.9.0
 

@@ -40,7 +40,8 @@ final fakeRoutine = Routine(
                         index: 0,
                         reps: 12,
                         version: 0,
-                        isSynced: false),
+                        isSynced: false,
+                        weight: null),
                     RoutineSet(
                         id: null,
                         apiId: null,
@@ -48,7 +49,8 @@ final fakeRoutine = Routine(
                         index: 1,
                         reps: 10,
                         version: 0,
-                        isSynced: false),
+                        isSynced: false,
+                        weight: null),
                     RoutineSet(
                         id: null,
                         apiId: null,
@@ -56,7 +58,8 @@ final fakeRoutine = Routine(
                         index: 2,
                         reps: 08,
                         version: 0,
-                        isSynced: false),
+                        isSynced: false,
+                        weight: null),
                   ],
                 ))
             .toList(),

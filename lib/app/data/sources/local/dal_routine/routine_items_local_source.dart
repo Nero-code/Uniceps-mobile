@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_v2_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart';
+import 'package:uniceps/app/data/models/routine_models/routine_set_dto.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
@@ -51,9 +52,10 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
 
       // --------------------------------------------------
       // Getting routine item sets.
-      final sets = await (_database.select(_database.routineSets)
+      final getSets = await (_database.select(_database.routineSets)
             ..where((f) => f.routineItemId.equals(items[i].id)))
           .get();
+      final sets = getSets.map((s) => RoutineSetDto.fromTable(s)).toList();
 
       // ------------------------------------------------------------------
       // trying to get routine image, there's a problem if the image is not
