@@ -10,14 +10,14 @@ class LoadingPage extends StatelessWidget {
       width: 45,
       height: 45,
       padding: const EdgeInsets.all(13.0),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Colors.white,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              offset: const Offset(0.0, 2.0),
-              color: Colors.grey.shade300,
-              blurRadius: 4,
+              offset: Offset(0.0, 1.5),
+              color: Color.fromARGB(180, 238, 238, 238),
+              blurRadius: 1,
               spreadRadius: 1,
             )
           ]),

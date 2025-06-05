@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-// import 'package:mockito/annotations.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_days_commands.dart';
-// import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_days_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_days_contract.dart';
 
-import '../contract_mocks/routine_days_test.mocks.dart';
+import 'routine_days_test.mocks.dart';
 
 const fakeDay1 =
     RoutineDay(routineId: 0, name: "Day 1", index: 0, exercises: []);
@@ -15,7 +15,7 @@ const fakeDay2 =
 
 final fakeDays = [fakeDay1, fakeDay2];
 
-// @GenerateMocks([IRoutineDaysContract])
+@GenerateMocks([IRoutineDaysContract])
 void main() {
   group('Routine Days Commands Tests', () {
     late MockIRoutineDaysContract mockRepo;

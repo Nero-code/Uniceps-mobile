@@ -12,19 +12,20 @@ class StopwatchCubit extends Cubit<StopwatchState> {
   StopwatchCubit()
       : super(const StopwatchState(time: "00:00:00", isRunning: false));
 
-  void startStopWatch() {
+  void startStopWatch([Duration initial = Duration.zero]) {
     _stopwatch.start();
     _timer = Timer.periodic(
         const Duration(seconds: 1),
         (timer) => emit(StopwatchState(
-            time: formatDuration(_stopwatch.elapsed), isRunning: true)));
+            time: formatDuration(_stopwatch.elapsed + initial),
+            isRunning: true)));
   }
 
   void stopStopwatch() {
     _stopwatch.stop();
     _timer?.cancel();
-    emit(StopwatchState(
-        time: formatDuration(_stopwatch.elapsed), isRunning: false));
+    // emit(StopwatchState(
+    //     time: formatDuration(_stopwatch.elapsed), isRunning: false));
   }
 
   void resetStopwatch() {

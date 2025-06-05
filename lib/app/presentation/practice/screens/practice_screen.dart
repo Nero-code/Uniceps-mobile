@@ -1,11 +1,16 @@
-import 'dart:async';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/presentation/practice/cubit/stopwatch_cubit.dart';
+import 'package:uniceps/app/domain/classes/practice_entities/t_log.dart';
+import 'package:uniceps/app/presentation/practice/blocs/practice/practice_cubit.dart';
+import 'package:uniceps/app/presentation/practice/blocs/session/session_bloc.dart';
+import 'package:uniceps/app/presentation/practice/blocs/stopwatch/stopwatch_cubit.dart';
+import 'package:uniceps/app/presentation/practice/dialogs/confirmation_dialog.dart';
 import 'package:uniceps/app/presentation/practice/dialogs/session_complete_dialog.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_body.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_header.dart';
+import 'package:uniceps/app/presentation/screens/loading_page.dart';
+import 'package:uniceps/injection_dependency.dart' as di;
 
 class PracticeScreen extends StatefulWidget {
   const PracticeScreen({super.key});
@@ -15,142 +20,199 @@ class PracticeScreen extends StatefulWidget {
 }
 
 class _PracticeScreenState extends State<PracticeScreen> {
-  // ---------------------------------------------------------------------------
-  // TIMER Logic and STOPWATCH variables and functions are put here.
-  final _stopwatch = Stopwatch();
-  Timer? _timer;
-
-  // void startStopWatch() {
-  //   _stopwatch.start();
-  //   _timer =
-  //       Timer.periodic(const Duration(seconds: 1), (timer) => setState(() {}));
-  // }
-
-  // void stopStopwatch() {
-  //   _stopwatch.stop();
-  //   _timer?.cancel();
-  // }
-
-  // void resetStopwatch() {
-  //   _stopwatch.reset();
-  //   setState(() {});
-  // }
-
-  // String formatDuration(Duration duration) {
-  //   String twoDigits(int n) => n.toString().padLeft(2, "0");
-  //   String hours = twoDigits(duration.inHours);
-  //   String minutes = twoDigits(duration.inMinutes.remainder(60));
-  //   String seconds = twoDigits(duration.inSeconds.remainder(60));
-
-  //   return "$hours:$minutes:$seconds";
-  // }
-
-  // ---------------------------------------------------------------------------
-
-  // ---------------------------------------------------------------------------
-  // Expansion list variable and flags will be put here.
-
-  int? expandedIndex;
-
-  // ---------------------------------------------------------------------------
-  @override
-  void initState() {
-    super.initState();
-    // startStopWatch();
-  }
-
-  @override
-  void dispose() {
-    _stopwatch.stop();
-    _timer?.cancel();
-    super.dispose();
-  }
+  int? expandedId;
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
-    return BlocProvider(
-      create: (context) => StopwatchCubit(),
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          centerTitle: true,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text("day 1"),
-              BlocBuilder<StopwatchCubit, StopwatchState>(
-                builder: (context, state) {
-                  if (!state.isRunning) {
-                    BlocProvider.of<StopwatchCubit>(context).startStopWatch();
-                  }
-                  return Text(
-                    // formatDuration(_stopwatch.elapsed),
-                    state.time,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w100,
-                      color: Colors.grey.shade700,
-                      fontSize: 26,
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
+        if (kDebugMode) {
+          print("didPop:  $didPop");
+          print("result:  $result");
+          print("mounted: ${context.mounted}");
+        }
+        if (context.mounted) {
+          context.read<StopwatchCubit>().stopStopwatch();
+        }
+      },
+      child: BlocConsumer<SessionBloc, SessionState>(
+        // --------------------------------------------------------
+        // Closing-Session State
+        listenWhen: (previous, current) =>
+            (previous is SessionLoadingState) &&
+            (current is NoActiveSessionState),
+        listener: (context, state) async {
+          print("b finished Session ${state.runtimeType}");
+          await showDialog<void>(
+              context: context,
+              builder: (context) => const SessionCompleteDialog());
+          print("a finished Session ${state.runtimeType}");
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+        },
+        // --------------------------------------------------------
+        builder: (context, sessionState) {
+          if (sessionState is SessionLoadedState) {
+            return BlocProvider(
+              create: (context) => PracticeCubit(commands: di.sl())
+                ..getPracticeDay(sessionState.session.dayId),
+              child: Scaffold(
+                appBar: AppBar(
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  centerTitle: true,
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      BlocSelector<PracticeCubit, PracticeState, String>(
+                        selector: (state) => (state is PracticeLoadedState)
+                            ? state.day.name
+                            : "",
+                        builder: (context, dayName) => Text(dayName),
+                      ),
+                      BlocBuilder<StopwatchCubit, StopwatchState>(
+                        builder: (context, state) => Text(
+                          state.time,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w100,
+                            color: Colors.grey.shade700,
+                            fontSize: 26,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                body: Stack(
+                  children: [
+                    const SizedBox.expand(),
+                    BlocBuilder<PracticeCubit, PracticeState>(
+                      builder: (context, state) {
+                        if (state is PracticeLoadedState) {
+                          return SingleChildScrollView(
+                            padding: const EdgeInsets.only(bottom: 100),
+                            child: ExpansionPanelList(
+                              expandedHeaderPadding: EdgeInsets.zero,
+                              expansionCallback: (panelIndex, isExpanded) {
+                                isExpanded
+                                    ? expandedId = panelIndex
+                                    : expandedId = null;
+                                setState(() {});
+                              },
+                              children: state.day.exercises.map(
+                                (i) {
+                                  return ExpansionPanel(
+                                    backgroundColor: const Color.fromARGB(
+                                        255, 250, 250, 250),
+                                    isExpanded: expandedId == i.index,
+                                    canTapOnHeader: true,
+                                    headerBuilder: (context, isExpanded) =>
+                                        PracticeHeader(item: i),
+                                    body: PracticeBody(
+                                      sets: i.sets,
+                                      logs: sessionState.session.logs
+                                          .where((log) =>
+                                              log.exerciseId ==
+                                              i.exercise.apiId)
+                                          .toList(),
+                                      onPressed: (set, weight) {
+                                        final l = sessionState.session.logs
+                                            .where((log) =>
+                                                (log.exerciseId ==
+                                                    i.exercise.apiId) &&
+                                                (log.setIndex == set.index))
+                                            .firstOrNull;
+                                        if (l == null) {
+                                          context.read<SessionBloc>().add(
+                                              LogSetEvent(
+                                                  log: TLog(
+                                                      id: null,
+                                                      sessionId: sessionState
+                                                          .session.id!,
+                                                      exerciseId:
+                                                          i.exercise.apiId!,
+                                                      exerciseIndex: i.index,
+                                                      setIndex: set.index,
+                                                      reps: set.reps,
+                                                      weight: weight,
+                                                      completedAt:
+                                                          DateTime.now(),
+                                                      apiId: null)));
+                                        } else {
+                                          context.read<SessionBloc>().add(
+                                              LogSetEvent(
+                                                  log: l.copywith(
+                                                      weight: weight)));
+                                        }
+                                      },
+                                    ),
+                                  );
+                                },
+                              ).toList(),
+                            ),
+                          );
+                        } else if (state is PracticeErrorState) {
+                          return Center(
+                              child: Text(state.failure.getErrorMessage()));
+                        }
+                        return const LoadingPage();
+                      },
                     ),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-        body: Stack(
-          children: [
-            SizedBox.expand(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.only(bottom: 100),
-                child: ExpansionPanelList(
-                  expandedHeaderPadding: EdgeInsets.zero,
-                  expansionCallback: (panelIndex, isExpanded) {
-                    isExpanded
-                        ? expandedIndex = panelIndex
-                        : expandedIndex = null;
-                    setState(() {});
-                  },
-                  children: [0, 1, 2, 3]
-                      .map((i) => ExpansionPanel(
-                            backgroundColor:
-                                const Color.fromARGB(255, 250, 250, 250),
-                            isExpanded: expandedIndex == i,
-                            canTapOnHeader: true,
-                            headerBuilder: (context, isExpanded) =>
-                                const PracticeHeader(),
-                            body: const PracticeBody(sets: [0, 1, 2, 3]),
-                          ))
-                      .toList(),
+                    Positioned(
+                      bottom: 0.0,
+                      width: screenSize.width,
+                      child: Container(
+                        height: 60,
+                        padding: const EdgeInsets.all(8.0),
+                        color: Colors.white,
+                        child: BlocListener<SessionBloc, SessionState>(
+                          listener: (context, state) {
+                            // TODO: implement listener
+                          },
+                          child: ElevatedButton(
+                              onPressed: () async {
+                                print("Finishing proccess");
+                                final confirmation = await showDialog<bool>(
+                                    context: context,
+                                    builder: (context) =>
+                                        const ConfirmationDialog());
+                                if ((confirmation ?? false) &&
+                                    context.mounted) {
+                                  context.read<SessionBloc>().add(
+                                      StopSessionEvent(
+                                          session: sessionState.session));
+                                  context.read<StopwatchCubit>()
+                                    ..stopStopwatch()
+                                    ..resetStopwatch();
+                                }
+                              },
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.bolt, size: 25),
+                                  Text("Finish", // TODO: Translate
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 16)),
+                                ],
+                              )),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 0.0,
-              width: screenSize.width,
-              child: Container(
-                height: 60,
-                padding: const EdgeInsets.all(8.0),
-                color: Colors.white,
-                child: ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) => const SessionCompleteDialog());
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.bolt, size: 25),
-                        Text("Finish",
-                            style: TextStyle(
-                                fontWeight: FontWeight.normal, fontSize: 16)),
-                      ],
-                    )),
+            );
+          } else if (sessionState is SessionErrorState) {
+            return Material(
+              child: Center(
+                child: Text(sessionState.failure.getErrorMessage()),
               ),
-            ),
-          ],
-        ),
+            );
+          }
+          return const Material(child: LoadingPage());
+        },
       ),
     );
   }

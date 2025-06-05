@@ -8,26 +8,30 @@ part 'routine_set_dto.g.dart';
 
 @JsonSerializable()
 class RoutineSetDto extends RoutineSet implements BaseDTO {
-  const RoutineSetDto(
-      {required super.id,
-      required super.apiId,
-      required super.routineItemId,
-      required super.version,
-      required super.index,
-      required super.reps,
-      required super.isSynced});
+  const RoutineSetDto({
+    required super.id,
+    required super.apiId,
+    required super.routineItemId,
+    required super.version,
+    required super.index,
+    required super.reps,
+    required super.weight,
+    required super.isSynced,
+  });
 
   factory RoutineSetDto.fromJson(Map<String, dynamic> json) =>
       _$RoutineSetDtoFromJson(json);
 
-  factory RoutineSetDto.fromTable(db.RoutineSet setItem) => RoutineSetDto(
-      id: setItem.id,
-      apiId: setItem.apiId,
-      routineItemId: setItem.routineItemId,
-      version: setItem.version,
-      index: setItem.roundIndex,
-      reps: setItem.repsCount,
-      isSynced: setItem.isSynced);
+  factory RoutineSetDto.fromTable(db.RoutineSet setItem, [double? weight]) =>
+      RoutineSetDto(
+          id: setItem.id,
+          apiId: setItem.apiId,
+          routineItemId: setItem.routineItemId,
+          version: setItem.version,
+          index: setItem.roundIndex,
+          reps: setItem.repsCount,
+          weight: weight,
+          isSynced: setItem.isSynced);
 
   @override
   RoutineSetDto copyWith({
@@ -36,6 +40,7 @@ class RoutineSetDto extends RoutineSet implements BaseDTO {
     int? routineItemId,
     int? index,
     int? reps,
+    double? weight,
     int? version,
     bool? isSynced,
   }) =>
@@ -46,6 +51,7 @@ class RoutineSetDto extends RoutineSet implements BaseDTO {
           version: version ?? this.version,
           index: index ?? this.index,
           reps: reps ?? this.reps,
+          weight: weight ?? this.weight,
           isSynced: isSynced ?? this.isSynced);
 
   @override

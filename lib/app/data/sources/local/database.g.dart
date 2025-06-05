@@ -2206,6 +2206,926 @@ class RoutineSetsCompanion extends UpdateCompanion<RoutineSet> {
   }
 }
 
+class $TSessionsTable extends TSessions
+    with TableInfo<$TSessionsTable, TSession> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TSessionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _tsIdMeta = const VerificationMeta('tsId');
+  @override
+  late final GeneratedColumn<int> tsId = GeneratedColumn<int>(
+      'ts_id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _dayIdMeta = const VerificationMeta('dayId');
+  @override
+  late final GeneratedColumn<int> dayId = GeneratedColumn<int>(
+      'day_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _startedAtMeta =
+      const VerificationMeta('startedAt');
+  @override
+  late final GeneratedColumn<DateTime> startedAt = GeneratedColumn<DateTime>(
+      'started_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _finishedAtMeta =
+      const VerificationMeta('finishedAt');
+  @override
+  late final GeneratedColumn<DateTime> finishedAt = GeneratedColumn<DateTime>(
+      'finished_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _apiIdMeta = const VerificationMeta('apiId');
+  @override
+  late final GeneratedColumn<int> apiId = GeneratedColumn<int>(
+      'api_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _versionMeta =
+      const VerificationMeta('version');
+  @override
+  late final GeneratedColumn<int> version = GeneratedColumn<int>(
+      'version', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _isSyncedMeta =
+      const VerificationMeta('isSynced');
+  @override
+  late final GeneratedColumn<bool> isSynced = GeneratedColumn<bool>(
+      'is_synced', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_synced" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [tsId, dayId, startedAt, finishedAt, apiId, version, isSynced];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 't_sessions';
+  @override
+  VerificationContext validateIntegrity(Insertable<TSession> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('ts_id')) {
+      context.handle(
+          _tsIdMeta, tsId.isAcceptableOrUnknown(data['ts_id']!, _tsIdMeta));
+    }
+    if (data.containsKey('day_id')) {
+      context.handle(
+          _dayIdMeta, dayId.isAcceptableOrUnknown(data['day_id']!, _dayIdMeta));
+    } else if (isInserting) {
+      context.missing(_dayIdMeta);
+    }
+    if (data.containsKey('started_at')) {
+      context.handle(_startedAtMeta,
+          startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta));
+    } else if (isInserting) {
+      context.missing(_startedAtMeta);
+    }
+    if (data.containsKey('finished_at')) {
+      context.handle(
+          _finishedAtMeta,
+          finishedAt.isAcceptableOrUnknown(
+              data['finished_at']!, _finishedAtMeta));
+    }
+    if (data.containsKey('api_id')) {
+      context.handle(
+          _apiIdMeta, apiId.isAcceptableOrUnknown(data['api_id']!, _apiIdMeta));
+    }
+    if (data.containsKey('version')) {
+      context.handle(_versionMeta,
+          version.isAcceptableOrUnknown(data['version']!, _versionMeta));
+    }
+    if (data.containsKey('is_synced')) {
+      context.handle(_isSyncedMeta,
+          isSynced.isAcceptableOrUnknown(data['is_synced']!, _isSyncedMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {tsId};
+  @override
+  TSession map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TSession(
+      tsId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}ts_id'])!,
+      dayId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}day_id'])!,
+      startedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}started_at'])!,
+      finishedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}finished_at']),
+      apiId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}api_id']),
+      version: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}version'])!,
+      isSynced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_synced'])!,
+    );
+  }
+
+  @override
+  $TSessionsTable createAlias(String alias) {
+    return $TSessionsTable(attachedDatabase, alias);
+  }
+}
+
+class TSession extends DataClass implements Insertable<TSession> {
+  final int tsId;
+  final int dayId;
+  final DateTime startedAt;
+  final DateTime? finishedAt;
+  final int? apiId;
+  final int version;
+  final bool isSynced;
+  const TSession(
+      {required this.tsId,
+      required this.dayId,
+      required this.startedAt,
+      this.finishedAt,
+      this.apiId,
+      required this.version,
+      required this.isSynced});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['ts_id'] = Variable<int>(tsId);
+    map['day_id'] = Variable<int>(dayId);
+    map['started_at'] = Variable<DateTime>(startedAt);
+    if (!nullToAbsent || finishedAt != null) {
+      map['finished_at'] = Variable<DateTime>(finishedAt);
+    }
+    if (!nullToAbsent || apiId != null) {
+      map['api_id'] = Variable<int>(apiId);
+    }
+    map['version'] = Variable<int>(version);
+    map['is_synced'] = Variable<bool>(isSynced);
+    return map;
+  }
+
+  TSessionsCompanion toCompanion(bool nullToAbsent) {
+    return TSessionsCompanion(
+      tsId: Value(tsId),
+      dayId: Value(dayId),
+      startedAt: Value(startedAt),
+      finishedAt: finishedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(finishedAt),
+      apiId:
+          apiId == null && nullToAbsent ? const Value.absent() : Value(apiId),
+      version: Value(version),
+      isSynced: Value(isSynced),
+    );
+  }
+
+  factory TSession.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TSession(
+      tsId: serializer.fromJson<int>(json['tsId']),
+      dayId: serializer.fromJson<int>(json['dayId']),
+      startedAt: serializer.fromJson<DateTime>(json['startedAt']),
+      finishedAt: serializer.fromJson<DateTime?>(json['finishedAt']),
+      apiId: serializer.fromJson<int?>(json['apiId']),
+      version: serializer.fromJson<int>(json['version']),
+      isSynced: serializer.fromJson<bool>(json['isSynced']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'tsId': serializer.toJson<int>(tsId),
+      'dayId': serializer.toJson<int>(dayId),
+      'startedAt': serializer.toJson<DateTime>(startedAt),
+      'finishedAt': serializer.toJson<DateTime?>(finishedAt),
+      'apiId': serializer.toJson<int?>(apiId),
+      'version': serializer.toJson<int>(version),
+      'isSynced': serializer.toJson<bool>(isSynced),
+    };
+  }
+
+  TSession copyWith(
+          {int? tsId,
+          int? dayId,
+          DateTime? startedAt,
+          Value<DateTime?> finishedAt = const Value.absent(),
+          Value<int?> apiId = const Value.absent(),
+          int? version,
+          bool? isSynced}) =>
+      TSession(
+        tsId: tsId ?? this.tsId,
+        dayId: dayId ?? this.dayId,
+        startedAt: startedAt ?? this.startedAt,
+        finishedAt: finishedAt.present ? finishedAt.value : this.finishedAt,
+        apiId: apiId.present ? apiId.value : this.apiId,
+        version: version ?? this.version,
+        isSynced: isSynced ?? this.isSynced,
+      );
+  TSession copyWithCompanion(TSessionsCompanion data) {
+    return TSession(
+      tsId: data.tsId.present ? data.tsId.value : this.tsId,
+      dayId: data.dayId.present ? data.dayId.value : this.dayId,
+      startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
+      finishedAt:
+          data.finishedAt.present ? data.finishedAt.value : this.finishedAt,
+      apiId: data.apiId.present ? data.apiId.value : this.apiId,
+      version: data.version.present ? data.version.value : this.version,
+      isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TSession(')
+          ..write('tsId: $tsId, ')
+          ..write('dayId: $dayId, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('finishedAt: $finishedAt, ')
+          ..write('apiId: $apiId, ')
+          ..write('version: $version, ')
+          ..write('isSynced: $isSynced')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(tsId, dayId, startedAt, finishedAt, apiId, version, isSynced);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TSession &&
+          other.tsId == this.tsId &&
+          other.dayId == this.dayId &&
+          other.startedAt == this.startedAt &&
+          other.finishedAt == this.finishedAt &&
+          other.apiId == this.apiId &&
+          other.version == this.version &&
+          other.isSynced == this.isSynced);
+}
+
+class TSessionsCompanion extends UpdateCompanion<TSession> {
+  final Value<int> tsId;
+  final Value<int> dayId;
+  final Value<DateTime> startedAt;
+  final Value<DateTime?> finishedAt;
+  final Value<int?> apiId;
+  final Value<int> version;
+  final Value<bool> isSynced;
+  const TSessionsCompanion({
+    this.tsId = const Value.absent(),
+    this.dayId = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.finishedAt = const Value.absent(),
+    this.apiId = const Value.absent(),
+    this.version = const Value.absent(),
+    this.isSynced = const Value.absent(),
+  });
+  TSessionsCompanion.insert({
+    this.tsId = const Value.absent(),
+    required int dayId,
+    required DateTime startedAt,
+    this.finishedAt = const Value.absent(),
+    this.apiId = const Value.absent(),
+    this.version = const Value.absent(),
+    this.isSynced = const Value.absent(),
+  })  : dayId = Value(dayId),
+        startedAt = Value(startedAt);
+  static Insertable<TSession> custom({
+    Expression<int>? tsId,
+    Expression<int>? dayId,
+    Expression<DateTime>? startedAt,
+    Expression<DateTime>? finishedAt,
+    Expression<int>? apiId,
+    Expression<int>? version,
+    Expression<bool>? isSynced,
+  }) {
+    return RawValuesInsertable({
+      if (tsId != null) 'ts_id': tsId,
+      if (dayId != null) 'day_id': dayId,
+      if (startedAt != null) 'started_at': startedAt,
+      if (finishedAt != null) 'finished_at': finishedAt,
+      if (apiId != null) 'api_id': apiId,
+      if (version != null) 'version': version,
+      if (isSynced != null) 'is_synced': isSynced,
+    });
+  }
+
+  TSessionsCompanion copyWith(
+      {Value<int>? tsId,
+      Value<int>? dayId,
+      Value<DateTime>? startedAt,
+      Value<DateTime?>? finishedAt,
+      Value<int?>? apiId,
+      Value<int>? version,
+      Value<bool>? isSynced}) {
+    return TSessionsCompanion(
+      tsId: tsId ?? this.tsId,
+      dayId: dayId ?? this.dayId,
+      startedAt: startedAt ?? this.startedAt,
+      finishedAt: finishedAt ?? this.finishedAt,
+      apiId: apiId ?? this.apiId,
+      version: version ?? this.version,
+      isSynced: isSynced ?? this.isSynced,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (tsId.present) {
+      map['ts_id'] = Variable<int>(tsId.value);
+    }
+    if (dayId.present) {
+      map['day_id'] = Variable<int>(dayId.value);
+    }
+    if (startedAt.present) {
+      map['started_at'] = Variable<DateTime>(startedAt.value);
+    }
+    if (finishedAt.present) {
+      map['finished_at'] = Variable<DateTime>(finishedAt.value);
+    }
+    if (apiId.present) {
+      map['api_id'] = Variable<int>(apiId.value);
+    }
+    if (version.present) {
+      map['version'] = Variable<int>(version.value);
+    }
+    if (isSynced.present) {
+      map['is_synced'] = Variable<bool>(isSynced.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TSessionsCompanion(')
+          ..write('tsId: $tsId, ')
+          ..write('dayId: $dayId, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('finishedAt: $finishedAt, ')
+          ..write('apiId: $apiId, ')
+          ..write('version: $version, ')
+          ..write('isSynced: $isSynced')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TLogsTable extends TLogs with TableInfo<$TLogsTable, TLog> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TLogsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _logIdMeta = const VerificationMeta('logId');
+  @override
+  late final GeneratedColumn<int> logId = GeneratedColumn<int>(
+      'log_id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _exerciseIdMeta =
+      const VerificationMeta('exerciseId');
+  @override
+  late final GeneratedColumn<int> exerciseId = GeneratedColumn<int>(
+      'exercise_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _exerciseIndexMeta =
+      const VerificationMeta('exerciseIndex');
+  @override
+  late final GeneratedColumn<int> exerciseIndex = GeneratedColumn<int>(
+      'exercise_index', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _setIndexMeta =
+      const VerificationMeta('setIndex');
+  @override
+  late final GeneratedColumn<int> setIndex = GeneratedColumn<int>(
+      'set_index', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _repsMeta = const VerificationMeta('reps');
+  @override
+  late final GeneratedColumn<int> reps = GeneratedColumn<int>(
+      'reps', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _weightMeta = const VerificationMeta('weight');
+  @override
+  late final GeneratedColumn<double> weight = GeneratedColumn<double>(
+      'weight', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _completedAtMeta =
+      const VerificationMeta('completedAt');
+  @override
+  late final GeneratedColumn<DateTime> completedAt = GeneratedColumn<DateTime>(
+      'completed_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _apiIdMeta = const VerificationMeta('apiId');
+  @override
+  late final GeneratedColumn<int> apiId = GeneratedColumn<int>(
+      'api_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _versionMeta =
+      const VerificationMeta('version');
+  @override
+  late final GeneratedColumn<int> version = GeneratedColumn<int>(
+      'version', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _isSyncedMeta =
+      const VerificationMeta('isSynced');
+  @override
+  late final GeneratedColumn<bool> isSynced = GeneratedColumn<bool>(
+      'is_synced', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_synced" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _sessionIdMeta =
+      const VerificationMeta('sessionId');
+  @override
+  late final GeneratedColumn<int> sessionId = GeneratedColumn<int>(
+      'session_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES t_sessions (ts_id) ON UPDATE CASCADE ON DELETE CASCADE'));
+  @override
+  List<GeneratedColumn> get $columns => [
+        logId,
+        exerciseId,
+        exerciseIndex,
+        setIndex,
+        reps,
+        weight,
+        completedAt,
+        apiId,
+        version,
+        isSynced,
+        sessionId
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 't_logs';
+  @override
+  VerificationContext validateIntegrity(Insertable<TLog> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('log_id')) {
+      context.handle(
+          _logIdMeta, logId.isAcceptableOrUnknown(data['log_id']!, _logIdMeta));
+    }
+    if (data.containsKey('exercise_id')) {
+      context.handle(
+          _exerciseIdMeta,
+          exerciseId.isAcceptableOrUnknown(
+              data['exercise_id']!, _exerciseIdMeta));
+    } else if (isInserting) {
+      context.missing(_exerciseIdMeta);
+    }
+    if (data.containsKey('exercise_index')) {
+      context.handle(
+          _exerciseIndexMeta,
+          exerciseIndex.isAcceptableOrUnknown(
+              data['exercise_index']!, _exerciseIndexMeta));
+    } else if (isInserting) {
+      context.missing(_exerciseIndexMeta);
+    }
+    if (data.containsKey('set_index')) {
+      context.handle(_setIndexMeta,
+          setIndex.isAcceptableOrUnknown(data['set_index']!, _setIndexMeta));
+    } else if (isInserting) {
+      context.missing(_setIndexMeta);
+    }
+    if (data.containsKey('reps')) {
+      context.handle(
+          _repsMeta, reps.isAcceptableOrUnknown(data['reps']!, _repsMeta));
+    } else if (isInserting) {
+      context.missing(_repsMeta);
+    }
+    if (data.containsKey('weight')) {
+      context.handle(_weightMeta,
+          weight.isAcceptableOrUnknown(data['weight']!, _weightMeta));
+    } else if (isInserting) {
+      context.missing(_weightMeta);
+    }
+    if (data.containsKey('completed_at')) {
+      context.handle(
+          _completedAtMeta,
+          completedAt.isAcceptableOrUnknown(
+              data['completed_at']!, _completedAtMeta));
+    } else if (isInserting) {
+      context.missing(_completedAtMeta);
+    }
+    if (data.containsKey('api_id')) {
+      context.handle(
+          _apiIdMeta, apiId.isAcceptableOrUnknown(data['api_id']!, _apiIdMeta));
+    }
+    if (data.containsKey('version')) {
+      context.handle(_versionMeta,
+          version.isAcceptableOrUnknown(data['version']!, _versionMeta));
+    }
+    if (data.containsKey('is_synced')) {
+      context.handle(_isSyncedMeta,
+          isSynced.isAcceptableOrUnknown(data['is_synced']!, _isSyncedMeta));
+    }
+    if (data.containsKey('session_id')) {
+      context.handle(_sessionIdMeta,
+          sessionId.isAcceptableOrUnknown(data['session_id']!, _sessionIdMeta));
+    } else if (isInserting) {
+      context.missing(_sessionIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {logId};
+  @override
+  TLog map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TLog(
+      logId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}log_id'])!,
+      exerciseId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}exercise_id'])!,
+      exerciseIndex: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}exercise_index'])!,
+      setIndex: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}set_index'])!,
+      reps: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}reps'])!,
+      weight: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}weight'])!,
+      completedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}completed_at'])!,
+      apiId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}api_id']),
+      version: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}version'])!,
+      isSynced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_synced'])!,
+      sessionId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}session_id'])!,
+    );
+  }
+
+  @override
+  $TLogsTable createAlias(String alias) {
+    return $TLogsTable(attachedDatabase, alias);
+  }
+}
+
+class TLog extends DataClass implements Insertable<TLog> {
+  final int logId;
+  final int exerciseId;
+  final int exerciseIndex;
+  final int setIndex;
+  final int reps;
+  final double weight;
+  final DateTime completedAt;
+  final int? apiId;
+  final int version;
+  final bool isSynced;
+  final int sessionId;
+  const TLog(
+      {required this.logId,
+      required this.exerciseId,
+      required this.exerciseIndex,
+      required this.setIndex,
+      required this.reps,
+      required this.weight,
+      required this.completedAt,
+      this.apiId,
+      required this.version,
+      required this.isSynced,
+      required this.sessionId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['log_id'] = Variable<int>(logId);
+    map['exercise_id'] = Variable<int>(exerciseId);
+    map['exercise_index'] = Variable<int>(exerciseIndex);
+    map['set_index'] = Variable<int>(setIndex);
+    map['reps'] = Variable<int>(reps);
+    map['weight'] = Variable<double>(weight);
+    map['completed_at'] = Variable<DateTime>(completedAt);
+    if (!nullToAbsent || apiId != null) {
+      map['api_id'] = Variable<int>(apiId);
+    }
+    map['version'] = Variable<int>(version);
+    map['is_synced'] = Variable<bool>(isSynced);
+    map['session_id'] = Variable<int>(sessionId);
+    return map;
+  }
+
+  TLogsCompanion toCompanion(bool nullToAbsent) {
+    return TLogsCompanion(
+      logId: Value(logId),
+      exerciseId: Value(exerciseId),
+      exerciseIndex: Value(exerciseIndex),
+      setIndex: Value(setIndex),
+      reps: Value(reps),
+      weight: Value(weight),
+      completedAt: Value(completedAt),
+      apiId:
+          apiId == null && nullToAbsent ? const Value.absent() : Value(apiId),
+      version: Value(version),
+      isSynced: Value(isSynced),
+      sessionId: Value(sessionId),
+    );
+  }
+
+  factory TLog.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TLog(
+      logId: serializer.fromJson<int>(json['logId']),
+      exerciseId: serializer.fromJson<int>(json['exerciseId']),
+      exerciseIndex: serializer.fromJson<int>(json['exerciseIndex']),
+      setIndex: serializer.fromJson<int>(json['setIndex']),
+      reps: serializer.fromJson<int>(json['reps']),
+      weight: serializer.fromJson<double>(json['weight']),
+      completedAt: serializer.fromJson<DateTime>(json['completedAt']),
+      apiId: serializer.fromJson<int?>(json['apiId']),
+      version: serializer.fromJson<int>(json['version']),
+      isSynced: serializer.fromJson<bool>(json['isSynced']),
+      sessionId: serializer.fromJson<int>(json['sessionId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'logId': serializer.toJson<int>(logId),
+      'exerciseId': serializer.toJson<int>(exerciseId),
+      'exerciseIndex': serializer.toJson<int>(exerciseIndex),
+      'setIndex': serializer.toJson<int>(setIndex),
+      'reps': serializer.toJson<int>(reps),
+      'weight': serializer.toJson<double>(weight),
+      'completedAt': serializer.toJson<DateTime>(completedAt),
+      'apiId': serializer.toJson<int?>(apiId),
+      'version': serializer.toJson<int>(version),
+      'isSynced': serializer.toJson<bool>(isSynced),
+      'sessionId': serializer.toJson<int>(sessionId),
+    };
+  }
+
+  TLog copyWith(
+          {int? logId,
+          int? exerciseId,
+          int? exerciseIndex,
+          int? setIndex,
+          int? reps,
+          double? weight,
+          DateTime? completedAt,
+          Value<int?> apiId = const Value.absent(),
+          int? version,
+          bool? isSynced,
+          int? sessionId}) =>
+      TLog(
+        logId: logId ?? this.logId,
+        exerciseId: exerciseId ?? this.exerciseId,
+        exerciseIndex: exerciseIndex ?? this.exerciseIndex,
+        setIndex: setIndex ?? this.setIndex,
+        reps: reps ?? this.reps,
+        weight: weight ?? this.weight,
+        completedAt: completedAt ?? this.completedAt,
+        apiId: apiId.present ? apiId.value : this.apiId,
+        version: version ?? this.version,
+        isSynced: isSynced ?? this.isSynced,
+        sessionId: sessionId ?? this.sessionId,
+      );
+  TLog copyWithCompanion(TLogsCompanion data) {
+    return TLog(
+      logId: data.logId.present ? data.logId.value : this.logId,
+      exerciseId:
+          data.exerciseId.present ? data.exerciseId.value : this.exerciseId,
+      exerciseIndex: data.exerciseIndex.present
+          ? data.exerciseIndex.value
+          : this.exerciseIndex,
+      setIndex: data.setIndex.present ? data.setIndex.value : this.setIndex,
+      reps: data.reps.present ? data.reps.value : this.reps,
+      weight: data.weight.present ? data.weight.value : this.weight,
+      completedAt:
+          data.completedAt.present ? data.completedAt.value : this.completedAt,
+      apiId: data.apiId.present ? data.apiId.value : this.apiId,
+      version: data.version.present ? data.version.value : this.version,
+      isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
+      sessionId: data.sessionId.present ? data.sessionId.value : this.sessionId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TLog(')
+          ..write('logId: $logId, ')
+          ..write('exerciseId: $exerciseId, ')
+          ..write('exerciseIndex: $exerciseIndex, ')
+          ..write('setIndex: $setIndex, ')
+          ..write('reps: $reps, ')
+          ..write('weight: $weight, ')
+          ..write('completedAt: $completedAt, ')
+          ..write('apiId: $apiId, ')
+          ..write('version: $version, ')
+          ..write('isSynced: $isSynced, ')
+          ..write('sessionId: $sessionId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(logId, exerciseId, exerciseIndex, setIndex,
+      reps, weight, completedAt, apiId, version, isSynced, sessionId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TLog &&
+          other.logId == this.logId &&
+          other.exerciseId == this.exerciseId &&
+          other.exerciseIndex == this.exerciseIndex &&
+          other.setIndex == this.setIndex &&
+          other.reps == this.reps &&
+          other.weight == this.weight &&
+          other.completedAt == this.completedAt &&
+          other.apiId == this.apiId &&
+          other.version == this.version &&
+          other.isSynced == this.isSynced &&
+          other.sessionId == this.sessionId);
+}
+
+class TLogsCompanion extends UpdateCompanion<TLog> {
+  final Value<int> logId;
+  final Value<int> exerciseId;
+  final Value<int> exerciseIndex;
+  final Value<int> setIndex;
+  final Value<int> reps;
+  final Value<double> weight;
+  final Value<DateTime> completedAt;
+  final Value<int?> apiId;
+  final Value<int> version;
+  final Value<bool> isSynced;
+  final Value<int> sessionId;
+  const TLogsCompanion({
+    this.logId = const Value.absent(),
+    this.exerciseId = const Value.absent(),
+    this.exerciseIndex = const Value.absent(),
+    this.setIndex = const Value.absent(),
+    this.reps = const Value.absent(),
+    this.weight = const Value.absent(),
+    this.completedAt = const Value.absent(),
+    this.apiId = const Value.absent(),
+    this.version = const Value.absent(),
+    this.isSynced = const Value.absent(),
+    this.sessionId = const Value.absent(),
+  });
+  TLogsCompanion.insert({
+    this.logId = const Value.absent(),
+    required int exerciseId,
+    required int exerciseIndex,
+    required int setIndex,
+    required int reps,
+    required double weight,
+    required DateTime completedAt,
+    this.apiId = const Value.absent(),
+    this.version = const Value.absent(),
+    this.isSynced = const Value.absent(),
+    required int sessionId,
+  })  : exerciseId = Value(exerciseId),
+        exerciseIndex = Value(exerciseIndex),
+        setIndex = Value(setIndex),
+        reps = Value(reps),
+        weight = Value(weight),
+        completedAt = Value(completedAt),
+        sessionId = Value(sessionId);
+  static Insertable<TLog> custom({
+    Expression<int>? logId,
+    Expression<int>? exerciseId,
+    Expression<int>? exerciseIndex,
+    Expression<int>? setIndex,
+    Expression<int>? reps,
+    Expression<double>? weight,
+    Expression<DateTime>? completedAt,
+    Expression<int>? apiId,
+    Expression<int>? version,
+    Expression<bool>? isSynced,
+    Expression<int>? sessionId,
+  }) {
+    return RawValuesInsertable({
+      if (logId != null) 'log_id': logId,
+      if (exerciseId != null) 'exercise_id': exerciseId,
+      if (exerciseIndex != null) 'exercise_index': exerciseIndex,
+      if (setIndex != null) 'set_index': setIndex,
+      if (reps != null) 'reps': reps,
+      if (weight != null) 'weight': weight,
+      if (completedAt != null) 'completed_at': completedAt,
+      if (apiId != null) 'api_id': apiId,
+      if (version != null) 'version': version,
+      if (isSynced != null) 'is_synced': isSynced,
+      if (sessionId != null) 'session_id': sessionId,
+    });
+  }
+
+  TLogsCompanion copyWith(
+      {Value<int>? logId,
+      Value<int>? exerciseId,
+      Value<int>? exerciseIndex,
+      Value<int>? setIndex,
+      Value<int>? reps,
+      Value<double>? weight,
+      Value<DateTime>? completedAt,
+      Value<int?>? apiId,
+      Value<int>? version,
+      Value<bool>? isSynced,
+      Value<int>? sessionId}) {
+    return TLogsCompanion(
+      logId: logId ?? this.logId,
+      exerciseId: exerciseId ?? this.exerciseId,
+      exerciseIndex: exerciseIndex ?? this.exerciseIndex,
+      setIndex: setIndex ?? this.setIndex,
+      reps: reps ?? this.reps,
+      weight: weight ?? this.weight,
+      completedAt: completedAt ?? this.completedAt,
+      apiId: apiId ?? this.apiId,
+      version: version ?? this.version,
+      isSynced: isSynced ?? this.isSynced,
+      sessionId: sessionId ?? this.sessionId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (logId.present) {
+      map['log_id'] = Variable<int>(logId.value);
+    }
+    if (exerciseId.present) {
+      map['exercise_id'] = Variable<int>(exerciseId.value);
+    }
+    if (exerciseIndex.present) {
+      map['exercise_index'] = Variable<int>(exerciseIndex.value);
+    }
+    if (setIndex.present) {
+      map['set_index'] = Variable<int>(setIndex.value);
+    }
+    if (reps.present) {
+      map['reps'] = Variable<int>(reps.value);
+    }
+    if (weight.present) {
+      map['weight'] = Variable<double>(weight.value);
+    }
+    if (completedAt.present) {
+      map['completed_at'] = Variable<DateTime>(completedAt.value);
+    }
+    if (apiId.present) {
+      map['api_id'] = Variable<int>(apiId.value);
+    }
+    if (version.present) {
+      map['version'] = Variable<int>(version.value);
+    }
+    if (isSynced.present) {
+      map['is_synced'] = Variable<bool>(isSynced.value);
+    }
+    if (sessionId.present) {
+      map['session_id'] = Variable<int>(sessionId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TLogsCompanion(')
+          ..write('logId: $logId, ')
+          ..write('exerciseId: $exerciseId, ')
+          ..write('exerciseIndex: $exerciseIndex, ')
+          ..write('setIndex: $setIndex, ')
+          ..write('reps: $reps, ')
+          ..write('weight: $weight, ')
+          ..write('completedAt: $completedAt, ')
+          ..write('apiId: $apiId, ')
+          ..write('version: $version, ')
+          ..write('isSynced: $isSynced, ')
+          ..write('sessionId: $sessionId')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2215,6 +3135,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ExercisesTable exercises = $ExercisesTable(this);
   late final $RoutineItemsTable routineItems = $RoutineItemsTable(this);
   late final $RoutineSetsTable routineSets = $RoutineSetsTable(this);
+  late final $TSessionsTable tSessions = $TSessionsTable(this);
+  late final $TLogsTable tLogs = $TLogsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2225,7 +3147,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         exerciseGroups,
         exercises,
         routineItems,
-        routineSets
+        routineSets,
+        tSessions,
+        tLogs
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -2284,6 +3208,20 @@ abstract class _$AppDatabase extends GeneratedDatabase {
                 limitUpdateKind: UpdateKind.update),
             result: [
               TableUpdate('routine_sets', kind: UpdateKind.update),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('t_sessions',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('t_logs', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('t_sessions',
+                limitUpdateKind: UpdateKind.update),
+            result: [
+              TableUpdate('t_logs', kind: UpdateKind.update),
             ],
           ),
         ],
@@ -4290,6 +5228,632 @@ typedef $$RoutineSetsTableProcessedTableManager = ProcessedTableManager<
     (RoutineSet, $$RoutineSetsTableReferences),
     RoutineSet,
     PrefetchHooks Function({bool routineItemId})>;
+typedef $$TSessionsTableCreateCompanionBuilder = TSessionsCompanion Function({
+  Value<int> tsId,
+  required int dayId,
+  required DateTime startedAt,
+  Value<DateTime?> finishedAt,
+  Value<int?> apiId,
+  Value<int> version,
+  Value<bool> isSynced,
+});
+typedef $$TSessionsTableUpdateCompanionBuilder = TSessionsCompanion Function({
+  Value<int> tsId,
+  Value<int> dayId,
+  Value<DateTime> startedAt,
+  Value<DateTime?> finishedAt,
+  Value<int?> apiId,
+  Value<int> version,
+  Value<bool> isSynced,
+});
+
+final class $$TSessionsTableReferences
+    extends BaseReferences<_$AppDatabase, $TSessionsTable, TSession> {
+  $$TSessionsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$TLogsTable, List<TLog>> _tLogsRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.tLogs,
+          aliasName:
+              $_aliasNameGenerator(db.tSessions.tsId, db.tLogs.sessionId));
+
+  $$TLogsTableProcessedTableManager get tLogsRefs {
+    final manager = $$TLogsTableTableManager($_db, $_db.tLogs)
+        .filter((f) => f.sessionId.tsId($_item.tsId));
+
+    final cache = $_typedResult.readTableOrNull(_tLogsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$TSessionsTableFilterComposer
+    extends Composer<_$AppDatabase, $TSessionsTable> {
+  $$TSessionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get tsId => $composableBuilder(
+      column: $table.tsId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get dayId => $composableBuilder(
+      column: $table.dayId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get startedAt => $composableBuilder(
+      column: $table.startedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get finishedAt => $composableBuilder(
+      column: $table.finishedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get apiId => $composableBuilder(
+      column: $table.apiId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get version => $composableBuilder(
+      column: $table.version, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> tLogsRefs(
+      Expression<bool> Function($$TLogsTableFilterComposer f) f) {
+    final $$TLogsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.tsId,
+        referencedTable: $db.tLogs,
+        getReferencedColumn: (t) => t.sessionId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$TLogsTableFilterComposer(
+              $db: $db,
+              $table: $db.tLogs,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$TSessionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $TSessionsTable> {
+  $$TSessionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get tsId => $composableBuilder(
+      column: $table.tsId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get dayId => $composableBuilder(
+      column: $table.dayId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get startedAt => $composableBuilder(
+      column: $table.startedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get finishedAt => $composableBuilder(
+      column: $table.finishedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get apiId => $composableBuilder(
+      column: $table.apiId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get version => $composableBuilder(
+      column: $table.version, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnOrderings(column));
+}
+
+class $$TSessionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TSessionsTable> {
+  $$TSessionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get tsId =>
+      $composableBuilder(column: $table.tsId, builder: (column) => column);
+
+  GeneratedColumn<int> get dayId =>
+      $composableBuilder(column: $table.dayId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get finishedAt => $composableBuilder(
+      column: $table.finishedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get apiId =>
+      $composableBuilder(column: $table.apiId, builder: (column) => column);
+
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<bool> get isSynced =>
+      $composableBuilder(column: $table.isSynced, builder: (column) => column);
+
+  Expression<T> tLogsRefs<T extends Object>(
+      Expression<T> Function($$TLogsTableAnnotationComposer a) f) {
+    final $$TLogsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.tsId,
+        referencedTable: $db.tLogs,
+        getReferencedColumn: (t) => t.sessionId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$TLogsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.tLogs,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$TSessionsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $TSessionsTable,
+    TSession,
+    $$TSessionsTableFilterComposer,
+    $$TSessionsTableOrderingComposer,
+    $$TSessionsTableAnnotationComposer,
+    $$TSessionsTableCreateCompanionBuilder,
+    $$TSessionsTableUpdateCompanionBuilder,
+    (TSession, $$TSessionsTableReferences),
+    TSession,
+    PrefetchHooks Function({bool tLogsRefs})> {
+  $$TSessionsTableTableManager(_$AppDatabase db, $TSessionsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TSessionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TSessionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TSessionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> tsId = const Value.absent(),
+            Value<int> dayId = const Value.absent(),
+            Value<DateTime> startedAt = const Value.absent(),
+            Value<DateTime?> finishedAt = const Value.absent(),
+            Value<int?> apiId = const Value.absent(),
+            Value<int> version = const Value.absent(),
+            Value<bool> isSynced = const Value.absent(),
+          }) =>
+              TSessionsCompanion(
+            tsId: tsId,
+            dayId: dayId,
+            startedAt: startedAt,
+            finishedAt: finishedAt,
+            apiId: apiId,
+            version: version,
+            isSynced: isSynced,
+          ),
+          createCompanionCallback: ({
+            Value<int> tsId = const Value.absent(),
+            required int dayId,
+            required DateTime startedAt,
+            Value<DateTime?> finishedAt = const Value.absent(),
+            Value<int?> apiId = const Value.absent(),
+            Value<int> version = const Value.absent(),
+            Value<bool> isSynced = const Value.absent(),
+          }) =>
+              TSessionsCompanion.insert(
+            tsId: tsId,
+            dayId: dayId,
+            startedAt: startedAt,
+            finishedAt: finishedAt,
+            apiId: apiId,
+            version: version,
+            isSynced: isSynced,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$TSessionsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({tLogsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (tLogsRefs) db.tLogs],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (tLogsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable:
+                            $$TSessionsTableReferences._tLogsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$TSessionsTableReferences(db, table, p0).tLogsRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.sessionId == item.tsId),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$TSessionsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $TSessionsTable,
+    TSession,
+    $$TSessionsTableFilterComposer,
+    $$TSessionsTableOrderingComposer,
+    $$TSessionsTableAnnotationComposer,
+    $$TSessionsTableCreateCompanionBuilder,
+    $$TSessionsTableUpdateCompanionBuilder,
+    (TSession, $$TSessionsTableReferences),
+    TSession,
+    PrefetchHooks Function({bool tLogsRefs})>;
+typedef $$TLogsTableCreateCompanionBuilder = TLogsCompanion Function({
+  Value<int> logId,
+  required int exerciseId,
+  required int exerciseIndex,
+  required int setIndex,
+  required int reps,
+  required double weight,
+  required DateTime completedAt,
+  Value<int?> apiId,
+  Value<int> version,
+  Value<bool> isSynced,
+  required int sessionId,
+});
+typedef $$TLogsTableUpdateCompanionBuilder = TLogsCompanion Function({
+  Value<int> logId,
+  Value<int> exerciseId,
+  Value<int> exerciseIndex,
+  Value<int> setIndex,
+  Value<int> reps,
+  Value<double> weight,
+  Value<DateTime> completedAt,
+  Value<int?> apiId,
+  Value<int> version,
+  Value<bool> isSynced,
+  Value<int> sessionId,
+});
+
+final class $$TLogsTableReferences
+    extends BaseReferences<_$AppDatabase, $TLogsTable, TLog> {
+  $$TLogsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $TSessionsTable _sessionIdTable(_$AppDatabase db) => db.tSessions
+      .createAlias($_aliasNameGenerator(db.tLogs.sessionId, db.tSessions.tsId));
+
+  $$TSessionsTableProcessedTableManager get sessionId {
+    final manager = $$TSessionsTableTableManager($_db, $_db.tSessions)
+        .filter((f) => f.tsId($_item.sessionId));
+    final item = $_typedResult.readTableOrNull(_sessionIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$TLogsTableFilterComposer extends Composer<_$AppDatabase, $TLogsTable> {
+  $$TLogsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get logId => $composableBuilder(
+      column: $table.logId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get exerciseId => $composableBuilder(
+      column: $table.exerciseId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get exerciseIndex => $composableBuilder(
+      column: $table.exerciseIndex, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get setIndex => $composableBuilder(
+      column: $table.setIndex, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get reps => $composableBuilder(
+      column: $table.reps, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get weight => $composableBuilder(
+      column: $table.weight, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get completedAt => $composableBuilder(
+      column: $table.completedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get apiId => $composableBuilder(
+      column: $table.apiId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get version => $composableBuilder(
+      column: $table.version, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnFilters(column));
+
+  $$TSessionsTableFilterComposer get sessionId {
+    final $$TSessionsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.sessionId,
+        referencedTable: $db.tSessions,
+        getReferencedColumn: (t) => t.tsId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$TSessionsTableFilterComposer(
+              $db: $db,
+              $table: $db.tSessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$TLogsTableOrderingComposer
+    extends Composer<_$AppDatabase, $TLogsTable> {
+  $$TLogsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get logId => $composableBuilder(
+      column: $table.logId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get exerciseId => $composableBuilder(
+      column: $table.exerciseId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get exerciseIndex => $composableBuilder(
+      column: $table.exerciseIndex,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get setIndex => $composableBuilder(
+      column: $table.setIndex, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get reps => $composableBuilder(
+      column: $table.reps, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get weight => $composableBuilder(
+      column: $table.weight, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get completedAt => $composableBuilder(
+      column: $table.completedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get apiId => $composableBuilder(
+      column: $table.apiId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get version => $composableBuilder(
+      column: $table.version, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnOrderings(column));
+
+  $$TSessionsTableOrderingComposer get sessionId {
+    final $$TSessionsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.sessionId,
+        referencedTable: $db.tSessions,
+        getReferencedColumn: (t) => t.tsId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$TSessionsTableOrderingComposer(
+              $db: $db,
+              $table: $db.tSessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$TLogsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TLogsTable> {
+  $$TLogsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get logId =>
+      $composableBuilder(column: $table.logId, builder: (column) => column);
+
+  GeneratedColumn<int> get exerciseId => $composableBuilder(
+      column: $table.exerciseId, builder: (column) => column);
+
+  GeneratedColumn<int> get exerciseIndex => $composableBuilder(
+      column: $table.exerciseIndex, builder: (column) => column);
+
+  GeneratedColumn<int> get setIndex =>
+      $composableBuilder(column: $table.setIndex, builder: (column) => column);
+
+  GeneratedColumn<int> get reps =>
+      $composableBuilder(column: $table.reps, builder: (column) => column);
+
+  GeneratedColumn<double> get weight =>
+      $composableBuilder(column: $table.weight, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get completedAt => $composableBuilder(
+      column: $table.completedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get apiId =>
+      $composableBuilder(column: $table.apiId, builder: (column) => column);
+
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<bool> get isSynced =>
+      $composableBuilder(column: $table.isSynced, builder: (column) => column);
+
+  $$TSessionsTableAnnotationComposer get sessionId {
+    final $$TSessionsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.sessionId,
+        referencedTable: $db.tSessions,
+        getReferencedColumn: (t) => t.tsId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$TSessionsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.tSessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$TLogsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $TLogsTable,
+    TLog,
+    $$TLogsTableFilterComposer,
+    $$TLogsTableOrderingComposer,
+    $$TLogsTableAnnotationComposer,
+    $$TLogsTableCreateCompanionBuilder,
+    $$TLogsTableUpdateCompanionBuilder,
+    (TLog, $$TLogsTableReferences),
+    TLog,
+    PrefetchHooks Function({bool sessionId})> {
+  $$TLogsTableTableManager(_$AppDatabase db, $TLogsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TLogsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TLogsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TLogsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> logId = const Value.absent(),
+            Value<int> exerciseId = const Value.absent(),
+            Value<int> exerciseIndex = const Value.absent(),
+            Value<int> setIndex = const Value.absent(),
+            Value<int> reps = const Value.absent(),
+            Value<double> weight = const Value.absent(),
+            Value<DateTime> completedAt = const Value.absent(),
+            Value<int?> apiId = const Value.absent(),
+            Value<int> version = const Value.absent(),
+            Value<bool> isSynced = const Value.absent(),
+            Value<int> sessionId = const Value.absent(),
+          }) =>
+              TLogsCompanion(
+            logId: logId,
+            exerciseId: exerciseId,
+            exerciseIndex: exerciseIndex,
+            setIndex: setIndex,
+            reps: reps,
+            weight: weight,
+            completedAt: completedAt,
+            apiId: apiId,
+            version: version,
+            isSynced: isSynced,
+            sessionId: sessionId,
+          ),
+          createCompanionCallback: ({
+            Value<int> logId = const Value.absent(),
+            required int exerciseId,
+            required int exerciseIndex,
+            required int setIndex,
+            required int reps,
+            required double weight,
+            required DateTime completedAt,
+            Value<int?> apiId = const Value.absent(),
+            Value<int> version = const Value.absent(),
+            Value<bool> isSynced = const Value.absent(),
+            required int sessionId,
+          }) =>
+              TLogsCompanion.insert(
+            logId: logId,
+            exerciseId: exerciseId,
+            exerciseIndex: exerciseIndex,
+            setIndex: setIndex,
+            reps: reps,
+            weight: weight,
+            completedAt: completedAt,
+            apiId: apiId,
+            version: version,
+            isSynced: isSynced,
+            sessionId: sessionId,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$TLogsTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: ({sessionId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (sessionId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.sessionId,
+                    referencedTable: $$TLogsTableReferences._sessionIdTable(db),
+                    referencedColumn:
+                        $$TLogsTableReferences._sessionIdTable(db).tsId,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$TLogsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $TLogsTable,
+    TLog,
+    $$TLogsTableFilterComposer,
+    $$TLogsTableOrderingComposer,
+    $$TLogsTableAnnotationComposer,
+    $$TLogsTableCreateCompanionBuilder,
+    $$TLogsTableUpdateCompanionBuilder,
+    (TLog, $$TLogsTableReferences),
+    TLog,
+    PrefetchHooks Function({bool sessionId})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4306,4 +5870,8 @@ class $AppDatabaseManager {
       $$RoutineItemsTableTableManager(_db, _db.routineItems);
   $$RoutineSetsTableTableManager get routineSets =>
       $$RoutineSetsTableTableManager(_db, _db.routineSets);
+  $$TSessionsTableTableManager get tSessions =>
+      $$TSessionsTableTableManager(_db, _db.tSessions);
+  $$TLogsTableTableManager get tLogs =>
+      $$TLogsTableTableManager(_db, _db.tLogs);
 }

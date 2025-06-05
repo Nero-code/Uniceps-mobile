@@ -6,11 +6,13 @@ class RoutineSet {
     required this.version,
     required this.index,
     required this.reps,
+    required this.weight,
     required this.isSynced,
   });
 
   final int? id, apiId;
   final int routineItemId, index, reps, version;
+  final double? weight;
   final bool isSynced;
 
   RoutineSet copyWith({
@@ -19,6 +21,7 @@ class RoutineSet {
     int? routineItemId,
     int? index,
     int? reps,
+    double? weight,
     int? version,
     bool? isSynced,
   }) =>
@@ -29,5 +32,6 @@ class RoutineSet {
           version: version ?? this.version,
           index: index ?? this.index,
           reps: reps ?? this.reps,
+          weight: weight ?? this.weight,
           isSynced: isSynced ?? this.isSynced);
 }

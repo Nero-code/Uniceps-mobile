@@ -94,7 +94,7 @@ const API = kDebugMode || kProfileMode
     ? r"https://uniapi-ui65lw0m.b4a.run/api/v1"
     : r"https://uniceps.trio-verse.com/api/v1";
 
-const API_V2 = r"yazanash-001-site1.anytempurl.com";
+const API_V2 = r"uniceps.runasp.net";
 
 /// PRODUCTION URL
 // const API = r"https://uniceps.trio-verse.com/api/v1";

@@ -28,16 +28,17 @@ class RoutineItemDto extends RoutineItem implements BaseDTO {
       _$RoutineItemDtoFromJson(json);
 
   factory RoutineItemDto.fromTable(db.RoutineItem item, ExerciseV2Dto exercise,
-          [List<db.RoutineSet> sets = const []]) =>
+          [List<RoutineSetDto> sets = const []]) =>
       RoutineItemDto(
-          id: item.id,
-          apiId: item.apiId,
-          dayId: item.dayId,
-          index: item.index,
-          version: item.version,
-          exerciseV2Dto: exercise,
-          setsDto: sets.map((set) => RoutineSetDto.fromTable(set)).toList(),
-          isSynced: item.isSynced);
+        id: item.id,
+        apiId: item.apiId,
+        dayId: item.dayId,
+        index: item.index,
+        version: item.version,
+        exerciseV2Dto: exercise,
+        setsDto: sets,
+        isSynced: item.isSynced,
+      );
 
   RoutineItemDto copyDtoWith({
     int? id,

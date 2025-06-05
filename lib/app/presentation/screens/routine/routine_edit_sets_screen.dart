@@ -21,6 +21,7 @@ class _SetsEditScreenState extends State<SetsEditScreen> {
         version: 0,
         index: index,
         reps: index * 10,
+        weight: null,
         isSynced: false),
   );
   @override

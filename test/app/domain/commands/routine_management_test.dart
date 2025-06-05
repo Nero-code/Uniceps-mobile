@@ -5,7 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_management_commands.dart';
 // import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_management_contract.dart';
-import '../contract_mocks/routine_management_test.mocks.dart';
+import 'routine_management_test.mocks.dart';
 
 final mockRoutine1 = Routine(
     id: 0,

@@ -31,7 +31,8 @@ class _RoutineItemHorizontalWidgetState
           version: sets[i].version,
           index: sets[i].index - 1,
           reps: sets[i].reps,
-          isSynced: sets[i].isSynced);
+          isSynced: sets[i].isSynced,
+          weight: null);
     }
     setState(() {});
   }

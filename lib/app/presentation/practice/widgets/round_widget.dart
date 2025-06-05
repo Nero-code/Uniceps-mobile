@@ -28,7 +28,7 @@ class RoundWidget extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text("$index",
+            child: Text("${index + 1}",
                 style: const TextStyle(fontWeight: FontWeight.normal)),
           ),
           Expanded(
