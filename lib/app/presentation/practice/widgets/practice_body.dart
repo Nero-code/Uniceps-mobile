@@ -5,15 +5,16 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
 import 'package:uniceps/app/presentation/practice/widgets/round_widget.dart';
 
 class PracticeBody extends StatefulWidget {
-  const PracticeBody(
-      {super.key,
-      required this.sets,
-      required this.logs,
-      required this.onPressed});
+  const PracticeBody({
+    super.key,
+    required this.sets,
+    required this.logs,
+    required this.onPressed,
+  });
 
   final List<RoutineSet> sets;
   final List<TLog> logs;
-  final void Function(RoutineSet s, double weight) onPressed;
+  final void Function(RoutineSet s, double weight, TLog? oldLog) onPressed;
 
   @override
   State<PracticeBody> createState() => _PracticeBodyState();
@@ -53,7 +54,9 @@ class _PracticeBodyState extends State<PracticeBody> {
           lastWeight: i.weight,
           isDone: setLog.where((setlog) => setlog.head == i.index).isNotEmpty,
           onTap: () => widget.onPressed(
-              i, double.tryParse(controllers[i.index].text) ?? 0),
+              i,
+              double.tryParse(controllers[i.index].text) ?? 0,
+              widget.logs.where((log) => log.setIndex == i.index).firstOrNull),
         );
       }).toList(),
     );

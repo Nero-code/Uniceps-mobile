@@ -42,51 +42,25 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       return const Tuple2(null, null); // No CurrentRoutine available!
     }
 
-    // You're about to witness a developer's worst nightmare...
-    //
     // --- THE JOIN QUERY ---
 
-    // final routinesAlias = _database.alias(_database.routines, 'r');
     final daysAlias = _database.alias(_database.daysGroup, 'd');
-    // final itemsAlias = _database.alias(_database.routineItems, 'i');
-    // final exercisesAlias = _database.alias(_database.exercises, 'e');
-    // final setsAlias = _database.alias(_database.routineSets, 's');
     final sessionsAlias = _database.alias(_database.tSessions, 'ts');
 
-    //
-    //
-    // -------------------------------------------------------------------------
-    // TODO: This join can be reduced into a single SELECT statement.
     final res = await (_database.select(_database.daysGroup).join([
       // First, join [routines] with [days].
       leftOuterJoin(
           daysAlias, daysAlias.routineId.equals(currentRoutine.first.id)),
+
+      // Then, join [days] with [tsessions]
       leftOuterJoin(sessionsAlias, sessionsAlias.dayId.equalsExp(daysAlias.id)),
-
-      // // Second, join [days] with [items].
-      // leftOuterJoin(itemsAlias, itemsAlias.dayId.equalsExp(daysAlias.id)),
-
-      // // Then, join [items] with [exercises].
-      // // but since it's a single exercises then no need for join.
-      // leftOuterJoin(exercisesAlias,
-      //     exercisesAlias.apiId.equalsExp(itemsAlias.exerciseId)),
-
-      // // Finally, join [items] with [sets].
-      // leftOuterJoin(
-      //     setsAlias, setsAlias.routineItemId.equalsExp(itemsAlias.id)),
     ])).get();
 
-    // ------------------------------------
-    // Routine Parse Algorithm
+    // --- Routine Parse Algorithm ---
     //
-    // These properties purpose is to hold temp data.
+    // These properties purpose is to hold parsing data.
     final List<db.DaysGroupData> days = [];
-    // final List<db.RoutineItem> items = [];
-    // final List<db.Exercise> exercises = [];
-    // final List<db.RoutineSet> sets = [];
     final List<db.TSession> sessions = [];
-
-    // final groups = await _database.select(_database.exerciseGroups).get();
 
     // Algorithm for fetching [routine] Starting Point.
     for (final row in res) {
@@ -98,20 +72,6 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       final session = row.readTableOrNull(sessionsAlias);
       if (session != null && !sessions.contains(session)) sessions.add(session);
       print("drift day: ${day.runtimeType}");
-
-      // // Get item from row and add if absent
-      // final item = row.readTableOrNull(itemsAlias);
-      // if (item != null && !items.contains(item)) items.add(item);
-      // print("drift item: ${item.runtimeType}");
-
-      // // Get exercises an muscle-group from row and add it
-      // final ex = row.readTableOrNull(exercisesAlias);
-      // if (ex != null && !exercises.contains(ex)) exercises.add(ex);
-      // print("drift ex: ${ex.runtimeType}");
-
-      // // Get set (ready... Go!) from row and add if absent
-      // final set = row.readTableOrNull(setsAlias);
-      // if (set != null && !sets.contains(set)) sets.add(set);
     }
     // ----------------------------------------------------------
 
@@ -120,10 +80,6 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       imagesCache: _imagesCache,
       routine: currentRoutine.first,
       days: days,
-      // items: items,
-      // exercises: exercises,
-      // groups: groups,
-      // sets: sets,
       items: [],
       exercises: [],
       groups: [],
@@ -146,24 +102,32 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     final day = await (_database.select(_database.daysGroup)
           ..where((f) => f.id.equals(dayId)))
         .get();
-    if (day.isEmpty) throw EmptyCacheExeption();
+    if (day.isEmpty) throw EmptyCacheExeption(); // No day exists
 
     // Second, we fetch the day items.
     final itemsAlias = _database.alias(_database.routineItems, 'it');
-    final exercisesAlias = _database.alias(_database.exercises, 'ex');
+    final exAlias = _database.alias(_database.exercises, 'ex');
     final setsAlias = _database.alias(_database.routineSets, 'se');
     final logsAlias = _database.alias(_database.tLogs, 'lo');
 
+    // You're about to witness a developers' worst nightmare...
+    //
+    // --- THE JOIN QUERY ---
     final res = await (_database.select(_database.routineItems).join([
+      // Get `Items` under `dayId`.
       leftOuterJoin(itemsAlias, itemsAlias.dayId.equals(dayId)),
-      leftOuterJoin(exercisesAlias,
-          exercisesAlias.apiId.equalsExp(itemsAlias.exerciseId)),
+
+      // Get `Exercises` for these `items`.
+      leftOuterJoin(exAlias, exAlias.apiId.equalsExp(itemsAlias.exerciseId)),
+
+      // Get `Sets` for these `items`.
       leftOuterJoin(
           setsAlias, setsAlias.routineItemId.equalsExp(itemsAlias.id)),
 
-      // Get exercise weights.
-      leftOuterJoin(
-          logsAlias, logsAlias.exerciseId.equalsExp(exercisesAlias.apiId)),
+      // Get TLogs for these exercises.
+      leftOuterJoin(logsAlias, logsAlias.exerciseId.equalsExp(exAlias.apiId)),
+      // Logs are needed because they hold information about the weights in the
+      // sets and it's order in each exercise, which is needed to get set wieght
     ])).get();
 
     final List<db.RoutineItem> items = [];
@@ -180,7 +144,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       if (item != null && !items.contains(item)) items.add(item);
 
       // Get exercises an muscle-group from row and add it
-      final ex = row.readTableOrNull(exercisesAlias);
+      final ex = row.readTableOrNull(exAlias);
       if (ex != null && !exercises.contains(ex)) exercises.add(ex);
 
       // Get set (ready... Go!) from row and add if absent
@@ -191,15 +155,16 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       final log = row.readTableOrNull(logsAlias);
       if (log != null && !logs.contains(log)) logs.add(log);
     }
-    // ----------------------------------------------------------
+    // ------ ------
 
     // Reduce logs table algorithm
     final logsByEx = <int, List<db.TLog>>{};
     for (final i in logs) {
       if (logsByEx.containsKey(i.exerciseId)) continue;
       logsByEx.addAll({
-        i.exerciseId:
-            logs.where((log) => log.exerciseId == i.exerciseId).toList()
+        i.exerciseId: logs.where((log) {
+          return log.exerciseId == i.exerciseId;
+        }).toList()
       });
     }
     // ---------------------------
@@ -216,27 +181,26 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
           //
           // * First, we get all the logs of an exercise, logs include set index
           //   and weight.
-
-          final weight = logsByEx[itemTable.exerciseId]!
+          final weights = logsByEx[itemTable.exerciseId]!
               // * Then we filter those logs by the setIndex... Why?
-              //   to filter out-of-range sets of old sessions
+              //   to filter out-of-range sets of old sessions.
               .where((log) => log.setIndex == setTable.roundIndex)
               .toList();
-          // * Then we sort in a descending order, so that the first item is the last
-          weight.sort((a, b) => b.completedAt.compareTo(a.completedAt));
+          // * Then we sort in a descending order, so that the first item is the last.
+          weights.sort((a, b) => b.completedAt.compareTo(a.completedAt));
           // print("----------------");
-          // for (final w in weight) {
+          // for (final w in weights) {
           //   print("""
           //     logid:     ${w.logId}
           //     exId:      ${w.exerciseId}
           //     setIndex:  ${w.setIndex}
-          //     weight:    ${w.weight}
+          //     weights:    ${w.weights}
           //     completed: ${w.completedAt}
           // """);
           // }
           // print("----------------");
           itemSets.add(RoutineSetDto.fromTable(
-              setTable, (weight.isEmpty) ? null : weight.first.weight));
+              setTable, (weights.isEmpty) ? null : weights.first.weight));
         }
       }
 

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/practice_entities/t_log.dart';
 import 'package:uniceps/app/presentation/practice/blocs/practice/practice_cubit.dart';
-import 'package:uniceps/app/presentation/practice/blocs/session/session_bloc.dart';
-import 'package:uniceps/app/presentation/practice/blocs/stopwatch/stopwatch_cubit.dart';
+import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
+import 'package:uniceps/app/presentation/home/blocs/stopwatch/stopwatch_cubit.dart';
 import 'package:uniceps/app/presentation/practice/dialogs/confirmation_dialog.dart';
 import 'package:uniceps/app/presentation/practice/dialogs/session_complete_dialog.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_body.dart';
@@ -45,7 +45,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
             (current is NoActiveSessionState),
         listener: (context, state) async {
           print("b finished Session ${state.runtimeType}");
-          await showDialog<void>(
+          await showDialog(
               context: context,
               builder: (context) => const SessionCompleteDialog());
           print("a finished Session ${state.runtimeType}");
@@ -94,62 +94,55 @@ class _PracticeScreenState extends State<PracticeScreen> {
                             padding: const EdgeInsets.only(bottom: 100),
                             child: ExpansionPanelList(
                               expandedHeaderPadding: EdgeInsets.zero,
-                              expansionCallback: (panelIndex, isExpanded) {
-                                isExpanded
-                                    ? expandedId = panelIndex
-                                    : expandedId = null;
-                                setState(() {});
-                              },
-                              children: state.day.exercises.map(
-                                (i) {
-                                  return ExpansionPanel(
-                                    backgroundColor: const Color.fromARGB(
-                                        255, 250, 250, 250),
-                                    isExpanded: expandedId == i.index,
-                                    canTapOnHeader: true,
-                                    headerBuilder: (context, isExpanded) =>
-                                        PracticeHeader(item: i),
-                                    body: PracticeBody(
-                                      sets: i.sets,
-                                      logs: sessionState.session.logs
-                                          .where((log) =>
-                                              log.exerciseId ==
-                                              i.exercise.apiId)
-                                          .toList(),
-                                      onPressed: (set, weight) {
-                                        final l = sessionState.session.logs
-                                            .where((log) =>
-                                                (log.exerciseId ==
-                                                    i.exercise.apiId) &&
-                                                (log.setIndex == set.index))
-                                            .firstOrNull;
-                                        if (l == null) {
-                                          context.read<SessionBloc>().add(
-                                              LogSetEvent(
-                                                  log: TLog(
-                                                      id: null,
-                                                      sessionId: sessionState
-                                                          .session.id!,
-                                                      exerciseId:
-                                                          i.exercise.apiId!,
-                                                      exerciseIndex: i.index,
-                                                      setIndex: set.index,
-                                                      reps: set.reps,
-                                                      weight: weight,
-                                                      completedAt:
-                                                          DateTime.now(),
-                                                      apiId: null)));
-                                        } else {
-                                          context.read<SessionBloc>().add(
-                                              LogSetEvent(
-                                                  log: l.copywith(
-                                                      weight: weight)));
-                                        }
-                                      },
-                                    ),
-                                  );
-                                },
-                              ).toList(),
+                              expansionCallback: _expansionCallback,
+                              children: state.day.exercises
+                                  .map((i) => ExpansionPanel(
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 250, 250, 250),
+                                        isExpanded: expandedId == i.index,
+                                        canTapOnHeader: true,
+                                        headerBuilder: (_, isExpanded) =>
+                                            PracticeHeader(item: i),
+                                        body: PracticeBody(
+                                          sets: i.sets,
+                                          logs: sessionState.session.logs
+                                              .where((log) =>
+                                                  log.exerciseId ==
+                                                  i.exercise.apiId)
+                                              .toList(),
+                                          onPressed: (set, weight, oldLog) {
+                                            if (oldLog == null) {
+                                              context.read<SessionBloc>().add(
+                                                    LogSetEvent(
+                                                      log: TLog(
+                                                          id: null,
+                                                          sessionId:
+                                                              sessionState
+                                                                  .session.id!,
+                                                          exerciseId:
+                                                              i.exercise.apiId!,
+                                                          exerciseIndex:
+                                                              i.index,
+                                                          setIndex: set.index,
+                                                          reps: set.reps,
+                                                          weight: weight,
+                                                          completedAt:
+                                                              DateTime.now(),
+                                                          apiId: null),
+                                                    ),
+                                                  );
+                                            } else {
+                                              context
+                                                  .read<SessionBloc>()
+                                                  .add(LogSetEvent(
+                                                    log: oldLog.copywith(
+                                                        weight: weight),
+                                                  ));
+                                            }
+                                          },
+                                        ),
+                                      ))
+                                  .toList(),
                             ),
                           );
                         } else if (state is PracticeErrorState) {
@@ -166,38 +159,23 @@ class _PracticeScreenState extends State<PracticeScreen> {
                         height: 60,
                         padding: const EdgeInsets.all(8.0),
                         color: Colors.white,
-                        child: BlocListener<SessionBloc, SessionState>(
-                          listener: (context, state) {
-                            // TODO: implement listener
-                          },
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                print("Finishing proccess");
-                                final confirmation = await showDialog<bool>(
-                                    context: context,
-                                    builder: (context) =>
-                                        const ConfirmationDialog());
-                                if ((confirmation ?? false) &&
-                                    context.mounted) {
-                                  context.read<SessionBloc>().add(
-                                      StopSessionEvent(
-                                          session: sessionState.session));
-                                  context.read<StopwatchCubit>()
-                                    ..stopStopwatch()
-                                    ..resetStopwatch();
-                                }
-                              },
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.bolt, size: 25),
-                                  Text("Finish", // TODO: Translate
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16)),
-                                ],
-                              )),
-                        ),
+                        child: ElevatedButton(
+                            onPressed: () {
+                              _finishSession(context, sessionState);
+                            },
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.bolt, size: 25),
+                                // TODO: Translate
+                                Text(
+                                  "Finish",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 16),
+                                ),
+                              ],
+                            )),
                       ),
                     ),
                   ],
@@ -215,5 +193,24 @@ class _PracticeScreenState extends State<PracticeScreen> {
         },
       ),
     );
+  }
+
+  void _finishSession(BuildContext context, SessionLoadedState sState) async {
+    print("Finishing proccess");
+    final confirmation = await showDialog<bool>(
+        context: context, builder: (context) => const ConfirmationDialog());
+    if ((confirmation ?? false) && context.mounted) {
+      context
+          .read<SessionBloc>()
+          .add(StopSessionEvent(session: sState.session));
+      context.read<StopwatchCubit>()
+        ..stopStopwatch()
+        ..resetStopwatch();
+    }
+  }
+
+  void _expansionCallback(int panelIndex, bool isExpanded) {
+    isExpanded ? expandedId = panelIndex : expandedId = null;
+    setState(() {});
   }
 }

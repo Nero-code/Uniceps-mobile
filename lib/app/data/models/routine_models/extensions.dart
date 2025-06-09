@@ -11,6 +11,14 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
 
+extension MuscleGroupDtoExtension on MuscleGroupDto {
+  MuscleGroup fromDto() => MuscleGroup(
+        apiId: apiId,
+        arGroupName: arGroupName,
+        enGroupName: enGroupName,
+      );
+}
+
 extension MuscleGroupExtension on MuscleGroup {
   MuscleGroupDto asDto() => MuscleGroupDto(
         id: id,
@@ -21,14 +29,14 @@ extension MuscleGroupExtension on MuscleGroup {
 }
 
 extension ExerciseV2Extension on ExerciseV2 {
-  RoutineItem toModel(int dayId, int index) => RoutineItem(
-      id: id,
-      apiId: apiId,
+  RoutineItem toItem(int dayId, int index) => RoutineItem(
+      id: null,
       dayId: dayId,
       index: index,
-      version: 0,
       exercise: this,
       sets: [],
+      apiId: null,
+      version: 0,
       isSynced: false);
 
   ExerciseV2Dto asDto() => ExerciseV2Dto(
@@ -38,6 +46,22 @@ extension ExerciseV2Extension on ExerciseV2 {
         name: name,
         imageUrl: imageUrl,
         imageBitMap: imageBitMap,
+      );
+}
+
+//
+//
+//
+extension RoutineSetDtoExtenstion on RoutineSetDto {
+  RoutineSet fromDto() => RoutineSet(
+        id: id,
+        apiId: apiId,
+        routineItemId: routineItemId,
+        version: version,
+        index: index,
+        reps: reps,
+        weight: weight,
+        isSynced: isSynced,
       );
 }
 
@@ -53,6 +77,23 @@ extension RoutineSetExtension on RoutineSet {
       isSynced: isSynced);
 }
 
+//
+//
+//
+
+extension RoutinItemDtoExtension on RoutineItemDto {
+  RoutineItem fromDto() => RoutineItem(
+        id: id,
+        apiId: apiId,
+        dayId: dayId,
+        index: index,
+        version: version,
+        exercise: exercise,
+        sets: sets,
+        isSynced: isSynced,
+      );
+}
+
 extension RoutineItemExtension on RoutineItem {
   RoutineItemDto asDto() => RoutineItemDto(
       id: id,
@@ -63,6 +104,19 @@ extension RoutineItemExtension on RoutineItem {
       exerciseV2Dto: exercise.asDto(),
       setsDto: sets.map((e) => e.asDto()).toList(),
       isSynced: isSynced);
+}
+
+//
+//
+//
+
+extension DaysDtoExtension on RoutineDayDto {
+  RoutineDay fromDto() => RoutineDay(
+        routineId: routineId,
+        name: name,
+        index: index,
+        exercises: exercises,
+      );
 }
 
 extension DaysExtension on RoutineDay {
@@ -77,8 +131,12 @@ extension DaysExtension on RoutineDay {
       isSynced: isSynced);
 }
 
-extension RoutineExtension on Routine {
-  RoutineDto asDto() => RoutineDto(
+//
+//
+//
+
+extension RoutineDtoExtension on RoutineDto {
+  Routine fromDto() => Routine(
       id: id,
       apiId: apiId,
       version: version,
@@ -86,6 +144,21 @@ extension RoutineExtension on Routine {
       description: description,
       createdAt: createdAt,
       updatedAt: updatedAt,
-      trainingDaysDto: trainingDays.map((e) => e.asDto()).toList(),
+      trainingDays: trainingDaysDto.map((d) => d.fromDto()).toList(),
       isSynced: isSynced);
+}
+
+extension RoutineExtension on Routine {
+  RoutineDto asDto() => RoutineDto(
+        id: id,
+        apiId: apiId,
+        version: version,
+        name: name,
+        description: description,
+        isCurrent: isCurrent,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+        trainingDaysDto: trainingDays.map((e) => e.asDto()).toList(),
+        isSynced: isSynced,
+      );
 }

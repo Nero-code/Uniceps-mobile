@@ -257,7 +257,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                             AddRoutineItemsEvent(
                                 items: res
                                     .map(
-                                      (e) => e.toModel(
+                                      (e) => e.toItem(
                                         days[selectedIndex].id!,
                                         res.indexOf(e),
                                       ),

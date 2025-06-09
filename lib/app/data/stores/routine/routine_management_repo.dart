@@ -84,6 +84,7 @@ class RoutineManagementRepo implements IRoutineManagementContract {
     try {
       final res = await _localSource.setCurrentRoutine(routine.asDto());
       return Right(res);
+      // return Right(res.map((r) => r.fromDto()).toList());
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
