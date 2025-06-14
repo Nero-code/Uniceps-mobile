@@ -9,18 +9,18 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/presentation/screens/routine/blocs/exercises_v2/exercises_v2_bloc.dart';
 import 'package:uniceps/app/presentation/screens/routine/blocs/exercises_v2/muscle_group_bloc.dart';
-import 'package:uniceps/app/presentation/screens/routine/blocs/routine_edit/days_edit_bloc.dart';
-import 'package:uniceps/app/presentation/screens/routine/blocs/routine_edit/items_edit_bloc.dart';
-import 'package:uniceps/app/presentation/screens/routine/blocs/routine_edit/sets_edit_bloc.dart';
+import 'package:uniceps/app/presentation/screens/routine/blocs/days_edit/days_edit_bloc.dart';
+import 'package:uniceps/app/presentation/screens/routine/blocs/items_edit/items_edit_bloc.dart';
+import 'package:uniceps/app/presentation/screens/routine/blocs/sets_edit/sets_edit_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/screens/routine/dialogs/day_add_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/dialogs/day_delete_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/dialogs/day_edit_flaoting_menu.dart';
 import 'package:uniceps/app/presentation/screens/routine/dialogs/days_sorting_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/dialogs/rename_day_dialog.dart';
-import 'package:uniceps/app/presentation/screens/routine/exercises_selection_screen.dart';
-import 'package:uniceps/app/presentation/screens/routine/routine_edit_items_tab.dart';
-import 'package:uniceps/app/presentation/screens/routine/routine_edit_sets_sheet.dart';
+import 'package:uniceps/app/presentation/screens/routine/screens/exercises_selection_screen.dart';
+import 'package:uniceps/app/presentation/screens/routine/pages/routine_edit_items_tab.dart';
+import 'package:uniceps/app/presentation/screens/routine/pages/routine_edit_sets_sheet.dart';
 import 'package:uniceps/app/presentation/screens/routine/widgets/day_tab_widget.dart';
 import 'package:uniceps/core/extensions.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
@@ -277,14 +277,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                   BlocBuilder<DaysEditBloc, DaysEditState>(
                     builder: (context, state) {
                       if (state is DaysEditLoadedState) {
-                        // if (state is DaysEditInitial) {
-                        //   BlocProvider.of<DaysEditBloc>(context)
-                        //       .add(GetDaysEvent(routineId: widget.routineId));
-                        //   return const SizedBox();
-                        // }
-                        print("days state type: ${state.runtimeType}");
-                        print("days state length: ${state.days.length}");
-
                         if (currentDay == null) {
                           for (final day in state.days) {
                             if (day.index == selectedIndex) {
@@ -419,18 +411,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                                     curve: Curves.linear);
                               }),
                               children: [
-                                // for (int i = 0; i < state.days.length; i++)
-                                //   RoutineItemEditTab(
-                                //     dayId: state.days[i].id!,
-                                //     onItemTap: (itemId) {
-                                //       routineItemId = itemId;
-                                //       BlocProvider.of<SetsEditBloc>(context)
-                                //           .add(GetSetsforRoutineItemEvent(
-                                //               itemId: itemId));
-
-                                //       panelController.open();
-                                //     },
-                                //   ),
                                 ...state.days.map(
                                   (day) {
                                     BlocProvider.of<ItemsEditBloc>(context).add(

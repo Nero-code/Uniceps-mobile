@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
-import 'package:uniceps/app/presentation/screens/routine/routine_management_screen.dart';
+import 'package:uniceps/app/presentation/screens/routine/screens/routine_management_screen.dart';
 
 class PlayWidget extends StatelessWidget {
   const PlayWidget({

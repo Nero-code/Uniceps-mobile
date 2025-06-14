@@ -12,7 +12,7 @@ import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/screens/routine/blocs/routine_management/routine_management_bloc.dart';
 import 'package:uniceps/app/presentation/screens/home/dialogs/comming_soon_dialog.dart';
-import 'package:uniceps/app/presentation/screens/routine/routine_management_screen.dart';
+import 'package:uniceps/app/presentation/screens/routine/screens/routine_management_screen.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/app/services/image_cache_manager.dart';

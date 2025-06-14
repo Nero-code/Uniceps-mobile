@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
-import 'package:uniceps/app/presentation/screens/routine/blocs/routine_edit/sets_edit_bloc.dart';
+import 'package:uniceps/app/presentation/screens/routine/blocs/sets_edit/sets_edit_bloc.dart';
 // import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/screens/routine/widgets/set_widget.dart';
 

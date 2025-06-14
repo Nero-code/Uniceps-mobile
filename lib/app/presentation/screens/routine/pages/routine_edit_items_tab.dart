@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/presentation/screens/routine/blocs/routine_edit/items_edit_bloc.dart';
+import 'package:uniceps/app/presentation/screens/routine/blocs/items_edit/items_edit_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/screens/routine/widgets/routine_item_horizontal_widget.dart';
 import 'package:uniceps/core/constants/constants.dart';
@@ -21,8 +21,6 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    // final screenSize = MediaQuery.sizeOf(context);
-    // print("items length: ${items.length}");
     return BlocBuilder<ItemsEditBloc, ItemsEditState>(
       builder: (context, state) {
         print("builder ${widget.dayId}");

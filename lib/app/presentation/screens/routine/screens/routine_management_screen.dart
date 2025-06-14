@@ -6,7 +6,7 @@ import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_create_
 import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_delete_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_options_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_set_current_dialog.dart';
-import 'package:uniceps/app/presentation/screens/routine/routine_edit_days_screen.dart';
+import 'package:uniceps/app/presentation/screens/routine/screens/routine_edit_days_screen.dart';
 import 'package:uniceps/app/presentation/screens/routine/widgets/routine_grid_tile.dart';
 import 'package:uniceps/app/presentation/screens/routine/widgets/routine_list_tile.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
