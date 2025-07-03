@@ -147,7 +147,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
                           );
                         } else if (state is PracticeErrorState) {
                           return Center(
-                              child: Text(state.failure.getErrorMessage()));
+                              child: Text(state.failure.getErrorMessage() +
+                                  " practice state"));
                         }
                         return const LoadingPage();
                       },
@@ -185,7 +186,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
           } else if (sessionState is SessionErrorState) {
             return Material(
               child: Center(
-                child: Text(sessionState.failure.getErrorMessage()),
+                child: Text(
+                    sessionState.failure.getErrorMessage() + " session state"),
               ),
             );
           }

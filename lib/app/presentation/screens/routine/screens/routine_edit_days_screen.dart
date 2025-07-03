@@ -20,7 +20,8 @@ import 'package:uniceps/app/presentation/screens/routine/dialogs/days_sorting_di
 import 'package:uniceps/app/presentation/screens/routine/dialogs/rename_day_dialog.dart';
 import 'package:uniceps/app/presentation/screens/routine/screens/exercises_selection_screen.dart';
 import 'package:uniceps/app/presentation/screens/routine/pages/routine_edit_items_tab.dart';
-import 'package:uniceps/app/presentation/screens/routine/pages/routine_edit_sets_sheet.dart';
+// import 'package:uniceps/app/presentation/screens/routine/pages/routine_edit_sets_sheet.dart';
+import 'package:uniceps/app/presentation/screens/routine/screens/routine_edit_sets_screen.dart';
 import 'package:uniceps/app/presentation/screens/routine/widgets/day_tab_widget.dart';
 import 'package:uniceps/core/extensions.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
@@ -257,10 +258,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                             AddRoutineItemsEvent(
                                 items: res
                                     .map(
-                                      (e) => e.toItem(
-                                        days[selectedIndex].id!,
-                                        res.indexOf(e),
-                                      ),
+                                      (e) => e.toItem(days[selectedIndex].id!),
                                     )
                                     .toList()),
                           );
@@ -418,14 +416,21 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                                             dayId: day.id!));
                                     return RoutineItemEditTab(
                                       dayId: day.id!,
-                                      onItemTap: (itemId) {
-                                        routineItemId = itemId;
-                                        BlocProvider.of<SetsEditBloc>(context)
-                                            .add(GetSetsforRoutineItemEvent(
-                                                itemId: itemId));
+                                      // onItemTap: (itemId) {
+                                      //   routineItemId = itemId;
+                                      //   BlocProvider.of<SetsEditBloc>(context)
+                                      //       .add(GetSetsforRoutineItemEvent(
+                                      //           itemId: itemId));
 
-                                        panelController.open();
-                                      },
+                                      //   panelController.open();
+                                      // },
+                                      onItemTap: (item) =>
+                                          Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              RoutineEditSetsScreen(item: item),
+                                        ),
+                                      ),
                                     );
                                   },
                                 )
@@ -471,18 +476,19 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                         }
                         if (setsState is SetsEditLoadedState &&
                             selectedItem != null) {
-                          return RoutineSetsSheet(
-                            itemId: selectedItem.id!,
-                            sets: setsState.sets,
-                            onSave: panelController.close,
-                            onDelete: () async {
-                              BlocProvider.of<ItemsEditBloc>(context).add(
-                                  RemoveRoutineItemEvent(
-                                      exercise: selectedItem!));
-                              routineItemId = null;
-                              await panelController.close();
-                            },
-                          );
+                          // return RoutineSetsSheet(
+                          //   itemId: selectedItem.id!,
+                          //   sets: setsState.sets,
+                          //   onSave: panelController.close,
+                          //   onDelete: () async {
+                          //     BlocProvider.of<ItemsEditBloc>(context).add(
+                          //         RemoveRoutineItemEvent(
+                          //             exercise: selectedItem!));
+                          //     routineItemId = null;
+                          //     await panelController.close();
+                          //   },
+                          // );
+                          return const SizedBox();
                         } else if (setsState is SetsEditErrorState) {
                           return ErrorScreenWidget(f: setsState.failure);
                         }

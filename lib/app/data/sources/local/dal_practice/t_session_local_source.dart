@@ -175,19 +175,19 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       List<RoutineSetDto> itemSets = [];
       for (final setTable in sets) {
         print("found set");
-        if (setTable.routineItemId == itemTable.id &&
-            logsByEx.containsKey(itemTable.exerciseId)) {
+        if (setTable.routineItemId == itemTable.id) {
           // To get the last weight on a [set] there are multiple things to do.
           //
           // * First, we get all the logs of an exercise, logs include set index
           //   and weight.
-          final weights = logsByEx[itemTable.exerciseId]!
-              // * Then we filter those logs by the setIndex... Why?
-              //   to filter out-of-range sets of old sessions.
-              .where((log) => log.setIndex == setTable.roundIndex)
+          //
+          // * Then we filter those logs by the setIndex... Why?
+          //   to filter out-of-range sets of old sessions.
+          final weights = logsByEx[itemTable.exerciseId]
+              ?.where((log) => log.setIndex == setTable.roundIndex)
               .toList();
           // * Then we sort in a descending order, so that the first item is the last.
-          weights.sort((a, b) => b.completedAt.compareTo(a.completedAt));
+          weights?.sort((a, b) => b.completedAt.compareTo(a.completedAt));
           // print("----------------");
           // for (final w in weights) {
           //   print("""
@@ -199,8 +199,8 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
           // """);
           // }
           // print("----------------");
-          itemSets.add(RoutineSetDto.fromTable(
-              setTable, (weights.isEmpty) ? null : weights.first.weight));
+          itemSets.add(
+              RoutineSetDto.fromTable(setTable, weights?.firstOrNull?.weight));
         }
       }
 
@@ -223,6 +223,9 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
 
   @override
   Future<TSessionModel?> getPreviousSession() async {
+    //
+    // TODO: Need to get [TLogs] with [TSession] object for progress retrieval
+    //
     final old = await (_database.select(_database.tSessions)
           ..where((f) => f.finishedAt.isNull()))
         .get();

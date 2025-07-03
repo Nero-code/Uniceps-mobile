@@ -93,8 +93,13 @@ class PlayWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(borderRadius),
                 splashColor: Colors.black38,
                 highlightColor: Colors.black38,
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => const RoutineManagementScreen())),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                            value: context.read<CurrentRoutineCubit>(),
+                            child: const RoutineManagementScreen(),
+                          )));
+                },
                 child: SizedBox.expand(
                   child: Center(
                     child:

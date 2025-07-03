@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/screens/routine/blocs/routine_management/routine_management_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_create_dialog.dart';
@@ -157,12 +158,21 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
                                             break;
 
                                           case Option.setCurrent:
-                                            _setCurrentRoutine(() => BlocProvider
-                                                    .of<RoutineManagementBloc>(
-                                                        context)
-                                                .add(SetCurrentRoutineEvent(
+                                            _setCurrentRoutine(() async {
+                                              final rBloc = BlocProvider.of<
+                                                      RoutineManagementBloc>(
+                                                  context)
+                                                ..add(SetCurrentRoutineEvent(
                                                     routine: e,
-                                                    version: state.version)));
+                                                    version: state.version));
+                                              await rBloc.stream.skip(1).first;
+                                              if (context.mounted) {
+                                                BlocProvider.of<
+                                                            CurrentRoutineCubit>(
+                                                        context)
+                                                    .getCurrentRoutine();
+                                              }
+                                            });
                                             break;
                                           default:
                                         }

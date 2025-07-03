@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/app/data/sources/local/dal_auth/account_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_gyms/attendence_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_gyms/gyms_local_source.dart';
@@ -67,6 +68,10 @@ Future<void> init() async {
   //////////////////////////////////////////////////////////////////////////////
   ///   D A T A B A S E S
   //////////////////////////////////////////////////////////////////////////////
+
+  final prefs = await SharedPreferences.getInstance();
+
+  sl.registerLazySingleton<SharedPreferences>(() => prefs);
 
   final userBox = await Hive.openBox<Map<dynamic, dynamic>>("User");
   final profileBox = await Hive.openBox<Map<dynamic, dynamic>>("Profile");

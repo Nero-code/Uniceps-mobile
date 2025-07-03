@@ -108,7 +108,7 @@ class RoundWidget extends StatelessWidget {
             padding: 3.0,
             onTap: onTap,
             child: Text(
-              " ${String.fromCharCode(isDone ? Icons.done.codePoint : Icons.hourglass_empty_rounded.codePoint)} ",
+              " ${String.fromCharCode(Icons.done.codePoint)} ",
               style: TextStyle(
                 fontSize: 14.0,
                 color: isDone ? Colors.green : Colors.black54,

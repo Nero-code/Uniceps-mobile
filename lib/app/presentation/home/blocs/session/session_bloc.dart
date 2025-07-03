@@ -20,7 +20,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
 
       either.fold(
         (failure) => (failure is EmptyCacheFailure)
-            ? emit(NoActiveSessionState())
+            ? emit(const NoActiveSessionState())
             : emit(SessionErrorState(failure: failure)),
         // ---------------------------------------------
         (r) => emit(SessionLoadedState(session: r)),

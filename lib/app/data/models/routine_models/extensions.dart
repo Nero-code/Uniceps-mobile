@@ -29,10 +29,10 @@ extension MuscleGroupExtension on MuscleGroup {
 }
 
 extension ExerciseV2Extension on ExerciseV2 {
-  RoutineItem toItem(int dayId, int index) => RoutineItem(
+  RoutineItem toItem(int dayId) => RoutineItem(
       id: null,
       dayId: dayId,
-      index: index,
+      index: 0,
       exercise: this,
       sets: [],
       apiId: null,

@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/app/presentation/screens/auth/screens/auth_screen.dart';
+import 'package:uniceps/app/presentation/auth/screens/auth_screen.dart';
 import 'package:uniceps/app/presentation/blocs/authentication/auth_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/attendence/attendence_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/player_gym/player_gym_bloc.dart';
@@ -19,7 +19,6 @@ import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/subscription/subs_bloc.dart';
 import 'package:uniceps/app/presentation/screens/profile/settings/screens/gym_list_screen.dart';
 import 'package:uniceps/app/presentation/screens/profile/settings/screens/profile_screen.dart';
-import 'package:uniceps/app/presentation/screens/home/screens/home_screen.dart';
 import 'package:uniceps/app/presentation/blocs/exercises/exercises_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/training/training_bloc.dart';
 import 'package:uniceps/firebase_options.dart';
@@ -28,7 +27,7 @@ import 'package:uniceps/main_cubit/locale_cubit.dart';
 import 'package:uniceps/main_cubit/training_section_cubit.dart';
 import 'package:uniceps/splash.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:uniceps/app/presentation/home/screens/temporary_screen.dart';
+import 'package:uniceps/app/presentation/home/screens/home_screen.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
@@ -175,9 +174,17 @@ class MyApp extends StatelessWidget {
             title: 'Uniceps',
             theme: lightTheme.copyWith(textTheme: GoogleFonts.cairoTextTheme()),
             // initialRoute: ROUTE_SPLASH,
-            initialRoute: "/temp",
+            initialRoute: "/yo",
             routes: {
-              "/temp": (context) => TemporaryScreen(),
+              '/yo': (context) => Scaffold(
+                    body: Center(
+                      child: ElevatedButton(
+                          onPressed: () =>
+                              Navigator.pushNamed(context, '/temp'),
+                          child: const Icon(Icons.navigate_next)),
+                    ),
+                  ),
+              "/temp": (context) => const HomeScreen(),
               // ROUTE_SPLASH: (context) => const SplashScreen(),
 
               //  AUTH

@@ -12,8 +12,8 @@ final class SessionInitial extends SessionState {}
 final class SessionLoadingState extends SessionState {}
 
 final class NoActiveSessionState extends SessionState {
-  final int? lastDayId;
-  const NoActiveSessionState({this.lastDayId});
+  // final int? lastDayId;
+  const NoActiveSessionState();
 }
 
 final class SessionLoadedState extends SessionState {

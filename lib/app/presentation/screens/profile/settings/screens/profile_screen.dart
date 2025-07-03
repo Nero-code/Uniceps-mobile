@@ -5,7 +5,7 @@ import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/app/presentation/blocs/authentication/auth_bloc.dart';
-import 'package:uniceps/app/presentation/screens/auth/screens/player_info_screen.dart';
+import 'package:uniceps/app/presentation/auth/screens/player_info_screen.dart';
 import 'package:uniceps/app/presentation/blocs/gyms/gyms_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/measurement/measurment_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';

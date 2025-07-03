@@ -7,17 +7,12 @@ import 'package:uniceps/app/presentation/screens/routine/blocs/sets_edit/sets_ed
 class SetWidget extends StatefulWidget {
   const SetWidget({
     super.key,
-    required this.index,
-    required this.routineItemId,
     required this.set,
-    required this.controller,
-    required this.onRemove,
+    this.isLast = false,
   });
 
   final RoutineSet set;
-  final TextEditingController controller;
-  final int index, routineItemId;
-  final void Function() onRemove;
+  final bool isLast;
 
   @override
   State<SetWidget> createState() => _SetWidgetState();
@@ -25,6 +20,20 @@ class SetWidget extends StatefulWidget {
 
 class _SetWidgetState extends State<SetWidget> {
   final _focusNode = FocusNode();
+  final _controller = TextEditingController();
+  bool hasChanged = false;
+  @override
+  void initState() {
+    _controller.text = widget.set.reps.toString();
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        _controller.selection =
+            TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -37,7 +46,7 @@ class _SetWidgetState extends State<SetWidget> {
             Expanded(
               child: Center(
                 child: Text(
-                  "${widget.index + 1}",
+                  "${widget.set.index + 1}",
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -50,14 +59,15 @@ class _SetWidgetState extends State<SetWidget> {
               flex: 2,
               child: Center(
                 child: SizedBox(
-                  width: 60,
+                  width: 80,
                   child: TextField(
                     focusNode: _focusNode,
+                    textInputAction: TextInputAction.next,
                     onTap: () {
                       if (!_focusNode.hasFocus) {
-                        widget.controller.selection = TextSelection(
+                        _controller.selection = TextSelection(
                             baseOffset: 0,
-                            extentOffset: widget.controller.text.length);
+                            extentOffset: _controller.text.length);
                       }
                     },
                     inputFormatters: [
@@ -65,17 +75,25 @@ class _SetWidgetState extends State<SetWidget> {
                     ],
                     keyboardType: const TextInputType.numberWithOptions(),
                     style: const TextStyle(fontSize: 14),
-                    controller: widget.controller,
+                    controller: _controller,
                     textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                      isCollapsed: true,
-                      contentPadding: EdgeInsets.all(8.0),
+                    decoration: InputDecoration(
+                      error: hasChanged ? const SizedBox() : null,
+                      // errorText: hasChanged ? "" : null,
+                      errorBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.amber)),
+                      focusedErrorBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.amber, width: 2.0)),
+                      // isCollapsed: true,
+                      contentPadding: const EdgeInsets.all(8.0),
                       hintText: "--",
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.bold,
                       ),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
+                      // prefixIcon: Icon(Icons.numbers, size: 15),
                     ),
                     maxLength: 4,
                     maxLines: 1,
@@ -84,19 +102,38 @@ class _SetWidgetState extends State<SetWidget> {
                             required isFocused,
                             required maxLength}) =>
                         const SizedBox(),
+                    onChanged: (value) => setState(() {
+                      hasChanged = true;
+                    }),
                     onSubmitted: (val) {
                       BlocProvider.of<SetsEditBloc>(context).add(UpdateSetEvent(
-                          itemId: widget.routineItemId,
-                          set: widget.set.copyWith(
-                              reps: int.parse(widget.controller.text))));
+                          set: widget.set
+                              .copyWith(reps: int.parse(_controller.text))));
+                      setState(() {
+                        hasChanged = false;
+                      });
+                      if (!widget.isLast) {
+                        _focusNode.nextFocus();
+                      }
                     },
                   ),
                 ),
               ),
             ),
             Expanded(
-              child: IconButton(
-                  onPressed: widget.onRemove, icon: const Icon(Icons.close)),
+              child: BlocBuilder<SetsEditBloc, SetsEditState>(
+                builder: (context, state) {
+                  return IconButton(
+                      onPressed: state is SetsEditLoadingState
+                          ? null
+                          : () {
+                              context
+                                  .read<SetsEditBloc>()
+                                  .add(RemoveSetEvent(set: widget.set));
+                            },
+                      icon: const Icon(Icons.close));
+                },
+              ),
             ),
           ],
         ),

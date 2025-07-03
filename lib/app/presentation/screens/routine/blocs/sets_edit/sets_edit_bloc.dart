@@ -21,7 +21,7 @@ class SetsEditBloc extends Bloc<SetsEditEvent, SetsEditState> {
         (l) => emit(SetsEditErrorState(failure: l)),
         (r) {
           // sets = r;
-          emit(SetsEditLoadedState(itemId: event.itemId, sets: r));
+          emit(SetsEditLoadedState(sets: r));
         },
       );
     });
@@ -31,30 +31,30 @@ class SetsEditBloc extends Bloc<SetsEditEvent, SetsEditState> {
 
       // sets.add(event.rSet);
 
-      final either = await _commands.addItemSets(event.itemId, event.oldSets);
+      final either = await _commands.addItemSets(event.itemId);
       either.fold(
         (l) => emit(SetsEditErrorState(failure: l)),
-        (r) => emit(SetsEditLoadedState(sets: r, itemId: event.itemId)),
+        (r) => emit(SetsEditLoadedState(sets: r)),
       );
 
       // emit(SetsEditLoadedState(itemId: event.itemId, sets: sets));
     });
 
-    on<SaveSetsEvent>((event, emit) async {
-      emit(SetsEditLoadingState());
+    // on<SaveSetsEvent>((event, emit) async {
+    //   emit(SetsEditLoadingState());
 
-      final either = await _commands.saveAllSets(event.sets);
-      either.fold(
-        (l) => emit(SetsEditErrorState(failure: l)),
-        (r) => emit(SetsEditLoadedState(sets: r, itemId: event.itemId)),
-      );
-    });
+    //   final either = await _commands.saveAllSets(event.sets);
+    //   either.fold(
+    //     (l) => emit(SetsEditErrorState(failure: l)),
+    //     (r) => emit(SetsEditLoadedState(sets: r, itemId: event.itemId)),
+    //   );
+    // });
 
     on<UpdateSetEvent>((event, emit) async {
       final either = await _commands.updateSet(event.set);
       either.fold(
         (l) => emit(SetsEditErrorState(failure: l)),
-        (r) => emit(SetsEditLoadedState(sets: r, itemId: event.itemId)),
+        (r) => emit(SetsEditLoadedState(sets: r)),
       );
     });
 
@@ -64,8 +64,7 @@ class SetsEditBloc extends Bloc<SetsEditEvent, SetsEditState> {
       final either = await _commands.removeItemSet(event.set);
       either.fold(
         (l) => emit(SetsEditErrorState(failure: l)),
-        (r) => emit(
-            SetsEditLoadedState(sets: List.from([...r]), itemId: event.itemId)),
+        (r) => emit(SetsEditLoadedState(sets: List.from([...r]))),
       );
     });
   }

@@ -1,4 +1,6 @@
-class RoutineSet {
+import 'package:equatable/equatable.dart';
+
+class RoutineSet extends Equatable {
   const RoutineSet({
     required this.id,
     required this.apiId,
@@ -34,4 +36,7 @@ class RoutineSet {
           reps: reps ?? this.reps,
           weight: weight ?? this.weight,
           isSynced: isSynced ?? this.isSynced);
+
+  @override
+  List<Object?> get props => [id, apiId, routineItemId, index, reps, weight];
 }

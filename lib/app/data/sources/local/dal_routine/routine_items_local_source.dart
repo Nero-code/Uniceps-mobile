@@ -111,7 +111,7 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
             );
       } else {
         ex = (await (_database.update(_database.exercises)
-                  ..where((f) => f.apiId.equals(i.apiId!)))
+                  ..where((f) => f.apiId.equals(i.exerciseV2Dto.apiId!)))
                 .writeReturning(ExercisesCompanion.custom(
           id: Constant(oldEx.first.id),
           apiId: Constant(oldEx.first.apiId),

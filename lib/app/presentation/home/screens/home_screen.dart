@@ -15,14 +15,14 @@ import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/injection_dependency.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class TemporaryScreen extends StatefulWidget {
-  const TemporaryScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<TemporaryScreen> createState() => _TemporaryScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _TemporaryScreenState extends State<TemporaryScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   final panelController = PanelController();
 
   @override
@@ -33,10 +33,6 @@ class _TemporaryScreenState extends State<TemporaryScreen> {
       body: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => StopwatchCubit(),
-            lazy: false,
-          ),
-          BlocProvider(
             create: (context) =>
                 CurrentRoutineCubit(commands: sl())..getCurrentRoutine(),
             lazy: false,
@@ -45,7 +41,11 @@ class _TemporaryScreenState extends State<TemporaryScreen> {
             create: (context) =>
                 SessionBloc(commands: sl())..add(GetLastActiveSessionEvent()),
           ),
-          BlocProvider(create: (context) => StopwatchCubit()),
+          BlocProvider(
+            create: (context) =>
+                StopwatchCubit(prefs: sl())..getStopwatchTime(),
+            lazy: false,
+          ),
         ],
         child: Stack(
           children: [
@@ -111,18 +111,26 @@ class _TemporaryScreenState extends State<TemporaryScreen> {
                 ),
                 const HomeCard(),
                 const SizedBox(height: 10), // Divider
+                //
+                // Stop watch widget
+                //
                 BlocBuilder<StopwatchCubit, StopwatchState>(
                     builder: (context, state) =>
                         Text(state.time == "00:00:00" ? "" : state.time)),
+                //
+                // Practice Panel
+                //
                 SizedBox(
                   width: screenSize.width * 0.9,
                   // height: screenSize.width * 0.17,
                   child: BlocConsumer<SessionBloc, SessionState>(
-                    listener: (context, state) {
+                    listener: (context, state) async {
                       final sessionBloc = context.read<SessionBloc>();
                       final stopwatchCubit = context.read<StopwatchCubit>();
+                      final currentRoutineCubit =
+                          context.read<CurrentRoutineCubit>();
 
-                      Navigator.of(context).push(MaterialPageRoute(
+                      await Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => MultiBlocProvider(
                                 providers: [
                                   BlocProvider.value(value: sessionBloc),
@@ -131,6 +139,7 @@ class _TemporaryScreenState extends State<TemporaryScreen> {
                                 ],
                                 child: const PracticeScreen(),
                               )));
+                      currentRoutineCubit.getCurrentRoutine();
                     },
                     //
                     listenWhen: (previous, current) =>
@@ -145,22 +154,24 @@ class _TemporaryScreenState extends State<TemporaryScreen> {
                             context
                                 .read<SessionBloc>()
                                 .add(StopSessionEvent(session: state.session));
+                            context.read<StopwatchCubit>().resetStopwatch();
                           },
-                          onStart: () =>
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) => MultiBlocProvider(
-                                        providers: [
-                                          BlocProvider.value(
-                                            value: context.read<SessionBloc>(),
-                                          ),
-                                          BlocProvider.value(
-                                            value:
-                                                context.read<StopwatchCubit>()
-                                                  ..startStopWatch(),
-                                          ),
-                                        ],
-                                        child: const PracticeScreen(),
-                                      ))),
+                          onStart: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => MultiBlocProvider(
+                                providers: [
+                                  BlocProvider.value(
+                                    value: context.read<SessionBloc>(),
+                                  ),
+                                  BlocProvider.value(
+                                    value: context.read<StopwatchCubit>()
+                                      ..startStopWatch(),
+                                  ),
+                                ],
+                                child: const PracticeScreen(),
+                              ),
+                            ),
+                          ),
                         );
                       } else if (state is NoActiveSessionState) {
                         return PlayWidget(
@@ -261,7 +272,7 @@ class _TemporaryScreenState extends State<TemporaryScreen> {
                         ...state.routine.trainingDays
                             .map((day) => RoutineDayItem(
                                   day: day,
-                                  isSelected: false,
+                                  isSelected: state.lastDayId == day.id,
                                   onSelect: () async {
                                     context
                                         .read<SessionBloc>()

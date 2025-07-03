@@ -43,8 +43,20 @@ class RoutineItemsRepo implements IRoutineItemsContract {
     try {
       await _mediaHelper.saveExerciseImages(
           items.map((item) => item.exercise.imageUrl).toList());
-      final itemsWithIdsList = await _localSource
-          .addItems(items.map((item) => item.asDto()).toList());
+
+      final loadedItemsLength =
+          itemsBuffer.where((i) => i.dayId == items.first.dayId).length;
+
+      final itemsWithIndexes = items.map((item) {
+        final modifiedItem =
+            item.copyWith(index: items.indexOf(item) + loadedItemsLength);
+        return modifiedItem.asDto();
+      }).toList();
+
+      // final itemsWithIdsList = await _localSource
+      //     .addItems(items.map((item) => item.asDto()).toList());
+
+      final itemsWithIdsList = await _localSource.addItems(itemsWithIndexes);
 
       // -------------------------------------------
       // TODO null check operator used on null value

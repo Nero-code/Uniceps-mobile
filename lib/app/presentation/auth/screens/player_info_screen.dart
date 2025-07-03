@@ -1,25 +1,22 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/app/data/models/auth_models/player_model.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
 import 'package:uniceps/app/presentation/blocs/authentication/auth_bloc.dart';
-import 'package:uniceps/app/presentation/screens/auth/widgets/gender_selection_widget.dart';
+import 'package:uniceps/app/presentation/auth/widgets/gender_selection_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';
 import 'package:uniceps/app/presentation/screens/profile/settings/widgets/profile_back_circle.dart';
 
 class PlayerInfoScreen extends StatefulWidget {
-  const PlayerInfoScreen({super.key, /**required this.onSave,*/ this.player});
+  const PlayerInfoScreen({super.key, this.player});
 
   final Player? player;
-  // final void Function(Player) onSave;
 
   @override
   State<PlayerInfoScreen> createState() => _PlayerInfoScreenState();
@@ -49,11 +46,9 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
 
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
-        if (context.mounted) {
-          Navigator.pop(context, false);
-        }
+        if (context.mounted) Navigator.pop(context, false);
       },
       child: Scaffold(
         body: BlocConsumer<ProfileBloc, ProfileState>(
@@ -65,14 +60,7 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
           },
           builder: (context, state) {
             if (state is ProfileLoadedState) {
-              isCreate = false;
-              showBackBtn = true;
-              email = state.player.email;
-              nameCtl.text = state.player.name;
-              phoneCtl.text = state.player.phoneNum;
-              birthCtl.text = state.player.birthDate;
-              male = state.player.gender == Gender.male;
-              initial = male;
+              _fillProfileData(state);
             }
             return Stack(
               children: [
@@ -434,5 +422,18 @@ class _PlayerInfoScreenState extends State<PlayerInfoScreen> {
         ),
       ),
     );
+  }
+
+  void _fillProfileData(ProfileLoadedState state) {
+    {
+      isCreate = false;
+      showBackBtn = true;
+      email = state.player.email;
+      nameCtl.text = state.player.name;
+      phoneCtl.text = state.player.phoneNum;
+      birthCtl.text = state.player.birthDate;
+      male = state.player.gender == Gender.male;
+      initial = male;
+    }
   }
 }
