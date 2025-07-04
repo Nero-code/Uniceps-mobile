@@ -33,7 +33,8 @@ class PracticeHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(item.exercise.name),
-              Text("${logs.length} / ${item.sets.length}"),
+              Text("${logs.length} / ${item.sets.length}",
+                  textDirection: TextDirection.ltr),
             ],
           )),
         ],

@@ -38,16 +38,24 @@ class StopwatchCubit extends Cubit<StopwatchState> {
     });
   }
 
-  void stopStopwatch() {
+  void stopStopwatch() async {
     _stopwatch.stop();
     _timer?.cancel();
+    await prefs.setString("time",
+        formatDuration(_stopwatch.elapsed + (_duration ?? Duration.zero)));
+
     // emit(StopwatchState(
     //     time: formatDuration(_stopwatch.elapsed), isRunning: false));
   }
 
-  void resetStopwatch() {
+  void resetStopwatch() async {
+    _timer?.cancel();
+    _stopwatch.stop();
     _stopwatch.reset();
     _duration = null;
+
+    await prefs.setString("time",
+        formatDuration(_stopwatch.elapsed + (_duration ?? Duration.zero)));
     emit(StopwatchState(
         time: formatDuration(_stopwatch.elapsed), isRunning: true));
   }

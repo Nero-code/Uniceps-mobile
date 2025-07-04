@@ -174,7 +174,7 @@ class MyApp extends StatelessWidget {
             title: 'Uniceps',
             theme: lightTheme.copyWith(textTheme: GoogleFonts.cairoTextTheme()),
             // initialRoute: ROUTE_SPLASH,
-            initialRoute: "/yo",
+            initialRoute: "/temp",
             routes: {
               '/yo': (context) => Scaffold(
                     body: Center(
