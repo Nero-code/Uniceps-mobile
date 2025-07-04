@@ -3,25 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:uniceps/app/data/models/routine_models/extensions.dart' as ext;
-import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
-import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/exercises_v2_bloc.dart';
-import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/muscle_group_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/days_edit/days_edit_bloc.dart';
-import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
-import 'package:uniceps/app/presentation/routine/blocs/sets_edit/sets_edit_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_add_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_delete_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_edit_flaoting_menu.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/days_sorting_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/rename_day_dialog.dart';
-import 'package:uniceps/app/presentation/routine/screens/exercises_selection_screen.dart';
 import 'package:uniceps/app/presentation/routine/pages/routine_edit_items_tab.dart';
-// import 'package:uniceps/app/presentation/screens/routine/pages/routine_edit_sets_sheet.dart';
-import 'package:uniceps/app/presentation/routine/screens/routine_edit_sets_screen.dart';
 import 'package:uniceps/app/presentation/routine/widgets/day_tab_widget.dart';
 import 'package:uniceps/core/extensions.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
@@ -209,8 +200,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
         BlocProvider(
             create: (context) => DaysEditBloc(commands: di.sl())
               ..add(GetDaysEvent(routineId: widget.routineId))),
-        BlocProvider(create: (context) => ItemsEditBloc(commands: di.sl())),
-        BlocProvider(create: (context) => SetsEditBloc(commands: di.sl())),
+        // BlocProvider(create: (context) => ItemsEditBloc(commands: di.sl())),
+        // BlocProvider(create: (context) => SetsEditBloc(commands: di.sl())),
       ],
       child: Stack(
         children: [
@@ -220,56 +211,57 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                 title: Text(widget.routineName),
                 backgroundColor: Theme.of(context).colorScheme.surface,
               ),
-              floatingActionButton:
-                  BlocSelector<DaysEditBloc, DaysEditState, List<RoutineDay>>(
-                selector: (state) =>
-                    state is DaysEditLoadedState ? state.days : [],
-                builder: (context, days) {
-                  if (days.isNotEmpty) {
-                    return FloatingActionButton(
-                      heroTag: "DaysEdit FAB",
-                      onPressed: () async {
-                        final res = await Navigator.push<List<ExerciseV2>>(
-                            context,
-                            MaterialPageRoute(
-                              builder: (c) => MultiBlocProvider(
-                                providers: [
-                                  BlocProvider(
-                                    create: (context) =>
-                                        MuscleGroupBloc(commands: di.sl())
-                                          ..add(GetMuscleGroupsEvent()),
-                                  ),
-                                  BlocProvider(
-                                    create: (context) =>
-                                        ExercisesV2Bloc(commands: di.sl()),
-                                  ),
-                                ],
-                                child: const ExercisesSelectionScreen(),
-                              ),
-                            ));
-                        if (res == null) {
-                          if (context.mounted) {
-                            showSnack(const Text("no items selected"), context);
-                          }
-                          return;
-                        }
-                        if (context.mounted) {
-                          BlocProvider.of<ItemsEditBloc>(context).add(
-                            AddRoutineItemsEvent(
-                                items: res
-                                    .map(
-                                      (e) => e.toItem(days[selectedIndex].id!),
-                                    )
-                                    .toList()),
-                          );
-                        }
-                      },
-                      child: const Icon(Icons.add),
-                    );
-                  }
-                  return const SizedBox();
-                },
-              ),
+              // floatingActionButton:
+              //     BlocSelector<DaysEditBloc, DaysEditState, List<RoutineDay>>(
+              //   selector: (state) =>
+              //       state is DaysEditLoadedState ? state.days : [],
+              //   builder: (context, days) {
+              //     if (days.isNotEmpty) {
+              //       return FloatingActionButton(
+              //         heroTag: "DaysEdit FAB",
+              //         onPressed: () async {
+              //           final res = await Navigator.push<List<ExerciseV2>>(
+              //               context,
+              //               MaterialPageRoute(
+              //                 builder: (c) => MultiBlocProvider(
+              //                   providers: [
+              //                     BlocProvider(
+              //                       create: (context) =>
+              //                           MuscleGroupBloc(commands: di.sl())
+              //                             ..add(GetMuscleGroupsEvent()),
+              //                     ),
+              //                     BlocProvider(
+              //                       create: (context) =>
+              //                           ExercisesV2Bloc(commands: di.sl()),
+              //                     ),
+              //                   ],
+              //                   child:  ExercisesSelectionScreen(presentExerciseIds: [],),
+              //                 ),
+              //               ));
+              //           if (res == null) {
+              //             if (context.mounted) {
+              //               showSnack(const Text("no items selected"), context);
+              //             }
+              //             return;
+              //           }
+              //           if (context.mounted) {
+              //             BlocProvider.of<ItemsEditBloc>(context).add(
+              //               AddRoutineItemsEvent(
+              //                   items: res
+              //                       .map(
+              //                         (e) => e.toItem(days[selectedIndex].id!),
+              //                       )
+              //                       .toList()),
+              //             );
+              //           }
+              //         },
+              //         child: const Icon(Icons.add),
+              //       );
+              //     }
+              //     return const SizedBox();
+              //   },
+              // ),
+
               body: Stack(
                 children: [
                   BlocBuilder<DaysEditBloc, DaysEditState>(
@@ -379,16 +371,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                                           ),
                                         ),
                                       );
-
-                                      // BlocProvider.of<DaysEditBloc>(context)
-                                      //     .add(AddDayEvent(
-                                      //   day: RoutineDay(
-                                      //     routineId: widget.routineId,
-                                      //     name: "day ${days.length}",
-                                      //     index: days.length,
-                                      //     exercises: [],
-                                      //   ),
-                                      // ));
                                     },
                                   ),
                                 ],
@@ -409,31 +391,10 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                                     curve: Curves.linear);
                               }),
                               children: [
-                                ...state.days.map(
-                                  (day) {
-                                    BlocProvider.of<ItemsEditBloc>(context).add(
-                                        GetRoutineDayItemsEvent(
-                                            dayId: day.id!));
-                                    return RoutineItemEditTab(
+                                ...state.days.map((day) => RoutineItemEditTab(
                                       dayId: day.id!,
-                                      // onItemTap: (itemId) {
-                                      //   routineItemId = itemId;
-                                      //   BlocProvider.of<SetsEditBloc>(context)
-                                      //       .add(GetSetsforRoutineItemEvent(
-                                      //           itemId: itemId));
-
-                                      //   panelController.open();
-                                      // },
-                                      onItemTap: (item) =>
-                                          Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              RoutineEditSetsScreen(item: item),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                )
+                                      dayName: day.name,
+                                    ))
                               ],
                             )),
                           ],
@@ -448,56 +409,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                     },
                   ),
                 ],
-              ),
-            ),
-          ),
-          SlidingUpPanel(
-            minHeight: 0.0,
-            maxHeight: screenSize.height * 0.75,
-            controller: panelController,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-            backdropEnabled: true,
-            panel: Scaffold(
-              body: BlocSelector<ItemsEditBloc, ItemsEditState,
-                  List<RoutineItem>?>(
-                selector: (state) {
-                  return state is ItemsEditLoadedState ? state.items : null;
-                },
-                builder: (context, items) {
-                  return BlocBuilder<SetsEditBloc, SetsEditState>(
-                    builder: (context, setsState) {
-                      if (items != null) {
-                        RoutineItem? selectedItem;
-                        try {
-                          selectedItem = items.firstWhere(
-                              (element) => element.id == routineItemId);
-                        } catch (e) {
-                          selectedItem = null;
-                        }
-                        if (setsState is SetsEditLoadedState &&
-                            selectedItem != null) {
-                          // return RoutineSetsSheet(
-                          //   itemId: selectedItem.id!,
-                          //   sets: setsState.sets,
-                          //   onSave: panelController.close,
-                          //   onDelete: () async {
-                          //     BlocProvider.of<ItemsEditBloc>(context).add(
-                          //         RemoveRoutineItemEvent(
-                          //             exercise: selectedItem!));
-                          //     routineItemId = null;
-                          //     await panelController.close();
-                          //   },
-                          // );
-                          return const SizedBox();
-                        } else if (setsState is SetsEditErrorState) {
-                          return ErrorScreenWidget(f: setsState.failure);
-                        }
-                        return const LoadingPage();
-                      }
-                      return const SizedBox();
-                    },
-                  );
-                },
               ),
             ),
           ),

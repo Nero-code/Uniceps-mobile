@@ -12,8 +12,9 @@ class ExercisesListTab extends StatefulWidget {
     super.key,
     required this.onSelect,
     required this.muscleGroup,
+    required this.presentExId,
   });
-
+  final List<int> presentExId;
   final MuscleGroup muscleGroup;
   final void Function(ExerciseV2 exercise, bool isSelect) onSelect;
 
@@ -49,6 +50,8 @@ class _ExercisesListTabState extends State<ExercisesListTab>
               padding: EdgeInsets.all(spacing),
               itemCount: state.list.length,
               itemBuilder: (context, index) {
+                final isPresent =
+                    widget.presentExId.contains(state.list[index].apiId!);
                 return Stack(
                   children: [
                     ExerciseGridWidget(
@@ -62,27 +65,36 @@ class _ExercisesListTabState extends State<ExercisesListTab>
                         splashColor: const Color.fromARGB(30, 158, 158, 158),
                         highlightColor: const Color.fromARGB(30, 158, 158, 158),
                         borderRadius: BorderRadius.circular(15.0),
-                        onTap: () {
-                          if (!selectedIds.contains(state.list[index].apiId)) {
-                            print("added");
-                            // -------------------------------------------------
-                            // Add exercise here and parent widget and notify
-                            selectedIds.add(state.list[index].apiId!);
-                            widget.onSelect(state.list[index], false);
-                            // -------------------------------------------------
-                          } else {
-                            print("removed");
-                            // -------------------------------------------------
-                            // Remove exercise here and parent widget and notify
-                            selectedIds.remove(state.list[index].apiId!);
-                            widget.onSelect(state.list[index], true);
-                            // -------------------------------------------------
-                          }
-                          setState(() {});
-                        },
+                        onTap: isPresent
+                            ? null
+                            : () {
+                                if (!selectedIds
+                                    .contains(state.list[index].apiId)) {
+                                  print("added");
+                                  // -------------------------------------------------
+                                  // Add exercise here and parent widget and notify
+                                  selectedIds.add(state.list[index].apiId!);
+                                  widget.onSelect(state.list[index], false);
+                                  // -------------------------------------------------
+                                } else {
+                                  print("removed");
+                                  // -------------------------------------------------
+                                  // Remove exercise here and parent widget and notify
+                                  selectedIds.remove(state.list[index].apiId!);
+                                  widget.onSelect(state.list[index], true);
+                                  // -------------------------------------------------
+                                }
+                                setState(() {});
+                              },
                         child: const SizedBox.expand(),
                       ),
                     ),
+                    if (isPresent)
+                      const Positioned(
+                        top: 0.0,
+                        right: 0.0,
+                        child: Icon(Icons.done_outline_rounded),
+                      ),
                   ],
                 );
               },

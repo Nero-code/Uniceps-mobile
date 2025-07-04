@@ -6,7 +6,11 @@ import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/pages/exercises_list_tab.dart';
 
 class ExercisesSelectionScreen extends StatefulWidget {
-  const ExercisesSelectionScreen({super.key});
+  const ExercisesSelectionScreen(
+      {super.key, required this.presentExerciseIds, required this.dayName});
+
+  final List<int> presentExerciseIds;
+  final String dayName;
 
   @override
   State<ExercisesSelectionScreen> createState() =>
@@ -48,9 +52,8 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen>
                   builder: (context, state) {
                     // return Text(
                     //     "${selected.isEmpty ? "Exercises" : selected.length}");
-                    return Text(state.selected.isEmpty
-                        ? "Exercises"
-                        : state.selected.length.toString());
+                    return Text(
+                        "${widget.dayName}:   ${state.selected.length + widget.presentExerciseIds.length}");
                   },
                 ),
                 bottom: TabBar(
@@ -79,6 +82,7 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen>
                 children: state.groups
                     .map((group) => Builder(builder: (context) {
                           return ExercisesListTab(
+                            presentExId: widget.presentExerciseIds,
                             muscleGroup: group,
                             onSelect: (exercise, isSelected) {
                               isSelected
