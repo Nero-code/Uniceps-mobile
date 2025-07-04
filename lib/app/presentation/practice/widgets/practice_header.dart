@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/practice_entities/t_log.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
+import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
 
 class PracticeHeader extends StatelessWidget {
-  const PracticeHeader({super.key, required this.item, this.logs = const []});
+  const PracticeHeader({super.key, required this.item});
 
   final RoutineItem item;
-  final List<TLog> logs;
+  // final List<TLog> logs;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +35,19 @@ class PracticeHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(item.exercise.name),
-              Text("${logs.length} / ${item.sets.length}",
-                  textDirection: TextDirection.ltr),
+              BlocSelector<SessionBloc, SessionState, List<TLog>>(
+                selector: (state) {
+                  return state is SessionLoadedState
+                      ? state.session.logs
+                          .where((log) => log.exerciseId == item.exercise.apiId)
+                          .toList()
+                      : [];
+                },
+                builder: (context, logs) {
+                  return Text("${logs.length} / ${item.sets.length}",
+                      textDirection: TextDirection.ltr);
+                },
+              ),
             ],
           )),
         ],

@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/domain/classes/practice_entities/t_log.dart';
 import 'package:uniceps/app/presentation/practice/blocs/practice/practice_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/stopwatch/stopwatch_cubit.dart';
@@ -53,6 +52,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
           Navigator.pop(context);
         },
         // --------------------------------------------------------
+        buildWhen: (previous, current) => current is SessionLoadedState,
         builder: (context, sessionState) {
           if (sessionState is SessionLoadedState) {
             return BlocProvider(
@@ -65,12 +65,16 @@ class _PracticeScreenState extends State<PracticeScreen> {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      BlocSelector<PracticeCubit, PracticeState, String>(
-                        selector: (state) => (state is PracticeLoadedState)
-                            ? state.day.name
-                            : "",
-                        builder: (context, dayName) => Text(dayName),
+                      Expanded(
+                        child:
+                            BlocSelector<PracticeCubit, PracticeState, String>(
+                          selector: (state) => (state is PracticeLoadedState)
+                              ? state.day.name
+                              : "",
+                          builder: (context, dayName) => Text(dayName),
+                        ),
                       ),
+                      const SizedBox(width: 5),
                       BlocBuilder<StopwatchCubit, StopwatchState>(
                         builder: (context, state) => Text(
                           state.time,
@@ -88,6 +92,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
                   children: [
                     const SizedBox.expand(),
                     BlocBuilder<PracticeCubit, PracticeState>(
+                      buildWhen: (previous, current) =>
+                          current is PracticeLoadedState,
                       builder: (context, state) {
                         if (state is PracticeLoadedState) {
                           return SingleChildScrollView(
@@ -101,9 +107,19 @@ class _PracticeScreenState extends State<PracticeScreen> {
                                             255, 250, 250, 250),
                                         isExpanded: expandedId == i.index,
                                         canTapOnHeader: true,
-                                        headerBuilder: (_, isExpanded) =>
-                                            PracticeHeader(item: i),
+                                        headerBuilder: (_, __) =>
+                                            PracticeHeader(
+                                          item: i,
+                                          // logs: sessionState.session.logs
+                                          //     .where((log) =>
+                                          //         log.exerciseId ==
+                                          //         i.exercise.apiId)
+                                          //     .toList(),
+                                        ),
                                         body: PracticeBody(
+                                          sessionId: sessionState.session.id!,
+                                          exId: i.exercise.apiId!,
+                                          exIndex: i.index,
                                           sets: i.sets,
                                           logs: sessionState.session.logs
                                               .where((log) =>
@@ -111,34 +127,34 @@ class _PracticeScreenState extends State<PracticeScreen> {
                                                   i.exercise.apiId)
                                               .toList(),
                                           onPressed: (set, weight, oldLog) {
-                                            if (oldLog == null) {
-                                              context.read<SessionBloc>().add(
-                                                    LogSetEvent(
-                                                      log: TLog(
-                                                          id: null,
-                                                          sessionId:
-                                                              sessionState
-                                                                  .session.id!,
-                                                          exerciseId:
-                                                              i.exercise.apiId!,
-                                                          exerciseIndex:
-                                                              i.index,
-                                                          setIndex: set.index,
-                                                          reps: set.reps,
-                                                          weight: weight,
-                                                          completedAt:
-                                                              DateTime.now(),
-                                                          apiId: null),
-                                                    ),
-                                                  );
-                                            } else {
-                                              context
-                                                  .read<SessionBloc>()
-                                                  .add(LogSetEvent(
-                                                    log: oldLog.copywith(
-                                                        weight: weight),
-                                                  ));
-                                            }
+                                            // if (oldLog == null) {
+                                            //   context.read<SessionBloc>().add(
+                                            //         LogSetEvent(
+                                            //           log: TLog(
+                                            //               id: null,
+                                            //               sessionId:
+                                            //                   sessionState
+                                            //                       .session.id!,
+                                            //               exerciseId:
+                                            //                   i.exercise.apiId!,
+                                            //               exerciseIndex:
+                                            //                   i.index,
+                                            //               setIndex: set.index,
+                                            //               reps: set.reps,
+                                            //               weight: weight,
+                                            //               completedAt:
+                                            //                   DateTime.now(),
+                                            //               apiId: null),
+                                            //         ),
+                                            //       );
+                                            // } else {
+                                            //   context
+                                            //       .read<SessionBloc>()
+                                            //       .add(LogSetEvent(
+                                            //         log: oldLog.copywith(
+                                            //             weight: weight),
+                                            //       ));
+                                            // }
                                           },
                                         ),
                                       ))

@@ -1,34 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/domain/classes/practice_entities/t_log.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
+import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/core/widgets/box_botton.dart';
 
-class RoundWidget extends StatelessWidget {
+class RoundWidget extends StatefulWidget {
   const RoundWidget({
     super.key,
-    required this.controller,
-    required this.index,
-    required this.reps,
-    required this.lastWeight,
-    required this.onTap,
-    this.isDone = false,
-  });
-  final void Function() onTap;
-  final TextEditingController? controller;
-  final int index, reps;
-  final double? lastWeight;
-  final bool isDone;
+    required this.sessionId,
+    required this.exId,
+    required this.exIndex,
+    required this.set,
+    this.log,
 
-  final expanded = const <int>[0, 1, 2, 3];
+    // required this.controller,
+    // required this.index,
+    // required this.reps,
+    // required this.lastWeight,
+    // required this.onTap,
+    // this.isDone = false,
+  });
+  final int sessionId;
+  final int exId;
+  final int exIndex;
+  final RoutineSet set;
+  final TLog? log;
 
   @override
+  State<RoundWidget> createState() => _RoundWidgetState();
+}
+
+class _RoundWidgetState extends State<RoundWidget> {
+  final weightCtl = TextEditingController();
+
+  // ------------------------
+  @override
   Widget build(BuildContext context) {
+    final weight = widget.log?.weight ?? widget.set.weight;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: Row(
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text("${index + 1}",
+            child: Text("${widget.set.index + 1}",
                 style: const TextStyle(fontWeight: FontWeight.normal)),
           ),
           Expanded(
@@ -44,7 +61,7 @@ class RoundWidget extends StatelessWidget {
                     color: Colors.grey,
                   ),
                   Text(
-                    "$reps",
+                    "${widget.set.reps}",
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -62,7 +79,7 @@ class RoundWidget extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  "${lastWeight ?? "---"} Kg",
+                  "${weight ?? "---"} Kg",
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -75,7 +92,7 @@ class RoundWidget extends StatelessWidget {
                 child: SizedBox(
                   width: 60,
                   child: TextField(
-                    controller: controller,
+                    controller: weightCtl,
                     textAlign: TextAlign.center,
                     maxLength: 5,
                     buildCounter: (_,
@@ -103,15 +120,35 @@ class RoundWidget extends StatelessWidget {
             ),
           ),
           BoxBotton(
-            background: isDone ? Colors.green.shade50 : Colors.grey.shade200,
-            borderRadius: 500,
+            background: widget.log != null
+                ? Colors.green.shade50
+                : Colors.grey.shade200,
+            borderRadius: 10,
             padding: 3.0,
-            onTap: onTap,
+            onTap: () {
+              context.read<SessionBloc>().add(
+                    LogSetEvent(
+                      log: widget.log?.copywith(
+                              weight: double.tryParse(weightCtl.text) ?? 0.0) ??
+                          TLog(
+                            id: null,
+                            sessionId: widget.sessionId,
+                            exerciseId: widget.exId,
+                            exerciseIndex: widget.exIndex,
+                            setIndex: widget.set.index,
+                            reps: widget.set.reps,
+                            weight: double.tryParse(weightCtl.text) ?? 0.0,
+                            completedAt: DateTime.now(),
+                            apiId: null,
+                          ),
+                    ),
+                  );
+            },
             child: Text(
               " ${String.fromCharCode(Icons.done.codePoint)} ",
               style: TextStyle(
                 fontSize: 14.0,
-                color: isDone ? Colors.green : Colors.black54,
+                color: widget.log != null ? Colors.green : Colors.black54,
                 fontWeight: FontWeight.bold, // Apply bold styling
                 fontFamily: Icons.hourglass_empty_rounded.fontFamily,
               ),
