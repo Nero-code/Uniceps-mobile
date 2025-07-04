@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
-import 'package:uniceps/app/presentation/screens/routine/blocs/routine_management/routine_management_bloc.dart';
+import 'package:uniceps/app/presentation/routine/blocs/routine_management/routine_management_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
-import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_create_dialog.dart';
-import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_delete_dialog.dart';
-import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_options_dialog.dart';
-import 'package:uniceps/app/presentation/screens/routine/dialogs/routine_set_current_dialog.dart';
-import 'package:uniceps/app/presentation/screens/routine/screens/routine_edit_days_screen.dart';
-import 'package:uniceps/app/presentation/screens/routine/widgets/routine_grid_tile.dart';
-import 'package:uniceps/app/presentation/screens/routine/widgets/routine_list_tile.dart';
+import 'package:uniceps/app/presentation/routine/dialogs/routine_create_dialog.dart';
+import 'package:uniceps/app/presentation/routine/dialogs/routine_delete_dialog.dart';
+import 'package:uniceps/app/presentation/routine/dialogs/routine_options_dialog.dart';
+import 'package:uniceps/app/presentation/routine/dialogs/routine_set_current_dialog.dart';
+import 'package:uniceps/app/presentation/routine/screens/routine_edit_days_screen.dart';
+import 'package:uniceps/app/presentation/routine/widgets/routine_grid_tile.dart';
+import 'package:uniceps/app/presentation/routine/widgets/routine_list_tile.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/injection_dependency.dart';
 

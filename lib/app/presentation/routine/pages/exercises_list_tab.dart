@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
-import 'package:uniceps/app/presentation/screens/routine/blocs/exercises_v2/exercises_v2_bloc.dart';
+import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/exercises_v2_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
-import 'package:uniceps/app/presentation/screens/routine/widgets/exercise_grid_widget.dart';
+import 'package:uniceps/app/presentation/routine/widgets/exercise_grid_widget.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 
 class ExercisesListTab extends StatefulWidget {

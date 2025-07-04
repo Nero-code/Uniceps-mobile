@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
-import 'package:uniceps/app/presentation/screens/routine/blocs/items_edit/items_edit_bloc.dart';
+import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
-import 'package:uniceps/app/presentation/screens/routine/widgets/routine_item_horizontal_widget.dart';
+import 'package:uniceps/app/presentation/routine/widgets/routine_item_horizontal_widget.dart';
 import 'package:uniceps/core/constants/constants.dart';
 
 class RoutineItemEditTab extends StatefulWidget {

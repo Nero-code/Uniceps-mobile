@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
-import 'package:uniceps/app/presentation/screens/routine/screens/exercises_selection_screen.dart';
+import 'package:uniceps/app/presentation/routine/screens/exercises_selection_screen.dart';
 
 class RoutineItemAddPlacholder extends StatelessWidget {
   const RoutineItemAddPlacholder({super.key, required this.onAdd});

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/presentation/screens/routine/blocs/exercises_v2/muscle_group_bloc.dart';
-import 'package:uniceps/app/presentation/screens/routine/blocs/exercises_v2_selection/exercises_v2_selection_cubit.dart';
+import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/muscle_group_bloc.dart';
+import 'package:uniceps/app/presentation/routine/blocs/exercises_v2_selection/exercises_v2_selection_cubit.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
-import 'package:uniceps/app/presentation/screens/routine/pages/exercises_list_tab.dart';
+import 'package:uniceps/app/presentation/routine/pages/exercises_list_tab.dart';
 
 class ExercisesSelectionScreen extends StatefulWidget {
   const ExercisesSelectionScreen({super.key});
