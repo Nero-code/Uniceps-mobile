@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
+import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/routine/screens/routine_management_screen.dart';
 
 class PlayWidget extends StatelessWidget {
@@ -95,8 +96,15 @@ class PlayWidget extends StatelessWidget {
                 highlightColor: Colors.black38,
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => BlocProvider.value(
-                            value: context.read<CurrentRoutineCubit>(),
+                      builder: (_) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider.value(
+                                value: context.read<CurrentRoutineCubit>(),
+                              ),
+                              BlocProvider.value(
+                                value: context.read<SessionBloc>(),
+                              ),
+                            ],
                             child: const RoutineManagementScreen(),
                           )));
                 },

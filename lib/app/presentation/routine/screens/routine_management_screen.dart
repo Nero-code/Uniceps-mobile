@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
+import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/routine_management/routine_management_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_create_dialog.dart';
@@ -128,6 +129,10 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
                                             ),
                                           ),
                                       onLongPress: () async {
+                                        final canDelete = context
+                                            .read<SessionBloc>()
+                                            .state is NoActiveSessionState;
+
                                         final res = await showDialog<Option>(
                                             context: context,
                                             builder: (context) =>
@@ -150,11 +155,26 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
                                             break;
 
                                           case Option.delete:
-                                            _deleteRoutine(() => BlocProvider
-                                                    .of<RoutineManagementBloc>(
-                                                        context)
-                                                .add(DeleteRoutineEvent(
-                                                    routineToDelete: e)));
+                                            if (canDelete) {
+                                              _deleteRoutine(() => BlocProvider
+                                                      .of<RoutineManagementBloc>(
+                                                          context)
+                                                  .add(DeleteRoutineEvent(
+                                                      routineToDelete: e)));
+                                            } else {
+                                              if (context.mounted) {
+                                                ScaffoldMessenger.of(context)
+                                                    .clearSnackBars();
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                    backgroundColor: Colors.red,
+                                                    content: Text(
+                                                        "you can't delete with an open session!"),
+                                                  ),
+                                                );
+                                              }
+                                            }
                                             break;
 
                                           case Option.setCurrent:

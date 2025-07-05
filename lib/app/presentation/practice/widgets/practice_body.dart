@@ -11,14 +11,12 @@ class PracticeBody extends StatefulWidget {
     required this.exIndex,
     required this.sets,
     required this.logs,
-    required this.onPressed,
   });
   final int sessionId;
   final int exId;
   final int exIndex;
   final List<RoutineSet> sets;
   final List<TLog> logs;
-  final void Function(RoutineSet s, double weight, TLog? oldLog) onPressed;
 
   @override
   State<PracticeBody> createState() => _PracticeBodyState();

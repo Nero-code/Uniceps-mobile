@@ -102,62 +102,27 @@ class _PracticeScreenState extends State<PracticeScreen> {
                               expandedHeaderPadding: EdgeInsets.zero,
                               expansionCallback: _expansionCallback,
                               children: state.day.exercises
-                                  .map((i) => ExpansionPanel(
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 250, 250, 250),
-                                        isExpanded: expandedId == i.index,
-                                        canTapOnHeader: true,
-                                        headerBuilder: (_, __) =>
-                                            PracticeHeader(
-                                          item: i,
-                                          // logs: sessionState.session.logs
-                                          //     .where((log) =>
-                                          //         log.exerciseId ==
-                                          //         i.exercise.apiId)
-                                          //     .toList(),
-                                        ),
-                                        body: PracticeBody(
-                                          sessionId: sessionState.session.id!,
-                                          exId: i.exercise.apiId!,
-                                          exIndex: i.index,
-                                          sets: i.sets,
-                                          logs: sessionState.session.logs
-                                              .where((log) =>
-                                                  log.exerciseId ==
-                                                  i.exercise.apiId)
-                                              .toList(),
-                                          onPressed: (set, weight, oldLog) {
-                                            // if (oldLog == null) {
-                                            //   context.read<SessionBloc>().add(
-                                            //         LogSetEvent(
-                                            //           log: TLog(
-                                            //               id: null,
-                                            //               sessionId:
-                                            //                   sessionState
-                                            //                       .session.id!,
-                                            //               exerciseId:
-                                            //                   i.exercise.apiId!,
-                                            //               exerciseIndex:
-                                            //                   i.index,
-                                            //               setIndex: set.index,
-                                            //               reps: set.reps,
-                                            //               weight: weight,
-                                            //               completedAt:
-                                            //                   DateTime.now(),
-                                            //               apiId: null),
-                                            //         ),
-                                            //       );
-                                            // } else {
-                                            //   context
-                                            //       .read<SessionBloc>()
-                                            //       .add(LogSetEvent(
-                                            //         log: oldLog.copywith(
-                                            //             weight: weight),
-                                            //       ));
-                                            // }
-                                          },
-                                        ),
-                                      ))
+                                  .map(
+                                    (i) => ExpansionPanel(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 250, 250, 250),
+                                      isExpanded: expandedId == i.index,
+                                      canTapOnHeader: true,
+                                      headerBuilder: (_, __) =>
+                                          PracticeHeader(item: i),
+                                      body: PracticeBody(
+                                        sessionId: sessionState.session.id!,
+                                        exId: i.exercise.apiId!,
+                                        exIndex: i.index,
+                                        sets: i.sets,
+                                        logs: sessionState.session.logs
+                                            .where((log) =>
+                                                log.exerciseId ==
+                                                i.exercise.apiId)
+                                            .toList(),
+                                      ),
+                                    ),
+                                  )
                                   .toList(),
                             ),
                           );
