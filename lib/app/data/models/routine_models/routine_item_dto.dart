@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:uniceps/app/data/models/base_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_v2_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_set_dto.dart';
 import 'package:uniceps/app/data/sources/local/database.dart' as db;
@@ -10,7 +9,7 @@ part 'routine_item_dto.g.dart';
 
 @freezed
 @JsonSerializable(explicitToJson: true)
-class RoutineItemDto extends RoutineItem implements BaseDTO {
+class RoutineItemDto extends RoutineItem {
   final ExerciseV2Dto exerciseV2Dto;
   final List<RoutineSetDto> setsDto;
   const RoutineItemDto({
@@ -61,6 +60,5 @@ class RoutineItemDto extends RoutineItem implements BaseDTO {
         isSynced: isSynced ?? this.isSynced,
       );
 
-  @override
   Map<String, dynamic> toJson() => _$RoutineItemDtoToJson(this);
 }

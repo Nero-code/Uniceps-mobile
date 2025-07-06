@@ -143,13 +143,13 @@ Future<void> init() async {
   ///
   //
 
-  sl.registerLazySingleton<AccountLocalSourceImpl>(() => AccountLocalSourceImpl(
-        userBox: userBox,
-        // playerBox: profileBox,
-        resetBottun: clear,
-        logger: sl(),
-        firebaseMessaging: FirebaseMessaging.instance,
-      ));
+  // sl.registerLazySingleton<AccountLocalSourceImpl>(() => AccountLocalSourceImpl(
+  //       userBox: userBox,
+  //       // playerBox: profileBox,
+  //       resetBottun: clear,
+  //       logger: sl(),
+  //       firebaseMessaging: FirebaseMessaging.instance,
+  //     ));
 
   sl.registerLazySingleton<IAttendenceLocalSource>(
       () => AttendenceLocalService(attendBox: attendenceBox));

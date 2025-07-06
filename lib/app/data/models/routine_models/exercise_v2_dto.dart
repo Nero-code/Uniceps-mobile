@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:uniceps/app/data/models/base_dto.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 
-class ExerciseV2Dto extends ExerciseV2 implements BaseDTO {
+class ExerciseV2Dto extends ExerciseV2 {
   const ExerciseV2Dto({
     super.id,
     required super.apiId,
@@ -48,7 +47,6 @@ class ExerciseV2Dto extends ExerciseV2 implements BaseDTO {
           imageUrl: imageUrl ?? this.imageUrl,
           imageBitMap: imageBitMap ?? this.imageBitMap);
 
-  @override
   Map<String, dynamic> toJson() => {
         'id': id,
         'apiId': apiId,

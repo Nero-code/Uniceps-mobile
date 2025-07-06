@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:uniceps/app/data/models/base_dto.dart';
 import 'package:uniceps/app/data/sources/local/database.dart' as db;
 import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
 
@@ -7,7 +6,7 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
 part 'routine_set_dto.g.dart';
 
 @JsonSerializable()
-class RoutineSetDto extends RoutineSet implements BaseDTO {
+class RoutineSetDto extends RoutineSet {
   const RoutineSetDto({
     required super.id,
     required super.apiId,
@@ -54,6 +53,5 @@ class RoutineSetDto extends RoutineSet implements BaseDTO {
           weight: weight ?? this.weight,
           isSynced: isSynced ?? this.isSynced);
 
-  @override
   Map<String, dynamic> toJson() => _$RoutineSetDtoToJson(this);
 }

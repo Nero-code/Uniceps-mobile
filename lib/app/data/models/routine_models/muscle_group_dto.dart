@@ -1,8 +1,7 @@
-import 'package:uniceps/app/data/models/base_dto.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 
-class MuscleGroupDto extends MuscleGroup implements BaseDTO {
+class MuscleGroupDto extends MuscleGroup {
   MuscleGroupDto({
     super.id,
     required super.apiId,
@@ -23,7 +22,6 @@ class MuscleGroupDto extends MuscleGroup implements BaseDTO {
         enGroupName: group.enName,
       );
 
-  @override
   Map<String, dynamic> toJson() => {
         "id": id,
         "apiId": apiId,

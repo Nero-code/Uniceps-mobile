@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
-import 'package:uniceps/app/data/models/base_dto.dart';
 import 'package:uniceps/app/data/sources/services/client_helper.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
@@ -17,7 +16,7 @@ class NoTokenHttpClientHelper implements ClientHelper {
   Client get client => _client;
 
   @override
-  Future<T> getHandler<T extends BaseDTO>(String api, String urlPart,
+  Future<T> getHandler<T>(String api, String urlPart,
       T Function(Map<String, dynamic> json) fromJson,
       [Map<String, String>? queryParams]) async {
     final Response res;
@@ -37,7 +36,7 @@ class NoTokenHttpClientHelper implements ClientHelper {
   }
 
   @override
-  Future<List<T>> getListHandler<T extends BaseDTO>(
+  Future<List<T>> getListHandler<T>(
       String api, String urlPart, T Function(Map<String, dynamic>) fromJson,
       [Map<String, String>? queryParams]) async {
     print("getListHandler: ${api + urlPart}");
@@ -63,7 +62,7 @@ class NoTokenHttpClientHelper implements ClientHelper {
   }
 
   @override
-  Future<T?> postHandler<T extends BaseDTO>(
+  Future<T?> postHandler<T>(
     String api,
     String urlPart,
     Map<String, dynamic> body, {

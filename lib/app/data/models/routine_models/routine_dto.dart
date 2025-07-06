@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:uniceps/app/data/models/base_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_day_dto.dart';
 import 'package:uniceps/app/data/sources/local/database.dart' as db;
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
@@ -8,7 +7,7 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 part 'routine_dto.g.dart'; // Required for JSON serialization
 
 @JsonSerializable(explicitToJson: true)
-class RoutineDto extends Routine implements BaseDTO {
+class RoutineDto extends Routine {
   final List<RoutineDayDto> trainingDaysDto;
 
   const RoutineDto({
@@ -44,7 +43,6 @@ class RoutineDto extends Routine implements BaseDTO {
         isSynced: r.isSynced,
       );
 
-  @override
   Map<String, dynamic> toJson() => _$RoutineDtoToJson(this);
 }
 
