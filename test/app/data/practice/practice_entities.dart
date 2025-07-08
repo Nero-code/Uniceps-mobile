@@ -95,6 +95,7 @@ final parseRoutine = RoutineDto(
   description: "Mock Routine",
   createdAt: DateTime(2025, 5, 28),
   updatedAt: DateTime.now(),
+  isCurrent: false,
   trainingDaysDto: [
     const RoutineDayDto(
         id: 0,

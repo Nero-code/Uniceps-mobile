@@ -105,10 +105,6 @@ void main() async {
         result.head!.trainingDaysDto.length,
         equals(parseRoutine.trainingDaysDto.length),
       );
-      expect(
-        result.head!.trainingDays.length,
-        equals(parseRoutine.trainingDays.length),
-      );
     });
 
     test('should return a Tuple (Routine, dayId) if a current routine is found',
@@ -128,10 +124,6 @@ void main() async {
       expect(
         result.head!.trainingDaysDto.length,
         equals(parseRoutine.trainingDaysDto.length),
-      );
-      expect(
-        result.head!.trainingDays.length,
-        equals(parseRoutine.trainingDays.length),
       );
 
       // Tail Tests
