@@ -49,7 +49,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
       //       .addAll({itemId: setsWithIds.map((s) => s as RoutineSet).toList()});
       // }
       final allsets = lazyItemSetsBuffer[itemId] ?? [];
-      allsets.add(setWithId);
+      allsets.add(setWithId.toEntity());
       lazyItemSetsBuffer.addAll({itemId: allsets});
 
       return Right(allsets);
@@ -63,7 +63,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
   //     List<RoutineSet> allSets) async {
   //   try {
   //     final res = await _localSource
-  //         .saveAllSets(allSets.map((s) => s.asDto()).toList());
+  //         .saveAllSets(allSets.map((s) => s.toDto()).toList());
   //     return Right(res);
   //   } catch (e) {
   //     return Left(DatabaseFailure(errorMsg: e.toString()));
@@ -74,7 +74,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
   Future<Either<Failure, List<RoutineSet>>> updateSet(
       RoutineSet updated) async {
     try {
-      await _localSource.updateSet(updated.asDto());
+      await _localSource.updateSet(updated.toDto());
       lazyItemSetsBuffer[updated.routineItemId]!
         ..removeWhere((s) => s.id! == updated.id!)
         ..add(updated)
@@ -89,7 +89,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
   Future<Either<Failure, List<RoutineSet>>> removeItemSet(
       RoutineSet setToRemove) async {
     try {
-      await _localSource.removeSets([setToRemove.asDto()]);
+      await _localSource.removeSets([setToRemove.toDto()]);
       final setslist = lazyItemSetsBuffer[setToRemove.routineItemId]!;
 
       setslist
@@ -100,7 +100,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
         setslist[i] = setslist[i].copyWith(index: i);
       }
 
-      await _localSource.saveAllSets(setslist.map((s) => s.asDto()).toList());
+      await _localSource.saveAllSets(setslist.map((s) => s.toDto()).toList());
 
       lazyItemSetsBuffer.addAll({setToRemove.routineItemId: setslist});
       // lazyItemSetsBuffer[setToRemove.routineItemId]!.remove(setToRemove);

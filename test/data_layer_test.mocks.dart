@@ -11,12 +11,8 @@ import 'package:firebase_core/firebase_core.dart' as _i6;
 import 'package:firebase_messaging/firebase_messaging.dart' as _i7;
 import 'package:hive_flutter/hive_flutter.dart' as _i3;
 import 'package:http/http.dart' as _i2;
-import 'package:logger/logger.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i10;
-import 'package:uniceps/app/data/sources/local/dal_auth/account_local_source.dart'
-    as _i12;
-import 'package:uniceps/app/data/models/auth_models/user_model.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -44,36 +40,6 @@ class _FakeResponse_0 extends _i1.SmartFake implements _i2.Response {
 class _FakeStreamedResponse_1 extends _i1.SmartFake
     implements _i2.StreamedResponse {
   _FakeStreamedResponse_1(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeBox_2<E> extends _i1.SmartFake implements _i3.Box<E> {
-  _FakeBox_2(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeLogger_3 extends _i1.SmartFake implements _i4.Logger {
-  _FakeLogger_3(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeUserModel_4 extends _i1.SmartFake implements _i5.UserModel {
-  _FakeUserModel_4(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -695,111 +661,6 @@ class MockBox<E> extends _i1.Mock implements _i3.Box<E> {
   _i8.Future<void> flush() => (super.noSuchMethod(
         Invocation.method(
           #flush,
-          [],
-        ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
-}
-
-/// A class which mocks [LocalUserSourceImpl].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockLocalUserSourceImpl extends _i1.Mock
-    implements _i12.AccountLocalSourceImpl {
-  @override
-  _i3.Box<Map<dynamic, dynamic>> get userBox => (super.noSuchMethod(
-        Invocation.getter(#userBox),
-        returnValue: _FakeBox_2<Map<dynamic, dynamic>>(
-          this,
-          Invocation.getter(#userBox),
-        ),
-        returnValueForMissingStub: _FakeBox_2<Map<dynamic, dynamic>>(
-          this,
-          Invocation.getter(#userBox),
-        ),
-      ) as _i3.Box<Map<dynamic, dynamic>>);
-
-  // @override
-  // _i3.Box<Map<dynamic, dynamic>> get playerBox => (super.noSuchMethod(
-  //       Invocation.getter(#playerBox),
-  //       returnValue: _FakeBox_2<Map<dynamic, dynamic>>(
-  //         this,
-  //         Invocation.getter(#playerBox),
-  //       ),
-  //       returnValueForMissingStub: _FakeBox_2<Map<dynamic, dynamic>>(
-  //         this,
-  //         Invocation.getter(#playerBox),
-  //       ),
-  //     ) as _i3.Box<Map<dynamic, dynamic>>);
-
-  @override
-  _i8.Future<void> Function() get resetBottun => (super.noSuchMethod(
-        Invocation.getter(#resetBottun),
-        returnValue: () => _i8.Future<void>.value(),
-        returnValueForMissingStub: () => _i8.Future<void>.value(),
-      ) as _i8.Future<void> Function());
-
-  @override
-  _i4.Logger get logger => (super.noSuchMethod(
-        Invocation.getter(#logger),
-        returnValue: _FakeLogger_3(
-          this,
-          Invocation.getter(#logger),
-        ),
-        returnValueForMissingStub: _FakeLogger_3(
-          this,
-          Invocation.getter(#logger),
-        ),
-      ) as _i4.Logger);
-
-  @override
-  _i8.Future<_i5.UserModel> getUser() => (super.noSuchMethod(
-        Invocation.method(
-          #getUser,
-          [],
-        ),
-        returnValue: _i8.Future<_i5.UserModel>.value(_FakeUserModel_4(
-          this,
-          Invocation.method(
-            #getUser,
-            [],
-          ),
-        )),
-        returnValueForMissingStub:
-            _i8.Future<_i5.UserModel>.value(_FakeUserModel_4(
-          this,
-          Invocation.method(
-            #getUser,
-            [],
-          ),
-        )),
-      ) as _i8.Future<_i5.UserModel>);
-
-  @override
-  _i8.Future<void> saveUser(_i5.UserModel? model) => (super.noSuchMethod(
-        Invocation.method(
-          #saveUser,
-          [model],
-        ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
-
-  @override
-  _i8.Future<bool> isLoggedIn() => (super.noSuchMethod(
-        Invocation.method(
-          #isLoggedIn,
-          [],
-        ),
-        returnValue: _i8.Future<bool>.value(false),
-        returnValueForMissingStub: _i8.Future<bool>.value(false),
-      ) as _i8.Future<bool>);
-
-  @override
-  _i8.Future<void> localLogout() => (super.noSuchMethod(
-        Invocation.method(
-          #localLogout,
           [],
         ),
         returnValue: _i8.Future<void>.value(),

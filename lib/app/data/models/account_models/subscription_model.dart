@@ -31,6 +31,21 @@ class SubscriptionModel {
     required this.permits,
   });
 
+  factory SubscriptionModel.free() => SubscriptionModel(
+          planName: "Free",
+          planId: "",
+          price: 0,
+          startDate: DateTime.now(),
+          endDate: DateTime(2099),
+          isActive: true,
+          isGift: false,
+          permits: const [
+            PermissionModel(action: Actions.cRoutine, maxCount: 1),
+            PermissionModel(action: Actions.cDay, maxCount: 3),
+            PermissionModel(action: Actions.cItem, maxCount: 5),
+            PermissionModel(action: Actions.cSet, maxCount: 3),
+          ]);
+
   factory SubscriptionModel.fromJson(Map<String, dynamic> json) =>
       _$SubscriptionModelFromJson(json);
 

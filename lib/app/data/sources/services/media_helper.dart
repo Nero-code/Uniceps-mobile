@@ -6,8 +6,8 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 abstract class MediaHelper {
-  Future<Uint8List?> getExerciseImage(String imageUrl);
-  Future<void> saveExerciseImages(List<String> imageUrls);
+  Future<Uint8List?> getImage(String imageUrl);
+  Future<void> saveImages(List<String> imageUrls);
 }
 
 class ImageMediaHelper implements MediaHelper {
@@ -22,9 +22,9 @@ class ImageMediaHelper implements MediaHelper {
   });
 
   @override
-  Future<Uint8List?> getExerciseImage(String imageUrl) async {
+  Future<Uint8List?> getImage(String imageUrl) async {
     if (imagesCache.containsKey(imageUrl)) {
-      return imagesCache.get(Uri.https(imageUrl));
+      return imagesCache.get(imageUrl);
     }
     if (await checker.hasConnection) {
       try {
@@ -42,7 +42,7 @@ class ImageMediaHelper implements MediaHelper {
   }
 
   @override
-  Future<void> saveExerciseImages(List<String> imageUrls) async {
+  Future<void> saveImages(List<String> imageUrls) async {
     if (await checker.hasConnection) {
       for (var imageUrl in imageUrls) {
         final res = await client.get(Uri.parse(imageUrl));

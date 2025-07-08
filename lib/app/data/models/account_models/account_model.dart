@@ -15,6 +15,12 @@ class AccountModel {
     required this.type,
   });
 
+  factory AccountModel.guest() => AccountModel(
+        email: "john.doe@example.com",
+        createdAt: DateTime.now(),
+        type: AccountType.guest,
+      );
+
   factory AccountModel.fromJson(Map<String, dynamic> json) =>
       _$AccountModelFromJson(json);
 

@@ -22,20 +22,10 @@ class AccountRepo implements IAccountService {
 
   @override
   Future<Either<Failure, Account>> getUserAccount() async {
-    if (await _checker.hasConnection) {
-      try {
-        final userAccount = await _remoteSource.getUserAccount();
-        await _localSource.saveUserAccount(userAccount);
-        return Right(userAccount.toEntity());
-      } catch (e) {
-        return Left(ServerFailure(errMsg: e.toString()));
-      }
-    } else {
-      try {
-        return Right((await _localSource.getUserAccount()).toEntity());
-      } catch (e) {
-        return Left(DatabaseFailure(errorMsg: e.toString()));
-      }
+    try {
+      return Right((await _localSource.getUserAccount()).toEntity());
+    } catch (e) {
+      return Left(DatabaseFailure(errorMsg: e.toString()));
     }
   }
 

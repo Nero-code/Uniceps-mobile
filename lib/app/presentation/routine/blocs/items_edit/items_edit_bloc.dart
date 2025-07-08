@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_items_commands.dart';
 import 'package:uniceps/core/errors/failure.dart';
@@ -33,7 +34,7 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
       emit(ItemsEditLoadingState());
 
       print("eventitems l: ${event.items.length}");
-      final either = await _commands.addItems(event.items);
+      final either = await _commands.addItems(event.dayId, event.items);
       either.fold(
         (l) => emit(ItemsEditErrorState(failure: l)),
         (r) => emit(ItemsEditLoadedState(items: r)),

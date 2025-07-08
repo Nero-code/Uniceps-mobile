@@ -136,7 +136,7 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
           RoutineItemsCompanion.insert(
               index: i.index, exerciseId: ex.id, dayId: i.dayId));
 
-      result.add(i.copyDtoWith(
+      result.add(i.copyWith(
         id: itemId,
         exerciseV2Dto: i.exerciseV2Dto
             .copywith(id: ex.id, apiId: ex.apiId, imageBitMap: img),

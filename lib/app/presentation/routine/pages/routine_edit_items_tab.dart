@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/data/models/routine_models/extensions.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/exercises_v2_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/muscle_group_bloc.dart';
@@ -124,11 +123,8 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab>
                           }
                           if (context.mounted) {
                             BlocProvider.of<ItemsEditBloc>(context).add(
-                              AddRoutineItemsEvent(
-                                  items: res
-                                      .map((e) => e.toItem(widget.dayId))
-                                      .toList()),
-                            );
+                                AddRoutineItemsEvent(
+                                    dayId: widget.dayId, items: res));
                           }
                         },
                       ),

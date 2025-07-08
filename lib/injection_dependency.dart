@@ -1,13 +1,11 @@
 import 'dart:typed_data';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart' as di;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uniceps/app/data/sources/local/dal_auth/account_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_gyms/attendence_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_gyms/gyms_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_gyms/my_gyms_local_source.dart';
@@ -378,19 +376,6 @@ Future<void> init() async {
   sl.registerLazySingleton<GuestModeUsecase>(
     () => GuestModeUsecase(authRepo: sl()),
   );
-
-  //////////////////////////////////////////////////////////////////////////////
-  ///
-  ///   B L O C S
-  ///
-  //////////////////////////////////////////////////////////////////////////////
-
-  // sl.registerFactory<AuthBloc>(() => AuthBloc(usecases: sl()));
-  // sl.registerFactory<GymsBloc>(() => GymsBloc(usecases: sl()));
-  // sl.registerFactory<SubsBloc>(() => SubsBloc(usecases: sl()));
-  // sl.registerFactory<ProfileBloc>(() => ProfileBloc(usecases: sl()));
-  // sl.registerFactory<TrainingBloc>(() => TrainingBloc(usecases: sl()));
-  // sl.registerFactory<MeasurmentBloc>(() => MeasurmentBloc(usecases: sl()));
 
   //////////////////////////////////////////////////////////////////////////////
   ///

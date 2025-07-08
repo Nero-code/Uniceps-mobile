@@ -1,28 +1,57 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart'
+    as rd;
 
 // part 'routine_day_dto.freezed.dart';
 part 'routine_day_dto.g.dart';
 
 @freezed
 @JsonSerializable(explicitToJson: true)
-class RoutineDayDto extends RoutineDay {
+class RoutineDayDto {
+  final int? id, apiId;
+  final int index, routineId, version;
+  final String name;
+  final bool isSynced;
   final List<RoutineItemDto> items;
+
   const RoutineDayDto({
-    required super.id,
-    required super.apiId,
-    required super.routineId,
-    required super.version,
-    required super.name,
-    required super.index,
+    required this.id,
+    required this.apiId,
+    required this.routineId,
+    required this.version,
+    required this.name,
+    required this.index,
     required this.items,
-    required super.isSynced,
-  }) : super(exercises: items);
+    required this.isSynced,
+  });
+
+  factory RoutineDayDto.fromEntity(rd.RoutineDay e) => RoutineDayDto(
+      id: e.id,
+      apiId: e.apiId,
+      routineId: e.routineId,
+      version: e.version,
+      name: e.name,
+      index: e.index,
+      items: e.exercises.map(RoutineItemDto.fromEntity).toList(),
+      isSynced: e.isSynced);
+
+  rd.RoutineDay toEntity() => rd.RoutineDay(
+        id: id,
+        apiId: apiId,
+        routineId: routineId,
+        name: name,
+        index: index,
+        exercises: items.map((i) => i.toEntity()).toList(),
+        version: version,
+        isSynced: isSynced,
+      );
 
   factory RoutineDayDto.fromJson(Map<String, dynamic> json) =>
       _$RoutineDayDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RoutineDayDtoToJson(this);
 
   factory RoutineDayDto.fromTable(DaysGroupData day,
           [List<RoutineItemDto> items = const []]) =>
@@ -36,7 +65,7 @@ class RoutineDayDto extends RoutineDay {
           items: items,
           isSynced: day.isSynced);
 
-  RoutineDayDto copyDtoWith({
+  RoutineDayDto copyWith({
     int? id,
     int? apiId,
     int? index,
@@ -55,6 +84,4 @@ class RoutineDayDto extends RoutineDay {
           index: index ?? this.index,
           items: items ?? this.items,
           isSynced: isSynced ?? this.isSynced);
-
-  Map<String, dynamic> toJson() => _$RoutineDayDtoToJson(this);
 }

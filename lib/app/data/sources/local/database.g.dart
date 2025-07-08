@@ -243,16 +243,16 @@ class $SubscriptionsTable extends Subscriptions
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $SubscriptionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _planNameMeta =
       const VerificationMeta('planName');
   @override
   late final GeneratedColumn<String> planName = GeneratedColumn<String>(
       'plan_name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _planIdMeta = const VerificationMeta('planId');
-  @override
-  late final GeneratedColumn<String> planId = GeneratedColumn<String>(
-      'plan_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _priceMeta = const VerificationMeta('price');
   @override
@@ -290,7 +290,7 @@ class $SubscriptionsTable extends Subscriptions
           GeneratedColumn.constraintIsAlways('CHECK ("is_gift" IN (0, 1))'));
   @override
   List<GeneratedColumn> get $columns =>
-      [planName, planId, price, startDate, endDate, isActive, isGift];
+      [id, planName, price, startDate, endDate, isActive, isGift];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -301,17 +301,16 @@ class $SubscriptionsTable extends Subscriptions
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
     if (data.containsKey('plan_name')) {
       context.handle(_planNameMeta,
           planName.isAcceptableOrUnknown(data['plan_name']!, _planNameMeta));
     } else if (isInserting) {
       context.missing(_planNameMeta);
-    }
-    if (data.containsKey('plan_id')) {
-      context.handle(_planIdMeta,
-          planId.isAcceptableOrUnknown(data['plan_id']!, _planIdMeta));
-    } else if (isInserting) {
-      context.missing(_planIdMeta);
     }
     if (data.containsKey('price')) {
       context.handle(
@@ -352,10 +351,10 @@ class $SubscriptionsTable extends Subscriptions
   Subscription map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Subscription(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       planName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}plan_name'])!,
-      planId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}plan_id'])!,
       price: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}price'])!,
       startDate: attachedDatabase.typeMapping
@@ -376,16 +375,16 @@ class $SubscriptionsTable extends Subscriptions
 }
 
 class Subscription extends DataClass implements Insertable<Subscription> {
+  final String id;
   final String planName;
-  final String planId;
   final double price;
   final DateTime startDate;
   final DateTime endDate;
   final bool isActive;
   final bool isGift;
   const Subscription(
-      {required this.planName,
-      required this.planId,
+      {required this.id,
+      required this.planName,
       required this.price,
       required this.startDate,
       required this.endDate,
@@ -394,8 +393,8 @@ class Subscription extends DataClass implements Insertable<Subscription> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
     map['plan_name'] = Variable<String>(planName);
-    map['plan_id'] = Variable<String>(planId);
     map['price'] = Variable<double>(price);
     map['start_date'] = Variable<DateTime>(startDate);
     map['end_date'] = Variable<DateTime>(endDate);
@@ -406,8 +405,8 @@ class Subscription extends DataClass implements Insertable<Subscription> {
 
   SubscriptionsCompanion toCompanion(bool nullToAbsent) {
     return SubscriptionsCompanion(
+      id: Value(id),
       planName: Value(planName),
-      planId: Value(planId),
       price: Value(price),
       startDate: Value(startDate),
       endDate: Value(endDate),
@@ -420,8 +419,8 @@ class Subscription extends DataClass implements Insertable<Subscription> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Subscription(
+      id: serializer.fromJson<String>(json['id']),
       planName: serializer.fromJson<String>(json['planName']),
-      planId: serializer.fromJson<String>(json['planId']),
       price: serializer.fromJson<double>(json['price']),
       startDate: serializer.fromJson<DateTime>(json['startDate']),
       endDate: serializer.fromJson<DateTime>(json['endDate']),
@@ -433,8 +432,8 @@ class Subscription extends DataClass implements Insertable<Subscription> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
       'planName': serializer.toJson<String>(planName),
-      'planId': serializer.toJson<String>(planId),
       'price': serializer.toJson<double>(price),
       'startDate': serializer.toJson<DateTime>(startDate),
       'endDate': serializer.toJson<DateTime>(endDate),
@@ -444,16 +443,16 @@ class Subscription extends DataClass implements Insertable<Subscription> {
   }
 
   Subscription copyWith(
-          {String? planName,
-          String? planId,
+          {String? id,
+          String? planName,
           double? price,
           DateTime? startDate,
           DateTime? endDate,
           bool? isActive,
           bool? isGift}) =>
       Subscription(
+        id: id ?? this.id,
         planName: planName ?? this.planName,
-        planId: planId ?? this.planId,
         price: price ?? this.price,
         startDate: startDate ?? this.startDate,
         endDate: endDate ?? this.endDate,
@@ -462,8 +461,8 @@ class Subscription extends DataClass implements Insertable<Subscription> {
       );
   Subscription copyWithCompanion(SubscriptionsCompanion data) {
     return Subscription(
+      id: data.id.present ? data.id.value : this.id,
       planName: data.planName.present ? data.planName.value : this.planName,
-      planId: data.planId.present ? data.planId.value : this.planId,
       price: data.price.present ? data.price.value : this.price,
       startDate: data.startDate.present ? data.startDate.value : this.startDate,
       endDate: data.endDate.present ? data.endDate.value : this.endDate,
@@ -475,8 +474,8 @@ class Subscription extends DataClass implements Insertable<Subscription> {
   @override
   String toString() {
     return (StringBuffer('Subscription(')
+          ..write('id: $id, ')
           ..write('planName: $planName, ')
-          ..write('planId: $planId, ')
           ..write('price: $price, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
@@ -487,14 +486,14 @@ class Subscription extends DataClass implements Insertable<Subscription> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      planName, planId, price, startDate, endDate, isActive, isGift);
+  int get hashCode =>
+      Object.hash(id, planName, price, startDate, endDate, isActive, isGift);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Subscription &&
+          other.id == this.id &&
           other.planName == this.planName &&
-          other.planId == this.planId &&
           other.price == this.price &&
           other.startDate == this.startDate &&
           other.endDate == this.endDate &&
@@ -503,8 +502,8 @@ class Subscription extends DataClass implements Insertable<Subscription> {
 }
 
 class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
+  final Value<String> id;
   final Value<String> planName;
-  final Value<String> planId;
   final Value<double> price;
   final Value<DateTime> startDate;
   final Value<DateTime> endDate;
@@ -512,8 +511,8 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
   final Value<bool> isGift;
   final Value<int> rowid;
   const SubscriptionsCompanion({
+    this.id = const Value.absent(),
     this.planName = const Value.absent(),
-    this.planId = const Value.absent(),
     this.price = const Value.absent(),
     this.startDate = const Value.absent(),
     this.endDate = const Value.absent(),
@@ -522,24 +521,24 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
     this.rowid = const Value.absent(),
   });
   SubscriptionsCompanion.insert({
+    required String id,
     required String planName,
-    required String planId,
     required double price,
     required DateTime startDate,
     required DateTime endDate,
     required bool isActive,
     required bool isGift,
     this.rowid = const Value.absent(),
-  })  : planName = Value(planName),
-        planId = Value(planId),
+  })  : id = Value(id),
+        planName = Value(planName),
         price = Value(price),
         startDate = Value(startDate),
         endDate = Value(endDate),
         isActive = Value(isActive),
         isGift = Value(isGift);
   static Insertable<Subscription> custom({
+    Expression<String>? id,
     Expression<String>? planName,
-    Expression<String>? planId,
     Expression<double>? price,
     Expression<DateTime>? startDate,
     Expression<DateTime>? endDate,
@@ -548,8 +547,8 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
+      if (id != null) 'id': id,
       if (planName != null) 'plan_name': planName,
-      if (planId != null) 'plan_id': planId,
       if (price != null) 'price': price,
       if (startDate != null) 'start_date': startDate,
       if (endDate != null) 'end_date': endDate,
@@ -560,8 +559,8 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
   }
 
   SubscriptionsCompanion copyWith(
-      {Value<String>? planName,
-      Value<String>? planId,
+      {Value<String>? id,
+      Value<String>? planName,
       Value<double>? price,
       Value<DateTime>? startDate,
       Value<DateTime>? endDate,
@@ -569,8 +568,8 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
       Value<bool>? isGift,
       Value<int>? rowid}) {
     return SubscriptionsCompanion(
+      id: id ?? this.id,
       planName: planName ?? this.planName,
-      planId: planId ?? this.planId,
       price: price ?? this.price,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
@@ -583,11 +582,11 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
     if (planName.present) {
       map['plan_name'] = Variable<String>(planName.value);
-    }
-    if (planId.present) {
-      map['plan_id'] = Variable<String>(planId.value);
     }
     if (price.present) {
       map['price'] = Variable<double>(price.value);
@@ -613,13 +612,248 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
   @override
   String toString() {
     return (StringBuffer('SubscriptionsCompanion(')
+          ..write('id: $id, ')
           ..write('planName: $planName, ')
-          ..write('planId: $planId, ')
           ..write('price: $price, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
           ..write('isActive: $isActive, ')
           ..write('isGift: $isGift, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PermissionsTable extends Permissions
+    with TableInfo<$PermissionsTable, Permission> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PermissionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _actionMeta = const VerificationMeta('action');
+  @override
+  late final GeneratedColumn<String> action = GeneratedColumn<String>(
+      'action', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _maxCountMeta =
+      const VerificationMeta('maxCount');
+  @override
+  late final GeneratedColumn<int> maxCount = GeneratedColumn<int>(
+      'max_count', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _planIdMeta = const VerificationMeta('planId');
+  @override
+  late final GeneratedColumn<String> planId = GeneratedColumn<String>(
+      'plan_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES subscriptions (id) ON UPDATE CASCADE ON DELETE CASCADE'));
+  @override
+  List<GeneratedColumn> get $columns => [action, maxCount, planId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'permissions';
+  @override
+  VerificationContext validateIntegrity(Insertable<Permission> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('action')) {
+      context.handle(_actionMeta,
+          action.isAcceptableOrUnknown(data['action']!, _actionMeta));
+    } else if (isInserting) {
+      context.missing(_actionMeta);
+    }
+    if (data.containsKey('max_count')) {
+      context.handle(_maxCountMeta,
+          maxCount.isAcceptableOrUnknown(data['max_count']!, _maxCountMeta));
+    }
+    if (data.containsKey('plan_id')) {
+      context.handle(_planIdMeta,
+          planId.isAcceptableOrUnknown(data['plan_id']!, _planIdMeta));
+    } else if (isInserting) {
+      context.missing(_planIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  Permission map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Permission(
+      action: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}action'])!,
+      maxCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}max_count']),
+      planId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}plan_id'])!,
+    );
+  }
+
+  @override
+  $PermissionsTable createAlias(String alias) {
+    return $PermissionsTable(attachedDatabase, alias);
+  }
+}
+
+class Permission extends DataClass implements Insertable<Permission> {
+  final String action;
+  final int? maxCount;
+  final String planId;
+  const Permission({required this.action, this.maxCount, required this.planId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['action'] = Variable<String>(action);
+    if (!nullToAbsent || maxCount != null) {
+      map['max_count'] = Variable<int>(maxCount);
+    }
+    map['plan_id'] = Variable<String>(planId);
+    return map;
+  }
+
+  PermissionsCompanion toCompanion(bool nullToAbsent) {
+    return PermissionsCompanion(
+      action: Value(action),
+      maxCount: maxCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(maxCount),
+      planId: Value(planId),
+    );
+  }
+
+  factory Permission.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Permission(
+      action: serializer.fromJson<String>(json['action']),
+      maxCount: serializer.fromJson<int?>(json['maxCount']),
+      planId: serializer.fromJson<String>(json['planId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'action': serializer.toJson<String>(action),
+      'maxCount': serializer.toJson<int?>(maxCount),
+      'planId': serializer.toJson<String>(planId),
+    };
+  }
+
+  Permission copyWith(
+          {String? action,
+          Value<int?> maxCount = const Value.absent(),
+          String? planId}) =>
+      Permission(
+        action: action ?? this.action,
+        maxCount: maxCount.present ? maxCount.value : this.maxCount,
+        planId: planId ?? this.planId,
+      );
+  Permission copyWithCompanion(PermissionsCompanion data) {
+    return Permission(
+      action: data.action.present ? data.action.value : this.action,
+      maxCount: data.maxCount.present ? data.maxCount.value : this.maxCount,
+      planId: data.planId.present ? data.planId.value : this.planId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Permission(')
+          ..write('action: $action, ')
+          ..write('maxCount: $maxCount, ')
+          ..write('planId: $planId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(action, maxCount, planId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Permission &&
+          other.action == this.action &&
+          other.maxCount == this.maxCount &&
+          other.planId == this.planId);
+}
+
+class PermissionsCompanion extends UpdateCompanion<Permission> {
+  final Value<String> action;
+  final Value<int?> maxCount;
+  final Value<String> planId;
+  final Value<int> rowid;
+  const PermissionsCompanion({
+    this.action = const Value.absent(),
+    this.maxCount = const Value.absent(),
+    this.planId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  PermissionsCompanion.insert({
+    required String action,
+    this.maxCount = const Value.absent(),
+    required String planId,
+    this.rowid = const Value.absent(),
+  })  : action = Value(action),
+        planId = Value(planId);
+  static Insertable<Permission> custom({
+    Expression<String>? action,
+    Expression<int>? maxCount,
+    Expression<String>? planId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (action != null) 'action': action,
+      if (maxCount != null) 'max_count': maxCount,
+      if (planId != null) 'plan_id': planId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  PermissionsCompanion copyWith(
+      {Value<String>? action,
+      Value<int?>? maxCount,
+      Value<String>? planId,
+      Value<int>? rowid}) {
+    return PermissionsCompanion(
+      action: action ?? this.action,
+      maxCount: maxCount ?? this.maxCount,
+      planId: planId ?? this.planId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (action.present) {
+      map['action'] = Variable<String>(action.value);
+    }
+    if (maxCount.present) {
+      map['max_count'] = Variable<int>(maxCount.value);
+    }
+    if (planId.present) {
+      map['plan_id'] = Variable<String>(planId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PermissionsCompanion(')
+          ..write('action: $action, ')
+          ..write('maxCount: $maxCount, ')
+          ..write('planId: $planId, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3754,6 +3988,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $AccountsTable accounts = $AccountsTable(this);
   late final $SubscriptionsTable subscriptions = $SubscriptionsTable(this);
+  late final $PermissionsTable permissions = $PermissionsTable(this);
   late final $RoutinesTable routines = $RoutinesTable(this);
   late final $DaysGroupTable daysGroup = $DaysGroupTable(this);
   late final $ExerciseGroupsTable exerciseGroups = $ExerciseGroupsTable(this);
@@ -3769,6 +4004,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
         accounts,
         subscriptions,
+        permissions,
         routines,
         daysGroup,
         exerciseGroups,
@@ -3781,6 +4017,20 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
         [
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('subscriptions',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('permissions', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('subscriptions',
+                limitUpdateKind: UpdateKind.update),
+            result: [
+              TableUpdate('permissions', kind: UpdateKind.update),
+            ],
+          ),
           WritePropagation(
             on: TableUpdateQuery.onTableName('routines',
                 limitUpdateKind: UpdateKind.delete),
@@ -3995,8 +4245,8 @@ typedef $$AccountsTableProcessedTableManager = ProcessedTableManager<
     PrefetchHooks Function()>;
 typedef $$SubscriptionsTableCreateCompanionBuilder = SubscriptionsCompanion
     Function({
+  required String id,
   required String planName,
-  required String planId,
   required double price,
   required DateTime startDate,
   required DateTime endDate,
@@ -4006,8 +4256,8 @@ typedef $$SubscriptionsTableCreateCompanionBuilder = SubscriptionsCompanion
 });
 typedef $$SubscriptionsTableUpdateCompanionBuilder = SubscriptionsCompanion
     Function({
+  Value<String> id,
   Value<String> planName,
-  Value<String> planId,
   Value<double> price,
   Value<DateTime> startDate,
   Value<DateTime> endDate,
@@ -4015,6 +4265,27 @@ typedef $$SubscriptionsTableUpdateCompanionBuilder = SubscriptionsCompanion
   Value<bool> isGift,
   Value<int> rowid,
 });
+
+final class $$SubscriptionsTableReferences
+    extends BaseReferences<_$AppDatabase, $SubscriptionsTable, Subscription> {
+  $$SubscriptionsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$PermissionsTable, List<Permission>>
+      _permissionsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+          db.permissions,
+          aliasName:
+              $_aliasNameGenerator(db.subscriptions.id, db.permissions.planId));
+
+  $$PermissionsTableProcessedTableManager get permissionsRefs {
+    final manager = $$PermissionsTableTableManager($_db, $_db.permissions)
+        .filter((f) => f.planId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_permissionsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
 
 class $$SubscriptionsTableFilterComposer
     extends Composer<_$AppDatabase, $SubscriptionsTable> {
@@ -4025,11 +4296,11 @@ class $$SubscriptionsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
   ColumnFilters<String> get planName => $composableBuilder(
       column: $table.planName, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get planId => $composableBuilder(
-      column: $table.planId, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<double> get price => $composableBuilder(
       column: $table.price, builder: (column) => ColumnFilters(column));
@@ -4045,6 +4316,27 @@ class $$SubscriptionsTableFilterComposer
 
   ColumnFilters<bool> get isGift => $composableBuilder(
       column: $table.isGift, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> permissionsRefs(
+      Expression<bool> Function($$PermissionsTableFilterComposer f) f) {
+    final $$PermissionsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.permissions,
+        getReferencedColumn: (t) => t.planId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PermissionsTableFilterComposer(
+              $db: $db,
+              $table: $db.permissions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$SubscriptionsTableOrderingComposer
@@ -4056,11 +4348,11 @@ class $$SubscriptionsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get planName => $composableBuilder(
       column: $table.planName, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get planId => $composableBuilder(
-      column: $table.planId, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<double> get price => $composableBuilder(
       column: $table.price, builder: (column) => ColumnOrderings(column));
@@ -4087,11 +4379,11 @@ class $$SubscriptionsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
   GeneratedColumn<String> get planName =>
       $composableBuilder(column: $table.planName, builder: (column) => column);
-
-  GeneratedColumn<String> get planId =>
-      $composableBuilder(column: $table.planId, builder: (column) => column);
 
   GeneratedColumn<double> get price =>
       $composableBuilder(column: $table.price, builder: (column) => column);
@@ -4107,6 +4399,27 @@ class $$SubscriptionsTableAnnotationComposer
 
   GeneratedColumn<bool> get isGift =>
       $composableBuilder(column: $table.isGift, builder: (column) => column);
+
+  Expression<T> permissionsRefs<T extends Object>(
+      Expression<T> Function($$PermissionsTableAnnotationComposer a) f) {
+    final $$PermissionsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.permissions,
+        getReferencedColumn: (t) => t.planId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PermissionsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.permissions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$SubscriptionsTableTableManager extends RootTableManager<
@@ -4118,12 +4431,9 @@ class $$SubscriptionsTableTableManager extends RootTableManager<
     $$SubscriptionsTableAnnotationComposer,
     $$SubscriptionsTableCreateCompanionBuilder,
     $$SubscriptionsTableUpdateCompanionBuilder,
-    (
-      Subscription,
-      BaseReferences<_$AppDatabase, $SubscriptionsTable, Subscription>
-    ),
+    (Subscription, $$SubscriptionsTableReferences),
     Subscription,
-    PrefetchHooks Function()> {
+    PrefetchHooks Function({bool permissionsRefs})> {
   $$SubscriptionsTableTableManager(_$AppDatabase db, $SubscriptionsTable table)
       : super(TableManagerState(
           db: db,
@@ -4135,8 +4445,8 @@ class $$SubscriptionsTableTableManager extends RootTableManager<
           createComputedFieldComposer: () =>
               $$SubscriptionsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
             Value<String> planName = const Value.absent(),
-            Value<String> planId = const Value.absent(),
             Value<double> price = const Value.absent(),
             Value<DateTime> startDate = const Value.absent(),
             Value<DateTime> endDate = const Value.absent(),
@@ -4145,8 +4455,8 @@ class $$SubscriptionsTableTableManager extends RootTableManager<
             Value<int> rowid = const Value.absent(),
           }) =>
               SubscriptionsCompanion(
+            id: id,
             planName: planName,
-            planId: planId,
             price: price,
             startDate: startDate,
             endDate: endDate,
@@ -4155,8 +4465,8 @@ class $$SubscriptionsTableTableManager extends RootTableManager<
             rowid: rowid,
           ),
           createCompanionCallback: ({
+            required String id,
             required String planName,
-            required String planId,
             required double price,
             required DateTime startDate,
             required DateTime endDate,
@@ -4165,8 +4475,8 @@ class $$SubscriptionsTableTableManager extends RootTableManager<
             Value<int> rowid = const Value.absent(),
           }) =>
               SubscriptionsCompanion.insert(
+            id: id,
             planName: planName,
-            planId: planId,
             price: price,
             startDate: startDate,
             endDate: endDate,
@@ -4175,9 +4485,34 @@ class $$SubscriptionsTableTableManager extends RootTableManager<
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map((e) => (
+                    e.readTable(table),
+                    $$SubscriptionsTableReferences(db, table, e)
+                  ))
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({permissionsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (permissionsRefs) db.permissions],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (permissionsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$SubscriptionsTableReferences
+                            ._permissionsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$SubscriptionsTableReferences(db, table, p0)
+                                .permissionsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.planId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
@@ -4190,12 +4525,252 @@ typedef $$SubscriptionsTableProcessedTableManager = ProcessedTableManager<
     $$SubscriptionsTableAnnotationComposer,
     $$SubscriptionsTableCreateCompanionBuilder,
     $$SubscriptionsTableUpdateCompanionBuilder,
-    (
-      Subscription,
-      BaseReferences<_$AppDatabase, $SubscriptionsTable, Subscription>
-    ),
+    (Subscription, $$SubscriptionsTableReferences),
     Subscription,
-    PrefetchHooks Function()>;
+    PrefetchHooks Function({bool permissionsRefs})>;
+typedef $$PermissionsTableCreateCompanionBuilder = PermissionsCompanion
+    Function({
+  required String action,
+  Value<int?> maxCount,
+  required String planId,
+  Value<int> rowid,
+});
+typedef $$PermissionsTableUpdateCompanionBuilder = PermissionsCompanion
+    Function({
+  Value<String> action,
+  Value<int?> maxCount,
+  Value<String> planId,
+  Value<int> rowid,
+});
+
+final class $$PermissionsTableReferences
+    extends BaseReferences<_$AppDatabase, $PermissionsTable, Permission> {
+  $$PermissionsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $SubscriptionsTable _planIdTable(_$AppDatabase db) =>
+      db.subscriptions.createAlias(
+          $_aliasNameGenerator(db.permissions.planId, db.subscriptions.id));
+
+  $$SubscriptionsTableProcessedTableManager get planId {
+    final manager = $$SubscriptionsTableTableManager($_db, $_db.subscriptions)
+        .filter((f) => f.id($_item.planId));
+    final item = $_typedResult.readTableOrNull(_planIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$PermissionsTableFilterComposer
+    extends Composer<_$AppDatabase, $PermissionsTable> {
+  $$PermissionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get action => $composableBuilder(
+      column: $table.action, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get maxCount => $composableBuilder(
+      column: $table.maxCount, builder: (column) => ColumnFilters(column));
+
+  $$SubscriptionsTableFilterComposer get planId {
+    final $$SubscriptionsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.planId,
+        referencedTable: $db.subscriptions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SubscriptionsTableFilterComposer(
+              $db: $db,
+              $table: $db.subscriptions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$PermissionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $PermissionsTable> {
+  $$PermissionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get action => $composableBuilder(
+      column: $table.action, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get maxCount => $composableBuilder(
+      column: $table.maxCount, builder: (column) => ColumnOrderings(column));
+
+  $$SubscriptionsTableOrderingComposer get planId {
+    final $$SubscriptionsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.planId,
+        referencedTable: $db.subscriptions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SubscriptionsTableOrderingComposer(
+              $db: $db,
+              $table: $db.subscriptions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$PermissionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PermissionsTable> {
+  $$PermissionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get action =>
+      $composableBuilder(column: $table.action, builder: (column) => column);
+
+  GeneratedColumn<int> get maxCount =>
+      $composableBuilder(column: $table.maxCount, builder: (column) => column);
+
+  $$SubscriptionsTableAnnotationComposer get planId {
+    final $$SubscriptionsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.planId,
+        referencedTable: $db.subscriptions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SubscriptionsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.subscriptions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$PermissionsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $PermissionsTable,
+    Permission,
+    $$PermissionsTableFilterComposer,
+    $$PermissionsTableOrderingComposer,
+    $$PermissionsTableAnnotationComposer,
+    $$PermissionsTableCreateCompanionBuilder,
+    $$PermissionsTableUpdateCompanionBuilder,
+    (Permission, $$PermissionsTableReferences),
+    Permission,
+    PrefetchHooks Function({bool planId})> {
+  $$PermissionsTableTableManager(_$AppDatabase db, $PermissionsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PermissionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PermissionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PermissionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> action = const Value.absent(),
+            Value<int?> maxCount = const Value.absent(),
+            Value<String> planId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              PermissionsCompanion(
+            action: action,
+            maxCount: maxCount,
+            planId: planId,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String action,
+            Value<int?> maxCount = const Value.absent(),
+            required String planId,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              PermissionsCompanion.insert(
+            action: action,
+            maxCount: maxCount,
+            planId: planId,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$PermissionsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({planId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (planId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.planId,
+                    referencedTable:
+                        $$PermissionsTableReferences._planIdTable(db),
+                    referencedColumn:
+                        $$PermissionsTableReferences._planIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$PermissionsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $PermissionsTable,
+    Permission,
+    $$PermissionsTableFilterComposer,
+    $$PermissionsTableOrderingComposer,
+    $$PermissionsTableAnnotationComposer,
+    $$PermissionsTableCreateCompanionBuilder,
+    $$PermissionsTableUpdateCompanionBuilder,
+    (Permission, $$PermissionsTableReferences),
+    Permission,
+    PrefetchHooks Function({bool planId})>;
 typedef $$RoutinesTableCreateCompanionBuilder = RoutinesCompanion Function({
   Value<int> id,
   Value<int?> apiId,
@@ -6827,6 +7402,8 @@ class $AppDatabaseManager {
       $$AccountsTableTableManager(_db, _db.accounts);
   $$SubscriptionsTableTableManager get subscriptions =>
       $$SubscriptionsTableTableManager(_db, _db.subscriptions);
+  $$PermissionsTableTableManager get permissions =>
+      $$PermissionsTableTableManager(_db, _db.permissions);
   $$RoutinesTableTableManager get routines =>
       $$RoutinesTableTableManager(_db, _db.routines);
   $$DaysGroupTableTableManager get daysGroup =>
