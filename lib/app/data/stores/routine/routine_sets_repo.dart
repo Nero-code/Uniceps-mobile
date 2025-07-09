@@ -18,7 +18,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
     try {
       final res = await _localSource.getItemSets(itemId);
       lazyItemSetsBuffer
-          .addAll({itemId: res.map((s) => s as RoutineSet).toList()});
+          .addAll({itemId: res.map((s) => s.toEntity()).toList()});
       return Right(lazyItemSetsBuffer[itemId]!);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
@@ -54,6 +54,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
 
       return Right(allsets);
     } catch (e) {
+      print("Error: $e");
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
   }

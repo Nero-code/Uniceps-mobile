@@ -1,3 +1,4 @@
+// import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uniceps/app/data/sources/local/database.dart' as db;
 import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart'

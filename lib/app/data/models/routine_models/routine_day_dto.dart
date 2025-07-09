@@ -1,4 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+// import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart'
@@ -7,7 +8,7 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart'
 // part 'routine_day_dto.freezed.dart';
 part 'routine_day_dto.g.dart';
 
-@freezed
+// @freezed
 @JsonSerializable(explicitToJson: true)
 class RoutineDayDto {
   final int? id, apiId;

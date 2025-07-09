@@ -1,7 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
 
-@freezed
 class Routine {
   final int? id, apiId;
   final int version;

@@ -1,3 +1,4 @@
+// import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_v2_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_set_dto.dart';
@@ -8,7 +9,7 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart'
 // part 'routine_item_dto.freezed.dart';
 part 'routine_item_dto.g.dart';
 
-@freezed
+// @freezed
 @JsonSerializable(explicitToJson: true)
 class RoutineItemDto {
   final int? id, apiId;

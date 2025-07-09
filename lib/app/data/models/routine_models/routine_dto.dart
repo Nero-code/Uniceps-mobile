@@ -1,4 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+// import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_day_dto.dart';
 import 'package:uniceps/app/data/sources/local/database.dart' as db;
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart' as r;

@@ -1,3 +1,4 @@
+// import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uniceps/app/data/models/account_models/permission_model.dart';
 import 'package:uniceps/app/domain/classes/account_entities/permission.dart';

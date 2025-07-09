@@ -85,6 +85,8 @@ class _RoutineItemHorizontalWidgetState
                                       Icons.question_mark_outlined,
                                       color: Colors.grey,
                                     );
+                            } else if (state is SetsEditErrorState) {
+                              return Text(state.failure.getErrorMessage());
                             }
                             return const SizedBox(
                               width: 20,
