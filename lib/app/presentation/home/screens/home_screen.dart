@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:uniceps/app/presentation/auth/screens/email_auth_screen.dart';
 import 'package:uniceps/app/presentation/home/widgets/home_card.dart';
 import 'package:uniceps/app/presentation/home/widgets/routine_day_item.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
@@ -138,10 +139,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       listener: (context, state) async {
                         final sessionBloc = context.read<SessionBloc>();
                         final stopwatchCubit = context.read<StopwatchCubit>();
-                        final currentRoutineCubit =
-                            context.read<CurrentRoutineCubit>();
 
-                        await Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => MultiBlocProvider(
                                   providers: [
                                     BlocProvider.value(value: sessionBloc),
@@ -151,7 +150,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                   child: const PracticeScreen(),
                                 )));
-                        currentRoutineCubit.getCurrentRoutine();
                       },
                       //
                       listenWhen: (previous, current) =>
@@ -205,8 +203,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             icon: Icons.account_circle,
                             iconsColor: Colors.deepOrange,
                             title: locale.profile,
-                            subtitle: "",
-                            onPressed: () async {},
+                            subtitle: "asd",
+                            onPressed: () async => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EmailAuthScreen(),
+                                )),
                           ),
                           SettingsTile(
                             icon: Icons.fitness_center_rounded,

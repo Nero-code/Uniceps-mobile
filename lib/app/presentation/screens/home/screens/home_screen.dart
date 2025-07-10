@@ -32,8 +32,8 @@ import 'package:uniceps/app/presentation/screens/home/widgets/progress_widget.da
 import 'package:uniceps/app/presentation/screens/home/widgets/training_day_list_item.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/app/presentation/screens/home/widgets/training_group.dart';
-import 'package:uniceps/main_cubit/locale_cubit.dart';
-import 'package:uniceps/main_cubit/training_section_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/locale/training_section_cubit.dart';
 import 'package:uniceps/app/services/update_service.dart';
 import 'package:alert_banner/exports.dart' as b;
 import 'package:uniceps/injection_dependency.dart' as di;

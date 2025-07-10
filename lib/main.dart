@@ -11,7 +11,7 @@ import 'package:uniceps/app/presentation/screens/profile/settings/screens/about_
 import 'package:uniceps/app/presentation/blocs/current_gym/current_gym_bloc.dart';
 import 'package:uniceps/firebase_options.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
-import 'package:uniceps/main_cubit/locale_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/app/presentation/home/screens/home_screen.dart';
 

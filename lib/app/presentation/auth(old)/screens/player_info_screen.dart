@@ -8,7 +8,7 @@ import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/app/data/models/auth_models/player_model.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
 import 'package:uniceps/app/presentation/blocs/authentication/auth_bloc.dart';
-import 'package:uniceps/app/presentation/auth/widgets/gender_selection_widget.dart';
+import 'package:uniceps/app/presentation/auth(old)/widgets/gender_selection_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';
 import 'package:uniceps/app/presentation/screens/profile/settings/widgets/profile_back_circle.dart';

@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/app/presentation/blocs/authentication/auth_bloc.dart';
-import 'package:uniceps/app/presentation/auth/screens/auth_screen.dart';
-import 'package:uniceps/app/presentation/auth/screens/player_info_screen.dart';
+import 'package:uniceps/app/presentation/auth(old)/screens/auth_screen.dart';
+import 'package:uniceps/app/presentation/auth(old)/screens/player_info_screen.dart';
 import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';
 
 class SplashScreen extends StatelessWidget {

@@ -5,12 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/app/presentation/blocs/authentication/auth_bloc.dart';
-import 'package:uniceps/app/presentation/auth/screens/player_info_screen.dart';
-import 'package:uniceps/app/presentation/auth/widgets/auth_box.dart';
-import 'package:uniceps/app/presentation/auth/widgets/code_box.dart';
-import 'package:uniceps/app/presentation/auth/widgets/back_painter.dart';
+import 'package:uniceps/app/presentation/auth(old)/screens/player_info_screen.dart';
+import 'package:uniceps/app/presentation/auth(old)/widgets/auth_box.dart';
+import 'package:uniceps/app/presentation/auth(old)/widgets/code_box.dart';
+import 'package:uniceps/app/presentation/auth(old)/widgets/back_painter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:uniceps/main_cubit/locale_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});

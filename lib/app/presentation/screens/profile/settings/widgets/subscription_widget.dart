@@ -6,7 +6,7 @@ import 'package:intl/intl.dart' as intl;
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/subscription.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:uniceps/main_cubit/locale_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 
 final f = intl.NumberFormat("###,###,###");
 

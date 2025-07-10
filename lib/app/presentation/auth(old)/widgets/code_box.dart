@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/app/presentation/auth/widgets/background_card.dart';
+import 'package:uniceps/app/presentation/auth(old)/widgets/background_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CodeBox extends StatefulWidget {

@@ -50,6 +50,7 @@ class RoutineDto {
       createdAt: createdAt,
       updatedAt: updatedAt,
       trainingDays: trainingDaysDto.map((d) => d.toEntity()).toList(),
+      isCurrent: isCurrent,
       isSynced: isSynced);
 
   factory RoutineDto.fromJson(Map<String, dynamic> json) =>
