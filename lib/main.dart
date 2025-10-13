@@ -8,7 +8,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/app/presentation/screens/profile/settings/screens/about_screen.dart';
-import 'package:uniceps/app/presentation/blocs/current_gym/current_gym_bloc.dart';
 import 'package:uniceps/firebase_options.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
@@ -126,22 +125,11 @@ class MyApp extends StatelessWidget {
         //     return AttendenceBloc(di.sl());
         //   },
         // ),
+
         BlocProvider<LocaleCubit>(
           create: (context) => LocaleCubit()..getSavedLanguageCode(),
         ),
-        // BlocProvider<TrainingSectionCubit>(
-        //   create: (context) => TrainingSectionCubit()..getSection(),
-        // ),
 
-        // TODO: D E L E T E
-        BlocProvider(
-          create: (context) {
-            debugPrint(
-                "------------------Current GymsBloc Created!---------------");
-            return CurrentGymBloc(usecases: di.sl())
-              ..add(const GetSubscribedToGymEvent());
-          },
-        ),
         // BlocProvider(create: (context) => AccountBloc()),
         // BlocProvider(create: (context) => SubscriptionsBloc()),
       ],

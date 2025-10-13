@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/app/data/models/auth_models/player_model.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
-import 'package:uniceps/app/domain/commands/profile_usecases/profile_usecases.dart';
+import 'package:uniceps/app/domain/commands/profile_usecases(old)/profile_usecases.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';

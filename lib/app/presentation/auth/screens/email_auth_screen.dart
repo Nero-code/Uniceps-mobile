@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class EmailAuthScreen extends StatelessWidget {
+class EmailAuthScreen extends StatefulWidget {
   const EmailAuthScreen({super.key});
+
+  @override
+  State<EmailAuthScreen> createState() => _EmailAuthScreenState();
+}
+
+class _EmailAuthScreenState extends State<EmailAuthScreen> {
   final radius = 50.0;
+
   final codeSent = false;
+
+  String email = '';
+
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.sizeOf(context);
@@ -13,6 +23,7 @@ class EmailAuthScreen extends StatelessWidget {
         centerTitle: true,
         title: const Text("Create Account"),
         elevation: 0.0,
+        backgroundColor: Theme.of(context).colorScheme.surface,
       ),
       body: Directionality(
         textDirection: TextDirection.ltr,
@@ -22,9 +33,11 @@ class EmailAuthScreen extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: screen.height * 0.25),
-                TextField(
+                TextFormField(
                   textDirection: TextDirection.ltr,
-                  readOnly: false,
+                  // readOnly: true,
+                  enabled: false,
+                  autovalidateMode: AutovalidateMode.onUnfocus,
                   decoration: InputDecoration(
                     // filled: true,
                     // fillColor: Colors.grey.shade100,
@@ -36,7 +49,17 @@ class EmailAuthScreen extends StatelessWidget {
                     prefixIcon: const Icon(Icons.person),
                   ),
                   onTapOutside: unfocus,
-                  onSubmitted: (value) {},
+                  validator: (value) {
+                    if (value != null) {
+                      if (value.contains("@") && value.contains(".com")) {
+                        return null;
+                      }
+                    }
+                    return "Please enter a valid email!";
+                  },
+                  onFieldSubmitted: (value) {
+                    email = value;
+                  },
                 ),
                 const SizedBox(height: 10),
                 if (true) // BlocBuilder --> state is CodeSentState

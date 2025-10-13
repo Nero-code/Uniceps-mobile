@@ -20,7 +20,7 @@ import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/app/presentation/blocs/current_gym/current_gym_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';
-import 'package:uniceps/app/domain/commands/training_usecases/training_usecases.dart';
+import 'package:uniceps/app/domain/commands/training_usecases(old)/training_usecases.dart';
 import 'package:uniceps/app/presentation/blocs/exercises/exercises_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/training/training_bloc.dart';
 import 'package:uniceps/app/presentation/screens/home/widgets/exercise_alert.dart';

@@ -1,51 +1,42 @@
 import 'package:dartz/dartz.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:uniceps/app/data/models/account_models/account_model.dart';
+import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/auth_contracts.dart';
 import 'package:uniceps/app/data/sources/services/token_service_simple.dart';
 import 'package:uniceps/app/domain/classes/account_entities/account.dart';
 import 'package:uniceps/app/domain/contracts/auth_repo/i_auth_contracts.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
-class EmailAuthService implements IOTPAuthRepo {
-  const EmailAuthService({
-    required this.connection,
-    required this.emailAuth,
+class EmailAuthRepo implements IOTPAuthRepo {
+  EmailAuthRepo({
+    required this.otpAuthSource,
     required this.tokenService,
+    required this.accountLocalSource,
+    required this.connection,
   });
+
+  /// otpAuthSource is typeof [IOTPAuthSource] for otp-only email authentication
+  final IOTPAuthSource otpAuthSource;
+
+  /// tokenService is typeof [SimpleTokenService] for saving new tokens
+  final SimpleTokenService tokenService;
+
+  /// accountLocalSource is typeof [IAccountLocalSource] for saving new account
+  final IAccountLocalSource accountLocalSource;
 
   /// connection is typeof [InternetConnectionChecker]
   final InternetConnectionChecker connection;
 
-  /// emailAuth is typeof [IOTPAuthSource] for otp-only email authentication
-  final IOTPAuthSource emailAuth;
-
-  /// tokenService is typeof [SimpleTokenService] for
-  final SimpleTokenService tokenService;
+  Account? tempAccount;
 
   @override
-  Future<Either<Failure, bool>> verifyCredential(
-      {required String credential,
-      CredentialType credentialType = CredentialType.email,
-      AccountType accountType = AccountType.normal}) async {
-    //
-    // This method is a buffer and an error translator for the [I2FAuthService].
-    //
-    // All its functionality happens with network connection available
-    // an So is the provided check...
-    //
+  Future<Either<Failure, bool>> verifyCredential({
+    required String credential,
+  }) async {
     if (await connection.hasConnection) {
-      //
-      // After That it calls the curresponding auth provider
-      // (in this case emailAuth).
-      //
-      // We should note that this procedure throws:
-      //
-      //   - AuthException
-      //   - ClientException
-      //   - ServerException
-      //
       try {
-        await emailAuth.verifyCredential(credential: credential);
+        await otpAuthSource.verifyCredential(credential: credential);
         // Returning [true] here is useless actually but whatever...
         return const Right(true);
       } catch (e) {
@@ -57,14 +48,21 @@ class EmailAuthService implements IOTPAuthRepo {
 
   @override
   Future<Either<Failure, Unit>> validateOTP(
-      {required String credential, required String otp}) async {
+      {required String credential,
+      required String otp,
+      AccountType accountType = AccountType.normal}) async {
     if (await connection.hasConnection) {
       try {
-        final res = await emailAuth.validateOTP(
+        final res = await otpAuthSource.validateOTP(
           otp: otp,
           credential: credential,
         );
-        await tokenService.saveAccessToken(res);
+
+        await Future.wait([
+          tokenService.saveAccessToken(res),
+          accountLocalSource.saveUserAccount(AccountModel(
+              email: credential, createdAt: DateTime.now(), type: accountType))
+        ]);
 
         return const Right(unit);
       } catch (e) {

@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/domain/commands/auth_usecases/guest_mode_login.dart';
+import 'package:uniceps/app/domain/commands/auth_usecases(old)/guest_mode_login.dart';
 import 'package:uniceps/core/errors/failure.dart';
 // import 'package:uniceps/features/Auth/data/models/player_model.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
-import 'package:uniceps/app/domain/commands/auth_usecases/auth_usecases.dart';
+import 'package:uniceps/app/domain/commands/auth_usecases(old)/auth_usecases.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
