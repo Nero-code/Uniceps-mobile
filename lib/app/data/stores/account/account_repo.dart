@@ -3,7 +3,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_source.dart';
 import 'package:uniceps/app/domain/classes/account_entities/account.dart';
-import 'package:uniceps/app/domain/classes/account_entities/subscription.dart';
+import 'package:uniceps/app/domain/classes/account_entities/membership.dart';
 import 'package:uniceps/app/domain/contracts/account/i_account_service.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
@@ -29,7 +29,7 @@ class AccountRepo implements IAccountService {
   }
 
   @override
-  Future<Either<Failure, Subscription>> getSubscriptionPlan() async {
+  Future<Either<Failure, Membership>> getSubscriptionPlan() async {
     if (await _checker.hasConnection) {
       try {
         final subscriptionPlan = await _remoteSource.getCurrentPlan();

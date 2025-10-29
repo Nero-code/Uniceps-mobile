@@ -18,6 +18,24 @@ class OTPAuthSource implements IOTPAuthSource {
   });
 
   @override
+  Future<bool> verifyCredential({
+    required String credential,
+    AccountType accountType = AccountType.normal,
+  }) async {
+    logger.d("START FUNC: verifyEmail()");
+
+    final res = await client.post(Uri.parse(API + HTTP_REGISTER),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: jsonEncode({"email": credential}));
+    logger.d("${res.statusCode}\n${res.body}");
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return true;
+    }
+    throw "";
+  }
+
+  @override
   Future<String> validateOTP(
       {required String credential, required String otp}) async {
     logger.d("START FUNC: verifyCodeSent()");
@@ -38,24 +56,5 @@ class OTPAuthSource implements IOTPAuthSource {
 
     logger.d("END   FUNC: verifyCodeSent(): RES: ${res.statusCode}");
     throw ServerException();
-  }
-
-  @override
-  Future<bool> verifyCredential({
-    required String credential,
-    AccountType accountType = AccountType.normal,
-  }) async {
-    logger.d("START FUNC: verifyEmail()");
-
-    final res = await client.post(Uri.parse(API + HTTP_REGISTER),
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
-        body: jsonEncode({"email": credential}));
-    logger.d("${res.statusCode}\n${res.body}");
-
-    if (res.statusCode == 200) {
-      logger.d(res.body);
-    }
-
-    return true;
   }
 }

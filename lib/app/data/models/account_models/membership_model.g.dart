@@ -1,13 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'subscription_model.dart';
+part of 'membership_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-SubscriptionModel _$SubscriptionModelFromJson(Map<String, dynamic> json) =>
-    SubscriptionModel(
+MembershipModel _$MembershipModelFromJson(Map<String, dynamic> json) =>
+    MembershipModel(
+      id: (json['id'] as num?)?.toInt(),
       planName: json['planName'] as String,
       planId: json['planId'] as String,
       price: (json['price'] as num).toDouble(),
@@ -20,8 +21,9 @@ SubscriptionModel _$SubscriptionModelFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$SubscriptionModelToJson(SubscriptionModel instance) =>
+Map<String, dynamic> _$MembershipModelToJson(MembershipModel instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'planName': instance.planName,
       'planId': instance.planId,
       'price': instance.price,

@@ -18,12 +18,10 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
       requiredDuringInsert: true);
   static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
-  late final GeneratedColumn<String> type = GeneratedColumn<String>(
-      'type', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 50),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
+  late final GeneratedColumnWithTypeConverter<AccountType, String> type =
+      GeneratedColumn<String>('type', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<AccountType>($AccountsTable.$convertertype);
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -48,12 +46,7 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
     } else if (isInserting) {
       context.missing(_emailMeta);
     }
-    if (data.containsKey('type')) {
-      context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
-    } else if (isInserting) {
-      context.missing(_typeMeta);
-    }
+    context.handle(_typeMeta, const VerificationResult.success());
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
@@ -71,8 +64,8 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
     return Account(
       email: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}email'])!,
-      type: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      type: $AccountsTable.$convertertype.fromSql(attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!),
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
@@ -82,11 +75,14 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
   $AccountsTable createAlias(String alias) {
     return $AccountsTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<AccountType, String, String> $convertertype =
+      const EnumNameConverter<AccountType>(AccountType.values);
 }
 
 class Account extends DataClass implements Insertable<Account> {
   final String email;
-  final String type;
+  final AccountType type;
   final DateTime createdAt;
   const Account(
       {required this.email, required this.type, required this.createdAt});
@@ -94,7 +90,9 @@ class Account extends DataClass implements Insertable<Account> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['email'] = Variable<String>(email);
-    map['type'] = Variable<String>(type);
+    {
+      map['type'] = Variable<String>($AccountsTable.$convertertype.toSql(type));
+    }
     map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
@@ -112,7 +110,8 @@ class Account extends DataClass implements Insertable<Account> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Account(
       email: serializer.fromJson<String>(json['email']),
-      type: serializer.fromJson<String>(json['type']),
+      type: $AccountsTable.$convertertype
+          .fromJson(serializer.fromJson<String>(json['type'])),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
@@ -121,12 +120,13 @@ class Account extends DataClass implements Insertable<Account> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'email': serializer.toJson<String>(email),
-      'type': serializer.toJson<String>(type),
+      'type':
+          serializer.toJson<String>($AccountsTable.$convertertype.toJson(type)),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
-  Account copyWith({String? email, String? type, DateTime? createdAt}) =>
+  Account copyWith({String? email, AccountType? type, DateTime? createdAt}) =>
       Account(
         email: email ?? this.email,
         type: type ?? this.type,
@@ -163,7 +163,7 @@ class Account extends DataClass implements Insertable<Account> {
 
 class AccountsCompanion extends UpdateCompanion<Account> {
   final Value<String> email;
-  final Value<String> type;
+  final Value<AccountType> type;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
   const AccountsCompanion({
@@ -174,7 +174,7 @@ class AccountsCompanion extends UpdateCompanion<Account> {
   });
   AccountsCompanion.insert({
     required String email,
-    required String type,
+    required AccountType type,
     required DateTime createdAt,
     this.rowid = const Value.absent(),
   })  : email = Value(email),
@@ -196,7 +196,7 @@ class AccountsCompanion extends UpdateCompanion<Account> {
 
   AccountsCompanion copyWith(
       {Value<String>? email,
-      Value<String>? type,
+      Value<AccountType>? type,
       Value<DateTime>? createdAt,
       Value<int>? rowid}) {
     return AccountsCompanion(
@@ -214,7 +214,8 @@ class AccountsCompanion extends UpdateCompanion<Account> {
       map['email'] = Variable<String>(email.value);
     }
     if (type.present) {
-      map['type'] = Variable<String>(type.value);
+      map['type'] =
+          Variable<String>($AccountsTable.$convertertype.toSql(type.value));
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -237,16 +238,25 @@ class AccountsCompanion extends UpdateCompanion<Account> {
   }
 }
 
-class $SubscriptionsTable extends Subscriptions
-    with TableInfo<$SubscriptionsTable, Subscription> {
+class $MembershipsTable extends Memberships
+    with TableInfo<$MembershipsTable, Membership> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $SubscriptionsTable(this.attachedDatabase, [this._alias]);
+  $MembershipsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _planIdMeta = const VerificationMeta('planId');
+  @override
+  late final GeneratedColumn<String> planId = GeneratedColumn<String>(
+      'plan_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _planNameMeta =
       const VerificationMeta('planName');
@@ -290,21 +300,25 @@ class $SubscriptionsTable extends Subscriptions
           GeneratedColumn.constraintIsAlways('CHECK ("is_gift" IN (0, 1))'));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, planName, price, startDate, endDate, isActive, isGift];
+      [id, planId, planName, price, startDate, endDate, isActive, isGift];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'subscriptions';
+  static const String $name = 'memberships';
   @override
-  VerificationContext validateIntegrity(Insertable<Subscription> instance,
+  VerificationContext validateIntegrity(Insertable<Membership> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('plan_id')) {
+      context.handle(_planIdMeta,
+          planId.isAcceptableOrUnknown(data['plan_id']!, _planIdMeta));
     } else if (isInserting) {
-      context.missing(_idMeta);
+      context.missing(_planIdMeta);
     }
     if (data.containsKey('plan_name')) {
       context.handle(_planNameMeta,
@@ -346,13 +360,15 @@ class $SubscriptionsTable extends Subscriptions
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Subscription map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Membership map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Subscription(
+    return Membership(
       id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      planId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}plan_id'])!,
       planName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}plan_name'])!,
       price: attachedDatabase.typeMapping
@@ -369,21 +385,23 @@ class $SubscriptionsTable extends Subscriptions
   }
 
   @override
-  $SubscriptionsTable createAlias(String alias) {
-    return $SubscriptionsTable(attachedDatabase, alias);
+  $MembershipsTable createAlias(String alias) {
+    return $MembershipsTable(attachedDatabase, alias);
   }
 }
 
-class Subscription extends DataClass implements Insertable<Subscription> {
-  final String id;
+class Membership extends DataClass implements Insertable<Membership> {
+  final int id;
+  final String planId;
   final String planName;
   final double price;
   final DateTime startDate;
   final DateTime endDate;
   final bool isActive;
   final bool isGift;
-  const Subscription(
+  const Membership(
       {required this.id,
+      required this.planId,
       required this.planName,
       required this.price,
       required this.startDate,
@@ -393,7 +411,8 @@ class Subscription extends DataClass implements Insertable<Subscription> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
+    map['id'] = Variable<int>(id);
+    map['plan_id'] = Variable<String>(planId);
     map['plan_name'] = Variable<String>(planName);
     map['price'] = Variable<double>(price);
     map['start_date'] = Variable<DateTime>(startDate);
@@ -403,9 +422,10 @@ class Subscription extends DataClass implements Insertable<Subscription> {
     return map;
   }
 
-  SubscriptionsCompanion toCompanion(bool nullToAbsent) {
-    return SubscriptionsCompanion(
+  MembershipsCompanion toCompanion(bool nullToAbsent) {
+    return MembershipsCompanion(
       id: Value(id),
+      planId: Value(planId),
       planName: Value(planName),
       price: Value(price),
       startDate: Value(startDate),
@@ -415,11 +435,12 @@ class Subscription extends DataClass implements Insertable<Subscription> {
     );
   }
 
-  factory Subscription.fromJson(Map<String, dynamic> json,
+  factory Membership.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Subscription(
-      id: serializer.fromJson<String>(json['id']),
+    return Membership(
+      id: serializer.fromJson<int>(json['id']),
+      planId: serializer.fromJson<String>(json['planId']),
       planName: serializer.fromJson<String>(json['planName']),
       price: serializer.fromJson<double>(json['price']),
       startDate: serializer.fromJson<DateTime>(json['startDate']),
@@ -432,7 +453,8 @@ class Subscription extends DataClass implements Insertable<Subscription> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
+      'id': serializer.toJson<int>(id),
+      'planId': serializer.toJson<String>(planId),
       'planName': serializer.toJson<String>(planName),
       'price': serializer.toJson<double>(price),
       'startDate': serializer.toJson<DateTime>(startDate),
@@ -442,16 +464,18 @@ class Subscription extends DataClass implements Insertable<Subscription> {
     };
   }
 
-  Subscription copyWith(
-          {String? id,
+  Membership copyWith(
+          {int? id,
+          String? planId,
           String? planName,
           double? price,
           DateTime? startDate,
           DateTime? endDate,
           bool? isActive,
           bool? isGift}) =>
-      Subscription(
+      Membership(
         id: id ?? this.id,
+        planId: planId ?? this.planId,
         planName: planName ?? this.planName,
         price: price ?? this.price,
         startDate: startDate ?? this.startDate,
@@ -459,9 +483,10 @@ class Subscription extends DataClass implements Insertable<Subscription> {
         isActive: isActive ?? this.isActive,
         isGift: isGift ?? this.isGift,
       );
-  Subscription copyWithCompanion(SubscriptionsCompanion data) {
-    return Subscription(
+  Membership copyWithCompanion(MembershipsCompanion data) {
+    return Membership(
       id: data.id.present ? data.id.value : this.id,
+      planId: data.planId.present ? data.planId.value : this.planId,
       planName: data.planName.present ? data.planName.value : this.planName,
       price: data.price.present ? data.price.value : this.price,
       startDate: data.startDate.present ? data.startDate.value : this.startDate,
@@ -473,8 +498,9 @@ class Subscription extends DataClass implements Insertable<Subscription> {
 
   @override
   String toString() {
-    return (StringBuffer('Subscription(')
+    return (StringBuffer('Membership(')
           ..write('id: $id, ')
+          ..write('planId: $planId, ')
           ..write('planName: $planName, ')
           ..write('price: $price, ')
           ..write('startDate: $startDate, ')
@@ -486,13 +512,14 @@ class Subscription extends DataClass implements Insertable<Subscription> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, planName, price, startDate, endDate, isActive, isGift);
+  int get hashCode => Object.hash(
+      id, planId, planName, price, startDate, endDate, isActive, isGift);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Subscription &&
+      (other is Membership &&
           other.id == this.id &&
+          other.planId == this.planId &&
           other.planName == this.planName &&
           other.price == this.price &&
           other.startDate == this.startDate &&
@@ -501,81 +528,81 @@ class Subscription extends DataClass implements Insertable<Subscription> {
           other.isGift == this.isGift);
 }
 
-class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
-  final Value<String> id;
+class MembershipsCompanion extends UpdateCompanion<Membership> {
+  final Value<int> id;
+  final Value<String> planId;
   final Value<String> planName;
   final Value<double> price;
   final Value<DateTime> startDate;
   final Value<DateTime> endDate;
   final Value<bool> isActive;
   final Value<bool> isGift;
-  final Value<int> rowid;
-  const SubscriptionsCompanion({
+  const MembershipsCompanion({
     this.id = const Value.absent(),
+    this.planId = const Value.absent(),
     this.planName = const Value.absent(),
     this.price = const Value.absent(),
     this.startDate = const Value.absent(),
     this.endDate = const Value.absent(),
     this.isActive = const Value.absent(),
     this.isGift = const Value.absent(),
-    this.rowid = const Value.absent(),
   });
-  SubscriptionsCompanion.insert({
-    required String id,
+  MembershipsCompanion.insert({
+    this.id = const Value.absent(),
+    required String planId,
     required String planName,
     required double price,
     required DateTime startDate,
     required DateTime endDate,
     required bool isActive,
     required bool isGift,
-    this.rowid = const Value.absent(),
-  })  : id = Value(id),
+  })  : planId = Value(planId),
         planName = Value(planName),
         price = Value(price),
         startDate = Value(startDate),
         endDate = Value(endDate),
         isActive = Value(isActive),
         isGift = Value(isGift);
-  static Insertable<Subscription> custom({
-    Expression<String>? id,
+  static Insertable<Membership> custom({
+    Expression<int>? id,
+    Expression<String>? planId,
     Expression<String>? planName,
     Expression<double>? price,
     Expression<DateTime>? startDate,
     Expression<DateTime>? endDate,
     Expression<bool>? isActive,
     Expression<bool>? isGift,
-    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (planId != null) 'plan_id': planId,
       if (planName != null) 'plan_name': planName,
       if (price != null) 'price': price,
       if (startDate != null) 'start_date': startDate,
       if (endDate != null) 'end_date': endDate,
       if (isActive != null) 'is_active': isActive,
       if (isGift != null) 'is_gift': isGift,
-      if (rowid != null) 'rowid': rowid,
     });
   }
 
-  SubscriptionsCompanion copyWith(
-      {Value<String>? id,
+  MembershipsCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? planId,
       Value<String>? planName,
       Value<double>? price,
       Value<DateTime>? startDate,
       Value<DateTime>? endDate,
       Value<bool>? isActive,
-      Value<bool>? isGift,
-      Value<int>? rowid}) {
-    return SubscriptionsCompanion(
+      Value<bool>? isGift}) {
+    return MembershipsCompanion(
       id: id ?? this.id,
+      planId: planId ?? this.planId,
       planName: planName ?? this.planName,
       price: price ?? this.price,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       isActive: isActive ?? this.isActive,
       isGift: isGift ?? this.isGift,
-      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -583,7 +610,10 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (id.present) {
-      map['id'] = Variable<String>(id.value);
+      map['id'] = Variable<int>(id.value);
+    }
+    if (planId.present) {
+      map['plan_id'] = Variable<String>(planId.value);
     }
     if (planName.present) {
       map['plan_name'] = Variable<String>(planName.value);
@@ -603,23 +633,20 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
     if (isGift.present) {
       map['is_gift'] = Variable<bool>(isGift.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('SubscriptionsCompanion(')
+    return (StringBuffer('MembershipsCompanion(')
           ..write('id: $id, ')
+          ..write('planId: $planId, ')
           ..write('planName: $planName, ')
           ..write('price: $price, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
           ..write('isActive: $isActive, ')
-          ..write('isGift: $isGift, ')
-          ..write('rowid: $rowid')
+          ..write('isGift: $isGift')
           ..write(')'))
         .toString();
   }
@@ -3752,7 +3779,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $AccountsTable accounts = $AccountsTable(this);
-  late final $SubscriptionsTable subscriptions = $SubscriptionsTable(this);
+  late final $MembershipsTable memberships = $MembershipsTable(this);
   late final $RoutinesTable routines = $RoutinesTable(this);
   late final $DaysGroupTable daysGroup = $DaysGroupTable(this);
   late final $ExerciseGroupsTable exerciseGroups = $ExerciseGroupsTable(this);
@@ -3767,7 +3794,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
         accounts,
-        subscriptions,
+        memberships,
         routines,
         daysGroup,
         exerciseGroups,
@@ -3859,13 +3886,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 
 typedef $$AccountsTableCreateCompanionBuilder = AccountsCompanion Function({
   required String email,
-  required String type,
+  required AccountType type,
   required DateTime createdAt,
   Value<int> rowid,
 });
 typedef $$AccountsTableUpdateCompanionBuilder = AccountsCompanion Function({
   Value<String> email,
-  Value<String> type,
+  Value<AccountType> type,
   Value<DateTime> createdAt,
   Value<int> rowid,
 });
@@ -3882,8 +3909,10 @@ class $$AccountsTableFilterComposer
   ColumnFilters<String> get email => $composableBuilder(
       column: $table.email, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get type => $composableBuilder(
-      column: $table.type, builder: (column) => ColumnFilters(column));
+  ColumnWithTypeConverterFilters<AccountType, AccountType, String> get type =>
+      $composableBuilder(
+          column: $table.type,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnFilters(column));
@@ -3920,7 +3949,7 @@ class $$AccountsTableAnnotationComposer
   GeneratedColumn<String> get email =>
       $composableBuilder(column: $table.email, builder: (column) => column);
 
-  GeneratedColumn<String> get type =>
+  GeneratedColumnWithTypeConverter<AccountType, String> get type =>
       $composableBuilder(column: $table.type, builder: (column) => column);
 
   GeneratedColumn<DateTime> get createdAt =>
@@ -3951,7 +3980,7 @@ class $$AccountsTableTableManager extends RootTableManager<
               $$AccountsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> email = const Value.absent(),
-            Value<String> type = const Value.absent(),
+            Value<AccountType> type = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -3963,7 +3992,7 @@ class $$AccountsTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             required String email,
-            required String type,
+            required AccountType type,
             required DateTime createdAt,
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -3992,40 +4021,43 @@ typedef $$AccountsTableProcessedTableManager = ProcessedTableManager<
     (Account, BaseReferences<_$AppDatabase, $AccountsTable, Account>),
     Account,
     PrefetchHooks Function()>;
-typedef $$SubscriptionsTableCreateCompanionBuilder = SubscriptionsCompanion
+typedef $$MembershipsTableCreateCompanionBuilder = MembershipsCompanion
     Function({
-  required String id,
+  Value<int> id,
+  required String planId,
   required String planName,
   required double price,
   required DateTime startDate,
   required DateTime endDate,
   required bool isActive,
   required bool isGift,
-  Value<int> rowid,
 });
-typedef $$SubscriptionsTableUpdateCompanionBuilder = SubscriptionsCompanion
+typedef $$MembershipsTableUpdateCompanionBuilder = MembershipsCompanion
     Function({
-  Value<String> id,
+  Value<int> id,
+  Value<String> planId,
   Value<String> planName,
   Value<double> price,
   Value<DateTime> startDate,
   Value<DateTime> endDate,
   Value<bool> isActive,
   Value<bool> isGift,
-  Value<int> rowid,
 });
 
-class $$SubscriptionsTableFilterComposer
-    extends Composer<_$AppDatabase, $SubscriptionsTable> {
-  $$SubscriptionsTableFilterComposer({
+class $$MembershipsTableFilterComposer
+    extends Composer<_$AppDatabase, $MembershipsTable> {
+  $$MembershipsTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<String> get id => $composableBuilder(
+  ColumnFilters<int> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get planId => $composableBuilder(
+      column: $table.planId, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get planName => $composableBuilder(
       column: $table.planName, builder: (column) => ColumnFilters(column));
@@ -4046,17 +4078,20 @@ class $$SubscriptionsTableFilterComposer
       column: $table.isGift, builder: (column) => ColumnFilters(column));
 }
 
-class $$SubscriptionsTableOrderingComposer
-    extends Composer<_$AppDatabase, $SubscriptionsTable> {
-  $$SubscriptionsTableOrderingComposer({
+class $$MembershipsTableOrderingComposer
+    extends Composer<_$AppDatabase, $MembershipsTable> {
+  $$MembershipsTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<String> get id => $composableBuilder(
+  ColumnOrderings<int> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get planId => $composableBuilder(
+      column: $table.planId, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get planName => $composableBuilder(
       column: $table.planName, builder: (column) => ColumnOrderings(column));
@@ -4077,17 +4112,20 @@ class $$SubscriptionsTableOrderingComposer
       column: $table.isGift, builder: (column) => ColumnOrderings(column));
 }
 
-class $$SubscriptionsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $SubscriptionsTable> {
-  $$SubscriptionsTableAnnotationComposer({
+class $$MembershipsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $MembershipsTable> {
+  $$MembershipsTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<String> get id =>
+  GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get planId =>
+      $composableBuilder(column: $table.planId, builder: (column) => column);
 
   GeneratedColumn<String> get planName =>
       $composableBuilder(column: $table.planName, builder: (column) => column);
@@ -4108,70 +4146,67 @@ class $$SubscriptionsTableAnnotationComposer
       $composableBuilder(column: $table.isGift, builder: (column) => column);
 }
 
-class $$SubscriptionsTableTableManager extends RootTableManager<
+class $$MembershipsTableTableManager extends RootTableManager<
     _$AppDatabase,
-    $SubscriptionsTable,
-    Subscription,
-    $$SubscriptionsTableFilterComposer,
-    $$SubscriptionsTableOrderingComposer,
-    $$SubscriptionsTableAnnotationComposer,
-    $$SubscriptionsTableCreateCompanionBuilder,
-    $$SubscriptionsTableUpdateCompanionBuilder,
-    (
-      Subscription,
-      BaseReferences<_$AppDatabase, $SubscriptionsTable, Subscription>
-    ),
-    Subscription,
+    $MembershipsTable,
+    Membership,
+    $$MembershipsTableFilterComposer,
+    $$MembershipsTableOrderingComposer,
+    $$MembershipsTableAnnotationComposer,
+    $$MembershipsTableCreateCompanionBuilder,
+    $$MembershipsTableUpdateCompanionBuilder,
+    (Membership, BaseReferences<_$AppDatabase, $MembershipsTable, Membership>),
+    Membership,
     PrefetchHooks Function()> {
-  $$SubscriptionsTableTableManager(_$AppDatabase db, $SubscriptionsTable table)
+  $$MembershipsTableTableManager(_$AppDatabase db, $MembershipsTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$SubscriptionsTableFilterComposer($db: db, $table: table),
+              $$MembershipsTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$SubscriptionsTableOrderingComposer($db: db, $table: table),
+              $$MembershipsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$SubscriptionsTableAnnotationComposer($db: db, $table: table),
+              $$MembershipsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
+            Value<int> id = const Value.absent(),
+            Value<String> planId = const Value.absent(),
             Value<String> planName = const Value.absent(),
             Value<double> price = const Value.absent(),
             Value<DateTime> startDate = const Value.absent(),
             Value<DateTime> endDate = const Value.absent(),
             Value<bool> isActive = const Value.absent(),
             Value<bool> isGift = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
           }) =>
-              SubscriptionsCompanion(
+              MembershipsCompanion(
             id: id,
+            planId: planId,
             planName: planName,
             price: price,
             startDate: startDate,
             endDate: endDate,
             isActive: isActive,
             isGift: isGift,
-            rowid: rowid,
           ),
           createCompanionCallback: ({
-            required String id,
+            Value<int> id = const Value.absent(),
+            required String planId,
             required String planName,
             required double price,
             required DateTime startDate,
             required DateTime endDate,
             required bool isActive,
             required bool isGift,
-            Value<int> rowid = const Value.absent(),
           }) =>
-              SubscriptionsCompanion.insert(
+              MembershipsCompanion.insert(
             id: id,
+            planId: planId,
             planName: planName,
             price: price,
             startDate: startDate,
             endDate: endDate,
             isActive: isActive,
             isGift: isGift,
-            rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -4180,20 +4215,17 @@ class $$SubscriptionsTableTableManager extends RootTableManager<
         ));
 }
 
-typedef $$SubscriptionsTableProcessedTableManager = ProcessedTableManager<
+typedef $$MembershipsTableProcessedTableManager = ProcessedTableManager<
     _$AppDatabase,
-    $SubscriptionsTable,
-    Subscription,
-    $$SubscriptionsTableFilterComposer,
-    $$SubscriptionsTableOrderingComposer,
-    $$SubscriptionsTableAnnotationComposer,
-    $$SubscriptionsTableCreateCompanionBuilder,
-    $$SubscriptionsTableUpdateCompanionBuilder,
-    (
-      Subscription,
-      BaseReferences<_$AppDatabase, $SubscriptionsTable, Subscription>
-    ),
-    Subscription,
+    $MembershipsTable,
+    Membership,
+    $$MembershipsTableFilterComposer,
+    $$MembershipsTableOrderingComposer,
+    $$MembershipsTableAnnotationComposer,
+    $$MembershipsTableCreateCompanionBuilder,
+    $$MembershipsTableUpdateCompanionBuilder,
+    (Membership, BaseReferences<_$AppDatabase, $MembershipsTable, Membership>),
+    Membership,
     PrefetchHooks Function()>;
 typedef $$RoutinesTableCreateCompanionBuilder = RoutinesCompanion Function({
   Value<int> id,
@@ -6824,8 +6856,8 @@ class $AppDatabaseManager {
   $AppDatabaseManager(this._db);
   $$AccountsTableTableManager get accounts =>
       $$AccountsTableTableManager(_db, _db.accounts);
-  $$SubscriptionsTableTableManager get subscriptions =>
-      $$SubscriptionsTableTableManager(_db, _db.subscriptions);
+  $$MembershipsTableTableManager get memberships =>
+      $$MembershipsTableTableManager(_db, _db.memberships);
   $$RoutinesTableTableManager get routines =>
       $$RoutinesTableTableManager(_db, _db.routines);
   $$DaysGroupTableTableManager get daysGroup =>

@@ -5,14 +5,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:uniceps/app/presentation/auth/screens/email_auth_screen.dart';
+import 'package:uniceps/app/presentation/blocs/app_state/app_state_cubit.dart';
+import 'package:uniceps/app/presentation/membership/screens/membership_screen.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/app/presentation/screens/profile/settings/screens/about_screen.dart';
 import 'package:uniceps/firebase_options.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/app/presentation/home/screens/home_screen.dart';
+import 'package:uniceps/splash.dart';
+import 'core/constants/app_routes.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
@@ -130,6 +134,9 @@ class MyApp extends StatelessWidget {
           create: (context) => LocaleCubit()..getSavedLanguageCode(),
         ),
 
+        BlocProvider<AppStateCubit>(
+          create: (context) => AppStateCubit(di.sl())..getUserAccount(),
+        ),
         // BlocProvider(create: (context) => AccountBloc()),
         // BlocProvider(create: (context) => SubscriptionsBloc()),
       ],
@@ -151,34 +158,20 @@ class MyApp extends StatelessWidget {
             restorationScopeId: "root",
             title: 'Uniceps',
             theme: lightTheme.copyWith(textTheme: GoogleFonts.cairoTextTheme()),
-            // initialRoute: ROUTE_SPLASH,
-            initialRoute: "/temp",
+            initialRoute: AppRoutes.splash,
             routes: {
-              '/yo': (context) => Scaffold(
-                    body: Center(
-                      child: ElevatedButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, '/temp'),
-                          child: const Icon(Icons.navigate_next)),
-                    ),
-                  ),
-              "/temp": (context) => const HomeScreen(),
-              // ROUTE_SPLASH: (context) => const SplashScreen(),
+              //  MAIN
+              AppRoutes.splash: (context) => const SplashScreen(),
+              AppRoutes.home: (context) => const HomeScreen(),
 
               //  AUTH
-              // ROUTE_AUTH: (context) => const AuthScreen(),
+              AppRoutes.auth: (context) => const EmailAuthScreen(),
               // ROUTE_PROFILE: (context) => const ProfileScreen(),
-
-              //  MAIN
-              // ROUTE_HOME: (context) => HomeScreen(
-              //       trainingUsecases: di.sl(),
-              //       service: di.sl(),
-              //       manager: di.sl(),
-              //     ),
 
               // //  AUX
               // ROUTE_GYMS_LIST: (context) => const GymListScreen(),
-              ROUTE_ABOUT: (context) => const AboutScreen(),
+              AppRoutes.about: (context) => const AboutScreen(),
+              AppRoutes.plans: (context) => const MembershipScreen(),
             },
           );
         },

@@ -5,8 +5,9 @@ import 'package:uniceps/core/errors/failure.dart';
 // enum CredentialType { email, phone }
 
 abstract class IOTPAuthRepo {
-  Future<Either<Failure, bool>> verifyCredential({required String credential});
-  Future<Either<Failure, Unit>> validateOTP(
+  Future<Either<AuthFailure, bool>> verifyCredential(
+      {required String credential});
+  Future<Either<AuthFailure, Unit>> validateOTP(
       {required String credential,
       required String otp,
       AccountType accountType = AccountType.normal});

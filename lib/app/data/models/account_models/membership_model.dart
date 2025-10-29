@@ -1,13 +1,15 @@
 // import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uniceps/app/data/models/account_models/permission_model.dart';
+import 'package:uniceps/app/data/sources/local/database.dart' as db;
 import 'package:uniceps/app/domain/classes/account_entities/permission.dart';
-import 'package:uniceps/app/domain/classes/account_entities/subscription.dart';
+import 'package:uniceps/app/domain/classes/account_entities/membership.dart';
 
-part 'subscription_model.g.dart';
+part 'membership_model.g.dart';
 
 @JsonSerializable()
-class SubscriptionModel {
+class MembershipModel {
+  final int? id;
   final String planName;
   final String planId;
   final double price;
@@ -21,7 +23,8 @@ class SubscriptionModel {
   bool allows(Actions act, int current) =>
       permits.any((p) => p.can(act, current));
 
-  const SubscriptionModel({
+  const MembershipModel({
+    this.id,
     required this.planName,
     required this.planId,
     required this.price,
@@ -32,7 +35,7 @@ class SubscriptionModel {
     required this.permits,
   });
 
-  factory SubscriptionModel.free() => SubscriptionModel(
+  factory MembershipModel.free() => MembershipModel(
           planName: "Free",
           planId: "",
           price: 0,
@@ -47,12 +50,33 @@ class SubscriptionModel {
             PermissionModel(action: Actions.cSet, maxCount: 3),
           ]);
 
-  factory SubscriptionModel.fromJson(Map<String, dynamic> json) =>
-      _$SubscriptionModelFromJson(json);
+  factory MembershipModel.fromJson(Map<String, dynamic> json) =>
+      _$MembershipModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SubscriptionModelToJson(this);
+  Map<String, dynamic> toJson() => _$MembershipModelToJson(this);
 
-  factory SubscriptionModel.fromEntity(Subscription s) => SubscriptionModel(
+  factory MembershipModel.fromTable(db.Membership c) => MembershipModel(
+      id: c.id,
+      planName: c.planName,
+      planId: c.planId,
+      price: c.price,
+      startDate: c.startDate,
+      endDate: c.endDate,
+      isActive: c.isActive,
+      isGift: c.isGift,
+      permits: []);
+
+  db.MembershipsCompanion toTable() => db.MembershipsCompanion.insert(
+        planId: planId,
+        planName: planName,
+        price: price,
+        startDate: startDate,
+        endDate: endDate,
+        isActive: isActive,
+        isGift: isGift,
+      );
+
+  factory MembershipModel.fromEntity(Membership s) => MembershipModel(
       planName: s.planName,
       planId: s.planId,
       price: s.price,
@@ -62,7 +86,7 @@ class SubscriptionModel {
       isGift: s.isGift,
       permits: s.permits.map((p) => PermissionModel.fromEntity(p)).toList());
 
-  Subscription toEntity() => Subscription(
+  Membership toEntity() => Membership(
         planName: planName,
         planId: planId,
         price: price,

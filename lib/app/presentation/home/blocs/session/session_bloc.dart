@@ -13,6 +13,8 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   SessionBloc({required PracticeCommands commands})
       : _commands = commands,
         super(SessionInitial()) {
+    // ------------------------------------------------
+    // Get Last Active Session Event
     on<GetLastActiveSessionEvent>((event, emit) async {
       emit(SessionLoadingState());
 
@@ -22,11 +24,13 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
         (failure) => (failure is EmptyCacheFailure)
             ? emit(const NoActiveSessionState())
             : emit(SessionErrorState(failure: failure)),
-        // ---------------------------------------------
+        // ---------------
         (r) => emit(SessionLoadedState(session: r)),
       );
     });
 
+    // ------------------------------------------------
+    // Start Session Event
     on<StartSessionEvent>((event, emit) async {
       final either = await _commands.startTrainingSession(event.dayId);
 
@@ -36,6 +40,8 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
       );
     });
 
+    // ------------------------------------------------
+    // Log Set Event
     on<LogSetEvent>((event, emit) async {
       emit(SessionLoadingState());
 
@@ -45,13 +51,16 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
         (r) => emit(SessionLoadedState(session: r)),
       );
     });
+
+    // ------------------------------------------------
+    // Stop Session Event
     on<StopSessionEvent>((event, emit) async {
       emit(SessionLoadingState());
 
       final either = await _commands.finishTrainingSession(event.session);
       either.fold(
         (l) => emit(SessionErrorState(failure: l)),
-        (r) => emit(NoActiveSessionState()),
+        (r) => emit(const NoActiveSessionState()),
       );
     });
   }

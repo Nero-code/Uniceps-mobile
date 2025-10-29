@@ -69,8 +69,8 @@ class ReloadScreenWidget extends StatelessWidget {
         return IMG_EMPTY_2;
 
       // case NoInternetConnectionFailure:
-      case const (OfflineFailure):
-        return IMG_NO_INTERNET;
+      // case const (OfflineFailure):
+      //   return IMG_NO_INTERNET;
       case const (DatabaseFailure):
         return IMG_VOID;
 
@@ -121,8 +121,8 @@ class ReloadScreenWidget extends StatelessWidget {
       case const (EmptyCacheFailure):
         return local.empty;
       //
-      case const (OfflineFailure):
-        return local.errNoInternet;
+      // case const (OfflineFailure):
+      //   return local.errNoInternet;
       //
       case const (DatabaseFailure):
         return local.error;

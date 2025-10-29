@@ -22,7 +22,7 @@ class RoutineOptionsDialog extends StatelessWidget {
         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.min,
         children: [
-          BoxBotton(
+          BoxButton(
             onTap: () => Navigator.pop(context, Option.edit),
             // width: screenSize.width * 0.5,
             border: Border.all(color: Colors.blueGrey, width: 2.0),
@@ -44,7 +44,7 @@ class RoutineOptionsDialog extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          BoxBotton(
+          BoxButton(
             onTap: () => Navigator.pop(context, Option.setCurrent),
             // width: 75,
             border: Border.all(color: Colors.amber.shade300, width: 2.0),
@@ -66,7 +66,7 @@ class RoutineOptionsDialog extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          BoxBotton(
+          BoxButton(
             onTap: () => Navigator.pop(context, Option.delete),
             // width: 75,
             border: Border.all(color: Colors.red.shade300, width: 2.0),

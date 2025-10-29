@@ -71,6 +71,10 @@ const IMG_NO_PROGRAM = "images/photos/no_program.png";
 const IMG_NO_ATTENDENCE = "images/photos/attendence_err.png";
 const IMG_NO_MEASUREMENTS = "images/photos/measurements_err.png";
 
+const IMG_CAP_MOTIVE = "images/cap_uni/cap_motive.png";
+const IMG_CAP_MEMBERSHIP = "images/cap_uni/cap_membership.png";
+const IMG_CAP_SELECT_DAY = "images/cap_uni/cap_select_day.png";
+
 ///
 ///
 ///   A P I - U R L S
@@ -90,8 +94,9 @@ final HEADERS = {
 
 /// TESTING URL
 // const API = Env.baseUrl;
+
 const API = kDebugMode || kProfileMode
-    ? r"https://uniapi-ui65lw0m.b4a.run/api/v1"
+    ? r"https://uniceps.runasp.net/api"
     : r"https://uniceps.trio-verse.com/api/v1";
 
 const API_V2 = r"uniceps.runasp.net";
@@ -101,8 +106,8 @@ const API_V2 = r"uniceps.runasp.net";
 
 /// https://trio-verse.com
 const URL = "https://trio-verse.com";
-const HTTP_REGISTER = "/auth";
-const HTTP_VERIFY_CODE = "/auth/verify";
+const HTTP_REGISTER = "/Authentication";
+const HTTP_VERIFY_CODE = "/Authentication/VerifyOtp";
 const HTTP_REFRESH = "/refresh";
 const HTTP_HANDSHAKE = "/handshake";
 const HTTP_GUEST_MODE = "/guest";
@@ -170,60 +175,6 @@ const HIVE_USER_BOX = "user";
 const HIVE_TRAINING_BOX = "trainingProgram";
 const HIVE_LAST_WEIGHT_BOX = "lastWeightBox";
 const HIVE_MEASURE_BOX = "measurements";
-
-// ////////////////////////////////////////////////////////////////////////// //
-//                H I V E   D A T A B A S E   S C H E M A
-// ////////////////////////////////////////////////////////////////////////// //
-//
-// {
-//    "user":
-//      {
-//        "player_info": {Player}         @Deprecated
-//        "token": {Token}
-//      }
-//
-//    ----------------------------------
-//
-//    "program": {TrainingProgram},
-//
-//    ----------------------------------
-//
-//    "Gyms":
-//      {
-//        "currentGym": {"gym_id"}
-//        list["gym_id"]:
-//        {
-//          "metrics": [id1, id2, id3],
-//          "SubScriptions": [id1, id2, id3],
-//        }
-//      }
-//
-//    ----------------------------------
-//
-//    "Presence":
-//      {
-//        "gymId": [ PresenceModel ]
-//      }
-//
-//    ----------------------------------
-//
-//    "measure":
-//      {
-//        "gymId": [ MeasurementModel ]
-//      }
-//
-//    ----------------------------------
-//
-//    "subs":
-//      {
-//        "gymId": [ SubscriptionModel ]
-//      }
-//    ----------------------------------
-//
-//    "avatar":
-// }
-//
-// ////////////////////////////////////////////////////////////////////////// //
 
 /// Pattern: [yyyy-MM-ddThh:mm:ss]
 String dateToString(DateTime date) {

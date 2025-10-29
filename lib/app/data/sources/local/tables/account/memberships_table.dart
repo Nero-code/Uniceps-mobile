@@ -1,7 +1,8 @@
 import 'package:drift/drift.dart';
 
-class Subscriptions extends Table {
-  TextColumn get id => text()();
+class Memberships extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get planId => text()();
   TextColumn get planName => text()();
   RealColumn get price => real()();
   DateTimeColumn get startDate => dateTime()();

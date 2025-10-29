@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'failure.freezed.dart';
 
 @immutable
 abstract class Failure {
@@ -17,18 +19,25 @@ class GeneralPurposFailure implements Failure {
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-///   A U T H   F A I L U R E S
-////////////////////////////////////////////////////////////////////////////////
-class AuthFailure implements Failure {
-  final String _errorMessage;
+// //////////////////////////////////////////////////////////////////////////////
+//    A U T H   F A I L U R E S
+// //////////////////////////////////////////////////////////////////////////////
+// class AuthFailure implements Failure {
+//   final String _errorMessage;
 
-  AuthFailure({required String errorMessage}) : _errorMessage = errorMessage;
+//   AuthFailure({required String errorMessage}) : _errorMessage = errorMessage;
 
-  @override
-  String getErrorMessage() {
-    return _errorMessage;
-  }
+//   @override
+//   String getErrorMessage() {
+//     return _errorMessage;
+//   }
+// }
+
+@freezed
+class AuthFailure with _$AuthFailure {
+  const factory AuthFailure.offline() = _Offline;
+  const factory AuthFailure.invalidCodeFailure() = _InvalidCodeFailure;
+  const factory AuthFailure.unautherizedFailure() = _UnautherizedFailure;
 }
 
 class OfflineFailure implements Failure {

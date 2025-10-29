@@ -8,13 +8,13 @@ class OtpUsecases {
 
   final IOTPAuthRepo _repo;
 
-  Future<Either<Failure, bool>> verifyCredential(
+  Future<Either<AuthFailure, bool>> verifyCredential(
           {required String credential}) async =>
       await _repo.verifyCredential(
         credential: credential,
       );
 
-  Future<Either<Failure, Unit>> validateOTP(
+  Future<Either<AuthFailure, Unit>> validateOTP(
           {required String credential,
           required String otp,
           AccountType accountType = AccountType.normal}) async =>

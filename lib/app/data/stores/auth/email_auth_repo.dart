@@ -31,7 +31,7 @@ class EmailAuthRepo implements IOTPAuthRepo {
   Account? tempAccount;
 
   @override
-  Future<Either<Failure, bool>> verifyCredential({
+  Future<Either<AuthFailure, bool>> verifyCredential({
     required String credential,
   }) async {
     if (await connection.hasConnection) {
@@ -40,23 +40,21 @@ class EmailAuthRepo implements IOTPAuthRepo {
         // Returning [true] here is useless actually but whatever...
         return const Right(true);
       } catch (e) {
-        return Left(AuthFailure(errorMessage: ""));
+        return const Left(AuthFailure.unautherizedFailure());
       }
     }
-    return Left(OfflineFailure(errorMessage: ""));
+    return const Left(AuthFailure.offline());
   }
 
   @override
-  Future<Either<Failure, Unit>> validateOTP(
+  Future<Either<AuthFailure, Unit>> validateOTP(
       {required String credential,
       required String otp,
       AccountType accountType = AccountType.normal}) async {
     if (await connection.hasConnection) {
       try {
-        final res = await otpAuthSource.validateOTP(
-          otp: otp,
-          credential: credential,
-        );
+        final res =
+            await otpAuthSource.validateOTP(otp: otp, credential: credential);
 
         await Future.wait([
           tokenService.saveAccessToken(res),
@@ -66,9 +64,10 @@ class EmailAuthRepo implements IOTPAuthRepo {
 
         return const Right(unit);
       } catch (e) {
-        return Left(AuthFailure(errorMessage: ""));
+        print(e);
+        return const Left(AuthFailure.invalidCodeFailure());
       }
     }
-    return Left(OfflineFailure(errorMessage: ""));
+    return const Left(AuthFailure.offline());
   }
 }

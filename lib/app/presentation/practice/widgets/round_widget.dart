@@ -119,7 +119,7 @@ class _RoundWidgetState extends State<RoundWidget> {
               ),
             ),
           ),
-          BoxBotton(
+          BoxButton(
             background: widget.log != null
                 ? Colors.green.shade50
                 : Colors.grey.shade200,

@@ -1,6 +1,6 @@
 import 'package:uniceps/app/domain/classes/account_entities/permission.dart';
 
-class Subscription {
+class Membership {
   final String planName;
   final String planId;
   final double price;
@@ -11,7 +11,7 @@ class Subscription {
 
   final List<Permission> permits;
 
-  const Subscription({
+  const Membership({
     required this.planName,
     required this.planId,
     required this.price,

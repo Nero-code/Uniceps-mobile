@@ -1,11 +1,13 @@
 import 'dart:typed_data';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart' as di;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_practice/t_session_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_days_local_source.dart';
@@ -13,11 +15,14 @@ import 'package:uniceps/app/data/sources/local/dal_routine/routine_items_local_s
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_sets_local_source.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
+import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/auth_contracts.dart';
-import 'package:uniceps/app/data/sources/remote/dal_auth/email_auth.dart';
+import 'package:uniceps/app/data/sources/remote/dal_auth/email_auth_remote_source.dart';
 import 'package:uniceps/app/data/sources/services/client_helper.dart';
 import 'package:uniceps/app/data/sources/services/media_helper.dart';
 import 'package:uniceps/app/data/sources/services/no_token_http_client.dart';
+import 'package:uniceps/app/data/sources/services/token_service_simple.dart';
+import 'package:uniceps/app/data/stores/account/account_repo.dart';
 import 'package:uniceps/app/data/stores/auth/email_auth_repo.dart';
 import 'package:uniceps/app/data/stores/practice/practice_repo.dart';
 import 'package:uniceps/app/data/stores/routine/exercises_repo.dart';
@@ -25,6 +30,7 @@ import 'package:uniceps/app/data/stores/routine/routine_days_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_items_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_management_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_sets_repo.dart';
+import 'package:uniceps/app/domain/commands/account_usecases/account_usecases.dart';
 import 'package:uniceps/app/domain/commands/auth_usecases/otp_usecases.dart';
 import 'package:uniceps/app/domain/commands/practice_usecases/practice_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/exercises_commands.dart';
@@ -32,6 +38,7 @@ import 'package:uniceps/app/domain/commands/routine_management/routine_days_comm
 import 'package:uniceps/app/domain/commands/routine_management/routine_items_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_management_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_sets_commands.dart';
+import 'package:uniceps/app/domain/contracts/account/i_account_service.dart';
 import 'package:uniceps/app/domain/contracts/auth_repo/i_auth_contracts.dart';
 import 'package:uniceps/app/domain/contracts/practice_repo/practice_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine_repo/i_exercises_contract.dart';
@@ -52,8 +59,13 @@ Future<void> init() async {
   // sl.registerLazySingleton<ClientHelper>(
   //     () => HttpClientHelper(client: sl(), tokenService: sl()));
 
+  sl.registerLazySingleton<FlutterSecureStorage>(
+      () => const FlutterSecureStorage());
+
   sl.registerLazySingleton<InternetConnectionChecker>(
       () => InternetConnectionChecker());
+
+  sl.registerLazySingleton(() => SimpleTokenService());
   //////////////////////////////////////////////////////////////////////////////
   ///   D A T A B A S E S
   //////////////////////////////////////////////////////////////////////////////
@@ -152,6 +164,21 @@ Future<void> init() async {
   sl.registerLazySingleton<IOTPAuthSource>(
       () => OTPAuthSource(client: sl(), logger: sl()));
 
+  sl.registerLazySingleton<IAccountLocalSource>(
+      () => AccountLocalSource(secureStorage: sl(), database: sl()));
+
+  /////////
+  ////////
+  ///////
+  //////      R E M O T E   S O U R C E S
+  /////
+  ////
+  ///
+  //
+
+  sl.registerLazySingleton<IAccountRemoteSource>(
+      () => AccountRemoteSource(clientHelper: sl()));
+
   /////////
   ////////
   ///////
@@ -160,6 +187,9 @@ Future<void> init() async {
   ////
   ///
   //
+
+  sl.registerLazySingleton<IAccountService>(
+      () => AccountRepo(localSource: sl(), remoteSource: sl(), checker: sl()));
 
   sl.registerLazySingleton<IPracticeContract>(
       () => PracticeRepo(localSource: sl()));
@@ -186,6 +216,7 @@ Future<void> init() async {
   ///
   //////////////////////////////////////////////////////////////////////////////
 
+  sl.registerFactory(() => AccountUsecases(repo: sl()));
   sl.registerFactory(() => PracticeCommands(repo: sl()));
   sl.registerFactory(() => RoutineManagementCommands(repo: sl()));
   sl.registerFactory(() => RoutineDaysCommands(repo: sl()));
