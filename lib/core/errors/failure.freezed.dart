@@ -404,3 +404,153 @@ class _$UnautherizedFailureImpl implements _UnautherizedFailure {
 abstract class _UnautherizedFailure implements AuthFailure {
   const factory _UnautherizedFailure() = _$UnautherizedFailureImpl;
 }
+
+/// @nodoc
+mixin _$MembershipFailure {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() cantGetPlan,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? cantGetPlan,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? cantGetPlan,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CantGetPlan value) cantGetPlan,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CantGetPlan value)? cantGetPlan,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CantGetPlan value)? cantGetPlan,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $MembershipFailureCopyWith<$Res> {
+  factory $MembershipFailureCopyWith(
+          MembershipFailure value, $Res Function(MembershipFailure) then) =
+      _$MembershipFailureCopyWithImpl<$Res, MembershipFailure>;
+}
+
+/// @nodoc
+class _$MembershipFailureCopyWithImpl<$Res, $Val extends MembershipFailure>
+    implements $MembershipFailureCopyWith<$Res> {
+  _$MembershipFailureCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+}
+
+/// @nodoc
+abstract class _$$CantGetPlanImplCopyWith<$Res> {
+  factory _$$CantGetPlanImplCopyWith(
+          _$CantGetPlanImpl value, $Res Function(_$CantGetPlanImpl) then) =
+      __$$CantGetPlanImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$CantGetPlanImplCopyWithImpl<$Res>
+    extends _$MembershipFailureCopyWithImpl<$Res, _$CantGetPlanImpl>
+    implements _$$CantGetPlanImplCopyWith<$Res> {
+  __$$CantGetPlanImplCopyWithImpl(
+      _$CantGetPlanImpl _value, $Res Function(_$CantGetPlanImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$CantGetPlanImpl implements _CantGetPlan {
+  const _$CantGetPlanImpl();
+
+  @override
+  String toString() {
+    return 'MembershipFailure.cantGetPlan()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$CantGetPlanImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() cantGetPlan,
+  }) {
+    return cantGetPlan();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? cantGetPlan,
+  }) {
+    return cantGetPlan?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? cantGetPlan,
+    required TResult orElse(),
+  }) {
+    if (cantGetPlan != null) {
+      return cantGetPlan();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CantGetPlan value) cantGetPlan,
+  }) {
+    return cantGetPlan(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CantGetPlan value)? cantGetPlan,
+  }) {
+    return cantGetPlan?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CantGetPlan value)? cantGetPlan,
+    required TResult orElse(),
+  }) {
+    if (cantGetPlan != null) {
+      return cantGetPlan(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CantGetPlan implements MembershipFailure {
+  const factory _CantGetPlan() = _$CantGetPlanImpl;
+}

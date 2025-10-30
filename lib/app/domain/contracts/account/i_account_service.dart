@@ -5,7 +5,7 @@ import 'package:uniceps/core/errors/failure.dart';
 
 abstract class IAccountService {
   Future<Either<Failure, Account>> getUserAccount();
-  Future<Either<Failure, Membership>> getSubscriptionPlan();
+  Future<Either<MembershipFailure, Membership>> getSubscriptionPlan();
 
   // Future<Either<Failure, Unit>> saveUserAccount(Account account);
   Future<Either<Failure, Unit>> logout();

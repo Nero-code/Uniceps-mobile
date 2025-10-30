@@ -29,20 +29,20 @@ class AccountRepo implements IAccountService {
   }
 
   @override
-  Future<Either<Failure, Membership>> getSubscriptionPlan() async {
+  Future<Either<MembershipFailure, Membership>> getSubscriptionPlan() async {
     if (await _checker.hasConnection) {
       try {
         final subscriptionPlan = await _remoteSource.getCurrentPlan();
         await _localSource.saveUserPlan(subscriptionPlan);
         return Right(subscriptionPlan.toEntity());
       } catch (e) {
-        return Left(ServerFailure(errMsg: e.toString()));
+        return const Left(MembershipFailure.cantGetPlan());
       }
     } else {
       try {
         return Right((await _localSource.getCurrentPlan()).toEntity());
       } catch (e) {
-        return Left(DatabaseFailure(errorMsg: e.toString()));
+        return const Left(MembershipFailure.cantGetPlan());
       }
     }
   }

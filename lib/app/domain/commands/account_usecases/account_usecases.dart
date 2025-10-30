@@ -12,6 +12,6 @@ class AccountUsecases {
   Future<Either<Failure, Account>> getUserAccount() async =>
       await _repo.getUserAccount();
 
-  Future<Either<Failure, Membership>> getSubscriptionPlan() async =>
+  Future<Either<MembershipFailure, Membership>> getSubscriptionPlan() async =>
       await _repo.getSubscriptionPlan();
 }

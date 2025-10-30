@@ -2,6 +2,25 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'failure.freezed.dart';
 
+@freezed
+class AuthFailure with _$AuthFailure {
+  const factory AuthFailure.offline() = _Offline;
+  const factory AuthFailure.invalidCodeFailure() = _InvalidCodeFailure;
+  const factory AuthFailure.unautherizedFailure() = _UnautherizedFailure;
+}
+
+@freezed
+class MembershipFailure with _$MembershipFailure {
+  const factory MembershipFailure.cantGetPlan() = _CantGetPlan;
+}
+
+// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
+
 @immutable
 abstract class Failure {
   String getErrorMessage();
@@ -32,13 +51,6 @@ class GeneralPurposFailure implements Failure {
 //     return _errorMessage;
 //   }
 // }
-
-@freezed
-class AuthFailure with _$AuthFailure {
-  const factory AuthFailure.offline() = _Offline;
-  const factory AuthFailure.invalidCodeFailure() = _InvalidCodeFailure;
-  const factory AuthFailure.unautherizedFailure() = _UnautherizedFailure;
-}
 
 class OfflineFailure implements Failure {
   final String _errorMessage;
