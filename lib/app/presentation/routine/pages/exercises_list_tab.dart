@@ -13,10 +13,12 @@ class ExercisesListTab extends StatefulWidget {
     required this.onSelect,
     required this.muscleGroup,
     required this.presentExId,
+    required this.canSelect,
   });
   final List<int> presentExId;
   final MuscleGroup muscleGroup;
   final void Function(ExerciseV2 exercise, bool isSelect) onSelect;
+  final bool canSelect;
 
   @override
   State<ExercisesListTab> createState() => _ExercisesListTabState();
