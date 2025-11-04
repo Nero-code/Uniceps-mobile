@@ -18,9 +18,10 @@ import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/auth_contracts.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/email_auth_remote_source.dart';
+import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
 import 'package:uniceps/app/data/sources/services/client_helper.dart';
+import 'package:uniceps/app/data/sources/services/http_client_helper.dart';
 import 'package:uniceps/app/data/sources/services/media_helper.dart';
-import 'package:uniceps/app/data/sources/services/no_token_http_client.dart';
 import 'package:uniceps/app/data/sources/services/token_service_simple.dart';
 import 'package:uniceps/app/data/stores/account/account_repo.dart';
 import 'package:uniceps/app/data/stores/auth/email_auth_repo.dart';
@@ -54,10 +55,10 @@ Future<void> init() async {
   final client = http.Client();
   // final c = io.HttpClient()..connectionTimeout = const Duration(seconds: 30);
   sl.registerLazySingleton(() => client);
-  sl.registerLazySingleton<ClientHelper>(
-      () => NoTokenHttpClientHelper(client: sl()));
   // sl.registerLazySingleton<ClientHelper>(
-  //     () => HttpClientHelper(client: sl(), tokenService: sl()));
+  //     () => NoTokenHttpClientHelper(client: sl()));
+  sl.registerLazySingleton<ClientHelper>(
+      () => HttpClientHelper(client: sl(), tokenService: sl()));
 
   sl.registerLazySingleton<FlutterSecureStorage>(
       () => const FlutterSecureStorage());
@@ -178,6 +179,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<IAccountRemoteSource>(
       () => AccountRemoteSource(clientHelper: sl()));
+
+  sl.registerLazySingleton<IExercisesRemoteSourceContract>(
+      () => ExercisesRemoteSourceImpl(clientHelper: sl()));
 
   /////////
   ////////

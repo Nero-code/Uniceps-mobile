@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/app/presentation/auth/bloc/auth_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 
 class EmailAuthScreen extends StatefulWidget {
@@ -35,8 +36,11 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
           backgroundColor: Theme.of(context).colorScheme.surface,
         ),
         body: BlocConsumer<AuthBloc, AuthState>(
-          listener: (context, state) =>
-              state.whenOrNull(authenticated: () => Navigator.pop(context)),
+          listener: (context, state) => state.whenOrNull(authenticated: () {
+            context.read<AccountCubit>().getUserAccount();
+            Navigator.pop(context);
+            return null;
+          }),
           builder: (context, state) => Directionality(
             textDirection: TextDirection.ltr,
             child: SingleChildScrollView(

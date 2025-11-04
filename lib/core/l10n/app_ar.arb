@@ -43,7 +43,6 @@
   "address": "العنوان",
   "owner": "المالك",
   "telephone": "الهاتف",
-
   "subscription": "الأشتراكات",
   "subscriptions": "الأشتراكات",
   "balance": "الرصيد",
@@ -53,6 +52,11 @@
   "calender": "التقويم",
   "list": "قائمة",
   "attendenceLog":"سجل الحضور",
+
+  "scrTitleMyRoutines": "البرامج الرياضية",
+  "scrTitleProfile": "الحساب الشخصي",
+  "scrTitleSettings": "الاعدادات",
+  "scrTitlePerformance": "الاداء",
 
   "chooseLang": "اختر اللغة:",
   "about": "حول",
@@ -176,6 +180,36 @@
   "sortDays": "ترتيب الايام",
 
 
-  "commingSoon": "قريبا!"
- 
+  "commingSoon": "قريبا!",
+
+  "captainUni": "كابتن يوني",
+
+  "buyNow": "اشتري الان",
+
+  "buyPlanQuestion": "شراء الباقة؟",
+  "buyPlancontent": "هل انت متاكد من شراء باقة {planName}! المدة الزمنية ستضاف الى المدة القديمة ان وجدت",
+  "@buyPlanContent": {
+    "placeHolders": {
+      "planName": { "type": "string" }
+    }
+  },
+  
+  "memberDurationAlart": "بقي لديك !{count} يوم حتى تاريخ {date}!",
+  "@memberDurationAlart": {
+    "placeHolders": {
+      "count": { "type": "num" },
+      "date": { "type": "string" }
+    }
+  },
+
+  "muscleGroup": "المجموعة العضلية: {group}",
+  "@muscleGroup": {
+    "placeHolders": {
+      "group": { "type": "String" }
+    }
+  },
+  
+  "signinAlert": "سجل دخولك الان لتصفح كامل التطبيق",
+  "upgrade": "تفعيل",
+  "upgradeAlert": "فعل باقة Premium من اجل افضل استفادة"
 }

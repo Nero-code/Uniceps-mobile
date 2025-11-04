@@ -53,13 +53,19 @@ class EmailAuthRepo implements IOTPAuthRepo {
       AccountType accountType = AccountType.normal}) async {
     if (await connection.hasConnection) {
       try {
-        final res =
-            await otpAuthSource.validateOTP(otp: otp, credential: credential);
+        final res = await otpAuthSource.validateOTP(
+          otp: otp,
+          credential: credential,
+          parser: (json) => json,
+        );
 
         await Future.wait([
-          tokenService.saveAccessToken(res),
+          tokenService.saveAccessToken(res['token']),
           accountLocalSource.saveUserAccount(AccountModel(
-              email: credential, createdAt: DateTime.now(), type: accountType))
+              uid: res['id'],
+              email: credential,
+              createdAt: DateTime.now(),
+              type: accountType))
         ]);
 
         return const Right(unit);

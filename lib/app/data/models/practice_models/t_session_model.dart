@@ -9,6 +9,7 @@ class TSessionModel extends TSession {
     required super.logs,
     required super.createdAt,
     required super.finishedAt,
+    super.progress,
     super.apiId,
     super.version = 0,
     super.isSynced = false,
@@ -18,6 +19,7 @@ class TSessionModel extends TSession {
         id: table.tsId,
         dayId: table.dayId,
         logs: <TLog>[],
+        progress: table.progress,
         createdAt: table.startedAt,
         finishedAt: table.finishedAt,
       );

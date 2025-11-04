@@ -8,7 +8,7 @@ abstract class IAccountLocalSource {
   Future<MembershipModel> getCurrentPlan();
 
   Future<void> saveUserAccount(AccountModel userAccount);
-  Future<void> saveUserPlan(MembershipModel subscriptionPlan);
+  Future<void> saveUserMembership(MembershipModel subscriptionPlan);
 
   Future<void> logout();
 }
@@ -48,7 +48,7 @@ class AccountLocalSource implements IAccountLocalSource {
   }
 
   @override
-  Future<void> saveUserPlan(MembershipModel subscriptionPlan) async {
+  Future<void> saveUserMembership(MembershipModel subscriptionPlan) async {
     await _database
         .into(_database.memberships)
         .insert(subscriptionPlan.toTable());

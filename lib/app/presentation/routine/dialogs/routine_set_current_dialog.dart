@@ -10,9 +10,9 @@ class RoutineSetCurrentDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     return AlertDialog(
-      icon: Icon(Icons.stars),
-      title: Text("Set As Current?"), // TODO: Translate
-      content: Text(
+      icon: const Icon(Icons.stars),
+      title: const Text("Set As Current?"), // TODO: Translate
+      content: const Text(
           "are you sure you want to set [this] routine as your current routine?"), // TODO: Translate
       actions: [
         TextButton(

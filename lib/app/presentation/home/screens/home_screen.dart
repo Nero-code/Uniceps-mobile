@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:uniceps/app/presentation/blocs/app_state/app_state_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/widgets/alert_bar.dart';
 import 'package:uniceps/app/presentation/home/widgets/captain_uni_card.dart';
 import 'package:uniceps/app/presentation/home/widgets/current_routine_card.dart';
-import 'package:uniceps/app/presentation/home/widgets/level_indicator.dart';
-import 'package:uniceps/app/presentation/home/widgets/routine_day_item.dart';
+import 'package:uniceps/app/presentation/home/widgets/practice_day_item.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/stopwatch/stopwatch_cubit.dart';
+import 'package:uniceps/app/presentation/home/widgets/practice_panel.dart';
+import 'package:uniceps/app/presentation/plans/screens/plans_screen.dart';
+import 'package:uniceps/app/presentation/practice/screens/practice_screen.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/core/widgets/box_botton.dart';
-import 'package:uniceps/injection_dependency.dart';
+import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,19 +30,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final panelController = PanelController();
 
-  // C O N S T A N T S ----------------
+  bool notifyUpgrade = true;
 
-  final double smallBtnIcon = 30;
-  final double smallBtnSize = 60;
-
-  final double largeBtnIcon = 50;
-  final double largeBtnSize = 140;
-
-  final btnBackgroundColor = const Color.fromARGB(29, 96, 125, 139);
-
-  final bool isSigned = false;
-
-  // ----------------------------------
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
@@ -55,33 +46,16 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         SystemNavigator.pop();
       },
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) =>
-                CurrentRoutineCubit(commands: sl())..getCurrentRoutine(),
-            lazy: false,
-          ),
-          BlocProvider(
-            create: (context) =>
-                SessionBloc(commands: sl())..add(GetLastActiveSessionEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                StopwatchCubit(prefs: sl())..getStopwatchTime(),
-            lazy: false,
-          ),
-        ],
+      child: BlocProvider(
+        create: (context) => StopwatchCubit(prefs: di.sl())..getStopwatchTime(),
+        lazy: false,
         child: Stack(
           children: [
             Scaffold(
               appBar: AppBar(
                 centerTitle: true,
                 backgroundColor: Theme.of(context).colorScheme.surface,
-                title: const Text(
-                  APP_NAME,
-                  // style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+                title: const Text(APP_NAME),
                 leading: const Center(
                   child:
                       Image(image: AssetImage(APP_LOGO), height: 30, width: 30),
@@ -122,122 +96,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   SingleChildScrollView(
                     child: Column(
                       children: [
-                        Container(
-                          width: screenSize.width,
-                          height: screenSize.height * .30,
-                          margin: const EdgeInsets.only(top: 50),
-                          child: Stack(
-                            children: [
-                              Align(
-                                alignment: Alignment.topCenter,
-                                child: Stack(
-                                  children: [
-                                    SizedBox.square(
-                                      dimension: 140,
-                                      child: CircularProgressIndicator(
-                                        strokeCap: StrokeCap.round,
-                                        // color: Colors.blue.shade200,
-
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        strokeWidth: 5,
-                                        value: 0.0,
-                                      ),
-                                    ),
-                                    BoxButton(
-                                      isCircle: true,
-                                      width: largeBtnSize,
-                                      height: largeBtnSize,
-                                      background: const Color.fromARGB(
-                                          29, 154, 178, 190),
-                                      // background: Color.fromARGB(37, 76, 175, 137),
-                                      onTap: () {
-                                        panelController.open();
-                                      },
-                                      child: Icon(
-                                        Icons.rocket,
-                                        size: largeBtnIcon,
-                                        // color: Colors.green,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.lerp(Alignment.bottomLeft,
-                                    Alignment.topCenter, .20)!,
-                                child: BoxButton(
-                                  isCircle: true,
-                                  width: smallBtnSize,
-                                  height: smallBtnSize,
-                                  background: btnBackgroundColor,
-                                  onTap: () {},
-                                  child: Icon(
-                                    Icons.bar_chart_rounded,
-                                    size: smallBtnIcon,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.lerp(Alignment.bottomRight,
-                                    Alignment.topCenter, .20)!,
-                                child: BoxButton(
-                                  isCircle: true,
-                                  width: smallBtnSize,
-                                  height: smallBtnSize,
-                                  background: btnBackgroundColor,
-                                  onTap: () {},
-                                  child: Icon(
-                                    Icons.settings,
-                                    size: smallBtnIcon,
-                                    // color: Colors.black54,
-                                    color: Colors.blueGrey.shade700,
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.lerp(Alignment.topLeft,
-                                    Alignment.topCenter, 0.2)!,
-                                child: BoxButton(
-                                  isCircle: true,
-                                  width: smallBtnSize,
-                                  height: smallBtnSize,
-                                  background: btnBackgroundColor,
-                                  onTap: () {},
-                                  child: const Center(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.local_fire_department,
-                                          color: Colors.orange,
-                                          size: 30,
-                                        ),
-                                        Text(
-                                          "115",
-                                          style: TextStyle(fontSize: 9),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.lerp(Alignment.topRight,
-                                    Alignment.topCenter, 0.2)!,
-                                child: const LevelIndicator(size: 60),
-                              ),
-                            ],
-                          ),
+                        //
+                        // Practice Panel
+                        //
+                        PracticePanel(
+                          onPractice: panelController.open,
+                          onSettings: () {},
+                          onAnalytics: () {},
                         ),
                         const CurrentRoutineCard(),
                         const SizedBox(),
-                        const CaptainUniCard(),
+                        CaptainUniCard(
+                          imagePath: IMG_CAP_MOTIVE,
+                          needsFlip: false,
+                          content: "content",
+                          gradient: LinearGradient(colors: [
+                            Theme.of(context).colorScheme.primary,
+                            Theme.of(context).colorScheme.secondary,
+                          ]),
+                        ),
                       ],
                     ),
                   ),
@@ -246,25 +123,53 @@ class _HomeScreenState extends State<HomeScreen> {
                     top: 0.0,
                     width: screenSize.width,
                     height: 35,
-                    child: BlocBuilder<AppStateCubit, AppStateState>(
-                      builder: (context, state) {
-                        return state.maybeWhen<Widget>(
-                            unauthenticated: () => AlertBar(
-                                  content:
-                                      "Hello Guest, sign in to see all features",
-                                  actionText: "Sign In",
-                                  action: () async {
-                                    await Navigator.pushNamed(
-                                        context, AppRoutes.auth);
+                    child: Builder(
+                      builder: (context) {
+                        final accountCubit = context.watch<AccountCubit>();
+                        final membershipBloc = context.watch<MembershipBloc>();
 
-                                    if (context.mounted) {
-                                      context
-                                          .read<AppStateCubit>()
-                                          .getUserAccount();
-                                    }
-                                  },
-                                ),
-                            orElse: () => const SizedBox());
+                        return accountCubit.state.map(
+                          initial: (s) => const SizedBox(),
+                          unauthenticated: (s) => AlertBar(
+                            content: Text(
+                              locale.signinAlert,
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                            actionText: locale.signin,
+                            action: () =>
+                                Navigator.pushNamed(context, AppRoutes.auth),
+                          ),
+                          hasAccount: (acc) => membershipBloc.state.maybeMap(
+                            orElse: () => const SizedBox(),
+                            error: (err) => err.f.map(
+                                cantGetPlan: (f) => notifyUpgrade
+                                    ? AlertBar(
+                                        color: Colors.teal,
+                                        foregroundColor: Colors.white70,
+                                        content: Text(
+                                          locale.upgradeAlert,
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              color: Color.fromARGB(
+                                                  255, 255, 222, 132)),
+                                        ),
+                                        actionText: locale.upgrade,
+                                        action: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => BlocProvider.value(
+                                              value: context
+                                                  .read<MembershipBloc>(),
+                                              child: const PlansScreen(),
+                                            ),
+                                          ),
+                                        ),
+                                        close: () => setState(
+                                            () => notifyUpgrade = false),
+                                      )
+                                    : const SizedBox()),
+                          ),
+                        );
                       },
                     ),
                   ),
@@ -279,11 +184,12 @@ class _HomeScreenState extends State<HomeScreen> {
               borderRadius:
                   const BorderRadius.vertical(top: Radius.circular(15)),
               controller: panelController,
-              panel: BlocBuilder<CurrentRoutineCubit, CurrentRoutineState>(
-                builder: (context, state) {
-                  if (state is CurrentRoutineLoadedState) {
-                    return Material(
-                      child: Column(
+              panel: Material(
+                color: Colors.transparent,
+                child: BlocBuilder<CurrentRoutineCubit, CurrentRoutineState>(
+                  builder: (context, state) {
+                    if (state is CurrentRoutineLoadedState) {
+                      return Column(
                         children: [
                           const SizedBox(height: 10),
                           SizedBox(
@@ -292,22 +198,51 @@ class _HomeScreenState extends State<HomeScreen> {
                                 image: AssetImage(IMG_CAP_SELECT_DAY)),
                           ),
                           Text(locale.dayQuete),
-                          ...state.routine.trainingDays
-                              .map((day) => RoutineDayItem(
-                                    day: day,
-                                    isSelected: state.lastDayId == day.id,
-                                    onSelect: () async {
-                                      context.read<SessionBloc>().add(
-                                          StartSessionEvent(dayId: day.id!));
-                                      await panelController.close();
-                                    },
-                                  )),
+                          ...state.routine.trainingDays.map((day) =>
+                              PracticeDayItem(
+                                day: day,
+                                isSelected: state.lastDayId == day.id,
+                                onSelect: () async {
+                                  context
+                                      .read<SessionBloc>()
+                                      .add(SessionEvent.startSession(day.id!));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => MultiBlocProvider(
+                                          providers: [
+                                            BlocProvider.value(
+                                              value:
+                                                  context.read<SessionBloc>(),
+                                            ),
+                                            BlocProvider.value(
+                                              value:
+                                                  context.read<StopwatchCubit>()
+                                                    ..startStopWatch(),
+                                            ),
+                                          ],
+                                          child: const PracticeScreen(),
+                                        ),
+                                      ));
+                                  await panelController.close();
+                                },
+                              )),
                         ],
-                      ),
-                    );
-                  }
-                  return const LoadingPage();
-                },
+                      );
+                    } else if (state is CurrentRoutineErrorState) {
+                      return Column(
+                        children: [
+                          Image(
+                            image: const AssetImage(IMG_BLANK),
+                            width: screenSize.width * .75,
+                          ),
+                          Text(locale.noTrainingProgram),
+                        ],
+                      );
+                    }
+                    return const LoadingPage();
+                  },
+                ),
               ),
             ),
           ],

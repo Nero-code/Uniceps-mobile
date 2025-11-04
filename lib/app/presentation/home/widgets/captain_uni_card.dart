@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/core/constants/constants.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CaptainUniCard extends StatelessWidget {
-  const CaptainUniCard({super.key});
+  const CaptainUniCard(
+      {super.key,
+      required this.imagePath,
+      required this.needsFlip,
+      required this.content,
+      this.background,
+      this.gradient});
+
+  final String imagePath;
+  final bool needsFlip;
+  final String content;
+  final Color? background;
+  final Gradient? gradient;
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!;
     final screenSize = MediaQuery.sizeOf(context);
     return Stack(
       children: [
@@ -16,14 +29,8 @@ class CaptainUniCard extends StatelessWidget {
           width: screenSize.width,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            gradient: LinearGradient(
-              colors: [
-                Theme.of(context).colorScheme.primary,
-                Theme.of(context).colorScheme.secondary,
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            color: background,
+            gradient: gradient,
           ),
           child: Row(
             children: [
@@ -33,16 +40,14 @@ class CaptainUniCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "كابتن يوني:",
+                      locale.captainUni,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "الالتزام التمرين يساعدك بالاقتراب من اهدافك تدرب الان!!"
-                      "الالتزام التمرين يساعدك بالاقتراب من اهدافك تدرب الان!!"
-                      "الالتزام التمرين يساعدك بالاقتراب من اهدافك تدرب الان!!",
+                      "$content الالتزام التمرين يساعدك بالاقتراب من اهدافك تدرب الان!!الالتزام التمرين يساعدك بالاقتراب من اهدافك تدرب الان!!",
                       softWrap: true,
                       style: TextStyle(color: Colors.white, fontSize: 14),
                     ),
@@ -66,9 +71,9 @@ class CaptainUniCard extends StatelessWidget {
           top: 0.0,
           right: -screenSize.width * 0.05,
           child: Transform.flip(
-            flipX: false,
+            flipX: needsFlip,
             child: Image(
-              image: const AssetImage(IMG_CAP_MOTIVE),
+              image: AssetImage(imagePath),
               width: screenSize.width * 0.50,
             ),
           ),

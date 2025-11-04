@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/core/errors/failure.dart';
-import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
-import 'package:uniceps/app/presentation/blocs/authentication/auth_bloc.dart';
-import 'package:uniceps/app/presentation/auth(old)/screens/player_info_screen.dart';
 import 'package:uniceps/app/presentation/blocs/gyms/gyms_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/measurement/measurment_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';
@@ -132,12 +128,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   title: local.profile,
                                   subtitle: "",
                                   onPressed: () async {
-                                    await Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const PlayerInfoScreen(),
-                                      ),
-                                    );
+                                    // await Navigator.of(context).push(
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) =>
+                                    //         const PlayerInfoScreen(),
+                                    //   ),
+                                    // );
                                     // print("Profile result: $res");
                                   },
                                 ),
@@ -247,46 +243,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                             TextButton(
                                               onPressed: () async {
-                                                BlocProvider.of<AuthBloc>(
-                                                        context)
-                                                    .add(LogoutEvent());
-                                                final bloc = await BlocProvider
-                                                        .of<AuthBloc>(context)
-                                                    .stream
-                                                    .skip(1)
-                                                    .first;
-                                                // print(
-                                                //     "Bloc: ${bloc.runtimeType}");
-                                                if (bloc
-                                                    is AuthLoggedoutState) {
-                                                  if (context.mounted) {
-                                                    Navigator.pop(context);
-                                                    Navigator.pop(context);
-                                                    Navigator
-                                                        .pushReplacementNamed(
-                                                            context,
-                                                            ROUTE_AUTH);
-                                                  }
-                                                } else {
-                                                  if (context.mounted) {
-                                                    Navigator.pop(context);
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .clearSnackBars();
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        content:
-                                                            ErrorScreenWidget(
-                                                          f: NoInternetConnectionFailure(
-                                                              errMsg: ""),
-                                                          callback: null,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }
-                                                }
+                                                // BlocProvider.of<AuthBloc>(
+                                                //         context)
+                                                //     .add(LogoutEvent());
+                                                // final bloc = await BlocProvider
+                                                //         .of<AuthBloc>(context)
+                                                //     .stream
+                                                //     .skip(1)
+                                                //     .first;
+                                                // // print(
+                                                // //     "Bloc: ${bloc.runtimeType}");
+                                                // if (bloc
+                                                //     is AuthLoggedoutState) {
+                                                //   if (context.mounted) {
+                                                //     Navigator.pop(context);
+                                                //     Navigator.pop(context);
+                                                //     Navigator
+                                                //         .pushReplacementNamed(
+                                                //             context,
+                                                //             ROUTE_AUTH);
+                                                //   }
+                                                // } else {
+                                                //   if (context.mounted) {
+                                                //     Navigator.pop(context);
+                                                //     ScaffoldMessenger.of(
+                                                //             context)
+                                                //         .clearSnackBars();
+                                                //     ScaffoldMessenger.of(
+                                                //             context)
+                                                //         .showSnackBar(
+                                                //       SnackBar(
+                                                //         content:
+                                                //             ErrorScreenWidget(
+                                                //           f: NoInternetConnectionFailure(
+                                                //               errMsg: ""),
+                                                //           callback: null,
+                                                //         ),
+                                                //       ),
+                                                //     );
+                                                //   }
+                                                // }
                                               },
                                               child: Text(
                                                 local.ok,

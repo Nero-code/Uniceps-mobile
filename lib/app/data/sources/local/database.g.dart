@@ -1510,18 +1510,14 @@ class $ExerciseGroupsTable extends ExerciseGroups
   late final GeneratedColumn<int> apiId = GeneratedColumn<int>(
       'api_id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _arNameMeta = const VerificationMeta('arName');
+  static const VerificationMeta _muscleGroupTranslationsMeta =
+      const VerificationMeta('muscleGroupTranslations');
   @override
-  late final GeneratedColumn<String> arName = GeneratedColumn<String>(
-      'ar_name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _enNameMeta = const VerificationMeta('enName');
+  late final GeneratedColumn<String> muscleGroupTranslations =
+      GeneratedColumn<String>('muscle_group_translations', aliasedName, false,
+          type: DriftSqlType.string, requiredDuringInsert: true);
   @override
-  late final GeneratedColumn<String> enName = GeneratedColumn<String>(
-      'en_name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns => [id, apiId, arName, enName];
+  List<GeneratedColumn> get $columns => [id, apiId, muscleGroupTranslations];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1541,17 +1537,14 @@ class $ExerciseGroupsTable extends ExerciseGroups
     } else if (isInserting) {
       context.missing(_apiIdMeta);
     }
-    if (data.containsKey('ar_name')) {
-      context.handle(_arNameMeta,
-          arName.isAcceptableOrUnknown(data['ar_name']!, _arNameMeta));
+    if (data.containsKey('muscle_group_translations')) {
+      context.handle(
+          _muscleGroupTranslationsMeta,
+          muscleGroupTranslations.isAcceptableOrUnknown(
+              data['muscle_group_translations']!,
+              _muscleGroupTranslationsMeta));
     } else if (isInserting) {
-      context.missing(_arNameMeta);
-    }
-    if (data.containsKey('en_name')) {
-      context.handle(_enNameMeta,
-          enName.isAcceptableOrUnknown(data['en_name']!, _enNameMeta));
-    } else if (isInserting) {
-      context.missing(_enNameMeta);
+      context.missing(_muscleGroupTranslationsMeta);
     }
     return context;
   }
@@ -1570,10 +1563,9 @@ class $ExerciseGroupsTable extends ExerciseGroups
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       apiId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}api_id'])!,
-      arName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}ar_name'])!,
-      enName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}en_name'])!,
+      muscleGroupTranslations: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}muscle_group_translations'])!,
     );
   }
 
@@ -1586,20 +1578,18 @@ class $ExerciseGroupsTable extends ExerciseGroups
 class ExerciseGroup extends DataClass implements Insertable<ExerciseGroup> {
   final int id;
   final int apiId;
-  final String arName;
-  final String enName;
+  final String muscleGroupTranslations;
   const ExerciseGroup(
       {required this.id,
       required this.apiId,
-      required this.arName,
-      required this.enName});
+      required this.muscleGroupTranslations});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['api_id'] = Variable<int>(apiId);
-    map['ar_name'] = Variable<String>(arName);
-    map['en_name'] = Variable<String>(enName);
+    map['muscle_group_translations'] =
+        Variable<String>(muscleGroupTranslations);
     return map;
   }
 
@@ -1607,8 +1597,7 @@ class ExerciseGroup extends DataClass implements Insertable<ExerciseGroup> {
     return ExerciseGroupsCompanion(
       id: Value(id),
       apiId: Value(apiId),
-      arName: Value(arName),
-      enName: Value(enName),
+      muscleGroupTranslations: Value(muscleGroupTranslations),
     );
   }
 
@@ -1618,8 +1607,8 @@ class ExerciseGroup extends DataClass implements Insertable<ExerciseGroup> {
     return ExerciseGroup(
       id: serializer.fromJson<int>(json['id']),
       apiId: serializer.fromJson<int>(json['apiId']),
-      arName: serializer.fromJson<String>(json['arName']),
-      enName: serializer.fromJson<String>(json['enName']),
+      muscleGroupTranslations:
+          serializer.fromJson<String>(json['muscleGroupTranslations']),
     );
   }
   @override
@@ -1628,25 +1617,26 @@ class ExerciseGroup extends DataClass implements Insertable<ExerciseGroup> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'apiId': serializer.toJson<int>(apiId),
-      'arName': serializer.toJson<String>(arName),
-      'enName': serializer.toJson<String>(enName),
+      'muscleGroupTranslations':
+          serializer.toJson<String>(muscleGroupTranslations),
     };
   }
 
   ExerciseGroup copyWith(
-          {int? id, int? apiId, String? arName, String? enName}) =>
+          {int? id, int? apiId, String? muscleGroupTranslations}) =>
       ExerciseGroup(
         id: id ?? this.id,
         apiId: apiId ?? this.apiId,
-        arName: arName ?? this.arName,
-        enName: enName ?? this.enName,
+        muscleGroupTranslations:
+            muscleGroupTranslations ?? this.muscleGroupTranslations,
       );
   ExerciseGroup copyWithCompanion(ExerciseGroupsCompanion data) {
     return ExerciseGroup(
       id: data.id.present ? data.id.value : this.id,
       apiId: data.apiId.present ? data.apiId.value : this.apiId,
-      arName: data.arName.present ? data.arName.value : this.arName,
-      enName: data.enName.present ? data.enName.value : this.enName,
+      muscleGroupTranslations: data.muscleGroupTranslations.present
+          ? data.muscleGroupTranslations.value
+          : this.muscleGroupTranslations,
     );
   }
 
@@ -1655,67 +1645,59 @@ class ExerciseGroup extends DataClass implements Insertable<ExerciseGroup> {
     return (StringBuffer('ExerciseGroup(')
           ..write('id: $id, ')
           ..write('apiId: $apiId, ')
-          ..write('arName: $arName, ')
-          ..write('enName: $enName')
+          ..write('muscleGroupTranslations: $muscleGroupTranslations')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, apiId, arName, enName);
+  int get hashCode => Object.hash(id, apiId, muscleGroupTranslations);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ExerciseGroup &&
           other.id == this.id &&
           other.apiId == this.apiId &&
-          other.arName == this.arName &&
-          other.enName == this.enName);
+          other.muscleGroupTranslations == this.muscleGroupTranslations);
 }
 
 class ExerciseGroupsCompanion extends UpdateCompanion<ExerciseGroup> {
   final Value<int> id;
   final Value<int> apiId;
-  final Value<String> arName;
-  final Value<String> enName;
+  final Value<String> muscleGroupTranslations;
   const ExerciseGroupsCompanion({
     this.id = const Value.absent(),
     this.apiId = const Value.absent(),
-    this.arName = const Value.absent(),
-    this.enName = const Value.absent(),
+    this.muscleGroupTranslations = const Value.absent(),
   });
   ExerciseGroupsCompanion.insert({
     this.id = const Value.absent(),
     required int apiId,
-    required String arName,
-    required String enName,
+    required String muscleGroupTranslations,
   })  : apiId = Value(apiId),
-        arName = Value(arName),
-        enName = Value(enName);
+        muscleGroupTranslations = Value(muscleGroupTranslations);
   static Insertable<ExerciseGroup> custom({
     Expression<int>? id,
     Expression<int>? apiId,
-    Expression<String>? arName,
-    Expression<String>? enName,
+    Expression<String>? muscleGroupTranslations,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (apiId != null) 'api_id': apiId,
-      if (arName != null) 'ar_name': arName,
-      if (enName != null) 'en_name': enName,
+      if (muscleGroupTranslations != null)
+        'muscle_group_translations': muscleGroupTranslations,
     });
   }
 
   ExerciseGroupsCompanion copyWith(
       {Value<int>? id,
       Value<int>? apiId,
-      Value<String>? arName,
-      Value<String>? enName}) {
+      Value<String>? muscleGroupTranslations}) {
     return ExerciseGroupsCompanion(
       id: id ?? this.id,
       apiId: apiId ?? this.apiId,
-      arName: arName ?? this.arName,
-      enName: enName ?? this.enName,
+      muscleGroupTranslations:
+          muscleGroupTranslations ?? this.muscleGroupTranslations,
     );
   }
 
@@ -1728,11 +1710,9 @@ class ExerciseGroupsCompanion extends UpdateCompanion<ExerciseGroup> {
     if (apiId.present) {
       map['api_id'] = Variable<int>(apiId.value);
     }
-    if (arName.present) {
-      map['ar_name'] = Variable<String>(arName.value);
-    }
-    if (enName.present) {
-      map['en_name'] = Variable<String>(enName.value);
+    if (muscleGroupTranslations.present) {
+      map['muscle_group_translations'] =
+          Variable<String>(muscleGroupTranslations.value);
     }
     return map;
   }
@@ -1742,8 +1722,7 @@ class ExerciseGroupsCompanion extends UpdateCompanion<ExerciseGroup> {
     return (StringBuffer('ExerciseGroupsCompanion(')
           ..write('id: $id, ')
           ..write('apiId: $apiId, ')
-          ..write('arName: $arName, ')
-          ..write('enName: $enName')
+          ..write('muscleGroupTranslations: $muscleGroupTranslations')
           ..write(')'))
         .toString();
   }
@@ -2887,6 +2866,14 @@ class $TSessionsTable extends TSessions
   late final GeneratedColumn<DateTime> finishedAt = GeneratedColumn<DateTime>(
       'finished_at', aliasedName, true,
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _progressMeta =
+      const VerificationMeta('progress');
+  @override
+  late final GeneratedColumn<double> progress = GeneratedColumn<double>(
+      'progress', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0.0));
   static const VerificationMeta _apiIdMeta = const VerificationMeta('apiId');
   @override
   late final GeneratedColumn<int> apiId = GeneratedColumn<int>(
@@ -2912,7 +2899,7 @@ class $TSessionsTable extends TSessions
       defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
-      [tsId, dayId, startedAt, finishedAt, apiId, version, isSynced];
+      [tsId, dayId, startedAt, finishedAt, progress, apiId, version, isSynced];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2945,6 +2932,10 @@ class $TSessionsTable extends TSessions
           finishedAt.isAcceptableOrUnknown(
               data['finished_at']!, _finishedAtMeta));
     }
+    if (data.containsKey('progress')) {
+      context.handle(_progressMeta,
+          progress.isAcceptableOrUnknown(data['progress']!, _progressMeta));
+    }
     if (data.containsKey('api_id')) {
       context.handle(
           _apiIdMeta, apiId.isAcceptableOrUnknown(data['api_id']!, _apiIdMeta));
@@ -2974,6 +2965,8 @@ class $TSessionsTable extends TSessions
           .read(DriftSqlType.dateTime, data['${effectivePrefix}started_at'])!,
       finishedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}finished_at']),
+      progress: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}progress'])!,
       apiId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}api_id']),
       version: attachedDatabase.typeMapping
@@ -2994,6 +2987,7 @@ class TSession extends DataClass implements Insertable<TSession> {
   final int dayId;
   final DateTime startedAt;
   final DateTime? finishedAt;
+  final double progress;
   final int? apiId;
   final int version;
   final bool isSynced;
@@ -3002,6 +2996,7 @@ class TSession extends DataClass implements Insertable<TSession> {
       required this.dayId,
       required this.startedAt,
       this.finishedAt,
+      required this.progress,
       this.apiId,
       required this.version,
       required this.isSynced});
@@ -3014,6 +3009,7 @@ class TSession extends DataClass implements Insertable<TSession> {
     if (!nullToAbsent || finishedAt != null) {
       map['finished_at'] = Variable<DateTime>(finishedAt);
     }
+    map['progress'] = Variable<double>(progress);
     if (!nullToAbsent || apiId != null) {
       map['api_id'] = Variable<int>(apiId);
     }
@@ -3030,6 +3026,7 @@ class TSession extends DataClass implements Insertable<TSession> {
       finishedAt: finishedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(finishedAt),
+      progress: Value(progress),
       apiId:
           apiId == null && nullToAbsent ? const Value.absent() : Value(apiId),
       version: Value(version),
@@ -3045,6 +3042,7 @@ class TSession extends DataClass implements Insertable<TSession> {
       dayId: serializer.fromJson<int>(json['dayId']),
       startedAt: serializer.fromJson<DateTime>(json['startedAt']),
       finishedAt: serializer.fromJson<DateTime?>(json['finishedAt']),
+      progress: serializer.fromJson<double>(json['progress']),
       apiId: serializer.fromJson<int?>(json['apiId']),
       version: serializer.fromJson<int>(json['version']),
       isSynced: serializer.fromJson<bool>(json['isSynced']),
@@ -3058,6 +3056,7 @@ class TSession extends DataClass implements Insertable<TSession> {
       'dayId': serializer.toJson<int>(dayId),
       'startedAt': serializer.toJson<DateTime>(startedAt),
       'finishedAt': serializer.toJson<DateTime?>(finishedAt),
+      'progress': serializer.toJson<double>(progress),
       'apiId': serializer.toJson<int?>(apiId),
       'version': serializer.toJson<int>(version),
       'isSynced': serializer.toJson<bool>(isSynced),
@@ -3069,6 +3068,7 @@ class TSession extends DataClass implements Insertable<TSession> {
           int? dayId,
           DateTime? startedAt,
           Value<DateTime?> finishedAt = const Value.absent(),
+          double? progress,
           Value<int?> apiId = const Value.absent(),
           int? version,
           bool? isSynced}) =>
@@ -3077,6 +3077,7 @@ class TSession extends DataClass implements Insertable<TSession> {
         dayId: dayId ?? this.dayId,
         startedAt: startedAt ?? this.startedAt,
         finishedAt: finishedAt.present ? finishedAt.value : this.finishedAt,
+        progress: progress ?? this.progress,
         apiId: apiId.present ? apiId.value : this.apiId,
         version: version ?? this.version,
         isSynced: isSynced ?? this.isSynced,
@@ -3088,6 +3089,7 @@ class TSession extends DataClass implements Insertable<TSession> {
       startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
       finishedAt:
           data.finishedAt.present ? data.finishedAt.value : this.finishedAt,
+      progress: data.progress.present ? data.progress.value : this.progress,
       apiId: data.apiId.present ? data.apiId.value : this.apiId,
       version: data.version.present ? data.version.value : this.version,
       isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
@@ -3101,6 +3103,7 @@ class TSession extends DataClass implements Insertable<TSession> {
           ..write('dayId: $dayId, ')
           ..write('startedAt: $startedAt, ')
           ..write('finishedAt: $finishedAt, ')
+          ..write('progress: $progress, ')
           ..write('apiId: $apiId, ')
           ..write('version: $version, ')
           ..write('isSynced: $isSynced')
@@ -3109,8 +3112,8 @@ class TSession extends DataClass implements Insertable<TSession> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(tsId, dayId, startedAt, finishedAt, apiId, version, isSynced);
+  int get hashCode => Object.hash(
+      tsId, dayId, startedAt, finishedAt, progress, apiId, version, isSynced);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3119,6 +3122,7 @@ class TSession extends DataClass implements Insertable<TSession> {
           other.dayId == this.dayId &&
           other.startedAt == this.startedAt &&
           other.finishedAt == this.finishedAt &&
+          other.progress == this.progress &&
           other.apiId == this.apiId &&
           other.version == this.version &&
           other.isSynced == this.isSynced);
@@ -3129,6 +3133,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
   final Value<int> dayId;
   final Value<DateTime> startedAt;
   final Value<DateTime?> finishedAt;
+  final Value<double> progress;
   final Value<int?> apiId;
   final Value<int> version;
   final Value<bool> isSynced;
@@ -3137,6 +3142,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
     this.dayId = const Value.absent(),
     this.startedAt = const Value.absent(),
     this.finishedAt = const Value.absent(),
+    this.progress = const Value.absent(),
     this.apiId = const Value.absent(),
     this.version = const Value.absent(),
     this.isSynced = const Value.absent(),
@@ -3146,6 +3152,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
     required int dayId,
     required DateTime startedAt,
     this.finishedAt = const Value.absent(),
+    this.progress = const Value.absent(),
     this.apiId = const Value.absent(),
     this.version = const Value.absent(),
     this.isSynced = const Value.absent(),
@@ -3156,6 +3163,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
     Expression<int>? dayId,
     Expression<DateTime>? startedAt,
     Expression<DateTime>? finishedAt,
+    Expression<double>? progress,
     Expression<int>? apiId,
     Expression<int>? version,
     Expression<bool>? isSynced,
@@ -3165,6 +3173,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
       if (dayId != null) 'day_id': dayId,
       if (startedAt != null) 'started_at': startedAt,
       if (finishedAt != null) 'finished_at': finishedAt,
+      if (progress != null) 'progress': progress,
       if (apiId != null) 'api_id': apiId,
       if (version != null) 'version': version,
       if (isSynced != null) 'is_synced': isSynced,
@@ -3176,6 +3185,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
       Value<int>? dayId,
       Value<DateTime>? startedAt,
       Value<DateTime?>? finishedAt,
+      Value<double>? progress,
       Value<int?>? apiId,
       Value<int>? version,
       Value<bool>? isSynced}) {
@@ -3184,6 +3194,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
       dayId: dayId ?? this.dayId,
       startedAt: startedAt ?? this.startedAt,
       finishedAt: finishedAt ?? this.finishedAt,
+      progress: progress ?? this.progress,
       apiId: apiId ?? this.apiId,
       version: version ?? this.version,
       isSynced: isSynced ?? this.isSynced,
@@ -3205,6 +3216,9 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
     if (finishedAt.present) {
       map['finished_at'] = Variable<DateTime>(finishedAt.value);
     }
+    if (progress.present) {
+      map['progress'] = Variable<double>(progress.value);
+    }
     if (apiId.present) {
       map['api_id'] = Variable<int>(apiId.value);
     }
@@ -3224,6 +3238,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
           ..write('dayId: $dayId, ')
           ..write('startedAt: $startedAt, ')
           ..write('finishedAt: $finishedAt, ')
+          ..write('progress: $progress, ')
           ..write('apiId: $apiId, ')
           ..write('version: $version, ')
           ..write('isSynced: $isSynced')
@@ -4901,15 +4916,13 @@ typedef $$ExerciseGroupsTableCreateCompanionBuilder = ExerciseGroupsCompanion
     Function({
   Value<int> id,
   required int apiId,
-  required String arName,
-  required String enName,
+  required String muscleGroupTranslations,
 });
 typedef $$ExerciseGroupsTableUpdateCompanionBuilder = ExerciseGroupsCompanion
     Function({
   Value<int> id,
   Value<int> apiId,
-  Value<String> arName,
-  Value<String> enName,
+  Value<String> muscleGroupTranslations,
 });
 
 final class $$ExerciseGroupsTableReferences
@@ -4948,11 +4961,9 @@ class $$ExerciseGroupsTableFilterComposer
   ColumnFilters<int> get apiId => $composableBuilder(
       column: $table.apiId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get arName => $composableBuilder(
-      column: $table.arName, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get enName => $composableBuilder(
-      column: $table.enName, builder: (column) => ColumnFilters(column));
+  ColumnFilters<String> get muscleGroupTranslations => $composableBuilder(
+      column: $table.muscleGroupTranslations,
+      builder: (column) => ColumnFilters(column));
 
   Expression<bool> exercisesRefs(
       Expression<bool> Function($$ExercisesTableFilterComposer f) f) {
@@ -4991,11 +5002,9 @@ class $$ExerciseGroupsTableOrderingComposer
   ColumnOrderings<int> get apiId => $composableBuilder(
       column: $table.apiId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get arName => $composableBuilder(
-      column: $table.arName, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get enName => $composableBuilder(
-      column: $table.enName, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<String> get muscleGroupTranslations => $composableBuilder(
+      column: $table.muscleGroupTranslations,
+      builder: (column) => ColumnOrderings(column));
 }
 
 class $$ExerciseGroupsTableAnnotationComposer
@@ -5013,11 +5022,8 @@ class $$ExerciseGroupsTableAnnotationComposer
   GeneratedColumn<int> get apiId =>
       $composableBuilder(column: $table.apiId, builder: (column) => column);
 
-  GeneratedColumn<String> get arName =>
-      $composableBuilder(column: $table.arName, builder: (column) => column);
-
-  GeneratedColumn<String> get enName =>
-      $composableBuilder(column: $table.enName, builder: (column) => column);
+  GeneratedColumn<String> get muscleGroupTranslations => $composableBuilder(
+      column: $table.muscleGroupTranslations, builder: (column) => column);
 
   Expression<T> exercisesRefs<T extends Object>(
       Expression<T> Function($$ExercisesTableAnnotationComposer a) f) {
@@ -5067,26 +5073,22 @@ class $$ExerciseGroupsTableTableManager extends RootTableManager<
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<int> apiId = const Value.absent(),
-            Value<String> arName = const Value.absent(),
-            Value<String> enName = const Value.absent(),
+            Value<String> muscleGroupTranslations = const Value.absent(),
           }) =>
               ExerciseGroupsCompanion(
             id: id,
             apiId: apiId,
-            arName: arName,
-            enName: enName,
+            muscleGroupTranslations: muscleGroupTranslations,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required int apiId,
-            required String arName,
-            required String enName,
+            required String muscleGroupTranslations,
           }) =>
               ExerciseGroupsCompanion.insert(
             id: id,
             apiId: apiId,
-            arName: arName,
-            enName: enName,
+            muscleGroupTranslations: muscleGroupTranslations,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (
@@ -6229,6 +6231,7 @@ typedef $$TSessionsTableCreateCompanionBuilder = TSessionsCompanion Function({
   required int dayId,
   required DateTime startedAt,
   Value<DateTime?> finishedAt,
+  Value<double> progress,
   Value<int?> apiId,
   Value<int> version,
   Value<bool> isSynced,
@@ -6238,6 +6241,7 @@ typedef $$TSessionsTableUpdateCompanionBuilder = TSessionsCompanion Function({
   Value<int> dayId,
   Value<DateTime> startedAt,
   Value<DateTime?> finishedAt,
+  Value<double> progress,
   Value<int?> apiId,
   Value<int> version,
   Value<bool> isSynced,
@@ -6283,6 +6287,9 @@ class $$TSessionsTableFilterComposer
 
   ColumnFilters<DateTime> get finishedAt => $composableBuilder(
       column: $table.finishedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get progress => $composableBuilder(
+      column: $table.progress, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<int> get apiId => $composableBuilder(
       column: $table.apiId, builder: (column) => ColumnFilters(column));
@@ -6336,6 +6343,9 @@ class $$TSessionsTableOrderingComposer
   ColumnOrderings<DateTime> get finishedAt => $composableBuilder(
       column: $table.finishedAt, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<double> get progress => $composableBuilder(
+      column: $table.progress, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<int> get apiId => $composableBuilder(
       column: $table.apiId, builder: (column) => ColumnOrderings(column));
 
@@ -6366,6 +6376,9 @@ class $$TSessionsTableAnnotationComposer
 
   GeneratedColumn<DateTime> get finishedAt => $composableBuilder(
       column: $table.finishedAt, builder: (column) => column);
+
+  GeneratedColumn<double> get progress =>
+      $composableBuilder(column: $table.progress, builder: (column) => column);
 
   GeneratedColumn<int> get apiId =>
       $composableBuilder(column: $table.apiId, builder: (column) => column);
@@ -6425,6 +6438,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
             Value<int> dayId = const Value.absent(),
             Value<DateTime> startedAt = const Value.absent(),
             Value<DateTime?> finishedAt = const Value.absent(),
+            Value<double> progress = const Value.absent(),
             Value<int?> apiId = const Value.absent(),
             Value<int> version = const Value.absent(),
             Value<bool> isSynced = const Value.absent(),
@@ -6434,6 +6448,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
             dayId: dayId,
             startedAt: startedAt,
             finishedAt: finishedAt,
+            progress: progress,
             apiId: apiId,
             version: version,
             isSynced: isSynced,
@@ -6443,6 +6458,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
             required int dayId,
             required DateTime startedAt,
             Value<DateTime?> finishedAt = const Value.absent(),
+            Value<double> progress = const Value.absent(),
             Value<int?> apiId = const Value.absent(),
             Value<int> version = const Value.absent(),
             Value<bool> isSynced = const Value.absent(),
@@ -6452,6 +6468,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
             dayId: dayId,
             startedAt: startedAt,
             finishedAt: finishedAt,
+            progress: progress,
             apiId: apiId,
             version: version,
             isSynced: isSynced,

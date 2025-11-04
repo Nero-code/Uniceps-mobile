@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +21,25 @@ const APP_LOGO_LIGHT = "images/logo/Logo-light.png";
 
 enum Gender { male, female }
 
-enum Lang { en, ar }
+enum Lang {
+  en('en'),
+  ar('ar');
+
+  final String val;
+  const Lang(this.val);
+}
+
+String encodeTranslations(Map<Lang, String> trans) => jsonEncode(trans.map(
+      (key, value) => MapEntry(key.name, value),
+    ));
+
+Map<Lang, String> parseTranslations(String muscleGroupTranslations) {
+  final dec = jsonDecode(muscleGroupTranslations) as Map;
+  return dec.map<Lang, String>(
+      (key, value) => MapEntry(parseLang(key), value.toString()));
+}
+
+Lang parseLang(String lang) => Lang.values.firstWhere((l) => l.name == lang);
 
 enum ThemeType { light, dark }
 
@@ -29,14 +48,38 @@ const List<String> languageCodes = ['ar', 'en'];
 const DATE_PATTERN = "dd/MM/yyyy";
 
 final trSections = [
-  const MuscleGroup(apiId: 4, enGroupName: "Legs", arGroupName: "أرجل"),
-  const MuscleGroup(apiId: 7, enGroupName: "Calves", arGroupName: "بطة الرجل"),
-  const MuscleGroup(apiId: 1, enGroupName: "Chest", arGroupName: "صدر"),
-  const MuscleGroup(apiId: 3, enGroupName: "Back", arGroupName: "ظهر"),
-  const MuscleGroup(apiId: 2, enGroupName: "Shoulder", arGroupName: "أكتاف"),
-  const MuscleGroup(apiId: 5, enGroupName: "Biceps", arGroupName: "باي"),
-  const MuscleGroup(apiId: 6, enGroupName: "Triceps", arGroupName: "تراي"),
-  const MuscleGroup(apiId: 8, enGroupName: "Abs", arGroupName: "معدة"),
+  const MuscleGroup(
+    apiId: 4,
+    muscleGroupTranslations: {Lang.en: "Legs", Lang.ar: "أرجل"},
+  ),
+  const MuscleGroup(
+    apiId: 7,
+    muscleGroupTranslations: {Lang.en: "Calves", Lang.ar: "بطة الرجل"},
+  ),
+  const MuscleGroup(
+    apiId: 1,
+    muscleGroupTranslations: {Lang.en: "Chest", Lang.ar: "صدر"},
+  ),
+  const MuscleGroup(
+    apiId: 3,
+    muscleGroupTranslations: {Lang.en: "Back", Lang.ar: "ظهر"},
+  ),
+  const MuscleGroup(
+    apiId: 2,
+    muscleGroupTranslations: {Lang.en: "Shoulder", Lang.ar: "أكتاف"},
+  ),
+  const MuscleGroup(
+    apiId: 5,
+    muscleGroupTranslations: {Lang.en: "Biceps", Lang.ar: "باي"},
+  ),
+  const MuscleGroup(
+    apiId: 6,
+    muscleGroupTranslations: {Lang.en: "Triceps", Lang.ar: "تراي"},
+  ),
+  const MuscleGroup(
+    apiId: 8,
+    muscleGroupTranslations: {Lang.en: "Abs", Lang.ar: "معدة"},
+  ),
 ];
 
 // final arTrSections = [
@@ -99,15 +142,17 @@ const API = kDebugMode || kProfileMode
     ? r"https://uniceps.runasp.net/api"
     : r"https://uniceps.trio-verse.com/api/v1";
 
-const API_V2 = r"uniceps.runasp.net";
+const API_V2 = kDebugMode || kProfileMode
+    ? r"uniceps.runasp.net"
+    : r"uniceps.trio-verse.com/api/v1";
 
 /// PRODUCTION URL
 // const API = r"https://uniceps.trio-verse.com/api/v1";
 
 /// https://trio-verse.com
 const URL = "https://trio-verse.com";
-const HTTP_REGISTER = "/Authentication";
-const HTTP_VERIFY_CODE = "/Authentication/VerifyOtp";
+const HTTP_REGISTER = "/api/Authentication";
+const HTTP_VERIFY_CODE = "/api/Authentication/VerifyOtp";
 const HTTP_REFRESH = "/refresh";
 const HTTP_HANDSHAKE = "/handshake";
 const HTTP_GUEST_MODE = "/guest";
@@ -125,6 +170,11 @@ const HTTP_TRAINING_PROGRAM = "/routines";
 const HTTP_IMAGES = "/images";
 const HTTP_SUBSCRIPTIONS = "/subscription";
 const HTTP_MEASURMENTS = "/metrics";
+
+const HTTP_MEMBERSHIP = "/api/Membership";
+
+const HTTP_PLAN = "/api/Plan/0";
+const HTTP_BUY_PLAN = "/api/Membership";
 
 const HTTP_MUSCLE_GROUPS = "/api/MuscleGroup";
 const HTTP_EXERCISES = "/api/Exercise";

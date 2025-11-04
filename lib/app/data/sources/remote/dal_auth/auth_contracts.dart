@@ -4,7 +4,11 @@ abstract class IOTPAuthSource {
   Future<bool> verifyCredential(
       {required String credential,
       AccountType accountType = AccountType.normal});
-  Future<String> validateOTP({required String credential, required String otp});
+  Future<T> validateOTP<T>({
+    required String credential,
+    required String otp,
+    required T Function(Map<String, dynamic> json) parser,
+  });
 }
 
 abstract class I2FAuthSource {

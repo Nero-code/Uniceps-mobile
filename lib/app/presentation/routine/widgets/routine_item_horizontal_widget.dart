@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
+import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/routine/blocs/sets_edit/sets_edit_bloc.dart';
 import 'package:uniceps/app/presentation/routine/screens/routine_edit_sets_screen.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RoutineItemHorizontalWidget extends StatefulWidget {
   const RoutineItemHorizontalWidget({super.key, required this.item});
@@ -22,7 +24,10 @@ class _RoutineItemHorizontalWidgetState
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
-    // final locale = AppLocalizations.of(context)!;
+    final locale = AppLocalizations.of(context)!;
+    final rtl = context.read<LocaleCubit>().state.isRtl();
+    final group =
+        widget.item.exercise.muscleGroupTranslations[rtl ? Lang.ar : Lang.en]!;
     return BlocProvider(
       create: (context) => SetsEditBloc(commands: di.sl())
         ..add(GetSetsforRoutineItemEvent(itemId: widget.item.id!)),
@@ -31,18 +36,14 @@ class _RoutineItemHorizontalWidgetState
         child: Builder(builder: (context) {
           return InkWell(
             borderRadius: BorderRadius.circular(15),
-            onTap: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
                   builder: (c) => BlocProvider.value(
-                    value: BlocProvider.of<SetsEditBloc>(context),
-                    child: RoutineEditSetsScreen(item: widget.item),
-                  ),
-                ),
-              );
-              setState(() {});
-            },
+                        value: BlocProvider.of<SetsEditBloc>(context),
+                        child: RoutineEditSetsScreen(item: widget.item),
+                      )),
+            ),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -66,7 +67,7 @@ class _RoutineItemHorizontalWidgetState
                     child: Column(
                       children: [
                         Text(widget.item.exercise.name, maxLines: 2),
-                        const Text("Muscle Group: z"), // TODO: Translate
+                        Text(locale.muscleGroup(group)),
                         const SizedBox(height: 20),
                         BlocBuilder<SetsEditBloc, SetsEditState>(
                           builder: (context, state) {

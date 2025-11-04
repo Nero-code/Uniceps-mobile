@@ -17,7 +17,7 @@ class LevelIndicator extends StatelessWidget {
       child: GradientCircularProgressIndicator(
         progress: 0.67,
         backgroundColor: Colors.grey.shade200,
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
@@ -26,7 +26,7 @@ class LevelIndicator extends StatelessWidget {
             Colors.amber, Colors.amber,
           ],
         ),
-        child: Column(
+        child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Text(

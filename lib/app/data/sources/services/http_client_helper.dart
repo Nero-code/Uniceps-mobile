@@ -4,52 +4,56 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:uniceps/app/data/sources/services/client_helper.dart';
-import 'package:uniceps/app/data/sources/services/token_service.dart';
+import 'package:uniceps/app/data/sources/services/token_service_simple.dart';
 
 class HttpClientHelper implements ClientHelper {
   const HttpClientHelper(
-      {required Client client, required TokenService tokenService})
+      {required Client client, required SimpleTokenService tokenService})
       : _tokenService = tokenService,
         _client = client;
 
   final Client _client;
-  final TokenService _tokenService;
-  final dataNodeInResponse = 'data';
+  final SimpleTokenService _tokenService;
+  // final dataNodeInResponse = 'data';
 
   ///  For more custom behaivuar
   Client get client => _client;
-  TokenService get tokenService => _tokenService;
+  SimpleTokenService get tokenService => _tokenService;
 
   @override
   Future<T> getHandler<T>(String api, String urlPart,
       T Function(Map<String, dynamic> json) fromJson,
-      [Map<String, String>? queryParams]) async {
-    final res = await _client.get(Uri.https(api, urlPart, queryParams),
-        headers: await getHeader());
+      {bool needsHeader = true, Map<String, String>? queryParams}) async {
+    final res = await _client.get(
+      Uri.https(api, urlPart, queryParams),
+      headers: await getHeader(needsHeader),
+    );
 
     if (kDebugMode) {
-      print("getHandler code: ${res.statusCode}");
+      print("getHandler code: ${res.statusCode}\n" "URL: ${api + urlPart}");
       print("getHandler body: ${res.body}");
     }
     handleHttpStatus(res);
 
-    return fromJson((res.body as Map)[dataNodeInResponse]);
+    return fromJson(jsonDecode(res.body));
   }
 
   @override
   Future<List<T>> getListHandler<T>(
       String api, String urlPart, T Function(Map<String, dynamic>) fromJson,
-      [Map<String, String>? queryParams]) async {
-    final res = await _client.get(Uri.https(api, urlPart, queryParams),
-        headers: await getHeader());
+      {bool needsHeader = true, Map<String, String>? queryParams}) async {
+    final res = await _client.get(
+      Uri.https(api, urlPart, queryParams),
+      headers: await getHeader(needsHeader),
+    );
 
     if (kDebugMode) {
-      print("getListHandler code: ${res.statusCode}");
+      print("getListHandler code: ${res.statusCode}\n" "URL: ${api + urlPart}");
       print("getListHandler body: ${res.body}");
     }
-
     handleHttpStatus(res);
-    final data = jsonDecode(res.body)[dataNodeInResponse] as Iterable;
+
+    final data = jsonDecode(res.body) as Iterable;
     if (data.isEmpty) {
       throw NoContentException();
     }
@@ -64,28 +68,30 @@ class HttpClientHelper implements ClientHelper {
     Map<String, dynamic> body, {
     T Function(Map<String, dynamic> json)? fromJson,
     void Function(Map<String, dynamic> body)? orElse,
+    bool needsHeader = true,
   }) async {
     if (kDebugMode) print(api + urlPart);
 
     final res = await _client.post(
-      Uri.https("$api" "$urlPart"),
-      headers: await getHeader(),
-      body: body,
+      Uri.https(api, urlPart),
+      headers: await getHeader(needsHeader),
+      body: jsonEncode(body),
     );
+
+    if (kDebugMode) {
+      print("getListHandler code: ${res.statusCode}\n" "URL: ${api + urlPart}");
+      print("getListHandler body: ${res.body}");
+    }
 
     handleHttpStatus(res);
 
-    if (kDebugMode) {
-      print("postHandler code: ${res.statusCode}");
-      print("postHandler body: ${res.body}");
-    }
-
-    if (res.statusCode == HttpStatus.created) {
+    if (res.statusCode == HttpStatus.ok ||
+        res.statusCode == HttpStatus.created) {
       if (fromJson != null) {
-        return fromJson(jsonDecode(res.body)[dataNodeInResponse]);
+        return fromJson(jsonDecode(res.body));
       }
       if (orElse != null) {
-        orElse(res.body as Map<String, dynamic>);
+        orElse(jsonDecode(res.body));
       }
     }
 
@@ -93,14 +99,11 @@ class HttpClientHelper implements ClientHelper {
   }
 
   @override
-  Future<void> putHandler(
-    String api,
-    String urlPart,
-    Map<String, dynamic> body,
-  ) async {
+  Future<void> putHandler(String api, String urlPart, Map<String, dynamic> body,
+      {bool needsHeader = true}) async {
     final res = await _client.put(
       Uri.https("$api" "$urlPart"),
-      headers: await getHeader(),
+      headers: await getHeader(needsHeader),
       body: body,
     );
     handleHttpStatus(res);
@@ -113,12 +116,10 @@ class HttpClientHelper implements ClientHelper {
 
   @override
   Future<void> deleteHandler(
-    String api,
-    String urlPart,
-    Map<String, dynamic> body,
-  ) async {
+      String api, String urlPart, Map<String, dynamic> body,
+      {bool needsHeader = true}) async {
     final res = await _client.delete(Uri.https("$api" "$urlPart"),
-        headers: await getHeader(), body: body);
+        headers: await getHeader(needsHeader), body: body);
 
     if (kDebugMode) {
       print("deleteHandler code: ${res.statusCode}");
@@ -126,10 +127,16 @@ class HttpClientHelper implements ClientHelper {
     }
   }
 
-  Future<Map<String, String>> getHeader() async {
-    final session = await _tokenService.session;
-
-    return {'Authorization': "Bearer ${session!.accessToken}"};
+  Future<Map<String, String>> getHeader(bool needToken) async {
+    // final session = await _tokenService.session;
+    // return {'Authorization': "Bearer ${session!.accessToken}"};
+    // final a = await _tokenService.getAccessToken();
+    return {
+      if (needToken)
+        'Authorization': "Bearer ${await _tokenService.getAccessToken()}",
+      'content-type': 'application/json;charset=utf-8',
+      'accept': 'application/json',
+    };
   }
 }
 

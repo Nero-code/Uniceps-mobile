@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/app_state/app_state_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 
 // class SplashScreen extends StatelessWidget {
@@ -81,7 +81,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AppStateCubit, AppStateState>(
+    return BlocListener<AccountCubit, AccountState>(
       listener: (context, state) {
         state.when(
           initial: () {},

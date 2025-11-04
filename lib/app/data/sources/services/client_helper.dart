@@ -1,21 +1,23 @@
 abstract class ClientHelper {
   Future<T> getHandler<T>(String api, String urlPart,
       T Function(Map<String, dynamic> json) fromJson,
-      [Map<String, String>? queryParams]);
+      {bool needsHeader = true, Map<String, String>? queryParams});
 
   Future<List<T>> getListHandler<T>(
       String api, String urlPart, T Function(Map<String, dynamic>) fromJson,
-      [Map<String, String>? queryParams]);
+      {bool needsHeader = true, Map<String, String>? queryParams});
 
   Future<T?> postHandler<T>(
       String api, String urlPart, Map<String, dynamic> body,
       {T Function(Map<String, dynamic> json)? fromJson,
-      void Function(Map<String, dynamic> body)? orElse});
+      void Function(Map<String, dynamic> body)? orElse,
+      bool needsHeader = true});
 
-  Future<void> putHandler(
-      String api, String urlPart, Map<String, dynamic> body);
+  Future<void> putHandler(String api, String urlPart, Map<String, dynamic> body,
+      {bool needsHeader = true});
   Future<void> deleteHandler(
-      String api, String urlPart, Map<String, dynamic> body);
+      String api, String urlPart, Map<String, dynamic> body,
+      {bool needsHeader = true});
 }
 
 // //////////////////////////////////////// //

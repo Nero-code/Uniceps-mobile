@@ -126,23 +126,21 @@ class _RoundWidgetState extends State<RoundWidget> {
             borderRadius: 10,
             padding: 3.0,
             onTap: () {
-              context.read<SessionBloc>().add(
-                    LogSetEvent(
-                      log: widget.log?.copywith(
-                              weight: double.tryParse(weightCtl.text) ?? 0.0) ??
-                          TLog(
-                            id: null,
-                            sessionId: widget.sessionId,
-                            exerciseId: widget.exId,
-                            exerciseIndex: widget.exIndex,
-                            setIndex: widget.set.index,
-                            reps: widget.set.reps,
-                            weight: double.tryParse(weightCtl.text) ?? 0.0,
-                            completedAt: DateTime.now(),
-                            apiId: null,
-                          ),
-                    ),
+              final log = widget.log?.copywith(
+                      weight: double.tryParse(weightCtl.text) ?? 0.0) ??
+                  TLog(
+                    id: null,
+                    completedAt: DateTime.now(),
+                    apiId: null,
+                    sessionId: widget.sessionId,
+                    exerciseId: widget.exId,
+                    exerciseIndex: widget.exIndex,
+                    setIndex: widget.set.index,
+                    reps: widget.set.reps,
+                    weight: double.tryParse(weightCtl.text) ?? 0.0,
                   );
+
+              context.read<SessionBloc>().add(SessionEvent.logSet(log));
             },
             child: Text(
               " ${String.fromCharCode(Icons.done.codePoint)} ",

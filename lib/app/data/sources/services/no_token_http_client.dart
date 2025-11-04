@@ -17,7 +17,7 @@ class NoTokenHttpClientHelper implements ClientHelper {
   @override
   Future<T> getHandler<T>(String api, String urlPart,
       T Function(Map<String, dynamic> json) fromJson,
-      [Map<String, String>? queryParams]) async {
+      {bool needsHeader = true, Map<String, String>? queryParams}) async {
     final res = await _client.get(Uri.https(api, urlPart, queryParams));
 
     if (kDebugMode) {
@@ -32,7 +32,7 @@ class NoTokenHttpClientHelper implements ClientHelper {
   @override
   Future<List<T>> getListHandler<T>(
       String api, String urlPart, T Function(Map<String, dynamic>) fromJson,
-      [Map<String, String>? queryParams]) async {
+      {bool needsHeader = true, Map<String, String>? queryParams}) async {
     print("getListHandler: ${api + urlPart}");
     final res = await _client.get(Uri.https(api, urlPart, queryParams));
 
@@ -56,12 +56,13 @@ class NoTokenHttpClientHelper implements ClientHelper {
     Map<String, dynamic> body, {
     T Function(Map<String, dynamic> json)? fromJson,
     void Function(Map<String, dynamic> body)? orElse,
+    bool needsHeader = true,
   }) async {
     if (kDebugMode) print(api + urlPart);
 
     final res = await _client.post(
       Uri.https("$api" "$urlPart"),
-      body: body,
+      body: jsonEncode(body),
     );
 
     handleHttpStatus(res);
@@ -84,11 +85,8 @@ class NoTokenHttpClientHelper implements ClientHelper {
   }
 
   @override
-  Future<void> putHandler(
-    String api,
-    String urlPart,
-    Map<String, dynamic> body,
-  ) async {
+  Future<void> putHandler(String api, String urlPart, Map<String, dynamic> body,
+      {bool needsHeader = true}) async {
     final res = await _client.put(
       Uri.https("$api" "$urlPart"),
       body: body,
@@ -101,10 +99,8 @@ class NoTokenHttpClientHelper implements ClientHelper {
 
   @override
   Future<void> deleteHandler(
-    String api,
-    String urlPart,
-    Map<String, dynamic> body,
-  ) async {
+      String api, String urlPart, Map<String, dynamic> body,
+      {bool needsHeader = true}) async {
     final res = await _client.delete(Uri.https("$api" "$urlPart"), body: body);
 
     if (kDebugMode) {

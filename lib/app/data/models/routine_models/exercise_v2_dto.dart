@@ -1,18 +1,23 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart'
     as ex;
+import 'package:uniceps/core/constants/constants.dart';
 
 class ExerciseV2Dto {
   final int? id, apiId;
   final int muscleGroupId;
   final String name, imageUrl;
+  final Map<Lang, String> muscleGroupTranslations;
   final Uint8List? imageBitMap;
   const ExerciseV2Dto({
     this.id,
     required this.apiId,
     required this.muscleGroupId,
     required this.name,
+    required this.muscleGroupTranslations,
     required this.imageUrl,
     required this.imageBitMap,
   });
@@ -21,6 +26,7 @@ class ExerciseV2Dto {
         apiId: e.apiId,
         muscleGroupId: e.muscleGroupId,
         name: e.name,
+        muscleGroupTranslations: e.muscleGroupTranslations,
         imageUrl: e.imageUrl,
         imageBitMap: e.imageBitMap,
       );
@@ -30,18 +36,23 @@ class ExerciseV2Dto {
         apiId: apiId,
         muscleGroupId: muscleGroupId,
         name: name,
+        muscleGroupTranslations: muscleGroupTranslations,
         imageUrl: imageUrl,
         imageBitMap: imageBitMap,
       );
 
-  factory ExerciseV2Dto.fromJson(Map<String, dynamic> json) => ExerciseV2Dto(
-        // id: json['id'],
-        apiId: json['id'],
-        muscleGroupId: json['muscleGroupId'],
-        name: json['name'],
-        imageUrl: json['imageUrl'],
-        imageBitMap: null,
-      );
+  factory ExerciseV2Dto.fromJson(Map<String, dynamic> json) {
+    // final map = parseTranslations(json['muscleGroupTranslations']);
+    return ExerciseV2Dto(
+      // id: json['id'],
+      apiId: json['id'],
+      muscleGroupId: json['muscleGroupId'],
+      name: json['name'],
+      muscleGroupTranslations: {},
+      imageUrl: json['imageUrl'],
+      imageBitMap: null,
+    );
+  }
 
   factory ExerciseV2Dto.fromTable(Exercise exercise, ExerciseGroup group,
           String imageUrl, Uint8List? imageBitMap) =>
@@ -50,6 +61,8 @@ class ExerciseV2Dto {
           apiId: exercise.apiId,
           muscleGroupId: group.apiId,
           name: exercise.name,
+          muscleGroupTranslations:
+              parseTranslations(group.muscleGroupTranslations),
           imageUrl: imageUrl,
           imageBitMap: imageBitMap);
 
@@ -58,6 +71,7 @@ class ExerciseV2Dto {
     int? apiId,
     int? muscleGroupId,
     String? name,
+    Map<Lang, String>? muscleGroupTranslations,
     String? imageUrl,
     Uint8List? imageBitMap,
   }) =>
@@ -66,6 +80,8 @@ class ExerciseV2Dto {
           apiId: apiId ?? this.apiId,
           muscleGroupId: muscleGroupId ?? this.muscleGroupId,
           name: name ?? this.name,
+          muscleGroupTranslations:
+              muscleGroupTranslations ?? this.muscleGroupTranslations,
           imageUrl: imageUrl ?? this.imageUrl,
           imageBitMap: imageBitMap ?? this.imageBitMap);
 
@@ -74,6 +90,7 @@ class ExerciseV2Dto {
         'apiId': apiId,
         'muscleGroupId': muscleGroupId,
         'name': name,
+        'muscleGroupTranslations': jsonEncode(muscleGroupTranslations),
         'imageUrl': imageUrl,
         'imageBitMap': imageBitMap,
       };

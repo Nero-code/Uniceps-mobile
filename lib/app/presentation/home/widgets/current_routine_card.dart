@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uniceps/core/constants/app_routes.dart';
 
 class CurrentRoutineCard extends StatelessWidget {
   const CurrentRoutineCard({super.key});
@@ -8,8 +9,8 @@ class CurrentRoutineCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 18.0, vertical: 8.0),
-      padding: EdgeInsets.symmetric(horizontal: 18.0, vertical: 8.0),
+      margin: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         color: btnBackgroundColor,
@@ -17,22 +18,22 @@ class CurrentRoutineCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("الروتين الحالي"),
-          Row(
+          const Text("الروتين الحالي"),
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("عدد التمارين:"),
               Text("2"),
             ],
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("عدد الجلسات التمرينية:"),
               Text("2"),
             ],
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("تاريخ الصنع:"),
@@ -42,8 +43,10 @@ class CurrentRoutineCard extends StatelessWidget {
           SizedBox(
             // width: screenSize.width,
             child: ElevatedButton(
-              onPressed: () {},
-              child: Icon(Icons.edit),
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.routineManager);
+              },
+              child: const Icon(Icons.edit),
             ),
           ),
         ],

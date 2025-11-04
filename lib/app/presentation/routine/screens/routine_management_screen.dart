@@ -9,10 +9,10 @@ import 'package:uniceps/app/presentation/routine/dialogs/routine_delete_dialog.d
 import 'package:uniceps/app/presentation/routine/dialogs/routine_options_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_set_current_dialog.dart';
 import 'package:uniceps/app/presentation/routine/screens/routine_edit_days_screen.dart';
-import 'package:uniceps/app/presentation/routine/widgets/routine_grid_tile.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_list_tile.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/injection_dependency.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RoutineManagementScreen extends StatefulWidget {
   const RoutineManagementScreen({super.key});
@@ -61,21 +61,14 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!;
     return BlocProvider(
       lazy: false,
       create: (context) =>
           RoutineManagementBloc(routineManagementUsecases: sl())
             ..add(GetRoutinesEvent()),
       child: Scaffold(
-          appBar: AppBar(title: const Text("My Routines")),
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: () => _createRoutine(
-          //     "routine $routinesLength",
-          //     (name) async => BlocProvider.of<RoutineManagementBloc>(context)
-          //         .add(CreateRoutineEvent(name: name)),
-          //   ),
-          //   child: const Icon(Icons.add),
-          // ),
+          appBar: AppBar(title: Text(locale.scrTitleMyRoutines)),
           body: BlocBuilder<RoutineManagementBloc, RoutineManagementState>(
             builder: (context, state) {
               if (state is RoutineManagementLoadedState) {
@@ -83,123 +76,89 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
 
                 return Stack(
                   children: [
-                    isGridView
-                        ? GridView(
-                            // padding: EdgeInsets.all(gridSpacing),
-                            padding: const EdgeInsets.only(bottom: 50.0),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              childAspectRatio: 1.3,
-                              crossAxisCount: 2,
-                              mainAxisSpacing: gridSpacing,
-                              crossAxisSpacing: gridSpacing,
+                    ListView(
+                      padding: const EdgeInsets.only(bottom: 50.0),
+                      children: state.routines.map(
+                        (e) {
+                          return RoutineListTile(
+                            routine: e,
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RoutineEditScreen(
+                                    routineId: e.id!, routineName: e.name),
+                              ),
                             ),
-                            children: state.routines.map(
-                              (e) {
-                                return RoutineGridTile(
-                                  routine: e,
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RoutineEditScreen(
-                                        routineId: e.id!,
-                                        routineName: e.name,
-                                      ),
-                                    ),
-                                  ),
-                                  onLongPress: () {},
-                                );
-                              },
-                            ).toList(),
-                          )
-                        : ListView(
-                            padding: const EdgeInsets.only(bottom: 50.0),
-                            children: state.routines
-                                .map(
-                                  (e) => RoutineListTile(
-                                      routine: e,
-                                      onTap: () => Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  RoutineEditScreen(
-                                                routineId: e.id!,
-                                                routineName: e.name,
-                                              ),
-                                            ),
-                                          ),
-                                      onLongPress: () async {
-                                        final canDelete = context
-                                            .read<SessionBloc>()
-                                            .state is NoActiveSessionState;
+                            onLongPress: () async {
+                              final canDelete = context
+                                  .read<SessionBloc>()
+                                  .state
+                                  .maybeWhen(
+                                      orElse: () => false,
+                                      noActiveSession: () => true);
 
-                                        final res = await showDialog<Option>(
-                                            context: context,
-                                            builder: (context) =>
-                                                RoutineOptionsDialog(
-                                                    routineName: e.name));
+                              final res = await showDialog<Option>(
+                                  context: context,
+                                  builder: (context) => RoutineOptionsDialog(
+                                      routineName: e.name));
 
-                                        // print("selected option: $res");
-                                        switch (res) {
-                                          case Option.edit:
-                                            _renameRoutine(e.name, (name) {
-                                              if (name == e.name) return;
-                                              BlocProvider.of<
-                                                          RoutineManagementBloc>(
-                                                      context)
-                                                  .add(UpdateRoutineEvent(
-                                                      routineToUpdate:
-                                                          e.copyWith(
-                                                              name: name)));
-                                            });
-                                            break;
+                              // print("selected option: $res");
+                              switch (res) {
+                                case Option.edit:
+                                  _renameRoutine(e.name, (name) {
+                                    if (name == e.name) return;
+                                    BlocProvider.of<RoutineManagementBloc>(
+                                            context)
+                                        .add(UpdateRoutineEvent(
+                                            routineToUpdate:
+                                                e.copyWith(name: name)));
+                                  });
+                                  break;
 
-                                          case Option.delete:
-                                            if (canDelete) {
-                                              _deleteRoutine(() => BlocProvider
-                                                      .of<RoutineManagementBloc>(
-                                                          context)
-                                                  .add(DeleteRoutineEvent(
-                                                      routineToDelete: e)));
-                                            } else {
-                                              if (context.mounted) {
-                                                ScaffoldMessenger.of(context)
-                                                    .clearSnackBars();
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  const SnackBar(
-                                                    backgroundColor: Colors.red,
-                                                    content: Text(
-                                                        "you can't delete with an open session!"),
-                                                  ),
-                                                );
-                                              }
-                                            }
-                                            break;
+                                case Option.delete:
+                                  if (canDelete) {
+                                    _deleteRoutine(() =>
+                                        BlocProvider.of<RoutineManagementBloc>(
+                                                context)
+                                            .add(DeleteRoutineEvent(
+                                                routineToDelete: e)));
+                                  } else {
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(context)
+                                          .clearSnackBars();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          backgroundColor: Colors.red,
+                                          content: Text(
+                                              "you can't delete with an open session!"),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                  break;
 
-                                          case Option.setCurrent:
-                                            _setCurrentRoutine(() async {
-                                              final rBloc = BlocProvider.of<
-                                                      RoutineManagementBloc>(
-                                                  context)
-                                                ..add(SetCurrentRoutineEvent(
-                                                    routine: e,
-                                                    version: state.version));
-                                              await rBloc.stream.skip(1).first;
-                                              if (context.mounted) {
-                                                BlocProvider.of<
-                                                            CurrentRoutineCubit>(
-                                                        context)
-                                                    .getCurrentRoutine();
-                                              }
-                                            });
-                                            break;
-                                          default:
-                                        }
-                                      }),
-                                )
-                                .toList(),
-                          ),
+                                case Option.setCurrent:
+                                  _setCurrentRoutine(() async {
+                                    final rBloc = BlocProvider.of<
+                                        RoutineManagementBloc>(context)
+                                      ..add(SetCurrentRoutineEvent(
+                                          routine: e, version: state.version));
+                                    await rBloc.stream.skip(1).first;
+                                    if (context.mounted) {
+                                      BlocProvider.of<CurrentRoutineCubit>(
+                                              context)
+                                          .getCurrentRoutine();
+                                    }
+                                  });
+                                  break;
+                                default:
+                              }
+                            },
+                          );
+                        },
+                      ).toList(),
+                    ),
                     Positioned(
                         bottom: 0.0,
                         width: MediaQuery.sizeOf(context).width,

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/muscle_group_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2_selection/exercises_v2_selection_cubit.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/pages/exercises_list_tab.dart';
+import 'package:uniceps/core/constants/constants.dart';
 
 class ExercisesSelectionScreen extends StatefulWidget {
   const ExercisesSelectionScreen(
@@ -36,6 +38,7 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen>
 
   @override
   Widget build(BuildContext context) {
+    final lang = BlocProvider.of<LocaleCubit>(context).state.isRtl();
     return BlocBuilder<MuscleGroupBloc, MuscleGroupState>(
       builder: (context, state) {
         if (state is MuscleGroupLoadedState) {
@@ -61,7 +64,9 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen>
                   controller: _tabController,
                   isScrollable: true,
                   tabs: [
-                    ...state.groups.map((group) => Tab(text: group.arGroupName))
+                    ...state.groups.map((group) => Tab(
+                        text: group
+                            .muscleGroupTranslations[lang ? Lang.ar : Lang.en]))
                   ],
                 ),
               ),

@@ -14,7 +14,7 @@ class SessionCompleteDialog extends StatelessWidget {
           padding: const EdgeInsets.all(5.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               colors: [
                 Colors.yellow,
                 Colors.amber,

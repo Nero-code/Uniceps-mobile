@@ -37,11 +37,12 @@ class PracticeHeader extends StatelessWidget {
               Text(item.exercise.name),
               BlocSelector<SessionBloc, SessionState, List<TLog>>(
                 selector: (state) {
-                  return state is SessionLoadedState
-                      ? state.session.logs
-                          .where((log) => log.exerciseId == item.exercise.apiId)
-                          .toList()
-                      : [];
+                  return state.maybeMap(
+                    loaded: (loaded) => loaded.session.logs
+                        .where((log) => log.exerciseId == item.exercise.apiId)
+                        .toList(),
+                    orElse: () => [],
+                  );
                 },
                 builder: (context, logs) {
                   return Text("${logs.length} / ${item.sets.length}",

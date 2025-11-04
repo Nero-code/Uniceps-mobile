@@ -52,6 +52,11 @@
   "list":"List",
   "attendenceLog":"Attendence Log",
 
+  "scrTitleMyRoutines": "My Routines",
+  "scrTitleProfile": "Profile",
+  "scrTitleSettings": "Settings",
+  "scrTitlePerformance": "Performance",
+
   "chooseLang": "Choose Language:",
   "about": "About",
   "gyms": "Gyms",
@@ -168,6 +173,36 @@
   "newRoutine": "New Routine",
   "sortDays": "Sort Days",
 
+  "commingSoon": "Comming Soon!",
 
-  "commingSoon": "Comming Soon!"
+  "captainUni": "Captain Uni",
+
+  "buyNow": "Buy Now",
+
+  "buyPlanQuestion": "Buy Plan?",
+  "buyPlancontent": "Are you sure you want to buy {planName}! the durations will accumilate if previous plan is present",
+  "@buyPlanContent": {
+    "placeHolders": {
+      "planName": { "type": "string" }
+    }
+  },
+
+  "memberDurationAlart": "you still have {count}! day(s) till {date}!",
+  "@memberDurationAlart": {
+    "placeHolders": {
+      "count": { "type": "num" },
+      "date": { "type": "string" }
+    }
+  },
+
+  "muscleGroup": "Muscle Group: {group}",
+  "@muscleGroup": {
+    "placeHolders": {
+      "group": { "type": "String" }
+    }
+  },
+
+  "signinAlert": "Sign in to see all features",
+  "upgrade": "Upgrade",
+  "upgradeAlert": "Become a Premium Member to unlock your FULL potential"
 }

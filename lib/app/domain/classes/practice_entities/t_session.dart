@@ -7,6 +7,8 @@ class TSession {
   final DateTime createdAt;
   final DateTime? finishedAt;
 
+  final double progress;
+
   final int? apiId;
   final int version;
   final bool isSynced;
@@ -18,6 +20,7 @@ class TSession {
     required this.apiId,
     required this.createdAt,
     required this.finishedAt,
+    this.progress = 0,
     this.version = 0,
     this.isSynced = false,
   });

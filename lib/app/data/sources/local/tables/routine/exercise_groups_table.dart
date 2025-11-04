@@ -6,8 +6,7 @@ class ExerciseGroups extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get apiId => integer()();
 
-  TextColumn get arName => text()();
-  TextColumn get enName => text()();
+  TextColumn get muscleGroupTranslations => text()();
 
   // Unique Columns
   @override

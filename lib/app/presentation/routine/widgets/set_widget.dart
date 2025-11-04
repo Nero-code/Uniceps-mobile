@@ -35,6 +35,12 @@ class _SetWidgetState extends State<SetWidget> {
   }
 
   @override
+  void didUpdateWidget(covariant SetWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _controller.text = "${widget.set.reps}";
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.sizeOf(context).height * 0.08,
@@ -62,7 +68,9 @@ class _SetWidgetState extends State<SetWidget> {
                   width: 80,
                   child: TextField(
                     focusNode: _focusNode,
-                    textInputAction: TextInputAction.next,
+                    textInputAction: widget.isLast
+                        ? TextInputAction.done
+                        : TextInputAction.next,
                     onTap: () {
                       if (!_focusNode.hasFocus) {
                         _controller.selection = TextSelection(

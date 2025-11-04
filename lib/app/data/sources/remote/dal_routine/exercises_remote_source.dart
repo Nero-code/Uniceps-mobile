@@ -19,24 +19,28 @@ class ExercisesRemoteSourceImpl implements IExercisesRemoteSourceContract {
   @override
   Future<List<MuscleGroupDto>> getExerciseGroups() async {
     return await _clientHelper.getListHandler<MuscleGroupDto>(
-        API_V2, HTTP_MUSCLE_GROUPS, (json) => MuscleGroupDto.fromJson(json));
+        API_V2, HTTP_MUSCLE_GROUPS, MuscleGroupDto.fromJson,
+        needsHeader: false);
   }
 
   @override
   Future<List<ExerciseV2Dto>> getAllExercises() async {
     return await _clientHelper.getListHandler<ExerciseV2Dto>(
-        API_V2, HTTP_EXERCISES, (json) => ExerciseV2Dto.fromJson(json));
+        API_V2, HTTP_EXERCISES, ExerciseV2Dto.fromJson,
+        needsHeader: false);
   }
 
   @override
   Future<List<ExerciseV2Dto>> getExercisesByFilter(String filter) async {
     return await _clientHelper.getListHandler<ExerciseV2Dto>(
-        API_V2, HTTP_EXERCISES, (json) => ExerciseV2Dto.fromJson(json));
+        API_V2, HTTP_EXERCISES, ExerciseV2Dto.fromJson,
+        needsHeader: false);
   }
 
   @override
   Future<List<ExerciseV2Dto>> getExercisesByGroup(MuscleGroupDto group) async {
-    return await _clientHelper.getListHandler(API_V2, HTTP_EXERCISES,
-        (json) => ExerciseV2Dto.fromJson(json), {'id': "${group.apiId}"});
+    return await _clientHelper.getListHandler(
+        API_V2, HTTP_EXERCISES, ExerciseV2Dto.fromJson,
+        needsHeader: false, queryParams: {'id': "${group.apiId}"});
   }
 }

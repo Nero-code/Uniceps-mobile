@@ -6,8 +6,12 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/app/presentation/auth/screens/email_auth_screen.dart';
-import 'package:uniceps/app/presentation/blocs/app_state/app_state_cubit.dart';
-import 'package:uniceps/app/presentation/membership/screens/membership_screen.dart';
+import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
+import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
+import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
+import 'package:uniceps/app/presentation/routine/screens/routine_management_screen.dart';
+import 'package:uniceps/app/presentation/settings/screens/settings_screen.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/app/presentation/screens/profile/settings/screens/about_screen.dart';
 import 'package:uniceps/firebase_options.dart';
@@ -61,84 +65,25 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        // BlocProvider<AuthBloc>(
-        //   create: (context) {
-        //     debugPrint(
-        //         "------------------AuthBloc Created!-----------------------");
-        //     return AuthBloc(usecases: di.sl(), guestMode: di.sl())
-        //       ..add(AuthCheckEvent());
-        //   },
-        // ),
-        // BlocProvider<TrainingBloc>(
-        //   create: (context) {
-        //     debugPrint(
-        //         "------------------TrainingBLoc Created!-------------------");
-        //     return TrainingBloc(usecases: di.sl(), manager: di.sl())
-        //       ..add(const GetProgramEvent());
-        //   },
-        // ),
-        // BlocProvider<ExercisesBloc>(
-        //   create: (context) {
-        //     debugPrint(
-        //         "------------------ExercisesBLoc Created!------------------");
-        //     return ExercisesBloc(usecases: di.sl());
-        //   },
-        // ),
-        // BlocProvider<ProfileBloc>(
-        //   create: (context) {
-        //     debugPrint(
-        //         "------------------ProfileBloc Created!--------------------");
-        //     return ProfileBloc(usecases: di.sl());
-        //     // return di.sl()..add(event);
-        //   },
-        // ),
-        // BlocProvider<SubsBloc>(
-        //   create: (context) {
-        //     debugPrint(
-        //         "------------------SubsBloc Created!-----------------------");
-        //     return SubsBloc(usecases: di.sl());
-        //   },
-        // ),
-        // BlocProvider<MeasurmentBloc>(
-        //   create: (context) {
-        //     debugPrint(
-        //         "------------------MeasurmentsBloc Created!----------------");
-        //     return MeasurmentBloc(usecases: di.sl())
-        //       ..add(GetMeasurementsEvent());
-        //   },
-        // ),
-        // BlocProvider<GymsBloc>(
-        //   create: (context) {
-        //     debugPrint(
-        //         "------------------GymsBloc Created!-----------------------");
-        //     return GymsBloc(usecases: di.sl())
-        //       ..add(const GetAllAvailableGymsEvent());
-        //   },
-        // ),
-        // BlocProvider(
-        //   create: (context) {
-        //     debugPrint(
-        //         "------------------Player-Gym Bloc Created!----------------");
-        //     return PlayerGymBloc(usecases: di.sl());
-        //   },
-        // ),
-        // BlocProvider<AttendenceBloc>(
-        //   create: (context) {
-        //     debugPrint(
-        //         "------------------AttendenceBloc Created!-----------------");
-        //     return AttendenceBloc(di.sl());
-        //   },
-        // ),
-
         BlocProvider<LocaleCubit>(
           create: (context) => LocaleCubit()..getSavedLanguageCode(),
         ),
-
-        BlocProvider<AppStateCubit>(
-          create: (context) => AppStateCubit(di.sl())..getUserAccount(),
+        BlocProvider<AccountCubit>(
+          create: (context) => AccountCubit(di.sl())..getUserAccount(),
         ),
-        // BlocProvider(create: (context) => AccountBloc()),
-        // BlocProvider(create: (context) => SubscriptionsBloc()),
+        BlocProvider(
+          create: (context) => MembershipBloc(di.sl())
+            ..add(const MembershipEvent.getCurrentPlan()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              CurrentRoutineCubit(commands: di.sl())..getCurrentRoutine(),
+          lazy: false,
+        ),
+        BlocProvider(
+          create: (context) => SessionBloc(commands: di.sl())
+            ..add(const SessionEvent.getLastActiveSession()),
+        ),
       ],
       child: BlocBuilder<LocaleCubit, ChangedLangState>(
         builder: (context, state) {
@@ -164,14 +109,18 @@ class MyApp extends StatelessWidget {
               AppRoutes.splash: (context) => const SplashScreen(),
               AppRoutes.home: (context) => const HomeScreen(),
 
+              // ROUTINE
+              AppRoutes.routineManager: (context) =>
+                  const RoutineManagementScreen(),
+
               //  AUTH
               AppRoutes.auth: (context) => const EmailAuthScreen(),
-              // ROUTE_PROFILE: (context) => const ProfileScreen(),
 
-              // //  AUX
-              // ROUTE_GYMS_LIST: (context) => const GymListScreen(),
+              // SETTINGS
+              AppRoutes.settings: (context) => const SettingsScreen(),
+
+              //  AUX
               AppRoutes.about: (context) => const AboutScreen(),
-              AppRoutes.plans: (context) => const MembershipScreen(),
             },
           );
         },
