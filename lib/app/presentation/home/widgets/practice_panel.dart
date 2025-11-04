@@ -7,12 +7,13 @@ import 'package:uniceps/core/widgets/box_botton.dart';
 class PracticePanel extends StatelessWidget {
   const PracticePanel({
     super.key,
+    required this.mainIcon,
     required this.onPractice,
     required this.onSettings,
     this.onAnalytics,
     this.onStreak,
   });
-
+  final Widget mainIcon;
   final VoidCallback onPractice;
   final VoidCallback onSettings;
   final VoidCallback? onAnalytics;
@@ -69,12 +70,7 @@ class PracticePanel extends StatelessWidget {
                       background: const Color.fromARGB(29, 154, 178, 190),
                       // background: Color.fromARGB(37, 76, 175, 137),
                       onTap: onPractice,
-                      child: Icon(
-                        Icons.rocket,
-                        size: largeBtnIcon,
-                        // color: Colors.green,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                      child: mainIcon,
                     ),
                   ],
                 );

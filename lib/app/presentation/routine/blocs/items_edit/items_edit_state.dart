@@ -26,3 +26,11 @@ final class ItemsEditErrorState extends ItemsEditState {
 
   const ItemsEditErrorState({required this.failure});
 }
+
+final class ItemsDownloadingState extends ItemsEditState {
+  final double progress;
+
+  const ItemsDownloadingState({required this.progress});
+  @override
+  List<Object> get props => [progress];
+}

@@ -35,6 +35,7 @@
   "logoutAlert": "Logout?",
   "logoutAlertContents": "You are about to Logout of the app some of your data may be lost, Are you sure?",
   "download":"Download",
+  "delete": "Delete",
   
   "price": "Price",
   "discount":"Discount",

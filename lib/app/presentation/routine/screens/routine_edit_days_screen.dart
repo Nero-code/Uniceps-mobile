@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
+import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/days_edit/days_edit_bloc.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_add_dialog.dart';
@@ -211,57 +213,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                 title: Text(widget.routineName),
                 backgroundColor: Theme.of(context).colorScheme.surface,
               ),
-              // floatingActionButton:
-              //     BlocSelector<DaysEditBloc, DaysEditState, List<RoutineDay>>(
-              //   selector: (state) =>
-              //       state is DaysEditLoadedState ? state.days : [],
-              //   builder: (context, days) {
-              //     if (days.isNotEmpty) {
-              //       return FloatingActionButton(
-              //         heroTag: "DaysEdit FAB",
-              //         onPressed: () async {
-              //           final res = await Navigator.push<List<ExerciseV2>>(
-              //               context,
-              //               MaterialPageRoute(
-              //                 builder: (c) => MultiBlocProvider(
-              //                   providers: [
-              //                     BlocProvider(
-              //                       create: (context) =>
-              //                           MuscleGroupBloc(commands: di.sl())
-              //                             ..add(GetMuscleGroupsEvent()),
-              //                     ),
-              //                     BlocProvider(
-              //                       create: (context) =>
-              //                           ExercisesV2Bloc(commands: di.sl()),
-              //                     ),
-              //                   ],
-              //                   child:  ExercisesSelectionScreen(presentExerciseIds: [],),
-              //                 ),
-              //               ));
-              //           if (res == null) {
-              //             if (context.mounted) {
-              //               showSnack(const Text("no items selected"), context);
-              //             }
-              //             return;
-              //           }
-              //           if (context.mounted) {
-              //             BlocProvider.of<ItemsEditBloc>(context).add(
-              //               AddRoutineItemsEvent(
-              //                   items: res
-              //                       .map(
-              //                         (e) => e.toItem(days[selectedIndex].id!),
-              //                       )
-              //                       .toList()),
-              //             );
-              //           }
-              //         },
-              //         child: const Icon(Icons.add),
-              //       );
-              //     }
-              //     return const SizedBox();
-              //   },
-              // ),
-
               body: Stack(
                 children: [
                   BlocBuilder<DaysEditBloc, DaysEditState>(
@@ -351,28 +302,46 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                                       },
                                     ),
                                   ),
-                                  IconButton(
-                                    iconSize: 20,
-                                    splashRadius: 20,
-                                    icon: const Icon(Icons.add),
-                                    onPressed: () {
-                                      _addDay(
-                                        "day ${state.days.length + 1}",
-                                        (name) => BlocProvider.of<DaysEditBloc>(
-                                                context)
-                                            .add(
-                                          AddDayEvent(
-                                            day: RoutineDay(
-                                              routineId: widget.routineId,
-                                              name: name,
-                                              index: state.days.length,
-                                              exercises: [],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                  Builder(builder: (context) {
+                                    final accountCubit =
+                                        context.watch<AccountCubit>();
+                                    final membershipBloc =
+                                        context.watch<MembershipBloc>();
+                                    final canAdd = accountCubit.state.when(
+                                        initial: () => false,
+                                        unauthenticated: () =>
+                                            state.days.isEmpty,
+                                        hasAccount: (s) => membershipBloc.state
+                                            .maybeWhen(
+                                                orElse: () =>
+                                                    state.days.isEmpty,
+                                                loaded: (m) => true));
+                                    return canAdd
+                                        ? IconButton(
+                                            iconSize: 20,
+                                            splashRadius: 20,
+                                            icon: const Icon(Icons.add),
+                                            onPressed: () {
+                                              _addDay(
+                                                "day ${state.days.length + 1}",
+                                                (name) => BlocProvider.of<
+                                                        DaysEditBloc>(context)
+                                                    .add(
+                                                  AddDayEvent(
+                                                    day: RoutineDay(
+                                                      routineId:
+                                                          widget.routineId,
+                                                      name: name,
+                                                      index: state.days.length,
+                                                      exercises: [],
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        : const SizedBox();
+                                  }),
                                 ],
                               ),
                             ),

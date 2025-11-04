@@ -31,14 +31,11 @@ class _ExercisesListTabState extends State<ExercisesListTab>
   Widget build(BuildContext context) {
     super.build(context);
     return BlocProvider(
-      create: (context) => ExercisesV2Bloc(commands: di.sl()),
+      create: (context) => ExercisesV2Bloc(commands: di.sl())
+        ..add(GetExercisesByFilterEvent(filter: widget.muscleGroup)),
       lazy: false,
       child: BlocBuilder<ExercisesV2Bloc, ExercisesV2State>(
         builder: (context, state) {
-          if (state is ExercisesV2Initial) {
-            BlocProvider.of<ExercisesV2Bloc>(context)
-                .add(GetExercisesByFilterEvent(filter: widget.muscleGroup));
-          }
           if (state is ExercisesV2LoadedState) {
             return GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

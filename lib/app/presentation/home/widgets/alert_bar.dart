@@ -8,7 +8,7 @@ class AlertBar extends StatelessWidget {
     this.action,
     this.close,
     this.color = const Color.fromRGBO(255, 245, 157, 1),
-    this.foregroundColor = Colors.black,
+    this.foregroundColor,
   });
 
   final Widget? content;
@@ -16,7 +16,8 @@ class AlertBar extends StatelessWidget {
   final void Function()? action;
   final void Function()? close;
 
-  final Color color, foregroundColor;
+  final Color color;
+  final Color? foregroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,8 @@ class AlertBar extends StatelessWidget {
                         horizontal: 8.0, vertical: 5.0),
                     child: Text(
                       actionText ?? '',
-                      style: TextStyle(fontSize: 12, color: foregroundColor),
+                      style: TextStyle(
+                          fontSize: 12, color: foregroundColor ?? Colors.teal),
                     ),
                   ),
                 ),

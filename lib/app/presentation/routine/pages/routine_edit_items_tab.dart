@@ -8,6 +8,7 @@ import 'package:uniceps/app/presentation/routine/screens/exercises_selection_scr
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_item_horizontal_widget.dart';
 import 'package:uniceps/core/constants/constants.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 
 class RoutineItemEditTab extends StatefulWidget {
@@ -26,122 +27,112 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    // final locale = AppLocalizations.of(context)!;
     return BlocProvider(
-      create: (context) => ItemsEditBloc(commands: di.sl())
-        ..add(GetRoutineDayItemsEvent(dayId: widget.dayId)),
-      child: Stack(
-        children: [
-          BlocBuilder<ItemsEditBloc, ItemsEditState>(
-            builder: (context, state) {
-              if (state is ItemsEditLoadedState) {
-                final items = state.items
-                    .where((element) => element.dayId == widget.dayId)
-                    .toList();
+      create: (context) =>
+          ItemsEditBloc(commands: di.sl(), mediaHelper: di.sl())
+            ..add(GetRoutineDayItemsEvent(dayId: widget.dayId)),
+      child: BlocBuilder<ItemsEditBloc, ItemsEditState>(
+        buildWhen: (previous, current) =>
+            current is! ItemsDownloadingState ||
+            current is! ItemsEditLoadingState,
+        builder: (context, state) {
+          if (state is ItemsEditLoadedState) {
+            final items = state.items
+                .where((element) => element.dayId == widget.dayId)
+                .toList();
 
-                items.sort((a, b) => a.index.compareTo(b.index));
+            items.sort((a, b) => a.index.compareTo(b.index));
 
-                return Stack(
-                  children: [
-                    items.isNotEmpty
-                        ? ReorderableListView(
-                            buildDefaultDragHandles: true,
-                            onReorder: (oldIndex, newIndex) {
-                              final list = items;
-                              final item = list.removeAt(oldIndex);
+            return Stack(
+              children: [
+                items.isNotEmpty
+                    ? ReorderableListView(
+                        buildDefaultDragHandles: true,
+                        onReorder: (oldIndex, newIndex) {
+                          final list = items;
+                          final item = list.removeAt(oldIndex);
 
-                              list.insert(
-                                  newIndex - (newIndex > oldIndex ? 1 : 0),
-                                  item);
+                          list.insert(
+                              newIndex - (newIndex > oldIndex ? 1 : 0), item);
 
-                              BlocProvider.of<ItemsEditBloc>(context).add(
-                                  ReorderRoutineItemsEvent(
-                                      newOrder: list, version: state.version));
-                            },
-                            children: [
-                              //
-                              // R O U T I N E   I T E M
-                              //
-                              ...items
-                                  .map((item) => RoutineItemHorizontalWidget(
-                                        key: ValueKey(item.id!),
-                                        item: item,
-                                      )),
-                              // ...items.map((item) => RoutineItemVerticalWidget(item: item)),
-                              //
-                            ],
-                          )
-                        : Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Image(
-                                  width: MediaQuery.sizeOf(context).width * 0.5,
-                                  image: const AssetImage(IMG_BLANK),
-                                ),
-                                const SizedBox(height: 10),
-                                const Text(
-                                    "no items, try the (+) button"), // TODO: Translate
-                              ],
-                            ),
-                          ),
-                    Positioned(
-                      bottom: 20.0,
-                      left: 20.0,
-                      child: FloatingActionButton(
-                        heroTag: "${widget.dayId}",
-                        child: const Icon(Icons.add),
-                        onPressed: () async {
-                          final presentItems =
-                              items.map((i) => i.exercise.apiId!).toList();
-                          final res = await Navigator.push<List<ExerciseV2>>(
-                              context,
-                              MaterialPageRoute(
-                                builder: (c) => MultiBlocProvider(
-                                  providers: [
-                                    BlocProvider(
-                                      create: (context) =>
-                                          MuscleGroupBloc(commands: di.sl())
-                                            ..add(GetMuscleGroupsEvent()),
-                                    ),
-                                    BlocProvider(
-                                      create: (context) =>
-                                          ExercisesV2Bloc(commands: di.sl()),
-                                    ),
-                                  ],
-                                  child: ExercisesSelectionScreen(
-                                    dayName: widget.dayName,
-                                    presentExerciseIds: presentItems,
-                                  ),
-                                ),
-                              ));
-                          if (res == null) {
-                            if (context.mounted) {
-                              showSnack(
-                                  const Text("no items selected"), context);
-                            }
-                            return;
-                          }
-                          if (context.mounted) {
-                            BlocProvider.of<ItemsEditBloc>(context).add(
-                                AddRoutineItemsEvent(
-                                    dayId: widget.dayId, items: res));
-                          }
+                          BlocProvider.of<ItemsEditBloc>(context).add(
+                              ReorderRoutineItemsEvent(
+                                  newOrder: list, version: state.version));
                         },
+                        children: [
+                          //
+                          // R O U T I N E   I T E M
+                          //
+                          ...items.map((item) => RoutineItemHorizontalWidget(
+                                key: ValueKey(item.id!),
+                                item: item,
+                              )),
+                          // ...items.map((item) => RoutineItemVerticalWidget(item: item)),
+                          //
+                        ],
+                      )
+                    : Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image(
+                              width: MediaQuery.sizeOf(context).width * 0.5,
+                              image: const AssetImage(IMG_BLANK),
+                            ),
+                            const SizedBox(height: 10),
+                            const Text(
+                                "no items, try the (+) button"), // TODO: Translate
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                );
-              } else if (state is ItemsEditErrorState) {
-                return Center(
-                    child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(state.failure.getErrorMessage()),
-                ));
-              }
-              return const LoadingPage();
-            },
-          ),
-        ],
+                Positioned(
+                  bottom: 20.0,
+                  left: 20.0,
+                  child: FloatingActionButton(
+                    heroTag: "${widget.dayId}",
+                    child: const Icon(Icons.add),
+                    onPressed: () {
+                      final presentItems =
+                          items.map((i) => i.exercise.apiId!).toList();
+                      Navigator.push<List<ExerciseV2>>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (c) => MultiBlocProvider(
+                              providers: [
+                                BlocProvider(
+                                  create: (context) =>
+                                      MuscleGroupBloc(commands: di.sl())
+                                        ..add(GetMuscleGroupsEvent()),
+                                ),
+                                BlocProvider(
+                                  create: (context) =>
+                                      ExercisesV2Bloc(commands: di.sl()),
+                                ),
+                                BlocProvider.value(
+                                    value: context.read<ItemsEditBloc>()),
+                              ],
+                              child: ExercisesSelectionScreen(
+                                dayId: widget.dayId,
+                                dayName: widget.dayName,
+                                presentExerciseIds: presentItems,
+                              ),
+                            ),
+                          ));
+                    },
+                  ),
+                ),
+              ],
+            );
+          } else if (state is ItemsEditErrorState) {
+            return Center(
+                child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(state.failure.getErrorMessage()),
+            ));
+          }
+          return const LoadingPage();
+        },
       ),
     );
   }

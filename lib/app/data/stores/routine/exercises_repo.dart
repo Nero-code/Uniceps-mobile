@@ -73,7 +73,9 @@ class ExercisesRepo implements IExercisesContract {
       try {
         final res = await _remoteSource
             .getExercisesByGroup(MuscleGroupDto.fromEntity(group));
-        return Right(res.map((r) => r.toEntity()).toList());
+        final augRes = res.map((ex) => ex.copywith(
+            muscleGroupTranslations: group.muscleGroupTranslations));
+        return Right(augRes.map((r) => r.toEntity()).toList());
       } catch (e) {
         return Left(ServerFailure(errMsg: e.toString()));
       }

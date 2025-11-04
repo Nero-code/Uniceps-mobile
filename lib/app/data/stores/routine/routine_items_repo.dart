@@ -12,12 +12,10 @@ class RoutineItemsRepo implements IRoutineItemsContract {
   RoutineItemsRepo({
     required IRoutineItemsLocalSourceContract localSource,
     required MediaHelper mediaHelper,
-  })  : _localSource = localSource,
-        _mediaHelper = mediaHelper;
+  }) : _localSource = localSource;
 
   final IRoutineItemsLocalSourceContract _localSource;
-  final MediaHelper _mediaHelper;
-  // final Map<int, List<RoutineItem>> lazyItemsBuffer = {};
+
   final itemsBuffer = <RoutineItem>[];
   final loadedDays = <int>[];
 
@@ -43,9 +41,6 @@ class RoutineItemsRepo implements IRoutineItemsContract {
   Future<Either<Failure, List<RoutineItem>>> addItems(
       int dayId, List<ExerciseV2> items) async {
     try {
-      await _mediaHelper
-          .saveImages(items.map((item) => item.imageUrl).toList());
-
       final previouslyAddedItems =
           itemsBuffer.where((i) => i.dayId == dayId).length;
 

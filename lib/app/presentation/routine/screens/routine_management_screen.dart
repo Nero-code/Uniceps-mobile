@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/routine_management/routine_management_bloc.dart';
@@ -162,36 +164,51 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
                     Positioned(
                         bottom: 0.0,
                         width: MediaQuery.sizeOf(context).width,
-                        child: Material(
-                          color: const Color.fromARGB(255, 59, 146, 146),
-                          // color: Theme.of(context).colorScheme.secondary,
-                          child: InkWell(
-                            child: const Padding(
-                              padding: EdgeInsets.all(10.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.add, color: Colors.white),
-                                  Text(
-                                    "Add Routine",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Colors.white,
+                        child: Builder(builder: (context) {
+                          final accountCubit = context.watch<AccountCubit>();
+                          final membershipBloc =
+                              context.watch<MembershipBloc>();
+                          final canCreate = accountCubit.state.when(
+                              initial: () => false,
+                              unauthenticated: () => state.routines.isEmpty,
+                              hasAccount: (s) => membershipBloc.state.maybeWhen(
+                                  orElse: () => state.routines.isEmpty,
+                                  loaded: (m) => true));
+
+                          return Material(
+                            color: canCreate
+                                ? const Color.fromARGB(255, 59, 146, 146)
+                                : Colors.grey.shade400,
+                            child: InkWell(
+                              onTap: canCreate
+                                  ? () => _createRoutine(
+                                        "routine $routinesLength",
+                                        (name) async => BlocProvider.of<
+                                                RoutineManagementBloc>(context)
+                                            .add(
+                                                CreateRoutineEvent(name: name)),
+                                      )
+                                  : null,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(Icons.add, color: Colors.white),
+                                    Text(
+                                      locale.add,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                            onTap: () => _createRoutine(
-                              "routine $routinesLength",
-                              (name) async =>
-                                  BlocProvider.of<RoutineManagementBloc>(
-                                          context)
-                                      .add(CreateRoutineEvent(name: name)),
-                            ),
-                          ),
-                        ))
+                          );
+                        }))
                   ],
                 );
               } else if (state is RoutineManagementErrorState) {

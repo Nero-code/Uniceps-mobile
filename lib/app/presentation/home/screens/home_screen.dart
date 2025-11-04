@@ -99,10 +99,46 @@ class _HomeScreenState extends State<HomeScreen> {
                         //
                         // Practice Panel
                         //
-                        PracticePanel(
-                          onPractice: panelController.open,
-                          onSettings: () {},
-                          onAnalytics: () {},
+                        BlocBuilder<SessionBloc, SessionState>(
+                          builder: (context, state) {
+                            return PracticePanel(
+                              onPractice: state.maybeWhen(
+                                  noActiveSession: () => panelController.open,
+                                  loaded: (s) => () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => BlocProvider.value(
+                                                value: context
+                                                    .read<StopwatchCubit>(),
+                                                child: const PracticeScreen(),
+                                              ))),
+                                  error: (e) =>
+                                      () => print(e.getErrorMessage()),
+                                  orElse: () => () {}),
+                              onSettings: () => Navigator.pushNamed(
+                                  context, AppRoutes.settings),
+                              onAnalytics: () {},
+                              mainIcon: state.maybeWhen(
+                                loading: () => const LoadingPage(),
+                                noActiveSession: () => Icon(
+                                  Icons.rocket,
+                                  size: 50,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                loaded: (s) => const Icon(
+                                  Icons.rocket_launch,
+                                  size: 50,
+                                  color: Colors.amber,
+                                ),
+                                error: (f) => const Icon(
+                                  Icons.refresh,
+                                  color: Colors.red,
+                                  size: 50,
+                                ),
+                                orElse: () => const SizedBox(),
+                              ),
+                            );
+                          },
                         ),
                         const CurrentRoutineCard(),
                         const SizedBox(),
@@ -131,10 +167,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         return accountCubit.state.map(
                           initial: (s) => const SizedBox(),
                           unauthenticated: (s) => AlertBar(
-                            content: Text(
-                              locale.signinAlert,
-                              style: const TextStyle(fontSize: 12),
-                            ),
+                            content: Text(locale.signinAlert,
+                                style: const TextStyle(fontSize: 12)),
                             actionText: locale.signin,
                             action: () =>
                                 Navigator.pushNamed(context, AppRoutes.auth),

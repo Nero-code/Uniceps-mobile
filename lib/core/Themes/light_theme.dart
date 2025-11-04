@@ -25,6 +25,7 @@ const secondaryLighter = Color(0xFFDBF5F6);
 const secondaryLight = Color(0xFFB5EBE9);
 
 ThemeData lightTheme = ThemeData(
+  fontFamily: 'Cairo',
   appBarTheme: const AppBarTheme().copyWith(
     foregroundColor: Colors.black,
     // foregroundColor: ,
