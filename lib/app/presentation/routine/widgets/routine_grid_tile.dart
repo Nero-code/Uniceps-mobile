@@ -66,7 +66,7 @@ class RoutineGridTile extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: Text(
-                  "${routine.trainingDays.length} ${local.days}",
+                  "${routine.trainingDays.length} ${local.day}",
                   style: const TextStyle(fontSize: 10),
                 ),
               ),

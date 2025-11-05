@@ -8,7 +8,7 @@ import 'package:uniceps/app/presentation/routine/screens/exercises_selection_scr
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_item_horizontal_widget.dart';
 import 'package:uniceps/core/constants/constants.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 
 class RoutineItemEditTab extends StatefulWidget {
@@ -27,7 +27,7 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    // final locale = AppLocalizations.of(context)!;
+    final locale = AppLocalizations.of(context)!;
     return BlocProvider(
       create: (context) =>
           ItemsEditBloc(commands: di.sl(), mediaHelper: di.sl())
@@ -81,8 +81,7 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab>
                               image: const AssetImage(IMG_BLANK),
                             ),
                             const SizedBox(height: 10),
-                            const Text(
-                                "no items, try the (+) button"), // TODO: Translate
+                            Text(locale.emptyRoutineItems),
                           ],
                         ),
                       ),

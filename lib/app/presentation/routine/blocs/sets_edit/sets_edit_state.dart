@@ -17,7 +17,7 @@ final class SetsEditLoadedState extends SetsEditState {
     required this.sets,
   });
   @override
-  List<Object> get props => sets;
+  List<Object> get props => [...sets];
 }
 
 final class SetsEditErrorState extends SetsEditState {

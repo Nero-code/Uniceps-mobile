@@ -60,7 +60,7 @@ class RoutineListTile extends StatelessWidget {
                       Text(
                         "${DateTime.now().difference(routine.createdAt).inDays}"
                         " "
-                        "${local.days}",
+                        "${local.day}",
                         style: const TextStyle(),
                       ),
                     ]),

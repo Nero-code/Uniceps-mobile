@@ -36,25 +36,15 @@ class SetsEditBloc extends Bloc<SetsEditEvent, SetsEditState> {
         (l) => emit(SetsEditErrorState(failure: l)),
         (r) => emit(SetsEditLoadedState(sets: r)),
       );
-
-      // emit(SetsEditLoadedState(itemId: event.itemId, sets: sets));
     });
 
-    // on<SaveSetsEvent>((event, emit) async {
-    //   emit(SetsEditLoadingState());
-
-    //   final either = await _commands.saveAllSets(event.sets);
-    //   either.fold(
-    //     (l) => emit(SetsEditErrorState(failure: l)),
-    //     (r) => emit(SetsEditLoadedState(sets: r, itemId: event.itemId)),
-    //   );
-    // });
-
     on<UpdateSetEvent>((event, emit) async {
+      emit(SetsEditLoadingState());
+
       final either = await _commands.updateSet(event.set);
       either.fold(
         (l) => emit(SetsEditErrorState(failure: l)),
-        (r) => emit(SetsEditLoadedState(sets: r)),
+        (r) => emit(SetsEditLoadedState(sets: List.from([...r]))),
       );
     });
 

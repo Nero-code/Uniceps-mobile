@@ -27,14 +27,14 @@ const secondaryLight = Color(0xFFB5EBE9);
 ThemeData lightTheme = ThemeData(
   fontFamily: 'Cairo',
   appBarTheme: const AppBarTheme().copyWith(
-    foregroundColor: Colors.black,
-    // foregroundColor: ,
-    backgroundColor: back2,
-    // systemOverlayStyle: const SystemUiOverlayStyle(
-    //     statusBarColor: Colors.transparent,
+      // foregroundColor: Colors.black,
+      // foregroundColor: ,
+      // backgroundColor: back2,
+      // systemOverlayStyle: const SystemUiOverlayStyle(
+      //     statusBarColor: Colors.transparent,
 
-    //     systemNavigationBarColor: Colors.transparent),
-  ),
+      //     systemNavigationBarColor: Colors.transparent),
+      ),
   colorScheme: ColorScheme.fromSeed(
     seedColor: mainBlue,
     primary: mainBlueLight,

@@ -64,35 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
               body: Stack(
                 fit: StackFit.expand,
                 children: [
-                  //
-                  //  G R A D I E N T   B A C K G R O U N D
-                  //
-
-                  // Container(
-                  //   height: screenSize.height * 0.50,
-                  //   width: screenSize.width,
-                  //   decoration: BoxDecoration(
-                  //     gradient: RadialGradient(
-                  //       colors: [
-                  //         // mainBlueDark,
-                  //         Theme.of(context).colorScheme.primary,
-                  //         // Theme.of(context).colorScheme.primary,
-                  //         Theme.of(context).colorScheme.secondary,
-                  //         Theme.of(context).colorScheme.surface,
-                  //       ],
-                  //       // begin: Alignment.topCenter,
-                  //       // end: Alignment.bottomCenter,
-                  //       center: Alignment.topCenter,
-                  //       stops: const [
-                  //         0.1,
-                  //         // 0.5,
-                  //         0.8,
-                  //         1,
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-
                   SingleChildScrollView(
                     child: Column(
                       children: [
@@ -109,7 +80,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       MaterialPageRoute(
                                           builder: (_) => BlocProvider.value(
                                                 value: context
-                                                    .read<StopwatchCubit>(),
+                                                    .read<StopwatchCubit>()
+                                                  ..startStopWatch(),
                                                 child: const PracticeScreen(),
                                               ))),
                                   error: (e) =>
@@ -154,7 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-
                   Positioned(
                     top: 0.0,
                     width: screenSize.width,

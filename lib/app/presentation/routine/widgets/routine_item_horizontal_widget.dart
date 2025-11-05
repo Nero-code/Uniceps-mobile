@@ -40,14 +40,17 @@ class _RoutineItemHorizontalWidgetState
               Material(
                 child: InkWell(
                   borderRadius: BorderRadius.circular(15),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (c) => BlocProvider.value(
-                              value: BlocProvider.of<SetsEditBloc>(context),
-                              child: RoutineEditSetsScreen(item: widget.item),
-                            )),
-                  ),
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (c) => BlocProvider.value(
+                                value: context.read<SetsEditBloc>(),
+                                child: RoutineEditSetsScreen(item: widget.item),
+                              )),
+                    );
+                    setState(() {});
+                  },
                   child: Material(
                     child: Container(
                       decoration: BoxDecoration(
@@ -155,7 +158,7 @@ class _RoutineItemHorizontalWidgetState
                     //     .read<ItemsEditBloc>()
                     //     .add(RemoveRoutineItemEvent(exercise: widget.item));
                   },
-                  icon: Icon(Icons.close),
+                  icon: const Icon(Icons.close),
                   color: Colors.red,
                 ),
               )

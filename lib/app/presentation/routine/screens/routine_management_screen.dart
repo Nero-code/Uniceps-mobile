@@ -35,7 +35,7 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
     showDialog(
       context: context,
       builder: (_) => RoutineNameDialog(
-          title: "Create Routine", initialName: initial, onSubmit: onCreate),
+          isCreate: true, initialName: initial, onSubmit: onCreate),
     );
   }
 
@@ -44,21 +44,23 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
     showDialog(
       context: context,
       builder: (_) => RoutineNameDialog(
-          title: "Rename Routine", initialName: initial, onSubmit: onCreate),
+          isCreate: false, initialName: initial, onSubmit: onCreate),
     );
   }
 
-  void _deleteRoutine(void Function() onConfirm) async {
+  void _deleteRoutine(String name, void Function() onConfirm) async {
     showDialog(
       context: context,
-      builder: (_) => RoutineDeleteDialog(onConfirm: onConfirm),
+      builder: (_) =>
+          RoutineDeleteDialog(routineName: name, onConfirm: onConfirm),
     );
   }
 
-  void _setCurrentRoutine(void Function() onConfirm) async {
+  void _setCurrentRoutine(void Function() onConfirm, String name) async {
     showDialog(
         context: context,
-        builder: (_) => RoutineSetCurrentDialog(onConfirm: onConfirm));
+        builder: (_) =>
+            RoutineSetCurrentDialog(routineName: name, onConfirm: onConfirm));
   }
 
   @override
@@ -119,9 +121,10 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
 
                                 case Option.delete:
                                   if (canDelete) {
-                                    _deleteRoutine(() =>
-                                        BlocProvider.of<RoutineManagementBloc>(
-                                                context)
+                                    _deleteRoutine(
+                                        e.name,
+                                        () => BlocProvider.of<
+                                                RoutineManagementBloc>(context)
                                             .add(DeleteRoutineEvent(
                                                 routineToDelete: e)));
                                   } else {
@@ -141,18 +144,22 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
                                   break;
 
                                 case Option.setCurrent:
-                                  _setCurrentRoutine(() async {
-                                    final rBloc = BlocProvider.of<
-                                        RoutineManagementBloc>(context)
-                                      ..add(SetCurrentRoutineEvent(
-                                          routine: e, version: state.version));
-                                    await rBloc.stream.skip(1).first;
-                                    if (context.mounted) {
-                                      BlocProvider.of<CurrentRoutineCubit>(
-                                              context)
-                                          .getCurrentRoutine();
-                                    }
-                                  });
+                                  _setCurrentRoutine(
+                                    () async {
+                                      final rBloc = BlocProvider.of<
+                                          RoutineManagementBloc>(context)
+                                        ..add(SetCurrentRoutineEvent(
+                                            routine: e,
+                                            version: state.version));
+                                      await rBloc.stream.skip(1).first;
+                                      if (context.mounted) {
+                                        BlocProvider.of<CurrentRoutineCubit>(
+                                                context)
+                                            .getCurrentRoutine();
+                                      }
+                                    },
+                                    e.name,
+                                  );
                                   break;
                                 default:
                               }
@@ -168,6 +175,7 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
                           final accountCubit = context.watch<AccountCubit>();
                           final membershipBloc =
                               context.watch<MembershipBloc>();
+
                           final canCreate = accountCubit.state.when(
                               initial: () => false,
                               unauthenticated: () => state.routines.isEmpty,
@@ -182,7 +190,7 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
                             child: InkWell(
                               onTap: canCreate
                                   ? () => _createRoutine(
-                                        "routine $routinesLength",
+                                        "${locale.newRoutine} $routinesLength",
                                         (name) async => BlocProvider.of<
                                                 RoutineManagementBloc>(context)
                                             .add(

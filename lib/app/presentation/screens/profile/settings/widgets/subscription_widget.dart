@@ -220,7 +220,7 @@ class _SubsrciptionWidgetState extends State<SubsrciptionWidget> {
                               color: Theme.of(context).colorScheme.primary),
                         ),
                         Text(
-                          local.days,
+                          local.day,
                           style: TextStyle(
                               fontSize: 10,
                               // fontWeight: FontWeight.bold,

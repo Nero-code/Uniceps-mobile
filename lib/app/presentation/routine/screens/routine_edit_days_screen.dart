@@ -197,22 +197,16 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-            create: (context) => DaysEditBloc(commands: di.sl())
-              ..add(GetDaysEvent(routineId: widget.routineId))),
-        // BlocProvider(create: (context) => ItemsEditBloc(commands: di.sl())),
-        // BlocProvider(create: (context) => SetsEditBloc(commands: di.sl())),
-      ],
+    return BlocProvider(
+      create: (context) => DaysEditBloc(commands: di.sl())
+        ..add(
+          GetDaysEvent(routineId: widget.routineId),
+        ),
       child: Stack(
         children: [
           ScaffoldMessenger(
             child: Scaffold(
-              appBar: AppBar(
-                title: Text(widget.routineName),
-                backgroundColor: Theme.of(context).colorScheme.surface,
-              ),
+              appBar: AppBar(title: Text(widget.routineName)),
               body: Stack(
                 children: [
                   BlocBuilder<DaysEditBloc, DaysEditState>(
@@ -230,8 +224,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                             //
                             //  T A B - B A R
                             //
-                            Container(
-                              color: Theme.of(context).colorScheme.surface,
+                            SizedBox(
                               width: screenSize.width,
                               height: screenSize.height * 0.06,
                               child: ListView(

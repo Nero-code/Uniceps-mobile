@@ -39,15 +39,6 @@ class RoutineSetsRepo implements IRoutineSetsContract {
     try {
       final setWithId = (await _localSource.addSets([newSet])).first;
 
-      // if (lazyItemSetsBuffer.containsKey(itemId)) {
-      //   final oldSets = lazyItemSetsBuffer[itemId]!;
-      //   oldSets.addAll(setsWithIds.map((s) => s as RoutineSet).toList());
-
-      //   lazyItemSetsBuffer.addAll({itemId: oldSets});
-      // } else {
-      //   lazyItemSetsBuffer
-      //       .addAll({itemId: setsWithIds.map((s) => s as RoutineSet).toList()});
-      // }
       final allsets = lazyItemSetsBuffer[itemId] ?? [];
       allsets.add(setWithId.toEntity());
       lazyItemSetsBuffer.addAll({itemId: allsets});
@@ -58,18 +49,6 @@ class RoutineSetsRepo implements IRoutineSetsContract {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
   }
-
-  // @override
-  // Future<Either<Failure, List<RoutineSet>>> saveAllSets(
-  //     List<RoutineSet> allSets) async {
-  //   try {
-  //     final res = await _localSource
-  //         .saveAllSets(allSets.map((s) => s.toDto()).toList());
-  //     return Right(res);
-  //   } catch (e) {
-  //     return Left(DatabaseFailure(errorMsg: e.toString()));
-  //   }
-  // }
 
   @override
   Future<Either<Failure, List<RoutineSet>>> updateSet(
