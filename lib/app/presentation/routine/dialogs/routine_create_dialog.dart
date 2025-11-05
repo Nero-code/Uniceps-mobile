@@ -5,10 +5,11 @@ class RoutineNameDialog extends StatelessWidget {
   RoutineNameDialog(
       {super.key,
       required this.initialName,
-      required this.title,
+      required this.isCreate,
       required this.onSubmit});
 
-  final String initialName, title;
+  final String initialName;
+  final bool isCreate;
   final void Function(String name) onSubmit;
 
   final _node = FocusNode();
@@ -26,7 +27,8 @@ class RoutineNameDialog extends StatelessWidget {
         color: Colors.blueGrey,
         size: 60,
       ),
-      title: Text(title),
+      title:
+          Text(isCreate ? "${locale.add} ${locale.newRoutine}" : locale.rename),
       content: TextField(
         focusNode: _node,
         onTap: () {

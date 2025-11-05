@@ -14,7 +14,7 @@ class DayAddDialog extends StatelessWidget {
     final locale = AppLocalizations.of(context)!;
     return AlertDialog(
       icon: const Icon(Icons.text_fields_rounded),
-      title: const Text("Add Day"), // TODO: Translate
+      title: Text("${locale.add} ${locale.day}"),
       content: TextField(
         controller: _controller,
         decoration: InputDecoration(
@@ -23,8 +23,6 @@ class DayAddDialog extends StatelessWidget {
               borderRadius: BorderRadius.circular(15)),
           fillColor: Colors.blueGrey.shade50,
           filled: true,
-          // hintText: initialName,
-          // hintStyle: TextStyle(color: Colors.grey),
         ),
         onTap: () => _controller.selection =
             TextSelection(baseOffset: 0, extentOffset: _controller.text.length),

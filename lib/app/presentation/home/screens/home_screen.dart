@@ -64,45 +64,53 @@ class _HomeScreenState extends State<HomeScreen> {
               body: Stack(
                 fit: StackFit.expand,
                 children: [
-                  //
-                  //  G R A D I E N T   B A C K G R O U N D
-                  //
-
-                  // Container(
-                  //   height: screenSize.height * 0.50,
-                  //   width: screenSize.width,
-                  //   decoration: BoxDecoration(
-                  //     gradient: RadialGradient(
-                  //       colors: [
-                  //         // mainBlueDark,
-                  //         Theme.of(context).colorScheme.primary,
-                  //         // Theme.of(context).colorScheme.primary,
-                  //         Theme.of(context).colorScheme.secondary,
-                  //         Theme.of(context).colorScheme.surface,
-                  //       ],
-                  //       // begin: Alignment.topCenter,
-                  //       // end: Alignment.bottomCenter,
-                  //       center: Alignment.topCenter,
-                  //       stops: const [
-                  //         0.1,
-                  //         // 0.5,
-                  //         0.8,
-                  //         1,
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-
                   SingleChildScrollView(
                     child: Column(
                       children: [
                         //
                         // Practice Panel
                         //
-                        PracticePanel(
-                          onPractice: panelController.open,
-                          onSettings: () {},
-                          onAnalytics: () {},
+                        BlocBuilder<SessionBloc, SessionState>(
+                          builder: (context, state) {
+                            return PracticePanel(
+                              onPractice: state.maybeWhen(
+                                  noActiveSession: () => panelController.open,
+                                  loaded: (s) => () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => BlocProvider.value(
+                                                value: context
+                                                    .read<StopwatchCubit>()
+                                                  ..startStopWatch(),
+                                                child: const PracticeScreen(),
+                                              ))),
+                                  error: (e) =>
+                                      () => print(e.getErrorMessage()),
+                                  orElse: () => () {}),
+                              onSettings: () => Navigator.pushNamed(
+                                  context, AppRoutes.settings),
+                              onAnalytics: () {},
+                              mainIcon: state.maybeWhen(
+                                loading: () => const LoadingPage(),
+                                noActiveSession: () => Icon(
+                                  Icons.rocket,
+                                  size: 50,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                loaded: (s) => const Icon(
+                                  Icons.rocket_launch,
+                                  size: 50,
+                                  color: Colors.amber,
+                                ),
+                                error: (f) => const Icon(
+                                  Icons.refresh,
+                                  color: Colors.red,
+                                  size: 50,
+                                ),
+                                orElse: () => const SizedBox(),
+                              ),
+                            );
+                          },
                         ),
                         const CurrentRoutineCard(),
                         const SizedBox(),
@@ -118,7 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-
                   Positioned(
                     top: 0.0,
                     width: screenSize.width,
@@ -131,10 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         return accountCubit.state.map(
                           initial: (s) => const SizedBox(),
                           unauthenticated: (s) => AlertBar(
-                            content: Text(
-                              locale.signinAlert,
-                              style: const TextStyle(fontSize: 12),
-                            ),
+                            content: Text(locale.signinAlert,
+                                style: const TextStyle(fontSize: 12)),
                             actionText: locale.signin,
                             action: () =>
                                 Navigator.pushNamed(context, AppRoutes.auth),

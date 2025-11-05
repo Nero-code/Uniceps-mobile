@@ -13,10 +13,12 @@ class ExercisesListTab extends StatefulWidget {
     required this.onSelect,
     required this.muscleGroup,
     required this.presentExId,
+    required this.canSelect,
   });
   final List<int> presentExId;
   final MuscleGroup muscleGroup;
   final void Function(ExerciseV2 exercise, bool isSelect) onSelect;
+  final bool canSelect;
 
   @override
   State<ExercisesListTab> createState() => _ExercisesListTabState();
@@ -31,14 +33,11 @@ class _ExercisesListTabState extends State<ExercisesListTab>
   Widget build(BuildContext context) {
     super.build(context);
     return BlocProvider(
-      create: (context) => ExercisesV2Bloc(commands: di.sl()),
+      create: (context) => ExercisesV2Bloc(commands: di.sl())
+        ..add(GetExercisesByFilterEvent(filter: widget.muscleGroup)),
       lazy: false,
       child: BlocBuilder<ExercisesV2Bloc, ExercisesV2State>(
         builder: (context, state) {
-          if (state is ExercisesV2Initial) {
-            BlocProvider.of<ExercisesV2Bloc>(context)
-                .add(GetExercisesByFilterEvent(filter: widget.muscleGroup));
-          }
           if (state is ExercisesV2LoadedState) {
             return GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

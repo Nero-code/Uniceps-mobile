@@ -10,50 +10,44 @@ class ProgressWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
-    return SizedBox(
-      width: MediaQuery.sizeOf(context).width,
-      height: MediaQuery.sizeOf(context).height,
-      child: Center(
-        child: Material(
-          borderRadius: BorderRadius.circular(15.0),
-          // color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: 70,
-                  height: 70,
-                  child: Stack(
-                    children: [
-                      SizedBox(
-                        width: 70,
-                        height: 70,
-                        child: CircularProgressIndicator(
-                          value: percent / 100,
-                          strokeAlign: -1.0,
-                          strokeWidth: 7.0,
-                          strokeCap: StrokeCap.round,
-                          color: secondaryBlue,
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          "$percent%",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey.shade500),
-                        ),
-                      ),
-                    ],
+    return Material(
+      borderRadius: BorderRadius.circular(15.0),
+      // color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 70,
+              height: 70,
+              child: Stack(
+                children: [
+                  SizedBox(
+                    width: 70,
+                    height: 70,
+                    child: CircularProgressIndicator(
+                      value: percent / 100,
+                      strokeAlign: -1.0,
+                      strokeWidth: 7.0,
+                      strokeCap: StrokeCap.round,
+                      color: secondaryBlue,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10.0),
-                Text(local.gettingRoutine),
-              ],
+                  Center(
+                    child: Text(
+                      "$percent%",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey.shade500),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+            const SizedBox(height: 10.0),
+            Text(local.gettingRoutine),
+          ],
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uniceps/core/widgets/box_botton.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum Option {
   edit,
@@ -15,6 +16,7 @@ class RoutineOptionsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final screenSize = MediaQuery.sizeOf(context);
+    final locale = AppLocalizations.of(context)!;
     return AlertDialog(
       icon: const Icon(Icons.edit, size: 40),
       title: Text(routineName),
@@ -34,7 +36,7 @@ class RoutineOptionsDialog extends StatelessWidget {
                 const Icon(Icons.text_fields_rounded, color: Colors.blueGrey),
                 const SizedBox(width: 5.0),
                 Text(
-                  "Rename", // TODO: Translate
+                  locale.rename,
                   style: TextStyle(
                       fontSize: fontSize,
                       fontWeight: FontWeight.bold,
@@ -56,7 +58,7 @@ class RoutineOptionsDialog extends StatelessWidget {
                 const Icon(Icons.play_circle_sharp, color: Colors.amber),
                 const SizedBox(width: 5.0),
                 Text(
-                  "Set Current", // TODO: Translate
+                  locale.setCurrent,
                   style: TextStyle(
                       fontSize: fontSize,
                       fontWeight: FontWeight.bold,
@@ -78,7 +80,7 @@ class RoutineOptionsDialog extends StatelessWidget {
                 const Icon(Icons.delete, color: Colors.red),
                 const SizedBox(width: 5.0),
                 Text(
-                  "Delete", // TODO: Translate
+                  locale.delete,
                   style: TextStyle(
                       fontSize: fontSize,
                       fontWeight: FontWeight.bold,

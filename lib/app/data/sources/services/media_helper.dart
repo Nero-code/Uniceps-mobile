@@ -3,11 +3,12 @@ import 'dart:typed_data';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 abstract class MediaHelper {
   Future<Uint8List?> getImage(String imageUrl);
-  Future<void> saveImages(List<String> imageUrls);
+  Stream<double> saveImages(List<String> imageUrls);
 }
 
 class ImageMediaHelper implements MediaHelper {
@@ -42,13 +43,23 @@ class ImageMediaHelper implements MediaHelper {
   }
 
   @override
-  Future<void> saveImages(List<String> imageUrls) async {
+  Stream<double> saveImages(List<String> imageUrls) async* {
+    print("Checking connection....");
     if (await checker.hasConnection) {
+      yield 0;
+      print("Checked!");
       for (var imageUrl in imageUrls) {
-        final res = await client.get(Uri.parse(imageUrl));
-        if (res.statusCode == 200) {
-          await imagesCache.put(imageUrl, res.bodyBytes);
+        print("is image available?");
+        if (imagesCache.get(imageUrl) == null) {
+          print("NO!");
+          final res = await client.get(Uri.parse(imageUrl));
+          if (res.statusCode == 200) {
+            await imagesCache.put(imageUrl, res.bodyBytes);
+          } else {
+            throw NoInternetException();
+          }
         }
+        yield 1 / imageUrls.length;
       }
       return;
     }

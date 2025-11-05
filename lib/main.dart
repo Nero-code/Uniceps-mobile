@@ -3,7 +3,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/app/presentation/auth/screens/email_auth_screen.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
@@ -102,7 +101,7 @@ class MyApp extends StatelessWidget {
             locale: state.locale,
             restorationScopeId: "root",
             title: 'Uniceps',
-            theme: lightTheme.copyWith(textTheme: GoogleFonts.cairoTextTheme()),
+            theme: lightTheme,
             initialRoute: AppRoutes.splash,
             routes: {
               //  MAIN

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/routine_management/routine_management_bloc.dart';
@@ -33,7 +35,7 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
     showDialog(
       context: context,
       builder: (_) => RoutineNameDialog(
-          title: "Create Routine", initialName: initial, onSubmit: onCreate),
+          isCreate: true, initialName: initial, onSubmit: onCreate),
     );
   }
 
@@ -42,21 +44,23 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
     showDialog(
       context: context,
       builder: (_) => RoutineNameDialog(
-          title: "Rename Routine", initialName: initial, onSubmit: onCreate),
+          isCreate: false, initialName: initial, onSubmit: onCreate),
     );
   }
 
-  void _deleteRoutine(void Function() onConfirm) async {
+  void _deleteRoutine(String name, void Function() onConfirm) async {
     showDialog(
       context: context,
-      builder: (_) => RoutineDeleteDialog(onConfirm: onConfirm),
+      builder: (_) =>
+          RoutineDeleteDialog(routineName: name, onConfirm: onConfirm),
     );
   }
 
-  void _setCurrentRoutine(void Function() onConfirm) async {
+  void _setCurrentRoutine(void Function() onConfirm, String name) async {
     showDialog(
         context: context,
-        builder: (_) => RoutineSetCurrentDialog(onConfirm: onConfirm));
+        builder: (_) =>
+            RoutineSetCurrentDialog(routineName: name, onConfirm: onConfirm));
   }
 
   @override
@@ -117,9 +121,10 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
 
                                 case Option.delete:
                                   if (canDelete) {
-                                    _deleteRoutine(() =>
-                                        BlocProvider.of<RoutineManagementBloc>(
-                                                context)
+                                    _deleteRoutine(
+                                        e.name,
+                                        () => BlocProvider.of<
+                                                RoutineManagementBloc>(context)
                                             .add(DeleteRoutineEvent(
                                                 routineToDelete: e)));
                                   } else {
@@ -139,18 +144,22 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
                                   break;
 
                                 case Option.setCurrent:
-                                  _setCurrentRoutine(() async {
-                                    final rBloc = BlocProvider.of<
-                                        RoutineManagementBloc>(context)
-                                      ..add(SetCurrentRoutineEvent(
-                                          routine: e, version: state.version));
-                                    await rBloc.stream.skip(1).first;
-                                    if (context.mounted) {
-                                      BlocProvider.of<CurrentRoutineCubit>(
-                                              context)
-                                          .getCurrentRoutine();
-                                    }
-                                  });
+                                  _setCurrentRoutine(
+                                    () async {
+                                      final rBloc = BlocProvider.of<
+                                          RoutineManagementBloc>(context)
+                                        ..add(SetCurrentRoutineEvent(
+                                            routine: e,
+                                            version: state.version));
+                                      await rBloc.stream.skip(1).first;
+                                      if (context.mounted) {
+                                        BlocProvider.of<CurrentRoutineCubit>(
+                                                context)
+                                            .getCurrentRoutine();
+                                      }
+                                    },
+                                    e.name,
+                                  );
                                   break;
                                 default:
                               }
@@ -162,36 +171,52 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
                     Positioned(
                         bottom: 0.0,
                         width: MediaQuery.sizeOf(context).width,
-                        child: Material(
-                          color: const Color.fromARGB(255, 59, 146, 146),
-                          // color: Theme.of(context).colorScheme.secondary,
-                          child: InkWell(
-                            child: const Padding(
-                              padding: EdgeInsets.all(10.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.add, color: Colors.white),
-                                  Text(
-                                    "Add Routine",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Colors.white,
+                        child: Builder(builder: (context) {
+                          final accountCubit = context.watch<AccountCubit>();
+                          final membershipBloc =
+                              context.watch<MembershipBloc>();
+
+                          final canCreate = accountCubit.state.when(
+                              initial: () => false,
+                              unauthenticated: () => state.routines.isEmpty,
+                              hasAccount: (s) => membershipBloc.state.maybeWhen(
+                                  orElse: () => state.routines.isEmpty,
+                                  loaded: (m) => true));
+
+                          return Material(
+                            color: canCreate
+                                ? const Color.fromARGB(255, 59, 146, 146)
+                                : Colors.grey.shade400,
+                            child: InkWell(
+                              onTap: canCreate
+                                  ? () => _createRoutine(
+                                        "${locale.newRoutine} $routinesLength",
+                                        (name) async => BlocProvider.of<
+                                                RoutineManagementBloc>(context)
+                                            .add(
+                                                CreateRoutineEvent(name: name)),
+                                      )
+                                  : null,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(Icons.add, color: Colors.white),
+                                    Text(
+                                      locale.add,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                            onTap: () => _createRoutine(
-                              "routine $routinesLength",
-                              (name) async =>
-                                  BlocProvider.of<RoutineManagementBloc>(
-                                          context)
-                                      .add(CreateRoutineEvent(name: name)),
-                            ),
-                          ),
-                        ))
+                          );
+                        }))
                   ],
                 );
               } else if (state is RoutineManagementErrorState) {

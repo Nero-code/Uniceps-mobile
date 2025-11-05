@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:uniceps/app/data/sources/services/media_helper.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_items_commands.dart';
@@ -10,9 +11,13 @@ part 'items_edit_state.dart';
 
 class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
   // List<RoutineItem> allItems = [];
+  final MediaHelper _mediaHelper;
   final RoutineItemsCommands _commands;
-  ItemsEditBloc({required RoutineItemsCommands commands})
+  ItemsEditBloc(
+      {required RoutineItemsCommands commands,
+      required MediaHelper mediaHelper})
       : _commands = commands,
+        _mediaHelper = mediaHelper,
         super(ItemsEditInitial()) {
     on<GetRoutineDayItemsEvent>(
       (event, emit) async {
@@ -32,6 +37,13 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
 
     on<AddRoutineItemsEvent>((event, emit) async {
       emit(ItemsEditLoadingState());
+      final imgStream =
+          _mediaHelper.saveImages(event.items.map((i) => i.imageUrl).toList());
+      double sum = 0.0;
+      await for (var i in imgStream) {
+        sum += i;
+        emit(ItemsDownloadingState(progress: sum));
+      }
 
       print("eventitems l: ${event.items.length}");
       final either = await _commands.addItems(event.dayId, event.items);

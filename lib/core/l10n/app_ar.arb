@@ -35,7 +35,9 @@
   "logoutAlert": "تسجيل الخروج؟",
   "logoutAlertContents": "انت الأن على وشك تسجيل الخروج, قد تتعرض معلوماتك للحذف, هل انت متأكد؟",
   "download":"تنزيل",
-  
+  "rename": "تغيير الاسم",
+  "setCurrent": "تفعيل",
+  "delete": "حذف",
 
   "price": "السعر",
   "discount":"الحسم",
@@ -57,6 +59,7 @@
   "scrTitleProfile": "الحساب الشخصي",
   "scrTitleSettings": "الاعدادات",
   "scrTitlePerformance": "الاداء",
+  "setsAndRound":"العدات والجولات",
 
   "chooseLang": "اختر اللغة:",
   "about": "حول",
@@ -104,7 +107,16 @@
   "emptySubs": "لا يوجد اشتراكات",
   "emptyMeasure": "لا يوجد قياسات",
   "emptyExcercises": "لا يوجد تمارين",
-
+  "emptySubscriptions":"لا يوجد اشتراكات",
+  "emptyMeasurements":"لا يوجد قياسات حاليا",
+  "emptyExercisesList":"لا يوجد تمارين لهذه المجموعة",
+  "emptyGymsList":"لا يوجد نوادي",
+  "emptyHandshakes":"لست عضوا في اي نادي",
+  "emptyTriningDaysMap":"لا يوجد برنامج تدريبي",
+  "emptyHomeCard":"اختر احد النوادي لعرضه",
+  "emptyAttendence":"لا يوجد سجل حضور",
+  "emptyRoutineItems": "لا يوجد عناصر, اضغط على زر (+) لاضافة تمارين",
+  
   "error": "حدث خطأ ما",
 
   "profile": "الحساب",
@@ -142,15 +154,6 @@
 
   "noGymSpecified": "لست مسجلا في اي نادي",
   "noTrainingProgram": "ليس لديك برنامج تدريبي",
-
-  "emptySubscriptions":"لا يوجد اشتراكات",
-  "emptyMeasurements":"لا يوجد قياسات حاليا",
-  "emptyExercisesList":"لا يوجد تمارين لهذه المجموعة",
-  "emptyGymsList":"لا يوجد نوادي",
-  "emptyHandshakes":"لست عضوا في اي نادي",
-  "emptyTriningDaysMap":"لا يوجد برنامج تدريبي",
-  "emptyHomeCard":"اختر احد النوادي لعرضه",
-  "emptyAttendence":"لا يوجد سجل حضور",
 
   "errNoInternet":"لا يوجد اتصال بالانترنت",
   "errServerException":"حدث خطأ في الخادم, الرجاء المحاولة لاحقا",
@@ -206,6 +209,20 @@
   "@muscleGroup": {
     "placeHolders": {
       "group": { "type": "String" }
+    }
+  },
+
+  "deleteAlertContent": "هل انت متاكد من حذف {item}؟ سيتم حذف كل العناصر المرتبطة بهذا العنصر",
+  "@deleteAlertContent": {
+    "placeHolders": {
+      "item": { "type": "string" }
+    }
+  },
+
+  "setCurrentAlertContent": "هل تريد تفعيل البرنامج {item}؟",
+  "@setCurrentAlertContent": {
+    "placeHolders": {
+      "item": { "type": "string" }
     }
   },
   
