@@ -1,10 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-// import 'package:mockito/annotations.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_management_commands.dart';
-// import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_management_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_management_contract.dart';
+
 import 'routine_management_test.mocks.dart';
 
 final mockRoutine1 = Routine(
@@ -31,7 +32,7 @@ final mockRoutine2 = Routine(
 
 final mockRoutines = [mockRoutine1, mockRoutine2];
 
-// @GenerateMocks([IRoutineManagementContract])
+@GenerateMocks([IRoutineManagementContract])
 void main() {
   group('Routine Management Commands Tests', () {
     late MockIRoutineManagementContract mockRepo;

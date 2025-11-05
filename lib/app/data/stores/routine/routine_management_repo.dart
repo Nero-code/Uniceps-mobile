@@ -29,7 +29,7 @@ class RoutineManagementRepo implements IRoutineManagementContract {
     try {
       final res = await _localSource.getAllRoutines();
       routines.clear();
-      routines.addAll(res);
+      routines.addAll(res.map((r) => r.toEntity()));
       return Right(routines);
     } catch (e) {
       return const Left(EmptyCacheFailure(errorMessage: ""));
@@ -42,7 +42,7 @@ class RoutineManagementRepo implements IRoutineManagementContract {
     try {
       print("create routine => inside repo");
       final res = await _localSource.createRoutine(routineName);
-      routines.add(res);
+      routines.add(res.toEntity());
       return Right(routines);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
@@ -52,7 +52,7 @@ class RoutineManagementRepo implements IRoutineManagementContract {
   @override
   Future<Either<Failure, List<Routine>>> updateRoutine(Routine routine) async {
     try {
-      await _localSource.updateRoutine(routine.asDto());
+      await _localSource.updateRoutine(routine.toDto());
 
       for (int i = 0; i < routines.length; i++) {
         if (routines[i].id == routine.id) {
@@ -70,7 +70,7 @@ class RoutineManagementRepo implements IRoutineManagementContract {
   @override
   Future<Either<Failure, List<Routine>>> deleteRoutine(Routine routine) async {
     try {
-      await _localSource.deleteRoutine(routine.asDto());
+      await _localSource.deleteRoutine(routine.toDto());
       routines.removeWhere((e) => e.id == routine.id);
       return Right(routines);
     } catch (e) {
@@ -82,8 +82,9 @@ class RoutineManagementRepo implements IRoutineManagementContract {
   Future<Either<Failure, List<Routine>>> setCurrentRoutine(
       Routine routine) async {
     try {
-      final res = await _localSource.setCurrentRoutine(routine.asDto());
-      return Right(res);
+      final res = await _localSource.setCurrentRoutine(routine.toDto());
+      return Right(res.map((r) => r.toEntity()).toList());
+      // return Right(res.map((r) => r.fromDto()).toList());
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
@@ -93,7 +94,7 @@ class RoutineManagementRepo implements IRoutineManagementContract {
   Future<Either<Failure, Unit>> shareRoutine(
       Routine routine, int userId) async {
     try {
-      await _localSource.shareRoutine(routine.asDto());
+      await _localSource.shareRoutine(routine.toDto());
       return const Right(unit);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: ""));

@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/data/models/routine_models/extensions.dart';
+import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_items_local_source.dart';
 import 'package:uniceps/app/data/sources/services/media_helper.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_items_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
@@ -28,7 +30,7 @@ class RoutineItemsRepo implements IRoutineItemsContract {
       //       .addAll({dayId: res.map((day) => day as RoutineItem).toList()});
       // }
       if (!loadedDays.contains(dayId)) {
-        itemsBuffer.addAll(res);
+        itemsBuffer.addAll(res.map((r) => r.toEntity()));
         loadedDays.add(dayId);
       }
       return Right(itemsBuffer);
@@ -39,12 +41,27 @@ class RoutineItemsRepo implements IRoutineItemsContract {
 
   @override
   Future<Either<Failure, List<RoutineItem>>> addItems(
-      List<RoutineItem> items) async {
+      int dayId, List<ExerciseV2> items) async {
     try {
-      await _mediaHelper.saveExerciseImages(
-          items.map((item) => item.exercise.imageUrl).toList());
-      final itemsWithIdsList = await _localSource
-          .addItems(items.map((item) => item.asDto()).toList());
+      await _mediaHelper
+          .saveImages(items.map((item) => item.imageUrl).toList());
+
+      final previouslyAddedItems =
+          itemsBuffer.where((i) => i.dayId == dayId).length;
+
+      final List<RoutineItemDto> routineItemsFromExercises = [];
+      for (int i = 0; i < items.length; i++) {
+        routineItemsFromExercises.add(
+          RoutineItemDto.create(
+              dayId, i + previouslyAddedItems, items[i].toDto()),
+        );
+      }
+
+      // final itemsWithIdsList = await _localSource
+      //     .addItems(items.map((item) => item.toDto()).toList());
+
+      final itemsWithIdsList =
+          await _localSource.addItems(routineItemsFromExercises);
 
       // -------------------------------------------
       // TODO null check operator used on null value
@@ -54,7 +71,7 @@ class RoutineItemsRepo implements IRoutineItemsContract {
       // lazyItemsBuffer[items.first.dayId]!.addAll(itemsWithIdsList);
       // -------------------------------------------
 
-      itemsBuffer.addAll(itemsWithIdsList);
+      itemsBuffer.addAll(itemsWithIdsList.map((r) => r.toEntity()));
 
       return Right(itemsBuffer);
     } catch (e) {
@@ -67,7 +84,7 @@ class RoutineItemsRepo implements IRoutineItemsContract {
       List<RoutineItem> items) async {
     try {
       final orderedList = await _localSource
-          .reorderItems(items.map((item) => item.asDto()).toList());
+          .reorderItems(items.map((item) => item.toDto()).toList());
 
       // ------------------------------------------
       // To reorder the list we need to:
@@ -79,7 +96,7 @@ class RoutineItemsRepo implements IRoutineItemsContract {
       }
       // ------------------------------------------
       // Second insert all items with updated index
-      itemsBuffer.addAll(orderedList);
+      itemsBuffer.addAll(orderedList.map((r) => r.toEntity()));
       // ------------------------------------------
 
       return Right(itemsBuffer);
@@ -92,7 +109,7 @@ class RoutineItemsRepo implements IRoutineItemsContract {
   Future<Either<Failure, List<RoutineItem>>> removeItem(
       RoutineItem item) async {
     try {
-      await _localSource.removeItem(item.asDto());
+      await _localSource.removeItem(item.toDto());
 
       // lazyItemsBuffer[item.dayId]!.remove(item);
 

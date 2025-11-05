@@ -18,7 +18,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
     try {
       final res = await _localSource.getItemSets(itemId);
       lazyItemSetsBuffer
-          .addAll({itemId: res.map((s) => s as RoutineSet).toList()});
+          .addAll({itemId: res.map((s) => s.toEntity()).toList()});
       return Right(lazyItemSetsBuffer[itemId]!);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
@@ -26,21 +26,18 @@ class RoutineSetsRepo implements IRoutineSetsContract {
   }
 
   @override
-  Future<Either<Failure, List<RoutineSet>>> addItemSets(
-      int itemId, List<RoutineSet> setsToAdd) async {
+  Future<Either<Failure, List<RoutineSet>>> addItemSets(int itemId) async {
+    final newSet = RoutineSetDto(
+        id: null,
+        apiId: null,
+        routineItemId: itemId,
+        version: 0,
+        index: lazyItemSetsBuffer[itemId]?.length ?? 0,
+        reps: 0,
+        weight: null,
+        isSynced: false);
     try {
-      final setsWithIds = await _localSource.addSets([
-        ...setsToAdd.map((s) => s.asDto()),
-        RoutineSetDto(
-            id: null,
-            apiId: null,
-            routineItemId: itemId,
-            version: 0,
-            index: setsToAdd.length,
-            reps: 0,
-            weight: null,
-            isSynced: false)
-      ]);
+      final setWithId = (await _localSource.addSets([newSet])).first;
 
       // if (lazyItemSetsBuffer.containsKey(itemId)) {
       //   final oldSets = lazyItemSetsBuffer[itemId]!;
@@ -51,35 +48,38 @@ class RoutineSetsRepo implements IRoutineSetsContract {
       //   lazyItemSetsBuffer
       //       .addAll({itemId: setsWithIds.map((s) => s as RoutineSet).toList()});
       // }
+      final allsets = lazyItemSetsBuffer[itemId] ?? [];
+      allsets.add(setWithId.toEntity());
+      lazyItemSetsBuffer.addAll({itemId: allsets});
 
-      lazyItemSetsBuffer.addAll({itemId: setsWithIds});
-
-      return Right(lazyItemSetsBuffer[itemId]!);
+      return Right(allsets);
     } catch (e) {
+      print("Error: $e");
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
   }
 
-  @override
-  Future<Either<Failure, List<RoutineSet>>> saveAllSets(
-      List<RoutineSet> allSets) async {
-    try {
-      final res = await _localSource
-          .saveAllSets(allSets.map((s) => s.asDto()).toList());
-      return Right(res);
-    } catch (e) {
-      return Left(DatabaseFailure(errorMsg: e.toString()));
-    }
-  }
+  // @override
+  // Future<Either<Failure, List<RoutineSet>>> saveAllSets(
+  //     List<RoutineSet> allSets) async {
+  //   try {
+  //     final res = await _localSource
+  //         .saveAllSets(allSets.map((s) => s.toDto()).toList());
+  //     return Right(res);
+  //   } catch (e) {
+  //     return Left(DatabaseFailure(errorMsg: e.toString()));
+  //   }
+  // }
 
   @override
   Future<Either<Failure, List<RoutineSet>>> updateSet(
       RoutineSet updated) async {
     try {
-      await _localSource.updateSet(updated.asDto());
+      await _localSource.updateSet(updated.toDto());
       lazyItemSetsBuffer[updated.routineItemId]!
         ..removeWhere((s) => s.id! == updated.id!)
-        ..add(updated);
+        ..add(updated)
+        ..sort((a, b) => a.index.compareTo(b.index));
       return Right(lazyItemSetsBuffer[updated.routineItemId]!);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
@@ -90,8 +90,22 @@ class RoutineSetsRepo implements IRoutineSetsContract {
   Future<Either<Failure, List<RoutineSet>>> removeItemSet(
       RoutineSet setToRemove) async {
     try {
-      await _localSource.removeSets([setToRemove.asDto()]);
-      lazyItemSetsBuffer[setToRemove.routineItemId]!.remove(setToRemove);
+      await _localSource.removeSets([setToRemove.toDto()]);
+      final setslist = lazyItemSetsBuffer[setToRemove.routineItemId]!;
+
+      setslist
+        ..remove(setToRemove)
+        ..sort((a, b) => a.index.compareTo(b.index));
+
+      for (var i = 0; i < setslist.length; i++) {
+        setslist[i] = setslist[i].copyWith(index: i);
+      }
+
+      await _localSource.saveAllSets(setslist.map((s) => s.toDto()).toList());
+
+      lazyItemSetsBuffer.addAll({setToRemove.routineItemId: setslist});
+      // lazyItemSetsBuffer[setToRemove.routineItemId]!.remove(setToRemove);
+
       return Right(lazyItemSetsBuffer[setToRemove.routineItemId]!);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));

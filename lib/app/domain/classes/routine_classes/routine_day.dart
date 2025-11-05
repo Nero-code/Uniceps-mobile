@@ -46,8 +46,9 @@ class RoutineDay {
   @override
   String toString() {
     return """\n
-  name:      $name
-  index:     $index
+    id:     $id
+    name:   $name
+    index:  $index
 """;
   }
 }

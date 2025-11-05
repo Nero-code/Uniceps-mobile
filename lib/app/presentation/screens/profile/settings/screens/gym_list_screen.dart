@@ -14,7 +14,7 @@ import 'package:uniceps/app/presentation/screens/profile/settings/screens/gym_pr
 import 'package:uniceps/app/presentation/screens/profile/settings/widgets/gym_logo_widget.dart';
 import 'package:uniceps/app/presentation/screens/profile/settings/widgets/gyms_list_wave_back.dart';
 import 'package:uniceps/app/presentation/screens/home/widgets/mygym_widget.dart';
-import 'package:uniceps/main_cubit/locale_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 
 class GymListScreen extends StatefulWidget {
   const GymListScreen({super.key});

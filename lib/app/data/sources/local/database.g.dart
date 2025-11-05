@@ -3,6 +3,655 @@
 part of 'database.dart';
 
 // ignore_for_file: type=lint
+class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AccountsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _emailMeta = const VerificationMeta('email');
+  @override
+  late final GeneratedColumn<String> email = GeneratedColumn<String>(
+      'email', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumnWithTypeConverter<AccountType, String> type =
+      GeneratedColumn<String>('type', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<AccountType>($AccountsTable.$convertertype);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [email, type, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'accounts';
+  @override
+  VerificationContext validateIntegrity(Insertable<Account> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('email')) {
+      context.handle(
+          _emailMeta, email.isAcceptableOrUnknown(data['email']!, _emailMeta));
+    } else if (isInserting) {
+      context.missing(_emailMeta);
+    }
+    context.handle(_typeMeta, const VerificationResult.success());
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  Account map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Account(
+      email: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}email'])!,
+      type: $AccountsTable.$convertertype.fromSql(attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $AccountsTable createAlias(String alias) {
+    return $AccountsTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<AccountType, String, String> $convertertype =
+      const EnumNameConverter<AccountType>(AccountType.values);
+}
+
+class Account extends DataClass implements Insertable<Account> {
+  final String email;
+  final AccountType type;
+  final DateTime createdAt;
+  const Account(
+      {required this.email, required this.type, required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['email'] = Variable<String>(email);
+    {
+      map['type'] = Variable<String>($AccountsTable.$convertertype.toSql(type));
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  AccountsCompanion toCompanion(bool nullToAbsent) {
+    return AccountsCompanion(
+      email: Value(email),
+      type: Value(type),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory Account.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Account(
+      email: serializer.fromJson<String>(json['email']),
+      type: $AccountsTable.$convertertype
+          .fromJson(serializer.fromJson<String>(json['type'])),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'email': serializer.toJson<String>(email),
+      'type':
+          serializer.toJson<String>($AccountsTable.$convertertype.toJson(type)),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  Account copyWith({String? email, AccountType? type, DateTime? createdAt}) =>
+      Account(
+        email: email ?? this.email,
+        type: type ?? this.type,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  Account copyWithCompanion(AccountsCompanion data) {
+    return Account(
+      email: data.email.present ? data.email.value : this.email,
+      type: data.type.present ? data.type.value : this.type,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Account(')
+          ..write('email: $email, ')
+          ..write('type: $type, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(email, type, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Account &&
+          other.email == this.email &&
+          other.type == this.type &&
+          other.createdAt == this.createdAt);
+}
+
+class AccountsCompanion extends UpdateCompanion<Account> {
+  final Value<String> email;
+  final Value<AccountType> type;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const AccountsCompanion({
+    this.email = const Value.absent(),
+    this.type = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  AccountsCompanion.insert({
+    required String email,
+    required AccountType type,
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  })  : email = Value(email),
+        type = Value(type),
+        createdAt = Value(createdAt);
+  static Insertable<Account> custom({
+    Expression<String>? email,
+    Expression<String>? type,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (email != null) 'email': email,
+      if (type != null) 'type': type,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  AccountsCompanion copyWith(
+      {Value<String>? email,
+      Value<AccountType>? type,
+      Value<DateTime>? createdAt,
+      Value<int>? rowid}) {
+    return AccountsCompanion(
+      email: email ?? this.email,
+      type: type ?? this.type,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (email.present) {
+      map['email'] = Variable<String>(email.value);
+    }
+    if (type.present) {
+      map['type'] =
+          Variable<String>($AccountsTable.$convertertype.toSql(type.value));
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AccountsCompanion(')
+          ..write('email: $email, ')
+          ..write('type: $type, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $MembershipsTable extends Memberships
+    with TableInfo<$MembershipsTable, Membership> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MembershipsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _planIdMeta = const VerificationMeta('planId');
+  @override
+  late final GeneratedColumn<String> planId = GeneratedColumn<String>(
+      'plan_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _planNameMeta =
+      const VerificationMeta('planName');
+  @override
+  late final GeneratedColumn<String> planName = GeneratedColumn<String>(
+      'plan_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _priceMeta = const VerificationMeta('price');
+  @override
+  late final GeneratedColumn<double> price = GeneratedColumn<double>(
+      'price', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _startDateMeta =
+      const VerificationMeta('startDate');
+  @override
+  late final GeneratedColumn<DateTime> startDate = GeneratedColumn<DateTime>(
+      'start_date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _endDateMeta =
+      const VerificationMeta('endDate');
+  @override
+  late final GeneratedColumn<DateTime> endDate = GeneratedColumn<DateTime>(
+      'end_date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _isActiveMeta =
+      const VerificationMeta('isActive');
+  @override
+  late final GeneratedColumn<bool> isActive = GeneratedColumn<bool>(
+      'is_active', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_active" IN (0, 1))'));
+  static const VerificationMeta _isGiftMeta = const VerificationMeta('isGift');
+  @override
+  late final GeneratedColumn<bool> isGift = GeneratedColumn<bool>(
+      'is_gift', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_gift" IN (0, 1))'));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, planId, planName, price, startDate, endDate, isActive, isGift];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'memberships';
+  @override
+  VerificationContext validateIntegrity(Insertable<Membership> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('plan_id')) {
+      context.handle(_planIdMeta,
+          planId.isAcceptableOrUnknown(data['plan_id']!, _planIdMeta));
+    } else if (isInserting) {
+      context.missing(_planIdMeta);
+    }
+    if (data.containsKey('plan_name')) {
+      context.handle(_planNameMeta,
+          planName.isAcceptableOrUnknown(data['plan_name']!, _planNameMeta));
+    } else if (isInserting) {
+      context.missing(_planNameMeta);
+    }
+    if (data.containsKey('price')) {
+      context.handle(
+          _priceMeta, price.isAcceptableOrUnknown(data['price']!, _priceMeta));
+    } else if (isInserting) {
+      context.missing(_priceMeta);
+    }
+    if (data.containsKey('start_date')) {
+      context.handle(_startDateMeta,
+          startDate.isAcceptableOrUnknown(data['start_date']!, _startDateMeta));
+    } else if (isInserting) {
+      context.missing(_startDateMeta);
+    }
+    if (data.containsKey('end_date')) {
+      context.handle(_endDateMeta,
+          endDate.isAcceptableOrUnknown(data['end_date']!, _endDateMeta));
+    } else if (isInserting) {
+      context.missing(_endDateMeta);
+    }
+    if (data.containsKey('is_active')) {
+      context.handle(_isActiveMeta,
+          isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta));
+    } else if (isInserting) {
+      context.missing(_isActiveMeta);
+    }
+    if (data.containsKey('is_gift')) {
+      context.handle(_isGiftMeta,
+          isGift.isAcceptableOrUnknown(data['is_gift']!, _isGiftMeta));
+    } else if (isInserting) {
+      context.missing(_isGiftMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Membership map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Membership(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      planId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}plan_id'])!,
+      planName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}plan_name'])!,
+      price: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}price'])!,
+      startDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}start_date'])!,
+      endDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}end_date'])!,
+      isActive: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_active'])!,
+      isGift: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_gift'])!,
+    );
+  }
+
+  @override
+  $MembershipsTable createAlias(String alias) {
+    return $MembershipsTable(attachedDatabase, alias);
+  }
+}
+
+class Membership extends DataClass implements Insertable<Membership> {
+  final int id;
+  final String planId;
+  final String planName;
+  final double price;
+  final DateTime startDate;
+  final DateTime endDate;
+  final bool isActive;
+  final bool isGift;
+  const Membership(
+      {required this.id,
+      required this.planId,
+      required this.planName,
+      required this.price,
+      required this.startDate,
+      required this.endDate,
+      required this.isActive,
+      required this.isGift});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['plan_id'] = Variable<String>(planId);
+    map['plan_name'] = Variable<String>(planName);
+    map['price'] = Variable<double>(price);
+    map['start_date'] = Variable<DateTime>(startDate);
+    map['end_date'] = Variable<DateTime>(endDate);
+    map['is_active'] = Variable<bool>(isActive);
+    map['is_gift'] = Variable<bool>(isGift);
+    return map;
+  }
+
+  MembershipsCompanion toCompanion(bool nullToAbsent) {
+    return MembershipsCompanion(
+      id: Value(id),
+      planId: Value(planId),
+      planName: Value(planName),
+      price: Value(price),
+      startDate: Value(startDate),
+      endDate: Value(endDate),
+      isActive: Value(isActive),
+      isGift: Value(isGift),
+    );
+  }
+
+  factory Membership.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Membership(
+      id: serializer.fromJson<int>(json['id']),
+      planId: serializer.fromJson<String>(json['planId']),
+      planName: serializer.fromJson<String>(json['planName']),
+      price: serializer.fromJson<double>(json['price']),
+      startDate: serializer.fromJson<DateTime>(json['startDate']),
+      endDate: serializer.fromJson<DateTime>(json['endDate']),
+      isActive: serializer.fromJson<bool>(json['isActive']),
+      isGift: serializer.fromJson<bool>(json['isGift']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'planId': serializer.toJson<String>(planId),
+      'planName': serializer.toJson<String>(planName),
+      'price': serializer.toJson<double>(price),
+      'startDate': serializer.toJson<DateTime>(startDate),
+      'endDate': serializer.toJson<DateTime>(endDate),
+      'isActive': serializer.toJson<bool>(isActive),
+      'isGift': serializer.toJson<bool>(isGift),
+    };
+  }
+
+  Membership copyWith(
+          {int? id,
+          String? planId,
+          String? planName,
+          double? price,
+          DateTime? startDate,
+          DateTime? endDate,
+          bool? isActive,
+          bool? isGift}) =>
+      Membership(
+        id: id ?? this.id,
+        planId: planId ?? this.planId,
+        planName: planName ?? this.planName,
+        price: price ?? this.price,
+        startDate: startDate ?? this.startDate,
+        endDate: endDate ?? this.endDate,
+        isActive: isActive ?? this.isActive,
+        isGift: isGift ?? this.isGift,
+      );
+  Membership copyWithCompanion(MembershipsCompanion data) {
+    return Membership(
+      id: data.id.present ? data.id.value : this.id,
+      planId: data.planId.present ? data.planId.value : this.planId,
+      planName: data.planName.present ? data.planName.value : this.planName,
+      price: data.price.present ? data.price.value : this.price,
+      startDate: data.startDate.present ? data.startDate.value : this.startDate,
+      endDate: data.endDate.present ? data.endDate.value : this.endDate,
+      isActive: data.isActive.present ? data.isActive.value : this.isActive,
+      isGift: data.isGift.present ? data.isGift.value : this.isGift,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Membership(')
+          ..write('id: $id, ')
+          ..write('planId: $planId, ')
+          ..write('planName: $planName, ')
+          ..write('price: $price, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('isActive: $isActive, ')
+          ..write('isGift: $isGift')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id, planId, planName, price, startDate, endDate, isActive, isGift);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Membership &&
+          other.id == this.id &&
+          other.planId == this.planId &&
+          other.planName == this.planName &&
+          other.price == this.price &&
+          other.startDate == this.startDate &&
+          other.endDate == this.endDate &&
+          other.isActive == this.isActive &&
+          other.isGift == this.isGift);
+}
+
+class MembershipsCompanion extends UpdateCompanion<Membership> {
+  final Value<int> id;
+  final Value<String> planId;
+  final Value<String> planName;
+  final Value<double> price;
+  final Value<DateTime> startDate;
+  final Value<DateTime> endDate;
+  final Value<bool> isActive;
+  final Value<bool> isGift;
+  const MembershipsCompanion({
+    this.id = const Value.absent(),
+    this.planId = const Value.absent(),
+    this.planName = const Value.absent(),
+    this.price = const Value.absent(),
+    this.startDate = const Value.absent(),
+    this.endDate = const Value.absent(),
+    this.isActive = const Value.absent(),
+    this.isGift = const Value.absent(),
+  });
+  MembershipsCompanion.insert({
+    this.id = const Value.absent(),
+    required String planId,
+    required String planName,
+    required double price,
+    required DateTime startDate,
+    required DateTime endDate,
+    required bool isActive,
+    required bool isGift,
+  })  : planId = Value(planId),
+        planName = Value(planName),
+        price = Value(price),
+        startDate = Value(startDate),
+        endDate = Value(endDate),
+        isActive = Value(isActive),
+        isGift = Value(isGift);
+  static Insertable<Membership> custom({
+    Expression<int>? id,
+    Expression<String>? planId,
+    Expression<String>? planName,
+    Expression<double>? price,
+    Expression<DateTime>? startDate,
+    Expression<DateTime>? endDate,
+    Expression<bool>? isActive,
+    Expression<bool>? isGift,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (planId != null) 'plan_id': planId,
+      if (planName != null) 'plan_name': planName,
+      if (price != null) 'price': price,
+      if (startDate != null) 'start_date': startDate,
+      if (endDate != null) 'end_date': endDate,
+      if (isActive != null) 'is_active': isActive,
+      if (isGift != null) 'is_gift': isGift,
+    });
+  }
+
+  MembershipsCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? planId,
+      Value<String>? planName,
+      Value<double>? price,
+      Value<DateTime>? startDate,
+      Value<DateTime>? endDate,
+      Value<bool>? isActive,
+      Value<bool>? isGift}) {
+    return MembershipsCompanion(
+      id: id ?? this.id,
+      planId: planId ?? this.planId,
+      planName: planName ?? this.planName,
+      price: price ?? this.price,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      isActive: isActive ?? this.isActive,
+      isGift: isGift ?? this.isGift,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (planId.present) {
+      map['plan_id'] = Variable<String>(planId.value);
+    }
+    if (planName.present) {
+      map['plan_name'] = Variable<String>(planName.value);
+    }
+    if (price.present) {
+      map['price'] = Variable<double>(price.value);
+    }
+    if (startDate.present) {
+      map['start_date'] = Variable<DateTime>(startDate.value);
+    }
+    if (endDate.present) {
+      map['end_date'] = Variable<DateTime>(endDate.value);
+    }
+    if (isActive.present) {
+      map['is_active'] = Variable<bool>(isActive.value);
+    }
+    if (isGift.present) {
+      map['is_gift'] = Variable<bool>(isGift.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MembershipsCompanion(')
+          ..write('id: $id, ')
+          ..write('planId: $planId, ')
+          ..write('planName: $planName, ')
+          ..write('price: $price, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('isActive: $isActive, ')
+          ..write('isGift: $isGift')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $RoutinesTable extends Routines with TableInfo<$RoutinesTable, Routine> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -861,18 +1510,14 @@ class $ExerciseGroupsTable extends ExerciseGroups
   late final GeneratedColumn<int> apiId = GeneratedColumn<int>(
       'api_id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _arNameMeta = const VerificationMeta('arName');
+  static const VerificationMeta _muscleGroupTranslationsMeta =
+      const VerificationMeta('muscleGroupTranslations');
   @override
-  late final GeneratedColumn<String> arName = GeneratedColumn<String>(
-      'ar_name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _enNameMeta = const VerificationMeta('enName');
+  late final GeneratedColumn<String> muscleGroupTranslations =
+      GeneratedColumn<String>('muscle_group_translations', aliasedName, false,
+          type: DriftSqlType.string, requiredDuringInsert: true);
   @override
-  late final GeneratedColumn<String> enName = GeneratedColumn<String>(
-      'en_name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns => [id, apiId, arName, enName];
+  List<GeneratedColumn> get $columns => [id, apiId, muscleGroupTranslations];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -892,17 +1537,14 @@ class $ExerciseGroupsTable extends ExerciseGroups
     } else if (isInserting) {
       context.missing(_apiIdMeta);
     }
-    if (data.containsKey('ar_name')) {
-      context.handle(_arNameMeta,
-          arName.isAcceptableOrUnknown(data['ar_name']!, _arNameMeta));
+    if (data.containsKey('muscle_group_translations')) {
+      context.handle(
+          _muscleGroupTranslationsMeta,
+          muscleGroupTranslations.isAcceptableOrUnknown(
+              data['muscle_group_translations']!,
+              _muscleGroupTranslationsMeta));
     } else if (isInserting) {
-      context.missing(_arNameMeta);
-    }
-    if (data.containsKey('en_name')) {
-      context.handle(_enNameMeta,
-          enName.isAcceptableOrUnknown(data['en_name']!, _enNameMeta));
-    } else if (isInserting) {
-      context.missing(_enNameMeta);
+      context.missing(_muscleGroupTranslationsMeta);
     }
     return context;
   }
@@ -921,10 +1563,9 @@ class $ExerciseGroupsTable extends ExerciseGroups
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       apiId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}api_id'])!,
-      arName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}ar_name'])!,
-      enName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}en_name'])!,
+      muscleGroupTranslations: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}muscle_group_translations'])!,
     );
   }
 
@@ -937,20 +1578,18 @@ class $ExerciseGroupsTable extends ExerciseGroups
 class ExerciseGroup extends DataClass implements Insertable<ExerciseGroup> {
   final int id;
   final int apiId;
-  final String arName;
-  final String enName;
+  final String muscleGroupTranslations;
   const ExerciseGroup(
       {required this.id,
       required this.apiId,
-      required this.arName,
-      required this.enName});
+      required this.muscleGroupTranslations});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['api_id'] = Variable<int>(apiId);
-    map['ar_name'] = Variable<String>(arName);
-    map['en_name'] = Variable<String>(enName);
+    map['muscle_group_translations'] =
+        Variable<String>(muscleGroupTranslations);
     return map;
   }
 
@@ -958,8 +1597,7 @@ class ExerciseGroup extends DataClass implements Insertable<ExerciseGroup> {
     return ExerciseGroupsCompanion(
       id: Value(id),
       apiId: Value(apiId),
-      arName: Value(arName),
-      enName: Value(enName),
+      muscleGroupTranslations: Value(muscleGroupTranslations),
     );
   }
 
@@ -969,8 +1607,8 @@ class ExerciseGroup extends DataClass implements Insertable<ExerciseGroup> {
     return ExerciseGroup(
       id: serializer.fromJson<int>(json['id']),
       apiId: serializer.fromJson<int>(json['apiId']),
-      arName: serializer.fromJson<String>(json['arName']),
-      enName: serializer.fromJson<String>(json['enName']),
+      muscleGroupTranslations:
+          serializer.fromJson<String>(json['muscleGroupTranslations']),
     );
   }
   @override
@@ -979,25 +1617,26 @@ class ExerciseGroup extends DataClass implements Insertable<ExerciseGroup> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'apiId': serializer.toJson<int>(apiId),
-      'arName': serializer.toJson<String>(arName),
-      'enName': serializer.toJson<String>(enName),
+      'muscleGroupTranslations':
+          serializer.toJson<String>(muscleGroupTranslations),
     };
   }
 
   ExerciseGroup copyWith(
-          {int? id, int? apiId, String? arName, String? enName}) =>
+          {int? id, int? apiId, String? muscleGroupTranslations}) =>
       ExerciseGroup(
         id: id ?? this.id,
         apiId: apiId ?? this.apiId,
-        arName: arName ?? this.arName,
-        enName: enName ?? this.enName,
+        muscleGroupTranslations:
+            muscleGroupTranslations ?? this.muscleGroupTranslations,
       );
   ExerciseGroup copyWithCompanion(ExerciseGroupsCompanion data) {
     return ExerciseGroup(
       id: data.id.present ? data.id.value : this.id,
       apiId: data.apiId.present ? data.apiId.value : this.apiId,
-      arName: data.arName.present ? data.arName.value : this.arName,
-      enName: data.enName.present ? data.enName.value : this.enName,
+      muscleGroupTranslations: data.muscleGroupTranslations.present
+          ? data.muscleGroupTranslations.value
+          : this.muscleGroupTranslations,
     );
   }
 
@@ -1006,67 +1645,59 @@ class ExerciseGroup extends DataClass implements Insertable<ExerciseGroup> {
     return (StringBuffer('ExerciseGroup(')
           ..write('id: $id, ')
           ..write('apiId: $apiId, ')
-          ..write('arName: $arName, ')
-          ..write('enName: $enName')
+          ..write('muscleGroupTranslations: $muscleGroupTranslations')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, apiId, arName, enName);
+  int get hashCode => Object.hash(id, apiId, muscleGroupTranslations);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ExerciseGroup &&
           other.id == this.id &&
           other.apiId == this.apiId &&
-          other.arName == this.arName &&
-          other.enName == this.enName);
+          other.muscleGroupTranslations == this.muscleGroupTranslations);
 }
 
 class ExerciseGroupsCompanion extends UpdateCompanion<ExerciseGroup> {
   final Value<int> id;
   final Value<int> apiId;
-  final Value<String> arName;
-  final Value<String> enName;
+  final Value<String> muscleGroupTranslations;
   const ExerciseGroupsCompanion({
     this.id = const Value.absent(),
     this.apiId = const Value.absent(),
-    this.arName = const Value.absent(),
-    this.enName = const Value.absent(),
+    this.muscleGroupTranslations = const Value.absent(),
   });
   ExerciseGroupsCompanion.insert({
     this.id = const Value.absent(),
     required int apiId,
-    required String arName,
-    required String enName,
+    required String muscleGroupTranslations,
   })  : apiId = Value(apiId),
-        arName = Value(arName),
-        enName = Value(enName);
+        muscleGroupTranslations = Value(muscleGroupTranslations);
   static Insertable<ExerciseGroup> custom({
     Expression<int>? id,
     Expression<int>? apiId,
-    Expression<String>? arName,
-    Expression<String>? enName,
+    Expression<String>? muscleGroupTranslations,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (apiId != null) 'api_id': apiId,
-      if (arName != null) 'ar_name': arName,
-      if (enName != null) 'en_name': enName,
+      if (muscleGroupTranslations != null)
+        'muscle_group_translations': muscleGroupTranslations,
     });
   }
 
   ExerciseGroupsCompanion copyWith(
       {Value<int>? id,
       Value<int>? apiId,
-      Value<String>? arName,
-      Value<String>? enName}) {
+      Value<String>? muscleGroupTranslations}) {
     return ExerciseGroupsCompanion(
       id: id ?? this.id,
       apiId: apiId ?? this.apiId,
-      arName: arName ?? this.arName,
-      enName: enName ?? this.enName,
+      muscleGroupTranslations:
+          muscleGroupTranslations ?? this.muscleGroupTranslations,
     );
   }
 
@@ -1079,11 +1710,9 @@ class ExerciseGroupsCompanion extends UpdateCompanion<ExerciseGroup> {
     if (apiId.present) {
       map['api_id'] = Variable<int>(apiId.value);
     }
-    if (arName.present) {
-      map['ar_name'] = Variable<String>(arName.value);
-    }
-    if (enName.present) {
-      map['en_name'] = Variable<String>(enName.value);
+    if (muscleGroupTranslations.present) {
+      map['muscle_group_translations'] =
+          Variable<String>(muscleGroupTranslations.value);
     }
     return map;
   }
@@ -1093,8 +1722,7 @@ class ExerciseGroupsCompanion extends UpdateCompanion<ExerciseGroup> {
     return (StringBuffer('ExerciseGroupsCompanion(')
           ..write('id: $id, ')
           ..write('apiId: $apiId, ')
-          ..write('arName: $arName, ')
-          ..write('enName: $enName')
+          ..write('muscleGroupTranslations: $muscleGroupTranslations')
           ..write(')'))
         .toString();
   }
@@ -2238,6 +2866,14 @@ class $TSessionsTable extends TSessions
   late final GeneratedColumn<DateTime> finishedAt = GeneratedColumn<DateTime>(
       'finished_at', aliasedName, true,
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _progressMeta =
+      const VerificationMeta('progress');
+  @override
+  late final GeneratedColumn<double> progress = GeneratedColumn<double>(
+      'progress', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0.0));
   static const VerificationMeta _apiIdMeta = const VerificationMeta('apiId');
   @override
   late final GeneratedColumn<int> apiId = GeneratedColumn<int>(
@@ -2263,7 +2899,7 @@ class $TSessionsTable extends TSessions
       defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
-      [tsId, dayId, startedAt, finishedAt, apiId, version, isSynced];
+      [tsId, dayId, startedAt, finishedAt, progress, apiId, version, isSynced];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2296,6 +2932,10 @@ class $TSessionsTable extends TSessions
           finishedAt.isAcceptableOrUnknown(
               data['finished_at']!, _finishedAtMeta));
     }
+    if (data.containsKey('progress')) {
+      context.handle(_progressMeta,
+          progress.isAcceptableOrUnknown(data['progress']!, _progressMeta));
+    }
     if (data.containsKey('api_id')) {
       context.handle(
           _apiIdMeta, apiId.isAcceptableOrUnknown(data['api_id']!, _apiIdMeta));
@@ -2325,6 +2965,8 @@ class $TSessionsTable extends TSessions
           .read(DriftSqlType.dateTime, data['${effectivePrefix}started_at'])!,
       finishedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}finished_at']),
+      progress: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}progress'])!,
       apiId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}api_id']),
       version: attachedDatabase.typeMapping
@@ -2345,6 +2987,7 @@ class TSession extends DataClass implements Insertable<TSession> {
   final int dayId;
   final DateTime startedAt;
   final DateTime? finishedAt;
+  final double progress;
   final int? apiId;
   final int version;
   final bool isSynced;
@@ -2353,6 +2996,7 @@ class TSession extends DataClass implements Insertable<TSession> {
       required this.dayId,
       required this.startedAt,
       this.finishedAt,
+      required this.progress,
       this.apiId,
       required this.version,
       required this.isSynced});
@@ -2365,6 +3009,7 @@ class TSession extends DataClass implements Insertable<TSession> {
     if (!nullToAbsent || finishedAt != null) {
       map['finished_at'] = Variable<DateTime>(finishedAt);
     }
+    map['progress'] = Variable<double>(progress);
     if (!nullToAbsent || apiId != null) {
       map['api_id'] = Variable<int>(apiId);
     }
@@ -2381,6 +3026,7 @@ class TSession extends DataClass implements Insertable<TSession> {
       finishedAt: finishedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(finishedAt),
+      progress: Value(progress),
       apiId:
           apiId == null && nullToAbsent ? const Value.absent() : Value(apiId),
       version: Value(version),
@@ -2396,6 +3042,7 @@ class TSession extends DataClass implements Insertable<TSession> {
       dayId: serializer.fromJson<int>(json['dayId']),
       startedAt: serializer.fromJson<DateTime>(json['startedAt']),
       finishedAt: serializer.fromJson<DateTime?>(json['finishedAt']),
+      progress: serializer.fromJson<double>(json['progress']),
       apiId: serializer.fromJson<int?>(json['apiId']),
       version: serializer.fromJson<int>(json['version']),
       isSynced: serializer.fromJson<bool>(json['isSynced']),
@@ -2409,6 +3056,7 @@ class TSession extends DataClass implements Insertable<TSession> {
       'dayId': serializer.toJson<int>(dayId),
       'startedAt': serializer.toJson<DateTime>(startedAt),
       'finishedAt': serializer.toJson<DateTime?>(finishedAt),
+      'progress': serializer.toJson<double>(progress),
       'apiId': serializer.toJson<int?>(apiId),
       'version': serializer.toJson<int>(version),
       'isSynced': serializer.toJson<bool>(isSynced),
@@ -2420,6 +3068,7 @@ class TSession extends DataClass implements Insertable<TSession> {
           int? dayId,
           DateTime? startedAt,
           Value<DateTime?> finishedAt = const Value.absent(),
+          double? progress,
           Value<int?> apiId = const Value.absent(),
           int? version,
           bool? isSynced}) =>
@@ -2428,6 +3077,7 @@ class TSession extends DataClass implements Insertable<TSession> {
         dayId: dayId ?? this.dayId,
         startedAt: startedAt ?? this.startedAt,
         finishedAt: finishedAt.present ? finishedAt.value : this.finishedAt,
+        progress: progress ?? this.progress,
         apiId: apiId.present ? apiId.value : this.apiId,
         version: version ?? this.version,
         isSynced: isSynced ?? this.isSynced,
@@ -2439,6 +3089,7 @@ class TSession extends DataClass implements Insertable<TSession> {
       startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
       finishedAt:
           data.finishedAt.present ? data.finishedAt.value : this.finishedAt,
+      progress: data.progress.present ? data.progress.value : this.progress,
       apiId: data.apiId.present ? data.apiId.value : this.apiId,
       version: data.version.present ? data.version.value : this.version,
       isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
@@ -2452,6 +3103,7 @@ class TSession extends DataClass implements Insertable<TSession> {
           ..write('dayId: $dayId, ')
           ..write('startedAt: $startedAt, ')
           ..write('finishedAt: $finishedAt, ')
+          ..write('progress: $progress, ')
           ..write('apiId: $apiId, ')
           ..write('version: $version, ')
           ..write('isSynced: $isSynced')
@@ -2460,8 +3112,8 @@ class TSession extends DataClass implements Insertable<TSession> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(tsId, dayId, startedAt, finishedAt, apiId, version, isSynced);
+  int get hashCode => Object.hash(
+      tsId, dayId, startedAt, finishedAt, progress, apiId, version, isSynced);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2470,6 +3122,7 @@ class TSession extends DataClass implements Insertable<TSession> {
           other.dayId == this.dayId &&
           other.startedAt == this.startedAt &&
           other.finishedAt == this.finishedAt &&
+          other.progress == this.progress &&
           other.apiId == this.apiId &&
           other.version == this.version &&
           other.isSynced == this.isSynced);
@@ -2480,6 +3133,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
   final Value<int> dayId;
   final Value<DateTime> startedAt;
   final Value<DateTime?> finishedAt;
+  final Value<double> progress;
   final Value<int?> apiId;
   final Value<int> version;
   final Value<bool> isSynced;
@@ -2488,6 +3142,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
     this.dayId = const Value.absent(),
     this.startedAt = const Value.absent(),
     this.finishedAt = const Value.absent(),
+    this.progress = const Value.absent(),
     this.apiId = const Value.absent(),
     this.version = const Value.absent(),
     this.isSynced = const Value.absent(),
@@ -2497,6 +3152,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
     required int dayId,
     required DateTime startedAt,
     this.finishedAt = const Value.absent(),
+    this.progress = const Value.absent(),
     this.apiId = const Value.absent(),
     this.version = const Value.absent(),
     this.isSynced = const Value.absent(),
@@ -2507,6 +3163,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
     Expression<int>? dayId,
     Expression<DateTime>? startedAt,
     Expression<DateTime>? finishedAt,
+    Expression<double>? progress,
     Expression<int>? apiId,
     Expression<int>? version,
     Expression<bool>? isSynced,
@@ -2516,6 +3173,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
       if (dayId != null) 'day_id': dayId,
       if (startedAt != null) 'started_at': startedAt,
       if (finishedAt != null) 'finished_at': finishedAt,
+      if (progress != null) 'progress': progress,
       if (apiId != null) 'api_id': apiId,
       if (version != null) 'version': version,
       if (isSynced != null) 'is_synced': isSynced,
@@ -2527,6 +3185,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
       Value<int>? dayId,
       Value<DateTime>? startedAt,
       Value<DateTime?>? finishedAt,
+      Value<double>? progress,
       Value<int?>? apiId,
       Value<int>? version,
       Value<bool>? isSynced}) {
@@ -2535,6 +3194,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
       dayId: dayId ?? this.dayId,
       startedAt: startedAt ?? this.startedAt,
       finishedAt: finishedAt ?? this.finishedAt,
+      progress: progress ?? this.progress,
       apiId: apiId ?? this.apiId,
       version: version ?? this.version,
       isSynced: isSynced ?? this.isSynced,
@@ -2556,6 +3216,9 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
     if (finishedAt.present) {
       map['finished_at'] = Variable<DateTime>(finishedAt.value);
     }
+    if (progress.present) {
+      map['progress'] = Variable<double>(progress.value);
+    }
     if (apiId.present) {
       map['api_id'] = Variable<int>(apiId.value);
     }
@@ -2575,6 +3238,7 @@ class TSessionsCompanion extends UpdateCompanion<TSession> {
           ..write('dayId: $dayId, ')
           ..write('startedAt: $startedAt, ')
           ..write('finishedAt: $finishedAt, ')
+          ..write('progress: $progress, ')
           ..write('apiId: $apiId, ')
           ..write('version: $version, ')
           ..write('isSynced: $isSynced')
@@ -3129,6 +3793,8 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
+  late final $AccountsTable accounts = $AccountsTable(this);
+  late final $MembershipsTable memberships = $MembershipsTable(this);
   late final $RoutinesTable routines = $RoutinesTable(this);
   late final $DaysGroupTable daysGroup = $DaysGroupTable(this);
   late final $ExerciseGroupsTable exerciseGroups = $ExerciseGroupsTable(this);
@@ -3142,6 +3808,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
+        accounts,
+        memberships,
         routines,
         daysGroup,
         exerciseGroups,
@@ -3231,6 +3899,349 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       const DriftDatabaseOptions(storeDateTimeAsText: true);
 }
 
+typedef $$AccountsTableCreateCompanionBuilder = AccountsCompanion Function({
+  required String email,
+  required AccountType type,
+  required DateTime createdAt,
+  Value<int> rowid,
+});
+typedef $$AccountsTableUpdateCompanionBuilder = AccountsCompanion Function({
+  Value<String> email,
+  Value<AccountType> type,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+
+class $$AccountsTableFilterComposer
+    extends Composer<_$AppDatabase, $AccountsTable> {
+  $$AccountsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get email => $composableBuilder(
+      column: $table.email, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<AccountType, AccountType, String> get type =>
+      $composableBuilder(
+          column: $table.type,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$AccountsTableOrderingComposer
+    extends Composer<_$AppDatabase, $AccountsTable> {
+  $$AccountsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get email => $composableBuilder(
+      column: $table.email, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$AccountsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AccountsTable> {
+  $$AccountsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get email =>
+      $composableBuilder(column: $table.email, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<AccountType, String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$AccountsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $AccountsTable,
+    Account,
+    $$AccountsTableFilterComposer,
+    $$AccountsTableOrderingComposer,
+    $$AccountsTableAnnotationComposer,
+    $$AccountsTableCreateCompanionBuilder,
+    $$AccountsTableUpdateCompanionBuilder,
+    (Account, BaseReferences<_$AppDatabase, $AccountsTable, Account>),
+    Account,
+    PrefetchHooks Function()> {
+  $$AccountsTableTableManager(_$AppDatabase db, $AccountsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AccountsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AccountsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AccountsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> email = const Value.absent(),
+            Value<AccountType> type = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              AccountsCompanion(
+            email: email,
+            type: type,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String email,
+            required AccountType type,
+            required DateTime createdAt,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              AccountsCompanion.insert(
+            email: email,
+            type: type,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$AccountsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $AccountsTable,
+    Account,
+    $$AccountsTableFilterComposer,
+    $$AccountsTableOrderingComposer,
+    $$AccountsTableAnnotationComposer,
+    $$AccountsTableCreateCompanionBuilder,
+    $$AccountsTableUpdateCompanionBuilder,
+    (Account, BaseReferences<_$AppDatabase, $AccountsTable, Account>),
+    Account,
+    PrefetchHooks Function()>;
+typedef $$MembershipsTableCreateCompanionBuilder = MembershipsCompanion
+    Function({
+  Value<int> id,
+  required String planId,
+  required String planName,
+  required double price,
+  required DateTime startDate,
+  required DateTime endDate,
+  required bool isActive,
+  required bool isGift,
+});
+typedef $$MembershipsTableUpdateCompanionBuilder = MembershipsCompanion
+    Function({
+  Value<int> id,
+  Value<String> planId,
+  Value<String> planName,
+  Value<double> price,
+  Value<DateTime> startDate,
+  Value<DateTime> endDate,
+  Value<bool> isActive,
+  Value<bool> isGift,
+});
+
+class $$MembershipsTableFilterComposer
+    extends Composer<_$AppDatabase, $MembershipsTable> {
+  $$MembershipsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get planId => $composableBuilder(
+      column: $table.planId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get planName => $composableBuilder(
+      column: $table.planName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get price => $composableBuilder(
+      column: $table.price, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get startDate => $composableBuilder(
+      column: $table.startDate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get endDate => $composableBuilder(
+      column: $table.endDate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isGift => $composableBuilder(
+      column: $table.isGift, builder: (column) => ColumnFilters(column));
+}
+
+class $$MembershipsTableOrderingComposer
+    extends Composer<_$AppDatabase, $MembershipsTable> {
+  $$MembershipsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get planId => $composableBuilder(
+      column: $table.planId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get planName => $composableBuilder(
+      column: $table.planName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get price => $composableBuilder(
+      column: $table.price, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get startDate => $composableBuilder(
+      column: $table.startDate, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get endDate => $composableBuilder(
+      column: $table.endDate, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isGift => $composableBuilder(
+      column: $table.isGift, builder: (column) => ColumnOrderings(column));
+}
+
+class $$MembershipsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $MembershipsTable> {
+  $$MembershipsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get planId =>
+      $composableBuilder(column: $table.planId, builder: (column) => column);
+
+  GeneratedColumn<String> get planName =>
+      $composableBuilder(column: $table.planName, builder: (column) => column);
+
+  GeneratedColumn<double> get price =>
+      $composableBuilder(column: $table.price, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startDate =>
+      $composableBuilder(column: $table.startDate, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get endDate =>
+      $composableBuilder(column: $table.endDate, builder: (column) => column);
+
+  GeneratedColumn<bool> get isActive =>
+      $composableBuilder(column: $table.isActive, builder: (column) => column);
+
+  GeneratedColumn<bool> get isGift =>
+      $composableBuilder(column: $table.isGift, builder: (column) => column);
+}
+
+class $$MembershipsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $MembershipsTable,
+    Membership,
+    $$MembershipsTableFilterComposer,
+    $$MembershipsTableOrderingComposer,
+    $$MembershipsTableAnnotationComposer,
+    $$MembershipsTableCreateCompanionBuilder,
+    $$MembershipsTableUpdateCompanionBuilder,
+    (Membership, BaseReferences<_$AppDatabase, $MembershipsTable, Membership>),
+    Membership,
+    PrefetchHooks Function()> {
+  $$MembershipsTableTableManager(_$AppDatabase db, $MembershipsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$MembershipsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$MembershipsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$MembershipsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> planId = const Value.absent(),
+            Value<String> planName = const Value.absent(),
+            Value<double> price = const Value.absent(),
+            Value<DateTime> startDate = const Value.absent(),
+            Value<DateTime> endDate = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+            Value<bool> isGift = const Value.absent(),
+          }) =>
+              MembershipsCompanion(
+            id: id,
+            planId: planId,
+            planName: planName,
+            price: price,
+            startDate: startDate,
+            endDate: endDate,
+            isActive: isActive,
+            isGift: isGift,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String planId,
+            required String planName,
+            required double price,
+            required DateTime startDate,
+            required DateTime endDate,
+            required bool isActive,
+            required bool isGift,
+          }) =>
+              MembershipsCompanion.insert(
+            id: id,
+            planId: planId,
+            planName: planName,
+            price: price,
+            startDate: startDate,
+            endDate: endDate,
+            isActive: isActive,
+            isGift: isGift,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$MembershipsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $MembershipsTable,
+    Membership,
+    $$MembershipsTableFilterComposer,
+    $$MembershipsTableOrderingComposer,
+    $$MembershipsTableAnnotationComposer,
+    $$MembershipsTableCreateCompanionBuilder,
+    $$MembershipsTableUpdateCompanionBuilder,
+    (Membership, BaseReferences<_$AppDatabase, $MembershipsTable, Membership>),
+    Membership,
+    PrefetchHooks Function()>;
 typedef $$RoutinesTableCreateCompanionBuilder = RoutinesCompanion Function({
   Value<int> id,
   Value<int?> apiId,
@@ -3905,15 +4916,13 @@ typedef $$ExerciseGroupsTableCreateCompanionBuilder = ExerciseGroupsCompanion
     Function({
   Value<int> id,
   required int apiId,
-  required String arName,
-  required String enName,
+  required String muscleGroupTranslations,
 });
 typedef $$ExerciseGroupsTableUpdateCompanionBuilder = ExerciseGroupsCompanion
     Function({
   Value<int> id,
   Value<int> apiId,
-  Value<String> arName,
-  Value<String> enName,
+  Value<String> muscleGroupTranslations,
 });
 
 final class $$ExerciseGroupsTableReferences
@@ -3952,11 +4961,9 @@ class $$ExerciseGroupsTableFilterComposer
   ColumnFilters<int> get apiId => $composableBuilder(
       column: $table.apiId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get arName => $composableBuilder(
-      column: $table.arName, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get enName => $composableBuilder(
-      column: $table.enName, builder: (column) => ColumnFilters(column));
+  ColumnFilters<String> get muscleGroupTranslations => $composableBuilder(
+      column: $table.muscleGroupTranslations,
+      builder: (column) => ColumnFilters(column));
 
   Expression<bool> exercisesRefs(
       Expression<bool> Function($$ExercisesTableFilterComposer f) f) {
@@ -3995,11 +5002,9 @@ class $$ExerciseGroupsTableOrderingComposer
   ColumnOrderings<int> get apiId => $composableBuilder(
       column: $table.apiId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get arName => $composableBuilder(
-      column: $table.arName, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get enName => $composableBuilder(
-      column: $table.enName, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<String> get muscleGroupTranslations => $composableBuilder(
+      column: $table.muscleGroupTranslations,
+      builder: (column) => ColumnOrderings(column));
 }
 
 class $$ExerciseGroupsTableAnnotationComposer
@@ -4017,11 +5022,8 @@ class $$ExerciseGroupsTableAnnotationComposer
   GeneratedColumn<int> get apiId =>
       $composableBuilder(column: $table.apiId, builder: (column) => column);
 
-  GeneratedColumn<String> get arName =>
-      $composableBuilder(column: $table.arName, builder: (column) => column);
-
-  GeneratedColumn<String> get enName =>
-      $composableBuilder(column: $table.enName, builder: (column) => column);
+  GeneratedColumn<String> get muscleGroupTranslations => $composableBuilder(
+      column: $table.muscleGroupTranslations, builder: (column) => column);
 
   Expression<T> exercisesRefs<T extends Object>(
       Expression<T> Function($$ExercisesTableAnnotationComposer a) f) {
@@ -4071,26 +5073,22 @@ class $$ExerciseGroupsTableTableManager extends RootTableManager<
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<int> apiId = const Value.absent(),
-            Value<String> arName = const Value.absent(),
-            Value<String> enName = const Value.absent(),
+            Value<String> muscleGroupTranslations = const Value.absent(),
           }) =>
               ExerciseGroupsCompanion(
             id: id,
             apiId: apiId,
-            arName: arName,
-            enName: enName,
+            muscleGroupTranslations: muscleGroupTranslations,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required int apiId,
-            required String arName,
-            required String enName,
+            required String muscleGroupTranslations,
           }) =>
               ExerciseGroupsCompanion.insert(
             id: id,
             apiId: apiId,
-            arName: arName,
-            enName: enName,
+            muscleGroupTranslations: muscleGroupTranslations,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (
@@ -5233,6 +6231,7 @@ typedef $$TSessionsTableCreateCompanionBuilder = TSessionsCompanion Function({
   required int dayId,
   required DateTime startedAt,
   Value<DateTime?> finishedAt,
+  Value<double> progress,
   Value<int?> apiId,
   Value<int> version,
   Value<bool> isSynced,
@@ -5242,6 +6241,7 @@ typedef $$TSessionsTableUpdateCompanionBuilder = TSessionsCompanion Function({
   Value<int> dayId,
   Value<DateTime> startedAt,
   Value<DateTime?> finishedAt,
+  Value<double> progress,
   Value<int?> apiId,
   Value<int> version,
   Value<bool> isSynced,
@@ -5287,6 +6287,9 @@ class $$TSessionsTableFilterComposer
 
   ColumnFilters<DateTime> get finishedAt => $composableBuilder(
       column: $table.finishedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get progress => $composableBuilder(
+      column: $table.progress, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<int> get apiId => $composableBuilder(
       column: $table.apiId, builder: (column) => ColumnFilters(column));
@@ -5340,6 +6343,9 @@ class $$TSessionsTableOrderingComposer
   ColumnOrderings<DateTime> get finishedAt => $composableBuilder(
       column: $table.finishedAt, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<double> get progress => $composableBuilder(
+      column: $table.progress, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<int> get apiId => $composableBuilder(
       column: $table.apiId, builder: (column) => ColumnOrderings(column));
 
@@ -5370,6 +6376,9 @@ class $$TSessionsTableAnnotationComposer
 
   GeneratedColumn<DateTime> get finishedAt => $composableBuilder(
       column: $table.finishedAt, builder: (column) => column);
+
+  GeneratedColumn<double> get progress =>
+      $composableBuilder(column: $table.progress, builder: (column) => column);
 
   GeneratedColumn<int> get apiId =>
       $composableBuilder(column: $table.apiId, builder: (column) => column);
@@ -5429,6 +6438,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
             Value<int> dayId = const Value.absent(),
             Value<DateTime> startedAt = const Value.absent(),
             Value<DateTime?> finishedAt = const Value.absent(),
+            Value<double> progress = const Value.absent(),
             Value<int?> apiId = const Value.absent(),
             Value<int> version = const Value.absent(),
             Value<bool> isSynced = const Value.absent(),
@@ -5438,6 +6448,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
             dayId: dayId,
             startedAt: startedAt,
             finishedAt: finishedAt,
+            progress: progress,
             apiId: apiId,
             version: version,
             isSynced: isSynced,
@@ -5447,6 +6458,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
             required int dayId,
             required DateTime startedAt,
             Value<DateTime?> finishedAt = const Value.absent(),
+            Value<double> progress = const Value.absent(),
             Value<int?> apiId = const Value.absent(),
             Value<int> version = const Value.absent(),
             Value<bool> isSynced = const Value.absent(),
@@ -5456,6 +6468,7 @@ class $$TSessionsTableTableManager extends RootTableManager<
             dayId: dayId,
             startedAt: startedAt,
             finishedAt: finishedAt,
+            progress: progress,
             apiId: apiId,
             version: version,
             isSynced: isSynced,
@@ -5858,6 +6871,10 @@ typedef $$TLogsTableProcessedTableManager = ProcessedTableManager<
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
+  $$AccountsTableTableManager get accounts =>
+      $$AccountsTableTableManager(_db, _db.accounts);
+  $$MembershipsTableTableManager get memberships =>
+      $$MembershipsTableTableManager(_db, _db.memberships);
   $$RoutinesTableTableManager get routines =>
       $$RoutinesTableTableManager(_db, _db.routines);
   $$DaysGroupTableTableManager get daysGroup =>

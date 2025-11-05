@@ -6,6 +6,7 @@ abstract class IRoutineSetsLocalSourceContract {
   //  R O U T I N E   S E T S   S E C T I O N
   Future<List<RoutineSetDto>> getItemSets(int itemId);
   Future<List<RoutineSetDto>> addSets(List<RoutineSetDto> listToAdd);
+  Future<RoutineSetDto> addSet(RoutineSetDto setToAdd);
   Future<List<RoutineSetDto>> saveAllSets(List<RoutineSetDto> list);
   Future<RoutineSetDto> updateSet(RoutineSetDto updated);
   Future<void> removeSets(List<RoutineSetDto> listToRemove);
@@ -63,6 +64,17 @@ class RoutineSetsLocalSourceImpl implements IRoutineSetsLocalSourceContract {
       result.add(s.copyWith(id: setId));
     }
     return result;
+  }
+
+  @override
+  Future<RoutineSetDto> addSet(RoutineSetDto setToAdd) async {
+    final setId = await _database.into(_database.routineSets).insert(
+        RoutineSetsCompanion.insert(
+            roundIndex: setToAdd.index,
+            repsCount: setToAdd.reps,
+            routineItemId: setToAdd.routineItemId));
+
+    return setToAdd.copyWith(id: setId);
   }
 
   @override

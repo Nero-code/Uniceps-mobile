@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class BoxBotton extends StatelessWidget {
-  const BoxBotton({
+class BoxButton extends StatelessWidget {
+  const BoxButton({
     super.key,
     this.width,
     this.height,

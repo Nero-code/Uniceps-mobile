@@ -5,30 +5,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:uniceps/app/presentation/auth/screens/email_auth_screen.dart';
+import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
+import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
+import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
+import 'package:uniceps/app/presentation/routine/screens/routine_management_screen.dart';
+import 'package:uniceps/app/presentation/settings/screens/settings_screen.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
-import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/app/presentation/screens/auth/screens/auth_screen.dart';
-import 'package:uniceps/app/presentation/blocs/authentication/auth_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/attendence/attendence_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/player_gym/player_gym_bloc.dart';
 import 'package:uniceps/app/presentation/screens/profile/settings/screens/about_screen.dart';
-import 'package:uniceps/app/presentation/blocs/current_gym/current_gym_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/gyms/gyms_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/measurement/measurment_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/subscription/subs_bloc.dart';
-import 'package:uniceps/app/presentation/screens/profile/settings/screens/gym_list_screen.dart';
-import 'package:uniceps/app/presentation/screens/profile/settings/screens/profile_screen.dart';
-import 'package:uniceps/app/presentation/screens/home/screens/home_screen.dart';
-import 'package:uniceps/app/presentation/blocs/exercises/exercises_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/training/training_bloc.dart';
 import 'package:uniceps/firebase_options.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
-import 'package:uniceps/main_cubit/locale_cubit.dart';
-import 'package:uniceps/main_cubit/training_section_cubit.dart';
-import 'package:uniceps/splash.dart';
+import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:uniceps/app/presentation/home/screens/temporary_screen.dart';
+import 'package:uniceps/app/presentation/home/screens/home_screen.dart';
+import 'package:uniceps/splash.dart';
+import 'core/constants/app_routes.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
@@ -73,87 +65,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthBloc>(
-          create: (context) {
-            debugPrint(
-                "------------------AuthBloc Created!-----------------------");
-            return AuthBloc(usecases: di.sl(), guestMode: di.sl())
-              ..add(AuthCheckEvent());
-          },
-        ),
-        BlocProvider<TrainingBloc>(
-          create: (context) {
-            debugPrint(
-                "------------------TrainingBLoc Created!-------------------");
-            return TrainingBloc(usecases: di.sl(), manager: di.sl())
-              ..add(const GetProgramEvent());
-          },
-        ),
-        BlocProvider<ExercisesBloc>(
-          create: (context) {
-            debugPrint(
-                "------------------ExercisesBLoc Created!------------------");
-            return ExercisesBloc(usecases: di.sl());
-          },
-        ),
-        BlocProvider<ProfileBloc>(
-          create: (context) {
-            debugPrint(
-                "------------------ProfileBloc Created!--------------------");
-            return ProfileBloc(usecases: di.sl());
-            // return di.sl()..add(event);
-          },
-        ),
-        BlocProvider<SubsBloc>(
-          create: (context) {
-            debugPrint(
-                "------------------SubsBloc Created!-----------------------");
-            return SubsBloc(usecases: di.sl());
-          },
-        ),
-        BlocProvider<MeasurmentBloc>(
-          create: (context) {
-            debugPrint(
-                "------------------MeasurmentsBloc Created!----------------");
-            return MeasurmentBloc(usecases: di.sl())
-              ..add(GetMeasurementsEvent());
-          },
-        ),
-        BlocProvider<GymsBloc>(
-          create: (context) {
-            debugPrint(
-                "------------------GymsBloc Created!-----------------------");
-            return GymsBloc(usecases: di.sl())
-              ..add(const GetAllAvailableGymsEvent());
-          },
-        ),
-        BlocProvider(
-          create: (context) {
-            debugPrint(
-                "------------------Current GymsBloc Created!---------------");
-            return CurrentGymBloc(usecases: di.sl())
-              ..add(const GetSubscribedToGymEvent());
-          },
-        ),
-        BlocProvider(
-          create: (context) {
-            debugPrint(
-                "------------------Player-Gym Bloc Created!----------------");
-            return PlayerGymBloc(usecases: di.sl());
-          },
-        ),
-        BlocProvider<AttendenceBloc>(
-          create: (context) {
-            debugPrint(
-                "------------------AttendenceBloc Created!-----------------");
-            return AttendenceBloc(di.sl());
-          },
-        ),
         BlocProvider<LocaleCubit>(
           create: (context) => LocaleCubit()..getSavedLanguageCode(),
         ),
-        BlocProvider<TrainingSectionCubit>(
-          create: (context) => TrainingSectionCubit()..getSection(),
+        BlocProvider<AccountCubit>(
+          create: (context) => AccountCubit(di.sl())..getUserAccount(),
+        ),
+        BlocProvider(
+          create: (context) => MembershipBloc(di.sl())
+            ..add(const MembershipEvent.getCurrentPlan()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              CurrentRoutineCubit(commands: di.sl())..getCurrentRoutine(),
+          lazy: false,
+        ),
+        BlocProvider(
+          create: (context) => SessionBloc(commands: di.sl())
+            ..add(const SessionEvent.getLastActiveSession()),
         ),
       ],
       child: BlocBuilder<LocaleCubit, ChangedLangState>(
@@ -174,26 +103,24 @@ class MyApp extends StatelessWidget {
             restorationScopeId: "root",
             title: 'Uniceps',
             theme: lightTheme.copyWith(textTheme: GoogleFonts.cairoTextTheme()),
-            // initialRoute: ROUTE_SPLASH,
-            initialRoute: "/temp",
+            initialRoute: AppRoutes.splash,
             routes: {
-              "/temp": (context) => TemporaryScreen(),
-              // ROUTE_SPLASH: (context) => const SplashScreen(),
+              //  MAIN
+              AppRoutes.splash: (context) => const SplashScreen(),
+              AppRoutes.home: (context) => const HomeScreen(),
+
+              // ROUTINE
+              AppRoutes.routineManager: (context) =>
+                  const RoutineManagementScreen(),
 
               //  AUTH
-              // ROUTE_AUTH: (context) => const AuthScreen(),
-              // ROUTE_PROFILE: (context) => const ProfileScreen(),
+              AppRoutes.auth: (context) => const EmailAuthScreen(),
 
-              //  MAIN
-              // ROUTE_HOME: (context) => HomeScreen(
-              //       trainingUsecases: di.sl(),
-              //       service: di.sl(),
-              //       manager: di.sl(),
-              //     ),
+              // SETTINGS
+              AppRoutes.settings: (context) => const SettingsScreen(),
 
-              // //  AUX
-              // ROUTE_GYMS_LIST: (context) => const GymListScreen(),
-              ROUTE_ABOUT: (context) => const AboutScreen(),
+              //  AUX
+              AppRoutes.about: (context) => const AboutScreen(),
             },
           );
         },

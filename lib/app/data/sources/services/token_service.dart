@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/core/errors/exceptions.dart';
 
 class TokenService {
   TokenService(
@@ -13,13 +14,15 @@ class TokenService {
 
   late final http.Client _client;
   final FlutterSecureStorage _storage;
-  // late String? _refreshToken;
   Session? _session;
 
   Future<Session?> get session async {
     print("getting Session...");
-    await _createSession();
-    return _session;
+    final isSessionCreated = await _createSession();
+    if (isSessionCreated) {
+      return _session;
+    }
+    throw SessionGenerationException();
   }
 
   // bool get isLoggedIn => _refreshToken != null;

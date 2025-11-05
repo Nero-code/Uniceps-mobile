@@ -1,6 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:uniceps/app/data/sources/local/schema_versions.dart';
+import 'package:uniceps/app/data/sources/local/tables/account/account_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/account/memberships_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/practice/t_logs_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/practice/t_sessions_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/routine/days_group_table.dart';
@@ -9,11 +11,17 @@ import 'package:uniceps/app/data/sources/local/tables/routine/exercises_table.da
 import 'package:uniceps/app/data/sources/local/tables/routine/routine_items_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/routine/routines_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/routine/sets_table.dart';
+import 'package:uniceps/app/domain/classes/account_entities/account.dart';
 
 part 'database.g.dart';
 
 @DriftDatabase(
   tables: [
+    // - User
+    Accounts,
+    Memberships,
+    // Permissions, // Early implementation
+    // - Training
     Routines,
     DaysGroup,
     RoutineItems,

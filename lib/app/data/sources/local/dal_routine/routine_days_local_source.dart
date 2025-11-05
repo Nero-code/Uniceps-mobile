@@ -43,7 +43,7 @@ class RoutineDaysLocalSourceImpl implements IRoutineDaysLocalSourceContract {
           dayName: day.name,
           routineId: day.routineId,
         ));
-    return day.copyDtoWith(id: res);
+    return day.copyWith(id: res);
   }
 
   @override

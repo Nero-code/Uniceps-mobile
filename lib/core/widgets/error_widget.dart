@@ -55,8 +55,8 @@ class ErrorScreenWidget extends StatelessWidget {
         return local.emptyExcercises;
       case const (EmptyCacheFailure):
         return local.empty;
-      case const (OfflineFailure):
-        return local.errNoInternet;
+      // case const (OfflineFailure):
+      //   return local.errNoInternet;
       case const (DatabaseFailure):
         return local.error;
       case const (NoInternetConnectionFailure):

@@ -1,0 +1,62 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:uniceps/app/data/models/account_models/account_model.dart';
+import 'package:uniceps/app/data/models/account_models/membership_model.dart';
+import 'package:uniceps/app/data/sources/local/database.dart';
+
+abstract class IAccountLocalSource {
+  Future<AccountModel> getUserAccount();
+  Future<MembershipModel> getCurrentPlan();
+
+  Future<void> saveUserAccount(AccountModel userAccount);
+  Future<void> saveUserMembership(MembershipModel subscriptionPlan);
+
+  Future<void> logout();
+}
+
+class AccountLocalSource implements IAccountLocalSource {
+  final FlutterSecureStorage _secureStorage;
+  final AppDatabase _database;
+
+  AccountLocalSource(
+      {required FlutterSecureStorage secureStorage,
+      required AppDatabase database})
+      : _secureStorage = secureStorage,
+        _database = database;
+
+  /// ### Get User Account:
+  ///
+  /// Account is an offline-first data resource, the absence of it means an
+  /// `Unatherized` state which translates to **guest**.
+  @override
+  Future<AccountModel> getUserAccount() async {
+    final account = await _database.select(_database.accounts).getSingle();
+    return AccountModel.fromTable(account);
+  }
+
+  @override
+  Future<MembershipModel> getCurrentPlan() async {
+    final res = await _database.select(_database.memberships).getSingleOrNull();
+    if (res == null) {
+      return MembershipModel.free();
+    }
+    return MembershipModel.fromTable(res);
+  }
+
+  @override
+  Future<void> saveUserAccount(AccountModel userAccount) async {
+    await _database.into(_database.accounts).insert(userAccount.toTable());
+  }
+
+  @override
+  Future<void> saveUserMembership(MembershipModel subscriptionPlan) async {
+    await _database
+        .into(_database.memberships)
+        .insert(subscriptionPlan.toTable());
+  }
+
+  @override
+  Future<void> logout() async {
+    await _database.delete(_database.accounts).go();
+    await _secureStorage.deleteAll();
+  }
+}

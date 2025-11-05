@@ -1,0 +1,26 @@
+import 'package:dartz/dartz.dart';
+import 'package:uniceps/app/domain/classes/account_entities/account.dart';
+import 'package:uniceps/core/errors/failure.dart';
+
+// enum CredentialType { email, phone }
+
+abstract class IOTPAuthRepo {
+  Future<Either<AuthFailure, bool>> verifyCredential(
+      {required String credential});
+  Future<Either<AuthFailure, Unit>> validateOTP(
+      {required String credential,
+      required String otp,
+      AccountType accountType = AccountType.normal});
+}
+
+abstract class I2FAuthRepo {
+  Future<Either<Failure, bool>> verifyCredentials({
+    required String credential,
+    required String password,
+  });
+  Future<Either<Failure, Unit>> validateCode({
+    required String code,
+    required String credential,
+    required String password,
+  });
+}

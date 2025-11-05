@@ -1,23 +1,50 @@
+// import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:uniceps/app/data/models/base_dto.dart';
 import 'package:uniceps/app/data/sources/local/database.dart' as db;
-import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart'
+    as rs;
 
 // part 'routine_day_dto.freezed.dart';
 part 'routine_set_dto.g.dart';
 
 @JsonSerializable()
-class RoutineSetDto extends RoutineSet implements BaseDTO {
+class RoutineSetDto {
+  final int? id, apiId;
+  final int routineItemId, index, reps, version;
+  final double? weight;
+  final bool isSynced;
   const RoutineSetDto({
-    required super.id,
-    required super.apiId,
-    required super.routineItemId,
-    required super.version,
-    required super.index,
-    required super.reps,
-    required super.weight,
-    required super.isSynced,
+    required this.id,
+    required this.apiId,
+    required this.routineItemId,
+    required this.version,
+    required this.index,
+    required this.reps,
+    required this.weight,
+    required this.isSynced,
   });
+
+  factory RoutineSetDto.fromEntity(rs.RoutineSet e) => RoutineSetDto(
+        id: e.id,
+        apiId: e.apiId,
+        routineItemId: e.routineItemId,
+        version: e.version,
+        index: e.index,
+        reps: e.reps,
+        weight: e.weight,
+        isSynced: e.isSynced,
+      );
+
+  rs.RoutineSet toEntity() => rs.RoutineSet(
+        id: id,
+        apiId: apiId,
+        routineItemId: routineItemId,
+        version: version,
+        index: index,
+        reps: reps,
+        weight: weight,
+        isSynced: isSynced,
+      );
 
   factory RoutineSetDto.fromJson(Map<String, dynamic> json) =>
       _$RoutineSetDtoFromJson(json);
@@ -33,7 +60,6 @@ class RoutineSetDto extends RoutineSet implements BaseDTO {
           weight: weight,
           isSynced: setItem.isSynced);
 
-  @override
   RoutineSetDto copyWith({
     int? id,
     int? apiId,
@@ -54,6 +80,5 @@ class RoutineSetDto extends RoutineSet implements BaseDTO {
           weight: weight ?? this.weight,
           isSynced: isSynced ?? this.isSynced);
 
-  @override
   Map<String, dynamic> toJson() => _$RoutineSetDtoToJson(this);
 }

@@ -3,9 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
-import 'package:uniceps/app/data/models/base_dto.dart';
 import 'package:uniceps/app/data/sources/services/client_helper.dart';
-import 'package:uniceps/core/errors/exceptions.dart';
 
 class NoTokenHttpClientHelper implements ClientHelper {
   const NoTokenHttpClientHelper({required Client client}) : _client = client;
@@ -17,72 +15,58 @@ class NoTokenHttpClientHelper implements ClientHelper {
   Client get client => _client;
 
   @override
-  Future<T> getHandler<T extends BaseDTO>(String api, String urlPart,
+  Future<T> getHandler<T>(String api, String urlPart,
       T Function(Map<String, dynamic> json) fromJson,
-      [Map<String, String>? queryParams]) async {
-    final Response res;
-    // try {
-    res = await _client.get(Uri.https(api, urlPart, queryParams));
-    // } catch (e) {
-    //   print("caught Exception in getHandler ${e.toString()}");
-    //   if (e is DioException) _catchException(e);
-    //   throw Exception(e);
-    // }
+      {bool needsHeader = true, Map<String, String>? queryParams}) async {
+    final res = await _client.get(Uri.https(api, urlPart, queryParams));
+
     if (kDebugMode) {
       print("getHandler code: ${res.statusCode}");
       print("getHandler body: ${res.body}");
     }
+    handleHttpStatus(res);
 
     return fromJson(jsonDecode(res.body));
   }
 
   @override
-  Future<List<T>> getListHandler<T extends BaseDTO>(
+  Future<List<T>> getListHandler<T>(
       String api, String urlPart, T Function(Map<String, dynamic>) fromJson,
-      [Map<String, String>? queryParams]) async {
+      {bool needsHeader = true, Map<String, String>? queryParams}) async {
     print("getListHandler: ${api + urlPart}");
-    final Response res;
-    // try {
-    res = await _client.get(Uri.https(api, urlPart, queryParams));
-    // } catch (e) {
-    //   print(e.toString());
-    //   if (e is DioException) _catchException(e);
-    //   throw Exception();
-    // }
+    final res = await _client.get(Uri.https(api, urlPart, queryParams));
+
     if (kDebugMode) {
       print("getListHandler code: ${res.statusCode}");
       print("getListHandler body: ${res.body}");
     }
-
+    handleHttpStatus(res);
     final data = jsonDecode(res.body) as Iterable;
     if (data.isEmpty) {
-      throw EmptyResponseException();
+      throw NoContentException();
     }
 
     return data.map((e) => fromJson(e)).toList();
   }
 
   @override
-  Future<T?> postHandler<T extends BaseDTO>(
+  Future<T?> postHandler<T>(
     String api,
     String urlPart,
     Map<String, dynamic> body, {
     T Function(Map<String, dynamic> json)? fromJson,
     void Function(Map<String, dynamic> body)? orElse,
+    bool needsHeader = true,
   }) async {
     if (kDebugMode) print(api + urlPart);
 
     final res = await _client.post(
       Uri.https("$api" "$urlPart"),
-      body: body,
+      body: jsonEncode(body),
     );
 
-    _mapStatusToError(res);
-    // } catch (e) {
-    //   if (e is DioException) _catchException(e);
-    //   rethrow;
-    // }
-    // print(res.realUri);
+    handleHttpStatus(res);
+
     if (kDebugMode) {
       print("postHandler code: ${res.statusCode}");
       print("postHandler body: ${res.body}");
@@ -90,9 +74,6 @@ class NoTokenHttpClientHelper implements ClientHelper {
 
     if (res.statusCode == HttpStatus.created) {
       if (fromJson != null) {
-        // return fromJson(jsonDecode(
-        //     (res.body))[dataNodeInResponse]);
-
         return fromJson(jsonDecode(res.body));
       }
       if (orElse != null) {
@@ -104,20 +85,13 @@ class NoTokenHttpClientHelper implements ClientHelper {
   }
 
   @override
-  Future<void> putHandler(
-    String api,
-    String urlPart,
-    Map<String, dynamic> body,
-  ) async {
+  Future<void> putHandler(String api, String urlPart, Map<String, dynamic> body,
+      {bool needsHeader = true}) async {
     final res = await _client.put(
       Uri.https("$api" "$urlPart"),
       body: body,
     );
-    _mapStatusToError(res);
-    // } catch (e) {
-    //   if (e is DioException) _catchException(e);
-    //   rethrow;
-    // }
+    handleHttpStatus(res);
 
     print("putHandler code: ${res.statusCode}");
     print("putHandler body: ${res.body}");
@@ -125,18 +99,10 @@ class NoTokenHttpClientHelper implements ClientHelper {
 
   @override
   Future<void> deleteHandler(
-    String api,
-    String urlPart,
-    Map<String, dynamic> body,
-  ) async {
-    final Response res;
+      String api, String urlPart, Map<String, dynamic> body,
+      {bool needsHeader = true}) async {
+    final res = await _client.delete(Uri.https("$api" "$urlPart"), body: body);
 
-    // try {
-    res = await _client.delete(Uri.https("$api" "$urlPart"), body: body);
-    // } catch (e) {
-    //   if (e is DioException) _catchException(e);
-    //   rethrow;
-    // }
     if (kDebugMode) {
       print("deleteHandler code: ${res.statusCode}");
       print("deleteHandler body: ${res.body}");
@@ -144,16 +110,27 @@ class NoTokenHttpClientHelper implements ClientHelper {
   }
 }
 
-void _mapStatusToError(Response res) {
-  print("_mapStatusToError: ${res.body}");
+String handleHttpStatus(Response res) {
   switch (res.statusCode) {
-    case HttpStatus.notFound:
-      throw EmptyResponseException();
-    case HttpStatus.badRequest:
+    case 200:
+      return 'OK';
+    case 201:
+      return 'Created';
+    case 204:
+      throw NoContentException();
+    case 400:
       throw BadRequestException();
-    case HttpStatus.badGateway:
-      throw ServerDownException();
+    case 401:
+      throw Exception('Unauthorized — please login again');
+    case 403:
+      throw Exception('Forbidden — you don’t have access');
+    case 404:
+      throw Exception('Not found — resource does not exist');
+    case 500:
+      throw Exception('Server error — try again later');
+    case 503:
+      throw Exception('Service temporarily unavailable');
     default:
-      throw Exception('Unknown Error');
+      throw Exception('Unhandled status code: ${res.statusCode}');
   }
 }

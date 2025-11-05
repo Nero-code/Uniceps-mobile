@@ -12,80 +12,41 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
 
 extension MuscleGroupExtension on MuscleGroup {
-  MuscleGroupDto asDto() => MuscleGroupDto(
-        id: id,
-        apiId: apiId,
-        arGroupName: arGroupName,
-        enGroupName: enGroupName,
-      );
+  MuscleGroupDto toDto() => MuscleGroupDto.fromEntity(this);
 }
 
 extension ExerciseV2Extension on ExerciseV2 {
-  RoutineItem toModel(int dayId, int index) => RoutineItem(
-      id: id,
-      apiId: apiId,
-      dayId: dayId,
-      index: index,
-      version: 0,
-      exercise: this,
-      sets: [],
-      isSynced: false);
-
-  ExerciseV2Dto asDto() => ExerciseV2Dto(
-        id: id,
-        apiId: apiId,
-        muscleGroupId: muscleGroupId,
-        name: name,
-        imageUrl: imageUrl,
-        imageBitMap: imageBitMap,
-      );
+  ExerciseV2Dto toDto() => ExerciseV2Dto.fromEntity(this);
 }
+
+//
+//
+//
 
 extension RoutineSetExtension on RoutineSet {
-  RoutineSetDto asDto() => RoutineSetDto(
-      id: id,
-      apiId: apiId,
-      routineItemId: routineItemId,
-      version: version,
-      index: index,
-      reps: reps,
-      weight: weight,
-      isSynced: isSynced);
+  RoutineSetDto toDto() => RoutineSetDto.fromEntity(this);
 }
+
+//
+//
+//
 
 extension RoutineItemExtension on RoutineItem {
-  RoutineItemDto asDto() => RoutineItemDto(
-      id: id,
-      apiId: apiId,
-      dayId: dayId,
-      index: index,
-      version: version,
-      exerciseV2Dto: exercise.asDto(),
-      setsDto: sets.map((e) => e.asDto()).toList(),
-      isSynced: isSynced);
+  RoutineItemDto toDto() => RoutineItemDto.fromEntity(this);
 }
+
+//
+//
+//
 
 extension DaysExtension on RoutineDay {
-  RoutineDayDto asDto() => RoutineDayDto(
-      id: id,
-      apiId: apiId,
-      routineId: routineId,
-      version: version,
-      name: name,
-      index: index,
-      items: exercises.map((e) => e.asDto()).toList(),
-      isSynced: isSynced);
+  RoutineDayDto toDto() => RoutineDayDto.fromEntity(this);
 }
 
+//
+//
+//
+
 extension RoutineExtension on Routine {
-  RoutineDto asDto() => RoutineDto(
-      id: id,
-      apiId: apiId,
-      version: version,
-      name: name,
-      description: description,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-      trainingDaysDto: trainingDays.map((e) => e.asDto()).toList(),
-      isSynced: isSynced);
+  RoutineDto toDto() => RoutineDto.fromEntity(this);
 }

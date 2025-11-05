@@ -21,7 +21,7 @@ class PracticeRepo implements IPracticeContract {
     try {
       final res = await _localSource.getCurrentRoutine();
       if (res.head != null) {
-        return Right(Tuple2(res.head!, res.tail));
+        return Right(Tuple2(res.head!.toEntity(), res.tail));
       } else {
         return const Left(EmptyCacheFailure(errorMessage: ""));
       }
@@ -34,7 +34,7 @@ class PracticeRepo implements IPracticeContract {
   Future<Either<Failure, RoutineDay>> getDayItems(int dayId) async {
     try {
       final res = await _localSource.getDayItems(dayId);
-      return Right(res);
+      return Right(res.toEntity());
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }

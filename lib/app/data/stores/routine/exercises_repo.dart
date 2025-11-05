@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:uniceps/app/data/models/routine_models/extensions.dart';
+import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
@@ -28,7 +28,7 @@ class ExercisesRepo implements IExercisesContract {
       try {
         final res = await _remoteSource.getExerciseGroups();
         await _localSource.saveMuscleGroups(res);
-        return Right(res);
+        return Right(res.map((r) => r.toEntity()).toList());
       } catch (e) {
         return Left(ServerFailure(errMsg: e.toString()));
       }
@@ -41,9 +41,10 @@ class ExercisesRepo implements IExercisesContract {
     if (await _internet.hasConnection) {
       try {
         final res = await _remoteSource.getAllExercises();
+
         allExercises.clear();
-        allExercises.addAll(res);
-        return Right(res);
+        allExercises.addAll(res.map((r) => r.toEntity()).toList());
+        return Right(allExercises);
       } catch (e) {
         return Left(ServerFailure(errMsg: e.toString()));
       }
@@ -57,7 +58,7 @@ class ExercisesRepo implements IExercisesContract {
     if (await _internet.hasConnection) {
       try {
         final res = await _remoteSource.getExercisesByFilter(filter);
-        return Right(res);
+        return Right(res.map((r) => r.toEntity()).toList());
       } catch (e) {
         return Left(ServerFailure(errMsg: e.toString()));
       }
@@ -70,8 +71,9 @@ class ExercisesRepo implements IExercisesContract {
       MuscleGroup group) async {
     if (await _internet.hasConnection) {
       try {
-        final res = await _remoteSource.getExercisesByGroup(group.asDto());
-        return Right(res);
+        final res = await _remoteSource
+            .getExercisesByGroup(MuscleGroupDto.fromEntity(group));
+        return Right(res.map((r) => r.toEntity()).toList());
       } catch (e) {
         return Left(ServerFailure(errMsg: e.toString()));
       }

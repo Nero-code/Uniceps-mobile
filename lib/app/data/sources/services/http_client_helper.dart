@@ -3,109 +3,95 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
-import 'package:uniceps/app/data/models/base_dto.dart';
 import 'package:uniceps/app/data/sources/services/client_helper.dart';
-import 'package:uniceps/app/data/sources/services/token_service.dart';
-import 'package:uniceps/core/errors/exceptions.dart';
+import 'package:uniceps/app/data/sources/services/token_service_simple.dart';
 
 class HttpClientHelper implements ClientHelper {
   const HttpClientHelper(
-      {required Client client, required TokenService tokenService})
+      {required Client client, required SimpleTokenService tokenService})
       : _tokenService = tokenService,
         _client = client;
 
   final Client _client;
-  final TokenService _tokenService;
-  final dataNodeInResponse = 'data';
+  final SimpleTokenService _tokenService;
+  // final dataNodeInResponse = 'data';
 
   ///  For more custom behaivuar
   Client get client => _client;
-  TokenService get tokenService => _tokenService;
+  SimpleTokenService get tokenService => _tokenService;
 
   @override
-  Future<T> getHandler<T extends BaseDTO>(String api, String urlPart,
+  Future<T> getHandler<T>(String api, String urlPart,
       T Function(Map<String, dynamic> json) fromJson,
-      [Map<String, String>? queryParams]) async {
-    final Response res;
-    // try {
-    res = await _client.get(Uri.https(api, urlPart, queryParams),
-        headers: await getHeader());
-    // } catch (e) {
-    //   print("caught Exception in getHandler ${e.toString()}");
-    //   if (e is DioException) _catchException(e);
-    //   throw Exception(e);
-    // }
+      {bool needsHeader = true, Map<String, String>? queryParams}) async {
+    final res = await _client.get(
+      Uri.https(api, urlPart, queryParams),
+      headers: await getHeader(needsHeader),
+    );
+
     if (kDebugMode) {
-      print("getHandler code: ${res.statusCode}");
+      print("getHandler code: ${res.statusCode}\n" "URL: ${api + urlPart}");
       print("getHandler body: ${res.body}");
     }
+    handleHttpStatus(res);
 
-    return fromJson((res.body as Map)[dataNodeInResponse]);
+    return fromJson(jsonDecode(res.body));
   }
 
   @override
-  Future<List<T>> getListHandler<T extends BaseDTO>(
+  Future<List<T>> getListHandler<T>(
       String api, String urlPart, T Function(Map<String, dynamic>) fromJson,
-      [Map<String, String>? queryParams]) async {
-    print("getListHandler: ${api + urlPart}");
-    final Response res;
-    // try {
-    res = await _client.get(Uri.https(api, urlPart, queryParams),
-        headers: await getHeader());
-    // } catch (e) {
-    //   print(e.toString());
-    //   if (e is DioException) _catchException(e);
-    //   throw Exception();
-    // }
+      {bool needsHeader = true, Map<String, String>? queryParams}) async {
+    final res = await _client.get(
+      Uri.https(api, urlPart, queryParams),
+      headers: await getHeader(needsHeader),
+    );
+
     if (kDebugMode) {
-      print("getListHandler code: ${res.statusCode}");
+      print("getListHandler code: ${res.statusCode}\n" "URL: ${api + urlPart}");
       print("getListHandler body: ${res.body}");
     }
+    handleHttpStatus(res);
 
-    final data = jsonDecode(res.body)[dataNodeInResponse] as Iterable;
+    final data = jsonDecode(res.body) as Iterable;
     if (data.isEmpty) {
-      throw EmptyResponseException();
+      throw NoContentException();
     }
 
     return data.map((e) => fromJson(e)).toList();
   }
 
   @override
-  Future<T?> postHandler<T extends BaseDTO>(
+  Future<T?> postHandler<T>(
     String api,
     String urlPart,
     Map<String, dynamic> body, {
     T Function(Map<String, dynamic> json)? fromJson,
     void Function(Map<String, dynamic> body)? orElse,
+    bool needsHeader = true,
   }) async {
     if (kDebugMode) print(api + urlPart);
 
     final res = await _client.post(
-      Uri.https("$api" "$urlPart"),
-      headers: await getHeader(),
-      body: body,
+      Uri.https(api, urlPart),
+      headers: await getHeader(needsHeader),
+      body: jsonEncode(body),
     );
 
-    _mapStatusToError(res);
-    // } catch (e) {
-    //   if (e is DioException) _catchException(e);
-    //   rethrow;
-    // }
-    // print(res.realUri);
     if (kDebugMode) {
-      print("postHandler code: ${res.statusCode}");
-      print("postHandler body: ${res.body}");
+      print("getListHandler code: ${res.statusCode}\n" "URL: ${api + urlPart}");
+      print("getListHandler body: ${res.body}");
     }
 
-    if (res.statusCode == HttpStatus.created) {
-      if (fromJson != null) {
-        // return fromJson(jsonDecode(
-        //     (res.body))[dataNodeInResponse]);
+    handleHttpStatus(res);
 
-        return fromJson(jsonDecode(res.body)[dataNodeInResponse]);
+    if (res.statusCode == HttpStatus.ok ||
+        res.statusCode == HttpStatus.created) {
+      if (fromJson != null) {
+        return fromJson(jsonDecode(res.body));
       }
       if (orElse != null) {
-        orElse(res.body as Map<String, dynamic>);
+        orElse(jsonDecode(res.body));
       }
     }
 
@@ -113,72 +99,68 @@ class HttpClientHelper implements ClientHelper {
   }
 
   @override
-  Future<void> putHandler(
-    String api,
-    String urlPart,
-    Map<String, dynamic> body,
-  ) async {
+  Future<void> putHandler(String api, String urlPart, Map<String, dynamic> body,
+      {bool needsHeader = true}) async {
     final res = await _client.put(
       Uri.https("$api" "$urlPart"),
-      headers: await getHeader(),
+      headers: await getHeader(needsHeader),
       body: body,
     );
-    _mapStatusToError(res);
-    // } catch (e) {
-    //   if (e is DioException) _catchException(e);
-    //   rethrow;
-    // }
+    handleHttpStatus(res);
 
-    print("putHandler code: ${res.statusCode}");
-    print("putHandler body: ${res.body}");
+    if (kDebugMode) {
+      print("putHandler code: ${res.statusCode}");
+      print("putHandler body: ${res.body}");
+    }
   }
 
   @override
   Future<void> deleteHandler(
-    String api,
-    String urlPart,
-    Map<String, dynamic> body,
-  ) async {
-    final Response res;
+      String api, String urlPart, Map<String, dynamic> body,
+      {bool needsHeader = true}) async {
+    final res = await _client.delete(Uri.https("$api" "$urlPart"),
+        headers: await getHeader(needsHeader), body: body);
 
-    // try {
-    res = await _client.delete(Uri.https("$api" "$urlPart"),
-        headers: await getHeader(), body: body);
-    // } catch (e) {
-    //   if (e is DioException) _catchException(e);
-    //   rethrow;
-    // }
     if (kDebugMode) {
       print("deleteHandler code: ${res.statusCode}");
       print("deleteHandler body: ${res.body}");
     }
   }
 
-  Future<Map<String, String>> getHeader() async {
-    final session = await _tokenService.session;
-    if (session == null) {
-      throw SessionGenerationException();
-    }
+  Future<Map<String, String>> getHeader(bool needToken) async {
+    // final session = await _tokenService.session;
+    // return {'Authorization': "Bearer ${session!.accessToken}"};
+    // final a = await _tokenService.getAccessToken();
     return {
-      // 'Content-Type': 'application/json; charset=UTF-8',
-      // "charset": "utf-8",
-      // "Accept-Charset": "utf-8",
-      // 'Accept': 'application/json; charset=UTF-8',
-      'Authorization': "Bearer ${session.accessToken}",
+      if (needToken)
+        'Authorization': "Bearer ${await _tokenService.getAccessToken()}",
+      'content-type': 'application/json;charset=utf-8',
+      'accept': 'application/json',
     };
   }
 }
 
-void _mapStatusToError(Response res) {
-  print("_mapStatusToError: ${res.body}");
+String handleHttpStatus(Response res) {
   switch (res.statusCode) {
-    case HttpStatus.notFound:
-      throw EmptyResponseException();
-    case HttpStatus.badRequest:
+    case 200:
+      return 'OK';
+    case 201:
+      return 'Created';
+    case 204:
+      throw NoContentException();
+    case 400:
       throw BadRequestException();
-    case HttpStatus.badGateway:
-      throw ServerDownException();
+    case 401:
+      throw Exception('Unauthorized — please login again');
+    case 403:
+      throw Exception('Forbidden — you don’t have access');
+    case 404:
+      throw Exception('Not found — resource does not exist');
+    case 500:
+      throw Exception('Server error — try again later');
+    case 503:
+      throw Exception('Service temporarily unavailable');
     default:
-      throw Exception('Unknown Error');
+      throw Exception('Unhandled status code: ${res.statusCode}');
   }
 }

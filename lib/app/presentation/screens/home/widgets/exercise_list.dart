@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/training_entities/exercise.dart';
-import 'package:uniceps/main_cubit/locale_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 
 class ExerciseListTile extends StatelessWidget {
   const ExerciseListTile(

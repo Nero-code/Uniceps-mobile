@@ -9,15 +9,14 @@ class RoutineSetsCommands implements ICommand {
 
   const RoutineSetsCommands({required IRoutineSetsContract repo})
       : _repo = repo;
-  Future<Either<Failure, List<RoutineSet>>> addItemSets(
-      int itemId, List<RoutineSet> oldSets) async {
-    return await _repo.addItemSets(itemId, oldSets);
+  Future<Either<Failure, List<RoutineSet>>> addItemSets(int itemId) async {
+    return await _repo.addItemSets(itemId);
   }
 
-  Future<Either<Failure, List<RoutineSet>>> saveAllSets(
-      List<RoutineSet> setsToSave) async {
-    return await _repo.saveAllSets(setsToSave);
-  }
+  // Future<Either<Failure, List<RoutineSet>>> saveAllSets(
+  //     List<RoutineSet> setsToSave) async {
+  //   return await _repo.saveAllSets(setsToSave);
+  // }
 
   Future<Either<Failure, List<RoutineSet>>> updateSet(
       RoutineSet updated) async {

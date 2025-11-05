@@ -92,14 +92,13 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
       //         enName: i.exerciseV2Dto.muscleGroup.enGroupName),
       //     onConflict: DoUpdate((update) => ExerciseGroupsCompanion.custom(
       //         arName: update.arName, enName: update.enName)));
-
       // -----------------------------------------------------------------
       // Inserting Exercise into database after muscle-group because of
       // foreign key constraints
 
       late final Exercise ex;
       final oldEx = await (_database.select(_database.exercises)
-            ..where((f) => f.apiId.equals(i.apiId!)))
+            ..where((f) => f.apiId.equals(i.exerciseV2Dto.apiId!)))
           .get();
 
       if (oldEx.isEmpty) {
@@ -109,17 +108,10 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
                   name: i.exerciseV2Dto.name,
                   imageUrl: i.exerciseV2Dto.imageUrl,
                   muscleGroup: i.exerciseV2Dto.muscleGroupId),
-              // onConflict: DoUpdate((old) => ExercisesCompanion.custom(
-              //       id: i.id == null ? null : Constant(i.id!),
-              //       apiId: old.apiId,
-              //       name: Constant(i.exerciseV2Dto.name),
-              //       imageUrl: Constant(i.exerciseV2Dto.imageUrl),
-              //       muscleGroup: Constant(i.exerciseV2Dto.muscleGroupId),
-              //     )),
             );
       } else {
         ex = (await (_database.update(_database.exercises)
-                  ..where((f) => f.apiId.equals(i.apiId!)))
+                  ..where((f) => f.apiId.equals(i.exerciseV2Dto.apiId!)))
                 .writeReturning(ExercisesCompanion.custom(
           id: Constant(oldEx.first.id),
           apiId: Constant(oldEx.first.apiId),
@@ -144,7 +136,7 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
           RoutineItemsCompanion.insert(
               index: i.index, exerciseId: ex.id, dayId: i.dayId));
 
-      result.add(i.copyDtoWith(
+      result.add(i.copyWith(
         id: itemId,
         exerciseV2Dto: i.exerciseV2Dto
             .copywith(id: ex.id, apiId: ex.apiId, imageBitMap: img),

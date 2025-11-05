@@ -12,13 +12,13 @@ RoutineDto _$RoutineDtoFromJson(Map<String, dynamic> json) => RoutineDto(
       version: (json['version'] as num).toInt(),
       name: json['name'] as String,
       description: json['description'] as String?,
+      isCurrent: json['isCurrent'] as bool,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
       trainingDaysDto: (json['trainingDaysDto'] as List<dynamic>)
           .map((e) => RoutineDayDto.fromJson(e as Map<String, dynamic>))
           .toList(),
       isSynced: json['isSynced'] as bool,
-      isCurrent: json['isCurrent'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$RoutineDtoToJson(RoutineDto instance) =>

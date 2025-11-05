@@ -120,6 +120,25 @@ class MockIRoutineManagementContract extends _i1.Mock
       ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>);
 
   @override
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>> setCurrentRoutine(
+          _i6.Routine? routine) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #setCurrentRoutine,
+          [routine],
+        ),
+        returnValue:
+            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>.value(
+                _FakeEither_0<_i5.Failure, List<_i6.Routine>>(
+          this,
+          Invocation.method(
+            #setCurrentRoutine,
+            [routine],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>);
+
+  @override
   _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>> shareRoutine(
     _i6.Routine? routine,
     int? userId,

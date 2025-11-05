@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/app/domain/classes/training_entities/exercise.dart';
-import 'package:uniceps/app/domain/commands/training_usecases/training_usecases.dart';
+import 'package:uniceps/app/domain/commands/training_usecases(old)/training_usecases.dart';
 
 part 'exercises_event.dart';
 part 'exercises_state.dart';
