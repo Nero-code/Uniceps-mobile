@@ -29,6 +29,7 @@ class _PracticeBodyState extends State<PracticeBody> {
       mainAxisSize: MainAxisSize.min,
       children: widget.sets.map((i) {
         return RoundWidget(
+          onLog: () {},
           sessionId: widget.sessionId,
           exId: widget.exId,
           exIndex: widget.exIndex,

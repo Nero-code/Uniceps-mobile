@@ -38,6 +38,7 @@
   "rename": "Rename",
   "setCurrent": "Set Current",
   "delete": "Delete",
+  "finish": "Finish",
   
   "price": "Price",
   "discount":"Discount",
@@ -104,14 +105,14 @@
   "emptySubs": "No Subscriptions",
   "emptyMeasure": "No Measurements",
   "emptyExcercises": "No Exercises",
-  "emptySubscriptions":"No Subscriptions yet",
-  "emptyMeasurements":"No Measurements yet",
-  "emptyExercisesList":"No Exercises in this Group",
-  "emptyGymsList":"No Gyms Available",
-  "emptyHandshakes":"you are not a member of any gym",
-  "emptyTriningDaysMap":"No Training Program yet",
-  "emptyHomeCard":"No Gym Specified, select a gym to load data",
-  "emptyAttendence":"Not a member",
+  "emptySubscriptions": "No Subscriptions yet",
+  "emptyMeasurements": "No Measurements yet",
+  "emptyExercisesList": "No Exercises in this Group",
+  "emptyGymsList": "No Gyms Available",
+  "emptyHandshakes": "you are not a member of any gym",
+  "emptyTriningDaysMap": "No Training Program yet",
+  "emptyHomeCard": "No Gym Specified, select a gym to load data",
+  "emptyAttendence": "Not a member",
   "emptyRoutineItems": "no items, try the (+) button",
   
   "error": "something went wrong",
@@ -223,5 +224,6 @@
 
   "signinAlert": "Sign in to see all features",
   "upgrade": "Upgrade",
-  "upgradeAlert": "Become a Premium Member to unlock your FULL potential"
+  "upgradeAlert": "Become a Premium Member to unlock your FULL potential",
+  "premiumAlertContent": "Unlock ALL content with Premium"
 }

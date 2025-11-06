@@ -21,8 +21,9 @@ class PracticeCommands {
   Future<Either<Failure, TSession>> startTrainingSession(int dayId) async =>
       await _repo.startTrainingSession(dayId);
 
-  Future<Either<Failure, TSession>> logSetComplete(TLog log) async =>
-      await _repo.logSetComplete(log);
+  Future<Either<Failure, TSession>> logSetComplete(
+          TLog log, double progress) async =>
+      await _repo.logSetComplete(log, progress);
 
   Future<Either<Failure, Unit>> finishTrainingSession(TSession session) async =>
       await _repo.finishTrainingSession(session);

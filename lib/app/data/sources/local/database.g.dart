@@ -8,6 +8,11 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $AccountsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _uidMeta = const VerificationMeta('uid');
+  @override
+  late final GeneratedColumn<String> uid = GeneratedColumn<String>(
+      'uid', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _emailMeta = const VerificationMeta('email');
   @override
   late final GeneratedColumn<String> email = GeneratedColumn<String>(
@@ -29,7 +34,7 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
       'created_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [email, type, createdAt];
+  List<GeneratedColumn> get $columns => [uid, email, type, createdAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -40,6 +45,12 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('uid')) {
+      context.handle(
+          _uidMeta, uid.isAcceptableOrUnknown(data['uid']!, _uidMeta));
+    } else if (isInserting) {
+      context.missing(_uidMeta);
+    }
     if (data.containsKey('email')) {
       context.handle(
           _emailMeta, email.isAcceptableOrUnknown(data['email']!, _emailMeta));
@@ -62,6 +73,8 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
   Account map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Account(
+      uid: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}uid'])!,
       email: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}email'])!,
       type: $AccountsTable.$convertertype.fromSql(attachedDatabase.typeMapping
@@ -81,14 +94,19 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
 }
 
 class Account extends DataClass implements Insertable<Account> {
+  final String uid;
   final String email;
   final AccountType type;
   final DateTime createdAt;
   const Account(
-      {required this.email, required this.type, required this.createdAt});
+      {required this.uid,
+      required this.email,
+      required this.type,
+      required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['uid'] = Variable<String>(uid);
     map['email'] = Variable<String>(email);
     {
       map['type'] = Variable<String>($AccountsTable.$convertertype.toSql(type));
@@ -99,6 +117,7 @@ class Account extends DataClass implements Insertable<Account> {
 
   AccountsCompanion toCompanion(bool nullToAbsent) {
     return AccountsCompanion(
+      uid: Value(uid),
       email: Value(email),
       type: Value(type),
       createdAt: Value(createdAt),
@@ -109,6 +128,7 @@ class Account extends DataClass implements Insertable<Account> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Account(
+      uid: serializer.fromJson<String>(json['uid']),
       email: serializer.fromJson<String>(json['email']),
       type: $AccountsTable.$convertertype
           .fromJson(serializer.fromJson<String>(json['type'])),
@@ -119,6 +139,7 @@ class Account extends DataClass implements Insertable<Account> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'uid': serializer.toJson<String>(uid),
       'email': serializer.toJson<String>(email),
       'type':
           serializer.toJson<String>($AccountsTable.$convertertype.toJson(type)),
@@ -126,14 +147,20 @@ class Account extends DataClass implements Insertable<Account> {
     };
   }
 
-  Account copyWith({String? email, AccountType? type, DateTime? createdAt}) =>
+  Account copyWith(
+          {String? uid,
+          String? email,
+          AccountType? type,
+          DateTime? createdAt}) =>
       Account(
+        uid: uid ?? this.uid,
         email: email ?? this.email,
         type: type ?? this.type,
         createdAt: createdAt ?? this.createdAt,
       );
   Account copyWithCompanion(AccountsCompanion data) {
     return Account(
+      uid: data.uid.present ? data.uid.value : this.uid,
       email: data.email.present ? data.email.value : this.email,
       type: data.type.present ? data.type.value : this.type,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
@@ -143,6 +170,7 @@ class Account extends DataClass implements Insertable<Account> {
   @override
   String toString() {
     return (StringBuffer('Account(')
+          ..write('uid: $uid, ')
           ..write('email: $email, ')
           ..write('type: $type, ')
           ..write('createdAt: $createdAt')
@@ -151,42 +179,49 @@ class Account extends DataClass implements Insertable<Account> {
   }
 
   @override
-  int get hashCode => Object.hash(email, type, createdAt);
+  int get hashCode => Object.hash(uid, email, type, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Account &&
+          other.uid == this.uid &&
           other.email == this.email &&
           other.type == this.type &&
           other.createdAt == this.createdAt);
 }
 
 class AccountsCompanion extends UpdateCompanion<Account> {
+  final Value<String> uid;
   final Value<String> email;
   final Value<AccountType> type;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
   const AccountsCompanion({
+    this.uid = const Value.absent(),
     this.email = const Value.absent(),
     this.type = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   AccountsCompanion.insert({
+    required String uid,
     required String email,
     required AccountType type,
     required DateTime createdAt,
     this.rowid = const Value.absent(),
-  })  : email = Value(email),
+  })  : uid = Value(uid),
+        email = Value(email),
         type = Value(type),
         createdAt = Value(createdAt);
   static Insertable<Account> custom({
+    Expression<String>? uid,
     Expression<String>? email,
     Expression<String>? type,
     Expression<DateTime>? createdAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
+      if (uid != null) 'uid': uid,
       if (email != null) 'email': email,
       if (type != null) 'type': type,
       if (createdAt != null) 'created_at': createdAt,
@@ -195,11 +230,13 @@ class AccountsCompanion extends UpdateCompanion<Account> {
   }
 
   AccountsCompanion copyWith(
-      {Value<String>? email,
+      {Value<String>? uid,
+      Value<String>? email,
       Value<AccountType>? type,
       Value<DateTime>? createdAt,
       Value<int>? rowid}) {
     return AccountsCompanion(
+      uid: uid ?? this.uid,
       email: email ?? this.email,
       type: type ?? this.type,
       createdAt: createdAt ?? this.createdAt,
@@ -210,6 +247,9 @@ class AccountsCompanion extends UpdateCompanion<Account> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (uid.present) {
+      map['uid'] = Variable<String>(uid.value);
+    }
     if (email.present) {
       map['email'] = Variable<String>(email.value);
     }
@@ -229,6 +269,7 @@ class AccountsCompanion extends UpdateCompanion<Account> {
   @override
   String toString() {
     return (StringBuffer('AccountsCompanion(')
+          ..write('uid: $uid, ')
           ..write('email: $email, ')
           ..write('type: $type, ')
           ..write('createdAt: $createdAt, ')
@@ -3900,12 +3941,14 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 }
 
 typedef $$AccountsTableCreateCompanionBuilder = AccountsCompanion Function({
+  required String uid,
   required String email,
   required AccountType type,
   required DateTime createdAt,
   Value<int> rowid,
 });
 typedef $$AccountsTableUpdateCompanionBuilder = AccountsCompanion Function({
+  Value<String> uid,
   Value<String> email,
   Value<AccountType> type,
   Value<DateTime> createdAt,
@@ -3921,6 +3964,9 @@ class $$AccountsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get uid => $composableBuilder(
+      column: $table.uid, builder: (column) => ColumnFilters(column));
+
   ColumnFilters<String> get email => $composableBuilder(
       column: $table.email, builder: (column) => ColumnFilters(column));
 
@@ -3942,6 +3988,9 @@ class $$AccountsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get uid => $composableBuilder(
+      column: $table.uid, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get email => $composableBuilder(
       column: $table.email, builder: (column) => ColumnOrderings(column));
 
@@ -3961,6 +4010,9 @@ class $$AccountsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get uid =>
+      $composableBuilder(column: $table.uid, builder: (column) => column);
+
   GeneratedColumn<String> get email =>
       $composableBuilder(column: $table.email, builder: (column) => column);
 
@@ -3994,24 +4046,28 @@ class $$AccountsTableTableManager extends RootTableManager<
           createComputedFieldComposer: () =>
               $$AccountsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
+            Value<String> uid = const Value.absent(),
             Value<String> email = const Value.absent(),
             Value<AccountType> type = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               AccountsCompanion(
+            uid: uid,
             email: email,
             type: type,
             createdAt: createdAt,
             rowid: rowid,
           ),
           createCompanionCallback: ({
+            required String uid,
             required String email,
             required AccountType type,
             required DateTime createdAt,
             Value<int> rowid = const Value.absent(),
           }) =>
               AccountsCompanion.insert(
+            uid: uid,
             email: email,
             type: type,
             createdAt: createdAt,

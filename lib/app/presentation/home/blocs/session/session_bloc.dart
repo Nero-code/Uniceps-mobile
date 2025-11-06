@@ -46,7 +46,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     on<_LogSet>((event, emit) async {
       emit(const SessionState.loading());
 
-      final either = await _commands.logSetComplete(event.log);
+      final either = await _commands.logSetComplete(event.log, event.progress);
       either.fold(
         (l) => emit(SessionState.error(l)),
         (r) => emit(SessionState.loaded(r)),

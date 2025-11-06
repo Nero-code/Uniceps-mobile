@@ -121,12 +121,12 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
 
                                 case Option.delete:
                                   if (canDelete) {
-                                    _deleteRoutine(
-                                        e.name,
-                                        () => BlocProvider.of<
-                                                RoutineManagementBloc>(context)
-                                            .add(DeleteRoutineEvent(
-                                                routineToDelete: e)));
+                                    _deleteRoutine(e.name, () {
+                                      BlocProvider.of<RoutineManagementBloc>(
+                                              context)
+                                          .add(DeleteRoutineEvent(
+                                              routineToDelete: e));
+                                    });
                                   } else {
                                     if (context.mounted) {
                                       ScaffoldMessenger.of(context)

@@ -64,7 +64,8 @@ class PracticeRepo implements IPracticeContract {
   }
 
   @override
-  Future<Either<Failure, TSession>> logSetComplete(TLog log) async {
+  Future<Either<Failure, TSession>> logSetComplete(
+      TLog log, double progress) async {
     if (_session == null) {
       return const Left(EmptyCacheFailure(errorMessage: "Null TSession!!!"));
     }

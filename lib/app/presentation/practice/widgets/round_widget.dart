@@ -9,24 +9,20 @@ import 'package:uniceps/core/widgets/box_botton.dart';
 class RoundWidget extends StatefulWidget {
   const RoundWidget({
     super.key,
+    required this.onLog,
     required this.sessionId,
     required this.exId,
     required this.exIndex,
     required this.set,
     this.log,
-
-    // required this.controller,
-    // required this.index,
-    // required this.reps,
-    // required this.lastWeight,
-    // required this.onTap,
-    // this.isDone = false,
   });
   final int sessionId;
   final int exId;
   final int exIndex;
   final RoutineSet set;
   final TLog? log;
+
+  final VoidCallback onLog;
 
   @override
   State<RoundWidget> createState() => _RoundWidgetState();
@@ -140,7 +136,7 @@ class _RoundWidgetState extends State<RoundWidget> {
                     weight: double.tryParse(weightCtl.text) ?? 0.0,
                   );
 
-              context.read<SessionBloc>().add(SessionEvent.logSet(log));
+              context.read<SessionBloc>().add(SessionEvent.logSet(log, 0));
             },
             child: Text(
               " ${String.fromCharCode(Icons.done.codePoint)} ",

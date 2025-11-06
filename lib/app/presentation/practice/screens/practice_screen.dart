@@ -10,6 +10,7 @@ import 'package:uniceps/app/presentation/practice/dialogs/session_complete_dialo
 import 'package:uniceps/app/presentation/practice/widgets/practice_body.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_header.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 
 class PracticeScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!;
     final screenSize = MediaQuery.sizeOf(context);
     return PopScope(
       canPop: true,
@@ -43,28 +45,23 @@ class _PracticeScreenState extends State<PracticeScreen> {
         // listenWhen: (previous, current) =>
         //     (previous is SessionLoadingState) &&
         //     (current is NoActiveSessionState),
-        listenWhen: (previous, current) => (current.maybeWhen(
-            orElse: () => false, noActiveSession: () => true)),
+        listenWhen: (previous, current) => (current.maybeWhen(orElse: () => false, noActiveSession: () => true)),
         listener: (context, state) async {
           print("b finished Session ${state.runtimeType}");
-          await showDialog(
-              context: context,
-              builder: (context) => const SessionCompleteDialog());
+          await showDialog(context: context, builder: (context) => const SessionCompleteDialog());
           print("a finished Session ${state.runtimeType}");
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
         },
         // --------------------------------------------------------
-        buildWhen: (previous, current) =>
-            current.maybeWhen(orElse: () => false, loaded: (session) => true),
+        buildWhen: (previous, current) => current.maybeWhen(orElse: () => false, loaded: (session) => true),
         builder: (context, sessionState) {
           return sessionState.map(
               initial: (_) => const SizedBox(),
               loading: (_) => const Material(child: LoadingPage()),
               noActiveSession: (_) => const SizedBox(),
               loaded: (sessionState) => BlocProvider(
-                    create: (context) => PracticeCubit(commands: di.sl())
-                      ..getPracticeDay(sessionState.session.dayId),
+                    create: (context) => PracticeCubit(commands: di.sl())..getPracticeDay(sessionState.session.dayId),
                     child: Scaffold(
                       appBar: AppBar(
                         backgroundColor: Theme.of(context).colorScheme.surface,
@@ -73,12 +70,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: BlocSelector<PracticeCubit, PracticeState,
-                                  String>(
-                                selector: (state) =>
-                                    (state is PracticeLoadedState)
-                                        ? state.day.name
-                                        : "",
+                              child: BlocSelector<PracticeCubit, PracticeState, String>(
+                                selector: (state) => (state is PracticeLoadedState) ? state.day.name : "",
                                 builder: (context, dayName) => Text(dayName),
                               ),
                             ),
@@ -100,8 +93,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                         children: [
                           const SizedBox.expand(),
                           BlocBuilder<PracticeCubit, PracticeState>(
-                            buildWhen: (previous, current) =>
-                                current is PracticeLoadedState,
+                            buildWhen: (previous, current) => current is PracticeLoadedState,
                             builder: (context, state) {
                               if (state is PracticeLoadedState) {
                                 return SingleChildScrollView(
@@ -112,23 +104,17 @@ class _PracticeScreenState extends State<PracticeScreen> {
                                     children: state.day.exercises
                                         .map(
                                           (i) => ExpansionPanel(
-                                            backgroundColor:
-                                                const Color.fromARGB(
-                                                    255, 250, 250, 250),
+                                            backgroundColor: const Color.fromARGB(255, 250, 250, 250),
                                             isExpanded: expandedId == i.index,
                                             canTapOnHeader: true,
-                                            headerBuilder: (_, __) =>
-                                                PracticeHeader(item: i),
+                                            headerBuilder: (_, __) => PracticeHeader(item: i),
                                             body: PracticeBody(
-                                              sessionId:
-                                                  sessionState.session.id!,
+                                              sessionId: sessionState.session.id!,
                                               exId: i.exercise.apiId!,
                                               exIndex: i.index,
                                               sets: i.sets,
                                               logs: sessionState.session.logs
-                                                  .where((log) =>
-                                                      log.exerciseId ==
-                                                      i.exercise.apiId)
+                                                  .where((log) => log.exerciseId == i.exercise.apiId)
                                                   .toList(),
                                             ),
                                           ),
@@ -137,9 +123,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                                   ),
                                 );
                               } else if (state is PracticeErrorState) {
-                                return Center(
-                                    child:
-                                        Text(state.failure.getErrorMessage()));
+                                return Center(child: Text(state.failure.getErrorMessage()));
                               }
                               return const LoadingPage();
                             },
@@ -152,8 +136,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                               padding: const EdgeInsets.all(8.0),
                               color: Colors.white,
                               child: ElevatedButton(
-                                  onPressed: () => _finishSession(
-                                      context, sessionState.session),
+                                  onPressed: () => _finishSession(context, sessionState.session),
                                   child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -161,9 +144,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
                                       // TODO: Translate
                                       Text(
                                         "Finish",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 16),
+                                        // locale.finish,
+                                        style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                       ),
                                     ],
                                   )),
@@ -185,8 +167,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
   void _finishSession(BuildContext context, TSession session) async {
     print("Finishing proccess");
-    final confirmation = await showDialog<bool>(
-        context: context, builder: (context) => const ConfirmationDialog());
+    final confirmation = await showDialog<bool>(context: context, builder: (context) => const ConfirmationDialog());
     if ((confirmation ?? false) && context.mounted) {
       context.read<SessionBloc>().add(SessionEvent.stopSession(session));
       context.read<StopwatchCubit>().resetStopwatch();

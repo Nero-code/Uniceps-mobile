@@ -9,6 +9,7 @@ import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
+import 'package:uniceps/app/presentation/plans/screens/plans_screen.dart';
 import 'package:uniceps/app/presentation/routine/screens/routine_management_screen.dart';
 import 'package:uniceps/app/presentation/settings/screens/settings_screen.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
@@ -117,6 +118,7 @@ class MyApp extends StatelessWidget {
 
               // SETTINGS
               AppRoutes.settings: (context) => const SettingsScreen(),
+              AppRoutes.plans: (context) => const PlansScreen(),
 
               //  AUX
               AppRoutes.about: (context) => const AboutScreen(),

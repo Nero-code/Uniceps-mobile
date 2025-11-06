@@ -4,7 +4,7 @@ part of 'session_bloc.dart';
 class SessionEvent with _$SessionEvent {
   const factory SessionEvent.getLastActiveSession() = _GetLastActiveSession;
   const factory SessionEvent.startSession(int dayId) = _StartSession;
-  const factory SessionEvent.logSet(TLog log) = _LogSet;
+  const factory SessionEvent.logSet(TLog log, double progress) = _LogSet;
   const factory SessionEvent.stopSession(TSession session) = _StopSession;
 }
 

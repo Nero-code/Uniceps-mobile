@@ -118,6 +118,8 @@ const IMG_CAP_MOTIVE = "images/cap_uni/cap_motive.png";
 const IMG_CAP_MEMBERSHIP = "images/cap_uni/cap_membership.png";
 const IMG_CAP_SELECT_DAY = "images/cap_uni/cap_select_day.png";
 
+const IMG_PREMIUM = "images/photos/premium.png";
+
 ///
 ///
 ///   A P I - U R L S
