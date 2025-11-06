@@ -24,7 +24,9 @@
   "skip": "تخطي <",
   "confirm": "تأكيد",
   "add": "اضافة",
+  "edit": "تعديل",
   "update": "تعديل",
+  "reorder": "اعادة ترتيب",
   "newVersion": "يوجد تحديث جديد!",
   "save": "حفظ",
   "level": "المستوى:",
@@ -37,6 +39,7 @@
   "download":"تنزيل",
   "rename": "تغيير الاسم",
   "setCurrent": "تفعيل",
+  "remove": "ازالة",
   "delete": "حذف",
   "finish": "انهاء",
 
@@ -60,16 +63,15 @@
   "scrTitleProfile": "الحساب الشخصي",
   "scrTitleSettings": "الاعدادات",
   "scrTitlePerformance": "الاداء",
-  "setsAndRound":"العدات والجولات",
+  "setsAndRounds":"العدات والجولات",
 
   "chooseLang": "اختر اللغة:",
   "about": "حول",
-
   "gyms": "النوادي",
-
   "trainer": "المدرب",
+
   "height": "الطول",
-  "heightError": "",
+  "heightError": "ضع طولك",
   "weight": "الوزن",
   "weightError": "",
   "lastWeight": "آخر وزن",
@@ -89,7 +91,6 @@
   "thighs": "الفخذين",
   "lThigh": "فخذ أيسر",
   "rThigh": "فخذ أيمن",
-
   "nick": "العنق",
   "shoulders": "الاكتاف",
   "waist": "الخصر",
@@ -99,7 +100,6 @@
 
   "enteredAt": "وقت الدخول",
   "exitedAt": "وقت الخروج",
-
   "codeNum": "رقم الكود",
 
   "reps": "العدات",
@@ -119,7 +119,6 @@
   "emptyRoutineItems": "لا يوجد عناصر, اضغط على زر (+) لاضافة تمارين",
   
   "error": "حدث خطأ ما",
-
   "profile": "الحساب",
 
   "pName": "الاسم",
@@ -164,7 +163,7 @@
   "dayQuete": "ماذا سنستهدف اليوم؟",
   "letsStart": "هيا لنبدأ...",
 
-  "days":"يوم",
+  "day":"يوم",
   "date":"التاريخ",
   "map": "الخطة اليومية",
   "availableGyms": "المنضمون لنا",
@@ -182,7 +181,6 @@
 
   "newRoutine": "برنامج",
   "sortDays": "ترتيب الايام",
-
 
   "commingSoon": "قريبا!",
 

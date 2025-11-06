@@ -96,6 +96,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
                             buildWhen: (previous, current) => current is PracticeLoadedState,
                             builder: (context, state) {
                               if (state is PracticeLoadedState) {
+                                final totalProgress =
+                                    state.day.exercises.map((e) => e.sets.length).reduce((a, b) => a + b);
                                 return SingleChildScrollView(
                                   padding: const EdgeInsets.only(bottom: 100),
                                   child: ExpansionPanelList(
@@ -113,6 +115,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                                               exId: i.exercise.apiId!,
                                               exIndex: i.index,
                                               sets: i.sets,
+                                              totalProgress: totalProgress,
                                               logs: sessionState.session.logs
                                                   .where((log) => log.exerciseId == i.exercise.apiId)
                                                   .toList(),

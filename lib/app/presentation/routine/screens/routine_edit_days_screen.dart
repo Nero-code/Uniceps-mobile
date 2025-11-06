@@ -18,11 +18,11 @@ import 'package:uniceps/app/presentation/routine/pages/routine_edit_items_tab.da
 import 'package:uniceps/app/presentation/routine/widgets/day_tab_widget.dart';
 import 'package:uniceps/core/extensions.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 
 class RoutineEditScreen extends StatefulWidget {
-  const RoutineEditScreen(
-      {super.key, required this.routineId, required this.routineName});
+  const RoutineEditScreen({super.key, required this.routineId, required this.routineName});
 
   final int routineId;
   final String routineName;
@@ -31,8 +31,7 @@ class RoutineEditScreen extends StatefulWidget {
   State<RoutineEditScreen> createState() => _RoutineEditScreenState();
 }
 
-class _RoutineEditScreenState extends State<RoutineEditScreen>
-    with TickerProviderStateMixin {
+class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProviderStateMixin {
   final tabController = ScrollController();
   final pageController = PageController();
   final overlayController = OverlayPortalController();
@@ -83,13 +82,10 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
           Positioned(
             top: pos!.bottom + 10,
             left: pos!.left <= screenSize.width * 0.5 ? pos!.left + 10 : null,
-            right: pos!.left > screenSize.width * 0.5
-                ? (screenSize.width - pos!.right)
-                : null,
+            right: pos!.left > screenSize.width * 0.5 ? (screenSize.width - pos!.right) : null,
             child: AnimatedBuilder(
               animation: animation,
-              builder: (bcontext, child) =>
-                  SizeTransition(sizeFactor: animation, child: child),
+              builder: (bcontext, child) => SizeTransition(sizeFactor: animation, child: child),
               child: Material(
                 color: Colors.transparent,
                 borderRadius: BorderRadius.circular(5),
@@ -147,8 +143,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
     );
   }
 
-  void _reorderDays(void Function(List<RoutineDay> sortedDays) onReorder,
-      List<RoutineDay> days) async {
+  void _reorderDays(void Function(List<RoutineDay> sortedDays) onReorder, List<RoutineDay> days) async {
     await showDialog<List<RoutineDay>>(
       context: context,
       builder: (dialogContext) => DaysSortingDialog(
@@ -161,8 +156,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
   void _deleteDay(void Function(RoutineDay toDelete) onDelete) async {
     if (selectedDay == null) {
       ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Could not find specified day")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Could not find specified day")));
     }
     await showDialog(
       context: context,
@@ -196,6 +190,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!;
     final screenSize = MediaQuery.sizeOf(context);
     return BlocProvider(
       create: (context) => DaysEditBloc(commands: di.sl())
@@ -239,49 +234,36 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                                       onTap: () {
                                         selectedIndex = day.index;
                                         pageController.animateToPage(day.index,
-                                            duration: Durations.medium4,
-                                            curve: Curves.fastOutSlowIn);
+                                            duration: Durations.medium4, curve: Curves.fastOutSlowIn);
                                         setState(() {});
                                       },
                                       onLongPress: (widgetKey) async {
                                         pos = widgetKey.globalPaintBounds;
                                         selectedDay = day;
 
-                                        final res = await showAnimatedOverlay(
-                                            context, screenSize);
+                                        final res = await showAnimatedOverlay(context, screenSize);
                                         if (res == null) return;
 
                                         switch (res) {
                                           case 0: // edit
                                             _renameDay(
-                                              (renamedDay) =>
-                                                  BlocProvider.of<DaysEditBloc>(
-                                                          context)
-                                                      .add(RenameDayEvent(
-                                                          day: renamedDay)),
+                                              (renamedDay) => BlocProvider.of<DaysEditBloc>(context)
+                                                  .add(RenameDayEvent(day: renamedDay)),
                                             );
                                             break;
                                           case 1: // reorder
                                             _reorderDays(
                                               (sortedDays) {
-                                                print(
-                                                    "Added Event: DaysReorder");
-                                                BlocProvider.of<DaysEditBloc>(
-                                                        context)
-                                                    .add(ReorderDaysEvent(
-                                                        newOrder: sortedDays,
-                                                        version:
-                                                            state.version + 1));
+                                                print("Added Event: DaysReorder");
+                                                BlocProvider.of<DaysEditBloc>(context).add(
+                                                    ReorderDaysEvent(newOrder: sortedDays, version: state.version + 1));
                                               },
                                               state.days,
                                             );
                                             break;
                                           case 2: // remove
                                             _deleteDay(
-                                              (deleted) =>
-                                                  BlocProvider.of<DaysEditBloc>(
-                                                          context)
-                                                      .add(
+                                              (deleted) => BlocProvider.of<DaysEditBloc>(context).add(
                                                 RemoveDayEvent(
                                                   dayToRemove: deleted,
                                                 ),
@@ -296,19 +278,13 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                                     ),
                                   ),
                                   Builder(builder: (context) {
-                                    final accountCubit =
-                                        context.watch<AccountCubit>();
-                                    final membershipBloc =
-                                        context.watch<MembershipBloc>();
+                                    final accountCubit = context.watch<AccountCubit>();
+                                    final membershipBloc = context.watch<MembershipBloc>();
                                     final canAdd = accountCubit.state.when(
                                         initial: () => false,
-                                        unauthenticated: () =>
-                                            state.days.isEmpty,
+                                        unauthenticated: () => state.days.isEmpty,
                                         hasAccount: (s) => membershipBloc.state
-                                            .maybeWhen(
-                                                orElse: () =>
-                                                    state.days.isEmpty,
-                                                loaded: (m) => true));
+                                            .maybeWhen(orElse: () => state.days.isEmpty, loaded: (m) => true));
                                     return canAdd
                                         ? IconButton(
                                             iconSize: 20,
@@ -316,14 +292,11 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                                             icon: const Icon(Icons.add),
                                             onPressed: () {
                                               _addDay(
-                                                "day ${state.days.length + 1}",
-                                                (name) => BlocProvider.of<
-                                                        DaysEditBloc>(context)
-                                                    .add(
+                                                "${locale.day} ${state.days.length + 1}",
+                                                (name) => BlocProvider.of<DaysEditBloc>(context).add(
                                                   AddDayEvent(
                                                     day: RoutineDay(
-                                                      routineId:
-                                                          widget.routineId,
+                                                      routineId: widget.routineId,
                                                       name: name,
                                                       index: state.days.length,
                                                       exercises: [],
@@ -346,9 +319,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen>
                                 selectedIndex = value;
 
                                 tabController.animateTo(
-                                    value *
-                                        (screenSize.width * 0.5) /
-                                        state.days[value].name.length,
+                                    value * (screenSize.width * 0.5) / state.days[value].name.length,
                                     duration: Durations.medium4,
                                     curve: Curves.linear);
                               }),

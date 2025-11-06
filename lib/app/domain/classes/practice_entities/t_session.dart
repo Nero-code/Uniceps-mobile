@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:uniceps/app/domain/classes/practice_entities/t_log.dart';
 
-class TSession {
+class TSession extends Equatable {
   final int? id;
   final int dayId;
   final List<TLog> logs;
@@ -25,21 +26,6 @@ class TSession {
     this.isSynced = false,
   });
 
-  // TSession copywith({
-  //   int? id,
-  //   int? apiId,
-  //   DateTime? createdAt,
-  //   DateTime? finishedAt,
-  //   int? version,
-  //   bool? isSynced,
-  // }) =>
-  //     TSession(
-  //       id: id ?? this.id,
-  //       logs: logs ?? this.logs,
-  //       apiId: apiId ?? this.apiId,
-  //       createdAt: createdAt ?? this.createdAt,
-  //       finishedAt: finishedAt ?? this.finishedAt,
-  //       version: version ?? this.version,
-  //       isSynced: isSynced ?? this.isSynced,
-  //     );
+  @override
+  List<Object?> get props => [id, dayId, logs.length, progress];
 }

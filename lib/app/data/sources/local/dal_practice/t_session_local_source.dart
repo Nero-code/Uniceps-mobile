@@ -18,7 +18,7 @@ abstract class ITSessionLocalSourceContract {
 
   Future<TSessionModel?> getPreviousSession();
   Future<TSessionModel> startTrainingSession(int dayId);
-  Future<TLogModel> logSet(TLogModel log);
+  Future<TLogModel> logSet(TLogModel log, double sessionProgress);
   Future<void> finishTrainingSession(TSessionModel session);
 }
 
@@ -35,9 +35,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
   @override
   Future<Tuple2<RoutineDto?, int?>> getCurrentRoutine() async {
     // First of all we search for the existance of the current routine
-    final currentRoutine = await (_database.select(_database.routines)
-          ..where((f) => f.isCurrent.equals(true)))
-        .get();
+    final currentRoutine = await (_database.select(_database.routines)..where((f) => f.isCurrent.equals(true))).get();
     if (currentRoutine.isEmpty) {
       return const Tuple2(null, null); // No CurrentRoutine available!
     }
@@ -49,8 +47,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
 
     final res = await (_database.select(_database.daysGroup).join([
       // First, join [routines] with [days].
-      leftOuterJoin(
-          daysAlias, daysAlias.routineId.equals(currentRoutine.first.id)),
+      leftOuterJoin(daysAlias, daysAlias.routineId.equals(currentRoutine.first.id)),
 
       // Then, join [days] with [tsessions]
       leftOuterJoin(sessionsAlias, sessionsAlias.dayId.equalsExp(daysAlias.id)),
@@ -89,9 +86,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     // print("training days:  ${days.length}");
     // print("training items: ${items.length}");
 
-    final lastDayId = (sessions
-          ..sort((a, b) => b.startedAt.compareTo(a.startedAt)))
-        .firstOrNull;
+    final lastDayId = (sessions..sort((a, b) => b.startedAt.compareTo(a.startedAt))).firstOrNull;
 
     return Tuple2(routine, lastDayId?.dayId);
   }
@@ -99,9 +94,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
   @override
   Future<RoutineDayDto> getDayItems(int dayId) async {
     // First we check if day exists.
-    final day = await (_database.select(_database.daysGroup)
-          ..where((f) => f.id.equals(dayId)))
-        .get();
+    final day = await (_database.select(_database.daysGroup)..where((f) => f.id.equals(dayId))).get();
     if (day.isEmpty) throw EmptyCacheExeption(); // No day exists
 
     // Second, we fetch the day items.
@@ -121,8 +114,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       leftOuterJoin(exAlias, exAlias.apiId.equalsExp(itemsAlias.exerciseId)),
 
       // Get `Sets` for these `items`.
-      leftOuterJoin(
-          setsAlias, setsAlias.routineItemId.equalsExp(itemsAlias.id)),
+      leftOuterJoin(setsAlias, setsAlias.routineItemId.equalsExp(itemsAlias.id)),
 
       // Get TLogs for these exercises.
       leftOuterJoin(logsAlias, logsAlias.exerciseId.equalsExp(exAlias.apiId)),
@@ -183,9 +175,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
           //
           // * Then we filter those logs by the setIndex... Why?
           //   to filter out-of-range sets of old sessions.
-          final weights = logsByEx[itemTable.exerciseId]
-              ?.where((log) => log.setIndex == setTable.roundIndex)
-              .toList();
+          final weights = logsByEx[itemTable.exerciseId]?.where((log) => log.setIndex == setTable.roundIndex).toList();
           // * Then we sort in a descending order, so that the first item is the last.
           weights?.sort((a, b) => b.completedAt.compareTo(a.completedAt));
           // print("----------------");
@@ -199,21 +189,17 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
           // """);
           // }
           // print("----------------");
-          itemSets.add(
-              RoutineSetDto.fromTable(setTable, weights?.firstOrNull?.weight));
+          itemSets.add(RoutineSetDto.fromTable(setTable, weights?.firstOrNull?.weight));
         }
       }
 
       // itemSets.toSet().toList();
 
-      final exercise =
-          exercises.firstWhere((e) => e.apiId == itemTable.exerciseId);
+      final exercise = exercises.firstWhere((e) => e.apiId == itemTable.exerciseId);
       final img = _imagesCache.get(exercise.imageUrl);
       final group = groups.firstWhere((g) => g.apiId == exercise.muscleGroup);
       final itemDto = RoutineItemDto.fromTable(
-          itemTable,
-          ExerciseV2Dto.fromTable(exercise, group, exercise.imageUrl, img),
-          itemSets);
+          itemTable, ExerciseV2Dto.fromTable(exercise, group, exercise.imageUrl, img), itemSets);
 
       dayItems.add(itemDto);
     }
@@ -223,32 +209,30 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
 
   @override
   Future<TSessionModel?> getPreviousSession() async {
-    //
-    // TODO: Need to get [TLogs] with [TSession] object for progress retrieval
-    //
-    final old = await (_database.select(_database.tSessions)
-          ..where((f) => f.finishedAt.isNull()))
-        .get();
+    final oldSession =
+        await (_database.select(_database.tSessions)..where((f) => f.finishedAt.isNull())).getSingleOrNull();
 
-    if (old.isNotEmpty) return TSessionModel.fromTable(old.first);
+    if (oldSession == null) return null;
 
-    return null;
+    final logs = await (_database.select(_database.tLogs)..where((f) => f.sessionId.equals(oldSession.tsId))).get();
+
+    return TSessionModel.fromTable(oldSession, logs);
   }
 
   @override
   Future<TSessionModel> startTrainingSession(int dayId) async {
-    final session = await _database.into(_database.tSessions).insertReturning(
-        db.TSessionsCompanion.insert(dayId: dayId, startedAt: DateTime.now()));
+    final session = await _database
+        .into(_database.tSessions)
+        .insertReturning(db.TSessionsCompanion.insert(dayId: dayId, startedAt: DateTime.now()));
 
-    return TSessionModel.fromTable(session);
+    return TSessionModel.fromTable(session, []);
   }
 
   @override
-  Future<TLogModel> logSet(TLogModel log) async {
+  Future<TLogModel> logSet(TLogModel log, double progress) async {
     if (log.id == null) {
-      final newLog = await _database
-          .into(_database.tLogs)
-          .insertReturning(db.TLogsCompanion.insert(
+      // Create new [TLog].
+      final newLog = await _database.into(_database.tLogs).insertReturning(db.TLogsCompanion.insert(
             sessionId: log.sessionId,
             exerciseId: log.exerciseId,
             exerciseIndex: log.exerciseIndex,
@@ -257,14 +241,19 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
             weight: log.weight,
             completedAt: log.completedAt,
           ));
+
+      // Then Update session progress.
+      await (_database.update(_database.tSessions)..where((f) => f.tsId.equals(log.sessionId)))
+          .write(db.TSessionsCompanion.custom(progress: Variable(progress)));
+
       return TLogModel.fromTable(newLog);
     } else {
-      final updatedLog = await (_database.update(_database.tLogs)
-            ..where((f) => f.logId.equals(log.id!)))
+      // Update previous [TLog]
+      final updatedLog = await (_database.update(_database.tLogs)..where((f) => f.logId.equals(log.id!)))
           .writeReturning(db.TLogsCompanion.custom(
-        weight: Constant(log.weight),
-        version: Constant(log.version + 1),
-        isSynced: const Constant(false),
+        weight: Variable(log.weight),
+        version: Variable(log.version + 1),
+        isSynced: const Variable(false),
       ));
       return TLogModel.fromTable(updatedLog.first);
     }
@@ -272,13 +261,11 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
 
   @override
   Future<void> finishTrainingSession(TSessionModel session) async {
-    await (_database.update(_database.tSessions)
-          ..where((f) => f.tsId.equals(session.id!)))
-        .write(
+    await (_database.update(_database.tSessions)..where((f) => f.tsId.equals(session.id!))).write(
       db.TSessionsCompanion.custom(
-        finishedAt: Constant(DateTime.now()),
-        version: Constant(session.version + 1),
-        isSynced: const Constant(false),
+        finishedAt: Variable(DateTime.now()),
+        version: Variable(session.version + 1),
+        isSynced: const Variable(false),
       ),
     );
   }

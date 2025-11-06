@@ -24,7 +24,9 @@
   "skip": "SKIP >",
   "confirm": "Confirm",
   "add": "Add",
+  "edit": "Edit",
   "update": "Update",
+  "reorder": "Reorder",
   "newVersion": "New Version Available",
   "save": "Save",
   "level": "Level:",
@@ -37,6 +39,7 @@
   "download":"Download",
   "rename": "Rename",
   "setCurrent": "Set Current",
+  "remove": "Remove",
   "delete": "Delete",
   "finish": "Finish",
   
@@ -60,7 +63,7 @@
   "scrTitleProfile": "Profile",
   "scrTitleSettings": "Settings",
   "scrTitlePerformance": "Performance",
-  "setsAndRound":"Sets & Rounds",
+  "setsAndRounds":"Sets & Rounds",
 
   "chooseLang": "Choose Language:",
   "about": "About",
