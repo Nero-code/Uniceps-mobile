@@ -19,7 +19,7 @@ abstract class ITSessionLocalSourceContract {
   Future<TSessionModel?> getPreviousSession();
   Future<TSessionModel> startTrainingSession(int dayId);
   Future<TLogModel> logSet(TLogModel log, double sessionProgress);
-  Future<void> finishTrainingSession(TSessionModel session);
+  Future<void> finishTrainingSession(TSessionModel session, bool isFullSession);
 }
 
 class TSessionLocalSource implements ITSessionLocalSourceContract {
@@ -260,12 +260,13 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
   }
 
   @override
-  Future<void> finishTrainingSession(TSessionModel session) async {
+  Future<void> finishTrainingSession(TSessionModel session, bool isFullSession) async {
     await (_database.update(_database.tSessions)..where((f) => f.tsId.equals(session.id!))).write(
       db.TSessionsCompanion.custom(
         finishedAt: Variable(DateTime.now()),
         version: Variable(session.version + 1),
         isSynced: const Variable(false),
+        progress: isFullSession ? const Constant(1) : null,
       ),
     );
   }

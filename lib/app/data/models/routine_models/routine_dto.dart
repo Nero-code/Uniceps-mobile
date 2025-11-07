@@ -53,12 +53,9 @@ class RoutineDto {
       isCurrent: isCurrent,
       isSynced: isSynced);
 
-  factory RoutineDto.fromJson(Map<String, dynamic> json) =>
-      _$RoutineDtoFromJson(json);
+  factory RoutineDto.fromJson(Map<String, dynamic> json) => _$RoutineDtoFromJson(json);
 
-  factory RoutineDto.fromTable(db.Routine r,
-          [List<RoutineDayDto> days = const []]) =>
-      RoutineDto(
+  factory RoutineDto.fromTable(db.Routine r, [List<RoutineDayDto> days = const []]) => RoutineDto(
         id: r.id,
         apiId: r.apiId,
         version: r.version,
@@ -73,49 +70,3 @@ class RoutineDto {
 
   Map<String, dynamic> toJson() => _$RoutineDtoToJson(this);
 }
-
-// @JsonSerializable(explicitToJson: true)
-// class RoutineDto implements BaseDTO {
-//   final List<RoutineDayDto> trainingDaysDto;
-//
-//   final int? id, apiId;
-//   final int version;
-//   final String name;
-//   final String? description;
-//   final bool isCurrent, isSynced;
-//   final DateTime createdAt, updatedAt;
-//
-//   const RoutineDto({
-//     required this.id,
-//     required this.apiId,
-//     required this.version,
-//     required this.name,
-//     required this.description,
-//     required this.createdAt,
-//     required this.updatedAt,
-//     required this.trainingDaysDto,
-//     required this.isSynced,
-//     required this.isCurrent,
-//   });
-//
-//   factory RoutineDto.fromJson(Map<String, dynamic> json) =>
-//       _$RoutineDtoFromJson(json);
-//
-//   factory RoutineDto.fromTable(db.Routine r,
-//           [List<RoutineDayDto> days = const []]) =>
-//       RoutineDto(
-//         id: r.id,
-//         apiId: r.apiId,
-//         version: r.version,
-//         name: r.name,
-//         description: r.description,
-//         createdAt: r.createdAt,
-//         updatedAt: r.updatedAt,
-//         trainingDaysDto: days,
-//         isCurrent: r.isCurrent,
-//         isSynced: r.isSynced,
-//       );
-//
-//   @override
-//   Map<String, dynamic> toJson() => _$RoutineDtoToJson(this);
-// }

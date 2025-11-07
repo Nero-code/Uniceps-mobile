@@ -3,8 +3,7 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DaysSortingDialog extends StatefulWidget {
-  const DaysSortingDialog(
-      {super.key, required this.days, required this.onReorder});
+  const DaysSortingDialog({super.key, required this.days, required this.onReorder});
 
   final List<RoutineDay> days;
 
@@ -26,7 +25,7 @@ class _DaysSortingDialogState extends State<DaysSortingDialog> {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     return AlertDialog(
-      title: const Text("title"), // TODO: Translate
+      title: Text(locale.reorder),
       content: Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey.shade300),
@@ -44,8 +43,7 @@ class _DaysSortingDialogState extends State<DaysSortingDialog> {
           children: widget.days
               .map((day) => ListTile(
                     key: Key("${day.id!}"),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
                     title: Text(day.name),
                     leading: const Icon(
                       Icons.drag_handle,
@@ -59,8 +57,7 @@ class _DaysSortingDialogState extends State<DaysSortingDialog> {
             final item = reorderedList.removeAt(oldIndex);
 
             print("onReorder 1: $reorderedList");
-            reorderedList.insert(
-                newIndex - (newIndex > oldIndex ? 1 : 0), item);
+            reorderedList.insert(newIndex - (newIndex > oldIndex ? 1 : 0), item);
 
             print("onReorder 2: $reorderedList");
             setState(() {});

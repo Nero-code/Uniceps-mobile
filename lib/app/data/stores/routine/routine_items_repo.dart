@@ -23,10 +23,7 @@ class RoutineItemsRepo implements IRoutineItemsContract {
   Future<Either<Failure, List<RoutineItem>>> getItemsUnderDay(int dayId) async {
     try {
       final res = await _localSource.getItemsByDay(dayId);
-      // if (!lazyItemsBuffer.containsKey(dayId)) {
-      //   lazyItemsBuffer
-      //       .addAll({dayId: res.map((day) => day as RoutineItem).toList()});
-      // }
+
       if (!loadedDays.contains(dayId)) {
         itemsBuffer.addAll(res.map((r) => r.toEntity()));
         loadedDays.add(dayId);
@@ -38,34 +35,16 @@ class RoutineItemsRepo implements IRoutineItemsContract {
   }
 
   @override
-  Future<Either<Failure, List<RoutineItem>>> addItems(
-      int dayId, List<ExerciseV2> items) async {
+  Future<Either<Failure, List<RoutineItem>>> addItems(int dayId, List<ExerciseV2> items) async {
     try {
-      final previouslyAddedItems =
-          itemsBuffer.where((i) => i.dayId == dayId).length;
+      final previouslyAddedItems = itemsBuffer.where((i) => i.dayId == dayId).length;
 
       final List<RoutineItemDto> routineItemsFromExercises = [];
       for (int i = 0; i < items.length; i++) {
-        routineItemsFromExercises.add(
-          RoutineItemDto.create(
-              dayId, i + previouslyAddedItems, items[i].toDto()),
-        );
+        routineItemsFromExercises.add(RoutineItemDto.create(dayId, i + previouslyAddedItems, items[i].toDto()));
       }
 
-      // final itemsWithIdsList = await _localSource
-      //     .addItems(items.map((item) => item.toDto()).toList());
-
-      final itemsWithIdsList =
-          await _localSource.addItems(routineItemsFromExercises);
-
-      // -------------------------------------------
-      // TODO null check operator used on null value
-      // if (!lazyItemsBuffer.containsKey(items.first.dayId)) {
-      //   lazyItemsBuffer.addAll({items.first.dayId: []});
-      // }
-      // lazyItemsBuffer[items.first.dayId]!.addAll(itemsWithIdsList);
-      // -------------------------------------------
-
+      final itemsWithIdsList = await _localSource.addItems(routineItemsFromExercises);
       itemsBuffer.addAll(itemsWithIdsList.map((r) => r.toEntity()));
 
       return Right(itemsBuffer);
@@ -75,11 +54,9 @@ class RoutineItemsRepo implements IRoutineItemsContract {
   }
 
   @override
-  Future<Either<Failure, List<RoutineItem>>> reorderItems(
-      List<RoutineItem> items) async {
+  Future<Either<Failure, List<RoutineItem>>> reorderItems(List<RoutineItem> items) async {
     try {
-      final orderedList = await _localSource
-          .reorderItems(items.map((item) => item.toDto()).toList());
+      final orderedList = await _localSource.reorderItems(items.map((item) => item.toDto()).toList());
 
       // ------------------------------------------
       // To reorder the list we need to:
@@ -101,8 +78,7 @@ class RoutineItemsRepo implements IRoutineItemsContract {
   }
 
   @override
-  Future<Either<Failure, List<RoutineItem>>> removeItem(
-      RoutineItem item) async {
+  Future<Either<Failure, List<RoutineItem>>> removeItem(RoutineItem item) async {
     try {
       await _localSource.removeItem(item.toDto());
 
@@ -110,8 +86,7 @@ class RoutineItemsRepo implements IRoutineItemsContract {
 
       itemsBuffer
         ..removeWhere((element) => element.id == item.id)
-        ..forEach((i) =>
-            i.index > item.index ? i = i.copyWith(index: i.index - 1) : null);
+        ..forEach((i) => i.index > item.index ? i = i.copyWith(index: i.index - 1) : null);
 
       return Right(itemsBuffer);
     } catch (e) {

@@ -58,7 +58,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     on<_StopSession>((event, emit) async {
       emit(const SessionState.loading());
 
-      final either = await _commands.finishTrainingSession(event.session);
+      final either = await _commands.finishTrainingSession(event.session, event.fullSession);
       either.fold(
         (l) => emit(SessionState.error(l)),
         (r) => emit(const SessionState.noActiveSession()),

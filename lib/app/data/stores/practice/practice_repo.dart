@@ -89,9 +89,9 @@ class PracticeRepo implements IPracticeContract {
   }
 
   @override
-  Future<Either<Failure, Unit>> finishTrainingSession(TSession session) async {
+  Future<Either<Failure, Unit>> finishTrainingSession(TSession session, bool full) async {
     try {
-      await _localSource.finishTrainingSession(session.asDto());
+      await _localSource.finishTrainingSession(session.asDto(), full);
       _session = null;
       return const Right(unit);
     } catch (e) {

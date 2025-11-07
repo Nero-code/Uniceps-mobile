@@ -21,7 +21,7 @@ class PracticeScreen extends StatefulWidget {
 }
 
 class _PracticeScreenState extends State<PracticeScreen> {
-  int? expandedId;
+  int? expandedId, totalProgress;
 
   @override
   Widget build(BuildContext context) {
@@ -42,16 +42,11 @@ class _PracticeScreenState extends State<PracticeScreen> {
       child: BlocConsumer<SessionBloc, SessionState>(
         // --------------------------------------------------------
         // Closing-Session State
-        // listenWhen: (previous, current) =>
-        //     (previous is SessionLoadingState) &&
-        //     (current is NoActiveSessionState),
-        listenWhen: (previous, current) => (current.maybeWhen(orElse: () => false, noActiveSession: () => true)),
+        // When: (previous, current) => current is NoActiveSessionState,
+        listenWhen: (previous, current) => current.maybeWhen(orElse: () => false, noActiveSession: () => true),
         listener: (context, state) async {
-          print("b finished Session ${state.runtimeType}");
           await showDialog(context: context, builder: (context) => const SessionCompleteDialog());
-          print("a finished Session ${state.runtimeType}");
-          // ignore: use_build_context_synchronously
-          Navigator.pop(context);
+          if (context.mounted) Navigator.pop(context);
         },
         // --------------------------------------------------------
         buildWhen: (previous, current) => current.maybeWhen(orElse: () => false, loaded: (session) => true),
@@ -96,8 +91,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                             buildWhen: (previous, current) => current is PracticeLoadedState,
                             builder: (context, state) {
                               if (state is PracticeLoadedState) {
-                                final totalProgress =
-                                    state.day.exercises.map((e) => e.sets.length).reduce((a, b) => a + b);
+                                totalProgress = state.day.exercises.map((e) => e.sets.length).reduce((a, b) => a + b);
                                 return SingleChildScrollView(
                                   padding: const EdgeInsets.only(bottom: 100),
                                   child: ExpansionPanelList(
@@ -115,7 +109,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                                               exId: i.exercise.apiId!,
                                               exIndex: i.index,
                                               sets: i.sets,
-                                              totalProgress: totalProgress,
+                                              totalProgress: totalProgress ?? 0,
                                               logs: sessionState.session.logs
                                                   .where((log) => log.exerciseId == i.exercise.apiId)
                                                   .toList(),
@@ -139,16 +133,17 @@ class _PracticeScreenState extends State<PracticeScreen> {
                               padding: const EdgeInsets.all(8.0),
                               color: Colors.white,
                               child: ElevatedButton(
-                                  onPressed: () => _finishSession(context, sessionState.session),
-                                  child: const Row(
+                                  onPressed: () {
+                                    final fullSession = sessionState.session.logs.length == totalProgress;
+                                    _finishSession(context, sessionState.session, fullSession);
+                                  },
+                                  child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(Icons.bolt, size: 25),
-                                      // TODO: Translate
+                                      const Icon(Icons.bolt, size: 25),
                                       Text(
-                                        "Finish",
-                                        // locale.finish,
-                                        style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+                                        locale.finish,
+                                        style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                       ),
                                     ],
                                   )),
@@ -168,11 +163,10 @@ class _PracticeScreenState extends State<PracticeScreen> {
     );
   }
 
-  void _finishSession(BuildContext context, TSession session) async {
-    print("Finishing proccess");
+  void _finishSession(BuildContext context, TSession session, bool fullSession) async {
     final confirmation = await showDialog<bool>(context: context, builder: (context) => const ConfirmationDialog());
     if ((confirmation ?? false) && context.mounted) {
-      context.read<SessionBloc>().add(SessionEvent.stopSession(session));
+      context.read<SessionBloc>().add(SessionEvent.stopSession(session, fullSession));
       context.read<StopwatchCubit>().resetStopwatch();
     }
   }

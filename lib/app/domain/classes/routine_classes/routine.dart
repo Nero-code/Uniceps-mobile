@@ -11,7 +11,6 @@ class Routine {
   const Routine({
     required this.id,
     required this.apiId,
-    // required this.issuerId,
     required this.version,
     required this.name,
     required this.description,
@@ -35,13 +34,15 @@ class Routine {
     List<RoutineDay>? trainingDays,
   }) =>
       Routine(
-          id: id ?? this.id,
-          apiId: apiId ?? this.apiId,
-          version: version ?? this.version,
-          name: name ?? this.name,
-          description: description ?? this.description,
-          createdAt: createdAt ?? this.createdAt,
-          updatedAt: updatedAt ?? this.updatedAt,
-          trainingDays: trainingDays ?? this.trainingDays,
-          isSynced: isSynced ?? this.isSynced);
+        id: id ?? this.id,
+        apiId: apiId ?? this.apiId,
+        version: version ?? this.version,
+        name: name ?? this.name,
+        description: description ?? this.description,
+        trainingDays: trainingDays ?? this.trainingDays,
+        isCurrent: isCurrent ?? this.isCurrent,
+        isSynced: isSynced ?? this.isSynced,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
 }

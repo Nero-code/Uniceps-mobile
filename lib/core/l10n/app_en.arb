@@ -42,6 +42,10 @@
   "remove": "Remove",
   "delete": "Delete",
   "finish": "Finish",
+  "finishAlertContent": "have you finished training? this session will be closed and marked as finished!",
+  "welldone": "🎉 Well Done!",
+  "great": "Great!",
+  
   
   "price": "Price",
   "discount":"Discount",
