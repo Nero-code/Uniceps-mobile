@@ -80,32 +80,28 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
             ),
           ),
           Positioned(
-            top: pos!.bottom + 10,
+            top: pos!.bottom,
             left: pos!.left <= screenSize.width * 0.5 ? pos!.left + 10 : null,
             right: pos!.left > screenSize.width * 0.5 ? (screenSize.width - pos!.right) : null,
             child: AnimatedBuilder(
               animation: animation,
               builder: (bcontext, child) => SizeTransition(sizeFactor: animation, child: child),
-              child: Material(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(5),
-                child: DayEditFlaotingMenu(
-                  onEdit: () async {
-                    future.complete(0);
-                    await controller.reverse();
-                    overlayEntry?.remove();
-                  },
-                  onReorder: () async {
-                    future.complete(1);
-                    await controller.reverse();
-                    overlayEntry?.remove();
-                  },
-                  onRemove: () async {
-                    future.complete(2);
-                    await controller.reverse();
-                    overlayEntry?.remove();
-                  },
-                ),
+              child: DayEditFlaotingMenu(
+                onEdit: () async {
+                  future.complete(0);
+                  await controller.reverse();
+                  overlayEntry?.remove();
+                },
+                onReorder: () async {
+                  future.complete(1);
+                  await controller.reverse();
+                  overlayEntry?.remove();
+                },
+                onRemove: () async {
+                  future.complete(2);
+                  await controller.reverse();
+                  overlayEntry?.remove();
+                },
               ),
             ),
           ),

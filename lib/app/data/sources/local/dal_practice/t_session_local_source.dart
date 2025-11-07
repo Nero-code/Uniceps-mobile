@@ -287,16 +287,23 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     // Part 2:
     //   Get Heat objects.
 
-    int dc, ic, sc, tc;
-    dc = ic = sc = tc = 0;
+    int dc, ic, sc, tc, lastDayId;
+    dc = ic = sc = tc = lastDayId = 0;
     Duration duration = Duration.zero;
+    DateTime newestSessionDate = DateTime(2000);
 
     final days = await (_database.select(_database.daysGroup)..where((f) => f.routineId.equals(routine.id))).get();
     for (final day in days) {
       final sessions = await (_database.select(_database.tSessions)..where((f) => f.dayId.equals(day.id))).get();
       tc = sessions.length;
-      final range = sessions.map((e) => e.startedAt).toList();
+      final range = sessions.map((e) => e.startedAt).toList()..sort();
+
       duration = range.last.difference(range.first);
+
+      if (newestSessionDate.difference(range.last).inDays < 0) {
+        newestSessionDate = range.last;
+        lastDayId = day.id;
+      }
 
       final items = await (_database.select(_database.routineItems)..where((f) => f.dayId.equals(day.id))).get();
       for (final item in items) {
@@ -308,7 +315,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     }
     dc = days.length;
 
-    final res = RoutineDto.fromTable(routine);
+    final res = RoutineDto.fromTable(routine, days.map(RoutineDayDto.fromTable).toList());
     final heat = RoutineHeat(
       routineName: routine.name,
       sessionCount: tc,
@@ -316,6 +323,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       days: dc,
       exercises: ic,
       sets: sc,
+      lastdayId: lastDayId,
     );
 
     return Tuple2(res, heat);
