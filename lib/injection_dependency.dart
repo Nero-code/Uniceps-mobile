@@ -31,6 +31,7 @@ import 'package:uniceps/app/data/stores/routine/routine_days_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_items_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_management_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_sets_repo.dart';
+import 'package:uniceps/app/data/stores/routine/routine_with_heat_repo.dart';
 import 'package:uniceps/app/domain/commands/account_usecases/account_usecases.dart';
 import 'package:uniceps/app/domain/commands/auth_usecases/otp_usecases.dart';
 import 'package:uniceps/app/domain/commands/practice_usecases/practice_commands.dart';
@@ -39,6 +40,7 @@ import 'package:uniceps/app/domain/commands/routine_management/routine_days_comm
 import 'package:uniceps/app/domain/commands/routine_management/routine_items_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_management_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_sets_commands.dart';
+import 'package:uniceps/app/domain/commands/routine_management/routine_with_heat_commands.dart';
 import 'package:uniceps/app/domain/contracts/account/i_account_service.dart';
 import 'package:uniceps/app/domain/contracts/auth_repo/i_auth_contracts.dart';
 import 'package:uniceps/app/domain/contracts/practice_repo/practice_contract.dart';
@@ -47,6 +49,7 @@ import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_days_contrac
 import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_items_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_sets_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_management_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_with_heat_contract.dart';
 import 'package:uniceps/app/services/update_service.dart';
 
 final sl = di.GetIt.instance;
@@ -57,14 +60,11 @@ Future<void> init() async {
   sl.registerLazySingleton(() => client);
   // sl.registerLazySingleton<ClientHelper>(
   //     () => NoTokenHttpClientHelper(client: sl()));
-  sl.registerLazySingleton<ClientHelper>(
-      () => HttpClientHelper(client: sl(), tokenService: sl()));
+  sl.registerLazySingleton<ClientHelper>(() => HttpClientHelper(client: sl(), tokenService: sl()));
 
-  sl.registerLazySingleton<FlutterSecureStorage>(
-      () => const FlutterSecureStorage());
+  sl.registerLazySingleton<FlutterSecureStorage>(() => const FlutterSecureStorage());
 
-  sl.registerLazySingleton<InternetConnectionChecker>(
-      () => InternetConnectionChecker());
+  sl.registerLazySingleton<InternetConnectionChecker>(() => InternetConnectionChecker());
 
   sl.registerLazySingleton(() => SimpleTokenService());
   //////////////////////////////////////////////////////////////////////////////
@@ -80,8 +80,7 @@ Future<void> init() async {
   ///  V2   R E Q U I R E D
   final imagesCache = await Hive.openBox<Uint8List>("ExerciseImages");
 
-  sl.registerLazySingleton<MediaHelper>(() =>
-      ImageMediaHelper(imagesCache: imagesCache, checker: sl(), client: sl()));
+  sl.registerLazySingleton<MediaHelper>(() => ImageMediaHelper(imagesCache: imagesCache, checker: sl(), client: sl()));
 
   // D E P R I C A T E D
   // final userBox = await Hive.openBox<Map<dynamic, dynamic>>("User");
@@ -150,23 +149,18 @@ Future<void> init() async {
   sl.registerLazySingleton<IRoutineManagementLocalSourceContract>(
       () => RoutineManagementLocalSourceImpl(database: sl()));
 
-  sl.registerLazySingleton<IRoutineDaysLocalSourceContract>(
-      () => RoutineDaysLocalSourceImpl(dataBase: sl()));
+  sl.registerLazySingleton<IRoutineDaysLocalSourceContract>(() => RoutineDaysLocalSourceImpl(dataBase: sl()));
 
-  sl.registerLazySingleton<IRoutineItemsLocalSourceContract>(() =>
-      RoutineItemsLocalSourceImpl(database: sl(), imagesCache: imagesCache));
+  sl.registerLazySingleton<IRoutineItemsLocalSourceContract>(
+      () => RoutineItemsLocalSourceImpl(database: sl(), imagesCache: imagesCache));
 
-  sl.registerLazySingleton<IRoutineSetsLocalSourceContract>(
-      () => RoutineSetsLocalSourceImpl(database: sl()));
+  sl.registerLazySingleton<IRoutineSetsLocalSourceContract>(() => RoutineSetsLocalSourceImpl(database: sl()));
 
-  sl.registerLazySingleton<IExercisesLocalSourceContract>(
-      () => ExercisesLocalSource(database: sl()));
+  sl.registerLazySingleton<IExercisesLocalSourceContract>(() => ExercisesLocalSource(database: sl()));
 
-  sl.registerLazySingleton<IOTPAuthSource>(
-      () => OTPAuthSource(client: sl(), logger: sl()));
+  sl.registerLazySingleton<IOTPAuthSource>(() => OTPAuthSource(client: sl(), logger: sl()));
 
-  sl.registerLazySingleton<IAccountLocalSource>(
-      () => AccountLocalSource(secureStorage: sl(), database: sl()));
+  sl.registerLazySingleton<IAccountLocalSource>(() => AccountLocalSource(secureStorage: sl(), database: sl()));
 
   /////////
   ////////
@@ -177,11 +171,9 @@ Future<void> init() async {
   ///
   //
 
-  sl.registerLazySingleton<IAccountRemoteSource>(
-      () => AccountRemoteSource(clientHelper: sl()));
+  sl.registerLazySingleton<IAccountRemoteSource>(() => AccountRemoteSource(clientHelper: sl()));
 
-  sl.registerLazySingleton<IExercisesRemoteSourceContract>(
-      () => ExercisesRemoteSourceImpl(clientHelper: sl()));
+  sl.registerLazySingleton<IExercisesRemoteSourceContract>(() => ExercisesRemoteSourceImpl(clientHelper: sl()));
 
   /////////
   ////////
@@ -192,27 +184,22 @@ Future<void> init() async {
   ///
   //
 
-  sl.registerLazySingleton<IAccountService>(
-      () => AccountRepo(localSource: sl(), remoteSource: sl(), checker: sl()));
+  sl.registerLazySingleton<IAccountService>(() => AccountRepo(localSource: sl(), remoteSource: sl(), checker: sl()));
 
-  sl.registerLazySingleton<IPracticeContract>(
-      () => PracticeRepo(localSource: sl()));
-  sl.registerLazySingleton<IRoutineManagementContract>(() =>
-      RoutineManagementRepo(
-          localSource: sl(), internet: sl(), clientHelper: sl()));
-  sl.registerLazySingleton<IRoutineDaysContract>(
-      () => RoutineDaysRepo(localSource: sl()));
-  sl.registerLazySingleton<IRoutineItemsContract>(
-      () => RoutineItemsRepo(localSource: sl(), mediaHelper: sl()));
-  sl.registerLazySingleton<IRoutineSetsContract>(
-      () => RoutineSetsRepo(localSource: sl()));
-  sl.registerLazySingleton<IExercisesContract>(() =>
-      ExercisesRepo(internet: sl(), remoteSource: sl(), localSource: sl()));
-  sl.registerLazySingleton<IOTPAuthRepo>(() => EmailAuthRepo(
-      otpAuthSource: sl(),
-      tokenService: sl(),
-      accountLocalSource: sl(),
-      connection: sl()));
+  sl.registerLazySingleton<IPracticeContract>(() => PracticeRepo(localSource: sl()));
+
+  sl.registerLazySingleton<IRoutineManagementContract>(
+      () => RoutineManagementRepo(localSource: sl(), internet: sl(), clientHelper: sl()));
+  sl.registerLazySingleton<IRoutineWithHeatContract>(
+      () => RoutineWithHeatRepo(localSource: sl(), internet: sl(), clientHelper: sl()));
+
+  sl.registerLazySingleton<IRoutineDaysContract>(() => RoutineDaysRepo(localSource: sl()));
+  sl.registerLazySingleton<IRoutineItemsContract>(() => RoutineItemsRepo(localSource: sl(), mediaHelper: sl()));
+  sl.registerLazySingleton<IRoutineSetsContract>(() => RoutineSetsRepo(localSource: sl()));
+  sl.registerLazySingleton<IExercisesContract>(
+      () => ExercisesRepo(internet: sl(), remoteSource: sl(), localSource: sl()));
+  sl.registerLazySingleton<IOTPAuthRepo>(
+      () => EmailAuthRepo(otpAuthSource: sl(), tokenService: sl(), accountLocalSource: sl(), connection: sl()));
 
   //////////////////////////////////////////////////////////////////////////////
   ///
@@ -223,6 +210,7 @@ Future<void> init() async {
   sl.registerFactory(() => AccountUsecases(repo: sl()));
   sl.registerFactory(() => PracticeCommands(repo: sl()));
   sl.registerFactory(() => RoutineManagementCommands(repo: sl()));
+  sl.registerFactory(() => RoutineWithHeatCommands(repo: sl()));
   sl.registerFactory(() => RoutineDaysCommands(repo: sl()));
   sl.registerFactory(() => RoutineItemsCommands(repo: sl()));
   sl.registerFactory(() => RoutineSetsCommands(repo: sl()));

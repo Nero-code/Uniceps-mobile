@@ -6,13 +6,13 @@ import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/widgets/alert_bar.dart';
 import 'package:uniceps/app/presentation/home/widgets/captain_uni_card.dart';
-import 'package:uniceps/app/presentation/home/widgets/current_routine_card.dart';
 import 'package:uniceps/app/presentation/home/widgets/practice_day_item.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/stopwatch/stopwatch_cubit.dart';
 import 'package:uniceps/app/presentation/home/widgets/practice_panel.dart';
 import 'package:uniceps/app/presentation/practice/screens/practice_screen.dart';
+import 'package:uniceps/app/presentation/routine/widgets/routine_with_heat.dart';
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
@@ -109,34 +109,42 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         BlocBuilder<CurrentRoutineCubit, CurrentRoutineState>(
                           builder: (context, state) {
-                            print(state.runtimeType);
-                            if (state is CurrentRoutineLoadedState) {
-                              return CurrentRoutineCard(
-                                routine: state.routine,
-                                onPressed: () async {
-                                  await Navigator.pushNamed(context, AppRoutes.routineManager);
-                                  if (context.mounted) {
-                                    context.read<CurrentRoutineCubit>().getCurrentRoutine();
-                                  }
-                                },
-                              );
-                            } else if (state is CurrentRoutineErrorState) {
-                              return Row(
-                                children: [
-                                  ErrorScreenWidget(f: state.failure),
-                                  ElevatedButton(
-                                    onPressed: () async {
+                            return state.map(
+                                initial: (_) => SizedBox(),
+                                loading: (_) => const LoadingPage(),
+                                loaded: (state) => RoutineWithHeat(
+                                    routine: state.c,
+                                    heat: state.heat,
+                                    onTap: () async {
                                       await Navigator.pushNamed(context, AppRoutes.routineManager);
                                       if (context.mounted) {
                                         context.read<CurrentRoutineCubit>().getCurrentRoutine();
                                       }
                                     },
-                                    child: const Icon(Icons.edit),
-                                  ),
-                                ],
-                              );
-                            }
-                            return const LoadingPage();
+                                    onMenu: null),
+                                // CurrentRoutineCard(
+                                //       routine: state.c,
+                                //       onPressed: () async {
+                                //         await Navigator.pushNamed(context, AppRoutes.routineManager);
+                                //         if (context.mounted) {
+                                //           context.read<CurrentRoutineCubit>().getCurrentRoutine();
+                                //         }
+                                //       },
+                                //     ),
+                                error: (state) => Row(
+                                      children: [
+                                        ErrorScreenWidget(f: state.f),
+                                        ElevatedButton(
+                                          onPressed: () async {
+                                            await Navigator.pushNamed(context, AppRoutes.routineManager);
+                                            if (context.mounted) {
+                                              context.read<CurrentRoutineCubit>().getCurrentRoutine();
+                                            }
+                                          },
+                                          child: const Icon(Icons.edit),
+                                        ),
+                                      ],
+                                    ));
                           },
                         ),
                         const SizedBox(),
@@ -203,8 +211,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.transparent,
                 child: BlocBuilder<CurrentRoutineCubit, CurrentRoutineState>(
                   builder: (context, state) {
-                    if (state is CurrentRoutineLoadedState) {
-                      return Column(
+                    return state.maybeMap(
+                      loaded: (state) => Column(
                         children: [
                           const SizedBox(height: 10),
                           SizedBox(
@@ -212,9 +220,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: const Image(image: AssetImage(IMG_CAP_SELECT_DAY)),
                           ),
                           Text(locale.dayQuete),
-                          ...state.routine.trainingDays.map((day) => PracticeDayItem(
+                          ...state.c.trainingDays.map((day) => PracticeDayItem(
                                 day: day,
-                                isSelected: state.lastDayId == day.id,
+                                isSelected: state.heat.lastdayId == day.id,
                                 onSelect: () async {
                                   context.read<SessionBloc>().add(SessionEvent.startSession(day.id!));
                                   Navigator.push(
@@ -236,9 +244,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                               )),
                         ],
-                      );
-                    } else if (state is CurrentRoutineErrorState) {
-                      return Column(
+                      ),
+                      orElse: () => Column(
                         children: [
                           Image(
                             image: const AssetImage(IMG_BLANK),
@@ -246,9 +253,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           Text(locale.noTrainingProgram),
                         ],
-                      );
-                    }
-                    return const LoadingPage();
+                      ),
+                    );
                   },
                 ),
               ),

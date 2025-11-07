@@ -10,10 +10,12 @@ import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_set_dto.dart';
 import 'package:uniceps/app/data/sources/local/database.dart' as db;
+import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
 abstract class ITSessionLocalSourceContract {
   Future<Tuple2<RoutineDto?, int?>> getCurrentRoutine();
+  Future<Tuple2<RoutineDto?, RoutineHeat?>> getCurrentRoutineWithHeat();
   Future<RoutineDayDto> getDayItems(int dayId);
 
   Future<TSessionModel?> getPreviousSession();
@@ -261,6 +263,10 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
 
   @override
   Future<void> finishTrainingSession(TSessionModel session, bool isFullSession) async {
+    if (session.logs.isEmpty) {
+      await (_database.delete(_database.tSessions)..where((f) => f.tsId.equals(session.id!))).go();
+      return;
+    }
     await (_database.update(_database.tSessions)..where((f) => f.tsId.equals(session.id!))).write(
       db.TSessionsCompanion.custom(
         finishedAt: Variable(DateTime.now()),
@@ -269,5 +275,49 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
         progress: isFullSession ? const Constant(1) : null,
       ),
     );
+  }
+
+  @override
+  Future<Tuple2<RoutineDto?, RoutineHeat?>> getCurrentRoutineWithHeat() async {
+    // Part 1:
+    //   Get all routines.
+    final routine = await (_database.select(_database.routines)..where((f) => f.isCurrent)).getSingleOrNull();
+    if (routine == null) return const Tuple2(null, null);
+
+    // Part 2:
+    //   Get Heat objects.
+
+    int dc, ic, sc, tc;
+    dc = ic = sc = tc = 0;
+    Duration duration = Duration.zero;
+
+    final days = await (_database.select(_database.daysGroup)..where((f) => f.routineId.equals(routine.id))).get();
+    for (final day in days) {
+      final sessions = await (_database.select(_database.tSessions)..where((f) => f.dayId.equals(day.id))).get();
+      tc = sessions.length;
+      final range = sessions.map((e) => e.startedAt).toList();
+      duration = range.last.difference(range.first);
+
+      final items = await (_database.select(_database.routineItems)..where((f) => f.dayId.equals(day.id))).get();
+      for (final item in items) {
+        final sets =
+            await (_database.select(_database.routineSets)..where((f) => f.routineItemId.equals(item.id))).get();
+        sc += sets.length;
+      }
+      ic = items.length;
+    }
+    dc = days.length;
+
+    final res = RoutineDto.fromTable(routine);
+    final heat = RoutineHeat(
+      routineName: routine.name,
+      sessionCount: tc,
+      duration: duration,
+      days: dc,
+      exercises: ic,
+      sets: sc,
+    );
+
+    return Tuple2(res, heat);
   }
 }

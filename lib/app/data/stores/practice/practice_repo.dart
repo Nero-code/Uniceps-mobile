@@ -6,6 +6,7 @@ import 'package:uniceps/app/domain/classes/practice_entities/t_log.dart';
 import 'package:uniceps/app/domain/classes/practice_entities/t_session.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
 import 'package:uniceps/app/domain/contracts/practice_repo/practice_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
@@ -96,6 +97,19 @@ class PracticeRepo implements IPracticeContract {
       return const Right(unit);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Tuple2<Routine, RoutineHeat?>>> getCurrentRoutineWithHeat() async {
+    try {
+      final res = await _localSource.getCurrentRoutineWithHeat();
+      if (res.head != null) {
+        return Right(Tuple2(res.head!.toEntity(), res.tail));
+      }
+      return const Left(EmptyCacheFailure(errorMessage: ""));
+    } catch (e) {
+      return Left(DatabaseFailure(errorMsg: ""));
     }
   }
 }

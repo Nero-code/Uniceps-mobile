@@ -1,14 +1,15 @@
 import 'package:drift/drift.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
 
 abstract class IRoutineManagementLocalSourceContract {
   Future<List<RoutineDto>> getAllRoutines();
+  Future<List<({RoutineDto routine, RoutineHeat heat})>> getAllRoutinesWithHeat();
   Future<RoutineDto> createRoutine(String routineName);
   Future<RoutineDto> updateRoutine(RoutineDto dto);
   Future<void> setCurrentRoutine(RoutineDto dto);
   Future<void> deleteRoutine(RoutineDto dto);
-  Future<void> saveRoutines(List<RoutineDto> list);
   Future<void> shareRoutine(RoutineDto dto);
 }
 
@@ -56,14 +57,58 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
   }
 
   @override
-  Future<void> saveRoutines(List<RoutineDto> list) async {
-    // TODO: implement saveRoutines
+  Future<void> shareRoutine(RoutineDto dto) async {
+    // TODO: implement shareRoutine
     throw UnimplementedError();
   }
 
   @override
-  Future<void> shareRoutine(RoutineDto dto) async {
-    // TODO: implement shareRoutine
-    throw UnimplementedError();
+  Future<List<({RoutineHeat heat, RoutineDto routine})>> getAllRoutinesWithHeat() async {
+    // Part 1:
+    //   Get all routines.
+    final routines = await _database.select(_database.routines).get();
+    final List<({RoutineHeat heat, RoutineDto routine})> result = [];
+
+    print("step 1: routines.length = ${routines.length}");
+
+    // Part 2:
+    //   Get Heat objects.
+    for (final routine in routines) {
+      int dc, ic, sc, tc;
+      dc = ic = sc = tc = 0;
+      Duration duration = Duration.zero;
+      final days = await (_database.select(_database.daysGroup)..where((f) => f.routineId.equals(routine.id))).get();
+      print("step 2: days.length = ${days.length}");
+      for (final day in days) {
+        final sessions = await (_database.select(_database.tSessions)..where((f) => f.dayId.equals(day.id))).get();
+        tc = sessions.length;
+        final range = sessions.map((e) => e.startedAt).toList();
+        duration = range.last.difference(range.first);
+
+        final items = await (_database.select(_database.routineItems)..where((f) => f.dayId.equals(day.id))).get();
+
+        print("step 3: items.length = ${items.length}");
+        for (final item in items) {
+          final sets =
+              await (_database.select(_database.routineSets)..where((f) => f.routineItemId.equals(item.id))).get();
+          sc += sets.length;
+          print("step 4: sets.length = ${sets.length}");
+        }
+        ic = items.length;
+      }
+      dc = days.length;
+      result.add((
+        routine: RoutineDto.fromTable(routine),
+        heat: RoutineHeat(
+          routineName: routine.name,
+          sessionCount: tc,
+          duration: duration,
+          days: dc,
+          exercises: ic,
+          sets: sc,
+        )
+      ));
+    }
+    return result;
   }
 }

@@ -11,6 +11,7 @@ import 'package:uniceps/app/presentation/home/blocs/current_routine/current_rout
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/plans/screens/plans_screen.dart';
 import 'package:uniceps/app/presentation/routine/screens/routine_management_screen.dart';
+import 'package:uniceps/app/presentation/routine/screens/routines_heat_screen.dart';
 import 'package:uniceps/app/presentation/settings/screens/settings_screen.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/app/presentation/screens/profile/settings/screens/about_screen.dart';
@@ -72,17 +73,14 @@ class MyApp extends StatelessWidget {
           create: (context) => AccountCubit(di.sl())..getUserAccount(),
         ),
         BlocProvider(
-          create: (context) => MembershipBloc(di.sl())
-            ..add(const MembershipEvent.getCurrentPlan()),
+          create: (context) => MembershipBloc(di.sl())..add(const MembershipEvent.getCurrentPlan()),
         ),
         BlocProvider(
-          create: (context) =>
-              CurrentRoutineCubit(commands: di.sl())..getCurrentRoutine(),
+          create: (context) => CurrentRoutineCubit(commands: di.sl())..getCurrentRoutine(),
           lazy: false,
         ),
         BlocProvider(
-          create: (context) => SessionBloc(commands: di.sl())
-            ..add(const SessionEvent.getLastActiveSession()),
+          create: (context) => SessionBloc(commands: di.sl())..add(const SessionEvent.getLastActiveSession()),
         ),
       ],
       child: BlocBuilder<LocaleCubit, ChangedLangState>(
@@ -110,8 +108,10 @@ class MyApp extends StatelessWidget {
               AppRoutes.home: (context) => const HomeScreen(),
 
               // ROUTINE
-              AppRoutes.routineManager: (context) =>
-                  const RoutineManagementScreen(),
+              // AppRoutes.routineManager: (context) =>
+              //     const RoutineManagementScreen(),
+
+              AppRoutes.routineManager: (context) => const RoutinesHeatScreen(),
 
               //  AUTH
               AppRoutes.auth: (context) => const EmailAuthScreen(),

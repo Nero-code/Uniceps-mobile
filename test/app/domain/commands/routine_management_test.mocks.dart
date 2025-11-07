@@ -8,8 +8,6 @@ import 'dart:async' as _i4;
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart' as _i6;
-import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart'
-    as _i7;
 import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_management_contract.dart'
     as _i3;
 import 'package:uniceps/core/errors/failure.dart' as _i5;
@@ -63,30 +61,6 @@ class MockIRoutineManagementContract extends _i1.Mock
           ),
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>);
-
-  @override
-  _i4.Future<
-          _i2
-          .Either<_i5.Failure, List<({_i7.RoutineHeat heat, _i6.Routine r})>>>
-      getAllRoutinesWithHeat() => (super.noSuchMethod(
-            Invocation.method(
-              #getAllRoutinesWithHeat,
-              [],
-            ),
-            returnValue: _i4.Future<
-                    _i2.Either<_i5.Failure,
-                        List<({_i7.RoutineHeat heat, _i6.Routine r})>>>.value(
-                _FakeEither_0<_i5.Failure,
-                    List<({_i7.RoutineHeat heat, _i6.Routine r})>>(
-              this,
-              Invocation.method(
-                #getAllRoutinesWithHeat,
-                [],
-              ),
-            )),
-          ) as _i4.Future<
-              _i2.Either<_i5.Failure,
-                  List<({_i7.RoutineHeat heat, _i6.Routine r})>>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>> createRoutine(
