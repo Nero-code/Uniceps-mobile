@@ -18,21 +18,24 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AuthFailure {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() offline,
+    required TResult Function() aOffline,
+    required TResult Function() invalidEmailFailure,
     required TResult Function() invalidCodeFailure,
     required TResult Function() unautherizedFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? offline,
+    TResult? Function()? aOffline,
+    TResult? Function()? invalidEmailFailure,
     TResult? Function()? invalidCodeFailure,
     TResult? Function()? unautherizedFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? offline,
+    TResult Function()? aOffline,
+    TResult Function()? invalidEmailFailure,
     TResult Function()? invalidCodeFailure,
     TResult Function()? unautherizedFailure,
     required TResult orElse(),
@@ -40,21 +43,24 @@ mixin _$AuthFailure {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Offline value) offline,
+    required TResult Function(_AOffline value) aOffline,
+    required TResult Function(_InvalidEmailFailure value) invalidEmailFailure,
     required TResult Function(_InvalidCodeFailure value) invalidCodeFailure,
     required TResult Function(_UnautherizedFailure value) unautherizedFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Offline value)? offline,
+    TResult? Function(_AOffline value)? aOffline,
+    TResult? Function(_InvalidEmailFailure value)? invalidEmailFailure,
     TResult? Function(_InvalidCodeFailure value)? invalidCodeFailure,
     TResult? Function(_UnautherizedFailure value)? unautherizedFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Offline value)? offline,
+    TResult Function(_AOffline value)? aOffline,
+    TResult Function(_InvalidEmailFailure value)? invalidEmailFailure,
     TResult Function(_InvalidCodeFailure value)? invalidCodeFailure,
     TResult Function(_UnautherizedFailure value)? unautherizedFailure,
     required TResult orElse(),
@@ -81,35 +87,35 @@ class _$AuthFailureCopyWithImpl<$Res, $Val extends AuthFailure>
 }
 
 /// @nodoc
-abstract class _$$OfflineImplCopyWith<$Res> {
-  factory _$$OfflineImplCopyWith(
-          _$OfflineImpl value, $Res Function(_$OfflineImpl) then) =
-      __$$OfflineImplCopyWithImpl<$Res>;
+abstract class _$$AOfflineImplCopyWith<$Res> {
+  factory _$$AOfflineImplCopyWith(
+          _$AOfflineImpl value, $Res Function(_$AOfflineImpl) then) =
+      __$$AOfflineImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$OfflineImplCopyWithImpl<$Res>
-    extends _$AuthFailureCopyWithImpl<$Res, _$OfflineImpl>
-    implements _$$OfflineImplCopyWith<$Res> {
-  __$$OfflineImplCopyWithImpl(
-      _$OfflineImpl _value, $Res Function(_$OfflineImpl) _then)
+class __$$AOfflineImplCopyWithImpl<$Res>
+    extends _$AuthFailureCopyWithImpl<$Res, _$AOfflineImpl>
+    implements _$$AOfflineImplCopyWith<$Res> {
+  __$$AOfflineImplCopyWithImpl(
+      _$AOfflineImpl _value, $Res Function(_$AOfflineImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$OfflineImpl implements _Offline {
-  const _$OfflineImpl();
+class _$AOfflineImpl implements _AOffline {
+  const _$AOfflineImpl();
 
   @override
   String toString() {
-    return 'AuthFailure.offline()';
+    return 'AuthFailure.aOffline()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$OfflineImpl);
+        (other.runtimeType == runtimeType && other is _$AOfflineImpl);
   }
 
   @override
@@ -118,33 +124,36 @@ class _$OfflineImpl implements _Offline {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() offline,
+    required TResult Function() aOffline,
+    required TResult Function() invalidEmailFailure,
     required TResult Function() invalidCodeFailure,
     required TResult Function() unautherizedFailure,
   }) {
-    return offline();
+    return aOffline();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? offline,
+    TResult? Function()? aOffline,
+    TResult? Function()? invalidEmailFailure,
     TResult? Function()? invalidCodeFailure,
     TResult? Function()? unautherizedFailure,
   }) {
-    return offline?.call();
+    return aOffline?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? offline,
+    TResult Function()? aOffline,
+    TResult Function()? invalidEmailFailure,
     TResult Function()? invalidCodeFailure,
     TResult Function()? unautherizedFailure,
     required TResult orElse(),
   }) {
-    if (offline != null) {
-      return offline();
+    if (aOffline != null) {
+      return aOffline();
     }
     return orElse();
   }
@@ -152,40 +161,158 @@ class _$OfflineImpl implements _Offline {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Offline value) offline,
+    required TResult Function(_AOffline value) aOffline,
+    required TResult Function(_InvalidEmailFailure value) invalidEmailFailure,
     required TResult Function(_InvalidCodeFailure value) invalidCodeFailure,
     required TResult Function(_UnautherizedFailure value) unautherizedFailure,
   }) {
-    return offline(this);
+    return aOffline(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Offline value)? offline,
+    TResult? Function(_AOffline value)? aOffline,
+    TResult? Function(_InvalidEmailFailure value)? invalidEmailFailure,
     TResult? Function(_InvalidCodeFailure value)? invalidCodeFailure,
     TResult? Function(_UnautherizedFailure value)? unautherizedFailure,
   }) {
-    return offline?.call(this);
+    return aOffline?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Offline value)? offline,
+    TResult Function(_AOffline value)? aOffline,
+    TResult Function(_InvalidEmailFailure value)? invalidEmailFailure,
     TResult Function(_InvalidCodeFailure value)? invalidCodeFailure,
     TResult Function(_UnautherizedFailure value)? unautherizedFailure,
     required TResult orElse(),
   }) {
-    if (offline != null) {
-      return offline(this);
+    if (aOffline != null) {
+      return aOffline(this);
     }
     return orElse();
   }
 }
 
-abstract class _Offline implements AuthFailure {
-  const factory _Offline() = _$OfflineImpl;
+abstract class _AOffline implements AuthFailure {
+  const factory _AOffline() = _$AOfflineImpl;
+}
+
+/// @nodoc
+abstract class _$$InvalidEmailFailureImplCopyWith<$Res> {
+  factory _$$InvalidEmailFailureImplCopyWith(_$InvalidEmailFailureImpl value,
+          $Res Function(_$InvalidEmailFailureImpl) then) =
+      __$$InvalidEmailFailureImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$InvalidEmailFailureImplCopyWithImpl<$Res>
+    extends _$AuthFailureCopyWithImpl<$Res, _$InvalidEmailFailureImpl>
+    implements _$$InvalidEmailFailureImplCopyWith<$Res> {
+  __$$InvalidEmailFailureImplCopyWithImpl(_$InvalidEmailFailureImpl _value,
+      $Res Function(_$InvalidEmailFailureImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$InvalidEmailFailureImpl implements _InvalidEmailFailure {
+  const _$InvalidEmailFailureImpl();
+
+  @override
+  String toString() {
+    return 'AuthFailure.invalidEmailFailure()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$InvalidEmailFailureImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() aOffline,
+    required TResult Function() invalidEmailFailure,
+    required TResult Function() invalidCodeFailure,
+    required TResult Function() unautherizedFailure,
+  }) {
+    return invalidEmailFailure();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? aOffline,
+    TResult? Function()? invalidEmailFailure,
+    TResult? Function()? invalidCodeFailure,
+    TResult? Function()? unautherizedFailure,
+  }) {
+    return invalidEmailFailure?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? aOffline,
+    TResult Function()? invalidEmailFailure,
+    TResult Function()? invalidCodeFailure,
+    TResult Function()? unautherizedFailure,
+    required TResult orElse(),
+  }) {
+    if (invalidEmailFailure != null) {
+      return invalidEmailFailure();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_AOffline value) aOffline,
+    required TResult Function(_InvalidEmailFailure value) invalidEmailFailure,
+    required TResult Function(_InvalidCodeFailure value) invalidCodeFailure,
+    required TResult Function(_UnautherizedFailure value) unautherizedFailure,
+  }) {
+    return invalidEmailFailure(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_AOffline value)? aOffline,
+    TResult? Function(_InvalidEmailFailure value)? invalidEmailFailure,
+    TResult? Function(_InvalidCodeFailure value)? invalidCodeFailure,
+    TResult? Function(_UnautherizedFailure value)? unautherizedFailure,
+  }) {
+    return invalidEmailFailure?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_AOffline value)? aOffline,
+    TResult Function(_InvalidEmailFailure value)? invalidEmailFailure,
+    TResult Function(_InvalidCodeFailure value)? invalidCodeFailure,
+    TResult Function(_UnautherizedFailure value)? unautherizedFailure,
+    required TResult orElse(),
+  }) {
+    if (invalidEmailFailure != null) {
+      return invalidEmailFailure(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _InvalidEmailFailure implements AuthFailure {
+  const factory _InvalidEmailFailure() = _$InvalidEmailFailureImpl;
 }
 
 /// @nodoc
@@ -226,7 +353,8 @@ class _$InvalidCodeFailureImpl implements _InvalidCodeFailure {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() offline,
+    required TResult Function() aOffline,
+    required TResult Function() invalidEmailFailure,
     required TResult Function() invalidCodeFailure,
     required TResult Function() unautherizedFailure,
   }) {
@@ -236,7 +364,8 @@ class _$InvalidCodeFailureImpl implements _InvalidCodeFailure {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? offline,
+    TResult? Function()? aOffline,
+    TResult? Function()? invalidEmailFailure,
     TResult? Function()? invalidCodeFailure,
     TResult? Function()? unautherizedFailure,
   }) {
@@ -246,7 +375,8 @@ class _$InvalidCodeFailureImpl implements _InvalidCodeFailure {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? offline,
+    TResult Function()? aOffline,
+    TResult Function()? invalidEmailFailure,
     TResult Function()? invalidCodeFailure,
     TResult Function()? unautherizedFailure,
     required TResult orElse(),
@@ -260,7 +390,8 @@ class _$InvalidCodeFailureImpl implements _InvalidCodeFailure {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Offline value) offline,
+    required TResult Function(_AOffline value) aOffline,
+    required TResult Function(_InvalidEmailFailure value) invalidEmailFailure,
     required TResult Function(_InvalidCodeFailure value) invalidCodeFailure,
     required TResult Function(_UnautherizedFailure value) unautherizedFailure,
   }) {
@@ -270,7 +401,8 @@ class _$InvalidCodeFailureImpl implements _InvalidCodeFailure {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Offline value)? offline,
+    TResult? Function(_AOffline value)? aOffline,
+    TResult? Function(_InvalidEmailFailure value)? invalidEmailFailure,
     TResult? Function(_InvalidCodeFailure value)? invalidCodeFailure,
     TResult? Function(_UnautherizedFailure value)? unautherizedFailure,
   }) {
@@ -280,7 +412,8 @@ class _$InvalidCodeFailureImpl implements _InvalidCodeFailure {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Offline value)? offline,
+    TResult Function(_AOffline value)? aOffline,
+    TResult Function(_InvalidEmailFailure value)? invalidEmailFailure,
     TResult Function(_InvalidCodeFailure value)? invalidCodeFailure,
     TResult Function(_UnautherizedFailure value)? unautherizedFailure,
     required TResult orElse(),
@@ -335,7 +468,8 @@ class _$UnautherizedFailureImpl implements _UnautherizedFailure {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() offline,
+    required TResult Function() aOffline,
+    required TResult Function() invalidEmailFailure,
     required TResult Function() invalidCodeFailure,
     required TResult Function() unautherizedFailure,
   }) {
@@ -345,7 +479,8 @@ class _$UnautherizedFailureImpl implements _UnautherizedFailure {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? offline,
+    TResult? Function()? aOffline,
+    TResult? Function()? invalidEmailFailure,
     TResult? Function()? invalidCodeFailure,
     TResult? Function()? unautherizedFailure,
   }) {
@@ -355,7 +490,8 @@ class _$UnautherizedFailureImpl implements _UnautherizedFailure {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? offline,
+    TResult Function()? aOffline,
+    TResult Function()? invalidEmailFailure,
     TResult Function()? invalidCodeFailure,
     TResult Function()? unautherizedFailure,
     required TResult orElse(),
@@ -369,7 +505,8 @@ class _$UnautherizedFailureImpl implements _UnautherizedFailure {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Offline value) offline,
+    required TResult Function(_AOffline value) aOffline,
+    required TResult Function(_InvalidEmailFailure value) invalidEmailFailure,
     required TResult Function(_InvalidCodeFailure value) invalidCodeFailure,
     required TResult Function(_UnautherizedFailure value) unautherizedFailure,
   }) {
@@ -379,7 +516,8 @@ class _$UnautherizedFailureImpl implements _UnautherizedFailure {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Offline value)? offline,
+    TResult? Function(_AOffline value)? aOffline,
+    TResult? Function(_InvalidEmailFailure value)? invalidEmailFailure,
     TResult? Function(_InvalidCodeFailure value)? invalidCodeFailure,
     TResult? Function(_UnautherizedFailure value)? unautherizedFailure,
   }) {
@@ -389,7 +527,8 @@ class _$UnautherizedFailureImpl implements _UnautherizedFailure {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Offline value)? offline,
+    TResult Function(_AOffline value)? aOffline,
+    TResult Function(_InvalidEmailFailure value)? invalidEmailFailure,
     TResult Function(_InvalidCodeFailure value)? invalidCodeFailure,
     TResult Function(_UnautherizedFailure value)? unautherizedFailure,
     required TResult orElse(),
@@ -409,32 +548,38 @@ abstract class _UnautherizedFailure implements AuthFailure {
 mixin _$MembershipFailure {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() mmOffline,
     required TResult Function() cantGetPlan,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? mmOffline,
     TResult? Function()? cantGetPlan,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? mmOffline,
     TResult Function()? cantGetPlan,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_MmOffline value) mmOffline,
     required TResult Function(_CantGetPlan value) cantGetPlan,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_MmOffline value)? mmOffline,
     TResult? Function(_CantGetPlan value)? cantGetPlan,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_MmOffline value)? mmOffline,
     TResult Function(_CantGetPlan value)? cantGetPlan,
     required TResult orElse(),
   }) =>
@@ -457,6 +602,108 @@ class _$MembershipFailureCopyWithImpl<$Res, $Val extends MembershipFailure>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+}
+
+/// @nodoc
+abstract class _$$MmOfflineImplCopyWith<$Res> {
+  factory _$$MmOfflineImplCopyWith(
+          _$MmOfflineImpl value, $Res Function(_$MmOfflineImpl) then) =
+      __$$MmOfflineImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$MmOfflineImplCopyWithImpl<$Res>
+    extends _$MembershipFailureCopyWithImpl<$Res, _$MmOfflineImpl>
+    implements _$$MmOfflineImplCopyWith<$Res> {
+  __$$MmOfflineImplCopyWithImpl(
+      _$MmOfflineImpl _value, $Res Function(_$MmOfflineImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$MmOfflineImpl implements _MmOffline {
+  const _$MmOfflineImpl();
+
+  @override
+  String toString() {
+    return 'MembershipFailure.mmOffline()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$MmOfflineImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() mmOffline,
+    required TResult Function() cantGetPlan,
+  }) {
+    return mmOffline();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? mmOffline,
+    TResult? Function()? cantGetPlan,
+  }) {
+    return mmOffline?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? mmOffline,
+    TResult Function()? cantGetPlan,
+    required TResult orElse(),
+  }) {
+    if (mmOffline != null) {
+      return mmOffline();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_MmOffline value) mmOffline,
+    required TResult Function(_CantGetPlan value) cantGetPlan,
+  }) {
+    return mmOffline(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_MmOffline value)? mmOffline,
+    TResult? Function(_CantGetPlan value)? cantGetPlan,
+  }) {
+    return mmOffline?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_MmOffline value)? mmOffline,
+    TResult Function(_CantGetPlan value)? cantGetPlan,
+    required TResult orElse(),
+  }) {
+    if (mmOffline != null) {
+      return mmOffline(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _MmOffline implements MembershipFailure {
+  const factory _MmOffline() = _$MmOfflineImpl;
 }
 
 /// @nodoc
@@ -497,6 +744,7 @@ class _$CantGetPlanImpl implements _CantGetPlan {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() mmOffline,
     required TResult Function() cantGetPlan,
   }) {
     return cantGetPlan();
@@ -505,6 +753,7 @@ class _$CantGetPlanImpl implements _CantGetPlan {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? mmOffline,
     TResult? Function()? cantGetPlan,
   }) {
     return cantGetPlan?.call();
@@ -513,6 +762,7 @@ class _$CantGetPlanImpl implements _CantGetPlan {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? mmOffline,
     TResult Function()? cantGetPlan,
     required TResult orElse(),
   }) {
@@ -525,6 +775,7 @@ class _$CantGetPlanImpl implements _CantGetPlan {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_MmOffline value) mmOffline,
     required TResult Function(_CantGetPlan value) cantGetPlan,
   }) {
     return cantGetPlan(this);
@@ -533,6 +784,7 @@ class _$CantGetPlanImpl implements _CantGetPlan {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_MmOffline value)? mmOffline,
     TResult? Function(_CantGetPlan value)? cantGetPlan,
   }) {
     return cantGetPlan?.call(this);
@@ -541,6 +793,7 @@ class _$CantGetPlanImpl implements _CantGetPlan {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_MmOffline value)? mmOffline,
     TResult Function(_CantGetPlan value)? cantGetPlan,
     required TResult orElse(),
   }) {
@@ -553,4 +806,268 @@ class _$CantGetPlanImpl implements _CantGetPlan {
 
 abstract class _CantGetPlan implements MembershipFailure {
   const factory _CantGetPlan() = _$CantGetPlanImpl;
+}
+
+/// @nodoc
+mixin _$MeasurementFailure {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() msOffline,
+    required TResult Function() noRecords,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? msOffline,
+    TResult? Function()? noRecords,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? msOffline,
+    TResult Function()? noRecords,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_MsOffline value) msOffline,
+    required TResult Function(_NoRecords value) noRecords,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_MsOffline value)? msOffline,
+    TResult? Function(_NoRecords value)? noRecords,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_MsOffline value)? msOffline,
+    TResult Function(_NoRecords value)? noRecords,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $MeasurementFailureCopyWith<$Res> {
+  factory $MeasurementFailureCopyWith(
+          MeasurementFailure value, $Res Function(MeasurementFailure) then) =
+      _$MeasurementFailureCopyWithImpl<$Res, MeasurementFailure>;
+}
+
+/// @nodoc
+class _$MeasurementFailureCopyWithImpl<$Res, $Val extends MeasurementFailure>
+    implements $MeasurementFailureCopyWith<$Res> {
+  _$MeasurementFailureCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+}
+
+/// @nodoc
+abstract class _$$MsOfflineImplCopyWith<$Res> {
+  factory _$$MsOfflineImplCopyWith(
+          _$MsOfflineImpl value, $Res Function(_$MsOfflineImpl) then) =
+      __$$MsOfflineImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$MsOfflineImplCopyWithImpl<$Res>
+    extends _$MeasurementFailureCopyWithImpl<$Res, _$MsOfflineImpl>
+    implements _$$MsOfflineImplCopyWith<$Res> {
+  __$$MsOfflineImplCopyWithImpl(
+      _$MsOfflineImpl _value, $Res Function(_$MsOfflineImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$MsOfflineImpl implements _MsOffline {
+  const _$MsOfflineImpl();
+
+  @override
+  String toString() {
+    return 'MeasurementFailure.msOffline()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$MsOfflineImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() msOffline,
+    required TResult Function() noRecords,
+  }) {
+    return msOffline();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? msOffline,
+    TResult? Function()? noRecords,
+  }) {
+    return msOffline?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? msOffline,
+    TResult Function()? noRecords,
+    required TResult orElse(),
+  }) {
+    if (msOffline != null) {
+      return msOffline();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_MsOffline value) msOffline,
+    required TResult Function(_NoRecords value) noRecords,
+  }) {
+    return msOffline(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_MsOffline value)? msOffline,
+    TResult? Function(_NoRecords value)? noRecords,
+  }) {
+    return msOffline?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_MsOffline value)? msOffline,
+    TResult Function(_NoRecords value)? noRecords,
+    required TResult orElse(),
+  }) {
+    if (msOffline != null) {
+      return msOffline(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _MsOffline implements MeasurementFailure {
+  const factory _MsOffline() = _$MsOfflineImpl;
+}
+
+/// @nodoc
+abstract class _$$NoRecordsImplCopyWith<$Res> {
+  factory _$$NoRecordsImplCopyWith(
+          _$NoRecordsImpl value, $Res Function(_$NoRecordsImpl) then) =
+      __$$NoRecordsImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$NoRecordsImplCopyWithImpl<$Res>
+    extends _$MeasurementFailureCopyWithImpl<$Res, _$NoRecordsImpl>
+    implements _$$NoRecordsImplCopyWith<$Res> {
+  __$$NoRecordsImplCopyWithImpl(
+      _$NoRecordsImpl _value, $Res Function(_$NoRecordsImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$NoRecordsImpl implements _NoRecords {
+  const _$NoRecordsImpl();
+
+  @override
+  String toString() {
+    return 'MeasurementFailure.noRecords()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$NoRecordsImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() msOffline,
+    required TResult Function() noRecords,
+  }) {
+    return noRecords();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? msOffline,
+    TResult? Function()? noRecords,
+  }) {
+    return noRecords?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? msOffline,
+    TResult Function()? noRecords,
+    required TResult orElse(),
+  }) {
+    if (noRecords != null) {
+      return noRecords();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_MsOffline value) msOffline,
+    required TResult Function(_NoRecords value) noRecords,
+  }) {
+    return noRecords(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_MsOffline value)? msOffline,
+    TResult? Function(_NoRecords value)? noRecords,
+  }) {
+    return noRecords?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_MsOffline value)? msOffline,
+    TResult Function(_NoRecords value)? noRecords,
+    required TResult orElse(),
+  }) {
+    if (noRecords != null) {
+      return noRecords(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _NoRecords implements MeasurementFailure {
+  const factory _NoRecords() = _$NoRecordsImpl;
 }

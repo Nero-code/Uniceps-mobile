@@ -9,24 +9,22 @@ import 'package:uniceps/core/widgets/box_botton.dart';
 class RoundWidget extends StatefulWidget {
   const RoundWidget({
     super.key,
+    required this.onLog,
     required this.sessionId,
     required this.exId,
     required this.exIndex,
     required this.set,
+    required this.totalProgress,
     this.log,
-
-    // required this.controller,
-    // required this.index,
-    // required this.reps,
-    // required this.lastWeight,
-    // required this.onTap,
-    // this.isDone = false,
   });
   final int sessionId;
   final int exId;
   final int exIndex;
   final RoutineSet set;
   final TLog? log;
+  final int totalProgress;
+
+  final VoidCallback onLog;
 
   @override
   State<RoundWidget> createState() => _RoundWidgetState();
@@ -45,8 +43,7 @@ class _RoundWidgetState extends State<RoundWidget> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text("${widget.set.index + 1}",
-                style: const TextStyle(fontWeight: FontWeight.normal)),
+            child: Text("${widget.set.index + 1}", style: const TextStyle(fontWeight: FontWeight.normal)),
           ),
           Expanded(
             flex: 1,
@@ -95,24 +92,16 @@ class _RoundWidgetState extends State<RoundWidget> {
                     controller: weightCtl,
                     textAlign: TextAlign.center,
                     maxLength: 5,
-                    buildCounter: (_,
-                            {required currentLength,
-                            required isFocused,
-                            required maxLength}) =>
-                        null,
+                    buildCounter: (_, {required currentLength, required isFocused, required maxLength}) => null,
                     keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.deny(RegExp(r"[^0-9^\.]"))
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r"[^0-9^\.]"))],
                     decoration: InputDecoration(
                       hintText: "0.0",
                       isDense: true,
                       contentPadding: const EdgeInsets.symmetric(vertical: 5),
                       enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(7)),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(7)),
+                          borderSide: const BorderSide(color: Colors.grey), borderRadius: BorderRadius.circular(7)),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(7)),
                     ),
                   ),
                 ),
@@ -120,14 +109,11 @@ class _RoundWidgetState extends State<RoundWidget> {
             ),
           ),
           BoxButton(
-            background: widget.log != null
-                ? Colors.green.shade50
-                : Colors.grey.shade200,
+            background: widget.log != null ? Colors.green.shade50 : Colors.grey.shade200,
             borderRadius: 10,
             padding: 3.0,
             onTap: () {
-              final log = widget.log?.copywith(
-                      weight: double.tryParse(weightCtl.text) ?? 0.0) ??
+              final log = widget.log?.copywith(weight: double.tryParse(weightCtl.text) ?? 0.0) ??
                   TLog(
                     id: null,
                     completedAt: DateTime.now(),
@@ -140,14 +126,16 @@ class _RoundWidgetState extends State<RoundWidget> {
                     weight: double.tryParse(weightCtl.text) ?? 0.0,
                   );
 
-              context.read<SessionBloc>().add(SessionEvent.logSet(log));
+              context
+                  .read<SessionBloc>()
+                  .add(SessionEvent.logSet(log, widget.totalProgress != 0 ? 1 / widget.totalProgress : 0));
             },
             child: Text(
               " ${String.fromCharCode(Icons.done.codePoint)} ",
               style: TextStyle(
                 fontSize: 14.0,
                 color: widget.log != null ? Colors.green : Colors.black54,
-                fontWeight: FontWeight.bold, // Apply bold styling
+                fontWeight: FontWeight.bold,
                 fontFamily: Icons.hourglass_empty_rounded.fontFamily,
               ),
             ),

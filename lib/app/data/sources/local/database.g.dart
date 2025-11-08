@@ -8,6 +8,11 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $AccountsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _uidMeta = const VerificationMeta('uid');
+  @override
+  late final GeneratedColumn<String> uid = GeneratedColumn<String>(
+      'uid', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _emailMeta = const VerificationMeta('email');
   @override
   late final GeneratedColumn<String> email = GeneratedColumn<String>(
@@ -29,7 +34,7 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
       'created_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [email, type, createdAt];
+  List<GeneratedColumn> get $columns => [uid, email, type, createdAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -40,6 +45,12 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('uid')) {
+      context.handle(
+          _uidMeta, uid.isAcceptableOrUnknown(data['uid']!, _uidMeta));
+    } else if (isInserting) {
+      context.missing(_uidMeta);
+    }
     if (data.containsKey('email')) {
       context.handle(
           _emailMeta, email.isAcceptableOrUnknown(data['email']!, _emailMeta));
@@ -62,6 +73,8 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
   Account map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Account(
+      uid: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}uid'])!,
       email: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}email'])!,
       type: $AccountsTable.$convertertype.fromSql(attachedDatabase.typeMapping
@@ -81,14 +94,19 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
 }
 
 class Account extends DataClass implements Insertable<Account> {
+  final String uid;
   final String email;
   final AccountType type;
   final DateTime createdAt;
   const Account(
-      {required this.email, required this.type, required this.createdAt});
+      {required this.uid,
+      required this.email,
+      required this.type,
+      required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['uid'] = Variable<String>(uid);
     map['email'] = Variable<String>(email);
     {
       map['type'] = Variable<String>($AccountsTable.$convertertype.toSql(type));
@@ -99,6 +117,7 @@ class Account extends DataClass implements Insertable<Account> {
 
   AccountsCompanion toCompanion(bool nullToAbsent) {
     return AccountsCompanion(
+      uid: Value(uid),
       email: Value(email),
       type: Value(type),
       createdAt: Value(createdAt),
@@ -109,6 +128,7 @@ class Account extends DataClass implements Insertable<Account> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Account(
+      uid: serializer.fromJson<String>(json['uid']),
       email: serializer.fromJson<String>(json['email']),
       type: $AccountsTable.$convertertype
           .fromJson(serializer.fromJson<String>(json['type'])),
@@ -119,6 +139,7 @@ class Account extends DataClass implements Insertable<Account> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'uid': serializer.toJson<String>(uid),
       'email': serializer.toJson<String>(email),
       'type':
           serializer.toJson<String>($AccountsTable.$convertertype.toJson(type)),
@@ -126,14 +147,20 @@ class Account extends DataClass implements Insertable<Account> {
     };
   }
 
-  Account copyWith({String? email, AccountType? type, DateTime? createdAt}) =>
+  Account copyWith(
+          {String? uid,
+          String? email,
+          AccountType? type,
+          DateTime? createdAt}) =>
       Account(
+        uid: uid ?? this.uid,
         email: email ?? this.email,
         type: type ?? this.type,
         createdAt: createdAt ?? this.createdAt,
       );
   Account copyWithCompanion(AccountsCompanion data) {
     return Account(
+      uid: data.uid.present ? data.uid.value : this.uid,
       email: data.email.present ? data.email.value : this.email,
       type: data.type.present ? data.type.value : this.type,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
@@ -143,6 +170,7 @@ class Account extends DataClass implements Insertable<Account> {
   @override
   String toString() {
     return (StringBuffer('Account(')
+          ..write('uid: $uid, ')
           ..write('email: $email, ')
           ..write('type: $type, ')
           ..write('createdAt: $createdAt')
@@ -151,42 +179,49 @@ class Account extends DataClass implements Insertable<Account> {
   }
 
   @override
-  int get hashCode => Object.hash(email, type, createdAt);
+  int get hashCode => Object.hash(uid, email, type, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Account &&
+          other.uid == this.uid &&
           other.email == this.email &&
           other.type == this.type &&
           other.createdAt == this.createdAt);
 }
 
 class AccountsCompanion extends UpdateCompanion<Account> {
+  final Value<String> uid;
   final Value<String> email;
   final Value<AccountType> type;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
   const AccountsCompanion({
+    this.uid = const Value.absent(),
     this.email = const Value.absent(),
     this.type = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   AccountsCompanion.insert({
+    required String uid,
     required String email,
     required AccountType type,
     required DateTime createdAt,
     this.rowid = const Value.absent(),
-  })  : email = Value(email),
+  })  : uid = Value(uid),
+        email = Value(email),
         type = Value(type),
         createdAt = Value(createdAt);
   static Insertable<Account> custom({
+    Expression<String>? uid,
     Expression<String>? email,
     Expression<String>? type,
     Expression<DateTime>? createdAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
+      if (uid != null) 'uid': uid,
       if (email != null) 'email': email,
       if (type != null) 'type': type,
       if (createdAt != null) 'created_at': createdAt,
@@ -195,11 +230,13 @@ class AccountsCompanion extends UpdateCompanion<Account> {
   }
 
   AccountsCompanion copyWith(
-      {Value<String>? email,
+      {Value<String>? uid,
+      Value<String>? email,
       Value<AccountType>? type,
       Value<DateTime>? createdAt,
       Value<int>? rowid}) {
     return AccountsCompanion(
+      uid: uid ?? this.uid,
       email: email ?? this.email,
       type: type ?? this.type,
       createdAt: createdAt ?? this.createdAt,
@@ -210,6 +247,9 @@ class AccountsCompanion extends UpdateCompanion<Account> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (uid.present) {
+      map['uid'] = Variable<String>(uid.value);
+    }
     if (email.present) {
       map['email'] = Variable<String>(email.value);
     }
@@ -229,6 +269,7 @@ class AccountsCompanion extends UpdateCompanion<Account> {
   @override
   String toString() {
     return (StringBuffer('AccountsCompanion(')
+          ..write('uid: $uid, ')
           ..write('email: $email, ')
           ..write('type: $type, ')
           ..write('createdAt: $createdAt, ')
@@ -3790,6 +3831,887 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
   }
 }
 
+class $MeasurementsTable extends Measurements
+    with TableInfo<$MeasurementsTable, Measurement> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MeasurementsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _apiIdMeta = const VerificationMeta('apiId');
+  @override
+  late final GeneratedColumn<int> apiId = GeneratedColumn<int>(
+      'api_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _heightMeta = const VerificationMeta('height');
+  @override
+  late final GeneratedColumn<double> height = GeneratedColumn<double>(
+      'height', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _weightMeta = const VerificationMeta('weight');
+  @override
+  late final GeneratedColumn<double> weight = GeneratedColumn<double>(
+      'weight', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _lArmMeta = const VerificationMeta('lArm');
+  @override
+  late final GeneratedColumn<double> lArm = GeneratedColumn<double>(
+      'l_arm', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _rArmMeta = const VerificationMeta('rArm');
+  @override
+  late final GeneratedColumn<double> rArm = GeneratedColumn<double>(
+      'r_arm', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _lHumerusMeta =
+      const VerificationMeta('lHumerus');
+  @override
+  late final GeneratedColumn<double> lHumerus = GeneratedColumn<double>(
+      'l_humerus', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _rHumerusMeta =
+      const VerificationMeta('rHumerus');
+  @override
+  late final GeneratedColumn<double> rHumerus = GeneratedColumn<double>(
+      'r_humerus', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _lThighMeta = const VerificationMeta('lThigh');
+  @override
+  late final GeneratedColumn<double> lThigh = GeneratedColumn<double>(
+      'l_thigh', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _rThighMeta = const VerificationMeta('rThigh');
+  @override
+  late final GeneratedColumn<double> rThigh = GeneratedColumn<double>(
+      'r_thigh', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _lLegMeta = const VerificationMeta('lLeg');
+  @override
+  late final GeneratedColumn<double> lLeg = GeneratedColumn<double>(
+      'l_leg', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _rLegMeta = const VerificationMeta('rLeg');
+  @override
+  late final GeneratedColumn<double> rLeg = GeneratedColumn<double>(
+      'r_leg', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _neckMeta = const VerificationMeta('neck');
+  @override
+  late final GeneratedColumn<double> neck = GeneratedColumn<double>(
+      'neck', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _shouldersMeta =
+      const VerificationMeta('shoulders');
+  @override
+  late final GeneratedColumn<double> shoulders = GeneratedColumn<double>(
+      'shoulders', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _waistMeta = const VerificationMeta('waist');
+  @override
+  late final GeneratedColumn<double> waist = GeneratedColumn<double>(
+      'waist', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _chestMeta = const VerificationMeta('chest');
+  @override
+  late final GeneratedColumn<double> chest = GeneratedColumn<double>(
+      'chest', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _hipsMeta = const VerificationMeta('hips');
+  @override
+  late final GeneratedColumn<double> hips = GeneratedColumn<double>(
+      'hips', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _checkDateMeta =
+      const VerificationMeta('checkDate');
+  @override
+  late final GeneratedColumn<DateTime> checkDate = GeneratedColumn<DateTime>(
+      'check_date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _versionMeta =
+      const VerificationMeta('version');
+  @override
+  late final GeneratedColumn<int> version = GeneratedColumn<int>(
+      'version', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _isSyncedMeta =
+      const VerificationMeta('isSynced');
+  @override
+  late final GeneratedColumn<bool> isSynced = GeneratedColumn<bool>(
+      'is_synced', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_synced" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        apiId,
+        height,
+        weight,
+        lArm,
+        rArm,
+        lHumerus,
+        rHumerus,
+        lThigh,
+        rThigh,
+        lLeg,
+        rLeg,
+        neck,
+        shoulders,
+        waist,
+        chest,
+        hips,
+        checkDate,
+        version,
+        isSynced
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'measurements';
+  @override
+  VerificationContext validateIntegrity(Insertable<Measurement> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('api_id')) {
+      context.handle(
+          _apiIdMeta, apiId.isAcceptableOrUnknown(data['api_id']!, _apiIdMeta));
+    }
+    if (data.containsKey('height')) {
+      context.handle(_heightMeta,
+          height.isAcceptableOrUnknown(data['height']!, _heightMeta));
+    } else if (isInserting) {
+      context.missing(_heightMeta);
+    }
+    if (data.containsKey('weight')) {
+      context.handle(_weightMeta,
+          weight.isAcceptableOrUnknown(data['weight']!, _weightMeta));
+    } else if (isInserting) {
+      context.missing(_weightMeta);
+    }
+    if (data.containsKey('l_arm')) {
+      context.handle(
+          _lArmMeta, lArm.isAcceptableOrUnknown(data['l_arm']!, _lArmMeta));
+    } else if (isInserting) {
+      context.missing(_lArmMeta);
+    }
+    if (data.containsKey('r_arm')) {
+      context.handle(
+          _rArmMeta, rArm.isAcceptableOrUnknown(data['r_arm']!, _rArmMeta));
+    } else if (isInserting) {
+      context.missing(_rArmMeta);
+    }
+    if (data.containsKey('l_humerus')) {
+      context.handle(_lHumerusMeta,
+          lHumerus.isAcceptableOrUnknown(data['l_humerus']!, _lHumerusMeta));
+    } else if (isInserting) {
+      context.missing(_lHumerusMeta);
+    }
+    if (data.containsKey('r_humerus')) {
+      context.handle(_rHumerusMeta,
+          rHumerus.isAcceptableOrUnknown(data['r_humerus']!, _rHumerusMeta));
+    } else if (isInserting) {
+      context.missing(_rHumerusMeta);
+    }
+    if (data.containsKey('l_thigh')) {
+      context.handle(_lThighMeta,
+          lThigh.isAcceptableOrUnknown(data['l_thigh']!, _lThighMeta));
+    } else if (isInserting) {
+      context.missing(_lThighMeta);
+    }
+    if (data.containsKey('r_thigh')) {
+      context.handle(_rThighMeta,
+          rThigh.isAcceptableOrUnknown(data['r_thigh']!, _rThighMeta));
+    } else if (isInserting) {
+      context.missing(_rThighMeta);
+    }
+    if (data.containsKey('l_leg')) {
+      context.handle(
+          _lLegMeta, lLeg.isAcceptableOrUnknown(data['l_leg']!, _lLegMeta));
+    } else if (isInserting) {
+      context.missing(_lLegMeta);
+    }
+    if (data.containsKey('r_leg')) {
+      context.handle(
+          _rLegMeta, rLeg.isAcceptableOrUnknown(data['r_leg']!, _rLegMeta));
+    } else if (isInserting) {
+      context.missing(_rLegMeta);
+    }
+    if (data.containsKey('neck')) {
+      context.handle(
+          _neckMeta, neck.isAcceptableOrUnknown(data['neck']!, _neckMeta));
+    } else if (isInserting) {
+      context.missing(_neckMeta);
+    }
+    if (data.containsKey('shoulders')) {
+      context.handle(_shouldersMeta,
+          shoulders.isAcceptableOrUnknown(data['shoulders']!, _shouldersMeta));
+    } else if (isInserting) {
+      context.missing(_shouldersMeta);
+    }
+    if (data.containsKey('waist')) {
+      context.handle(
+          _waistMeta, waist.isAcceptableOrUnknown(data['waist']!, _waistMeta));
+    } else if (isInserting) {
+      context.missing(_waistMeta);
+    }
+    if (data.containsKey('chest')) {
+      context.handle(
+          _chestMeta, chest.isAcceptableOrUnknown(data['chest']!, _chestMeta));
+    } else if (isInserting) {
+      context.missing(_chestMeta);
+    }
+    if (data.containsKey('hips')) {
+      context.handle(
+          _hipsMeta, hips.isAcceptableOrUnknown(data['hips']!, _hipsMeta));
+    } else if (isInserting) {
+      context.missing(_hipsMeta);
+    }
+    if (data.containsKey('check_date')) {
+      context.handle(_checkDateMeta,
+          checkDate.isAcceptableOrUnknown(data['check_date']!, _checkDateMeta));
+    } else if (isInserting) {
+      context.missing(_checkDateMeta);
+    }
+    if (data.containsKey('version')) {
+      context.handle(_versionMeta,
+          version.isAcceptableOrUnknown(data['version']!, _versionMeta));
+    }
+    if (data.containsKey('is_synced')) {
+      context.handle(_isSyncedMeta,
+          isSynced.isAcceptableOrUnknown(data['is_synced']!, _isSyncedMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Measurement map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Measurement(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      apiId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}api_id']),
+      height: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}height'])!,
+      weight: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}weight'])!,
+      lArm: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}l_arm'])!,
+      rArm: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}r_arm'])!,
+      lHumerus: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}l_humerus'])!,
+      rHumerus: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}r_humerus'])!,
+      lThigh: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}l_thigh'])!,
+      rThigh: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}r_thigh'])!,
+      lLeg: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}l_leg'])!,
+      rLeg: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}r_leg'])!,
+      neck: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}neck'])!,
+      shoulders: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}shoulders'])!,
+      waist: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}waist'])!,
+      chest: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}chest'])!,
+      hips: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}hips'])!,
+      checkDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}check_date'])!,
+      version: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}version'])!,
+      isSynced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_synced'])!,
+    );
+  }
+
+  @override
+  $MeasurementsTable createAlias(String alias) {
+    return $MeasurementsTable(attachedDatabase, alias);
+  }
+}
+
+class Measurement extends DataClass implements Insertable<Measurement> {
+  final int id;
+  final int? apiId;
+  final double height;
+  final double weight;
+  final double lArm;
+  final double rArm;
+  final double lHumerus;
+  final double rHumerus;
+  final double lThigh;
+  final double rThigh;
+  final double lLeg;
+  final double rLeg;
+  final double neck;
+  final double shoulders;
+  final double waist;
+  final double chest;
+  final double hips;
+  final DateTime checkDate;
+  final int version;
+  final bool isSynced;
+  const Measurement(
+      {required this.id,
+      this.apiId,
+      required this.height,
+      required this.weight,
+      required this.lArm,
+      required this.rArm,
+      required this.lHumerus,
+      required this.rHumerus,
+      required this.lThigh,
+      required this.rThigh,
+      required this.lLeg,
+      required this.rLeg,
+      required this.neck,
+      required this.shoulders,
+      required this.waist,
+      required this.chest,
+      required this.hips,
+      required this.checkDate,
+      required this.version,
+      required this.isSynced});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    if (!nullToAbsent || apiId != null) {
+      map['api_id'] = Variable<int>(apiId);
+    }
+    map['height'] = Variable<double>(height);
+    map['weight'] = Variable<double>(weight);
+    map['l_arm'] = Variable<double>(lArm);
+    map['r_arm'] = Variable<double>(rArm);
+    map['l_humerus'] = Variable<double>(lHumerus);
+    map['r_humerus'] = Variable<double>(rHumerus);
+    map['l_thigh'] = Variable<double>(lThigh);
+    map['r_thigh'] = Variable<double>(rThigh);
+    map['l_leg'] = Variable<double>(lLeg);
+    map['r_leg'] = Variable<double>(rLeg);
+    map['neck'] = Variable<double>(neck);
+    map['shoulders'] = Variable<double>(shoulders);
+    map['waist'] = Variable<double>(waist);
+    map['chest'] = Variable<double>(chest);
+    map['hips'] = Variable<double>(hips);
+    map['check_date'] = Variable<DateTime>(checkDate);
+    map['version'] = Variable<int>(version);
+    map['is_synced'] = Variable<bool>(isSynced);
+    return map;
+  }
+
+  MeasurementsCompanion toCompanion(bool nullToAbsent) {
+    return MeasurementsCompanion(
+      id: Value(id),
+      apiId:
+          apiId == null && nullToAbsent ? const Value.absent() : Value(apiId),
+      height: Value(height),
+      weight: Value(weight),
+      lArm: Value(lArm),
+      rArm: Value(rArm),
+      lHumerus: Value(lHumerus),
+      rHumerus: Value(rHumerus),
+      lThigh: Value(lThigh),
+      rThigh: Value(rThigh),
+      lLeg: Value(lLeg),
+      rLeg: Value(rLeg),
+      neck: Value(neck),
+      shoulders: Value(shoulders),
+      waist: Value(waist),
+      chest: Value(chest),
+      hips: Value(hips),
+      checkDate: Value(checkDate),
+      version: Value(version),
+      isSynced: Value(isSynced),
+    );
+  }
+
+  factory Measurement.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Measurement(
+      id: serializer.fromJson<int>(json['id']),
+      apiId: serializer.fromJson<int?>(json['apiId']),
+      height: serializer.fromJson<double>(json['height']),
+      weight: serializer.fromJson<double>(json['weight']),
+      lArm: serializer.fromJson<double>(json['lArm']),
+      rArm: serializer.fromJson<double>(json['rArm']),
+      lHumerus: serializer.fromJson<double>(json['lHumerus']),
+      rHumerus: serializer.fromJson<double>(json['rHumerus']),
+      lThigh: serializer.fromJson<double>(json['lThigh']),
+      rThigh: serializer.fromJson<double>(json['rThigh']),
+      lLeg: serializer.fromJson<double>(json['lLeg']),
+      rLeg: serializer.fromJson<double>(json['rLeg']),
+      neck: serializer.fromJson<double>(json['neck']),
+      shoulders: serializer.fromJson<double>(json['shoulders']),
+      waist: serializer.fromJson<double>(json['waist']),
+      chest: serializer.fromJson<double>(json['chest']),
+      hips: serializer.fromJson<double>(json['hips']),
+      checkDate: serializer.fromJson<DateTime>(json['checkDate']),
+      version: serializer.fromJson<int>(json['version']),
+      isSynced: serializer.fromJson<bool>(json['isSynced']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'apiId': serializer.toJson<int?>(apiId),
+      'height': serializer.toJson<double>(height),
+      'weight': serializer.toJson<double>(weight),
+      'lArm': serializer.toJson<double>(lArm),
+      'rArm': serializer.toJson<double>(rArm),
+      'lHumerus': serializer.toJson<double>(lHumerus),
+      'rHumerus': serializer.toJson<double>(rHumerus),
+      'lThigh': serializer.toJson<double>(lThigh),
+      'rThigh': serializer.toJson<double>(rThigh),
+      'lLeg': serializer.toJson<double>(lLeg),
+      'rLeg': serializer.toJson<double>(rLeg),
+      'neck': serializer.toJson<double>(neck),
+      'shoulders': serializer.toJson<double>(shoulders),
+      'waist': serializer.toJson<double>(waist),
+      'chest': serializer.toJson<double>(chest),
+      'hips': serializer.toJson<double>(hips),
+      'checkDate': serializer.toJson<DateTime>(checkDate),
+      'version': serializer.toJson<int>(version),
+      'isSynced': serializer.toJson<bool>(isSynced),
+    };
+  }
+
+  Measurement copyWith(
+          {int? id,
+          Value<int?> apiId = const Value.absent(),
+          double? height,
+          double? weight,
+          double? lArm,
+          double? rArm,
+          double? lHumerus,
+          double? rHumerus,
+          double? lThigh,
+          double? rThigh,
+          double? lLeg,
+          double? rLeg,
+          double? neck,
+          double? shoulders,
+          double? waist,
+          double? chest,
+          double? hips,
+          DateTime? checkDate,
+          int? version,
+          bool? isSynced}) =>
+      Measurement(
+        id: id ?? this.id,
+        apiId: apiId.present ? apiId.value : this.apiId,
+        height: height ?? this.height,
+        weight: weight ?? this.weight,
+        lArm: lArm ?? this.lArm,
+        rArm: rArm ?? this.rArm,
+        lHumerus: lHumerus ?? this.lHumerus,
+        rHumerus: rHumerus ?? this.rHumerus,
+        lThigh: lThigh ?? this.lThigh,
+        rThigh: rThigh ?? this.rThigh,
+        lLeg: lLeg ?? this.lLeg,
+        rLeg: rLeg ?? this.rLeg,
+        neck: neck ?? this.neck,
+        shoulders: shoulders ?? this.shoulders,
+        waist: waist ?? this.waist,
+        chest: chest ?? this.chest,
+        hips: hips ?? this.hips,
+        checkDate: checkDate ?? this.checkDate,
+        version: version ?? this.version,
+        isSynced: isSynced ?? this.isSynced,
+      );
+  Measurement copyWithCompanion(MeasurementsCompanion data) {
+    return Measurement(
+      id: data.id.present ? data.id.value : this.id,
+      apiId: data.apiId.present ? data.apiId.value : this.apiId,
+      height: data.height.present ? data.height.value : this.height,
+      weight: data.weight.present ? data.weight.value : this.weight,
+      lArm: data.lArm.present ? data.lArm.value : this.lArm,
+      rArm: data.rArm.present ? data.rArm.value : this.rArm,
+      lHumerus: data.lHumerus.present ? data.lHumerus.value : this.lHumerus,
+      rHumerus: data.rHumerus.present ? data.rHumerus.value : this.rHumerus,
+      lThigh: data.lThigh.present ? data.lThigh.value : this.lThigh,
+      rThigh: data.rThigh.present ? data.rThigh.value : this.rThigh,
+      lLeg: data.lLeg.present ? data.lLeg.value : this.lLeg,
+      rLeg: data.rLeg.present ? data.rLeg.value : this.rLeg,
+      neck: data.neck.present ? data.neck.value : this.neck,
+      shoulders: data.shoulders.present ? data.shoulders.value : this.shoulders,
+      waist: data.waist.present ? data.waist.value : this.waist,
+      chest: data.chest.present ? data.chest.value : this.chest,
+      hips: data.hips.present ? data.hips.value : this.hips,
+      checkDate: data.checkDate.present ? data.checkDate.value : this.checkDate,
+      version: data.version.present ? data.version.value : this.version,
+      isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Measurement(')
+          ..write('id: $id, ')
+          ..write('apiId: $apiId, ')
+          ..write('height: $height, ')
+          ..write('weight: $weight, ')
+          ..write('lArm: $lArm, ')
+          ..write('rArm: $rArm, ')
+          ..write('lHumerus: $lHumerus, ')
+          ..write('rHumerus: $rHumerus, ')
+          ..write('lThigh: $lThigh, ')
+          ..write('rThigh: $rThigh, ')
+          ..write('lLeg: $lLeg, ')
+          ..write('rLeg: $rLeg, ')
+          ..write('neck: $neck, ')
+          ..write('shoulders: $shoulders, ')
+          ..write('waist: $waist, ')
+          ..write('chest: $chest, ')
+          ..write('hips: $hips, ')
+          ..write('checkDate: $checkDate, ')
+          ..write('version: $version, ')
+          ..write('isSynced: $isSynced')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      apiId,
+      height,
+      weight,
+      lArm,
+      rArm,
+      lHumerus,
+      rHumerus,
+      lThigh,
+      rThigh,
+      lLeg,
+      rLeg,
+      neck,
+      shoulders,
+      waist,
+      chest,
+      hips,
+      checkDate,
+      version,
+      isSynced);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Measurement &&
+          other.id == this.id &&
+          other.apiId == this.apiId &&
+          other.height == this.height &&
+          other.weight == this.weight &&
+          other.lArm == this.lArm &&
+          other.rArm == this.rArm &&
+          other.lHumerus == this.lHumerus &&
+          other.rHumerus == this.rHumerus &&
+          other.lThigh == this.lThigh &&
+          other.rThigh == this.rThigh &&
+          other.lLeg == this.lLeg &&
+          other.rLeg == this.rLeg &&
+          other.neck == this.neck &&
+          other.shoulders == this.shoulders &&
+          other.waist == this.waist &&
+          other.chest == this.chest &&
+          other.hips == this.hips &&
+          other.checkDate == this.checkDate &&
+          other.version == this.version &&
+          other.isSynced == this.isSynced);
+}
+
+class MeasurementsCompanion extends UpdateCompanion<Measurement> {
+  final Value<int> id;
+  final Value<int?> apiId;
+  final Value<double> height;
+  final Value<double> weight;
+  final Value<double> lArm;
+  final Value<double> rArm;
+  final Value<double> lHumerus;
+  final Value<double> rHumerus;
+  final Value<double> lThigh;
+  final Value<double> rThigh;
+  final Value<double> lLeg;
+  final Value<double> rLeg;
+  final Value<double> neck;
+  final Value<double> shoulders;
+  final Value<double> waist;
+  final Value<double> chest;
+  final Value<double> hips;
+  final Value<DateTime> checkDate;
+  final Value<int> version;
+  final Value<bool> isSynced;
+  const MeasurementsCompanion({
+    this.id = const Value.absent(),
+    this.apiId = const Value.absent(),
+    this.height = const Value.absent(),
+    this.weight = const Value.absent(),
+    this.lArm = const Value.absent(),
+    this.rArm = const Value.absent(),
+    this.lHumerus = const Value.absent(),
+    this.rHumerus = const Value.absent(),
+    this.lThigh = const Value.absent(),
+    this.rThigh = const Value.absent(),
+    this.lLeg = const Value.absent(),
+    this.rLeg = const Value.absent(),
+    this.neck = const Value.absent(),
+    this.shoulders = const Value.absent(),
+    this.waist = const Value.absent(),
+    this.chest = const Value.absent(),
+    this.hips = const Value.absent(),
+    this.checkDate = const Value.absent(),
+    this.version = const Value.absent(),
+    this.isSynced = const Value.absent(),
+  });
+  MeasurementsCompanion.insert({
+    this.id = const Value.absent(),
+    this.apiId = const Value.absent(),
+    required double height,
+    required double weight,
+    required double lArm,
+    required double rArm,
+    required double lHumerus,
+    required double rHumerus,
+    required double lThigh,
+    required double rThigh,
+    required double lLeg,
+    required double rLeg,
+    required double neck,
+    required double shoulders,
+    required double waist,
+    required double chest,
+    required double hips,
+    required DateTime checkDate,
+    this.version = const Value.absent(),
+    this.isSynced = const Value.absent(),
+  })  : height = Value(height),
+        weight = Value(weight),
+        lArm = Value(lArm),
+        rArm = Value(rArm),
+        lHumerus = Value(lHumerus),
+        rHumerus = Value(rHumerus),
+        lThigh = Value(lThigh),
+        rThigh = Value(rThigh),
+        lLeg = Value(lLeg),
+        rLeg = Value(rLeg),
+        neck = Value(neck),
+        shoulders = Value(shoulders),
+        waist = Value(waist),
+        chest = Value(chest),
+        hips = Value(hips),
+        checkDate = Value(checkDate);
+  static Insertable<Measurement> custom({
+    Expression<int>? id,
+    Expression<int>? apiId,
+    Expression<double>? height,
+    Expression<double>? weight,
+    Expression<double>? lArm,
+    Expression<double>? rArm,
+    Expression<double>? lHumerus,
+    Expression<double>? rHumerus,
+    Expression<double>? lThigh,
+    Expression<double>? rThigh,
+    Expression<double>? lLeg,
+    Expression<double>? rLeg,
+    Expression<double>? neck,
+    Expression<double>? shoulders,
+    Expression<double>? waist,
+    Expression<double>? chest,
+    Expression<double>? hips,
+    Expression<DateTime>? checkDate,
+    Expression<int>? version,
+    Expression<bool>? isSynced,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (apiId != null) 'api_id': apiId,
+      if (height != null) 'height': height,
+      if (weight != null) 'weight': weight,
+      if (lArm != null) 'l_arm': lArm,
+      if (rArm != null) 'r_arm': rArm,
+      if (lHumerus != null) 'l_humerus': lHumerus,
+      if (rHumerus != null) 'r_humerus': rHumerus,
+      if (lThigh != null) 'l_thigh': lThigh,
+      if (rThigh != null) 'r_thigh': rThigh,
+      if (lLeg != null) 'l_leg': lLeg,
+      if (rLeg != null) 'r_leg': rLeg,
+      if (neck != null) 'neck': neck,
+      if (shoulders != null) 'shoulders': shoulders,
+      if (waist != null) 'waist': waist,
+      if (chest != null) 'chest': chest,
+      if (hips != null) 'hips': hips,
+      if (checkDate != null) 'check_date': checkDate,
+      if (version != null) 'version': version,
+      if (isSynced != null) 'is_synced': isSynced,
+    });
+  }
+
+  MeasurementsCompanion copyWith(
+      {Value<int>? id,
+      Value<int?>? apiId,
+      Value<double>? height,
+      Value<double>? weight,
+      Value<double>? lArm,
+      Value<double>? rArm,
+      Value<double>? lHumerus,
+      Value<double>? rHumerus,
+      Value<double>? lThigh,
+      Value<double>? rThigh,
+      Value<double>? lLeg,
+      Value<double>? rLeg,
+      Value<double>? neck,
+      Value<double>? shoulders,
+      Value<double>? waist,
+      Value<double>? chest,
+      Value<double>? hips,
+      Value<DateTime>? checkDate,
+      Value<int>? version,
+      Value<bool>? isSynced}) {
+    return MeasurementsCompanion(
+      id: id ?? this.id,
+      apiId: apiId ?? this.apiId,
+      height: height ?? this.height,
+      weight: weight ?? this.weight,
+      lArm: lArm ?? this.lArm,
+      rArm: rArm ?? this.rArm,
+      lHumerus: lHumerus ?? this.lHumerus,
+      rHumerus: rHumerus ?? this.rHumerus,
+      lThigh: lThigh ?? this.lThigh,
+      rThigh: rThigh ?? this.rThigh,
+      lLeg: lLeg ?? this.lLeg,
+      rLeg: rLeg ?? this.rLeg,
+      neck: neck ?? this.neck,
+      shoulders: shoulders ?? this.shoulders,
+      waist: waist ?? this.waist,
+      chest: chest ?? this.chest,
+      hips: hips ?? this.hips,
+      checkDate: checkDate ?? this.checkDate,
+      version: version ?? this.version,
+      isSynced: isSynced ?? this.isSynced,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (apiId.present) {
+      map['api_id'] = Variable<int>(apiId.value);
+    }
+    if (height.present) {
+      map['height'] = Variable<double>(height.value);
+    }
+    if (weight.present) {
+      map['weight'] = Variable<double>(weight.value);
+    }
+    if (lArm.present) {
+      map['l_arm'] = Variable<double>(lArm.value);
+    }
+    if (rArm.present) {
+      map['r_arm'] = Variable<double>(rArm.value);
+    }
+    if (lHumerus.present) {
+      map['l_humerus'] = Variable<double>(lHumerus.value);
+    }
+    if (rHumerus.present) {
+      map['r_humerus'] = Variable<double>(rHumerus.value);
+    }
+    if (lThigh.present) {
+      map['l_thigh'] = Variable<double>(lThigh.value);
+    }
+    if (rThigh.present) {
+      map['r_thigh'] = Variable<double>(rThigh.value);
+    }
+    if (lLeg.present) {
+      map['l_leg'] = Variable<double>(lLeg.value);
+    }
+    if (rLeg.present) {
+      map['r_leg'] = Variable<double>(rLeg.value);
+    }
+    if (neck.present) {
+      map['neck'] = Variable<double>(neck.value);
+    }
+    if (shoulders.present) {
+      map['shoulders'] = Variable<double>(shoulders.value);
+    }
+    if (waist.present) {
+      map['waist'] = Variable<double>(waist.value);
+    }
+    if (chest.present) {
+      map['chest'] = Variable<double>(chest.value);
+    }
+    if (hips.present) {
+      map['hips'] = Variable<double>(hips.value);
+    }
+    if (checkDate.present) {
+      map['check_date'] = Variable<DateTime>(checkDate.value);
+    }
+    if (version.present) {
+      map['version'] = Variable<int>(version.value);
+    }
+    if (isSynced.present) {
+      map['is_synced'] = Variable<bool>(isSynced.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MeasurementsCompanion(')
+          ..write('id: $id, ')
+          ..write('apiId: $apiId, ')
+          ..write('height: $height, ')
+          ..write('weight: $weight, ')
+          ..write('lArm: $lArm, ')
+          ..write('rArm: $rArm, ')
+          ..write('lHumerus: $lHumerus, ')
+          ..write('rHumerus: $rHumerus, ')
+          ..write('lThigh: $lThigh, ')
+          ..write('rThigh: $rThigh, ')
+          ..write('lLeg: $lLeg, ')
+          ..write('rLeg: $rLeg, ')
+          ..write('neck: $neck, ')
+          ..write('shoulders: $shoulders, ')
+          ..write('waist: $waist, ')
+          ..write('chest: $chest, ')
+          ..write('hips: $hips, ')
+          ..write('checkDate: $checkDate, ')
+          ..write('version: $version, ')
+          ..write('isSynced: $isSynced')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3803,6 +4725,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $RoutineSetsTable routineSets = $RoutineSetsTable(this);
   late final $TSessionsTable tSessions = $TSessionsTable(this);
   late final $TLogsTable tLogs = $TLogsTable(this);
+  late final $MeasurementsTable measurements = $MeasurementsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3817,7 +4740,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         routineItems,
         routineSets,
         tSessions,
-        tLogs
+        tLogs,
+        measurements
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -3900,12 +4824,14 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 }
 
 typedef $$AccountsTableCreateCompanionBuilder = AccountsCompanion Function({
+  required String uid,
   required String email,
   required AccountType type,
   required DateTime createdAt,
   Value<int> rowid,
 });
 typedef $$AccountsTableUpdateCompanionBuilder = AccountsCompanion Function({
+  Value<String> uid,
   Value<String> email,
   Value<AccountType> type,
   Value<DateTime> createdAt,
@@ -3921,6 +4847,9 @@ class $$AccountsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get uid => $composableBuilder(
+      column: $table.uid, builder: (column) => ColumnFilters(column));
+
   ColumnFilters<String> get email => $composableBuilder(
       column: $table.email, builder: (column) => ColumnFilters(column));
 
@@ -3942,6 +4871,9 @@ class $$AccountsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get uid => $composableBuilder(
+      column: $table.uid, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get email => $composableBuilder(
       column: $table.email, builder: (column) => ColumnOrderings(column));
 
@@ -3961,6 +4893,9 @@ class $$AccountsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get uid =>
+      $composableBuilder(column: $table.uid, builder: (column) => column);
+
   GeneratedColumn<String> get email =>
       $composableBuilder(column: $table.email, builder: (column) => column);
 
@@ -3994,24 +4929,28 @@ class $$AccountsTableTableManager extends RootTableManager<
           createComputedFieldComposer: () =>
               $$AccountsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
+            Value<String> uid = const Value.absent(),
             Value<String> email = const Value.absent(),
             Value<AccountType> type = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               AccountsCompanion(
+            uid: uid,
             email: email,
             type: type,
             createdAt: createdAt,
             rowid: rowid,
           ),
           createCompanionCallback: ({
+            required String uid,
             required String email,
             required AccountType type,
             required DateTime createdAt,
             Value<int> rowid = const Value.absent(),
           }) =>
               AccountsCompanion.insert(
+            uid: uid,
             email: email,
             type: type,
             createdAt: createdAt,
@@ -6867,6 +7806,398 @@ typedef $$TLogsTableProcessedTableManager = ProcessedTableManager<
     (TLog, $$TLogsTableReferences),
     TLog,
     PrefetchHooks Function({bool sessionId})>;
+typedef $$MeasurementsTableCreateCompanionBuilder = MeasurementsCompanion
+    Function({
+  Value<int> id,
+  Value<int?> apiId,
+  required double height,
+  required double weight,
+  required double lArm,
+  required double rArm,
+  required double lHumerus,
+  required double rHumerus,
+  required double lThigh,
+  required double rThigh,
+  required double lLeg,
+  required double rLeg,
+  required double neck,
+  required double shoulders,
+  required double waist,
+  required double chest,
+  required double hips,
+  required DateTime checkDate,
+  Value<int> version,
+  Value<bool> isSynced,
+});
+typedef $$MeasurementsTableUpdateCompanionBuilder = MeasurementsCompanion
+    Function({
+  Value<int> id,
+  Value<int?> apiId,
+  Value<double> height,
+  Value<double> weight,
+  Value<double> lArm,
+  Value<double> rArm,
+  Value<double> lHumerus,
+  Value<double> rHumerus,
+  Value<double> lThigh,
+  Value<double> rThigh,
+  Value<double> lLeg,
+  Value<double> rLeg,
+  Value<double> neck,
+  Value<double> shoulders,
+  Value<double> waist,
+  Value<double> chest,
+  Value<double> hips,
+  Value<DateTime> checkDate,
+  Value<int> version,
+  Value<bool> isSynced,
+});
+
+class $$MeasurementsTableFilterComposer
+    extends Composer<_$AppDatabase, $MeasurementsTable> {
+  $$MeasurementsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get apiId => $composableBuilder(
+      column: $table.apiId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get weight => $composableBuilder(
+      column: $table.weight, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get lArm => $composableBuilder(
+      column: $table.lArm, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get rArm => $composableBuilder(
+      column: $table.rArm, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get lHumerus => $composableBuilder(
+      column: $table.lHumerus, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get rHumerus => $composableBuilder(
+      column: $table.rHumerus, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get lThigh => $composableBuilder(
+      column: $table.lThigh, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get rThigh => $composableBuilder(
+      column: $table.rThigh, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get lLeg => $composableBuilder(
+      column: $table.lLeg, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get rLeg => $composableBuilder(
+      column: $table.rLeg, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get neck => $composableBuilder(
+      column: $table.neck, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get shoulders => $composableBuilder(
+      column: $table.shoulders, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get waist => $composableBuilder(
+      column: $table.waist, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get chest => $composableBuilder(
+      column: $table.chest, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get hips => $composableBuilder(
+      column: $table.hips, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get checkDate => $composableBuilder(
+      column: $table.checkDate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get version => $composableBuilder(
+      column: $table.version, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnFilters(column));
+}
+
+class $$MeasurementsTableOrderingComposer
+    extends Composer<_$AppDatabase, $MeasurementsTable> {
+  $$MeasurementsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get apiId => $composableBuilder(
+      column: $table.apiId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get weight => $composableBuilder(
+      column: $table.weight, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get lArm => $composableBuilder(
+      column: $table.lArm, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get rArm => $composableBuilder(
+      column: $table.rArm, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get lHumerus => $composableBuilder(
+      column: $table.lHumerus, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get rHumerus => $composableBuilder(
+      column: $table.rHumerus, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get lThigh => $composableBuilder(
+      column: $table.lThigh, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get rThigh => $composableBuilder(
+      column: $table.rThigh, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get lLeg => $composableBuilder(
+      column: $table.lLeg, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get rLeg => $composableBuilder(
+      column: $table.rLeg, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get neck => $composableBuilder(
+      column: $table.neck, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get shoulders => $composableBuilder(
+      column: $table.shoulders, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get waist => $composableBuilder(
+      column: $table.waist, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get chest => $composableBuilder(
+      column: $table.chest, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get hips => $composableBuilder(
+      column: $table.hips, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get checkDate => $composableBuilder(
+      column: $table.checkDate, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get version => $composableBuilder(
+      column: $table.version, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnOrderings(column));
+}
+
+class $$MeasurementsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $MeasurementsTable> {
+  $$MeasurementsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get apiId =>
+      $composableBuilder(column: $table.apiId, builder: (column) => column);
+
+  GeneratedColumn<double> get height =>
+      $composableBuilder(column: $table.height, builder: (column) => column);
+
+  GeneratedColumn<double> get weight =>
+      $composableBuilder(column: $table.weight, builder: (column) => column);
+
+  GeneratedColumn<double> get lArm =>
+      $composableBuilder(column: $table.lArm, builder: (column) => column);
+
+  GeneratedColumn<double> get rArm =>
+      $composableBuilder(column: $table.rArm, builder: (column) => column);
+
+  GeneratedColumn<double> get lHumerus =>
+      $composableBuilder(column: $table.lHumerus, builder: (column) => column);
+
+  GeneratedColumn<double> get rHumerus =>
+      $composableBuilder(column: $table.rHumerus, builder: (column) => column);
+
+  GeneratedColumn<double> get lThigh =>
+      $composableBuilder(column: $table.lThigh, builder: (column) => column);
+
+  GeneratedColumn<double> get rThigh =>
+      $composableBuilder(column: $table.rThigh, builder: (column) => column);
+
+  GeneratedColumn<double> get lLeg =>
+      $composableBuilder(column: $table.lLeg, builder: (column) => column);
+
+  GeneratedColumn<double> get rLeg =>
+      $composableBuilder(column: $table.rLeg, builder: (column) => column);
+
+  GeneratedColumn<double> get neck =>
+      $composableBuilder(column: $table.neck, builder: (column) => column);
+
+  GeneratedColumn<double> get shoulders =>
+      $composableBuilder(column: $table.shoulders, builder: (column) => column);
+
+  GeneratedColumn<double> get waist =>
+      $composableBuilder(column: $table.waist, builder: (column) => column);
+
+  GeneratedColumn<double> get chest =>
+      $composableBuilder(column: $table.chest, builder: (column) => column);
+
+  GeneratedColumn<double> get hips =>
+      $composableBuilder(column: $table.hips, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get checkDate =>
+      $composableBuilder(column: $table.checkDate, builder: (column) => column);
+
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<bool> get isSynced =>
+      $composableBuilder(column: $table.isSynced, builder: (column) => column);
+}
+
+class $$MeasurementsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $MeasurementsTable,
+    Measurement,
+    $$MeasurementsTableFilterComposer,
+    $$MeasurementsTableOrderingComposer,
+    $$MeasurementsTableAnnotationComposer,
+    $$MeasurementsTableCreateCompanionBuilder,
+    $$MeasurementsTableUpdateCompanionBuilder,
+    (
+      Measurement,
+      BaseReferences<_$AppDatabase, $MeasurementsTable, Measurement>
+    ),
+    Measurement,
+    PrefetchHooks Function()> {
+  $$MeasurementsTableTableManager(_$AppDatabase db, $MeasurementsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$MeasurementsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$MeasurementsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$MeasurementsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int?> apiId = const Value.absent(),
+            Value<double> height = const Value.absent(),
+            Value<double> weight = const Value.absent(),
+            Value<double> lArm = const Value.absent(),
+            Value<double> rArm = const Value.absent(),
+            Value<double> lHumerus = const Value.absent(),
+            Value<double> rHumerus = const Value.absent(),
+            Value<double> lThigh = const Value.absent(),
+            Value<double> rThigh = const Value.absent(),
+            Value<double> lLeg = const Value.absent(),
+            Value<double> rLeg = const Value.absent(),
+            Value<double> neck = const Value.absent(),
+            Value<double> shoulders = const Value.absent(),
+            Value<double> waist = const Value.absent(),
+            Value<double> chest = const Value.absent(),
+            Value<double> hips = const Value.absent(),
+            Value<DateTime> checkDate = const Value.absent(),
+            Value<int> version = const Value.absent(),
+            Value<bool> isSynced = const Value.absent(),
+          }) =>
+              MeasurementsCompanion(
+            id: id,
+            apiId: apiId,
+            height: height,
+            weight: weight,
+            lArm: lArm,
+            rArm: rArm,
+            lHumerus: lHumerus,
+            rHumerus: rHumerus,
+            lThigh: lThigh,
+            rThigh: rThigh,
+            lLeg: lLeg,
+            rLeg: rLeg,
+            neck: neck,
+            shoulders: shoulders,
+            waist: waist,
+            chest: chest,
+            hips: hips,
+            checkDate: checkDate,
+            version: version,
+            isSynced: isSynced,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int?> apiId = const Value.absent(),
+            required double height,
+            required double weight,
+            required double lArm,
+            required double rArm,
+            required double lHumerus,
+            required double rHumerus,
+            required double lThigh,
+            required double rThigh,
+            required double lLeg,
+            required double rLeg,
+            required double neck,
+            required double shoulders,
+            required double waist,
+            required double chest,
+            required double hips,
+            required DateTime checkDate,
+            Value<int> version = const Value.absent(),
+            Value<bool> isSynced = const Value.absent(),
+          }) =>
+              MeasurementsCompanion.insert(
+            id: id,
+            apiId: apiId,
+            height: height,
+            weight: weight,
+            lArm: lArm,
+            rArm: rArm,
+            lHumerus: lHumerus,
+            rHumerus: rHumerus,
+            lThigh: lThigh,
+            rThigh: rThigh,
+            lLeg: lLeg,
+            rLeg: rLeg,
+            neck: neck,
+            shoulders: shoulders,
+            waist: waist,
+            chest: chest,
+            hips: hips,
+            checkDate: checkDate,
+            version: version,
+            isSynced: isSynced,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$MeasurementsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $MeasurementsTable,
+    Measurement,
+    $$MeasurementsTableFilterComposer,
+    $$MeasurementsTableOrderingComposer,
+    $$MeasurementsTableAnnotationComposer,
+    $$MeasurementsTableCreateCompanionBuilder,
+    $$MeasurementsTableUpdateCompanionBuilder,
+    (
+      Measurement,
+      BaseReferences<_$AppDatabase, $MeasurementsTable, Measurement>
+    ),
+    Measurement,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -6891,4 +8222,6 @@ class $AppDatabaseManager {
       $$TSessionsTableTableManager(_db, _db.tSessions);
   $$TLogsTableTableManager get tLogs =>
       $$TLogsTableTableManager(_db, _db.tLogs);
+  $$MeasurementsTableTableManager get measurements =>
+      $$MeasurementsTableTableManager(_db, _db.measurements);
 }

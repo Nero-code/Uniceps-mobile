@@ -65,7 +65,8 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                     enabled: state.maybeWhen(
                         initial: () => true,
                         error: (f) => f.when(
-                            offline: () => true,
+                            aOffline: () => true,
+                            invalidEmailFailure: () => true,
                             invalidCodeFailure: () => false,
                             unautherizedFailure: () => false),
                         orElse: () => false),
@@ -96,7 +97,8 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                       codeSent: () => true,
                       authenticated: () => false,
                       error: (f) => f.when(
-                          offline: () => true,
+                          aOffline: () => true,
+                          invalidEmailFailure: () => false,
                           invalidCodeFailure: () => true,
                           unautherizedFailure: () => false),
                       loading: () => false,
@@ -120,31 +122,33 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                   SizedBox(
                     width: screen.width,
                     child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal,
-                          foregroundColor: Colors.white),
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.teal, foregroundColor: Colors.white),
                       onPressed: state.when(
-                        initial: () => () => context.read<AuthBloc>().add(
-                            AuthEvent.requestEmailAuth(
-                                emailController.text.trim().toLowerCase())),
-                        codeSent: () => (() => context.read<AuthBloc>().add(
-                            AuthEvent.verifyCode(
-                                emailController.text.trim().toLowerCase(),
-                                codeController.text))),
+                        initial: () => () => context
+                            .read<AuthBloc>()
+                            .add(AuthEvent.requestEmailAuth(emailController.text.trim().toLowerCase())),
+                        codeSent: () => (() => context
+                            .read<AuthBloc>()
+                            .add(AuthEvent.verifyCode(emailController.text.trim().toLowerCase(), codeController.text))),
                         error: (f) => f.when(
-                          offline: () => () => (codeController.text.isEmpty)
+                          // Offline
+                          aOffline: () => () => (codeController.text.isEmpty)
                               ? AuthEvent.requestEmailAuth(
                                   emailController.text.trim().toLowerCase(),
                                 )
                               : context.read<AuthBloc>().add(
-                                  AuthEvent.verifyCode(
-                                      emailController.text.trim().toLowerCase(),
-                                      codeController.text)),
-                          invalidCodeFailure: () => () => context
-                              .read<AuthBloc>()
-                              .add(AuthEvent.verifyCode(
-                                  emailController.text.trim().toLowerCase(),
-                                  codeController.text)),
+                                  AuthEvent.verifyCode(emailController.text.trim().toLowerCase(), codeController.text)),
+
+                          // InvalidEmailFailure
+                          invalidEmailFailure: () => () => AuthEvent.requestEmailAuth(
+                                emailController.text.trim().toLowerCase(),
+                              ),
+
+                          // InvalidCodeFailure
+                          invalidCodeFailure: () => () => context.read<AuthBloc>().add(
+                              AuthEvent.verifyCode(emailController.text.trim().toLowerCase(), codeController.text)),
+
+                          // UnautherizedFailure
                           unautherizedFailure: () => null,
                         ),
                         authenticated: () => null,
@@ -153,9 +157,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                       icon: SizedBox.square(
                         dimension: 15,
                         child: state.maybeWhen(
-                            loading: () => const CircularProgressIndicator(
-                                strokeWidth: 2.0),
-                            orElse: () => null),
+                            loading: () => const CircularProgressIndicator(strokeWidth: 2.0), orElse: () => null),
                       ),
                       label: Text(
                         locale.signin,
@@ -175,6 +177,5 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
     );
   }
 
-  void unfocus(PointerDownEvent event) =>
-      FocusManager.instance.primaryFocus?.unfocus();
+  void unfocus(PointerDownEvent event) => FocusManager.instance.primaryFocus?.unfocus();
 }

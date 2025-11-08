@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uniceps/app/data/models/routine_models/extensions.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart';
-// import 'package:uniceps/app/data/sources/remote/dal_routine/routine_management_remote_source.dart';
 import 'package:uniceps/app/data/sources/services/client_helper.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_management_contract.dart';
@@ -36,11 +35,21 @@ class RoutineManagementRepo implements IRoutineManagementContract {
     }
   }
 
+  // @override
+  // Future<Either<Failure, List<({RoutineHeat heat, Routine routine})>>> getAllRoutinesWithHeat() async {
+  //   try {
+  //     final res = await _localSource.getAllRoutines();
+  //     routines.clear();
+  //     routines.addAll(res.map((r) => r.toEntity()));
+  //     return Right(routines.map((r) => (routine: r, heat: RoutineHeat.cold(r.name))).toList());
+  //   } catch (e) {
+  //     return const Left(EmptyCacheFailure(errorMessage: ""));
+  //   }
+  // }
+
   @override
-  Future<Either<Failure, List<Routine>>> createRoutine(
-      String routineName) async {
+  Future<Either<Failure, List<Routine>>> createRoutine(String routineName) async {
     try {
-      print("create routine => inside repo");
       final res = await _localSource.createRoutine(routineName);
       routines.add(res.toEntity());
       return Right(routines);
@@ -79,20 +88,30 @@ class RoutineManagementRepo implements IRoutineManagementContract {
   }
 
   @override
-  Future<Either<Failure, List<Routine>>> setCurrentRoutine(
-      Routine routine) async {
+  Future<Either<Failure, List<Routine>>> setCurrentRoutine(Routine routine) async {
     try {
-      final res = await _localSource.setCurrentRoutine(routine.toDto());
-      return Right(res.map((r) => r.toEntity()).toList());
-      // return Right(res.map((r) => r.fromDto()).toList());
+      await _localSource.setCurrentRoutine(routine.toDto());
+
+      for (int i = 0; i < routines.length; i++) {
+        if (routines[i].isCurrent) {
+          routines[i] = routines[i].copyWith(isCurrent: false);
+        } else if (routines[i].id == routine.id) {
+          routines[i] = routine.copyWith(isCurrent: true);
+        }
+
+        // This line is the result of reducing the above lines (but has performance issues!).
+        //
+        //   `routines[i]= routines[i].copyWith(isCurrent: routines[i].id == routine.id);`
+      }
+
+      return Right(routines);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> shareRoutine(
-      Routine routine, int userId) async {
+  Future<Either<Failure, Unit>> shareRoutine(Routine routine, int userId) async {
     try {
       await _localSource.shareRoutine(routine.toDto());
       return const Right(unit);

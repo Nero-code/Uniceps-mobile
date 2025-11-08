@@ -24,7 +24,9 @@
   "skip": "SKIP >",
   "confirm": "Confirm",
   "add": "Add",
+  "edit": "Edit",
   "update": "Update",
+  "reorder": "Reorder",
   "newVersion": "New Version Available",
   "save": "Save",
   "level": "Level:",
@@ -37,7 +39,13 @@
   "download":"Download",
   "rename": "Rename",
   "setCurrent": "Set Current",
+  "remove": "Remove",
   "delete": "Delete",
+  "finish": "Finish",
+  "finishAlertContent": "have you finished training? this session will be closed and marked as finished!",
+  "welldone": "🎉 Well Done!",
+  "great": "Great!",
+  
   
   "price": "Price",
   "discount":"Discount",
@@ -59,7 +67,7 @@
   "scrTitleProfile": "Profile",
   "scrTitleSettings": "Settings",
   "scrTitlePerformance": "Performance",
-  "setsAndRound":"Sets & Rounds",
+  "setsAndRounds":"Sets & Rounds",
 
   "chooseLang": "Choose Language:",
   "about": "About",
@@ -104,14 +112,14 @@
   "emptySubs": "No Subscriptions",
   "emptyMeasure": "No Measurements",
   "emptyExcercises": "No Exercises",
-  "emptySubscriptions":"No Subscriptions yet",
-  "emptyMeasurements":"No Measurements yet",
-  "emptyExercisesList":"No Exercises in this Group",
-  "emptyGymsList":"No Gyms Available",
-  "emptyHandshakes":"you are not a member of any gym",
-  "emptyTriningDaysMap":"No Training Program yet",
-  "emptyHomeCard":"No Gym Specified, select a gym to load data",
-  "emptyAttendence":"Not a member",
+  "emptySubscriptions": "No Subscriptions yet",
+  "emptyMeasurements": "No Measurements yet",
+  "emptyExercisesList": "No Exercises in this Group",
+  "emptyGymsList": "No Gyms Available",
+  "emptyHandshakes": "you are not a member of any gym",
+  "emptyTriningDaysMap": "No Training Program yet",
+  "emptyHomeCard": "No Gym Specified, select a gym to load data",
+  "emptyAttendence": "Not a member",
   "emptyRoutineItems": "no items, try the (+) button",
   
   "error": "something went wrong",
@@ -223,5 +231,6 @@
 
   "signinAlert": "Sign in to see all features",
   "upgrade": "Upgrade",
-  "upgradeAlert": "Become a Premium Member to unlock your FULL potential"
+  "upgradeAlert": "Become a Premium Member to unlock your FULL potential",
+  "premiumAlertContent": "Unlock ALL content with Premium"
 }

@@ -14,8 +14,7 @@ final class RoutineManagementLoadingState extends RoutineManagementState {}
 final class RoutineManagementLoadedState extends RoutineManagementState {
   final int version;
   final List<Routine> routines;
-  const RoutineManagementLoadedState(
-      {required this.routines, this.version = 0});
+  const RoutineManagementLoadedState({required this.routines, this.version = 0});
 
   @override
   List<Object> get props => [routines.length, version];

@@ -69,16 +69,14 @@ class _RoutineEditSetsScreenState extends State<RoutineEditSetsScreen> {
                   builder: (context, state) {
                     return Column(
                       children: [
-                        Text(locale.setsAndRound),
+                        Text(locale.setsAndRounds),
                         if (state is SetsEditLoadedState)
                           FocusScope(
                             node: _focusScopeNode,
                             child: Column(
                               children: [
                                 for (int i = 0; i < state.sets.length; i++)
-                                  SetWidget(
-                                      set: state.sets[i],
-                                      isLast: i == state.sets.length - 1),
+                                  SetWidget(set: state.sets[i], isLast: i == state.sets.length - 1),
                               ],
                             ),
                           ),
@@ -90,9 +88,7 @@ class _RoutineEditSetsScreenState extends State<RoutineEditSetsScreen> {
                                 onPressed: state is SetsEditLoadingState
                                     ? null
                                     : () {
-                                        context.read<SetsEditBloc>().add(
-                                            AddSetEvent(
-                                                itemId: widget.item.id!));
+                                        context.read<SetsEditBloc>().add(AddSetEvent(itemId: widget.item.id!));
                                       },
                                 child: state is SetsEditLoadingState
                                     ? const SizedBox(

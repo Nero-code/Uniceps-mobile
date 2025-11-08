@@ -35,17 +35,16 @@ String encodeTranslations(Map<Lang, String> trans) => jsonEncode(trans.map(
 
 Map<Lang, String> parseTranslations(String muscleGroupTranslations) {
   final dec = jsonDecode(muscleGroupTranslations) as Map;
-  return dec.map<Lang, String>(
-      (key, value) => MapEntry(parseLang(key), value.toString()));
+  return dec.map<Lang, String>((key, value) => MapEntry(parseLang(key), value.toString()));
 }
 
 Lang parseLang(String lang) => Lang.values.firstWhere((l) => l.name == lang);
 
 enum ThemeType { light, dark }
 
-const List<String> languageCodes = ['ar', 'en'];
+// const List<String> languageCodes = ['ar', 'en'];
 
-const DATE_PATTERN = "dd/MM/yyyy";
+// const DATE_PATTERN = "dd/MM/yyyy";
 
 final trSections = [
   const MuscleGroup(
@@ -118,6 +117,8 @@ const IMG_CAP_MOTIVE = "images/cap_uni/cap_motive.png";
 const IMG_CAP_MEMBERSHIP = "images/cap_uni/cap_membership.png";
 const IMG_CAP_SELECT_DAY = "images/cap_uni/cap_select_day.png";
 
+const IMG_PREMIUM = "images/photos/premium.png";
+
 ///
 ///
 ///   A P I - U R L S
@@ -138,13 +139,9 @@ final HEADERS = {
 /// TESTING URL
 // const API = Env.baseUrl;
 
-const API = kDebugMode || kProfileMode
-    ? r"https://uniceps.runasp.net/api"
-    : r"https://uniceps.trio-verse.com/api/v1";
+const API = kDebugMode || kProfileMode ? r"https://uniceps.runasp.net/api" : r"https://uniceps.trio-verse.com/api/v1";
 
-const API_V2 = kDebugMode || kProfileMode
-    ? r"uniceps.runasp.net"
-    : r"uniceps.trio-verse.com/api/v1";
+const API_V2 = kDebugMode || kProfileMode ? r"uniceps.runasp.net" : r"uniceps.trio-verse.com/api/v1";
 
 /// PRODUCTION URL
 // const API = r"https://uniceps.trio-verse.com/api/v1";

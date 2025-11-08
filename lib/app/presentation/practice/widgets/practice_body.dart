@@ -3,7 +3,7 @@ import 'package:uniceps/app/domain/classes/practice_entities/t_log.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
 import 'package:uniceps/app/presentation/practice/widgets/round_widget.dart';
 
-class PracticeBody extends StatefulWidget {
+class PracticeBody extends StatelessWidget {
   const PracticeBody({
     super.key,
     required this.sessionId,
@@ -11,29 +11,28 @@ class PracticeBody extends StatefulWidget {
     required this.exIndex,
     required this.sets,
     required this.logs,
+    required this.totalProgress,
   });
   final int sessionId;
   final int exId;
   final int exIndex;
   final List<RoutineSet> sets;
   final List<TLog> logs;
+  final int totalProgress;
 
-  @override
-  State<PracticeBody> createState() => _PracticeBodyState();
-}
-
-class _PracticeBodyState extends State<PracticeBody> {
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: widget.sets.map((i) {
+      children: sets.map((i) {
         return RoundWidget(
-          sessionId: widget.sessionId,
-          exId: widget.exId,
-          exIndex: widget.exIndex,
+          onLog: () {},
+          totalProgress: totalProgress,
+          sessionId: sessionId,
+          exId: exId,
+          exIndex: exIndex,
           set: i,
-          log: widget.logs.where((l) => l.setIndex == i.index).firstOrNull,
+          log: logs.where((l) => l.setIndex == i.index).firstOrNull,
         );
       }).toList(),
     );

@@ -20,15 +20,11 @@ extension ExerciseV2Extension on ExerciseV2 {
 }
 
 //
-//
-//
 
 extension RoutineSetExtension on RoutineSet {
   RoutineSetDto toDto() => RoutineSetDto.fromEntity(this);
 }
 
-//
-//
 //
 
 extension RoutineItemExtension on RoutineItem {
@@ -36,15 +32,11 @@ extension RoutineItemExtension on RoutineItem {
 }
 
 //
-//
-//
 
 extension DaysExtension on RoutineDay {
   RoutineDayDto toDto() => RoutineDayDto.fromEntity(this);
 }
 
-//
-//
 //
 
 extension RoutineExtension on Routine {

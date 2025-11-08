@@ -6,12 +6,12 @@ import 'package:uniceps/app/domain/classes/practice_entities/t_log.dart';
 import 'package:uniceps/app/domain/classes/practice_entities/t_session.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
 import 'package:uniceps/app/domain/contracts/practice_repo/practice_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class PracticeRepo implements IPracticeContract {
-  PracticeRepo({required ITSessionLocalSourceContract localSource})
-      : _localSource = localSource;
+  PracticeRepo({required ITSessionLocalSourceContract localSource}) : _localSource = localSource;
   final ITSessionLocalSourceContract _localSource;
 
   TSessionModel? _session;
@@ -64,18 +64,20 @@ class PracticeRepo implements IPracticeContract {
   }
 
   @override
-  Future<Either<Failure, TSession>> logSetComplete(TLog log) async {
+  Future<Either<Failure, TSession>> logSetComplete(TLog log, double progress) async {
     if (_session == null) {
       return const Left(EmptyCacheFailure(errorMessage: "Null TSession!!!"));
     }
 
     try {
-      final res = await _localSource.logSet(log.asDto());
+      final totalProgress = _session!.progress + progress;
+      final res = await _localSource.logSet(log.asDto(), totalProgress);
 
       final oldLogIndex = _session!.logs.indexWhere((e) => e.id! == res.id!);
       if (oldLogIndex == -1) {
         // if logs doesn't contain log, Then add it.
         _session!.logs.add(res);
+        _session = _session!.copywith(progress: totalProgress);
       } else {
         // else update it.
         _session!.logs[oldLogIndex] = res;
@@ -88,13 +90,26 @@ class PracticeRepo implements IPracticeContract {
   }
 
   @override
-  Future<Either<Failure, Unit>> finishTrainingSession(TSession session) async {
+  Future<Either<Failure, Unit>> finishTrainingSession(TSession session, bool full) async {
     try {
-      await _localSource.finishTrainingSession(session.asDto());
+      await _localSource.finishTrainingSession(session.asDto(), full);
       _session = null;
       return const Right(unit);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Tuple2<Routine, RoutineHeat?>>> getCurrentRoutineWithHeat() async {
+    try {
+      final res = await _localSource.getCurrentRoutineWithHeat();
+      if (res.head != null) {
+        return Right(Tuple2(res.head!.toEntity(), res.tail));
+      }
+      return const Left(EmptyCacheFailure(errorMessage: ""));
+    } catch (e) {
+      return Left(DatabaseFailure(errorMsg: ""));
     }
   }
 }

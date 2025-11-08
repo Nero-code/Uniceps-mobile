@@ -43,14 +43,12 @@ class EmailAuthRepo implements IOTPAuthRepo {
         return const Left(AuthFailure.unautherizedFailure());
       }
     }
-    return const Left(AuthFailure.offline());
+    return const Left(AuthFailure.aOffline());
   }
 
   @override
   Future<Either<AuthFailure, Unit>> validateOTP(
-      {required String credential,
-      required String otp,
-      AccountType accountType = AccountType.normal}) async {
+      {required String credential, required String otp, AccountType accountType = AccountType.normal}) async {
     if (await connection.hasConnection) {
       try {
         final res = await otpAuthSource.validateOTP(
@@ -61,11 +59,8 @@ class EmailAuthRepo implements IOTPAuthRepo {
 
         await Future.wait([
           tokenService.saveAccessToken(res['token']),
-          accountLocalSource.saveUserAccount(AccountModel(
-              uid: res['id'],
-              email: credential,
-              createdAt: DateTime.now(),
-              type: accountType))
+          accountLocalSource.saveUserAccount(
+              AccountModel(uid: res['id'], email: credential, createdAt: DateTime.now(), type: accountType))
         ]);
 
         return const Right(unit);
@@ -74,6 +69,6 @@ class EmailAuthRepo implements IOTPAuthRepo {
         return const Left(AuthFailure.invalidCodeFailure());
       }
     }
-    return const Left(AuthFailure.offline());
+    return const Left(AuthFailure.aOffline());
   }
 }

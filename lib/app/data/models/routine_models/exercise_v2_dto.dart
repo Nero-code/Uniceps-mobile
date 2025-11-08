@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart'
-    as ex;
+import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart' as ex;
 import 'package:uniceps/core/constants/constants.dart';
 
 class ExerciseV2Dto {
@@ -48,21 +45,19 @@ class ExerciseV2Dto {
       apiId: json['id'],
       muscleGroupId: json['muscleGroupId'],
       name: json['name'],
-      muscleGroupTranslations: {},
+      muscleGroupTranslations: json['muscleGroupTranslations'] ?? {},
       imageUrl: json['imageUrl'],
       imageBitMap: null,
     );
   }
 
-  factory ExerciseV2Dto.fromTable(Exercise exercise, ExerciseGroup group,
-          String imageUrl, Uint8List? imageBitMap) =>
+  factory ExerciseV2Dto.fromTable(Exercise exercise, ExerciseGroup group, String imageUrl, Uint8List? imageBitMap) =>
       ExerciseV2Dto(
           id: exercise.id,
           apiId: exercise.apiId,
           muscleGroupId: group.apiId,
           name: exercise.name,
-          muscleGroupTranslations:
-              parseTranslations(group.muscleGroupTranslations),
+          muscleGroupTranslations: parseTranslations(group.muscleGroupTranslations),
           imageUrl: imageUrl,
           imageBitMap: imageBitMap);
 
@@ -80,8 +75,7 @@ class ExerciseV2Dto {
           apiId: apiId ?? this.apiId,
           muscleGroupId: muscleGroupId ?? this.muscleGroupId,
           name: name ?? this.name,
-          muscleGroupTranslations:
-              muscleGroupTranslations ?? this.muscleGroupTranslations,
+          muscleGroupTranslations: muscleGroupTranslations ?? this.muscleGroupTranslations,
           imageUrl: imageUrl ?? this.imageUrl,
           imageBitMap: imageBitMap ?? this.imageBitMap);
 
@@ -90,7 +84,7 @@ class ExerciseV2Dto {
         'apiId': apiId,
         'muscleGroupId': muscleGroupId,
         'name': name,
-        'muscleGroupTranslations': jsonEncode(muscleGroupTranslations),
+        'muscleGroupTranslations': encodeTranslations(muscleGroupTranslations),
         'imageUrl': imageUrl,
         'imageBitMap': imageBitMap,
       };

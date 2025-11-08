@@ -53,8 +53,6 @@ class PracticePanel extends StatelessWidget {
                       dimension: 140,
                       child: CircularProgressIndicator(
                         strokeCap: StrokeCap.round,
-                        // color: Colors.blue.shade200,
-
                         color: Theme.of(context).colorScheme.secondary,
                         strokeWidth: 5,
                         value: state.maybeWhen(
@@ -68,7 +66,8 @@ class PracticePanel extends StatelessWidget {
                       width: largeBtnSize,
                       height: largeBtnSize,
                       background: const Color.fromARGB(29, 154, 178, 190),
-                      // background: Color.fromARGB(37, 76, 175, 137),
+                      // background: const Color.fromARGB(255, 226, 237, 243),
+                      border: Border.all(width: 0.5, color: Colors.grey),
                       onTap: onPractice,
                       child: mainIcon,
                     ),
@@ -78,8 +77,7 @@ class PracticePanel extends StatelessWidget {
             ),
           ),
           Align(
-            alignment:
-                Alignment.lerp(Alignment.bottomLeft, Alignment.topCenter, .20)!,
+            alignment: Alignment.lerp(Alignment.bottomLeft, Alignment.topCenter, .20)!,
             child: BoxButton(
               isCircle: true,
               width: smallBtnSize,
@@ -94,8 +92,7 @@ class PracticePanel extends StatelessWidget {
             ),
           ),
           Align(
-            alignment: Alignment.lerp(
-                Alignment.bottomRight, Alignment.topCenter, .20)!,
+            alignment: Alignment.lerp(Alignment.bottomRight, Alignment.topCenter, .20)!,
             child: BoxButton(
               isCircle: true,
               width: smallBtnSize,
@@ -111,8 +108,7 @@ class PracticePanel extends StatelessWidget {
             ),
           ),
           Align(
-            alignment:
-                Alignment.lerp(Alignment.topLeft, Alignment.topCenter, 0.2)!,
+            alignment: Alignment.lerp(Alignment.topLeft, Alignment.topCenter, 0.2)!,
             child: BoxButton(
               isCircle: true,
               width: smallBtnSize,
@@ -138,8 +134,7 @@ class PracticePanel extends StatelessWidget {
             ),
           ),
           Align(
-            alignment:
-                Alignment.lerp(Alignment.topRight, Alignment.topCenter, 0.2)!,
+            alignment: Alignment.lerp(Alignment.topRight, Alignment.topCenter, 0.2)!,
             child: const LevelIndicator(size: 60),
           ),
         ],

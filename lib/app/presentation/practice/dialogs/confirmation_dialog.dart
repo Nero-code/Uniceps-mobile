@@ -8,17 +8,14 @@ class ConfirmationDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     return AlertDialog(
-      title: const Text("exit?"), // TODO: Translate
-      content: const Text(
-          "have you finihsed training? this session will be marked as finished!"), // TODO: Translate
+      title: Text(locale.finish),
+      content: Text(locale.finishAlertContent),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, false),
           child: Text(locale.cancel),
         ),
-        ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(locale.confirm)),
+        ElevatedButton(onPressed: () => Navigator.pop(context, true), child: Text(locale.confirm)),
       ],
     );
   }

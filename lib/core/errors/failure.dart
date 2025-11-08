@@ -4,16 +4,23 @@ part 'failure.freezed.dart';
 
 @freezed
 class AuthFailure with _$AuthFailure {
-  const factory AuthFailure.offline() = _Offline;
+  const factory AuthFailure.aOffline() = _AOffline;
+  const factory AuthFailure.invalidEmailFailure() = _InvalidEmailFailure;
   const factory AuthFailure.invalidCodeFailure() = _InvalidCodeFailure;
   const factory AuthFailure.unautherizedFailure() = _UnautherizedFailure;
 }
 
 @freezed
 class MembershipFailure with _$MembershipFailure {
+  const factory MembershipFailure.mmOffline() = _MmOffline;
   const factory MembershipFailure.cantGetPlan() = _CantGetPlan;
 }
 
+@freezed
+class MeasurementFailure with _$MeasurementFailure {
+  const factory MeasurementFailure.msOffline() = _MsOffline;
+  const factory MeasurementFailure.noRecords() = _NoRecords;
+}
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
@@ -29,8 +36,7 @@ abstract class Failure {
 class GeneralPurposFailure implements Failure {
   final String _errorMessage;
 
-  GeneralPurposFailure({required String errorMessage})
-      : _errorMessage = errorMessage;
+  GeneralPurposFailure({required String errorMessage}) : _errorMessage = errorMessage;
 
   @override
   String getErrorMessage() {

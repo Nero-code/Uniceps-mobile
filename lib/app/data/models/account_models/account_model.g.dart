@@ -7,7 +7,7 @@ part of 'account_model.dart';
 // **************************************************************************
 
 AccountModel _$AccountModelFromJson(Map<String, dynamic> json) => AccountModel(
-      uid: '',
+      uid: json['id'] as String,
       email: json['email'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       type: $enumDecode(_$AccountTypeEnumMap, json['type']),
@@ -15,6 +15,7 @@ AccountModel _$AccountModelFromJson(Map<String, dynamic> json) => AccountModel(
 
 Map<String, dynamic> _$AccountModelToJson(AccountModel instance) =>
     <String, dynamic>{
+      'id': instance.uid,
       'email': instance.email,
       'createdAt': instance.createdAt.toIso8601String(),
       'type': _$AccountTypeEnumMap[instance.type]!,

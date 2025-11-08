@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/app/presentation/blocs/gyms/gyms_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/measurement/measurment_bloc.dart';
+import 'package:uniceps/app/presentation/measurement/blocs/measurement/measurment_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';
-import 'package:uniceps/app/presentation/screens/profile/settings/screens/measurement_screen.dart';
+import 'package:uniceps/app/presentation/measurement/screens/measurement_screen.dart';
 import 'package:uniceps/app/presentation/screens/profile/settings/widgets/profile_back_circle.dart';
 import 'package:uniceps/app/presentation/screens/profile/settings/widgets/settings_tile.dart';
 import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
@@ -65,10 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 children: [
                                   Text(
                                     state.player.name,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall!
-                                        .copyWith(
+                                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white70,
                                         ),
@@ -80,14 +77,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   //   ),
                                   // ),
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.07,
+                                    height: MediaQuery.of(context).size.height * 0.07,
                                   ),
                                   Container(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color:
-                                          Theme.of(context).colorScheme.surface,
+                                      color: Theme.of(context).colorScheme.surface,
                                     ),
                                     padding: const EdgeInsets.all(30),
                                     child: const Image(
@@ -101,13 +96,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               return ReloadScreenWidget(
                                 f: state.failure,
                                 callBack: () {
-                                  BlocProvider.of<ProfileBloc>(context)
-                                      .add(const GetProfileDataEvent());
+                                  BlocProvider.of<ProfileBloc>(context).add(const GetProfileDataEvent());
                                 },
                               );
                             } else if (state is ProfileSubmittedState) {
-                              BlocProvider.of<ProfileBloc>(context)
-                                  .add(const GetProfileDataEvent());
+                              BlocProvider.of<ProfileBloc>(context).add(const GetProfileDataEvent());
                             }
                             return const CircularProgressIndicator();
                           },
@@ -143,10 +136,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   title: local.gyms,
                                   subtitle: "yoyoyoyo",
                                   onPressed: () {
-                                    BlocProvider.of<GymsBloc>(context)
-                                        .add(const GetAllAvailableGymsEvent());
-                                    Navigator.of(context)
-                                        .pushNamed(ROUTE_GYMS_LIST);
+                                    BlocProvider.of<GymsBloc>(context).add(const GetAllAvailableGymsEvent());
+                                    Navigator.of(context).pushNamed(ROUTE_GYMS_LIST);
                                   },
                                 ),
                               ],
@@ -161,12 +152,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     // onPressed: () => Navigator.of(context)
                                     //     .pushNamed(ROUTE_MEASUREMENTS),
                                     onPressed: () {
-                                      BlocProvider.of<MeasurmentBloc>(context)
-                                          .add(GetMeasurementsEvent());
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                        builder: (context) =>
-                                            const MeasurementScreen3(),
+                                      BlocProvider.of<MeasurementBloc>(context).add(GetMeasurementsEvent());
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => const MeasurementScreen(),
                                       ));
                                     }),
                                 SettingsTile(
@@ -184,21 +172,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           children: [
                                             for (var i in Lang.values)
                                               RadioListTile(
-                                                  title: Text(i == Lang.en
-                                                      ? "English"
-                                                      : "العربية"),
-                                                  value:
-                                                      st.locale.languageCode ==
-                                                          i.name,
+                                                  title: Text(i == Lang.en ? "English" : "العربية"),
+                                                  value: st.locale.languageCode == i.name,
                                                   groupValue: true,
                                                   onChanged: (newVal) {
-                                                    BlocProvider.of<
-                                                                LocaleCubit>(
-                                                            context)
-                                                        .changeLanguage(
-                                                            i.name == "en"
-                                                                ? "en"
-                                                                : "ar");
+                                                    BlocProvider.of<LocaleCubit>(context)
+                                                        .changeLanguage(i.name == "en" ? "en" : "ar");
                                                     Navigator.pop(context);
                                                   }),
                                           ],
@@ -216,8 +195,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   iconsColor: Colors.amber,
                                   title: local.about,
                                   subtitle: "yoyoyoyo",
-                                  onPressed: () => Navigator.of(context)
-                                      .pushNamed(ROUTE_ABOUT),
+                                  onPressed: () => Navigator.of(context).pushNamed(ROUTE_ABOUT),
                                 ),
                                 SettingsTile(
                                   icon: Icons.logout_rounded,
@@ -232,8 +210,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       builder: (context) {
                                         return AlertDialog(
                                           title: Text(local.logoutAlert),
-                                          content:
-                                              Text(local.logoutAlertContents),
+                                          content: Text(local.logoutAlertContents),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
@@ -286,8 +263,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               },
                                               child: Text(
                                                 local.ok,
-                                                style: const TextStyle(
-                                                    color: Colors.red),
+                                                style: const TextStyle(color: Colors.red),
                                               ),
                                             ),
                                           ],

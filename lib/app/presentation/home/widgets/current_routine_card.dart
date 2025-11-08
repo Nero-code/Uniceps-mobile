@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/core/constants/app_routes.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 
 class CurrentRoutineCard extends StatelessWidget {
-  const CurrentRoutineCard({super.key});
+  const CurrentRoutineCard({super.key, this.onPressed, required this.routine});
 
   final btnBackgroundColor = const Color.fromARGB(29, 96, 125, 139);
+  final VoidCallback? onPressed;
+  final Routine routine;
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +45,11 @@ class CurrentRoutineCard extends StatelessWidget {
           SizedBox(
             // width: screenSize.width,
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.routineManager);
-              },
+              // onPressed: () async{
+              //   Navigator.pushNamed(context, AppRoutes.routineManager);
+              //   setstat
+              // },
+              onPressed: onPressed,
               child: const Icon(Icons.edit),
             ),
           ),

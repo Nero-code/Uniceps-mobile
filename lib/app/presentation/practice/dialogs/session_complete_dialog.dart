@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SessionCompleteDialog extends StatelessWidget {
   const SessionCompleteDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!;
     return Material(
       color: Colors.transparent,
       child: Center(
@@ -39,11 +41,11 @@ class SessionCompleteDialog extends StatelessWidget {
                     color: Colors.amber,
                   ),
                 ),
-                const Expanded(
+                Expanded(
                   child: Center(
                     child: Text(
-                      "Well Done!!!",
-                      style: TextStyle(
+                      locale.welldone,
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w900,
                         color: Color.fromARGB(255, 69, 114, 126),
@@ -59,7 +61,7 @@ class SessionCompleteDialog extends StatelessWidget {
                         backgroundColor: Colors.amber,
                         foregroundColor: Colors.white),
                     onPressed: () => Navigator.pop(context),
-                    child: const Text("Great!"),
+                    child: Text(locale.great),
                   ),
                 ),
                 const SizedBox(height: 10),

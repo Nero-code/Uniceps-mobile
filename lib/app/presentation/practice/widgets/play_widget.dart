@@ -28,8 +28,7 @@ class PlayWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(borderRadius),
 
             color: Theme.of(context).colorScheme.surface,
-            border: Border.all(
-                color: hasOldSession ? Colors.amber : Colors.green, width: .5),
+            border: Border.all(color: hasOldSession ? Colors.amber : Colors.green, width: .5),
 
             // gradient: LinearGradient(
             //   colors: hasOldSession
@@ -75,8 +74,7 @@ class PlayWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(borderRadius),
 
               color: Theme.of(context).colorScheme.surface,
-              border: Border.all(
-                  color: const Color.fromARGB(255, 120, 203, 214), width: .5),
+              border: Border.all(color: const Color.fromARGB(255, 120, 203, 214), width: .5),
 
               // color: const Color.fromARGB(255, 120, 203, 214),
               // boxShadow: [
@@ -110,13 +108,10 @@ class PlayWidget extends StatelessWidget {
                 },
                 child: SizedBox.expand(
                   child: Center(
-                    child:
-                        BlocBuilder<CurrentRoutineCubit, CurrentRoutineState>(
+                    child: BlocBuilder<CurrentRoutineCubit, CurrentRoutineState>(
                       builder: (context, state) {
                         return Text(
-                          state is CurrentRoutineLoadedState
-                              ? state.routine.name
-                              : "Current Routine Here",
+                          state.maybeWhen(orElse: () => "Current Routine Here", loaded: (routine, _) => routine.name),
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
