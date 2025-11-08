@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 
 class Measurement extends Equatable {
-  final String id, gymId;
+  final int? id;
+  final int? apiId;
   final double height;
   final double weight;
   final double lArm;
@@ -19,9 +20,12 @@ class Measurement extends Equatable {
   final double hips;
   final DateTime checkDate;
 
+  final int version;
+  final bool isSynced;
+
   const Measurement({
-    required this.id,
-    required this.gymId,
+    this.id,
+    this.apiId,
     required this.height,
     required this.weight,
     required this.lArm,
@@ -38,7 +42,9 @@ class Measurement extends Equatable {
     required this.chest,
     required this.hips,
     required this.checkDate,
+    this.version = 0,
+    this.isSynced = false,
   });
   @override
-  List<Object?> get props => [id, gymId];
+  List<Object?> get props => [id];
 }

@@ -26,19 +26,18 @@ class SettingsScreen extends StatelessWidget {
 
             return accountCubit.state.map(
               initial: (_) => const SizedBox(),
-              unauthenticated: (_) => AlertBar(
-                content: Text(locale.signinAlert),
-                actionText: locale.signin,
-                action: () => Navigator.pushNamed(context, AppRoutes.auth),
+              unauthenticated: (_) => SizedBox(
+                height: 35,
+                child: AlertBar(
+                  content: Text(locale.signinAlert, style: const TextStyle(fontSize: 12)),
+                  actionText: locale.signin,
+                  action: () => Navigator.pushNamed(context, AppRoutes.auth),
+                ),
               ),
               hasAccount: (acc) => membershipBloc.state.map(
                 initial: (_) => const SizedBox(),
                 loading: (_) => const SizedBox(),
-                loaded: (m) => Container(
-                    child: Text(m.m.endDate
-                        .difference(DateTime.now())
-                        .inDays
-                        .toString())),
+                loaded: (m) => Text(m.m.endDate.difference(DateTime.now()).inDays.toString()),
                 error: (value) => const PremiumBanner(),
               ),
             );
@@ -47,7 +46,7 @@ class SettingsScreen extends StatelessWidget {
           //
           //  S E T T I N G S   T A B L E
           //
-
+          const SizedBox(height: 10),
           Table(
             children: [
               TableRow(
@@ -64,7 +63,7 @@ class SettingsScreen extends StatelessWidget {
                     iconsColor: Colors.blue,
                     title: locale.gyms,
                     subtitle: "yoyoyoyo",
-                    onPressed: () {},
+                    onPressed: null,
                   ),
                 ],
               ),
@@ -75,7 +74,7 @@ class SettingsScreen extends StatelessWidget {
                     iconsColor: Colors.green,
                     title: locale.measurements,
                     subtitle: "yoyoyoyo",
-                    onPressed: () {},
+                    onPressed: () => Navigator.pushNamed(context, AppRoutes.measurements),
                   ),
                   SettingsTile(
                     icon: Icons.language,
@@ -86,11 +85,7 @@ class SettingsScreen extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (c) {
-                          final languageCode = context
-                              .read<LocaleCubit>()
-                              .state
-                              .locale
-                              .languageCode;
+                          final languageCode = context.read<LocaleCubit>().state.locale.languageCode;
                           return AlertDialog(
                             title: Text(locale.chooseLang),
                             content: Column(
@@ -98,15 +93,11 @@ class SettingsScreen extends StatelessWidget {
                               children: [
                                 for (var i in Lang.values)
                                   RadioListTile(
-                                      title: Text(
-                                          i == Lang.en ? "English" : "العربية"),
+                                      title: Text(i == Lang.en ? "English" : "العربية"),
                                       value: languageCode == i.name,
                                       groupValue: true,
                                       onChanged: (newVal) {
-                                        context
-                                            .read<LocaleCubit>()
-                                            .changeLanguage(
-                                                i.name == "en" ? "en" : "ar");
+                                        context.read<LocaleCubit>().changeLanguage(i.name == "en" ? "en" : "ar");
                                         Navigator.pop(context);
                                       }),
                               ],
@@ -125,8 +116,7 @@ class SettingsScreen extends StatelessWidget {
                     iconsColor: Colors.amber,
                     title: locale.about,
                     subtitle: "yoyoyoyo",
-                    onPressed: () =>
-                        Navigator.of(context).pushNamed(ROUTE_ABOUT),
+                    onPressed: () => Navigator.of(context).pushNamed(ROUTE_ABOUT),
                   ),
                   SettingsTile(
                     icon: Icons.logout_rounded,

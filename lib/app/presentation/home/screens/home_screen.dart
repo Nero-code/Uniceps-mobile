@@ -178,8 +178,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           hasAccount: (acc) => membershipBloc.state.maybeMap(
                             orElse: () => const SizedBox(),
-                            error: (err) => err.f.map(
-                                cantGetPlan: (f) => notifyUpgrade
+                            error: (err) => err.f.maybeMap(
+                                orElse: () => notifyUpgrade
                                     ? AlertBar(
                                         color: Colors.teal,
                                         foregroundColor: Colors.white70,

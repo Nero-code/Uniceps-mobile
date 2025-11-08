@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/app/presentation/blocs/gyms/gyms_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/measurement/measurment_bloc.dart';
+import 'package:uniceps/app/presentation/measurement/blocs/measurement/measurment_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/profile/profile_bloc.dart';
 import 'package:uniceps/app/presentation/measurement/screens/measurement_screen.dart';
 import 'package:uniceps/app/presentation/screens/profile/settings/widgets/profile_back_circle.dart';
@@ -152,9 +152,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     // onPressed: () => Navigator.of(context)
                                     //     .pushNamed(ROUTE_MEASUREMENTS),
                                     onPressed: () {
-                                      BlocProvider.of<MeasurmentBloc>(context).add(GetMeasurementsEvent());
+                                      BlocProvider.of<MeasurementBloc>(context).add(GetMeasurementsEvent());
                                       Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => const MeasurementScreen3(),
+                                        builder: (context) => const MeasurementScreen(),
                                       ));
                                     }),
                                 SettingsTile(

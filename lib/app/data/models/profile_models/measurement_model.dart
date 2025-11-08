@@ -1,94 +1,126 @@
-import 'package:uniceps/core/constants/constants.dart';
+import 'dart:math';
+
+import 'package:json_annotation/json_annotation.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 
-class MeasurementModel extends Measurement {
+part 'measurement_model.g.dart';
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class MeasurementModel {
+  final int? id, apiId;
+  final double height;
+  final double weight;
+  final double lArm;
+  final double rArm;
+  final double lHumerus;
+  final double rHumerus;
+  final double lThigh;
+  final double rThigh;
+  final double lLeg;
+  final double rLeg;
+  final double neck;
+  final double shoulders;
+  final double waist;
+  final double chest;
+  final double hips;
+  final DateTime checkDate;
+
+  final int version;
+  final bool isSynced;
+
   const MeasurementModel({
-    required super.id,
-    required super.gymId,
-    required super.height,
-    required super.weight,
-    required super.lArm,
-    required super.rArm,
-    required super.lHumerus,
-    required super.rHumerus,
-    required super.lLeg,
-    required super.rLeg,
-    required super.lThigh,
-    required super.rThigh,
-    required super.neck,
-    required super.shoulders,
-    required super.waist,
-    required super.chest,
-    required super.hips,
-    required super.checkDate,
+    required this.id,
+    required this.apiId,
+    required this.height,
+    required this.weight,
+    required this.lArm,
+    required this.rArm,
+    required this.lHumerus,
+    required this.rHumerus,
+    required this.lLeg,
+    required this.rLeg,
+    required this.lThigh,
+    required this.rThigh,
+    required this.neck,
+    required this.shoulders,
+    required this.waist,
+    required this.chest,
+    required this.hips,
+    required this.checkDate,
+    required this.version,
+    required this.isSynced,
   });
 
-  factory MeasurementModel.fromJson(Map<dynamic, dynamic> json) {
-    // print("Measurement: \n$json");
+  factory MeasurementModel.fromJson(Map<String, dynamic> json) => _$MeasurementModelFromJson(json);
+  Map<String, dynamic> toJson() => _$MeasurementModelToJson(this);
 
-    // print("height:    ${json['height'].runtimeType}");
-    // print("weight:    ${json['weight'].runtimeType}");
-    // print("lArm:      ${json['l_arm'].runtimeType}");
-    // print("rArm:      ${json['r_arm'].runtimeType}");
-    // print("lHumerus:  ${json['l_humerus'].runtimeType}");
-    // print("rHumerus:  ${json['r_humerus'].runtimeType}");
-    // print("lLeg:      ${json['l_leg'].runtimeType}");
-    // print("rLeg:      ${json['r_leg'].runtimeType}");
-    // print("lThigh:    ${json['l_thigh'].runtimeType}");
-    // print("rThigh:    ${json['r_thigh'].runtimeType}");
-    // print("neck:      ${json['neck'].runtimeType}");
-    // print("shoulders: ${json['shoulders'].runtimeType}");
-    // print("waist:     ${json['waist'].runtimeType}");
-    // print("chest:     ${json['chest'].runtimeType}");
-    // print("hips:      ${json['hips'].runtimeType}");
-    // print("checkDate: ${json['check_date'].runtimeType}");
+  factory MeasurementModel.fromEntity(Measurement m) => MeasurementModel(
+        id: m.id,
+        apiId: m.apiId,
+        height: m.height,
+        weight: m.weight,
+        lArm: m.lArm,
+        rArm: m.rArm,
+        lHumerus: m.lHumerus,
+        rHumerus: m.rHumerus,
+        lLeg: m.lLeg,
+        rLeg: m.rLeg,
+        lThigh: m.lThigh,
+        rThigh: m.rThigh,
+        neck: m.neck,
+        shoulders: m.shoulders,
+        waist: m.waist,
+        chest: m.chest,
+        hips: m.hips,
+        checkDate: m.checkDate,
+        version: m.version,
+        isSynced: m.isSynced,
+      );
 
-    return MeasurementModel(
-      id: json['id'],
-      gymId: json['gym_id'],
-      height: json['height'],
-      weight: json['weight'],
-      lArm: json['l_arm'],
-      rArm: json['r_arm'],
-      lHumerus: json['l_humerus'],
-      rHumerus: json['r_humerus'],
-      lLeg: json['l_leg'],
-      rLeg: json['r_leg'],
-      lThigh: json['l_thigh'],
-      rThigh: json['r_thigh'],
-      neck: json['neck'],
-      shoulders: json['shoulders'],
-      waist: json['waist'],
-      chest: json['chest'],
-      hips: json['hips'],
-      checkDate: DateTime.parse(json['check_date']),
-      // checkDate: DateTime.now(),
-    );
-  }
+  Measurement toEntity() => Measurement(
+        id: id,
+        apiId: apiId,
+        height: height,
+        weight: weight,
+        lArm: lArm,
+        rArm: rArm,
+        lHumerus: lHumerus,
+        rHumerus: rHumerus,
+        lLeg: lLeg,
+        rLeg: rLeg,
+        lThigh: lThigh,
+        rThigh: rThigh,
+        neck: neck,
+        shoulders: shoulders,
+        waist: waist,
+        chest: chest,
+        hips: hips,
+        checkDate: checkDate,
+        version: version,
+        isSynced: isSynced,
+      );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'gym_id': gymId,
-      'height': height,
-      'weight': weight,
-      'l_arm': lArm,
-      'r_arm': rArm,
-      'l_humerus': lHumerus,
-      'r_humerus': rHumerus,
-      'l_leg': lLeg,
-      'r_leg': rLeg,
-      'l_thigh': lThigh,
-      'r_thigh': rThigh,
-      'neck': neck,
-      'shoulders': shoulders,
-      'waist': waist,
-      'chest': chest,
-      'hips': hips,
-      'check_date': dateToString(checkDate),
-    };
-  }
-
-  @override
-  List<Object?> get props => [id, gymId, checkDate];
+  /// Dummy constructor for fake data generation.
+  factory MeasurementModel.skank() => MeasurementModel(
+        id: null,
+        apiId: null,
+        height: 0,
+        weight: 0,
+        lArm: 0,
+        rArm: 0,
+        lHumerus: 0,
+        rHumerus: 0,
+        lLeg: 0,
+        rLeg: 0,
+        lThigh: 0,
+        rThigh: 0,
+        neck: 0,
+        shoulders: 0,
+        waist: 0,
+        chest: 0,
+        hips: 0,
+        checkDate: DateTime(Random().nextInt(25) + 2000),
+        version: 0,
+        isSynced: false,
+      );
 }

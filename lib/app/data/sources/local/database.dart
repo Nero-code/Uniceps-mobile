@@ -3,6 +3,7 @@ import 'package:drift_flutter/drift_flutter.dart';
 import 'package:uniceps/app/data/sources/local/schema_versions.dart';
 import 'package:uniceps/app/data/sources/local/tables/account/account_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/account/memberships_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/measurement/measurement_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/practice/t_logs_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/practice/t_sessions_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/routine/days_group_table.dart';
@@ -30,6 +31,8 @@ part 'database.g.dart';
     ExerciseGroups,
     TSessions,
     TLogs,
+    // - Measurements
+    Measurements,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -60,5 +63,5 @@ class AppDatabase extends _$AppDatabase {
       );
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 }
