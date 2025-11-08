@@ -27,27 +27,28 @@ class RoutineWithHeat extends StatelessWidget {
         // borderRadius: BorderRadius.circular(15.0),
         color: Colors.white,
         shape: const OutlineInputBorder(
-          borderRadius: BorderRadius.horizontal(left: Radius.circular(50), right: Radius.circular(15)),
+          borderRadius: BorderRadius.all(Radius.circular(50)),
           borderSide: BorderSide(color: Colors.grey, width: 0.5),
         ),
         // elevation: 1,
         child: InkWell(
-          borderRadius: const BorderRadius.horizontal(left: Radius.circular(50), right: Radius.circular(15)),
+          borderRadius: const BorderRadius.all(Radius.circular(50)),
           onTap: onTap,
           // onLongPress: onLongPress,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                if (onMenu != null)
-                  SizedBox.square(
-                    dimension: 30,
-                    child: IconButton(
-                      style: IconButton.styleFrom(padding: EdgeInsets.all(3.0), iconSize: 20),
-                      onPressed: onMenu,
-                      icon: const Icon(Icons.more_vert_rounded, size: 20),
-                    ),
-                  ),
+                SizedBox.square(
+                  dimension: 30,
+                  child: onMenu != null
+                      ? IconButton(
+                          style: IconButton.styleFrom(padding: EdgeInsets.all(3.0), iconSize: 20),
+                          onPressed: onMenu,
+                          icon: const Icon(Icons.more_vert_rounded, size: 20),
+                        )
+                      : null,
+                ),
                 const SizedBox(width: 5.0),
                 Expanded(
                   child: Column(

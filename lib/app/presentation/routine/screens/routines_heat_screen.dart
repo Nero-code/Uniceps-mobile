@@ -78,76 +78,79 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                         padding: const EdgeInsets.only(bottom: 50.0),
                         children: state.maybeMap<List<Widget>>(
                           orElse: () => [const SizedBox()],
-                          loaded: (state) => state.routines
-                              .map(
-                                (e) => RoutineWithHeat(
-                                  routine: e.routine,
-                                  heat: e.heat,
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          RoutineEditScreen(routineId: e.routine.id!, routineName: e.routine.name),
+                          loaded: (state) {
+                            routinesLength = state.routines.length + 1;
+                            return state.routines
+                                .map(
+                                  (e) => RoutineWithHeat(
+                                    routine: e.routine,
+                                    heat: e.heat,
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            RoutineEditScreen(routineId: e.routine.id!, routineName: e.routine.name),
+                                      ),
                                     ),
-                                  ),
-                                  onMenu: () async {
-                                    final canDelete = context
-                                        .read<SessionBloc>()
-                                        .state
-                                        .maybeWhen(orElse: () => false, noActiveSession: () => true);
+                                    onMenu: () async {
+                                      final canDelete = context
+                                          .read<SessionBloc>()
+                                          .state
+                                          .maybeWhen(orElse: () => false, noActiveSession: () => true);
 
-                                    final res = await showDialog<Option>(
-                                        context: context,
-                                        builder: (context) => RoutineOptionsDialog(routineName: e.routine.name));
+                                      final res = await showDialog<Option>(
+                                          context: context,
+                                          builder: (context) => RoutineOptionsDialog(routineName: e.routine.name));
 
-                                    // print("selected option: $res");
-                                    switch (res) {
-                                      case Option.edit:
-                                        _renameRoutine(e.routine.name, (name) {
-                                          if (name == e.routine.name) return;
-                                          BlocProvider.of<RoutinesWithHeatBloc>(context)
-                                              .add(RoutinesWithHeatEvent.update(e.routine.copyWith(name: name)));
-                                        });
-                                        break;
-
-                                      case Option.delete:
-                                        if (canDelete) {
-                                          _deleteRoutine(e.routine.name, () {
+                                      // print("selected option: $res");
+                                      switch (res) {
+                                        case Option.edit:
+                                          _renameRoutine(e.routine.name, (name) {
+                                            if (name == e.routine.name) return;
                                             BlocProvider.of<RoutinesWithHeatBloc>(context)
-                                                .add(RoutinesWithHeatEvent.delete(e.routine));
+                                                .add(RoutinesWithHeatEvent.update(e.routine.copyWith(name: name)));
                                           });
-                                        } else {
-                                          if (context.mounted) {
-                                            ScaffoldMessenger.of(context).clearSnackBars();
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(
-                                                backgroundColor: Colors.red,
-                                                content: Text("you can't delete with an open session!"),
-                                              ),
-                                            );
-                                          }
-                                        }
-                                        break;
+                                          break;
 
-                                      case Option.setCurrent:
-                                        _setCurrentRoutine(
-                                          () async {
-                                            final rBloc = BlocProvider.of<RoutinesWithHeatBloc>(context)
-                                              ..add(RoutinesWithHeatEvent.setCurrent(e.routine));
-                                            await rBloc.stream.skip(1).first;
+                                        case Option.delete:
+                                          if (canDelete) {
+                                            _deleteRoutine(e.routine.name, () {
+                                              BlocProvider.of<RoutinesWithHeatBloc>(context)
+                                                  .add(RoutinesWithHeatEvent.delete(e.routine));
+                                            });
+                                          } else {
                                             if (context.mounted) {
-                                              BlocProvider.of<CurrentRoutineCubit>(context).getCurrentRoutine();
+                                              ScaffoldMessenger.of(context).clearSnackBars();
+                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                const SnackBar(
+                                                  backgroundColor: Colors.red,
+                                                  content: Text("you can't delete with an open session!"),
+                                                ),
+                                              );
                                             }
-                                          },
-                                          e.routine.name,
-                                        );
-                                        break;
-                                      default:
-                                    }
-                                  },
-                                ),
-                              )
-                              .toList(),
+                                          }
+                                          break;
+
+                                        case Option.setCurrent:
+                                          _setCurrentRoutine(
+                                            () async {
+                                              final rBloc = BlocProvider.of<RoutinesWithHeatBloc>(context)
+                                                ..add(RoutinesWithHeatEvent.setCurrent(e.routine));
+                                              await rBloc.stream.skip(1).first;
+                                              if (context.mounted) {
+                                                BlocProvider.of<CurrentRoutineCubit>(context).getCurrentRoutine();
+                                              }
+                                            },
+                                            e.routine.name,
+                                          );
+                                          break;
+                                        default:
+                                      }
+                                    },
+                                  ),
+                                )
+                                .toList();
+                          },
                         ),
                       ),
                     ),
@@ -172,8 +175,8 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                           onTap: canCreate
                               ? () => _createRoutine(
                                     "${locale.newRoutine} $routinesLength",
-                                    (name) async => BlocProvider.of<RoutinesWithHeatBloc>(context)
-                                        .add(RoutinesWithHeatEvent.create(name)),
+                                    (name) =>
+                                        context.read<RoutinesWithHeatBloc>().add(RoutinesWithHeatEvent.create(name)),
                                   )
                               : null,
                           child: Padding(

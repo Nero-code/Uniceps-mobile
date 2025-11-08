@@ -8,7 +8,7 @@ import 'package:uniceps/app/presentation/measurement/blocs/measurement/measurmen
 import 'package:uniceps/app/presentation/measurement/widgets/measure_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
-// import 'package:uniceps/injection_dependency.dart' as di;
+import 'package:uniceps/injection_dependency.dart' as di;
 
 class MeasurementScreen extends StatefulWidget {
   const MeasurementScreen({super.key});
@@ -61,7 +61,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
     // final local = AppLocalizations.of(context)!;
     final isRtl = context.read<LocaleCubit>().state.isRtl();
     return BlocProvider(
-      create: (context) => MeasurementBloc()..add(const GetMeasurementsEvent()),
+      create: (context) => MeasurementBloc(di.sl())..add(const GetMeasurementsEvent()),
       lazy: false,
       child: Scaffold(
         body: BlocBuilder<MeasurementBloc, MeasurementState>(

@@ -8,6 +8,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart';
+import 'package:uniceps/app/data/sources/local/dal_measurements/measurements_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_practice/t_session_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_days_local_source.dart';
@@ -26,6 +27,7 @@ import 'package:uniceps/app/data/sources/services/token_service_simple.dart';
 import 'package:uniceps/app/data/stores/account/account_repo.dart';
 import 'package:uniceps/app/data/stores/auth/email_auth_repo.dart';
 import 'package:uniceps/app/data/stores/practice/practice_repo.dart';
+import 'package:uniceps/app/data/stores/profile/measurements_repo.dart';
 import 'package:uniceps/app/data/stores/routine/exercises_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_days_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_items_repo.dart';
@@ -34,6 +36,7 @@ import 'package:uniceps/app/data/stores/routine/routine_sets_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_with_heat_repo.dart';
 import 'package:uniceps/app/domain/commands/account_usecases/account_usecases.dart';
 import 'package:uniceps/app/domain/commands/auth_usecases/otp_usecases.dart';
+import 'package:uniceps/app/domain/commands/measurement/measurement_commands.dart';
 import 'package:uniceps/app/domain/commands/practice_usecases/practice_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/exercises_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_days_commands.dart';
@@ -44,6 +47,7 @@ import 'package:uniceps/app/domain/commands/routine_management/routine_with_heat
 import 'package:uniceps/app/domain/contracts/account/i_account_service.dart';
 import 'package:uniceps/app/domain/contracts/auth_repo/i_auth_contracts.dart';
 import 'package:uniceps/app/domain/contracts/practice_repo/practice_contract.dart';
+import 'package:uniceps/app/domain/contracts/profile_repo/i_measurement_service.dart';
 import 'package:uniceps/app/domain/contracts/routine_repo/i_exercises_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_days_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_items_contract.dart';
@@ -55,20 +59,10 @@ import 'package:uniceps/app/services/update_service.dart';
 final sl = di.GetIt.instance;
 
 Future<void> init() async {
-  final client = http.Client();
-  // final c = io.HttpClient()..connectionTimeout = const Duration(seconds: 30);
-  sl.registerLazySingleton(() => client);
-  // sl.registerLazySingleton<ClientHelper>(
-  //     () => NoTokenHttpClientHelper(client: sl()));
-  sl.registerLazySingleton<ClientHelper>(() => HttpClientHelper(client: sl(), tokenService: sl()));
-
-  sl.registerLazySingleton<FlutterSecureStorage>(() => const FlutterSecureStorage());
-
-  sl.registerLazySingleton<InternetConnectionChecker>(() => InternetConnectionChecker());
-
-  sl.registerLazySingleton(() => SimpleTokenService());
   //////////////////////////////////////////////////////////////////////////////
+  ///
   ///   D A T A B A S E S
+  ///
   //////////////////////////////////////////////////////////////////////////////
 
   final prefs = await SharedPreferences.getInstance();
@@ -76,6 +70,7 @@ Future<void> init() async {
 
   sl.registerLazySingleton<SharedPreferences>(() => prefs);
   sl.registerLazySingleton<AppDatabase>(() => appDataBase);
+  sl.registerLazySingleton<FlutterSecureStorage>(() => const FlutterSecureStorage());
 
   ///  V2   R E Q U I R E D
   final imagesCache = await Hive.openBox<Uint8List>("ExerciseImages");
@@ -137,7 +132,7 @@ Future<void> init() async {
   /////////
   ////////
   ///////
-  //////      R O U T I N E   S O U R C E S
+  //////      L O C A L   S O U R C E S
   /////
   ////
   ///
@@ -146,21 +141,21 @@ Future<void> init() async {
   sl.registerLazySingleton<ITSessionLocalSourceContract>(
       () => TSessionLocalSource(database: sl(), imagesCache: imagesCache));
 
+  //  R O U T I N E   S O U R C E S
   sl.registerLazySingleton<IRoutineManagementLocalSourceContract>(
       () => RoutineManagementLocalSourceImpl(database: sl()));
-
   sl.registerLazySingleton<IRoutineDaysLocalSourceContract>(() => RoutineDaysLocalSourceImpl(dataBase: sl()));
-
   sl.registerLazySingleton<IRoutineItemsLocalSourceContract>(
       () => RoutineItemsLocalSourceImpl(database: sl(), imagesCache: imagesCache));
-
   sl.registerLazySingleton<IRoutineSetsLocalSourceContract>(() => RoutineSetsLocalSourceImpl(database: sl()));
-
   sl.registerLazySingleton<IExercisesLocalSourceContract>(() => ExercisesLocalSource(database: sl()));
 
+  //  A U T H   S O U R C E S
   sl.registerLazySingleton<IOTPAuthSource>(() => OTPAuthSource(client: sl(), logger: sl()));
-
   sl.registerLazySingleton<IAccountLocalSource>(() => AccountLocalSource(secureStorage: sl(), database: sl()));
+
+  //  M E A S U R E M E N T S   S O U R C E S
+  sl.registerLazySingleton<IMeasurementsLocalSource>(() => MeasurementsLocalSource(database: sl(), logger: sl()));
 
   /////////
   ////////
@@ -184,28 +179,33 @@ Future<void> init() async {
   ///
   //
 
-  sl.registerLazySingleton<IAccountService>(() => AccountRepo(localSource: sl(), remoteSource: sl(), checker: sl()));
-
   sl.registerLazySingleton<IPracticeContract>(() => PracticeRepo(localSource: sl()));
-
   sl.registerLazySingleton<IRoutineManagementContract>(
       () => RoutineManagementRepo(localSource: sl(), internet: sl(), clientHelper: sl()));
   sl.registerLazySingleton<IRoutineWithHeatContract>(
       () => RoutineWithHeatRepo(localSource: sl(), internet: sl(), clientHelper: sl()));
-
   sl.registerLazySingleton<IRoutineDaysContract>(() => RoutineDaysRepo(localSource: sl()));
   sl.registerLazySingleton<IRoutineItemsContract>(() => RoutineItemsRepo(localSource: sl(), mediaHelper: sl()));
   sl.registerLazySingleton<IRoutineSetsContract>(() => RoutineSetsRepo(localSource: sl()));
   sl.registerLazySingleton<IExercisesContract>(
       () => ExercisesRepo(internet: sl(), remoteSource: sl(), localSource: sl()));
+
+  //  A U T H   R E P O
   sl.registerLazySingleton<IOTPAuthRepo>(
       () => EmailAuthRepo(otpAuthSource: sl(), tokenService: sl(), accountLocalSource: sl(), connection: sl()));
+  sl.registerLazySingleton<IAccountService>(() => AccountRepo(localSource: sl(), remoteSource: sl(), checker: sl()));
 
-  //////////////////////////////////////////////////////////////////////////////
+  //  M E A S U R E M E N T S   R E P O
+  sl.registerLazySingleton<IMeasurementContract>(() => MeasurementsRepo(localSource: sl(), logger: sl()));
+
+  /////////
+  ////////
+  ///////
+  //////      U S E C A S E S  -  V 2
+  /////
+  ////
   ///
-  ///   U S E C A S E S  -  V 2
-  ///
-  //////////////////////////////////////////////////////////////////////////////
+  //
 
   sl.registerFactory(() => AccountUsecases(repo: sl()));
   sl.registerFactory(() => PracticeCommands(repo: sl()));
@@ -216,12 +216,24 @@ Future<void> init() async {
   sl.registerFactory(() => RoutineSetsCommands(repo: sl()));
   sl.registerFactory(() => ExercisesCommands(repo: sl()));
   sl.registerFactory(() => OtpUsecases(repo: sl()));
+  sl.registerFactory(() => MeasurementCommands(repo: sl()));
 
   //////////////////////////////////////////////////////////////////////////////
   ///
   ///   O T H E R
   ///
   //////////////////////////////////////////////////////////////////////////////
+
+  final client = http.Client();
+  // final c = io.HttpClient()..connectionTimeout = const Duration(seconds: 30);
+  sl.registerLazySingleton(() => client);
+  // sl.registerLazySingleton<ClientHelper>(
+  //     () => NoTokenHttpClientHelper(client: sl()));
+  sl.registerLazySingleton<ClientHelper>(() => HttpClientHelper(client: sl(), tokenService: sl()));
+
+  sl.registerLazySingleton<InternetConnectionChecker>(() => InternetConnectionChecker());
+
+  sl.registerLazySingleton(() => SimpleTokenService());
 
   sl.registerLazySingleton<Logger>(
     () => Logger(

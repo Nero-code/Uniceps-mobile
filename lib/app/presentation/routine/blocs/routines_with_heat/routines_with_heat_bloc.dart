@@ -20,16 +20,40 @@ class RoutinesWithHeatBloc extends Bloc<RoutinesWithHeatEvent, RoutinesWithHeatS
       );
     });
     on<_Create>((event, emit) async {
-      // TODO: implement event handler
+      emit(const _Loading());
+
+      final either = await _usecases.createRoutine(event.name);
+      either.fold(
+        (l) => emit(_Error(l)),
+        (r) => emit(_Loaded(r)),
+      );
     });
     on<_Update>((event, emit) async {
-      // TODO: implement event handler
+      emit(const _Loading());
+
+      final either = await _usecases.updateRoutine(event.update);
+      either.fold(
+        (l) => emit(_Error(l)),
+        (r) => emit(_Loaded(r)),
+      );
     });
     on<_Delete>((event, emit) async {
-      // TODO: implement event handler
+      emit(const _Loading());
+
+      final either = await _usecases.deleteRoutine(event.delete);
+      either.fold(
+        (l) => emit(_Error(l)),
+        (r) => emit(_Loaded(r)),
+      );
     });
     on<_SetCurrent>((event, emit) async {
-      // TODO: implement event handler
+      emit(const _Loading());
+
+      final either = await _usecases.setCurrentRoutine(event.update);
+      either.fold(
+        (l) => emit(_Error(l)),
+        (r) => emit(_Loaded(r)),
+      );
     });
   }
 }
