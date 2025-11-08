@@ -17,7 +17,6 @@ import 'package:uniceps/app/presentation/routine/widgets/routine_with_heat.dart'
 import 'package:uniceps/app/presentation/screens/loading_page.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

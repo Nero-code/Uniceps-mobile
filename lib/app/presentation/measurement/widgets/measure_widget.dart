@@ -28,9 +28,16 @@ class MeasureWidget extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.shade300, width: 2.0),
-              borderRadius: BorderRadius.circular(20),
-            ),
+                border: Border.all(color: Colors.black, width: .5),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0, 3),
+                    color: Colors.grey,
+                    blurRadius: 3,
+                    spreadRadius: -1,
+                  ),
+                ]),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Image(
@@ -43,10 +50,14 @@ class MeasureWidget extends StatelessWidget {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(title),
+              Text(
+                title,
+                style: TextStyle(fontSize: 10),
+              ),
               Text(
                 "${intl.NumberFormat("###,###.#").format(value)} ${isCm ? "Cm" : "Kg"}",
                 textDirection: TextDirection.ltr,
+                style: TextStyle(fontSize: 10),
               ),
             ],
           ),

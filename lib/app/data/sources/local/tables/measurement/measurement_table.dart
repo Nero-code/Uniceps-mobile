@@ -19,6 +19,6 @@ class Measurements extends Table {
   late final chest = real()();
   late final hips = real()();
   late final checkDate = dateTime()();
-  late final version = integer().withDefault(const Constant(0));
-  late final isSynced = boolean().withDefault(const Constant(false));
+  late final version = integer().withDefault(const Constant(0))();
+  late final isSynced = boolean().withDefault(const Constant(false))();
 }

@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
-import 'package:uniceps/app/data/sources/local/schema_versions.dart';
 import 'package:uniceps/app/data/sources/local/tables/account/account_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/account/memberships_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/measurement/measurement_table.dart';
@@ -56,12 +55,11 @@ class AppDatabase extends _$AppDatabase {
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) async => await m.createAll(),
-        onUpgrade: stepByStep(),
         beforeOpen: (details) async {
           await customStatement('PRAGMA foreign_keys = ON');
         },
       );
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 1;
 }

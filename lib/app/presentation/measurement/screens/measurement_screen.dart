@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:uniceps/app/presentation/measurement/widgets/multifab_menu.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/app/presentation/measurement/blocs/measurement/measurment_bloc.dart';
@@ -139,9 +140,9 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                     return const Center(child: CircularProgressIndicator());
                   },
                 ),
-                Positioned(
-                  top: MediaQuery.viewInsetsOf(context).top + 30,
-                  child: const BackButton(),
+                const Positioned(
+                  top: 25,
+                  child: BackButton(),
                 ),
                 if (state is MeasurementLoadedState)
                   Positioned(
@@ -151,6 +152,11 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
+                          style: IconButton.styleFrom(
+                              side: BorderSide(color: Colors.grey.shade300),
+                              padding: EdgeInsets.zero,
+                              backgroundColor: Colors.white,
+                              surfaceTintColor: Colors.blue),
                           onPressed: () async {
                             //  RTL  -->  Left (previous)
                             if (isLoading) return;
@@ -162,19 +168,9 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                               await animate(true);
                             }
                           },
-                          icon: Container(
-                            padding: const EdgeInsets.all(10.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                              ),
-                            ),
-                            child: Icon(
-                              Icons.arrow_back_ios_new_rounded,
-                              color: Colors.grey.shade600,
-                            ),
+                          icon: Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            color: Colors.grey.shade600,
                           ),
                         ),
                         PageTransitionSwitcher(
@@ -193,6 +189,11 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                           ),
                         ),
                         IconButton(
+                          style: IconButton.styleFrom(
+                              side: BorderSide(color: Colors.grey.shade300),
+                              padding: EdgeInsets.zero,
+                              backgroundColor: Colors.white,
+                              surfaceTintColor: Colors.blue),
                           onPressed: () async {
                             //  RTL  -->  Right (Next)
                             if (isLoading) return;
@@ -203,24 +204,68 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                               await animate(false);
                             }
                           },
-                          icon: Container(
-                            padding: const EdgeInsets.all(10.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                              ),
-                              color: Colors.white,
-                            ),
-                            child: Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              color: Colors.grey.shade600,
-                            ),
+                          icon: Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            color: Colors.grey.shade600,
                           ),
                         ),
+                        const SizedBox(width: 30),
                       ],
                     ),
                   ),
+                // Positioned(
+                //   bottom: 100,
+                //   right: 20,
+                //   child: MultiFabMenu(),
+                // ),
+                Positioned(
+                  bottom: 0,
+                  left: isRtl ? 25.0 : null,
+                  right: isRtl ? null : 25,
+                  child: AnimatedStackMenu(
+                    spacing: 50,
+                    toggleButton: (animation, toggle) => IconButton.filled(
+                      style: IconButton.styleFrom(
+                        foregroundColor: Colors.grey.shade700,
+                        backgroundColor: Colors.grey.shade200,
+                      ),
+                      onPressed: toggle,
+                      icon: AnimatedIcon(icon: AnimatedIcons.menu_close, progress: animation),
+                    ),
+                    children: [
+                      IconButton.filled(
+                        style: IconButton.styleFrom(
+                          foregroundColor: Colors.blue,
+                          backgroundColor: Colors.blue.shade50,
+                        ),
+                        onPressed: () {
+                          print("aklsjhflakjshdflkjasdf");
+                        },
+                        icon: const Icon(Icons.add),
+                      ),
+                      IconButton.filled(
+                        style: IconButton.styleFrom(
+                          foregroundColor: Colors.green,
+                          backgroundColor: Colors.green.shade50,
+                        ),
+                        onPressed: () {
+                          print("aklsjhflakjshdflkjasdf");
+                        },
+                        icon: const Icon(Icons.edit),
+                      ),
+                      IconButton.filled(
+                        style: IconButton.styleFrom(
+                          foregroundColor: Colors.red,
+                          backgroundColor: Colors.red.shade50,
+                        ),
+                        onPressed: () {
+                          print("aklsjhflakjshdflkjasdf");
+                        },
+                        icon: const Icon(Icons.delete),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             );
           },
@@ -231,6 +276,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
 
   void childBuilder(Measurement m) {
     final local = AppLocalizations.of(context)!;
+    const verticalGap = 5.0;
     child = SingleChildScrollView(
       child: Column(
         // key: ValueKey<int>(page),
@@ -244,6 +290,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
               MeasureWidget(image: trImg[3], title: local.shoulders, value: m.shoulders),
             ],
           ),
+          const SizedBox(height: verticalGap),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             textDirection: TextDirection.rtl,
@@ -253,6 +300,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
               MeasureWidget(image: trImg[7], title: local.rArm, value: m.rArm),
             ],
           ),
+          const SizedBox(height: verticalGap),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             textDirection: TextDirection.rtl,
@@ -262,6 +310,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
               MeasureWidget(image: trImg[9], title: local.rThigh, value: m.rThigh),
             ],
           ),
+          const SizedBox(height: verticalGap),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             textDirection: TextDirection.rtl,
@@ -272,6 +321,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
               MeasureWidget(image: trImg[11], title: local.rLeg, value: m.rLeg),
             ],
           ),
+          const SizedBox(height: verticalGap),
           MeasureWidget(image: trImg[1], title: local.weight, isCm: false, value: m.weight),
         ],
       ),

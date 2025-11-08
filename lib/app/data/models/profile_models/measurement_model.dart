@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
+import 'package:uniceps/app/data/sources/local/database.dart' as db;
 
 part 'measurement_model.g.dart';
 
@@ -99,6 +100,28 @@ class MeasurementModel {
         version: version,
         isSynced: isSynced,
       );
+
+  factory MeasurementModel.fromTable(db.Measurement m) => MeasurementModel(
+      id: m.id,
+      apiId: m.apiId,
+      height: m.height,
+      weight: m.weight,
+      lArm: m.lArm,
+      rArm: m.rArm,
+      lHumerus: m.lHumerus,
+      rHumerus: m.rHumerus,
+      lLeg: m.lLeg,
+      rLeg: m.rLeg,
+      lThigh: m.lThigh,
+      rThigh: m.rThigh,
+      neck: m.neck,
+      shoulders: m.shoulders,
+      waist: m.waist,
+      chest: m.chest,
+      hips: m.hips,
+      checkDate: m.checkDate,
+      version: m.version,
+      isSynced: m.isSynced);
 
   /// Dummy constructor for fake data generation.
   factory MeasurementModel.skank() => MeasurementModel(

@@ -3935,6 +3935,24 @@ class $MeasurementsTable extends Measurements
   late final GeneratedColumn<DateTime> checkDate = GeneratedColumn<DateTime>(
       'check_date', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _versionMeta =
+      const VerificationMeta('version');
+  @override
+  late final GeneratedColumn<int> version = GeneratedColumn<int>(
+      'version', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _isSyncedMeta =
+      const VerificationMeta('isSynced');
+  @override
+  late final GeneratedColumn<bool> isSynced = GeneratedColumn<bool>(
+      'is_synced', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_synced" IN (0, 1))'),
+      defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -3954,7 +3972,9 @@ class $MeasurementsTable extends Measurements
         waist,
         chest,
         hips,
-        checkDate
+        checkDate,
+        version,
+        isSynced
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -4069,6 +4089,14 @@ class $MeasurementsTable extends Measurements
     } else if (isInserting) {
       context.missing(_checkDateMeta);
     }
+    if (data.containsKey('version')) {
+      context.handle(_versionMeta,
+          version.isAcceptableOrUnknown(data['version']!, _versionMeta));
+    }
+    if (data.containsKey('is_synced')) {
+      context.handle(_isSyncedMeta,
+          isSynced.isAcceptableOrUnknown(data['is_synced']!, _isSyncedMeta));
+    }
     return context;
   }
 
@@ -4114,6 +4142,10 @@ class $MeasurementsTable extends Measurements
           .read(DriftSqlType.double, data['${effectivePrefix}hips'])!,
       checkDate: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}check_date'])!,
+      version: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}version'])!,
+      isSynced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_synced'])!,
     );
   }
 
@@ -4142,6 +4174,8 @@ class Measurement extends DataClass implements Insertable<Measurement> {
   final double chest;
   final double hips;
   final DateTime checkDate;
+  final int version;
+  final bool isSynced;
   const Measurement(
       {required this.id,
       this.apiId,
@@ -4160,7 +4194,9 @@ class Measurement extends DataClass implements Insertable<Measurement> {
       required this.waist,
       required this.chest,
       required this.hips,
-      required this.checkDate});
+      required this.checkDate,
+      required this.version,
+      required this.isSynced});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -4184,6 +4220,8 @@ class Measurement extends DataClass implements Insertable<Measurement> {
     map['chest'] = Variable<double>(chest);
     map['hips'] = Variable<double>(hips);
     map['check_date'] = Variable<DateTime>(checkDate);
+    map['version'] = Variable<int>(version);
+    map['is_synced'] = Variable<bool>(isSynced);
     return map;
   }
 
@@ -4208,6 +4246,8 @@ class Measurement extends DataClass implements Insertable<Measurement> {
       chest: Value(chest),
       hips: Value(hips),
       checkDate: Value(checkDate),
+      version: Value(version),
+      isSynced: Value(isSynced),
     );
   }
 
@@ -4233,6 +4273,8 @@ class Measurement extends DataClass implements Insertable<Measurement> {
       chest: serializer.fromJson<double>(json['chest']),
       hips: serializer.fromJson<double>(json['hips']),
       checkDate: serializer.fromJson<DateTime>(json['checkDate']),
+      version: serializer.fromJson<int>(json['version']),
+      isSynced: serializer.fromJson<bool>(json['isSynced']),
     );
   }
   @override
@@ -4257,6 +4299,8 @@ class Measurement extends DataClass implements Insertable<Measurement> {
       'chest': serializer.toJson<double>(chest),
       'hips': serializer.toJson<double>(hips),
       'checkDate': serializer.toJson<DateTime>(checkDate),
+      'version': serializer.toJson<int>(version),
+      'isSynced': serializer.toJson<bool>(isSynced),
     };
   }
 
@@ -4278,7 +4322,9 @@ class Measurement extends DataClass implements Insertable<Measurement> {
           double? waist,
           double? chest,
           double? hips,
-          DateTime? checkDate}) =>
+          DateTime? checkDate,
+          int? version,
+          bool? isSynced}) =>
       Measurement(
         id: id ?? this.id,
         apiId: apiId.present ? apiId.value : this.apiId,
@@ -4298,6 +4344,8 @@ class Measurement extends DataClass implements Insertable<Measurement> {
         chest: chest ?? this.chest,
         hips: hips ?? this.hips,
         checkDate: checkDate ?? this.checkDate,
+        version: version ?? this.version,
+        isSynced: isSynced ?? this.isSynced,
       );
   Measurement copyWithCompanion(MeasurementsCompanion data) {
     return Measurement(
@@ -4319,6 +4367,8 @@ class Measurement extends DataClass implements Insertable<Measurement> {
       chest: data.chest.present ? data.chest.value : this.chest,
       hips: data.hips.present ? data.hips.value : this.hips,
       checkDate: data.checkDate.present ? data.checkDate.value : this.checkDate,
+      version: data.version.present ? data.version.value : this.version,
+      isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
     );
   }
 
@@ -4342,7 +4392,9 @@ class Measurement extends DataClass implements Insertable<Measurement> {
           ..write('waist: $waist, ')
           ..write('chest: $chest, ')
           ..write('hips: $hips, ')
-          ..write('checkDate: $checkDate')
+          ..write('checkDate: $checkDate, ')
+          ..write('version: $version, ')
+          ..write('isSynced: $isSynced')
           ..write(')'))
         .toString();
   }
@@ -4366,7 +4418,9 @@ class Measurement extends DataClass implements Insertable<Measurement> {
       waist,
       chest,
       hips,
-      checkDate);
+      checkDate,
+      version,
+      isSynced);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -4388,7 +4442,9 @@ class Measurement extends DataClass implements Insertable<Measurement> {
           other.waist == this.waist &&
           other.chest == this.chest &&
           other.hips == this.hips &&
-          other.checkDate == this.checkDate);
+          other.checkDate == this.checkDate &&
+          other.version == this.version &&
+          other.isSynced == this.isSynced);
 }
 
 class MeasurementsCompanion extends UpdateCompanion<Measurement> {
@@ -4410,6 +4466,8 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
   final Value<double> chest;
   final Value<double> hips;
   final Value<DateTime> checkDate;
+  final Value<int> version;
+  final Value<bool> isSynced;
   const MeasurementsCompanion({
     this.id = const Value.absent(),
     this.apiId = const Value.absent(),
@@ -4429,6 +4487,8 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
     this.chest = const Value.absent(),
     this.hips = const Value.absent(),
     this.checkDate = const Value.absent(),
+    this.version = const Value.absent(),
+    this.isSynced = const Value.absent(),
   });
   MeasurementsCompanion.insert({
     this.id = const Value.absent(),
@@ -4449,6 +4509,8 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
     required double chest,
     required double hips,
     required DateTime checkDate,
+    this.version = const Value.absent(),
+    this.isSynced = const Value.absent(),
   })  : height = Value(height),
         weight = Value(weight),
         lArm = Value(lArm),
@@ -4484,6 +4546,8 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
     Expression<double>? chest,
     Expression<double>? hips,
     Expression<DateTime>? checkDate,
+    Expression<int>? version,
+    Expression<bool>? isSynced,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -4504,6 +4568,8 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
       if (chest != null) 'chest': chest,
       if (hips != null) 'hips': hips,
       if (checkDate != null) 'check_date': checkDate,
+      if (version != null) 'version': version,
+      if (isSynced != null) 'is_synced': isSynced,
     });
   }
 
@@ -4525,7 +4591,9 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
       Value<double>? waist,
       Value<double>? chest,
       Value<double>? hips,
-      Value<DateTime>? checkDate}) {
+      Value<DateTime>? checkDate,
+      Value<int>? version,
+      Value<bool>? isSynced}) {
     return MeasurementsCompanion(
       id: id ?? this.id,
       apiId: apiId ?? this.apiId,
@@ -4545,6 +4613,8 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
       chest: chest ?? this.chest,
       hips: hips ?? this.hips,
       checkDate: checkDate ?? this.checkDate,
+      version: version ?? this.version,
+      isSynced: isSynced ?? this.isSynced,
     );
   }
 
@@ -4605,6 +4675,12 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
     if (checkDate.present) {
       map['check_date'] = Variable<DateTime>(checkDate.value);
     }
+    if (version.present) {
+      map['version'] = Variable<int>(version.value);
+    }
+    if (isSynced.present) {
+      map['is_synced'] = Variable<bool>(isSynced.value);
+    }
     return map;
   }
 
@@ -4628,7 +4704,9 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
           ..write('waist: $waist, ')
           ..write('chest: $chest, ')
           ..write('hips: $hips, ')
-          ..write('checkDate: $checkDate')
+          ..write('checkDate: $checkDate, ')
+          ..write('version: $version, ')
+          ..write('isSynced: $isSynced')
           ..write(')'))
         .toString();
   }
@@ -7748,6 +7826,8 @@ typedef $$MeasurementsTableCreateCompanionBuilder = MeasurementsCompanion
   required double chest,
   required double hips,
   required DateTime checkDate,
+  Value<int> version,
+  Value<bool> isSynced,
 });
 typedef $$MeasurementsTableUpdateCompanionBuilder = MeasurementsCompanion
     Function({
@@ -7769,6 +7849,8 @@ typedef $$MeasurementsTableUpdateCompanionBuilder = MeasurementsCompanion
   Value<double> chest,
   Value<double> hips,
   Value<DateTime> checkDate,
+  Value<int> version,
+  Value<bool> isSynced,
 });
 
 class $$MeasurementsTableFilterComposer
@@ -7833,6 +7915,12 @@ class $$MeasurementsTableFilterComposer
 
   ColumnFilters<DateTime> get checkDate => $composableBuilder(
       column: $table.checkDate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get version => $composableBuilder(
+      column: $table.version, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnFilters(column));
 }
 
 class $$MeasurementsTableOrderingComposer
@@ -7897,6 +7985,12 @@ class $$MeasurementsTableOrderingComposer
 
   ColumnOrderings<DateTime> get checkDate => $composableBuilder(
       column: $table.checkDate, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get version => $composableBuilder(
+      column: $table.version, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnOrderings(column));
 }
 
 class $$MeasurementsTableAnnotationComposer
@@ -7961,6 +8055,12 @@ class $$MeasurementsTableAnnotationComposer
 
   GeneratedColumn<DateTime> get checkDate =>
       $composableBuilder(column: $table.checkDate, builder: (column) => column);
+
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<bool> get isSynced =>
+      $composableBuilder(column: $table.isSynced, builder: (column) => column);
 }
 
 class $$MeasurementsTableTableManager extends RootTableManager<
@@ -8007,6 +8107,8 @@ class $$MeasurementsTableTableManager extends RootTableManager<
             Value<double> chest = const Value.absent(),
             Value<double> hips = const Value.absent(),
             Value<DateTime> checkDate = const Value.absent(),
+            Value<int> version = const Value.absent(),
+            Value<bool> isSynced = const Value.absent(),
           }) =>
               MeasurementsCompanion(
             id: id,
@@ -8027,6 +8129,8 @@ class $$MeasurementsTableTableManager extends RootTableManager<
             chest: chest,
             hips: hips,
             checkDate: checkDate,
+            version: version,
+            isSynced: isSynced,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -8047,6 +8151,8 @@ class $$MeasurementsTableTableManager extends RootTableManager<
             required double chest,
             required double hips,
             required DateTime checkDate,
+            Value<int> version = const Value.absent(),
+            Value<bool> isSynced = const Value.absent(),
           }) =>
               MeasurementsCompanion.insert(
             id: id,
@@ -8067,6 +8173,8 @@ class $$MeasurementsTableTableManager extends RootTableManager<
             chest: chest,
             hips: hips,
             checkDate: checkDate,
+            version: version,
+            isSynced: isSynced,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

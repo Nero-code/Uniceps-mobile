@@ -1,4 +1,5 @@
 import 'package:logger/logger.dart';
+import 'package:uniceps/app/data/models/profile_models/extensions.dart';
 import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
 
@@ -6,6 +7,7 @@ abstract class IMeasurementsLocalSource {
   // Measurements Responsibility
   Future<List<MeasurementModel>> getMeasurements();
   Future<int> saveMeasurement(MeasurementModel m);
+  Future<void> deleteMeasurement(MeasurementModel m);
 }
 
 class MeasurementsLocalSource implements IMeasurementsLocalSource {
@@ -15,12 +17,24 @@ class MeasurementsLocalSource implements IMeasurementsLocalSource {
 
   @override
   Future<List<MeasurementModel>> getMeasurements() async {
-    return List.filled(5, MeasurementModel.skank());
+    final res = await database.select(database.measurements).get();
+    return res.map(MeasurementModel.fromTable).toList();
   }
 
   @override
   Future<int> saveMeasurement(MeasurementModel m) async {
-    // TODO: implement saveMeasurement
-    throw UnimplementedError();
+    final int? newId;
+    if (m.id == null) {
+      newId = await database.into(database.measurements).insert(m.insertable());
+      return newId;
+    } else {
+      await (database.update(database.measurements)..where((f) => f.id.equals(m.id!))).write(m.updatable());
+      return m.id!;
+    }
+  }
+
+  @override
+  Future<void> deleteMeasurement(MeasurementModel m) async {
+    await (database.delete(database.measurements)..where((f) => f.id.equals(m.id!))).go();
   }
 }

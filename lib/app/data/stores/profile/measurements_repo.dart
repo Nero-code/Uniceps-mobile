@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:logger/logger.dart';
+import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
 import 'package:uniceps/app/data/sources/local/dal_measurements/measurements_local_source.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/app/domain/contracts/profile_repo/i_measurement_service.dart';
@@ -28,19 +29,38 @@ class MeasurementsRepo implements IMeasurementContract {
 
   @override
   Future<Either<Failure, Unit>> createMeasurement(Measurement m) async {
-    // TODO: implement createMeasurement
-    throw UnimplementedError();
+    try {
+      final id = await localSource.saveMeasurement(MeasurementModel.fromEntity(m));
+      buffer.add(m.copyWith(id: id));
+      return const Right(unit);
+    } catch (e) {
+      return Left(DatabaseFailure(errorMsg: ""));
+    }
   }
 
   @override
   Future<Either<Failure, Unit>> updateMeasurement(Measurement m) async {
-    // TODO: implement updateMeasurement
-    throw UnimplementedError();
+    try {
+      final model = MeasurementModel.fromEntity(m);
+      await localSource.saveMeasurement(model);
+      buffer.removeWhere((e) => e.id == model.id);
+      buffer
+        ..add(model.toEntity())
+        ..sort();
+      return const Right(unit);
+    } catch (e) {
+      return Left(DatabaseFailure(errorMsg: ""));
+    }
   }
 
   @override
   Future<Either<Failure, Unit>> deleteMeasurement(Measurement m) async {
-    // TODO: implement deleteMeasurement
-    throw UnimplementedError();
+    try {
+      await localSource.deleteMeasurement(MeasurementModel.fromEntity(m));
+      buffer.removeWhere((e) => e.id == m.id);
+      return const Right(unit);
+    } catch (e) {
+      return Left(DatabaseFailure(errorMsg: ""));
+    }
   }
 }
