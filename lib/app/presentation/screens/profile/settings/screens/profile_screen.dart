@@ -152,7 +152,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     // onPressed: () => Navigator.of(context)
                                     //     .pushNamed(ROUTE_MEASUREMENTS),
                                     onPressed: () {
-                                      BlocProvider.of<MeasurementBloc>(context).add(GetMeasurementsEvent());
+                                      BlocProvider.of<MeasurementBloc>(context).add(MeasurementEvent.getMeasurements());
                                       Navigator.of(context).push(MaterialPageRoute(
                                         builder: (context) => const MeasurementScreen(),
                                       ));

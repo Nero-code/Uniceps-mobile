@@ -1,22 +1,10 @@
 part of 'measurment_bloc.dart';
 
-sealed class MeasurementState extends Equatable {
-  const MeasurementState();
-
-  @override
-  List<Object> get props => [];
-}
-
-final class MeasurementInitial extends MeasurementState {}
-
-final class MeasurementLoadingState extends MeasurementState {}
-
-final class MeasurementLoadedState extends MeasurementState {
-  final List<Measurement> list;
-  const MeasurementLoadedState({required this.list});
-}
-
-final class MeasurementErrorState extends MeasurementState {
-  final Failure f;
-  const MeasurementErrorState({required this.f});
+@freezed
+class MeasurementState with _$MeasurementState {
+  const factory MeasurementState.initial() = _Initial;
+  const factory MeasurementState.loading() = _Loading;
+  const factory MeasurementState.dirty() = _Dirty;
+  const factory MeasurementState.loaded(List<Measurement> list) = _Loaded;
+  const factory MeasurementState.error(MeasurementFailure f) = _Error;
 }

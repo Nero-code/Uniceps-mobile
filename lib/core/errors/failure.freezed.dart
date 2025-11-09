@@ -814,18 +814,21 @@ mixin _$MeasurementFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() msOffline,
     required TResult Function() noRecords,
+    required TResult Function() msDbFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? msOffline,
     TResult? Function()? noRecords,
+    TResult? Function()? msDbFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? msOffline,
     TResult Function()? noRecords,
+    TResult Function()? msDbFailure,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -833,18 +836,21 @@ mixin _$MeasurementFailure {
   TResult map<TResult extends Object?>({
     required TResult Function(_MsOffline value) msOffline,
     required TResult Function(_NoRecords value) noRecords,
+    required TResult Function(_MsDbFailure value) msDbFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_MsOffline value)? msOffline,
     TResult? Function(_NoRecords value)? noRecords,
+    TResult? Function(_MsDbFailure value)? msDbFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_MsOffline value)? msOffline,
     TResult Function(_NoRecords value)? noRecords,
+    TResult Function(_MsDbFailure value)? msDbFailure,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -908,6 +914,7 @@ class _$MsOfflineImpl implements _MsOffline {
   TResult when<TResult extends Object?>({
     required TResult Function() msOffline,
     required TResult Function() noRecords,
+    required TResult Function() msDbFailure,
   }) {
     return msOffline();
   }
@@ -917,6 +924,7 @@ class _$MsOfflineImpl implements _MsOffline {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? msOffline,
     TResult? Function()? noRecords,
+    TResult? Function()? msDbFailure,
   }) {
     return msOffline?.call();
   }
@@ -926,6 +934,7 @@ class _$MsOfflineImpl implements _MsOffline {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? msOffline,
     TResult Function()? noRecords,
+    TResult Function()? msDbFailure,
     required TResult orElse(),
   }) {
     if (msOffline != null) {
@@ -939,6 +948,7 @@ class _$MsOfflineImpl implements _MsOffline {
   TResult map<TResult extends Object?>({
     required TResult Function(_MsOffline value) msOffline,
     required TResult Function(_NoRecords value) noRecords,
+    required TResult Function(_MsDbFailure value) msDbFailure,
   }) {
     return msOffline(this);
   }
@@ -948,6 +958,7 @@ class _$MsOfflineImpl implements _MsOffline {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_MsOffline value)? msOffline,
     TResult? Function(_NoRecords value)? noRecords,
+    TResult? Function(_MsDbFailure value)? msDbFailure,
   }) {
     return msOffline?.call(this);
   }
@@ -957,6 +968,7 @@ class _$MsOfflineImpl implements _MsOffline {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_MsOffline value)? msOffline,
     TResult Function(_NoRecords value)? noRecords,
+    TResult Function(_MsDbFailure value)? msDbFailure,
     required TResult orElse(),
   }) {
     if (msOffline != null) {
@@ -1010,6 +1022,7 @@ class _$NoRecordsImpl implements _NoRecords {
   TResult when<TResult extends Object?>({
     required TResult Function() msOffline,
     required TResult Function() noRecords,
+    required TResult Function() msDbFailure,
   }) {
     return noRecords();
   }
@@ -1019,6 +1032,7 @@ class _$NoRecordsImpl implements _NoRecords {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? msOffline,
     TResult? Function()? noRecords,
+    TResult? Function()? msDbFailure,
   }) {
     return noRecords?.call();
   }
@@ -1028,6 +1042,7 @@ class _$NoRecordsImpl implements _NoRecords {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? msOffline,
     TResult Function()? noRecords,
+    TResult Function()? msDbFailure,
     required TResult orElse(),
   }) {
     if (noRecords != null) {
@@ -1041,6 +1056,7 @@ class _$NoRecordsImpl implements _NoRecords {
   TResult map<TResult extends Object?>({
     required TResult Function(_MsOffline value) msOffline,
     required TResult Function(_NoRecords value) noRecords,
+    required TResult Function(_MsDbFailure value) msDbFailure,
   }) {
     return noRecords(this);
   }
@@ -1050,6 +1066,7 @@ class _$NoRecordsImpl implements _NoRecords {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_MsOffline value)? msOffline,
     TResult? Function(_NoRecords value)? noRecords,
+    TResult? Function(_MsDbFailure value)? msDbFailure,
   }) {
     return noRecords?.call(this);
   }
@@ -1059,6 +1076,7 @@ class _$NoRecordsImpl implements _NoRecords {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_MsOffline value)? msOffline,
     TResult Function(_NoRecords value)? noRecords,
+    TResult Function(_MsDbFailure value)? msDbFailure,
     required TResult orElse(),
   }) {
     if (noRecords != null) {
@@ -1070,4 +1088,112 @@ class _$NoRecordsImpl implements _NoRecords {
 
 abstract class _NoRecords implements MeasurementFailure {
   const factory _NoRecords() = _$NoRecordsImpl;
+}
+
+/// @nodoc
+abstract class _$$MsDbFailureImplCopyWith<$Res> {
+  factory _$$MsDbFailureImplCopyWith(
+          _$MsDbFailureImpl value, $Res Function(_$MsDbFailureImpl) then) =
+      __$$MsDbFailureImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$MsDbFailureImplCopyWithImpl<$Res>
+    extends _$MeasurementFailureCopyWithImpl<$Res, _$MsDbFailureImpl>
+    implements _$$MsDbFailureImplCopyWith<$Res> {
+  __$$MsDbFailureImplCopyWithImpl(
+      _$MsDbFailureImpl _value, $Res Function(_$MsDbFailureImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$MsDbFailureImpl implements _MsDbFailure {
+  const _$MsDbFailureImpl();
+
+  @override
+  String toString() {
+    return 'MeasurementFailure.msDbFailure()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$MsDbFailureImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() msOffline,
+    required TResult Function() noRecords,
+    required TResult Function() msDbFailure,
+  }) {
+    return msDbFailure();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? msOffline,
+    TResult? Function()? noRecords,
+    TResult? Function()? msDbFailure,
+  }) {
+    return msDbFailure?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? msOffline,
+    TResult Function()? noRecords,
+    TResult Function()? msDbFailure,
+    required TResult orElse(),
+  }) {
+    if (msDbFailure != null) {
+      return msDbFailure();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_MsOffline value) msOffline,
+    required TResult Function(_NoRecords value) noRecords,
+    required TResult Function(_MsDbFailure value) msDbFailure,
+  }) {
+    return msDbFailure(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_MsOffline value)? msOffline,
+    TResult? Function(_NoRecords value)? noRecords,
+    TResult? Function(_MsDbFailure value)? msDbFailure,
+  }) {
+    return msDbFailure?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_MsOffline value)? msOffline,
+    TResult Function(_NoRecords value)? noRecords,
+    TResult Function(_MsDbFailure value)? msDbFailure,
+    required TResult orElse(),
+  }) {
+    if (msDbFailure != null) {
+      return msDbFailure(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _MsDbFailure implements MeasurementFailure {
+  const factory _MsDbFailure() = _$MsDbFailureImpl;
 }

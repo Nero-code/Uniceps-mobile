@@ -13,33 +13,33 @@ class MeasurementsRepo implements IMeasurementContract {
 
   final List<Measurement> buffer = [];
   @override
-  Future<Either<Failure, List<Measurement>>> getMeasurements() async {
+  Future<Either<MeasurementFailure, List<Measurement>>> getMeasurements() async {
     try {
       if (buffer.isNotEmpty) return Right(buffer);
-
       final res = await localSource.getMeasurements();
-      if (res.isEmpty) return const Left(EmptyCacheFailure(errorMessage: ""));
+      //
+      if (res.isEmpty) return const Left(MeasurementFailure.noRecords());
+      //
       buffer.addAll(res.map((m) => m.toEntity()).toList());
-
       return Right(buffer);
     } catch (e) {
-      return Left(DatabaseFailure(errorMsg: "errorMsg"));
+      return const Left(MeasurementFailure.msDbFailure());
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> createMeasurement(Measurement m) async {
+  Future<Either<MeasurementFailure, Unit>> createMeasurement(Measurement m) async {
     try {
       final id = await localSource.saveMeasurement(MeasurementModel.fromEntity(m));
       buffer.add(m.copyWith(id: id));
       return const Right(unit);
     } catch (e) {
-      return Left(DatabaseFailure(errorMsg: ""));
+      return const Left(MeasurementFailure.msDbFailure());
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> updateMeasurement(Measurement m) async {
+  Future<Either<MeasurementFailure, Unit>> updateMeasurement(Measurement m) async {
     try {
       final model = MeasurementModel.fromEntity(m);
       await localSource.saveMeasurement(model);
@@ -49,18 +49,18 @@ class MeasurementsRepo implements IMeasurementContract {
         ..sort();
       return const Right(unit);
     } catch (e) {
-      return Left(DatabaseFailure(errorMsg: ""));
+      return const Left(MeasurementFailure.msDbFailure());
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> deleteMeasurement(Measurement m) async {
+  Future<Either<MeasurementFailure, Unit>> deleteMeasurement(Measurement m) async {
     try {
       await localSource.deleteMeasurement(MeasurementModel.fromEntity(m));
       buffer.removeWhere((e) => e.id == m.id);
       return const Right(unit);
     } catch (e) {
-      return Left(DatabaseFailure(errorMsg: ""));
+      return const Left(const MeasurementFailure.msDbFailure());
     }
   }
 }

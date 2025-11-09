@@ -20,6 +20,7 @@ class MembershipFailure with _$MembershipFailure {
 class MeasurementFailure with _$MeasurementFailure {
   const factory MeasurementFailure.msOffline() = _MsOffline;
   const factory MeasurementFailure.noRecords() = _NoRecords;
+  const factory MeasurementFailure.msDbFailure() = _MsDbFailure;
 }
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------

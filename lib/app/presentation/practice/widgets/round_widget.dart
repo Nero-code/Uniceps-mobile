@@ -94,7 +94,10 @@ class _RoundWidgetState extends State<RoundWidget> {
                     maxLength: 5,
                     buildCounter: (_, {required currentLength, required isFocused, required maxLength}) => null,
                     keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r"[^0-9^\.]"))],
+                    inputFormatters: [
+                      // FilteringTextInputFormatter.deny(RegExp(r"[^0-9^\.]")),
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
+                    ],
                     decoration: InputDecoration(
                       hintText: "0.0",
                       isDense: true,

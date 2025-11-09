@@ -9,8 +9,8 @@ class MeasurementCommands implements ICommand {
 
   const MeasurementCommands({required IMeasurementContract repo}) : _repo = repo;
 
-  Future<Either<Failure, List<Measurement>>> getMeasurements() => _repo.getMeasurements();
-  Future<Either<Failure, Unit>> createMeasurements(Measurement m) => _repo.createMeasurement(m);
-  Future<Either<Failure, Unit>> updateMeasurements(Measurement m) => _repo.updateMeasurement(m);
-  Future<Either<Failure, Unit>> deleteMeasurements(Measurement m) => _repo.deleteMeasurement(m);
+  Future<Either<MeasurementFailure, List<Measurement>>> getMeasurements() => _repo.getMeasurements();
+  Future<Either<MeasurementFailure, Unit>> createMeasurements(Measurement m) => _repo.createMeasurement(m);
+  Future<Either<MeasurementFailure, Unit>> updateMeasurements(Measurement m) => _repo.updateMeasurement(m);
+  Future<Either<MeasurementFailure, Unit>> deleteMeasurements(Measurement m) => _repo.deleteMeasurement(m);
 }

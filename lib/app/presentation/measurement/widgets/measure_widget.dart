@@ -12,7 +12,7 @@ class MeasureWidget extends StatelessWidget {
   });
 
   final String title, image;
-  final double value;
+  final double? value;
   final bool isCm;
   final VoidCallback? onPressed;
 
@@ -21,8 +21,10 @@ class MeasureWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.sizeOf(context);
+    // final isEdit = onPressed != null;
     return InkWell(
       onTap: onPressed,
+      borderRadius: BorderRadius.circular(20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -30,7 +32,7 @@ class MeasureWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.black, width: .5),
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     offset: Offset(0, 3),
                     color: Colors.grey,
@@ -41,9 +43,9 @@ class MeasureWidget extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Image(
-                width: screen.width * 0.2,
-                height: screen.width * 0.2,
-                image: AssetImage("images/muscle-groups/$image"),
+                width: screen.width * .2,
+                height: screen.width * .2,
+                image: AssetImage(image),
               ),
             ),
           ),
@@ -52,12 +54,12 @@ class MeasureWidget extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(fontSize: 10),
+                style: const TextStyle(fontSize: 10),
               ),
               Text(
-                "${intl.NumberFormat("###,###.#").format(value)} ${isCm ? "Cm" : "Kg"}",
+                "${value != null ? intl.NumberFormat("###,###.#").format(value) : '---'} ${isCm ? "Cm" : "Kg"}",
                 textDirection: TextDirection.ltr,
-                style: TextStyle(fontSize: 10),
+                style: const TextStyle(fontSize: 10),
               ),
             ],
           ),
