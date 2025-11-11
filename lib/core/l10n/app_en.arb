@@ -16,6 +16,7 @@
   "changePassword": "Change Password",
   "gymBoxTitle": "Please type in the code the Gym Gave you",
   "authBoxTitle": "Please enter your email",
+  "profileTitle": "Tell us about yourself",
   
   "ok": "OK",
   "no": "No",
@@ -163,6 +164,7 @@
   "errNoInternet":"No Internet Available",
   "errServerException":"An error occurred from our side, try again later",
   "errUnknown":"Unknown error occurred",
+  "errOpenSessionDelete": "you can't delete with an open session!",
 
   "endOfSubDate": "End of subscription Date",
   "dayQuete": "what're you going to train today?",

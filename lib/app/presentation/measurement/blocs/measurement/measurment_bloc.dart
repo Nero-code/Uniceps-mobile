@@ -1,6 +1,6 @@
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:uniceps/app/domain/commands/measurement/measurement_commands.dart';
+import 'package:uniceps/app/domain/commands/measurement_usecases/measurement_commands.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 

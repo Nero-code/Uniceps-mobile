@@ -56,7 +56,7 @@ class RoutineWithHeat extends StatelessWidget {
                     children: [
                       // shared - name
                       Text(
-                        routine.name + " دائري 1",
+                        routine.name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

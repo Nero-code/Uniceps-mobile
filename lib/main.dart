@@ -11,10 +11,11 @@ import 'package:uniceps/app/presentation/home/blocs/current_routine/current_rout
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/measurement/screens/measurement_screen.dart';
 import 'package:uniceps/app/presentation/plans/screens/plans_screen.dart';
+import 'package:uniceps/app/presentation/profile/screens/profile_screen.dart';
 import 'package:uniceps/app/presentation/routine/screens/routines_heat_screen.dart';
 import 'package:uniceps/app/presentation/settings/screens/settings_screen.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
-import 'package:uniceps/app/presentation/screens/profile/settings/screens/about_screen.dart';
+import 'package:uniceps/app/presentation/screens/about_screen.dart';
 import 'package:uniceps/firebase_options.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
@@ -104,25 +105,26 @@ class MyApp extends StatelessWidget {
             initialRoute: AppRoutes.splash,
             routes: {
               //  MAIN
-              AppRoutes.splash: (context) => const SplashScreen(),
-              AppRoutes.home: (context) => const HomeScreen(),
+              AppRoutes.splash: (_) => const SplashScreen(),
+              AppRoutes.profile: (_) => const ProfileScreen(),
+              AppRoutes.home: (_) => const HomeScreen(),
 
               // ROUTINE
-              // AppRoutes.routineManager: (context) =>
+              // AppRoutes.routineManager: (_) =>
               //     const RoutineManagementScreen(),
 
-              AppRoutes.routineManager: (context) => const RoutinesHeatScreen(),
+              AppRoutes.routineManager: (_) => const RoutinesHeatScreen(),
 
               //  AUTH
-              AppRoutes.auth: (context) => const EmailAuthScreen(),
+              AppRoutes.auth: (_) => const EmailAuthScreen(),
 
               // SETTINGS
-              AppRoutes.settings: (context) => const SettingsScreen(),
-              AppRoutes.measurements: (context) => const MeasurementScreen(),
-              AppRoutes.plans: (context) => const PlansScreen(),
+              AppRoutes.settings: (_) => const SettingsScreen(),
+              AppRoutes.measurements: (_) => const MeasurementScreen(),
+              AppRoutes.plans: (_) => const PlansScreen(),
 
               //  AUX
-              AppRoutes.about: (context) => const AboutScreen(),
+              AppRoutes.about: (_) => const AboutScreen(),
             },
           );
         },

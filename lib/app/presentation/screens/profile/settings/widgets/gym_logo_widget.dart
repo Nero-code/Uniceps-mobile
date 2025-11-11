@@ -37,7 +37,7 @@ class GymLogoWidget extends StatelessWidget {
                 child: CachedNetworkImage(
                   width: 80,
                   height: 80,
-                  imageUrl: "$API" "$HTTP_GYMS" "$HTTP_GYM_LOGO" "/${gym.id}",
+                  imageUrl: "$API_V2" "$HTTP_GYMS" "$HTTP_GYM_LOGO" "/${gym.id}",
                   imageBuilder: (context, imageProvider) {
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(25),

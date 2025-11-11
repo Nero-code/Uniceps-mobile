@@ -2,83 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-class MultiFabMenu extends StatefulWidget {
-  const MultiFabMenu({super.key});
-
-  @override
-  State<MultiFabMenu> createState() => _MultiFabMenuState();
-}
-
-class _MultiFabMenuState extends State<MultiFabMenu> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-  bool _isOpen = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 250),
-      vsync: this,
-    );
-    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
-  }
-
-  void _toggle() {
-    setState(() => _isOpen = !_isOpen);
-    _isOpen ? _controller.forward() : _controller.reverse();
-  }
-
-  Widget _buildFab({
-    required IconData icon,
-    required double offset,
-    required VoidCallback onPressed,
-  }) {
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (_, child) {
-        return Transform.translate(
-          offset: Offset(0, -offset * _animation.value),
-          child: Opacity(
-            opacity: _animation.value,
-            child: child,
-          ),
-        );
-      },
-      child: FloatingActionButton(
-        mini: true,
-        onPressed: onPressed,
-        child: Icon(icon),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final offset = 50.0;
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        _buildFab(icon: Icons.message, offset: offset * 3, onPressed: () => print("Message")),
-        _buildFab(icon: Icons.photo, offset: offset * 2, onPressed: () => print("Photo")),
-        _buildFab(icon: Icons.location_on, offset: offset, onPressed: () => print("Location")),
-        FloatingActionButton(
-          mini: true,
-          onPressed: _toggle,
-          child: AnimatedIcon(
-            icon: AnimatedIcons.menu_close,
-            progress: _animation,
-          ),
-        ),
-      ],
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+enum Direction {
+  top,
+  right,
+  bottom,
+  left,
 }
 
 class AnimatedStackMenu extends StatefulWidget {
@@ -86,6 +14,7 @@ class AnimatedStackMenu extends StatefulWidget {
   final Widget Function(Animation<double> anim, VoidCallback toggle) toggleButton;
   final double spacing;
   final Duration duration;
+  final Direction direction;
 
   const AnimatedStackMenu({
     super.key,
@@ -93,6 +22,7 @@ class AnimatedStackMenu extends StatefulWidget {
     required this.toggleButton,
     this.spacing = 60,
     this.duration = const Duration(milliseconds: 300),
+    this.direction = Direction.top,
   });
 
   @override
@@ -127,7 +57,12 @@ class _AnimatedStackMenuState extends State<AnimatedStackMenu> with SingleTicker
           return Align(
             alignment: Alignment.center,
             child: Padding(
-              padding: EdgeInsets.only(bottom: offset * _animation.value),
+              padding: EdgeInsets.only(
+                top: widget.direction == Direction.top ? offset * _animation.value : 0.0,
+                right: widget.direction == Direction.right ? offset * _animation.value : 0.0,
+                bottom: widget.direction == Direction.bottom ? offset * _animation.value : 0.0,
+                left: widget.direction == Direction.left ? offset * _animation.value : 0.0,
+              ),
               child: Opacity(
                 opacity: _animation.value,
                 child: child,
@@ -143,13 +78,29 @@ class _AnimatedStackMenuState extends State<AnimatedStackMenu> with SingleTicker
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.bottomRight,
+      alignment: alignWithDirection(),
       clipBehavior: Clip.none,
       children: [
         ..._buildAnimatedChildren(),
         widget.toggleButton(_animation, _toggle),
       ],
     );
+  }
+
+  Alignment alignWithDirection() {
+    switch (widget.direction) {
+      case Direction.top:
+        return Alignment.topCenter;
+
+      case Direction.right:
+        return Alignment.centerRight;
+
+      case Direction.bottom:
+        return Alignment.bottomCenter;
+
+      default:
+        return Alignment.centerLeft;
+    }
   }
 
   @override

@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class GenderSelectBox extends StatefulWidget {
   const GenderSelectBox({super.key, required this.onSelect, this.initialValue});
 
-  final void Function(bool? selected) onSelect;
+  final void Function(bool selected) onSelect;
   final bool? initialValue;
 
   @override
@@ -34,16 +34,14 @@ class _GenderSelectBoxState extends State<GenderSelectBox> {
               Material(
                 elevation: isMale ?? false ? 3 : 0,
                 borderRadius: BorderRadius.circular(10),
-                color: isMale ?? false
-                    ? Theme.of(context).colorScheme.primary
-                    : background,
+                color: isMale ?? false ? Theme.of(context).colorScheme.primary : background,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(10),
                   onTap: () {
                     if (isMale != null && isMale == true) return;
                     isMale = !(isMale ?? false);
                     setState(() {
-                      widget.onSelect(isMale);
+                      widget.onSelect(isMale!);
                     });
                   },
                   child: SizedBox(
@@ -70,7 +68,7 @@ class _GenderSelectBoxState extends State<GenderSelectBox> {
                     if (isMale != null && isMale == false) return;
                     isMale = !(isMale ?? true);
                     setState(() {
-                      widget.onSelect(isMale);
+                      widget.onSelect(isMale!);
                     });
                   },
                   child: SizedBox(

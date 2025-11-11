@@ -9,7 +9,7 @@ import 'package:uniceps/app/presentation/practice/dialogs/confirmation_dialog.da
 import 'package:uniceps/app/presentation/practice/dialogs/session_complete_dialog.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_body.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_header.dart';
-import 'package:uniceps/app/presentation/screens/loading_page.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 
@@ -53,7 +53,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
         builder: (context, sessionState) {
           return sessionState.map(
               initial: (_) => const SizedBox(),
-              loading: (_) => const Material(child: LoadingPage()),
+              loading: (_) => const Material(child: LoadingIndicator()),
               noActiveSession: (_) => const SizedBox(),
               loaded: (sessionState) => BlocProvider(
                     create: (context) => PracticeCubit(commands: di.sl())..getPracticeDay(sessionState.session.dayId),
@@ -122,7 +122,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                               } else if (state is PracticeErrorState) {
                                 return Center(child: Text(state.failure.getErrorMessage()));
                               }
-                              return const LoadingPage();
+                              return const LoadingIndicator();
                             },
                           ),
                           Positioned(

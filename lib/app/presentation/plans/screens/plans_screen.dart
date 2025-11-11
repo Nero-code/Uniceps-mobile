@@ -10,7 +10,7 @@ import 'package:uniceps/app/presentation/plans/blocs/plans_bloc.dart';
 import 'package:uniceps/app/presentation/plans/widgets/plan_widget.dart';
 import 'package:uniceps/app/presentation/screens/error_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:uniceps/app/presentation/screens/loading_page.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:url_launcher/url_launcher.dart';
@@ -47,8 +47,7 @@ class _PlansScreenState extends State<PlansScreen> {
                         loaded: (m) => AlertBar(
                           content: Text(
                               locale.memberDurationAlart(
-                                  "${m.endDate.difference(DateTime.now()).inDays}",
-                                  DateFormat.yMd().format(m.endDate)),
+                                  "${m.endDate.difference(DateTime.now()).inDays}", DateFormat.yMd().format(m.endDate)),
                               style: const TextStyle(fontSize: 12)),
                         ),
                         orElse: () => const SizedBox(),
@@ -66,13 +65,13 @@ class _PlansScreenState extends State<PlansScreen> {
                   ),
                   SizedBox(width: screen.width),
                   BlocBuilder<PlansBloc, PlansState>(
-                    buildWhen: (previous, current) => current.maybeWhen(
-                        orElse: () => true, buyPlanAndReset: (i) => false),
+                    buildWhen: (previous, current) =>
+                        current.maybeWhen(orElse: () => true, buyPlanAndReset: (i) => false),
                     builder: (context, state) => state.when(
                         initial: () => const SizedBox(),
                         loading: () => const Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: LoadingPage(),
+                              child: LoadingIndicator(),
                             ),
                         loaded: (plan) => SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
@@ -80,10 +79,8 @@ class _PlansScreenState extends State<PlansScreen> {
                                 children: plan.items
                                     .map((item) => PlanWidget(
                                         item: item,
-                                        onTap: () =>
-                                            setState(() => selectedPlan = item),
-                                        isSelected:
-                                            selectedPlan?.id == item.id))
+                                        onTap: () => setState(() => selectedPlan = item),
+                                        isSelected: selectedPlan?.id == item.id))
                                     .toList(),
                               ),
                             ),
@@ -113,25 +110,18 @@ class _PlansScreenState extends State<PlansScreen> {
                     ],
                     rows: [
                       DataRow(cells: [
-                        DataCell(Text(ltr
-                            ? 'Access to Basic Workouts'
-                            : 'وصول للتمارين الاساسية')),
+                        DataCell(Text(ltr ? 'Access to Basic Workouts' : 'وصول للتمارين الاساسية')),
                         const DataCell(Icon(Icons.check, color: Colors.green)),
                         const DataCell(Icon(Icons.check, color: Colors.green)),
                       ]),
                       DataRow(cells: [
-                        DataCell(Text(ltr
-                            ? 'Custom Workout Plans'
-                            : 'برامج تدريبية مخصصة')),
-                        const DataCell(
-                            Icon(Icons.trip_origin, color: Colors.amber)),
+                        DataCell(Text(ltr ? 'Custom Workout Plans' : 'برامج تدريبية مخصصة')),
+                        const DataCell(Icon(Icons.trip_origin, color: Colors.amber)),
                         const DataCell(Icon(Icons.check, color: Colors.green)),
                       ]),
                       DataRow(cells: [
-                        DataCell(
-                            Text(ltr ? 'Progress Tracking' : 'تتبع الانجاز')),
-                        const DataCell(
-                            Icon(Icons.trip_origin, color: Colors.amber)),
+                        DataCell(Text(ltr ? 'Progress Tracking' : 'تتبع الانجاز')),
+                        const DataCell(Icon(Icons.trip_origin, color: Colors.amber)),
                         const DataCell(Icon(Icons.check, color: Colors.green)),
                       ]),
                       // DataRow(cells: [
@@ -140,8 +130,7 @@ class _PlansScreenState extends State<PlansScreen> {
                       //   DataCell(Icon(Icons.check, color: Colors.green)),
                       // ]),
                       DataRow(cells: [
-                        DataCell(Text(
-                            ltr ? 'Ad-Free Experience' : 'تجربة بلا اعلانات')),
+                        DataCell(Text(ltr ? 'Ad-Free Experience' : 'تجربة بلا اعلانات')),
                         const DataCell(Icon(Icons.close, color: Colors.red)),
                         const DataCell(Icon(Icons.check, color: Colors.green)),
                       ]),
@@ -166,8 +155,7 @@ class _PlansScreenState extends State<PlansScreen> {
                       //   DataCell(Icon(Icons.check, color: Colors.green)),
                       // ]),
                       DataRow(cells: [
-                        DataCell(
-                            Text(ltr ? 'Priority Support' : 'اولوية في الدعم')),
+                        DataCell(Text(ltr ? 'Priority Support' : 'اولوية في الدعم')),
                         const DataCell(Icon(Icons.close, color: Colors.red)),
                         const DataCell(Icon(Icons.check, color: Colors.green)),
                       ]),
@@ -196,30 +184,22 @@ class _PlansScreenState extends State<PlansScreen> {
                   listener: (context, state) {
                     state.maybeWhen(
                       buyPlanAndReset: (paymentResponse) async {
-                        final res = await launchUrl(
-                            Uri.parse(paymentResponse.paymentUrl));
+                        final res = await launchUrl(Uri.parse(paymentResponse.paymentUrl));
                         if (res && context.mounted) {
-                          context
-                              .read<MembershipBloc>()
-                              .add(const MembershipEvent.getCurrentPlan());
+                          context.read<MembershipBloc>().add(const MembershipEvent.getCurrentPlan());
                           Navigator.pop(context);
                         }
                       },
                       orElse: () {},
                     );
                   },
-                  buildWhen: (previous, current) => current.maybeWhen(
-                      orElse: () => true, buyPlanAndReset: (res) => false),
+                  buildWhen: (previous, current) =>
+                      current.maybeWhen(orElse: () => true, buyPlanAndReset: (res) => false),
                   builder: (context, state) {
                     final activateBtn = selectedPlan != null &&
-                        state.maybeWhen(
-                            orElse: () => true,
-                            loading: () => false,
-                            buyPlanAndReset: (_) => false);
+                        state.maybeWhen(orElse: () => true, loading: () => false, buyPlanAndReset: (_) => false);
                     return ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.amber,
-                            foregroundColor: Colors.white),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.amber, foregroundColor: Colors.white),
                         onPressed: activateBtn
                             ? () => showDialog(
                                 context: context,
@@ -227,26 +207,19 @@ class _PlansScreenState extends State<PlansScreen> {
                                       value: context.read<PlansBloc>(),
                                       child: AlertDialog(
                                         title: Text(locale.buyPlanQuestion),
-                                        content: Text(locale.buyPlancontent(
-                                            selectedPlan?.durationString ??
-                                                '')),
+                                        content: Text(locale.buyPlancontent(selectedPlan?.durationString ?? '')),
                                         actions: [
                                           ElevatedButton.icon(
                                             style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.amber,
-                                                foregroundColor: Colors.white),
+                                                backgroundColor: Colors.amber, foregroundColor: Colors.white),
                                             label: Text(
                                               locale.ok,
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold),
+                                              style: const TextStyle(fontWeight: FontWeight.bold),
                                             ),
                                             icon: const Icon(Icons.done),
                                             onPressed: selectedPlan != null
                                                 ? () async {
-                                                    context
-                                                        .read<PlansBloc>()
-                                                        .add(PlansEvent.buyPlan(
-                                                            selectedPlan!));
+                                                    context.read<PlansBloc>().add(PlansEvent.buyPlan(selectedPlan!));
 
                                                     Navigator.pop(context);
                                                   }
@@ -255,8 +228,7 @@ class _PlansScreenState extends State<PlansScreen> {
                                           TextButton.icon(
                                             label: Text(locale.cancel),
                                             icon: const Icon(Icons.close),
-                                            onPressed: () =>
-                                                Navigator.pop(context),
+                                            onPressed: () => Navigator.pop(context),
                                           ),
                                         ],
                                       ),

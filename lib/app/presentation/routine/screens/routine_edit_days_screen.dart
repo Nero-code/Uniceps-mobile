@@ -8,7 +8,7 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/days_edit/days_edit_bloc.dart';
-import 'package:uniceps/app/presentation/screens/loading_page.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_add_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_delete_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_edit_flaoting_menu.dart';
@@ -334,7 +334,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                           callback: null,
                         );
                       }
-                      return const LoadingPage();
+                      return const LoadingIndicator();
                     },
                   ),
                 ],

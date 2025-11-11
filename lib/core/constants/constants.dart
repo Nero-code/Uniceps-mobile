@@ -12,14 +12,22 @@ import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 ///
 
 const APP_NAME = 'Uniceps';
-const APP_VERSION = 'v1.0.0';
+const APP_VERSION = 'v2.0.0';
 const APP_RELEASE_DATE = '10/10/2024';
 
 const APP_LOGO = "images/logo/Logo.png";
 const APP_LOGO_DARK = "images/logo/Logo-dark.png";
 const APP_LOGO_LIGHT = "images/logo/Logo-light.png";
 
-enum Gender { male, female }
+enum Gender {
+  male(1),
+  female(2);
+
+  final int val;
+  const Gender(this.val);
+}
+
+Gender parseGender(int val) => Gender.values.firstWhere((g) => g.val == val);
 
 enum Lang {
   en('en'),
@@ -141,7 +149,9 @@ final HEADERS = {
 
 const API = kDebugMode || kProfileMode ? r"https://uniceps.runasp.net/api" : r"https://uniceps.trio-verse.com/api/v1";
 
-const API_V2 = kDebugMode || kProfileMode ? r"uniceps.runasp.net" : r"uniceps.trio-verse.com/api/v1";
+// const API_V2 = kDebugMode || kProfileMode ? r"uniceps.runasp.net" : r"uniceps.trio-verse.com/api/v1";
+const API_V2 = r"uniceps.runasp.net";
+// const API_V2 = r"uniceps.trio-verse.com/api/v1";
 
 /// PRODUCTION URL
 // const API = r"https://uniceps.trio-verse.com/api/v1";

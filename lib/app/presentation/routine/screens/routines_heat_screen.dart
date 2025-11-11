@@ -6,7 +6,7 @@ import 'package:uniceps/app/presentation/home/blocs/current_routine/current_rout
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/routines_with_heat/routines_with_heat_bloc.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_with_heat.dart';
-import 'package:uniceps/app/presentation/screens/loading_page.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_create_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_delete_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_options_dialog.dart';
@@ -66,7 +66,7 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
             builder: (context, state) {
               return state.map(
                 initial: (_) => const SizedBox(),
-                loading: (_) => const LoadingPage(),
+                loading: (_) => const LoadingIndicator(),
                 error: (state) => ReloadScreenWidget(
                     f: state.f,
                     callBack: () =>
@@ -122,9 +122,9 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                                             if (context.mounted) {
                                               ScaffoldMessenger.of(context).clearSnackBars();
                                               ScaffoldMessenger.of(context).showSnackBar(
-                                                const SnackBar(
+                                                SnackBar(
                                                   backgroundColor: Colors.red,
-                                                  content: Text("you can't delete with an open session!"),
+                                                  content: Text(locale.errOpenSessionDelete),
                                                 ),
                                               );
                                             }

@@ -14,7 +14,7 @@ import 'package:uniceps/app/presentation/home/widgets/practice_panel.dart';
 import 'package:uniceps/app/presentation/home/widgets/routine_skeleton.dart';
 import 'package:uniceps/app/presentation/practice/screens/practice_screen.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_with_heat.dart';
-import 'package:uniceps/app/presentation/screens/loading_page.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               onSettings: () => Navigator.pushNamed(context, AppRoutes.settings),
                               onAnalytics: () {},
                               mainIcon: state.maybeWhen(
-                                loading: () => const LoadingPage(),
+                                loading: () => const LoadingIndicator(),
                                 noActiveSession: () => Icon(
                                   Icons.rocket,
                                   size: 50,
@@ -110,36 +110,24 @@ class _HomeScreenState extends State<HomeScreen> {
                         BlocBuilder<CurrentRoutineCubit, CurrentRoutineState>(
                           builder: (context, state) {
                             return state.map(
-                              initial: (_) => SizedBox(),
-                              loading: (_) => const LoadingPage(),
-                              loaded: (state) => RoutineWithHeat(
-                                  routine: state.c,
-                                  heat: state.heat,
-                                  onTap: () async {
-                                    await Navigator.pushNamed(context, AppRoutes.routineManager);
-                                    if (context.mounted) {
-                                      context.read<CurrentRoutineCubit>().getCurrentRoutine();
-                                    }
-                                  },
-                                  onMenu: null),
-                              // CurrentRoutineCard(
-                              //       routine: state.c,
-                              //       onPressed: () async {
-                              //         await Navigator.pushNamed(context, AppRoutes.routineManager);
-                              //         if (context.mounted) {
-                              //           context.read<CurrentRoutineCubit>().getCurrentRoutine();
-                              //         }
-                              //       },
-                              //     ),
-                              error: (state) => RoutineSkeleton(
-                                onTap: () async {
-                                  await Navigator.pushNamed(context, AppRoutes.routineManager);
-                                  if (context.mounted) {
-                                    context.read<CurrentRoutineCubit>().getCurrentRoutine();
-                                  }
-                                },
-                              ),
-                            );
+                                initial: (_) => const SizedBox(),
+                                loading: (_) => const RoutineSkeleton(),
+                                loaded: (state) => RoutineWithHeat(
+                                    routine: state.c,
+                                    heat: state.heat,
+                                    onMenu: null,
+                                    onTap: () async {
+                                      await Navigator.pushNamed(context, AppRoutes.routineManager);
+                                      if (context.mounted) {
+                                        context.read<CurrentRoutineCubit>().getCurrentRoutine();
+                                      }
+                                    }),
+                                error: (state) => RoutineSkeleton(onTap: () async {
+                                      await Navigator.pushNamed(context, AppRoutes.routineManager);
+                                      if (context.mounted) {
+                                        context.read<CurrentRoutineCubit>().getCurrentRoutine();
+                                      }
+                                    }));
                           },
                         ),
                         const SizedBox(),

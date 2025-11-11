@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 
 class RoutineSkeleton extends StatelessWidget {
   const RoutineSkeleton({super.key, this.onTap});
@@ -23,9 +24,8 @@ class RoutineSkeleton extends StatelessWidget {
           child: InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(15)),
             onTap: onTap,
-            // onLongPress: onLongPress,
             child: Center(
-              child: Icon(Icons.add, size: 50, color: Colors.grey),
+              child: onTap != null ? const Icon(Icons.add, size: 50, color: Colors.grey) : const LoadingIndicator(),
             ),
           ),
         ),

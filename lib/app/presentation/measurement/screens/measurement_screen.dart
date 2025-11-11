@@ -5,7 +5,7 @@ import 'package:intl/intl.dart' as intl;
 import 'package:uniceps/app/presentation/measurement/dialogs/delete_dialog.dart';
 import 'package:uniceps/app/presentation/measurement/screens/add_edit_measurement_screen.dart';
 import 'package:uniceps/app/presentation/measurement/widgets/multifab_menu.dart';
-import 'package:uniceps/app/presentation/screens/loading_page.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/core/constants/muscles_images.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/app/presentation/measurement/blocs/measurement/measurment_bloc.dart';
@@ -62,7 +62,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
             return state.map(
               initial: (_) => const SizedBox(),
               dirty: (_) => const SizedBox(),
-              loading: (_) => const LoadingPage(),
+              loading: (_) => const LoadingIndicator(),
               loaded: (state) {
                 childBuilder(state.list[page]);
                 return Stack(
@@ -86,7 +86,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                         }
                       },
                       child: Padding(
-                        padding: EdgeInsets.only(top: MediaQuery.sizeOf(context).height * 0.1),
+                        padding: EdgeInsets.only(top: MediaQuery.sizeOf(context).height * 0.15),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -169,33 +169,31 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                                 padding: EdgeInsets.zero,
                                 backgroundColor: Colors.white,
                                 surfaceTintColor: Colors.blue),
-                            onPressed:
-                                () async {
-                                    //  RTL  -->  Right (Next)
-                                    if (isLoading) return;
-                                    if (isRtl && page < state.list.length - 1) {
-                                      await animate(true);
-                                    }
-                                    if (!isRtl && page > 0) {
-                                      await animate(false);
-                                    }
-                                  }
-                                ,
+                            onPressed: () async {
+                              //  RTL  -->  Right (Next)
+                              if (isLoading) return;
+                              if (isRtl && page < state.list.length - 1) {
+                                await animate(true);
+                              }
+                              if (!isRtl && page > 0) {
+                                await animate(false);
+                              }
+                            },
                             icon: Icon(
                               Icons.arrow_forward_ios_rounded,
                               color: Colors.grey.shade600,
                             ),
                           ),
-                          const SizedBox(width: 30),
                         ],
                       ),
                     ),
                     Positioned(
-                      bottom: 0,
+                      top: 30,
                       left: isRtl ? 25.0 : null,
                       right: isRtl ? null : 25,
                       child: AnimatedStackMenu(
                         spacing: 50,
+                        direction: isRtl ? Direction.left : Direction.right,
                         toggleButton: (animation, toggle) => IconButton.filled(
                           style: IconButton.styleFrom(
                             foregroundColor: Colors.grey.shade700,
