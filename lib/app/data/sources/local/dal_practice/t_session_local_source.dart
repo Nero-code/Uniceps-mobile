@@ -287,8 +287,9 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     // Part 2:
     //   Get Heat objects.
 
-    int dc, ic, sc, tc, lastDayId;
-    dc = ic = sc = tc = lastDayId = 0;
+    int dc, ic, sc, tc;
+    dc = ic = sc = tc = 0;
+    int? lastDayId;
     Duration duration = Duration.zero;
     DateTime newestSessionDate = DateTime(2000);
 
@@ -297,12 +298,12 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       final sessions = await (_database.select(_database.tSessions)..where((f) => f.dayId.equals(day.id))).get();
       tc = sessions.length;
       final range = sessions.map((e) => e.startedAt).toList()..sort();
-
-      duration = range.last.difference(range.first);
-
-      if (newestSessionDate.difference(range.last).inDays < 0) {
-        newestSessionDate = range.last;
-        lastDayId = day.id;
+      if (range.isNotEmpty) {
+        duration = range.last.difference(range.first);
+        if (newestSessionDate.difference(range.last).inHours < 0) {
+          newestSessionDate = range.last;
+          lastDayId = day.id;
+        }
       }
 
       final items = await (_database.select(_database.routineItems)..where((f) => f.dayId.equals(day.id))).get();

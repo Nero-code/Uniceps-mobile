@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 
 class CaptainUniCard extends StatelessWidget {
   const CaptainUniCard(
@@ -20,11 +22,11 @@ class CaptainUniCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     final screenSize = MediaQuery.sizeOf(context);
+    final isRtl = context.read<LocaleCubit>().state.isRtl();
     return Stack(
       children: [
         Container(
-          margin:
-              EdgeInsets.only(top: screenSize.width * .18, left: 10, right: 10),
+          margin: EdgeInsets.only(top: screenSize.width * .18, left: 10, right: 10),
           padding: const EdgeInsets.all(8.0),
           width: screenSize.width,
           decoration: BoxDecoration(
@@ -41,10 +43,7 @@ class CaptainUniCard extends StatelessWidget {
                   children: [
                     Text(
                       locale.captainUni,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       "$content الالتزام التمرين يساعدك بالاقتراب من اهدافك تدرب الان!!الالتزام التمرين يساعدك بالاقتراب من اهدافك تدرب الان!!",
@@ -67,11 +66,12 @@ class CaptainUniCard extends StatelessWidget {
         //     ),
         //   ),
         // ),
-        Positioned(
+        Positioned.directional(
           top: 0.0,
-          right: -screenSize.width * 0.05,
+          start: -screenSize.width * 0.05,
+          textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
           child: Transform.flip(
-            flipX: needsFlip,
+            flipX: isRtl ? needsFlip : !needsFlip,
             child: Image(
               image: AssetImage(imagePath),
               width: screenSize.width * 0.50,

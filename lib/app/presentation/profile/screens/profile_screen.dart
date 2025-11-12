@@ -73,7 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         },
                       );
                     },
-                    icon: Icon(Icons.language),
+                    icon: const Icon(Icons.language),
                   ),
                 ),
                 Column(
@@ -109,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         decoration: InputDecoration(
                           labelText: locale.pName,
                           isDense: true,
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                         ),
                       ),
                     ),
@@ -141,7 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               },
                               child: Text(
                                 DateFormat("d/M/y").format(birthDate ?? DateTime.now()),
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
                           ],
