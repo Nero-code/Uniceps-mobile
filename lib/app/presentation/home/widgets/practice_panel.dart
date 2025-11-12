@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/home/widgets/level_indicator.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/box_botton.dart';
 
 class PracticePanel extends StatelessWidget {
@@ -76,21 +78,37 @@ class PracticePanel extends StatelessWidget {
               },
             ),
           ),
-          Align(
-            alignment: Alignment.lerp(Alignment.bottomLeft, Alignment.topCenter, .20)!,
-            child: BoxButton(
-              isCircle: true,
-              width: smallBtnSize,
-              height: smallBtnSize,
-              background: btnBackgroundColor,
-              onTap: onAnalytics,
-              child: Icon(
-                Icons.bar_chart_rounded,
-                size: smallBtnIcon,
-                color: Colors.red,
+          Builder(builder: (context) {
+            // final acc = context.watch<AccountCubit>();
+            final mem = context.watch<MembershipBloc>();
+
+            return Align(
+              alignment: Alignment.lerp(Alignment.bottomLeft, Alignment.topCenter, .20)!,
+              child: Badge(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                backgroundColor: Colors.amber,
+                isLabelVisible: mem.state.maybeWhen(orElse: () => true, loaded: (_) => false),
+                label: const Image(
+                  image: AssetImage(IMG_PREMIUM),
+                  color: Colors.white,
+                  width: 15,
+                  height: 15,
+                ),
+                child: BoxButton(
+                  isCircle: true,
+                  width: smallBtnSize,
+                  height: smallBtnSize,
+                  background: btnBackgroundColor,
+                  onTap: mem.state.whenOrNull(loaded: (_) => onAnalytics) ?? onAnalytics, // TODO: Remove bypass...
+                  child: Icon(
+                    Icons.bar_chart_rounded,
+                    size: smallBtnIcon,
+                    color: Colors.red,
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          }),
           Align(
             alignment: Alignment.lerp(Alignment.bottomRight, Alignment.topCenter, .20)!,
             child: BoxButton(
@@ -124,10 +142,10 @@ class PracticePanel extends StatelessWidget {
                       color: Colors.orange,
                       size: 30,
                     ),
-                    Text(
-                      "115",
-                      style: TextStyle(fontSize: 9),
-                    ),
+                    // Text(
+                    //   "115",
+                    //   style: TextStyle(fontSize: 9),
+                    // ),
                   ],
                 ),
               ),
