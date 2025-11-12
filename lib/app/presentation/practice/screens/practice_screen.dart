@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/practice_entities/t_session.dart';
+import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/practice/blocs/practice/practice_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/stopwatch/stopwatch_cubit.dart';
@@ -37,6 +38,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
         }
         if (context.mounted) {
           context.read<StopwatchCubit>().stopStopwatch();
+          context.read<CurrentRoutineCubit>().getCurrentRoutine();
         }
       },
       child: BlocConsumer<SessionBloc, SessionState>(
@@ -91,7 +93,10 @@ class _PracticeScreenState extends State<PracticeScreen> {
                             buildWhen: (previous, current) => current is PracticeLoadedState,
                             builder: (context, state) {
                               if (state is PracticeLoadedState) {
-                                totalProgress = state.day.exercises.map((e) => e.sets.length).reduce((a, b) => a + b);
+                                if (state.day.exercises.isNotEmpty) {
+                                  totalProgress = state.day.exercises.map((e) => e.sets.length).reduce((a, b) => a + b);
+                                }
+
                                 return SingleChildScrollView(
                                   padding: const EdgeInsets.only(bottom: 100),
                                   child: ExpansionPanelList(
@@ -163,12 +168,25 @@ class _PracticeScreenState extends State<PracticeScreen> {
     );
   }
 
-  void _finishSession(BuildContext context, TSession session, bool fullSession) async {
-    final confirmation = await showDialog<bool>(context: context, builder: (context) => const ConfirmationDialog());
-    if ((confirmation ?? false) && context.mounted) {
-      context.read<SessionBloc>().add(SessionEvent.stopSession(session, fullSession));
-      context.read<StopwatchCubit>().resetStopwatch();
-    }
+  void _finishSession(BuildContext context, TSession session, bool fullSession) {
+    showDialog<bool>(
+        context: context,
+        builder: (_) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: context.read<SessionBloc>()),
+              BlocProvider.value(value: context.read<StopwatchCubit>()),
+              BlocProvider.value(value: context.read<CurrentRoutineCubit>()),
+            ],
+            child: ConfirmationDialog(
+              onConfirm: () {
+                context.read<SessionBloc>().add(SessionEvent.stopSession(session, fullSession));
+                context.read<StopwatchCubit>().resetStopwatch();
+                context.read<CurrentRoutineCubit>().getCurrentRoutine();
+              },
+            ),
+          );
+        });
   }
 
   void _expansionCallback(int panelIndex, bool isExpanded) {

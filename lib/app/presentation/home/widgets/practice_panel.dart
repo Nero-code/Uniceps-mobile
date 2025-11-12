@@ -135,7 +135,7 @@ class PracticePanel extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.lerp(Alignment.topRight, Alignment.topCenter, 0.2)!,
-            child: const LevelIndicator(size: 60),
+            child: const LevelIndicator(size: 55),
           ),
         ],
       ),

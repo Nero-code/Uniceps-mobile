@@ -5,9 +5,11 @@ class LevelIndicator extends StatelessWidget {
   const LevelIndicator({
     super.key,
     this.size = 50,
+    this.progress = 0,
   });
 
   final double size;
+  final double progress;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class LevelIndicator extends StatelessWidget {
       width: size,
       height: size,
       child: GradientCircularProgressIndicator(
-        progress: 0.67,
+        progress: progress,
         backgroundColor: Colors.grey.shade200,
         gradient: const LinearGradient(
           begin: Alignment.topCenter,
@@ -26,7 +28,7 @@ class LevelIndicator extends StatelessWidget {
             Colors.amber, Colors.amber,
           ],
         ),
-        child: const Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Text(
@@ -48,7 +50,7 @@ class LevelIndicator extends StatelessWidget {
 
             Icon(
               Icons.fitness_center_outlined,
-              size: 20,
+              size: size * .5,
               color: Colors.amber,
             ),
           ],

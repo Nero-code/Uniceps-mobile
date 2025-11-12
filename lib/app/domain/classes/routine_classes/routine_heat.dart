@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class RoutineHeat {
   final String routineName;
   final int sessionCount;
@@ -6,6 +8,26 @@ class RoutineHeat {
   final int days;
   final int exercises;
   final int sets;
+
+  double get value {
+    final countNorm = sessionCount / 30;
+    final timeNorm = duration.inDays / 60;
+    final norm = countNorm - timeNorm > 0 ? countNorm : timeNorm;
+
+    if (norm >= 1) return 1;
+    return norm;
+  }
+
+  Color get color {
+    final countNorm = sessionCount / 30;
+    final timeNorm = duration.inDays / 60;
+    final norm = countNorm - timeNorm > 0 ? countNorm : timeNorm;
+
+    if (norm >= 1) return Colors.red;
+    if (norm >= .75) return Color.lerp(Colors.amber, Colors.red, (norm - .75) * 4)!;
+    if (norm > 0) return Colors.blue;
+    return Colors.green;
+  }
 
   const RoutineHeat({
     required this.routineName,

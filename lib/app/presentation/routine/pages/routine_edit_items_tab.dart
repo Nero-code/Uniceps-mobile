@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
+import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/exercises_v2_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/muscle_group_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
@@ -26,6 +27,7 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab> with AutomaticK
   Widget build(BuildContext context) {
     super.build(context);
     final locale = AppLocalizations.of(context)!;
+    final isRtl = context.read<LocaleCubit>().state.isRtl();
     return BlocProvider(
       create: (context) =>
           ItemsEditBloc(commands: di.sl(), mediaHelper: di.sl())..add(GetRoutineDayItemsEvent(dayId: widget.dayId)),
@@ -76,9 +78,10 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab> with AutomaticK
                           ],
                         ),
                       ),
-                Positioned(
+                Positioned.directional(
                   bottom: 20.0,
-                  left: 20.0,
+                  end: 20.0,
+                  textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
                   child: FloatingActionButton(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     foregroundColor: Colors.white,
