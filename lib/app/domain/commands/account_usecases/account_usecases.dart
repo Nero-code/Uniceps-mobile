@@ -12,17 +12,15 @@ class AccountUsecases {
 
   final IAccountService _repo;
 
-  Future<Either<Failure, Account>> getUserAccount() async =>
-      await _repo.getUserAccount();
+  Future<Either<Failure, Account>> getUserAccount() => _repo.getUserAccount();
 
-  Future<Either<MembershipFailure, Membership>> getSubscriptionPlan() async =>
-      await _repo.getUserMembership();
+  Future<Either<MembershipFailure, Membership>> getSubscriptionPlan() => _repo.getUserMembership();
 
-  Future<Either<Failure, Plan>> getPlans() async => await _repo.getPlans();
+  Future<Either<Failure, Plan>> getPlans() => _repo.getPlans();
 
-  Future<Either<Failure, PaymentResponse>> buyPlan(PlanItem item) async =>
-      await _repo.buyPlan(item);
+  Future<Either<Failure, PaymentResponse>> buyPlan(PlanItem item) => _repo.buyPlan(item);
 
-  Future<Either<Failure, Unit>> deleteAccount() async =>
-      await _repo.deleteAccount();
+  Future<Either<Failure, Unit>> logout() => _repo.logout();
+
+  Future<Either<Failure, Unit>> deleteAccount() => _repo.deleteAccount();
 }

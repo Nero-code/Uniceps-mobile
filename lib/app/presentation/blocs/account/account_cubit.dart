@@ -17,4 +17,12 @@ class AccountCubit extends Cubit<AccountState> {
       (r) => emit(AccountState.hasAccount(r)),
     );
   }
+
+  Future<void> logout() async {
+    final res = await _accountUsecases.logout();
+    res.fold(
+      (l) => emit(state),
+      (r) => emit(const AccountState.unauthenticated()),
+    );
+  }
 }

@@ -2,8 +2,8 @@
 // ignore_for_file: unused_local_variable, unused_import
 import 'package:drift/drift.dart';
 import 'package:drift_dev/api/migrations_native.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
-import 'package:test/test.dart';
 import 'generated/schema.dart';
 
 import 'generated/schema_v1.dart' as v1;
@@ -77,16 +77,11 @@ void main() {
         batch.insertAll(oldDb.routineItems, oldRoutineItemsData);
       },
       validateItems: (newDb) async {
-        expect(
-            expectedNewRoutinesData, await newDb.select(newDb.routines).get());
-        expect(expectedNewDaysGroupData,
-            await newDb.select(newDb.daysGroup).get());
-        expect(expectedNewExerciseGroupsData,
-            await newDb.select(newDb.exerciseGroups).get());
-        expect(expectedNewExercisesData,
-            await newDb.select(newDb.exercises).get());
-        expect(expectedNewRoutineItemsData,
-            await newDb.select(newDb.routineItems).get());
+        expect(expectedNewRoutinesData, await newDb.select(newDb.routines).get());
+        expect(expectedNewDaysGroupData, await newDb.select(newDb.daysGroup).get());
+        expect(expectedNewExerciseGroupsData, await newDb.select(newDb.exerciseGroups).get());
+        expect(expectedNewExercisesData, await newDb.select(newDb.exercises).get());
+        expect(expectedNewRoutineItemsData, await newDb.select(newDb.routineItems).get());
       },
     );
   });

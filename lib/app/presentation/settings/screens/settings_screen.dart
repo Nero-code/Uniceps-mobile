@@ -118,35 +118,43 @@ class SettingsScreen extends StatelessWidget {
                     subtitle: "yoyoyoyo",
                     onPressed: () => Navigator.of(context).pushNamed(ROUTE_ABOUT),
                   ),
-                  SettingsTile(
-                    icon: Icons.logout_rounded,
-                    iconsColor: Colors.red,
-                    title: locale.logout,
-                    subtitle: "",
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(locale.logoutAlert),
-                            content: Text(locale.logoutAlertContents),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text(locale.cancel),
-                              ),
-                              TextButton(
-                                onPressed: () async {},
-                                child: Text(
-                                  locale.ok,
-                                  style: const TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            ],
-                          ).build(context);
-                        },
+                  BlocBuilder<AccountCubit, AccountState>(
+                    builder: (context, state) {
+                      return SettingsTile(
+                        icon: Icons.logout_rounded,
+                        iconsColor: Colors.red,
+                        title: locale.logout,
+                        subtitle: "",
+                        onPressed: state.whenOrNull(
+                            hasAccount: (_) => () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text(locale.logoutAlert),
+                                        content: Text(locale.logoutAlertContents),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text(locale.cancel),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              context.read<AccountCubit>().logout();
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text(
+                                              locale.ok,
+                                              style: const TextStyle(color: Colors.red),
+                                            ),
+                                          ),
+                                        ],
+                                      ).build(context);
+                                    },
+                                  );
+                                }),
                       );
                     },
                   ),

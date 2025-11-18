@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
-        if (panelController.isPanelOpen) {
+        if (panelController.isPanelOpen || panelController.isPanelAnimating) {
           panelController.close();
           return;
         }
@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   error: (e) => () => print(e.getErrorMessage()),
                                   orElse: () => () {}),
                               onSettings: () => Navigator.pushNamed(context, AppRoutes.settings),
-                              onAnalytics: () {},
+                              onAnalytics: () => Navigator.pushNamed(context, AppRoutes.performance),
                               mainIcon: state.maybeWhen(
                                 loading: () => const LoadingIndicator(),
                                 noActiveSession: () => Icon(

@@ -27,12 +27,12 @@ class RoutineWithHeat extends StatelessWidget {
         // borderRadius: BorderRadius.circular(15.0),
         color: Colors.white,
         shape: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(50)),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
           borderSide: BorderSide(color: Colors.grey, width: 0.5),
         ),
         // elevation: 1,
         child: InkWell(
-          borderRadius: const BorderRadius.all(Radius.circular(50)),
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
           onTap: onTap,
           // onLongPress: onLongPress,
           child: Padding(
