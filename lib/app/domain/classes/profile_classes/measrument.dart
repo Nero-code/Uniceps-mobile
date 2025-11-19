@@ -91,6 +91,25 @@ class Measurement extends Equatable {
         isSynced: isSynced ?? this.isSynced,
       );
 
+  Measurement difference(Measurement other) => Measurement(
+        height: height - other.height,
+        weight: weight - other.weight,
+        lArm: lArm - other.lArm,
+        rArm: rArm - other.rArm,
+        lHumerus: lHumerus - other.lHumerus,
+        rHumerus: rHumerus - other.rHumerus,
+        lLeg: lLeg - other.lLeg,
+        rLeg: rLeg - other.rLeg,
+        lThigh: lThigh - other.lThigh,
+        rThigh: rThigh - other.rThigh,
+        neck: neck - other.neck,
+        shoulders: shoulders - other.shoulders,
+        waist: waist - other.waist,
+        chest: chest - other.chest,
+        hips: hips - other.hips,
+        checkDate: DateTime.now(),
+      );
+
   @override
   List<Object?> get props => [id];
 }

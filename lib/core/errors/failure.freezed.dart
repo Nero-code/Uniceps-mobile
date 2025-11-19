@@ -1197,3 +1197,267 @@ class _$MsDbFailureImpl implements _MsDbFailure {
 abstract class _MsDbFailure implements MeasurementFailure {
   const factory _MsDbFailure() = _$MsDbFailureImpl;
 }
+
+/// @nodoc
+mixin _$PerformanceFailure {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() noValues,
+    required TResult Function() invalidValues,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? noValues,
+    TResult? Function()? invalidValues,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? noValues,
+    TResult Function()? invalidValues,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_NoValues value) noValues,
+    required TResult Function(_InvalidValues value) invalidValues,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_NoValues value)? noValues,
+    TResult? Function(_InvalidValues value)? invalidValues,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_NoValues value)? noValues,
+    TResult Function(_InvalidValues value)? invalidValues,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PerformanceFailureCopyWith<$Res> {
+  factory $PerformanceFailureCopyWith(
+          PerformanceFailure value, $Res Function(PerformanceFailure) then) =
+      _$PerformanceFailureCopyWithImpl<$Res, PerformanceFailure>;
+}
+
+/// @nodoc
+class _$PerformanceFailureCopyWithImpl<$Res, $Val extends PerformanceFailure>
+    implements $PerformanceFailureCopyWith<$Res> {
+  _$PerformanceFailureCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+}
+
+/// @nodoc
+abstract class _$$NoValuesImplCopyWith<$Res> {
+  factory _$$NoValuesImplCopyWith(
+          _$NoValuesImpl value, $Res Function(_$NoValuesImpl) then) =
+      __$$NoValuesImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$NoValuesImplCopyWithImpl<$Res>
+    extends _$PerformanceFailureCopyWithImpl<$Res, _$NoValuesImpl>
+    implements _$$NoValuesImplCopyWith<$Res> {
+  __$$NoValuesImplCopyWithImpl(
+      _$NoValuesImpl _value, $Res Function(_$NoValuesImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$NoValuesImpl implements _NoValues {
+  const _$NoValuesImpl();
+
+  @override
+  String toString() {
+    return 'PerformanceFailure.noValues()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$NoValuesImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() noValues,
+    required TResult Function() invalidValues,
+  }) {
+    return noValues();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? noValues,
+    TResult? Function()? invalidValues,
+  }) {
+    return noValues?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? noValues,
+    TResult Function()? invalidValues,
+    required TResult orElse(),
+  }) {
+    if (noValues != null) {
+      return noValues();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_NoValues value) noValues,
+    required TResult Function(_InvalidValues value) invalidValues,
+  }) {
+    return noValues(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_NoValues value)? noValues,
+    TResult? Function(_InvalidValues value)? invalidValues,
+  }) {
+    return noValues?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_NoValues value)? noValues,
+    TResult Function(_InvalidValues value)? invalidValues,
+    required TResult orElse(),
+  }) {
+    if (noValues != null) {
+      return noValues(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _NoValues implements PerformanceFailure {
+  const factory _NoValues() = _$NoValuesImpl;
+}
+
+/// @nodoc
+abstract class _$$InvalidValuesImplCopyWith<$Res> {
+  factory _$$InvalidValuesImplCopyWith(
+          _$InvalidValuesImpl value, $Res Function(_$InvalidValuesImpl) then) =
+      __$$InvalidValuesImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$InvalidValuesImplCopyWithImpl<$Res>
+    extends _$PerformanceFailureCopyWithImpl<$Res, _$InvalidValuesImpl>
+    implements _$$InvalidValuesImplCopyWith<$Res> {
+  __$$InvalidValuesImplCopyWithImpl(
+      _$InvalidValuesImpl _value, $Res Function(_$InvalidValuesImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$InvalidValuesImpl implements _InvalidValues {
+  const _$InvalidValuesImpl();
+
+  @override
+  String toString() {
+    return 'PerformanceFailure.invalidValues()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$InvalidValuesImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() noValues,
+    required TResult Function() invalidValues,
+  }) {
+    return invalidValues();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? noValues,
+    TResult? Function()? invalidValues,
+  }) {
+    return invalidValues?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? noValues,
+    TResult Function()? invalidValues,
+    required TResult orElse(),
+  }) {
+    if (invalidValues != null) {
+      return invalidValues();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_NoValues value) noValues,
+    required TResult Function(_InvalidValues value) invalidValues,
+  }) {
+    return invalidValues(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_NoValues value)? noValues,
+    TResult? Function(_InvalidValues value)? invalidValues,
+  }) {
+    return invalidValues?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_NoValues value)? noValues,
+    TResult Function(_InvalidValues value)? invalidValues,
+    required TResult orElse(),
+  }) {
+    if (invalidValues != null) {
+      return invalidValues(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _InvalidValues implements PerformanceFailure {
+  const factory _InvalidValues() = _$InvalidValuesImpl;
+}

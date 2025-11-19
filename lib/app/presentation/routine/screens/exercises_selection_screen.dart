@@ -4,7 +4,7 @@ import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/muscle_group_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2_selection/exercises_v2_selection_cubit.dart';
 import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
-import 'package:uniceps/app/presentation/screens/home/widgets/progress_widget.dart';
+import 'package:uniceps/app/presentation/routine/widgets/progress_widget.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/pages/exercises_list_tab.dart';
 import 'package:uniceps/core/constants/constants.dart';
@@ -90,19 +90,6 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen> wit
                                           previous is ItemsDownloadingState && current is ItemsEditLoadedState,
                                       listener: (context, state) => Navigator.pop(context),
                                       builder: (context, state) {
-                                        // return Column(
-                                        //   mainAxisSize: MainAxisSize.min,
-                                        //   children: [
-                                        //     CircularProgressIndicator(
-                                        //         value: state
-                                        //                 is ItemsDownloadingState
-                                        //             ? state.progress
-                                        //             : null),
-                                        //     Text(state is ItemsDownloadingState
-                                        //         ? "${state.progress}"
-                                        //         : locale.download),
-                                        //   ],
-                                        // );
                                         return ProgressWidget(
                                             percent: state is ItemsDownloadingState ? state.progress : 0);
                                       },

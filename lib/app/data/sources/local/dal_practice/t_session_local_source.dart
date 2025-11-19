@@ -18,6 +18,8 @@ abstract class ITSessionLocalSourceContract {
   Future<Tuple2<RoutineDto?, RoutineHeat?>> getCurrentRoutineWithHeat();
   Future<RoutineDayDto> getDayItems(int dayId);
 
+  Future<List<TSessionModel>> getSessionsByRoutine(int routineId);
+
   Future<TSessionModel?> getPreviousSession();
   Future<TSessionModel> startTrainingSession(int dayId);
   Future<TLogModel> logSet(TLogModel log, double sessionProgress);
@@ -328,5 +330,26 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     );
 
     return Tuple2(res, heat);
+  }
+
+  @override
+  Future<List<TSessionModel>> getSessionsByRoutine(int routineId) async {
+    // final routine = await (_database.select(_database.routines)..where((f)=>f.id.equals(routineId))).getSingleOrNull();
+    // if(routine==null)throw EmptyCacheExeption();
+
+    final days = await (_database.select(_database.daysGroup)..where((f) => f.routineId.equals(routineId))).get();
+    if (days.isEmpty) throw EmptyCacheExeption();
+    final List<TSessionModel> sessions = [];
+    for (final day in days) {
+      final res = await (_database.select(_database.tSessions)
+            ..where((f) => f.dayId.equals(day.id) & f.finishedAt.isNotNull()))
+          .get();
+      if (res.isEmpty) throw EmptyCacheExeption();
+      for (final s in res) {
+        final logs = await (_database.select(_database.tLogs)..where((f) => f.sessionId.equals(s.tsId))).get();
+        sessions.add(TSessionModel.fromTable(s, logs));
+      }
+    }
+    return sessions;
   }
 }

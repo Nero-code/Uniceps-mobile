@@ -27,7 +27,7 @@ class ProgressWidget extends StatelessWidget {
                     width: 70,
                     height: 70,
                     child: CircularProgressIndicator(
-                      value: percent / 100,
+                      value: percent,
                       strokeAlign: -1.0,
                       strokeWidth: 7.0,
                       strokeCap: StrokeCap.round,
@@ -36,10 +36,8 @@ class ProgressWidget extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      "$percent%",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey.shade500),
+                      formatProgress(percent),
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),
                     ),
                   ),
                 ],
@@ -51,5 +49,9 @@ class ProgressWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String formatProgress(double progress) {
+    return '${(progress * 100).round()}%';
   }
 }

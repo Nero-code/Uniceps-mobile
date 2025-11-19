@@ -22,6 +22,12 @@ class MeasurementFailure with _$MeasurementFailure {
   const factory MeasurementFailure.noRecords() = _NoRecords;
   const factory MeasurementFailure.msDbFailure() = _MsDbFailure;
 }
+
+@freezed
+class PerformanceFailure with _$PerformanceFailure {
+  const factory PerformanceFailure.noValues() = _NoValues;
+  const factory PerformanceFailure.invalidValues() = _InvalidValues;
+}
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
