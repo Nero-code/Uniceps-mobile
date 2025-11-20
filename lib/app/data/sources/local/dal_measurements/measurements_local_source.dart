@@ -2,6 +2,7 @@ import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/profile_models/extensions.dart';
 import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
+import 'package:uniceps/core/errors/exceptions.dart';
 
 abstract class IMeasurementsLocalSource {
   // Measurements Responsibility
@@ -18,6 +19,7 @@ class MeasurementsLocalSource implements IMeasurementsLocalSource {
   @override
   Future<List<MeasurementModel>> getMeasurements() async {
     final res = await database.select(database.measurements).get();
+    if (res.isEmpty) throw EmptyCacheExeption();
     return res.map(MeasurementModel.fromTable).toList();
   }
 

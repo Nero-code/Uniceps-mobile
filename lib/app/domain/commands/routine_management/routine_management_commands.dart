@@ -8,18 +8,10 @@ class RoutineManagementCommands implements ICommand {
   final IRoutineManagementContract _repo;
   const RoutineManagementCommands({required IRoutineManagementContract repo}) : _repo = repo;
 
-  Future<Either<Failure, List<Routine>>> getAllRoutines() async => await _repo.getAllRoutines();
-
-  Future<Either<Failure, List<Routine>>> createRoutine(String routineName) async =>
-      await _repo.createRoutine(routineName);
-
-  Future<Either<Failure, List<Routine>>> updateRoutine(Routine routine) async => await _repo.updateRoutine(routine);
-
-  Future<Either<Failure, List<Routine>>> setCurrentRoutine(Routine routine) async =>
-      await _repo.setCurrentRoutine(routine);
-
-  Future<Either<Failure, List<Routine>>> deleteRoutine(Routine routine) async => await _repo.deleteRoutine(routine);
-
-  Future<Either<Failure, Unit>> shareRoutine(Routine routine, int userId) async =>
-      await _repo.shareRoutine(routine, userId);
+  Future<Either<Failure, List<Routine>>> getAllRoutines() => _repo.getAllRoutines();
+  Future<Either<Failure, List<Routine>>> createRoutine(String routineName) => _repo.createRoutine(routineName);
+  Future<Either<Failure, List<Routine>>> updateRoutine(Routine routine) => _repo.updateRoutine(routine);
+  Future<Either<Failure, List<Routine>>> setCurrentRoutine(Routine routine) => _repo.setCurrentRoutine(routine);
+  Future<Either<Failure, List<Routine>>> deleteRoutine(Routine routine) => _repo.deleteRoutine(routine);
+  Future<Either<Failure, Unit>> shareRoutine(Routine routine, int userId) => _repo.shareRoutine(routine, userId);
 }

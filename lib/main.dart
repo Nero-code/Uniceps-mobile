@@ -10,6 +10,7 @@ import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/measurement/screens/measurement_screen.dart';
+import 'package:uniceps/app/presentation/performance/screens/measurement_tool_screen.dart';
 import 'package:uniceps/app/presentation/performance/screens/performance_screen.dart';
 import 'package:uniceps/app/presentation/plans/screens/plans_screen.dart';
 import 'package:uniceps/app/presentation/profile/screens/profile_screen.dart';
@@ -121,7 +122,8 @@ class MyApp extends StatelessWidget {
               // SETTINGS
               AppRoutes.settings: (_) => const SettingsScreen(),
               AppRoutes.measurements: (_) => const MeasurementScreen(),
-              AppRoutes.performance: (_) => const PerformanceScreen(),
+              AppRoutes.measurementTool: (_) => const MeasurementToolScreen(),
+              AppRoutes.performance: (_) => PerformanceScreen(routineCommnds: di.sl(), performanceCommands: di.sl()),
               AppRoutes.plans: (_) => const PlansScreen(),
 
               //  AUX

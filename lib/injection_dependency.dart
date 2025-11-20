@@ -27,6 +27,7 @@ import 'package:uniceps/app/data/sources/services/media_helper.dart';
 import 'package:uniceps/app/data/sources/services/token_service_simple.dart';
 import 'package:uniceps/app/data/stores/account/account_repo.dart';
 import 'package:uniceps/app/data/stores/auth/email_auth_repo.dart';
+import 'package:uniceps/app/data/stores/performance/performance_repo.dart';
 import 'package:uniceps/app/data/stores/practice/practice_repo.dart';
 import 'package:uniceps/app/data/stores/profile/measurements_repo.dart';
 import 'package:uniceps/app/data/stores/profile/profile_repo.dart';
@@ -39,6 +40,7 @@ import 'package:uniceps/app/data/stores/routine/routine_with_heat_repo.dart';
 import 'package:uniceps/app/domain/commands/account_usecases/account_usecases.dart';
 import 'package:uniceps/app/domain/commands/auth_usecases/otp_usecases.dart';
 import 'package:uniceps/app/domain/commands/measurement_usecases/measurement_commands.dart';
+import 'package:uniceps/app/domain/commands/performance_usecases/performance_commands.dart';
 import 'package:uniceps/app/domain/commands/practice_usecases/practice_commands.dart';
 import 'package:uniceps/app/domain/commands/profile_usecases/profile_usecases.dart';
 import 'package:uniceps/app/domain/commands/routine_management/exercises_commands.dart';
@@ -49,6 +51,7 @@ import 'package:uniceps/app/domain/commands/routine_management/routine_sets_comm
 import 'package:uniceps/app/domain/commands/routine_management/routine_with_heat_commands.dart';
 import 'package:uniceps/app/domain/contracts/account/i_account_service.dart';
 import 'package:uniceps/app/domain/contracts/auth_repo/i_auth_contracts.dart';
+import 'package:uniceps/app/domain/contracts/performance/performance_contract.dart';
 import 'package:uniceps/app/domain/contracts/practice_repo/practice_contract.dart';
 import 'package:uniceps/app/domain/contracts/profile_repo/i_measurement_service.dart';
 import 'package:uniceps/app/domain/contracts/profile_repo/i_profile_service.dart';
@@ -205,6 +208,12 @@ Future<void> init() async {
 
   //  M E A S U R E M E N T S   R E P O
   sl.registerLazySingleton<IMeasurementContract>(() => MeasurementsRepo(localSource: sl(), logger: sl()));
+  sl.registerLazySingleton<IPerformanceContract>(() => PerformanceRepo(
+        profileLocalSource: sl(),
+        routineLocalSource: sl(),
+        tSessionsLocalSource: sl(),
+        measurementsLocalSource: sl(),
+      ));
 
   /////////
   ////////
@@ -226,6 +235,8 @@ Future<void> init() async {
   sl.registerFactory(() => ExercisesCommands(repo: sl()));
   sl.registerFactory(() => OtpUsecases(repo: sl()));
   sl.registerFactory(() => MeasurementCommands(repo: sl()));
+
+  sl.registerFactory(() => PerformanceCommands(repo: sl()));
 
   //////////////////////////////////////////////////////////////////////////////
   ///

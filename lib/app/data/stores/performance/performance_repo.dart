@@ -1,4 +1,8 @@
+import 'dart:math';
+
 import 'package:dartz/dartz.dart';
+import 'package:uniceps/app/data/models/auth_models/player_model.dart';
+import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
 import 'package:uniceps/app/data/sources/local/dal_measurements/measurements_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_practice/t_session_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_profile/profile_local_source.dart';
@@ -7,8 +11,8 @@ import 'package:uniceps/app/domain/classes/performance_entities/logs_report.dart
 import 'package:uniceps/app/domain/classes/performance_entities/physical_report.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/sessions_report.dart';
 import 'package:uniceps/app/domain/classes/practice_entities/t_session.dart';
-import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/app/domain/contracts/performance/performance_contract.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
@@ -26,7 +30,6 @@ class PerformanceRepo implements IPerformanceContract {
   });
 
   final Map<int, List<TSession>> sessionsBuffer = {};
-  final List<Measurement> measrumentsBuffer = [];
 
   @override
   Future<Either<PerformanceFailure, SessionsReport>> getSessionsReport(int routineId) async {
@@ -43,6 +46,7 @@ class PerformanceRepo implements IPerformanceContract {
     maxDuration = avgDuration = minDuration = totalDuration = Duration.zero;
     double progressRate = 0;
     final list = sessionsBuffer[routineId]!;
+    list.sort((a, b) => a.createdAt.compareTo(b.createdAt));
 
     for (final s in list) {
       final sDuration = s.finishedAt!.difference(s.createdAt);
@@ -63,6 +67,8 @@ class PerformanceRepo implements IPerformanceContract {
       minDuration: minDuration,
       totalDuration: totalDuration,
       progressRate: progressRate,
+      sessionsCount: list.length,
+      firstSession: list.first.createdAt,
     ));
   }
 
@@ -117,7 +123,36 @@ class PerformanceRepo implements IPerformanceContract {
 
   @override
   Future<Either<PerformanceFailure, PhysicalReport>> getPhysicalReport() async {
-    // TODO: implement getPhysicalReport
-    throw UnimplementedError();
+    PlayerModel profile;
+    List<MeasurementModel> measures;
+    MeasurementModel m;
+    try {
+      profile = await profileLocalSource.getProfileData();
+      measures = await measurementsLocalSource.getMeasurements();
+    } catch (e) {
+      return const Left(PerformanceFailure.noValues());
+    }
+
+    measures.sort((a, b) => b.checkDate.compareTo(a.checkDate));
+    try {
+      m = measures.firstWhere((m) => m.weight > 0 && m.height > 0);
+    } catch (e) {
+      return const Left(PerformanceFailure.invalidValues());
+    }
+
+    final age = DateTime.now().year - profile.birthDate.year;
+    final bmi = m.weight / pow(m.height, 2);
+    final bmr = (10 * m.weight) + (6.25 * m.height) - (5 * age) + (profile.gender == Gender.male ? 5 : -161);
+
+    double bf = 0;
+    if (profile.gender == Gender.male && m.waist - m.neck > 0) {
+      bf = 86.01 * log10(m.waist - m.neck) - 70.041 * log10(m.height);
+    } else if (profile.gender == Gender.female && m.waist + m.hips - m.neck > 0) {
+      bf = 163.205 * log10(m.waist + m.hips - m.neck) - 97.684 * log10(m.height);
+    }
+
+    return Right(PhysicalReport(bmi: bmi, bmr: bmr, gender: profile.gender, bodyFatPercentage: bf));
   }
+
+  double log10(num x) => log(x) / ln10;
 }

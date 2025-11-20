@@ -27,6 +27,8 @@ class RoutineManagementRepo implements IRoutineManagementContract {
   Future<Either<Failure, List<Routine>>> getAllRoutines() async {
     try {
       final res = await _localSource.getAllRoutines();
+      if (res.isEmpty) return const Left(EmptyCacheFailure(errorMessage: ""));
+
       routines.clear();
       routines.addAll(res.map((r) => r.toEntity()));
       return Right(routines);
