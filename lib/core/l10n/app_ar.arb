@@ -49,6 +49,15 @@
   "record": "سجل",
   "before": "قبل",
   "after": "بعد",
+  
+  "sessions": "الجلسات",
+  "sessionsReport": "تقرير الجلسات",
+  "weightsReport": "تقرير الاوزان",
+  "exerciseDensity": "كثافة التمرين",
+  "exerciseIntensity": "شدة التمرين",
+  "exerciseVolume": "حجم التمرين",
+  "physicalReport": "التقرير الجسدي",
+  "progressRate": "معدل الانجاز",
 
   "price": "السعر",
   "discount":"الحسم",
@@ -124,6 +133,13 @@
   "emptyHomeCard": "اختر احد النوادي لعرضه",
   "emptyAttendence": "لا يوجد سجل حضور",
   "emptyRoutineItems": "لا يوجد عناصر, اضغط على زر (+) لاضافة تمارين",
+
+  "sessionsReportNoValues": "لا يوجد جلسات لهذا البرنامج, عد بعد التمرين!",
+  "sessionsReportInvalidValues": "قيم الجلسة غير صحيحة!",
+  "logsReportNoValues": "لا يوجد تقرير اداء لهذا البرنامج",
+  "logsReportInvalidValues": "قيم الاداء غير صحيحة!",
+  "physicalReportNoValues": "لا يوجد قياسات لديك, قم بادخال قياس!",
+  "physicalReportInvalidValues": "قيم القياسات غير صحيحة!",
   
   "error": "حدث خطأ ما",
   "profile": "الحساب",

@@ -9,6 +9,8 @@ class RenameDayDialog extends StatelessWidget {
   final controller = TextEditingController();
   final RoutineDay oldDay;
   final void Function(RoutineDay newVal) onSubmit;
+
+  final FocusNode _node = FocusNode();
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
@@ -21,14 +23,22 @@ class RenameDayDialog extends StatelessWidget {
           // contentPadding:
           //     const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
           hintText: oldDay.name,
-
-          border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(15)),
+          hintStyle: const TextStyle(fontWeight: FontWeight.w300, color: Colors.grey),
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.blueGrey.shade50), borderRadius: BorderRadius.circular(15)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
           fillColor: Colors.blueGrey.shade50,
           filled: true,
           // hintText: initialName,
           // hintStyle: TextStyle(color: Colors.grey),
         ),
-        onTap: () => controller.selection = TextSelection(baseOffset: 0, extentOffset: controller.text.length),
+        focusNode: _node,
+        onTap: () {
+          if (!_node.hasFocus) {
+            controller.selection = TextSelection(baseOffset: 0, extentOffset: controller.text.length);
+          }
+        },
+        onTapOutside: (_) => _node.unfocus(),
       ),
       actions: [
         TextButton(

@@ -122,7 +122,7 @@ class MyApp extends StatelessWidget {
               // SETTINGS
               AppRoutes.settings: (_) => const SettingsScreen(),
               AppRoutes.measurements: (_) => const MeasurementScreen(),
-              AppRoutes.measurementTool: (_) => const MeasurementToolScreen(),
+              AppRoutes.measurementTool: (_) => MeasurementToolScreen(commands: di.sl()),
               AppRoutes.performance: (_) => PerformanceScreen(routineCommnds: di.sl(), performanceCommands: di.sl()),
               AppRoutes.plans: (_) => const PlansScreen(),
 

@@ -11,18 +11,15 @@ class PracticeCommands {
   final IPracticeContract _repo;
   const PracticeCommands({required IPracticeContract repo}) : _repo = repo;
 
-  Future<Either<Failure, Tuple2<Routine, int?>>> getCurrentRoutine() async => await _repo.getCurrentRoutine();
+  Future<Either<Failure, Tuple2<Routine, int?>>> getCurrentRoutine() => _repo.getCurrentRoutine();
   Future<Either<Failure, Tuple2<Routine, RoutineHeat?>>> getCurrentRoutineWithHeat() =>
       _repo.getCurrentRoutineWithHeat();
-  Future<Either<Failure, RoutineDay>> getdayItems(int dayId) async => await _repo.getDayItems(dayId);
 
-  Future<Either<Failure, TSession>> getLastActiveSession() async => await _repo.getPreviousSession();
+  Future<Either<Failure, RoutineDay>> getdayItems(int dayId) => _repo.getDayItems(dayId);
+  Future<Either<Failure, TSession>> getLastActiveSession() => _repo.getPreviousSession();
+  Future<Either<Failure, TSession>> startTrainingSession(int dayId) => _repo.startTrainingSession(dayId);
+  Future<Either<Failure, TSession>> logSetComplete(TLog log, double progress) => _repo.logSetComplete(log, progress);
 
-  Future<Either<Failure, TSession>> startTrainingSession(int dayId) async => await _repo.startTrainingSession(dayId);
-
-  Future<Either<Failure, TSession>> logSetComplete(TLog log, double progress) async =>
-      await _repo.logSetComplete(log, progress);
-
-  Future<Either<Failure, Unit>> finishTrainingSession(TSession session, bool full) async =>
-      await _repo.finishTrainingSession(session, full);
+  Future<Either<Failure, Unit>> finishTrainingSession(TSession session, bool full) =>
+      _repo.finishTrainingSession(session, full);
 }

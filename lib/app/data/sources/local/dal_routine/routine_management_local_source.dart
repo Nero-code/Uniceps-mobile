@@ -85,7 +85,7 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
         final range = sessions.map((e) => e.startedAt).toList()..sort();
 
         if (range.isNotEmpty) {
-          duration = range.last.difference(range.first);
+          duration = DateTime.now().difference(range.first);
         }
 
         final items = await (_database.select(_database.routineItems)..where((f) => f.dayId.equals(day.id))).get();

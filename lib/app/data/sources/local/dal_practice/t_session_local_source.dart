@@ -102,7 +102,8 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     if (day.isEmpty) throw EmptyCacheExeption(); // No day exists
 
     // Second, we fetch the day items.
-    final itemsAlias = _database.alias(_database.routineItems, 'it');
+    // final itemsAlias = _database.alias(_database.routineItems, 'it');
+    final itemsAlias = _database.routineItems;
     final exAlias = _database.alias(_database.exercises, 'ex');
     final setsAlias = _database.alias(_database.routineSets, 'se');
     final logsAlias = _database.alias(_database.tLogs, 'lo');
@@ -110,12 +111,12 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     // You're about to witness a developers' worst nightmare...
     //
     // --- THE JOIN QUERY ---
-    final res = await (_database.select(_database.routineItems).join([
+    final res = await ((_database.select(_database.routineItems)..where((f) => f.dayId.equals(dayId))).join([
       // Get `Items` under `dayId`.
-      leftOuterJoin(itemsAlias, itemsAlias.dayId.equals(dayId)),
+      // leftOuterJoin(itemsAlias, itemsAlias.dayId.equals(dayId)),
 
       // Get `Exercises` for these `items`.
-      leftOuterJoin(exAlias, exAlias.apiId.equalsExp(itemsAlias.exerciseId)),
+      leftOuterJoin(exAlias, exAlias.id.equalsExp(itemsAlias.exerciseId)),
 
       // Get `Sets` for these `items`.
       leftOuterJoin(setsAlias, setsAlias.routineItemId.equalsExp(itemsAlias.id)),
@@ -165,7 +166,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     }
     // ---------------------------
 
-    List<RoutineItemDto> dayItems = [];
+    final List<RoutineItemDto> dayItems = [];
     for (final itemTable in items) {
       //
       List<RoutineSetDto> itemSets = [];
@@ -199,7 +200,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
 
       // itemSets.toSet().toList();
 
-      final exercise = exercises.firstWhere((e) => e.apiId == itemTable.exerciseId);
+      final exercise = exercises.firstWhere((e) => e.id == itemTable.exerciseId);
       final img = _imagesCache.get(exercise.imageUrl);
       final group = groups.firstWhere((g) => g.apiId == exercise.muscleGroup);
       final itemDto = RoutineItemDto.fromTable(
@@ -207,8 +208,9 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
 
       dayItems.add(itemDto);
     }
-
-    return RoutineDayDto.fromTable(day.first, dayItems);
+    assert(dayItems.isNotEmpty);
+    final t = RoutineDayDto.fromTable(day.first, dayItems);
+    return t;
   }
 
   @override

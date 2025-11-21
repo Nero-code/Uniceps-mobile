@@ -6,10 +6,14 @@ import 'package:uniceps/app/domain/classes/performance_entities/sessions_report.
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/commands/performance_usecases/performance_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_management_commands.dart';
-import 'package:uniceps/app/presentation/performance/widgets/analytics_card.dart';
+import 'package:uniceps/app/presentation/performance/widgets/logs_report_card.dart';
+import 'package:uniceps/app/presentation/performance/widgets/no_report_widget.dart';
+import 'package:uniceps/app/presentation/performance/widgets/physical_report_card.dart';
+import 'package:uniceps/app/presentation/performance/widgets/session_report_card.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PerformanceScreen extends StatefulWidget {
   const PerformanceScreen({super.key, required this.performanceCommands, required this.routineCommnds});
@@ -60,6 +64,7 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!;
     final screenSize = MediaQuery.sizeOf(context);
     return Scaffold(
       body: FutureBuilder(
@@ -96,297 +101,71 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
                 //
 
                 SliverToBoxAdapter(
-                  child: Container(
-                    width: screenSize.width,
-                    margin: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Sessions Report',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(Icons.arrow_drop_up_rounded),
-                                      SizedBox(width: 5.0),
-                                      Text(
-                                        '02:00:00',
-                                        textDirection: TextDirection.ltr,
-                                        style: TextStyle(fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.remove),
-                                      SizedBox(width: 5.0),
-                                      Text(
-                                        '01:00:00',
-                                        textDirection: TextDirection.ltr,
-                                        style: TextStyle(fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.arrow_drop_down_rounded),
-                                      SizedBox(width: 5.0),
-                                      Text(
-                                        '00:30:00',
-                                        textDirection: TextDirection.ltr,
-                                        style: TextStyle(fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.timer),
-                                      SizedBox(width: 5.0),
-                                      Text(
-                                        '120:30:15',
-                                        textDirection: TextDirection.ltr,
-                                        style: TextStyle(fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  SizedBox.square(
-                                    dimension: screenSize.width * .2,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.orange.withOpacity(0.5),
-                                      value: .9,
-                                      strokeWidth: 10,
-                                      strokeAlign: 1,
-                                      strokeCap: StrokeCap.round,
-                                    ),
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        'Sessions',
-                                        style: TextStyle(fontSize: 10),
-                                      ),
-                                      Text(
-                                        '26',
-                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                                child: Column(
-                              children: [
-                                Text(
-                                  'Progress Rate',
-                                  style: TextStyle(fontSize: 10),
-                                ),
-                                Text(
-                                  '45.2',
-                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                  child: FutureBuilder(
+                      future: sessionsReport,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return snapshot.data!.fold(
+                            (l) => NoReportWidget(
+                                message: l.when(
+                              noValues: () => locale.sessionsReportNoValues,
+                              invalidValues: () => locale.sessionsReportInvalidValues,
                             )),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                            (r) => SessionReportCard(report: r),
+                          );
+                        }
+                        return const LoadingIndicator();
+                      }),
                 ),
 
                 //
                 //  Logs Report
                 //
 
-                SliverPadding(
-                  padding: const EdgeInsets.all(8.0),
-                  sliver: SliverGrid.count(
-                    crossAxisCount: 2,
-                    childAspectRatio: 16 / 12,
-                    mainAxisSpacing: 8.0,
-                    crossAxisSpacing: 8.0,
-                    children: const [
-                      AnalyticsCard(
-                        title: 'Weight Lifting',
-                        icon: Icon(Icons.fitness_center, color: Colors.red),
-                        iconBackground: Colors.red,
-                        max: 0,
-                        avg: 0,
-                        min: 0,
-                      ),
-                      AnalyticsCard(
-                        title: 'Exercise Density',
-                        icon: Icon(Icons.menu_open_rounded, color: Colors.blue),
-                        iconBackground: Colors.lightBlue,
-                        max: 0,
-                        avg: 0,
-                        min: 0,
-                      ),
-                      AnalyticsCard(
-                        title: 'Exercise Volume',
-                        icon: Icon(Icons.multitrack_audio_rounded, color: Colors.green),
-                        iconBackground: Colors.green,
-                        max: 0,
-                        avg: 0,
-                        min: 0,
-                      ),
-                      AnalyticsCard(
-                        title: 'Exercise Intensity',
-                        icon: Icon(
-                          Icons.keyboard_double_arrow_up,
-                          color: Colors.orange,
-                        ),
-                        iconBackground: Colors.amber,
-                        max: 0,
-                        avg: 0,
-                        min: 0,
-                      ),
-                    ],
-                  ),
+                SliverToBoxAdapter(
+                  child: FutureBuilder(
+                      future: logsReport,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return snapshot.data!.fold(
+                            (l) => NoReportWidget(
+                              message: l.when(
+                                noValues: () => locale.logsReportNoValues,
+                                invalidValues: () => locale.logsReportInvalidValues,
+                              ),
+                              background: const Color.fromARGB(61, 76, 175, 79),
+                            ),
+                            (r) => Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: LogsReportCard(r: r),
+                            ),
+                          );
+                        }
+                        return const LoadingIndicator();
+                      }),
                 ),
 
                 //
                 //  Physical Report
                 //
                 SliverToBoxAdapter(
-                  child: Container(
-                    width: screenSize.width,
-                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Physical Report',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    SizedBox.square(
-                                      dimension: screenSize.width * .2,
-                                      child: CircularProgressIndicator(
-                                        color: Colors.red.withOpacity(0.5),
-                                        backgroundColor: Colors.grey.shade100,
-                                        value: .74,
-                                        strokeWidth: 10,
-                                        strokeAlign: 1,
-                                        strokeCap: StrokeCap.round,
-                                      ),
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'BMI',
-                                          style: TextStyle(fontSize: 10),
-                                        ),
-                                        Text(
-                                          '74.3%',
-                                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                  child: FutureBuilder(
+                      future: physicalReport,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return snapshot.data!.fold(
+                            (l) => NoReportWidget(
+                              message: l.when(
+                                noValues: () => locale.physicalReportNoValues,
+                                invalidValues: () => locale.physicalReportInvalidValues,
                               ),
-                              Expanded(
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    SizedBox.square(
-                                      dimension: screenSize.width * .2,
-                                      child: CircularProgressIndicator(
-                                        color: Colors.amber.withOpacity(0.5),
-                                        backgroundColor: Colors.grey.shade100,
-                                        value: .43,
-                                        strokeWidth: 10,
-                                        strokeAlign: 1,
-                                        strokeCap: StrokeCap.round,
-                                      ),
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'BMR',
-                                          style: TextStyle(fontSize: 10),
-                                        ),
-                                        Text(
-                                          '43%',
-                                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    SizedBox.square(
-                                      dimension: screenSize.width * .2,
-                                      child: CircularProgressIndicator(
-                                        color: Colors.green.withOpacity(0.5),
-                                        backgroundColor: Colors.grey.shade100,
-                                        value: .26,
-                                        strokeWidth: 10,
-                                        strokeAlign: 1,
-                                        strokeCap: StrokeCap.round,
-                                      ),
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'BF%',
-                                          textDirection: TextDirection.ltr,
-                                          style: TextStyle(fontSize: 10),
-                                        ),
-                                        Text(
-                                          '26%',
-                                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          'disclaimer: note that these values help you gain insight into your body measurements and ratios',
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
-                        ),
-                      ],
-                    ),
-                  ),
+                              background: const Color.fromARGB(52, 244, 67, 54),
+                            ),
+                            (r) => PhysicalReportCard(report: r),
+                          );
+                        }
+                        return LoadingIndicator();
+                      }),
                 ),
               ],
             );

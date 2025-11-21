@@ -110,6 +110,39 @@ class Measurement extends Equatable {
         checkDate: DateTime.now(),
       );
 
+  double getByIndex(int index) {
+    switch (index) {
+      case 0:
+        return height;
+      case 1:
+        return weight;
+      case 2:
+        return neck;
+      case 3:
+        return shoulders;
+      case 4:
+        return chest;
+      case 5:
+        return waist;
+      case 6:
+        return lArm;
+      case 7:
+        return rArm;
+      case 8:
+        return lThigh;
+      case 9:
+        return rThigh;
+      case 10:
+        return lLeg;
+      case 11:
+        return rLeg;
+      case 12:
+        return hips;
+      default:
+        return 0.0;
+    }
+  }
+
   @override
   List<Object?> get props => [id];
 }

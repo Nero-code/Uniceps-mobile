@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
+import 'package:uniceps/app/domain/commands/measurement_usecases/measurement_commands.dart';
 import 'package:uniceps/app/presentation/performance/widgets/muscle_difference_widget.dart';
 import 'package:uniceps/core/constants/muscles_images.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 
 const imgs = [
   MusclesImages.height,
@@ -20,62 +24,112 @@ const imgs = [
   MusclesImages.hips,
 ];
 
-class MeasurementToolScreen extends StatelessWidget {
-  const MeasurementToolScreen({super.key});
+class MeasurementToolScreen extends StatefulWidget {
+  const MeasurementToolScreen({super.key, required this.commands});
+
+  final MeasurementCommands commands;
+
+  @override
+  State<MeasurementToolScreen> createState() => _MeasurementToolScreenState();
+}
+
+class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
+  List<Measurement> measurements = [];
+  Measurement? oldM, newM;
+
+  Future<List<Measurement>> getMeasurements() async {
+    final either = await widget.commands.getMeasurements();
+    return either.fold(
+      (l) => Future.error(l),
+      (r) => Future.value(r),
+    );
+  }
+
+  late Future<List<Measurement>> future;
+
+  @override
+  void initState() {
+    super.initState();
+    future = getMeasurements();
+  }
 
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            title: Text('Measurements Tool'),
-          ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  DropdownButton(
-                      icon: const Icon(Icons.calendar_month),
-                      hint: Text('01/01/2000'),
-                      elevation: 1,
-                      borderRadius: BorderRadius.circular(10),
-                      items: List.generate(5, (i) => DateFormat.yMd().format(DateTime(2000 + i, i)))
-                          .map((date) => DropdownMenuItem(value: date, child: Text(date)))
-                          .toList(),
-                      onChanged: (v) {}),
-                  Icon(Icons.arrow_right_alt_outlined),
-                  DropdownButton(
-                      icon: const Icon(Icons.calendar_month),
-                      hint: Text('01/01/2000'),
-                      elevation: 1,
-                      borderRadius: BorderRadius.circular(10),
-                      items: List.generate(5, (i) => DateFormat.yMd().format(DateTime(2000 + i, i)))
-                          .map((date) => DropdownMenuItem(
-                                value: date,
-                                child: Text(date),
-                              ))
-                          .toList(),
-                      onChanged: (v) {}),
+      body: FutureBuilder(
+          future: future,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              measurements = snapshot.data!;
+              return CustomScrollView(
+                slivers: [
+                  const SliverAppBar(
+                    title: Text('Measurements Tool'),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          // OLD
+                          DropdownButton(
+                            icon: const Icon(Icons.calendar_month, size: 20),
+                            hint: const Text('01/01/2000'),
+                            elevation: 1,
+                            value: oldM,
+                            borderRadius: BorderRadius.circular(10),
+                            items: measurements
+                                .map((m) =>
+                                    DropdownMenuItem(value: m, child: Text(DateFormat.yMd().format(m.checkDate))))
+                                .toList(),
+                            onChanged: (v) => setState(() => oldM = v),
+                          ),
+                          const Icon(Icons.arrow_right_alt_outlined),
+
+                          // NEW
+                          DropdownButton(
+                            icon: const Icon(Icons.calendar_month, size: 20),
+                            hint: const Text('01/01/2000'),
+                            elevation: 1,
+                            value: newM,
+                            borderRadius: BorderRadius.circular(10),
+                            items: measurements
+                                .map((m) =>
+                                    DropdownMenuItem(value: m, child: Text(DateFormat.yMd().format(m.checkDate))))
+                                .toList(),
+                            onChanged: (v) => setState(() => newM = v),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SliverList.separated(
+                    itemCount: imgs.length,
+                    separatorBuilder: (context, index) => const SizedBox(height: 5),
+                    itemBuilder: (context, i) {
+                      return MuscleDifferenceWidget(
+                        image: imgs[i],
+                        muscleName: muscleNameMapper(i, locale),
+                        newVal: newM?.getByIndex(i),
+                        oldVal: oldM?.getByIndex(i),
+                      );
+                    },
+                  ),
                 ],
-              ),
-            ),
-          ),
-          SliverList.separated(
-            itemCount: imgs.length,
-            separatorBuilder: (context, index) => SizedBox(height: 5),
-            itemBuilder: (context, i) {
-              return MuscleDifferenceWidget(
-                image: imgs[i],
-                muscleName: muscleNameMapper(i, locale),
               );
-            },
-          ),
-        ],
-      ),
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text((snapshot.error as MeasurementFailure).when(
+                  msOffline: () => locale.errNoInternet,
+                  noRecords: () => locale.empty,
+                  msDbFailure: () => locale.error,
+                )),
+              );
+            }
+            return const LoadingIndicator();
+          }),
     );
   }
 
@@ -83,10 +137,8 @@ class MeasurementToolScreen extends StatelessWidget {
     switch (index) {
       case 0:
         return l.height;
-
       case 1:
         return l.weight;
-
       case 2:
         return l.nick;
       case 3:

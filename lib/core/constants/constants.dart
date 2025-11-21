@@ -43,10 +43,14 @@ String encodeTranslations(Map<Lang, String> trans) => jsonEncode(trans.map(
 
 Map<Lang, String> parseTranslations(String muscleGroupTranslations) {
   final dec = jsonDecode(muscleGroupTranslations) as Map;
-  return dec.map<Lang, String>((key, value) => MapEntry(parseLang(key), value.toString()));
+  return dec.map<Lang, String>((key, value) => MapEntry(parseLang(key.toString()), value.toString()));
 }
 
-Lang parseLang(String lang) => Lang.values.firstWhere((l) => l.name == lang);
+Lang parseLang(String lang) {
+  return Lang.values.firstWhere(
+    (l) => l.val == lang,
+  );
+}
 
 enum ThemeType { light, dark }
 

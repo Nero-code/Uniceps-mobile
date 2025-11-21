@@ -20,8 +20,7 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
   final AppDatabase _database;
   final Box<Uint8List> _imagesCache;
 
-  const RoutineItemsLocalSourceImpl(
-      {required AppDatabase database, required Box<Uint8List> imagesCache})
+  const RoutineItemsLocalSourceImpl({required AppDatabase database, required Box<Uint8List> imagesCache})
       : _database = database,
         _imagesCache = imagesCache;
 
@@ -31,30 +30,25 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
     final result = <RoutineItemDto>[];
 
     // Starting with database query to get items under the `dayId`
-    final items = await (_database.select(_database.routineItems)
-          ..where((f) => f.dayId.equals(dayId)))
-        .get()
+    final items = await (_database.select(_database.routineItems)..where((f) => f.dayId.equals(dayId))).get()
       ..sort((a, b) => b.index.compareTo(a.index));
 
     for (int i = 0; i < items.length; i++) {
       // -----------------------------------------------------------
       // Getting exercise since only muscle group is a parent in its
       // relationship with exercise
-      final ex = await (_database.select(_database.exercises)
-            ..where((f) => f.id.equals(items[i].exerciseId)))
-          .getSingle();
+      final ex =
+          await (_database.select(_database.exercises)..where((f) => f.id.equals(items[i].exerciseId))).getSingle();
 
       // --------------------------------------------------
       // Getting Muscle-group that the exercise belongs to.
-      final mg = await (_database.select(_database.exerciseGroups)
-            ..where((f) => f.id.equals(ex.muscleGroup)))
-          .getSingle();
+      final mg =
+          await (_database.select(_database.exerciseGroups)..where((f) => f.id.equals(ex.muscleGroup))).getSingle();
 
       // --------------------------------------------------
       // Getting routine item sets.
-      final getSets = await (_database.select(_database.routineSets)
-            ..where((f) => f.routineItemId.equals(items[i].id)))
-          .get();
+      final getSets =
+          await (_database.select(_database.routineSets)..where((f) => f.routineItemId.equals(items[i].id))).get();
       final sets = getSets.map((s) => RoutineSetDto.fromTable(s)).toList();
 
       // ------------------------------------------------------------------
@@ -71,8 +65,7 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
       // Its main functionality is to group rows based on a specific condition,
       // like a shared id or foreign key...
       result.add(
-        RoutineItemDto.fromTable(
-            items[i], ExerciseV2Dto.fromTable(ex, mg, ex.imageUrl, img), sets),
+        RoutineItemDto.fromTable(items[i], ExerciseV2Dto.fromTable(ex, mg, ex.imageUrl, img), sets),
       );
     }
     return result;
@@ -97,9 +90,8 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
       // foreign key constraints
 
       late final Exercise ex;
-      final oldEx = await (_database.select(_database.exercises)
-            ..where((f) => f.apiId.equals(i.exerciseV2Dto.apiId!)))
-          .get();
+      final oldEx =
+          await (_database.select(_database.exercises)..where((f) => f.apiId.equals(i.exerciseV2Dto.apiId!))).get();
 
       if (oldEx.isEmpty) {
         ex = await _database.into(_database.exercises).insertReturning(
@@ -110,8 +102,7 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
                   muscleGroup: i.exerciseV2Dto.muscleGroupId),
             );
       } else {
-        ex = (await (_database.update(_database.exercises)
-                  ..where((f) => f.apiId.equals(i.exerciseV2Dto.apiId!)))
+        ex = (await (_database.update(_database.exercises)..where((f) => f.apiId.equals(i.exerciseV2Dto.apiId!)))
                 .writeReturning(ExercisesCompanion.custom(
           id: Constant(oldEx.first.id),
           apiId: Constant(oldEx.first.apiId),
@@ -132,14 +123,13 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
       //
       // Also another assumption to bear in mind that the item image is stored
       // in the repo layer before these insertions.
-      final itemId = await _database.into(_database.routineItems).insert(
-          RoutineItemsCompanion.insert(
-              index: i.index, exerciseId: ex.id, dayId: i.dayId));
+      final itemId = await _database
+          .into(_database.routineItems)
+          .insert(RoutineItemsCompanion.insert(index: i.index, exerciseId: ex.id, dayId: i.dayId));
 
       result.add(i.copyWith(
         id: itemId,
-        exerciseV2Dto: i.exerciseV2Dto
-            .copywith(id: ex.id, apiId: ex.apiId, imageBitMap: img),
+        exerciseV2Dto: i.exerciseV2Dto.copywith(id: ex.id, apiId: ex.apiId, imageBitMap: img),
       ));
     }
     return result;
@@ -147,17 +137,14 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
 
   @override
   Future<void> removeItem(RoutineItemDto item) async {
-    await (_database.delete(_database.routineItems)
-          ..where((f) => f.id.equals(item.id!)))
-        .go();
+    await (_database.delete(_database.routineItems)..where((f) => f.id.equals(item.id!))).go();
 
     final old = await (_database.select(_database.routineItems)
           ..where((f) => f.dayId.equals(item.dayId))
           ..where((f2) => f2.index.isBiggerOrEqualValue(item.index)))
         .get();
     for (final i in old) {
-      await (_database.update(_database.routineItems)
-            ..where((f) => f.id.equals(i.id)))
+      await (_database.update(_database.routineItems)..where((f) => f.id.equals(i.id)))
           .write(RoutineItemsCompanion.custom(
         index: Constant(i.index - 1),
       ));
@@ -169,12 +156,9 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
     final res = <RoutineItemDto>[];
 
     for (int i = 0; i < list.length; i++) {
-      final row = await (_database.update(_database.routineItems)
-            ..where((f) => f.id.equals(list[i].id!)))
+      final row = await (_database.update(_database.routineItems)..where((f) => f.id.equals(list[i].id!)))
           .writeReturning(RoutineItemsCompanion(
-              index: Value(i),
-              version: Value(list[i].version + 1),
-              isSynced: const Value(false)));
+              index: Value(i), version: Value(list[i].version + 1), isSynced: const Value(false)));
 
       res.add(RoutineItemDto.fromTable(row.first, list[i].exerciseV2Dto));
     }

@@ -141,7 +141,7 @@ class PerformanceRepo implements IPerformanceContract {
     }
 
     final age = DateTime.now().year - profile.birthDate.year;
-    final bmi = m.weight / pow(m.height, 2);
+    final bmi = m.weight / pow(m.height / 100, 2);
     final bmr = (10 * m.weight) + (6.25 * m.height) - (5 * age) + (profile.gender == Gender.male ? 5 : -161);
 
     double bf = 0;

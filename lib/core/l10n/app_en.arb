@@ -50,6 +50,15 @@
   "before": "Before",
   "after": "After",
   
+  "sessions": "Sessions",
+  "sessionsReport": "Sessions Report",
+  "weightsReport": "Weights Report",
+  "exerciseDensity": "Exercise Density",
+  "exerciseIntensity": "Exercise Intensity",
+  "exerciseVolume": "Exercise Volume",
+  "physicalReport": "Physical Report",
+  "progressRate": "Preogress Rate",
+  
   
   "price": "Price",
   "discount":"Discount",
@@ -125,6 +134,13 @@
   "emptyHomeCard": "No Gym Specified, select a gym to load data",
   "emptyAttendence": "Not a member",
   "emptyRoutineItems": "no items, try the (+) button",
+
+  "sessionsReportNoValues": "No sessions found for this routine, Try practicing!",
+  "sessionsReportInvalidValues": "Malformed sessions values!",
+  "logsReportNoValues": "No Logs found for this routine",
+  "logsReportInvalidValues": "Malformed logs!",
+  "physicalReportNoValues": "No measurements found, Try measuring yourself!",
+  "physicalReportInvalidValues": "Malformed Measurements!",
   
   "error": "something went wrong",
   "profile": "Profile",

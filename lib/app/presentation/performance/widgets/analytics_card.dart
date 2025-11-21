@@ -9,6 +9,7 @@ class AnalyticsCard extends StatelessWidget {
     required this.max,
     required this.avg,
     required this.min,
+    required this.total,
     this.background = const Color.fromRGBO(238, 238, 238, 1),
   });
 
@@ -17,7 +18,7 @@ class AnalyticsCard extends StatelessWidget {
   final Color iconBackground;
   final Color background;
 
-  final double max, avg, min;
+  final double max, avg, min, total;
 
   @override
   Widget build(BuildContext context) {
