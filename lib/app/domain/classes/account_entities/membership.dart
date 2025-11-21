@@ -1,5 +1,3 @@
-import 'package:uniceps/app/domain/classes/account_entities/permission.dart';
-
 class Membership {
   final String planName;
   final String planId;
@@ -9,8 +7,6 @@ class Membership {
   final bool isActive;
   final bool isGift;
 
-  final List<Permission> permits;
-
   const Membership({
     required this.planName,
     required this.planId,
@@ -19,6 +15,5 @@ class Membership {
     required this.endDate,
     required this.isActive,
     required this.isGift,
-    required this.permits,
   });
 }

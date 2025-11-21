@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uniceps/app/data/models/account_models/account_model.dart';
 import 'package:uniceps/app/data/models/account_models/membership_model.dart';
@@ -17,9 +19,7 @@ class AccountLocalSource implements IAccountLocalSource {
   final FlutterSecureStorage _secureStorage;
   final AppDatabase _database;
 
-  AccountLocalSource(
-      {required FlutterSecureStorage secureStorage,
-      required AppDatabase database})
+  AccountLocalSource({required FlutterSecureStorage secureStorage, required AppDatabase database})
       : _secureStorage = secureStorage,
         _database = database;
 
@@ -35,11 +35,11 @@ class AccountLocalSource implements IAccountLocalSource {
 
   @override
   Future<MembershipModel> getCurrentPlan() async {
-    final res = await _database.select(_database.memberships).getSingleOrNull();
+    final res = await _secureStorage.read(key: 'plan');
     if (res == null) {
       return MembershipModel.free();
     }
-    return MembershipModel.fromTable(res);
+    return MembershipModel.fromJson(jsonDecode(res));
   }
 
   @override
@@ -49,9 +49,7 @@ class AccountLocalSource implements IAccountLocalSource {
 
   @override
   Future<void> saveUserMembership(MembershipModel subscriptionPlan) async {
-    await _database
-        .into(_database.memberships)
-        .insert(subscriptionPlan.toTable());
+    await _secureStorage.write(key: 'plan', value: jsonEncode(subscriptionPlan.toJson()));
   }
 
   @override
