@@ -11,7 +11,7 @@ import 'package:uniceps/app/domain/classes/performance_entities/logs_report.dart
 import 'package:uniceps/app/domain/classes/performance_entities/physical_report.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/sessions_report.dart';
 import 'package:uniceps/app/domain/classes/practice_entities/t_session.dart';
-import 'package:uniceps/app/domain/contracts/performance/performance_contract.dart';
+import 'package:uniceps/app/domain/contracts/performance/i_performance_contract.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';

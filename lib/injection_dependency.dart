@@ -52,8 +52,8 @@ import 'package:uniceps/app/domain/commands/routine_management/routine_sets_comm
 import 'package:uniceps/app/domain/commands/routine_management/routine_with_heat_commands.dart';
 import 'package:uniceps/app/domain/contracts/account/i_account_service.dart';
 import 'package:uniceps/app/domain/contracts/auth/i_auth_contracts.dart';
-import 'package:uniceps/app/domain/contracts/performance/performance_contract.dart';
-import 'package:uniceps/app/domain/contracts/practice/practice_contract.dart';
+import 'package:uniceps/app/domain/contracts/performance/i_performance_contract.dart';
+import 'package:uniceps/app/domain/contracts/practice/i_practice_contract.dart';
 import 'package:uniceps/app/domain/contracts/profile/i_measurement_service.dart';
 import 'package:uniceps/app/domain/contracts/profile/i_profile_service.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_exercises_contract.dart';

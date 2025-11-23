@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/logs_report.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/physical_report.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/sessions_report.dart';
-import 'package:uniceps/app/domain/contracts/performance/performance_contract.dart';
+import 'package:uniceps/app/domain/contracts/performance/i_performance_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class PerformanceCommands {

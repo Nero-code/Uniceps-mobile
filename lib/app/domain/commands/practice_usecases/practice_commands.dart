@@ -4,7 +4,7 @@ import 'package:uniceps/app/domain/classes/practice_entities/t_session.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
-import 'package:uniceps/app/domain/contracts/practice/practice_contract.dart';
+import 'package:uniceps/app/domain/contracts/practice/i_practice_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class PracticeCommands {
