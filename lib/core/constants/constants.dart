@@ -162,8 +162,6 @@ const API_V2 = r"uniceps.runasp.net";
 
 /// https://trio-verse.com
 const URL = "https://trio-verse.com";
-const HTTP_REGISTER = "/api/Authentication";
-const HTTP_VERIFY_CODE = "/api/Authentication/VerifyOtp";
 const HTTP_REFRESH = "/refresh";
 const HTTP_HANDSHAKE = "/handshake";
 const HTTP_GUEST_MODE = "/guest";
@@ -181,18 +179,19 @@ const HTTP_TRAINING_PROGRAM = "/routines";
 const HTTP_IMAGES = "/images";
 const HTTP_SUBSCRIPTIONS = "/subscription";
 const HTTP_MEASURMENTS = "/metrics";
-
-const HTTP_MEMBERSHIP = "/api/Membership";
-
-const HTTP_PLAN = "/api/Plan/0";
-const HTTP_BUY_PLAN = "/api/Membership";
-
-const HTTP_MUSCLE_GROUPS = "/api/MuscleGroup";
-const HTTP_EXERCISES = "/api/Exercise";
-
 const HTTP_PRESENCE = "/attendances";
 const HTTP_GYMS = "/gyms";
 const HTTP_GYM_LOGO = "/logos";
+
+// V2 Routes
+const HTTP_SESSION_SYNC = '/api/';
+const HTTP_MEMBERSHIP = "/api/Membership";
+const HTTP_REGISTER = "/api/Authentication";
+const HTTP_VERIFY_CODE = "/api/Authentication/VerifyOtp";
+const HTTP_PLAN = "/api/Plan/0";
+const HTTP_BUY_PLAN = "/api/Membership";
+const HTTP_MUSCLE_GROUPS = "/api/MuscleGroup";
+const HTTP_EXERCISES = "/api/Exercise";
 
 ///////////////////////////////////////////////////////////////////////////////
 ///

@@ -22,4 +22,10 @@ class PlayerModel extends Player {
         'birth_date': DateFormat('d/M/y').format(birthDate),
         'gender': gender.val,
       };
+
+  factory PlayerModel.fromEntity(Player p) => PlayerModel(
+        name: p.name,
+        birthDate: p.birthDate,
+        gender: p.gender,
+      );
 }

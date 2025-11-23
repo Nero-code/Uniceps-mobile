@@ -8,6 +8,8 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/days_edit/days_edit_bloc.dart';
+import 'package:uniceps/core/constants/app_routes.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_add_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_delete_dialog.dart';
@@ -281,12 +283,12 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                         unauthenticated: () => state.days.isEmpty,
                                         hasAccount: (s) => membershipBloc.state
                                             .maybeWhen(orElse: () => state.days.isEmpty, loaded: (m) => true));
-                                    return canAdd
-                                        ? IconButton(
-                                            iconSize: 20,
-                                            splashRadius: 20,
-                                            icon: const Icon(Icons.add),
-                                            onPressed: () {
+                                    return IconButton(
+                                      iconSize: 20,
+                                      splashRadius: 20,
+                                      icon: const Icon(Icons.add),
+                                      onPressed: canAdd
+                                          ? () {
                                               _addDay(
                                                 "${locale.day} ${state.days.length + 1}",
                                                 (name) => BlocProvider.of<DaysEditBloc>(context).add(
@@ -300,9 +302,35 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                                   ),
                                                 ),
                                               );
-                                            },
-                                          )
-                                        : const SizedBox();
+                                            }
+                                          : () => showDialog(
+                                                context: context,
+                                                builder: (context) => AlertDialog(
+                                                  title: Center(
+                                                    child: Image(
+                                                      image: AssetImage(IMG_PREMIUM),
+                                                      color: Colors.amber,
+                                                      width: MediaQuery.sizeOf(context).width * .2,
+                                                      height: MediaQuery.sizeOf(context).width * .2,
+                                                    ),
+                                                  ),
+                                                  content: Text(locale.upgradeAlert),
+                                                  actions: [
+                                                    Center(
+                                                      child: ElevatedButton(
+                                                        style: ElevatedButton.styleFrom(
+                                                          backgroundColor: Colors.amber,
+                                                          foregroundColor: Colors.white,
+                                                        ),
+                                                        onPressed: () =>
+                                                            Navigator.pushReplacementNamed(context, AppRoutes.plans),
+                                                        child: Text(locale.upgrade),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                    );
                                   }),
                                 ],
                               ),

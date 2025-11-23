@@ -3,6 +3,15 @@ import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 
+/// background message to fetch notifications on the fly,
+///
+/// and showing the notification dialog on screen while the app is `Dismissed`.
+@pragma('vm:entry-point')
+Future<void> _backgroundNotificationHandler(RemoteMessage message, String langCode) async {
+  print("Background Service");
+  print(message.toMap());
+}
+
 /// Firebase NotificationService integration, But [onBackgroundMessage]
 /// throws null [Exception] for unknown resons...
 ///
@@ -18,8 +27,7 @@ class NotificationService {
   /// Initialization of the service needs to be a singleton
   Future<void> init() async {
     FirebaseMessaging.onBackgroundMessage(_backgroundNotificationHandler);
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true, // Required to display a heads up notification
       badge: true,
       sound: true,
@@ -46,6 +54,6 @@ class NotificationService {
 
   /// Safety valve for whatever could go wrong...
   void dispose() async {
-    if (_subscription != null) await _subscription!.cancel();
+    await _subscription?.cancel();
   }
 }

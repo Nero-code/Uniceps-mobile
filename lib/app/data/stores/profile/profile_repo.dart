@@ -23,9 +23,9 @@ class ProfileRepo implements IProfileService {
   }
 
   @override
-  Future<Either<Failure, Unit>> saveProfile(PlayerModel model) async {
+  Future<Either<Failure, Unit>> saveProfile(Player model) async {
     try {
-      await localSource.savePlayerData(model);
+      await localSource.savePlayerData(PlayerModel.fromEntity(model));
       return const Right(unit);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: ""));

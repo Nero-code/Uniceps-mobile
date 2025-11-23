@@ -7,8 +7,7 @@ import 'package:uniceps/app/data/sources/services/client_helper.dart';
 import 'package:uniceps/app/data/sources/services/token_service_simple.dart';
 
 class HttpClientHelper implements ClientHelper {
-  const HttpClientHelper(
-      {required Client client, required SimpleTokenService tokenService})
+  const HttpClientHelper({required Client client, required SimpleTokenService tokenService})
       : _tokenService = tokenService,
         _client = client;
 
@@ -21,8 +20,7 @@ class HttpClientHelper implements ClientHelper {
   SimpleTokenService get tokenService => _tokenService;
 
   @override
-  Future<T> getHandler<T>(String api, String urlPart,
-      T Function(Map<String, dynamic> json) fromJson,
+  Future<T> getHandler<T>(String api, String urlPart, T Function(Map<String, dynamic> json) fromJson,
       {bool needsHeader = true, Map<String, String>? queryParams}) async {
     final res = await _client.get(
       Uri.https(api, urlPart, queryParams),
@@ -39,8 +37,7 @@ class HttpClientHelper implements ClientHelper {
   }
 
   @override
-  Future<List<T>> getListHandler<T>(
-      String api, String urlPart, T Function(Map<String, dynamic>) fromJson,
+  Future<List<T>> getListHandler<T>(String api, String urlPart, T Function(Map<String, dynamic>) fromJson,
       {bool needsHeader = true, Map<String, String>? queryParams}) async {
     final res = await _client.get(
       Uri.https(api, urlPart, queryParams),
@@ -85,8 +82,7 @@ class HttpClientHelper implements ClientHelper {
 
     handleHttpStatus(res);
 
-    if (res.statusCode == HttpStatus.ok ||
-        res.statusCode == HttpStatus.created) {
+    if (res.statusCode == HttpStatus.ok || res.statusCode == HttpStatus.created) {
       if (fromJson != null) {
         return fromJson(jsonDecode(res.body));
       }
@@ -99,8 +95,7 @@ class HttpClientHelper implements ClientHelper {
   }
 
   @override
-  Future<void> putHandler(String api, String urlPart, Map<String, dynamic> body,
-      {bool needsHeader = true}) async {
+  Future<void> putHandler(String api, String urlPart, Map<String, dynamic> body, {bool needsHeader = true}) async {
     final res = await _client.put(
       Uri.https("$api" "$urlPart"),
       headers: await getHeader(needsHeader),
@@ -115,11 +110,8 @@ class HttpClientHelper implements ClientHelper {
   }
 
   @override
-  Future<void> deleteHandler(
-      String api, String urlPart, Map<String, dynamic> body,
-      {bool needsHeader = true}) async {
-    final res = await _client.delete(Uri.https("$api" "$urlPart"),
-        headers: await getHeader(needsHeader), body: body);
+  Future<void> deleteHandler(String api, String urlPart, Map<String, dynamic> body, {bool needsHeader = true}) async {
+    final res = await _client.delete(Uri.https("$api" "$urlPart"), headers: await getHeader(needsHeader), body: body);
 
     if (kDebugMode) {
       print("deleteHandler code: ${res.statusCode}");
@@ -132,8 +124,7 @@ class HttpClientHelper implements ClientHelper {
     // return {'Authorization': "Bearer ${session!.accessToken}"};
     // final a = await _tokenService.getAccessToken();
     return {
-      if (needToken)
-        'Authorization': "Bearer ${await _tokenService.getAccessToken()}",
+      if (needToken) 'Authorization': "Bearer ${await _tokenService.getAccessToken()}",
       'content-type': 'application/json;charset=utf-8',
       'accept': 'application/json',
     };
@@ -151,15 +142,15 @@ String handleHttpStatus(Response res) {
     case 400:
       throw BadRequestException();
     case 401:
-      throw Exception('Unauthorized — please login again');
+      throw UnauthorizedException();
     case 403:
-      throw Exception('Forbidden — you don’t have access');
+      throw ForbiddenException();
     case 404:
-      throw Exception('Not found — resource does not exist');
+      throw NotFoundException();
     case 500:
-      throw Exception('Server error — try again later');
+      throw ServerErrorException();
     case 503:
-      throw Exception('Service temporarily unavailable');
+      throw ServiceUnavailableException();
     default:
       throw Exception('Unhandled status code: ${res.statusCode}');
   }

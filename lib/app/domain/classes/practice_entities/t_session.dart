@@ -4,6 +4,7 @@ import 'package:uniceps/app/domain/classes/practice_entities/t_log.dart';
 class TSession extends Equatable {
   final int? id;
   final int dayId;
+  final String dayName;
   final List<TLog> logs;
   final DateTime createdAt;
   final DateTime? finishedAt;
@@ -17,6 +18,7 @@ class TSession extends Equatable {
   const TSession({
     required this.id,
     required this.dayId,
+    required this.dayName,
     required this.logs,
     required this.apiId,
     required this.createdAt,

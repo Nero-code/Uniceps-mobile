@@ -140,6 +140,7 @@
   "logsReportInvalidValues": "قيم الاداء غير صحيحة!",
   "physicalReportNoValues": "لا يوجد قياسات لديك, قم بادخال قياس!",
   "physicalReportInvalidValues": "قيم القياسات غير صحيحة!",
+  "physicalReportDisclaimer": "ملاحظة: هذه القيم ليست دقيقة, يرجى مراجعة مختصين للتاكد من هذه القيم",
   
   "error": "حدث خطأ ما",
   "profile": "الحساب",

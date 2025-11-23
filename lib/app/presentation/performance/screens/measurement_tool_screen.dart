@@ -76,7 +76,7 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
                           // OLD
                           DropdownButton(
                             icon: const Icon(Icons.calendar_month, size: 20),
-                            hint: const Text('01/01/2000'),
+                            hint: const Text('--/--/----', style: TextStyle(fontWeight: FontWeight.w300)),
                             elevation: 1,
                             value: oldM,
                             borderRadius: BorderRadius.circular(10),
@@ -91,7 +91,7 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
                           // NEW
                           DropdownButton(
                             icon: const Icon(Icons.calendar_month, size: 20),
-                            hint: const Text('01/01/2000'),
+                            hint: const Text('--/--/----', style: TextStyle(fontWeight: FontWeight.w300)),
                             elevation: 1,
                             value: newM,
                             borderRadius: BorderRadius.circular(10),
@@ -123,7 +123,7 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
               return Center(
                 child: Text((snapshot.error as MeasurementFailure).when(
                   msOffline: () => locale.errNoInternet,
-                  noRecords: () => locale.empty,
+                  noRecords: () => locale.emptyMeasure,
                   msDbFailure: () => locale.error,
                 )),
               );

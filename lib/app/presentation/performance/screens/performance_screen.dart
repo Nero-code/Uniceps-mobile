@@ -123,26 +123,23 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
                 //
 
                 SliverToBoxAdapter(
-                  child: FutureBuilder(
-                      future: logsReport,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return snapshot.data!.fold(
-                            (l) => NoReportWidget(
-                              message: l.when(
-                                noValues: () => locale.logsReportNoValues,
-                                invalidValues: () => locale.logsReportInvalidValues,
-                              ),
-                              background: const Color.fromARGB(61, 76, 175, 79),
-                            ),
-                            (r) => Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: LogsReportCard(r: r),
-                            ),
-                          );
-                        }
-                        return const LoadingIndicator();
-                      }),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FutureBuilder(
+                        future: logsReport,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return snapshot.data!.fold(
+                                (l) => NoReportWidget(
+                                        message: l.when(
+                                      noValues: () => locale.logsReportNoValues,
+                                      invalidValues: () => locale.logsReportInvalidValues,
+                                    )),
+                                (r) => LogsReportCard(r: r));
+                          }
+                          return const LoadingIndicator();
+                        }),
+                  ),
                 ),
 
                 //
@@ -155,12 +152,10 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
                         if (snapshot.hasData) {
                           return snapshot.data!.fold(
                             (l) => NoReportWidget(
-                              message: l.when(
-                                noValues: () => locale.physicalReportNoValues,
-                                invalidValues: () => locale.physicalReportInvalidValues,
-                              ),
-                              background: const Color.fromARGB(52, 244, 67, 54),
-                            ),
+                                message: l.when(
+                              noValues: () => locale.physicalReportNoValues,
+                              invalidValues: () => locale.physicalReportInvalidValues,
+                            )),
                             (r) => PhysicalReportCard(report: r),
                           );
                         }

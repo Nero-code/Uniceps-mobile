@@ -53,13 +53,14 @@ class PerformanceRepo implements IPerformanceContract {
       maxDuration = sDuration.compareTo(maxDuration) > 0 ? sDuration : maxDuration;
       minDuration = sDuration.compareTo(minDuration) < 0 ? sDuration : minDuration;
       totalDuration += sDuration;
-      progressRate += s.progress;
+      progressRate += s.logs.length;
     }
 
     final avgSeconds = (maxDuration - minDuration).inSeconds / 2;
     avgDuration = Duration(seconds: avgSeconds.round());
-
-    progressRate = progressRate / list.length;
+    if (totalDuration.inMinutes != 0) {
+      progressRate = progressRate / totalDuration.inMinutes;
+    }
 
     return Right(SessionsReport(
       maxDuration: maxDuration,
@@ -129,6 +130,9 @@ class PerformanceRepo implements IPerformanceContract {
     try {
       profile = await profileLocalSource.getProfileData();
       measures = await measurementsLocalSource.getMeasurements();
+      if (measures.isEmpty) {
+        return const Left(PerformanceFailure.noValues());
+      }
     } catch (e) {
       return const Left(PerformanceFailure.noValues());
     }

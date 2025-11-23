@@ -56,7 +56,7 @@ class SettingsScreen extends StatelessWidget {
                     iconsColor: Colors.deepOrange,
                     title: locale.profile,
                     subtitle: "",
-                    onPressed: null,
+                    onPressed: () => Navigator.pushNamed(context, AppRoutes.profile),
                   ),
                   SettingsTile(
                     icon: Icons.fitness_center_rounded,
@@ -116,7 +116,7 @@ class SettingsScreen extends StatelessWidget {
                     iconsColor: Colors.amber,
                     title: locale.about,
                     subtitle: "yoyoyoyo",
-                    onPressed: () => Navigator.of(context).pushNamed(ROUTE_ABOUT),
+                    onPressed: () => Navigator.pushNamed(context, AppRoutes.about),
                   ),
                   BlocBuilder<AccountCubit, AccountState>(
                     builder: (context, state) {

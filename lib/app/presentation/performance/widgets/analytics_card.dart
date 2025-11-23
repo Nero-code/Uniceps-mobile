@@ -22,13 +22,17 @@ class AnalyticsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.sizeOf(context);
     return Container(
+        width: screenSize.width * .5 - 14.0,
+        // height: 120,
         decoration: BoxDecoration(
           color: background,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Center(
               child: Text(
@@ -36,42 +40,49 @@ class AnalyticsCard extends StatelessWidget {
                 style: const TextStyle(fontSize: 12),
               ),
             ),
-            Expanded(
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                        padding: const EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(color: iconBackground.withOpacity(0.1), shape: BoxShape.circle),
-                        child: icon),
+                  Container(
+                    width: 40,
+                    height: 40,
+                    padding: const EdgeInsets.all(5.0),
+                    decoration:
+                        BoxDecoration(color: iconBackground.withOpacity(0.15), borderRadius: BorderRadius.circular(10)),
+                    child: icon,
                   ),
+                  const SizedBox(width: 5),
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.arrow_drop_up_rounded),
+                            const Icon(Icons.arrow_drop_up_rounded, color: Colors.green),
+                            const SizedBox(width: 5),
                             Text(
                               '$max',
-                              style: const TextStyle(fontSize: 12),
+                              style: const TextStyle(fontSize: 16),
                             ),
                           ],
                         ),
                         Row(
                           children: [
-                            const Icon(Icons.remove_rounded),
+                            const Icon(Icons.remove_rounded, color: Colors.grey),
+                            const SizedBox(width: 5),
                             Text(
                               '$avg',
-                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                              style: const TextStyle(fontSize: 14),
                             ),
                           ],
                         ),
                         Row(
                           children: [
-                            const Icon(Icons.arrow_drop_down_rounded),
+                            const Icon(Icons.arrow_drop_down_rounded, color: Colors.pink),
+                            const SizedBox(width: 5),
                             Text(
                               '$min',
                               style: const TextStyle(fontSize: 12),
@@ -80,10 +91,11 @@ class AnalyticsCard extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            const Icon(Icons.clear_all),
+                            const Icon(Icons.savings_outlined, color: Colors.brown),
+                            const SizedBox(width: 5),
                             Text(
-                              '$min',
-                              style: const TextStyle(fontSize: 12),
+                              '$total',
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
                             ),
                           ],
                         ),

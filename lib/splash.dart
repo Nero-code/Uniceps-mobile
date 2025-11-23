@@ -15,7 +15,7 @@ class SplashScreen extends StatelessWidget {
       child: BlocListener<ProfileCubit, ProfileState>(
         listener: (context, state) => state.when(
           initial: () => null,
-          notFound: () => Navigator.pushReplacementNamed(context, AppRoutes.profile),
+          notFound: () => Navigator.pushReplacementNamed(context, AppRoutes.profileInitial),
           found: () => Navigator.pushReplacementNamed(context, AppRoutes.home),
         ),
         child: Scaffold(

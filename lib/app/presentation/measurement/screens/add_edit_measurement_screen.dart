@@ -258,9 +258,9 @@ class _AddEditMeasurementScreenState extends State<AddEditMeasurementScreen> {
                   context: context,
                   builder: (_) => SetMeasureDialog(
                     title: locale.hips,
-                    onPositive: (val) => measure.addAll(
-                      {"weight": val},
-                    ),
+                    onPositive: (val) => setState(() => measure.addAll(
+                          {"weight": val},
+                        )),
                   ),
                 ),
               ),
@@ -315,7 +315,7 @@ class _AddEditMeasurementScreenState extends State<AddEditMeasurementScreen> {
         waist: json['waist'] ?? 0.0,
         chest: json['chest'] ?? 0.0,
         hips: json['hips'] ?? 0.0,
-        checkDate: json['check_date'] ?? DateTime.now(),
+        checkDate: DateTime.tryParse(json['check_date'] ?? '') ?? DateTime.now(),
         version: json['version'] ?? 0,
         isSynced: json['is_synced'] ?? false,
       );

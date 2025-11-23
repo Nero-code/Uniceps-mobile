@@ -13,8 +13,9 @@ import 'package:uniceps/app/presentation/measurement/screens/measurement_screen.
 import 'package:uniceps/app/presentation/performance/screens/measurement_tool_screen.dart';
 import 'package:uniceps/app/presentation/performance/screens/performance_screen.dart';
 import 'package:uniceps/app/presentation/plans/screens/plans_screen.dart';
-import 'package:uniceps/app/presentation/profile/screens/profile_screen.dart';
+import 'package:uniceps/app/presentation/profile/screens/profile_initial_screen.dart';
 import 'package:uniceps/app/presentation/routine/screens/routines_heat_screen.dart';
+import 'package:uniceps/app/presentation/settings/screens/profile_screen.dart';
 import 'package:uniceps/app/presentation/settings/screens/settings_screen.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/app/presentation/screens/about_screen.dart';
@@ -55,7 +56,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await FlutterDownloader.initialize(
-    debug: true,
+    debug: false,
     ignoreSsl: false,
   );
 
@@ -108,6 +109,7 @@ class MyApp extends StatelessWidget {
             routes: {
               //  MAIN
               AppRoutes.splash: (_) => const SplashScreen(),
+              AppRoutes.profileInitial: (_) => const ProfileInitialScreen(),
               AppRoutes.profile: (_) => const ProfileScreen(),
               AppRoutes.home: (_) => const HomeScreen(),
 

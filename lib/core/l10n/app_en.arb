@@ -141,6 +141,7 @@
   "logsReportInvalidValues": "Malformed logs!",
   "physicalReportNoValues": "No measurements found, Try measuring yourself!",
   "physicalReportInvalidValues": "Malformed Measurements!",
+  "physicalReportDisclaimer": "Note: these values are not completely accurate, medical information should come from professionals",
   
   "error": "something went wrong",
   "profile": "Profile",
@@ -254,4 +255,5 @@
   "upgrade": "Upgrade",
   "upgradeAlert": "Become a Premium Member to unlock your FULL potential",
   "premiumAlertContent": "Unlock ALL content with Premium"
+
 }

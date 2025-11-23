@@ -32,6 +32,7 @@ class PhysicalReportCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Stack(
@@ -40,7 +41,7 @@ class PhysicalReportCard extends StatelessWidget {
                       SizedBox.square(
                         dimension: screenSize.width * .2,
                         child: CircularProgressIndicator(
-                          color: Colors.red.withOpacity(0.5),
+                          color: const Color.fromARGB(255, 153, 63, 31).withOpacity(0.5),
                           backgroundColor: Colors.grey.shade100,
                           value: (report.bmi - 10) / 30,
                           strokeWidth: 10,
@@ -58,6 +59,7 @@ class PhysicalReportCard extends StatelessWidget {
                             report.bmi.toStringAsFixed(1),
                             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           ),
+                          const SizedBox(height: 10),
                         ],
                       ),
                     ],
@@ -68,14 +70,20 @@ class PhysicalReportCard extends StatelessWidget {
                     alignment: Alignment.center,
                     children: [
                       SizedBox.square(
-                        dimension: screenSize.width * .2,
-                        child: CircularProgressIndicator(
-                          color: Colors.amber.withOpacity(0.5),
-                          backgroundColor: Colors.grey.shade100,
-                          value: .43,
-                          strokeWidth: 10,
-                          strokeAlign: 1,
-                          strokeCap: StrokeCap.round,
+                        dimension: screenSize.width * .21,
+                        // child: CircularProgressIndicator(
+                        //   color: Colors.amber.withOpacity(0.5),
+                        //   backgroundColor: Colors.grey.shade100,
+                        //   value: .43,
+                        //   strokeWidth: 10,
+                        //   strokeAlign: 1,
+                        //   strokeCap: StrokeCap.round,
+                        // ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.grey.shade100,
+                          ),
                         ),
                       ),
                       Column(
@@ -86,6 +94,7 @@ class PhysicalReportCard extends StatelessWidget {
                           ),
                           Text(
                             '${report.bmr}',
+                            textDirection: TextDirection.ltr,
                             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           Text(
@@ -107,23 +116,25 @@ class PhysicalReportCard extends StatelessWidget {
                         child: CircularProgressIndicator(
                           color: Colors.green.withOpacity(0.5),
                           backgroundColor: Colors.grey.shade100,
-                          value: .26,
+                          value: report.bodyFatPercentage,
                           strokeWidth: 10,
                           strokeAlign: 1,
                           strokeCap: StrokeCap.round,
                         ),
                       ),
-                      const Column(
+                      Column(
                         children: [
-                          Text(
+                          const Text(
                             'BF%',
                             textDirection: TextDirection.ltr,
                             style: TextStyle(fontSize: 10),
                           ),
                           Text(
-                            '26%',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            '${report.bodyFatPercentage.toStringAsFixed(1)}%',
+                            textDirection: TextDirection.ltr,
+                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           ),
+                          const SizedBox(height: 10),
                         ],
                       ),
                     ],
@@ -133,8 +144,8 @@ class PhysicalReportCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          const Text(
-            'disclaimer: note that these values help you gain insight into your body measurements and ratios',
+          Text(
+            locale.physicalReportDisclaimer,
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
           ),
         ],

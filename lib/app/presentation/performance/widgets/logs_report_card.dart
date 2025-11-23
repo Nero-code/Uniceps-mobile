@@ -17,6 +17,7 @@ class LogsReportCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Row(
           children: [
@@ -29,6 +30,7 @@ class LogsReportCard extends StatelessWidget {
               min: r.minWeight,
               total: r.totalWeights,
             ),
+            SizedBox(width: 8),
             AnalyticsCard(
               title: locale.exerciseDensity,
               icon: const Icon(Icons.menu_open_rounded, color: Colors.blue),
@@ -40,6 +42,7 @@ class LogsReportCard extends StatelessWidget {
             ),
           ],
         ),
+        SizedBox(height: 8),
         Row(
           children: [
             AnalyticsCard(
@@ -51,12 +54,10 @@ class LogsReportCard extends StatelessWidget {
               min: r.minVolume,
               total: r.totalVolume,
             ),
+            SizedBox(width: 8),
             AnalyticsCard(
               title: locale.exerciseIntensity,
-              icon: const Icon(
-                Icons.keyboard_double_arrow_up,
-                color: Colors.orange,
-              ),
+              icon: const Icon(Icons.keyboard_double_arrow_down, color: Colors.orange),
               iconBackground: Colors.amber,
               max: r.intensity.reduce((a, b) => max(a, b)),
               avg: r.intensity.reduce((a, b) => a + b) / r.intensity.length,

@@ -22,6 +22,8 @@ abstract class AppRoutes {
   static const performance = '/home/performance';
 
   static const profile = '/settings/profile';
+  static const profileInitial = '/splash/profile_initial';
+
   static const exercises = '/exercise';
   static const subscriptions = '/profile/subscriptions';
   static const measurements = '/profile/measurements';

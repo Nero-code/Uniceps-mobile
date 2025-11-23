@@ -19,7 +19,7 @@ mixin _$SessionEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() getLastActiveSession,
-    required TResult Function(int dayId) startSession,
+    required TResult Function(int dayId, String dayName) startSession,
     required TResult Function(TLog log, double progress) logSet,
     required TResult Function(TSession session, bool fullSession) stopSession,
   }) =>
@@ -27,7 +27,7 @@ mixin _$SessionEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getLastActiveSession,
-    TResult? Function(int dayId)? startSession,
+    TResult? Function(int dayId, String dayName)? startSession,
     TResult? Function(TLog log, double progress)? logSet,
     TResult? Function(TSession session, bool fullSession)? stopSession,
   }) =>
@@ -35,7 +35,7 @@ mixin _$SessionEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getLastActiveSession,
-    TResult Function(int dayId)? startSession,
+    TResult Function(int dayId, String dayName)? startSession,
     TResult Function(TLog log, double progress)? logSet,
     TResult Function(TSession session, bool fullSession)? stopSession,
     required TResult orElse(),
@@ -126,7 +126,7 @@ class _$GetLastActiveSessionImpl implements _GetLastActiveSession {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() getLastActiveSession,
-    required TResult Function(int dayId) startSession,
+    required TResult Function(int dayId, String dayName) startSession,
     required TResult Function(TLog log, double progress) logSet,
     required TResult Function(TSession session, bool fullSession) stopSession,
   }) {
@@ -137,7 +137,7 @@ class _$GetLastActiveSessionImpl implements _GetLastActiveSession {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getLastActiveSession,
-    TResult? Function(int dayId)? startSession,
+    TResult? Function(int dayId, String dayName)? startSession,
     TResult? Function(TLog log, double progress)? logSet,
     TResult? Function(TSession session, bool fullSession)? stopSession,
   }) {
@@ -148,7 +148,7 @@ class _$GetLastActiveSessionImpl implements _GetLastActiveSession {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getLastActiveSession,
-    TResult Function(int dayId)? startSession,
+    TResult Function(int dayId, String dayName)? startSession,
     TResult Function(TLog log, double progress)? logSet,
     TResult Function(TSession session, bool fullSession)? stopSession,
     required TResult orElse(),
@@ -207,7 +207,7 @@ abstract class _$$StartSessionImplCopyWith<$Res> {
           _$StartSessionImpl value, $Res Function(_$StartSessionImpl) then) =
       __$$StartSessionImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({int dayId});
+  $Res call({int dayId, String dayName});
 }
 
 /// @nodoc
@@ -222,12 +222,17 @@ class __$$StartSessionImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? dayId = null,
+    Object? dayName = null,
   }) {
     return _then(_$StartSessionImpl(
       null == dayId
           ? _value.dayId
           : dayId // ignore: cast_nullable_to_non_nullable
               as int,
+      null == dayName
+          ? _value.dayName
+          : dayName // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -235,14 +240,16 @@ class __$$StartSessionImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$StartSessionImpl implements _StartSession {
-  const _$StartSessionImpl(this.dayId);
+  const _$StartSessionImpl(this.dayId, this.dayName);
 
   @override
   final int dayId;
+  @override
+  final String dayName;
 
   @override
   String toString() {
-    return 'SessionEvent.startSession(dayId: $dayId)';
+    return 'SessionEvent.startSession(dayId: $dayId, dayName: $dayName)';
   }
 
   @override
@@ -250,11 +257,12 @@ class _$StartSessionImpl implements _StartSession {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$StartSessionImpl &&
-            (identical(other.dayId, dayId) || other.dayId == dayId));
+            (identical(other.dayId, dayId) || other.dayId == dayId) &&
+            (identical(other.dayName, dayName) || other.dayName == dayName));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, dayId);
+  int get hashCode => Object.hash(runtimeType, dayId, dayName);
 
   @JsonKey(ignore: true)
   @override
@@ -266,35 +274,35 @@ class _$StartSessionImpl implements _StartSession {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() getLastActiveSession,
-    required TResult Function(int dayId) startSession,
+    required TResult Function(int dayId, String dayName) startSession,
     required TResult Function(TLog log, double progress) logSet,
     required TResult Function(TSession session, bool fullSession) stopSession,
   }) {
-    return startSession(dayId);
+    return startSession(dayId, dayName);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getLastActiveSession,
-    TResult? Function(int dayId)? startSession,
+    TResult? Function(int dayId, String dayName)? startSession,
     TResult? Function(TLog log, double progress)? logSet,
     TResult? Function(TSession session, bool fullSession)? stopSession,
   }) {
-    return startSession?.call(dayId);
+    return startSession?.call(dayId, dayName);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getLastActiveSession,
-    TResult Function(int dayId)? startSession,
+    TResult Function(int dayId, String dayName)? startSession,
     TResult Function(TLog log, double progress)? logSet,
     TResult Function(TSession session, bool fullSession)? stopSession,
     required TResult orElse(),
   }) {
     if (startSession != null) {
-      return startSession(dayId);
+      return startSession(dayId, dayName);
     }
     return orElse();
   }
@@ -338,9 +346,11 @@ class _$StartSessionImpl implements _StartSession {
 }
 
 abstract class _StartSession implements SessionEvent {
-  const factory _StartSession(final int dayId) = _$StartSessionImpl;
+  const factory _StartSession(final int dayId, final String dayName) =
+      _$StartSessionImpl;
 
   int get dayId;
+  String get dayName;
   @JsonKey(ignore: true)
   _$$StartSessionImplCopyWith<_$StartSessionImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -420,7 +430,7 @@ class _$LogSetImpl implements _LogSet {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() getLastActiveSession,
-    required TResult Function(int dayId) startSession,
+    required TResult Function(int dayId, String dayName) startSession,
     required TResult Function(TLog log, double progress) logSet,
     required TResult Function(TSession session, bool fullSession) stopSession,
   }) {
@@ -431,7 +441,7 @@ class _$LogSetImpl implements _LogSet {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getLastActiveSession,
-    TResult? Function(int dayId)? startSession,
+    TResult? Function(int dayId, String dayName)? startSession,
     TResult? Function(TLog log, double progress)? logSet,
     TResult? Function(TSession session, bool fullSession)? stopSession,
   }) {
@@ -442,7 +452,7 @@ class _$LogSetImpl implements _LogSet {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getLastActiveSession,
-    TResult Function(int dayId)? startSession,
+    TResult Function(int dayId, String dayName)? startSession,
     TResult Function(TLog log, double progress)? logSet,
     TResult Function(TSession session, bool fullSession)? stopSession,
     required TResult orElse(),
@@ -575,7 +585,7 @@ class _$StopSessionImpl implements _StopSession {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() getLastActiveSession,
-    required TResult Function(int dayId) startSession,
+    required TResult Function(int dayId, String dayName) startSession,
     required TResult Function(TLog log, double progress) logSet,
     required TResult Function(TSession session, bool fullSession) stopSession,
   }) {
@@ -586,7 +596,7 @@ class _$StopSessionImpl implements _StopSession {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getLastActiveSession,
-    TResult? Function(int dayId)? startSession,
+    TResult? Function(int dayId, String dayName)? startSession,
     TResult? Function(TLog log, double progress)? logSet,
     TResult? Function(TSession session, bool fullSession)? stopSession,
   }) {
@@ -597,7 +607,7 @@ class _$StopSessionImpl implements _StopSession {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getLastActiveSession,
-    TResult Function(int dayId)? startSession,
+    TResult Function(int dayId, String dayName)? startSession,
     TResult Function(TLog log, double progress)? logSet,
     TResult Function(TSession session, bool fullSession)? stopSession,
     required TResult orElse(),

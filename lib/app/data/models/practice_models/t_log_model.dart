@@ -1,6 +1,10 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uniceps/app/data/sources/local/database.dart' as db;
 import 'package:uniceps/app/domain/classes/practice_entities/t_log.dart';
 
+part 't_log_model.g.dart';
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class TLogModel extends TLog {
   const TLogModel({
     required super.id,
@@ -26,4 +30,7 @@ class TLogModel extends TLog {
         weight: table.weight,
         completedAt: table.completedAt,
       );
+
+  factory TLogModel.fromJson(Map<String, dynamic> json) => _$TLogModelFromJson(json);
+  Map<String, dynamic> toJson() => _$TLogModelToJson(this);
 }

@@ -24,6 +24,7 @@ import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_sou
 import 'package:uniceps/app/data/sources/services/client_helper.dart';
 import 'package:uniceps/app/data/sources/services/http_client_helper.dart';
 import 'package:uniceps/app/data/sources/services/media_helper.dart';
+import 'package:uniceps/app/data/sources/services/t_session_sync_service.dart';
 import 'package:uniceps/app/data/sources/services/token_service_simple.dart';
 import 'package:uniceps/app/data/stores/account/account_repo.dart';
 import 'package:uniceps/app/data/stores/auth/email_auth_repo.dart';
@@ -276,10 +277,8 @@ Future<void> init() async {
     ),
   );
 
-  sl.registerLazySingleton<UpdateService>(
-    () => UpdateService(
-      connectionChecker: sl(),
-      client: sl(),
-    ),
-  );
+  sl.registerLazySingleton<UpdateService>(() => UpdateService(connectionChecker: sl(), client: sl()));
+
+  sl.registerLazySingleton(
+      () => TSessionSyncService(database: sl(), client: sl(), connectionChecker: sl(), logger: sl()));
 }

@@ -164,12 +164,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             error: (err) => err.f.maybeMap(
                                 orElse: () => notifyUpgrade
                                     ? AlertBar(
-                                        color: Colors.teal,
-                                        foregroundColor: Colors.white70,
+                                        color: Colors.amber.shade300,
+                                        foregroundColor: Colors.black87,
                                         content: Text(
                                           locale.upgradeAlert,
-                                          style:
-                                              const TextStyle(fontSize: 12, color: Color.fromARGB(255, 255, 222, 132)),
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            color: Color.fromRGBO(47, 53, 53, 1),
+                                            fontWeight: FontWeight.w300,
+                                          ),
                                         ),
                                         actionText: locale.upgrade,
                                         action: () => Navigator.pushNamed(context, AppRoutes.plans),
@@ -207,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 day: day,
                                 isSelected: state.heat.lastdayId == day.id,
                                 onSelect: () async {
-                                  context.read<SessionBloc>().add(SessionEvent.startSession(day.id!));
+                                  context.read<SessionBloc>().add(SessionEvent.startSession(day.id!, day.name));
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(

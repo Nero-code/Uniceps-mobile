@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
-import 'package:uniceps/app/presentation/home/widgets/level_indicator.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/box_botton.dart';
 
@@ -125,36 +124,36 @@ class PracticePanel extends StatelessWidget {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.lerp(Alignment.topLeft, Alignment.topCenter, 0.2)!,
-            child: BoxButton(
-              isCircle: true,
-              width: smallBtnSize,
-              height: smallBtnSize,
-              background: btnBackgroundColor,
-              onTap: onStreak,
-              child: const Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.local_fire_department,
-                      color: Colors.orange,
-                      size: 30,
-                    ),
-                    // Text(
-                    //   "115",
-                    //   style: TextStyle(fontSize: 9),
-                    // ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.lerp(Alignment.topRight, Alignment.topCenter, 0.2)!,
-            child: const LevelIndicator(size: 55),
-          ),
+          // Align(
+          //   alignment: Alignment.lerp(Alignment.topLeft, Alignment.topCenter, 0.2)!,
+          //   child: BoxButton(
+          //     isCircle: true,
+          //     width: smallBtnSize,
+          //     height: smallBtnSize,
+          //     background: btnBackgroundColor,
+          //     onTap: onStreak,
+          //     child: const Center(
+          //       child: Column(
+          //         mainAxisSize: MainAxisSize.min,
+          //         children: [
+          //           Icon(
+          //             Icons.local_fire_department,
+          //             color: Colors.orange,
+          //             size: 30,
+          //           ),
+          //           // Text(
+          //           //   "115",
+          //           //   style: TextStyle(fontSize: 9),
+          //           // ),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // Align(
+          //   alignment: Alignment.lerp(Alignment.topRight, Alignment.topCenter, 0.2)!,
+          //   child: const LevelIndicator(size: 55),
+          // ),
         ],
       ),
     );

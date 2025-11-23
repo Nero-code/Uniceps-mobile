@@ -26,13 +26,12 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
   Future<Either<Failure, List<({RoutineHeat heat, Routine routine})>>> getAllRoutinesWithHeat() async {
     try {
       final res = await _localSource.getAllRoutinesWithHeat();
-      if (res.isEmpty) return const Left(EmptyCacheFailure(errorMessage: ""));
 
       routines.clear();
       routines.addAll(res.map((e) => (routine: e.routine.toEntity(), heat: e.heat)));
       return Right(routines);
     } catch (e) {
-      return const Left(EmptyCacheFailure(errorMessage: ""));
+      return Left(DatabaseFailure(errorMsg: ""));
     }
   }
 

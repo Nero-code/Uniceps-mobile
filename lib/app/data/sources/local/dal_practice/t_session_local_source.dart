@@ -21,7 +21,7 @@ abstract class ITSessionLocalSourceContract {
   Future<List<TSessionModel>> getSessionsByRoutine(int routineId);
 
   Future<TSessionModel?> getPreviousSession();
-  Future<TSessionModel> startTrainingSession(int dayId);
+  Future<TSessionModel> startTrainingSession(int dayId, String dayName);
   Future<TLogModel> logSet(TLogModel log, double sessionProgress);
   Future<void> finishTrainingSession(TSessionModel session, bool isFullSession);
 }
@@ -226,10 +226,10 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
   }
 
   @override
-  Future<TSessionModel> startTrainingSession(int dayId) async {
+  Future<TSessionModel> startTrainingSession(int dayId, String dayName) async {
     final session = await _database
         .into(_database.tSessions)
-        .insertReturning(db.TSessionsCompanion.insert(dayId: dayId, startedAt: DateTime.now()));
+        .insertReturning(db.TSessionsCompanion.insert(dayId: dayId, dayName: dayName, startedAt: DateTime.now()));
 
     return TSessionModel.fromTable(session, []);
   }

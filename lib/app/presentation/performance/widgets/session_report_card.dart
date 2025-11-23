@@ -27,6 +27,7 @@ class SessionReportCard extends StatelessWidget {
             locale.sessionsReport,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
+          const SizedBox(height: 8.0),
           Row(
             children: [
               Expanded(
@@ -39,7 +40,7 @@ class SessionReportCard extends StatelessWidget {
                         Text(
                           formatDuration(report.maxDuration),
                           textDirection: TextDirection.ltr,
-                          style: const TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
                     ),
@@ -50,7 +51,7 @@ class SessionReportCard extends StatelessWidget {
                         Text(
                           formatDuration(report.avgDuration),
                           textDirection: TextDirection.ltr,
-                          style: const TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
                     ),
@@ -61,18 +62,18 @@ class SessionReportCard extends StatelessWidget {
                         Text(
                           formatDuration(report.minDuration),
                           textDirection: TextDirection.ltr,
-                          style: const TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
                     ),
                     Row(
                       children: [
-                        const Icon(Icons.timer),
+                        const Icon(Icons.timer_outlined),
                         const SizedBox(width: 5.0),
                         Text(
                           formatDuration(report.totalDuration),
                           textDirection: TextDirection.ltr,
-                          style: const TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
                     ),
@@ -86,8 +87,8 @@ class SessionReportCard extends StatelessWidget {
                     SizedBox.square(
                       dimension: screenSize.width * .2,
                       child: CircularProgressIndicator(
-                        color: Colors.orange.withOpacity(0.5),
-                        value: .9,
+                        color: report.color.withOpacity(0.3),
+                        value: report.value,
                         strokeWidth: 10,
                         strokeAlign: 1,
                         strokeCap: StrokeCap.round,
@@ -111,6 +112,11 @@ class SessionReportCard extends StatelessWidget {
               Expanded(
                   child: Column(
                 children: [
+                  // Icon(
+                  //   Icons.local_fire_department_rounded,
+                  //   color: report.color,
+                  //   size: 35,
+                  // ),
                   Text(
                     locale.progressRate,
                     style: const TextStyle(fontSize: 10),

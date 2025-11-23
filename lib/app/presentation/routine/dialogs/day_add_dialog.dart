@@ -9,6 +9,8 @@ class DayAddDialog extends StatelessWidget {
   final String initialName;
   final void Function(String name) onDone;
 
+  final _node = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
@@ -16,16 +18,19 @@ class DayAddDialog extends StatelessWidget {
       icon: const Icon(Icons.text_fields_rounded),
       title: Text("${locale.add} ${locale.day}"),
       content: TextField(
+        focusNode: _node,
         controller: _controller,
         decoration: InputDecoration(
-          border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(15)),
+          border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(15)),
           fillColor: Colors.blueGrey.shade50,
           filled: true,
         ),
-        onTap: () => _controller.selection =
-            TextSelection(baseOffset: 0, extentOffset: _controller.text.length),
+        onTap: () {
+          if (!_node.hasFocus) {
+            _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
+          }
+        },
+        onTapOutside: (_) => _node.unfocus(),
       ),
       actions: [
         TextButton(

@@ -17,7 +17,8 @@ class PracticeCommands {
 
   Future<Either<Failure, RoutineDay>> getdayItems(int dayId) => _repo.getDayItems(dayId);
   Future<Either<Failure, TSession>> getLastActiveSession() => _repo.getPreviousSession();
-  Future<Either<Failure, TSession>> startTrainingSession(int dayId) => _repo.startTrainingSession(dayId);
+  Future<Either<Failure, TSession>> startTrainingSession(int dayId, String dayName) =>
+      _repo.startTrainingSession(dayId, dayName);
   Future<Either<Failure, TSession>> logSetComplete(TLog log, double progress) => _repo.logSetComplete(log, progress);
 
   Future<Either<Failure, Unit>> finishTrainingSession(TSession session, bool full) =>

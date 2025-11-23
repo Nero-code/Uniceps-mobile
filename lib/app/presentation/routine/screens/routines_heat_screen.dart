@@ -6,6 +6,8 @@ import 'package:uniceps/app/presentation/home/blocs/current_routine/current_rout
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/routines_with_heat/routines_with_heat_bloc.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_with_heat.dart';
+import 'package:uniceps/core/constants/app_routes.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_create_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_delete_dialog.dart';
@@ -71,136 +73,143 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                     f: state.f,
                     callBack: () =>
                         BlocProvider.of<RoutinesWithHeatBloc>(context).add(const RoutinesWithHeatEvent.getRoutines())),
-                loaded: (value) => Column(
-                  children: [
-                    Expanded(
-                      child: ListView(
-                        padding: const EdgeInsets.only(bottom: 50.0),
-                        children: state.maybeMap<List<Widget>>(
-                          orElse: () => [const SizedBox()],
-                          loaded: (state) {
-                            routinesLength = state.routines.length + 1;
-                            return state.routines
-                                .map(
-                                  (e) => RoutineWithHeat(
-                                    routine: e.routine,
-                                    heat: e.heat,
-                                    onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            RoutineEditScreen(routineId: e.routine.id!, routineName: e.routine.name),
-                                      ),
+                loaded: (state) {
+                  routinesLength = state.routines.length + 1;
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: ListView(
+                          padding: const EdgeInsets.only(bottom: 50.0),
+                          children: state.routines
+                              .map(
+                                (e) => RoutineWithHeat(
+                                  routine: e.routine,
+                                  heat: e.heat,
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          RoutineEditScreen(routineId: e.routine.id!, routineName: e.routine.name),
                                     ),
-                                    onMenu: () async {
-                                      final canDelete = context
-                                          .read<SessionBloc>()
-                                          .state
-                                          .maybeWhen(orElse: () => false, noActiveSession: () => true);
-
-                                      final res = await showDialog<Option>(
-                                          context: context,
-                                          builder: (context) => RoutineOptionsDialog(routineName: e.routine.name));
-
-                                      // print("selected option: $res");
-                                      switch (res) {
-                                        case Option.edit:
-                                          _renameRoutine(e.routine.name, (name) {
-                                            if (name == e.routine.name) return;
-                                            BlocProvider.of<RoutinesWithHeatBloc>(context)
-                                                .add(RoutinesWithHeatEvent.update(e.routine.copyWith(name: name)));
-                                          });
-                                          break;
-
-                                        case Option.delete:
-                                          if (canDelete) {
-                                            _deleteRoutine(e.routine.name, () {
-                                              BlocProvider.of<RoutinesWithHeatBloc>(context)
-                                                  .add(RoutinesWithHeatEvent.delete(e.routine));
-                                            });
-                                          } else {
-                                            if (context.mounted) {
-                                              ScaffoldMessenger.of(context).clearSnackBars();
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                SnackBar(
-                                                  backgroundColor: Colors.red,
-                                                  content: Text(locale.errOpenSessionDelete),
-                                                ),
-                                              );
-                                            }
-                                          }
-                                          break;
-
-                                        case Option.setCurrent:
-                                          _setCurrentRoutine(
-                                            () async {
-                                              final rBloc = BlocProvider.of<RoutinesWithHeatBloc>(context)
-                                                ..add(RoutinesWithHeatEvent.setCurrent(e.routine));
-                                              await rBloc.stream.skip(1).first;
-                                              if (context.mounted) {
-                                                BlocProvider.of<CurrentRoutineCubit>(context).getCurrentRoutine();
-                                              }
-                                            },
-                                            e.routine.name,
-                                          );
-                                          break;
-                                        default:
-                                      }
-                                    },
                                   ),
-                                )
-                                .toList();
-                          },
+                                  onMenu: () async {
+                                    final canDelete = context
+                                        .read<SessionBloc>()
+                                        .state
+                                        .maybeWhen(orElse: () => false, noActiveSession: () => true);
+
+                                    final res = await showDialog<Option>(
+                                        context: context,
+                                        builder: (context) => RoutineOptionsDialog(routineName: e.routine.name));
+
+                                    // print("selected option: $res");
+                                    switch (res) {
+                                      case Option.edit:
+                                        _renameRoutine(e.routine.name, (name) {
+                                          if (name == e.routine.name) return;
+                                          BlocProvider.of<RoutinesWithHeatBloc>(context)
+                                              .add(RoutinesWithHeatEvent.update(e.routine.copyWith(name: name)));
+                                        });
+                                        break;
+
+                                      case Option.delete:
+                                        if (canDelete) {
+                                          _deleteRoutine(e.routine.name, () {
+                                            BlocProvider.of<RoutinesWithHeatBloc>(context)
+                                                .add(RoutinesWithHeatEvent.delete(e.routine));
+                                          });
+                                        } else {
+                                          if (context.mounted) {
+                                            ScaffoldMessenger.of(context).clearSnackBars();
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                backgroundColor: Colors.red,
+                                                content: Text(locale.errOpenSessionDelete),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                        break;
+
+                                      case Option.setCurrent:
+                                        _setCurrentRoutine(
+                                          () async {
+                                            final rBloc = BlocProvider.of<RoutinesWithHeatBloc>(context)
+                                              ..add(RoutinesWithHeatEvent.setCurrent(e.routine));
+                                            await rBloc.stream.skip(1).first;
+                                            if (context.mounted) {
+                                              BlocProvider.of<CurrentRoutineCubit>(context).getCurrentRoutine();
+                                            }
+                                          },
+                                          e.routine.name,
+                                        );
+                                        break;
+                                      default:
+                                    }
+                                  },
+                                ),
+                              )
+                              .toList(),
                         ),
                       ),
-                    ),
-                    Builder(builder: (context) {
-                      final accountCubit = context.watch<AccountCubit>();
-                      final membershipBloc = context.watch<MembershipBloc>();
+                      Builder(builder: (context) {
+                        final accountCubit = context.watch<AccountCubit>();
+                        final membershipBloc = context.watch<MembershipBloc>();
 
-                      final canCreate = accountCubit.state.when(
-                          initial: () => false,
-                          unauthenticated: () =>
-                              state.maybeWhen(orElse: () => false, loaded: (routines) => routines.isEmpty),
-                          hasAccount: (s) => membershipBloc.state.maybeWhen(
-                              orElse: () => state.maybeWhen(
-                                    orElse: () => false,
-                                    loaded: (routines) => routines.isEmpty,
-                                  ),
-                              loaded: (_) => true));
+                        final canCreate = accountCubit.state.when(
+                            initial: () => false,
+                            unauthenticated: () =>
+                                state.maybeWhen(orElse: () => false, loaded: (routines) => routines.isEmpty),
+                            hasAccount: (s) => membershipBloc.state.maybeWhen(
+                                orElse: () => state.maybeWhen(
+                                      orElse: () => false,
+                                      loaded: (routines) => routines.isEmpty,
+                                    ),
+                                loaded: (_) => true));
 
-                      return Material(
-                        color: canCreate ? const Color.fromARGB(255, 59, 146, 146) : Colors.grey.shade400,
-                        child: InkWell(
-                          onTap: canCreate
-                              ? () => _createRoutine(
-                                    "${locale.newRoutine} $routinesLength",
-                                    (name) =>
-                                        context.read<RoutinesWithHeatBloc>().add(RoutinesWithHeatEvent.create(name)),
-                                  )
-                              : null,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.add, color: Colors.white),
-                                Text(
-                                  locale.add,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Colors.white,
+                        return Material(
+                          color: canCreate ? const Color.fromARGB(255, 59, 146, 146) : Colors.amber,
+                          child: InkWell(
+                            onTap: canCreate
+                                ? () => _createRoutine(
+                                      "${locale.newRoutine} $routinesLength",
+                                      (name) =>
+                                          context.read<RoutinesWithHeatBloc>().add(RoutinesWithHeatEvent.create(name)),
+                                    )
+                                : () => Navigator.pushNamed(context, AppRoutes.plans),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  canCreate
+                                      ? const Icon(Icons.add, color: Colors.white)
+                                      : Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                          child: Image(
+                                            image: AssetImage(IMG_PREMIUM),
+                                            color: Colors.white,
+                                            width: 15,
+                                            height: 15,
+                                          ),
+                                        ),
+                                  Text(
+                                    canCreate ? locale.add : locale.upgrade,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    })
-                  ],
-                ),
+                        );
+                      })
+                    ],
+                  );
+                },
               );
             },
           )),

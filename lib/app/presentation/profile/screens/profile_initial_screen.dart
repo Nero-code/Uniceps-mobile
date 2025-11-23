@@ -10,14 +10,14 @@ import 'package:uniceps/core/constants/constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/injection_dependency.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class ProfileInitialScreen extends StatefulWidget {
+  const ProfileInitialScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<ProfileInitialScreen> createState() => _ProfileInitialScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileInitialScreenState extends State<ProfileInitialScreen> {
   final nameCtl = TextEditingController();
   final phoneCtl = TextEditingController();
   DateTime? birthDate;

@@ -37,10 +37,7 @@ class RoutineOptionsDialog extends StatelessWidget {
                 const SizedBox(width: 5.0),
                 Text(
                   locale.rename,
-                  style: TextStyle(
-                      fontSize: fontSize,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blueGrey),
+                  style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.blueGrey),
                 ),
               ],
             ),
@@ -55,14 +52,11 @@ class RoutineOptionsDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               // mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.play_circle_sharp, color: Colors.amber),
+                const Icon(Icons.flag, color: Colors.amber),
                 const SizedBox(width: 5.0),
                 Text(
                   locale.setCurrent,
-                  style: TextStyle(
-                      fontSize: fontSize,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber),
+                  style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.amber),
                 ),
               ],
             ),
@@ -81,10 +75,7 @@ class RoutineOptionsDialog extends StatelessWidget {
                 const SizedBox(width: 5.0),
                 Text(
                   locale.delete,
-                  style: TextStyle(
-                      fontSize: fontSize,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red),
+                  style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.red),
                 ),
               ],
             ),

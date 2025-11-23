@@ -53,9 +53,9 @@ class PracticeRepo implements IPracticeContract {
   }
 
   @override
-  Future<Either<Failure, TSession>> startTrainingSession(int dayId) async {
+  Future<Either<Failure, TSession>> startTrainingSession(int dayId, String dayName) async {
     try {
-      _session = await _localSource.startTrainingSession(dayId);
+      _session = await _localSource.startTrainingSession(dayId, dayName);
 
       return Right(_session!);
     } catch (e) {
@@ -71,7 +71,7 @@ class PracticeRepo implements IPracticeContract {
 
     try {
       final totalProgress = _session!.progress + progress;
-      final res = await _localSource.logSet(log.asDto(), totalProgress);
+      final res = await _localSource.logSet(log.toDto(), totalProgress);
 
       final oldLogIndex = _session!.logs.indexWhere((e) => e.id! == res.id!);
       if (oldLogIndex == -1) {
@@ -92,7 +92,7 @@ class PracticeRepo implements IPracticeContract {
   @override
   Future<Either<Failure, Unit>> finishTrainingSession(TSession session, bool full) async {
     try {
-      await _localSource.finishTrainingSession(session.asDto(), full);
+      await _localSource.finishTrainingSession(session.toDto(), full);
       _session = null;
       return const Right(unit);
     } catch (e) {
