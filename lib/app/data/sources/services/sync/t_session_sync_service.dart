@@ -5,15 +5,11 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/practice_models/t_session_model.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
-import 'package:uniceps/app/data/sources/services/client_helper.dart';
+import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
+import 'package:uniceps/app/data/sources/services/sync/sync_contract.dart';
 import 'package:uniceps/core/constants/constants.dart';
 
-abstract class ITSessionSyncServiceContract {
-  void start();
-  void dispose();
-}
-
-class TSessionSyncService implements ITSessionSyncServiceContract {
+class TSessionSyncService implements SyncContract {
   final AppDatabase _database;
   final ClientHelper _client;
   final InternetConnectionChecker _connectionChecker;
@@ -35,6 +31,11 @@ class TSessionSyncService implements ITSessionSyncServiceContract {
   @override
   void start() {
     _init();
+  }
+
+  @override
+  void dispose() async {
+    await queue.close();
   }
 
   void _init() async {
@@ -91,10 +92,5 @@ class TSessionSyncService implements ITSessionSyncServiceContract {
     } catch (e) {
       _logger.e(e.toString(), error: e);
     }
-  }
-
-  @override
-  void dispose() async {
-    await queue.close();
   }
 }

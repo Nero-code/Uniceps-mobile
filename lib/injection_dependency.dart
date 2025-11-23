@@ -21,11 +21,11 @@ import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_sourc
 import 'package:uniceps/app/data/sources/remote/dal_auth/auth_contracts.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/email_auth_remote_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
-import 'package:uniceps/app/data/sources/services/client_helper.dart';
-import 'package:uniceps/app/data/sources/services/http_client_helper.dart';
+import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
+import 'package:uniceps/app/data/sources/services/internet_client/http_client_helper.dart';
 import 'package:uniceps/app/data/sources/services/media_helper.dart';
-import 'package:uniceps/app/data/sources/services/t_session_sync_service.dart';
-import 'package:uniceps/app/data/sources/services/token_service_simple.dart';
+import 'package:uniceps/app/data/sources/services/sync/t_session_sync_service.dart';
+import 'package:uniceps/app/data/sources/services/token/token_service_simple.dart';
 import 'package:uniceps/app/data/stores/account/account_repo.dart';
 import 'package:uniceps/app/data/stores/auth/email_auth_repo.dart';
 import 'package:uniceps/app/data/stores/performance/performance_repo.dart';

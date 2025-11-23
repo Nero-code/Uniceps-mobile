@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
-import 'package:uniceps/app/data/sources/services/client_helper.dart';
-import 'package:uniceps/app/data/sources/services/token_service_simple.dart';
+import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
+import 'package:uniceps/app/data/sources/services/token/token_service_simple.dart';
 
 class HttpClientHelper implements ClientHelper {
   const HttpClientHelper({required Client client, required SimpleTokenService tokenService})
