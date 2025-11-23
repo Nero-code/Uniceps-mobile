@@ -5,7 +5,7 @@ import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_sourc
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_exercises_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_exercises_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class ExercisesRepo implements IExercisesContract {
@@ -53,8 +53,7 @@ class ExercisesRepo implements IExercisesContract {
   }
 
   @override
-  Future<Either<Failure, List<ExerciseV2>>> getExercisesByFilter(
-      String filter) async {
+  Future<Either<Failure, List<ExerciseV2>>> getExercisesByFilter(String filter) async {
     if (await _internet.hasConnection) {
       try {
         final res = await _remoteSource.getExercisesByFilter(filter);
@@ -67,14 +66,11 @@ class ExercisesRepo implements IExercisesContract {
   }
 
   @override
-  Future<Either<Failure, List<ExerciseV2>>> getExercisesByGroup(
-      MuscleGroup group) async {
+  Future<Either<Failure, List<ExerciseV2>>> getExercisesByGroup(MuscleGroup group) async {
     if (await _internet.hasConnection) {
       try {
-        final res = await _remoteSource
-            .getExercisesByGroup(MuscleGroupDto.fromEntity(group));
-        final augRes = res.map((ex) => ex.copywith(
-            muscleGroupTranslations: group.muscleGroupTranslations));
+        final res = await _remoteSource.getExercisesByGroup(MuscleGroupDto.fromEntity(group));
+        final augRes = res.map((ex) => ex.copywith(muscleGroupTranslations: group.muscleGroupTranslations));
         return Right(augRes.map((r) => r.toEntity()).toList());
       } catch (e) {
         return Left(ServerFailure(errMsg: e.toString()));

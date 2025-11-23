@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:uniceps/app/domain/contracts/profile_repo/i_profile_service.dart';
+import 'package:uniceps/app/domain/contracts/profile/i_profile_service.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
 

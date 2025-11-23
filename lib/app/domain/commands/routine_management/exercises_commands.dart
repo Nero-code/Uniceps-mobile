@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 import 'package:uniceps/app/domain/commands/i_command.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_exercises_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_exercises_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class ExercisesCommands implements ICommand {
@@ -18,8 +18,7 @@ class ExercisesCommands implements ICommand {
   //   return await _repo.getExercisesByFilter(filter);
   // }
 
-  Future<Either<Failure, List<ExerciseV2>>> getExercisesByGroup(
-      MuscleGroup filter) async {
+  Future<Either<Failure, List<ExerciseV2>>> getExercisesByGroup(MuscleGroup filter) async {
     return await _repo.getExercisesByGroup(filter);
   }
 

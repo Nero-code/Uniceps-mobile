@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/commands/i_command.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_management_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_management_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class RoutineManagementCommands implements ICommand {

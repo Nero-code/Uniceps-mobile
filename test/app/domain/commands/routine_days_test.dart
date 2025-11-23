@@ -4,14 +4,12 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_days_commands.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_days_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_days_contract.dart';
 
 import 'routine_days_test.mocks.dart';
 
-const fakeDay1 =
-    RoutineDay(routineId: 0, name: "Day 1", index: 0, exercises: []);
-const fakeDay2 =
-    RoutineDay(routineId: 0, name: "Day 2", index: 1, exercises: []);
+const fakeDay1 = RoutineDay(routineId: 0, name: "Day 1", index: 0, exercises: []);
+const fakeDay2 = RoutineDay(routineId: 0, name: "Day 2", index: 1, exercises: []);
 
 final fakeDays = [fakeDay1, fakeDay2];
 
@@ -27,8 +25,7 @@ void main() {
     });
 
     test('getDaysUnderRoutine - success scenario', () async {
-      when(mockRepo.getDaysUnderRoutine(0))
-          .thenAnswer((_) async => Right(fakeDays));
+      when(mockRepo.getDaysUnderRoutine(0)).thenAnswer((_) async => Right(fakeDays));
 
       final either = await commands.getDaysUnderRoutine(0);
 
@@ -44,10 +41,8 @@ void main() {
     });
 
     test('addDay - success scenario', () async {
-      const newDay =
-          RoutineDay(routineId: 0, name: "Day 3", index: 2, exercises: []);
-      when(mockRepo.addDay(newDay))
-          .thenAnswer((_) async => Right([...fakeDays, newDay]));
+      const newDay = RoutineDay(routineId: 0, name: "Day 3", index: 2, exercises: []);
+      when(mockRepo.addDay(newDay)).thenAnswer((_) async => Right([...fakeDays, newDay]));
 
       final either = await commands.addDay(newDay);
 
@@ -62,8 +57,7 @@ void main() {
     });
 
     test('removeDay - success scenario', () async {
-      when(mockRepo.removeDay(fakeDays[1]))
-          .thenAnswer((_) async => Right([fakeDays[0]]));
+      when(mockRepo.removeDay(fakeDays[1])).thenAnswer((_) async => Right([fakeDays[0]]));
 
       final either = await commands.removeDay(fakeDays[1]);
 
@@ -75,10 +69,8 @@ void main() {
     });
 
     test('renameDay - success scenario', () async {
-      const renamedDay =
-          RoutineDay(routineId: 0, name: "Renamed", index: 1, exercises: []);
-      when(mockRepo.renameDay(renamedDay))
-          .thenAnswer((_) async => Right([fakeDays[0], renamedDay]));
+      const renamedDay = RoutineDay(routineId: 0, name: "Renamed", index: 1, exercises: []);
+      when(mockRepo.renameDay(renamedDay)).thenAnswer((_) async => Right([fakeDays[0], renamedDay]));
 
       final either = await commands.renameDay(renamedDay);
 
@@ -94,8 +86,7 @@ void main() {
     });
 
     test('reorderDays - success scenario', () async {
-      when(mockRepo.reorderDays([fakeDays[1], fakeDays[0]]))
-          .thenAnswer((_) async => Right([fakeDays[1], fakeDays[0]]));
+      when(mockRepo.reorderDays([fakeDays[1], fakeDays[0]])).thenAnswer((_) async => Right([fakeDays[1], fakeDays[0]]));
 
       final either = await commands.reorderDays([fakeDays[1], fakeDays[0]]);
 

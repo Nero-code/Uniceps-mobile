@@ -51,17 +51,17 @@ import 'package:uniceps/app/domain/commands/routine_management/routine_managemen
 import 'package:uniceps/app/domain/commands/routine_management/routine_sets_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_with_heat_commands.dart';
 import 'package:uniceps/app/domain/contracts/account/i_account_service.dart';
-import 'package:uniceps/app/domain/contracts/auth_repo/i_auth_contracts.dart';
+import 'package:uniceps/app/domain/contracts/auth/i_auth_contracts.dart';
 import 'package:uniceps/app/domain/contracts/performance/performance_contract.dart';
-import 'package:uniceps/app/domain/contracts/practice_repo/practice_contract.dart';
-import 'package:uniceps/app/domain/contracts/profile_repo/i_measurement_service.dart';
-import 'package:uniceps/app/domain/contracts/profile_repo/i_profile_service.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_exercises_contract.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_days_contract.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_items_contract.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_sets_contract.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_management_contract.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_with_heat_contract.dart';
+import 'package:uniceps/app/domain/contracts/practice/practice_contract.dart';
+import 'package:uniceps/app/domain/contracts/profile/i_measurement_service.dart';
+import 'package:uniceps/app/domain/contracts/profile/i_profile_service.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_exercises_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_days_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_items_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_sets_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_management_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_with_heat_contract.dart';
 import 'package:uniceps/app/services/update_service.dart';
 
 final sl = di.GetIt.instance;

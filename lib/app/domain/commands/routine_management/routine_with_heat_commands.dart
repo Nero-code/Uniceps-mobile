@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_with_heat_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_with_heat_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class RoutineWithHeatCommands {

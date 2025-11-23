@@ -3,7 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/auth_models/player_model.dart';
 import 'package:uniceps/app/data/sources/local/dal_profile/profile_local_source.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
-import 'package:uniceps/app/domain/contracts/profile_repo/i_profile_service.dart';
+import 'package:uniceps/app/domain/contracts/profile/i_profile_service.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class ProfileRepo implements IProfileService {

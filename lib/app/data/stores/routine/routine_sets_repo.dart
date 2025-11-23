@@ -3,12 +3,11 @@ import 'package:uniceps/app/data/models/routine_models/extensions.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_set_dto.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_sets_local_source.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_sets_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_sets_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class RoutineSetsRepo implements IRoutineSetsContract {
-  RoutineSetsRepo({required IRoutineSetsLocalSourceContract localSource})
-      : _localSource = localSource;
+  RoutineSetsRepo({required IRoutineSetsLocalSourceContract localSource}) : _localSource = localSource;
   final IRoutineSetsLocalSourceContract _localSource;
 
   final Map<int, List<RoutineSet>> lazyItemSetsBuffer = {};
@@ -17,8 +16,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
   Future<Either<Failure, List<RoutineSet>>> getItemSets(int itemId) async {
     try {
       final res = await _localSource.getItemSets(itemId);
-      lazyItemSetsBuffer
-          .addAll({itemId: res.map((s) => s.toEntity()).toList()});
+      lazyItemSetsBuffer.addAll({itemId: res.map((s) => s.toEntity()).toList()});
       return Right(lazyItemSetsBuffer[itemId]!);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
@@ -51,8 +49,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
   }
 
   @override
-  Future<Either<Failure, List<RoutineSet>>> updateSet(
-      RoutineSet updated) async {
+  Future<Either<Failure, List<RoutineSet>>> updateSet(RoutineSet updated) async {
     try {
       await _localSource.updateSet(updated.toDto());
       lazyItemSetsBuffer[updated.routineItemId]!
@@ -66,8 +63,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
   }
 
   @override
-  Future<Either<Failure, List<RoutineSet>>> removeItemSet(
-      RoutineSet setToRemove) async {
+  Future<Either<Failure, List<RoutineSet>>> removeItemSet(RoutineSet setToRemove) async {
     try {
       await _localSource.removeSets([setToRemove.toDto()]);
       final setslist = lazyItemSetsBuffer[setToRemove.routineItemId]!;

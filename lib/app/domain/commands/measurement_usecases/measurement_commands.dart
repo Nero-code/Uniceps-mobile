@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/app/domain/commands/i_command.dart';
-import 'package:uniceps/app/domain/contracts/profile_repo/i_measurement_service.dart';
+import 'package:uniceps/app/domain/contracts/profile/i_measurement_service.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class MeasurementCommands implements ICommand {

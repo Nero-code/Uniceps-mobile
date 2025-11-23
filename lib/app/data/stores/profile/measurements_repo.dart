@@ -3,7 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
 import 'package:uniceps/app/data/sources/local/dal_measurements/measurements_local_source.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
-import 'package:uniceps/app/domain/contracts/profile_repo/i_measurement_service.dart';
+import 'package:uniceps/app/domain/contracts/profile/i_measurement_service.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class MeasurementsRepo implements IMeasurementContract {
