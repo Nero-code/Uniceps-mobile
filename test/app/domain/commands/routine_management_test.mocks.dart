@@ -8,7 +8,8 @@ import 'dart:async' as _i4;
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart' as _i6;
-import 'package:uniceps/app/domain/contracts/routine/i_routine_management_contract.dart' as _i3;
+import 'package:uniceps/app/domain/contracts/routine/i_routine_management_contract.dart'
+    as _i3;
 import 'package:uniceps/core/errors/failure.dart' as _i5;
 
 // ignore_for_file: type=lint
@@ -37,19 +38,22 @@ class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
 /// A class which mocks [IRoutineManagementContract].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockIRoutineManagementContract extends _i1.Mock implements _i3.IRoutineManagementContract {
+class MockIRoutineManagementContract extends _i1.Mock
+    implements _i3.IRoutineManagementContract {
   MockIRoutineManagementContract() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>> getAllRoutines() => (super.noSuchMethod(
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>> getAllRoutines() =>
+      (super.noSuchMethod(
         Invocation.method(
           #getAllRoutines,
           [],
         ),
         returnValue:
-            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>.value(_FakeEither_0<_i5.Failure, List<_i6.Routine>>(
+            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>.value(
+                _FakeEither_0<_i5.Failure, List<_i6.Routine>>(
           this,
           Invocation.method(
             #getAllRoutines,
@@ -59,13 +63,16 @@ class MockIRoutineManagementContract extends _i1.Mock implements _i3.IRoutineMan
       ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>);
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>> createRoutine(String? routineName) => (super.noSuchMethod(
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>> createRoutine(
+          String? routineName) =>
+      (super.noSuchMethod(
         Invocation.method(
           #createRoutine,
           [routineName],
         ),
         returnValue:
-            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>.value(_FakeEither_0<_i5.Failure, List<_i6.Routine>>(
+            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>.value(
+                _FakeEither_0<_i5.Failure, List<_i6.Routine>>(
           this,
           Invocation.method(
             #createRoutine,
@@ -75,13 +82,16 @@ class MockIRoutineManagementContract extends _i1.Mock implements _i3.IRoutineMan
       ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>);
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>> updateRoutine(_i6.Routine? routine) => (super.noSuchMethod(
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>> updateRoutine(
+          _i6.Routine? routine) =>
+      (super.noSuchMethod(
         Invocation.method(
           #updateRoutine,
           [routine],
         ),
         returnValue:
-            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>.value(_FakeEither_0<_i5.Failure, List<_i6.Routine>>(
+            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>.value(
+                _FakeEither_0<_i5.Failure, List<_i6.Routine>>(
           this,
           Invocation.method(
             #updateRoutine,
@@ -91,13 +101,16 @@ class MockIRoutineManagementContract extends _i1.Mock implements _i3.IRoutineMan
       ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>);
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>> deleteRoutine(_i6.Routine? routine) => (super.noSuchMethod(
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>> deleteRoutine(
+          _i6.Routine? routine) =>
+      (super.noSuchMethod(
         Invocation.method(
           #deleteRoutine,
           [routine],
         ),
         returnValue:
-            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>.value(_FakeEither_0<_i5.Failure, List<_i6.Routine>>(
+            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>.value(
+                _FakeEither_0<_i5.Failure, List<_i6.Routine>>(
           this,
           Invocation.method(
             #deleteRoutine,
@@ -107,13 +120,16 @@ class MockIRoutineManagementContract extends _i1.Mock implements _i3.IRoutineMan
       ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>);
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>> setCurrentRoutine(_i6.Routine? routine) => (super.noSuchMethod(
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>> setCurrentRoutine(
+          _i6.Routine? routine) =>
+      (super.noSuchMethod(
         Invocation.method(
           #setCurrentRoutine,
           [routine],
         ),
         returnValue:
-            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>.value(_FakeEither_0<_i5.Failure, List<_i6.Routine>>(
+            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>.value(
+                _FakeEither_0<_i5.Failure, List<_i6.Routine>>(
           this,
           Invocation.method(
             #setCurrentRoutine,
@@ -135,7 +151,8 @@ class MockIRoutineManagementContract extends _i1.Mock implements _i3.IRoutineMan
             userId,
           ],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>.value(_FakeEither_0<_i5.Failure, _i2.Unit>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>.value(
+            _FakeEither_0<_i5.Failure, _i2.Unit>(
           this,
           Invocation.method(
             #shareRoutine,

@@ -13,9 +13,7 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
   // List<RoutineItem> allItems = [];
   final MediaHelper _mediaHelper;
   final RoutineItemsCommands _commands;
-  ItemsEditBloc(
-      {required RoutineItemsCommands commands,
-      required MediaHelper mediaHelper})
+  ItemsEditBloc({required RoutineItemsCommands commands, required MediaHelper mediaHelper})
       : _commands = commands,
         _mediaHelper = mediaHelper,
         super(ItemsEditInitial()) {
@@ -37,8 +35,7 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
 
     on<AddRoutineItemsEvent>((event, emit) async {
       emit(ItemsEditLoadingState());
-      final imgStream =
-          _mediaHelper.saveImages(event.items.map((i) => i.imageUrl).toList());
+      final imgStream = _mediaHelper.saveImages(event.items.map((i) => i.imageUrl).toList());
       double sum = 0.0;
       await for (var i in imgStream) {
         sum += i;
@@ -78,6 +75,17 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
       either.fold(
         (l) => emit(ItemsEditErrorState(failure: l)),
         (r) => emit(ItemsEditLoadedState(items: r, version: event.version + 1)),
+      );
+    });
+
+    on<CopySetsToAll>((event, emit) async {
+      final items = (state as ItemsEditLoadedState).items;
+      emit(ItemsEditLoadingState());
+
+      final either = await _commands.copySetsToAll(event.dayId, event.itemId);
+      either.fold(
+        (l) => emit(ItemsEditErrorState(failure: l)),
+        (r) => emit(ItemsEditLoadedState(items: items)),
       );
     });
   }

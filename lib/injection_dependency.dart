@@ -24,6 +24,7 @@ import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_sou
 import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/data/sources/services/internet_client/http_client_helper.dart';
 import 'package:uniceps/app/data/sources/services/media_helper.dart';
+import 'package:uniceps/app/data/sources/services/sync/sync_contract.dart';
 import 'package:uniceps/app/data/sources/services/sync/t_session_sync_service.dart';
 import 'package:uniceps/app/data/sources/services/token/token_service_simple.dart';
 import 'package:uniceps/app/data/stores/account/account_repo.dart';
@@ -62,6 +63,7 @@ import 'package:uniceps/app/domain/contracts/routine/i_routine_items_contract.da
 import 'package:uniceps/app/domain/contracts/routine/i_routine_sets_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_management_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_with_heat_contract.dart';
+import 'package:uniceps/app/services/captian_quotes_service.dart';
 import 'package:uniceps/app/services/update_service.dart';
 
 final sl = di.GetIt.instance;
@@ -279,6 +281,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<UpdateService>(() => UpdateService(connectionChecker: sl(), client: sl()));
 
-  sl.registerLazySingleton(
-      () => TSessionSyncService(database: sl(), client: sl(), connectionChecker: sl(), logger: sl()));
+  sl.registerLazySingleton<TSessionSyncContract>(
+      () => TSessionSyncService(database: sl(), client: sl(), connectionChecker: sl(), logger: sl()),
+      dispose: (param) => param.dispose());
+
+  sl.registerLazySingleton(() => CaptianQuotesService(prefs: sl()));
 }

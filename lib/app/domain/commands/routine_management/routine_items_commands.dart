@@ -24,4 +24,8 @@ class RoutineItemsCommands implements ICommand {
   Future<Either<Failure, List<RoutineItem>>> reorderItems(List<RoutineItem> items) async {
     return await _repo.reorderItems(items);
   }
+
+  Future<Either<Failure, Unit>> copySetsToAll(int dayId, int itemId) async {
+    return await _repo.copySetsToAll(dayId, itemId);
+  }
 }

@@ -19,6 +19,8 @@ const APP_LOGO = "images/logo/Logo.png";
 const APP_LOGO_DARK = "images/logo/Logo-dark.png";
 const APP_LOGO_LIGHT = "images/logo/Logo-light.png";
 
+const ASSET_QUOTES = 'assets/captain_quotes.json';
+
 enum Gender {
   male(1),
   female(2);
@@ -184,7 +186,7 @@ const HTTP_GYMS = "/gyms";
 const HTTP_GYM_LOGO = "/logos";
 
 // V2 Routes
-const HTTP_SESSION_SYNC = '/api/';
+const HTTP_SESSION_SYNC = '/api/Workout';
 const HTTP_MEMBERSHIP = "/api/Membership";
 const HTTP_REGISTER = "/api/Authentication";
 const HTTP_VERIFY_CODE = "/api/Authentication/VerifyOtp";

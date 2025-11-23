@@ -5,7 +5,7 @@ class BoxButton extends StatelessWidget {
     super.key,
     this.width,
     this.height,
-    this.padding,
+    this.padding = const EdgeInsets.all(8.0),
     this.child,
     this.border,
     this.focusedBorder,
@@ -18,7 +18,8 @@ class BoxButton extends StatelessWidget {
     this.activeChild,
   });
 
-  final double? width, height, padding;
+  final double? width, height;
+  final EdgeInsets padding;
   final double borderRadius;
   final BoxBorder? border, focusedBorder;
 
@@ -44,13 +45,9 @@ class BoxButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: isCircle
-              ? BorderRadius.circular(5000)
-              : BorderRadius.circular(borderRadius - 1),
+          borderRadius: isCircle ? BorderRadius.circular(5000) : BorderRadius.circular(borderRadius - 1),
           onTap: onTap,
-          child: Padding(
-              padding: EdgeInsets.all(padding ?? 8.0),
-              child: isActive ? child : activeChild ?? child),
+          child: Padding(padding: padding, child: isActive ? child : activeChild ?? child),
         ),
       ),
     );

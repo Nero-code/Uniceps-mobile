@@ -55,10 +55,11 @@ class _HomeScreenState extends State<HomeScreen> {
               appBar: AppBar(
                 centerTitle: true,
                 backgroundColor: Theme.of(context).colorScheme.surface,
-                title: const Text(APP_NAME),
-                leading: const Center(
-                  child: Image(image: AssetImage(APP_LOGO), height: 30, width: 30),
-                ),
+                title: Text(APP_NAME,
+                    style: TextStyle(fontFamily: 'Playwrite', color: Theme.of(context).colorScheme.primary)),
+                // leading: const Center(
+                //   child: Image(image: AssetImage(APP_LOGO), height: 30, width: 30),
+                // ),
               ),
               body: Stack(
                 fit: StackFit.expand,

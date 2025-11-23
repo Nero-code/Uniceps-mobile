@@ -1,6 +1,42 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/core/constants/constants.dart';
 
-class CaptianQuotesService {}
+const quotekey = 'DailyQuote';
+
+class CaptianQuotesService {
+  final SharedPreferences _prefs;
+  const CaptianQuotesService({required SharedPreferences prefs}) : _prefs = prefs;
+
+  Future<DailyQuote> getQuote() async {
+    final tempQuotes = jsonDecode(await rootBundle.loadString(ASSET_QUOTES)) as List;
+    final List<Map<Lang, String>> quotes = [];
+    for (var i in tempQuotes) {
+      final q = (i as Map).map((key, value) => MapEntry(parseLang(key.toString()), value.toString()));
+      quotes.add(q);
+    }
+    final oldQuote = _prefs.getString(quotekey);
+    DailyQuote quote;
+    if (oldQuote == null) {
+      final sentance = quotes[Random().nextInt(quotes.length - 1)];
+      quote = DailyQuote(quote: sentance, date: DateTime.now());
+    } else {
+      final decodedOldQuote = DailyQuote.fromJson(jsonDecode(oldQuote) as Map<String, dynamic>);
+
+      if (decodedOldQuote.date.difference(DateTime.now()).inDays == 0) {
+        quote = decodedOldQuote;
+      } else {
+        final sentance = quotes[Random().nextInt(quotes.length - 1)];
+        quote = DailyQuote(quote: sentance, date: DateTime.now());
+      }
+    }
+    await _prefs.setString(quotekey, jsonEncode(quote.toJson()));
+    return quote;
+  }
+}
 
 /// The `DailyQuote` class for **Captain Uni** card.
 ///

@@ -105,4 +105,14 @@ class RoutineItemsRepo implements IRoutineItemsContract {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, Unit>> copySetsToAll(int dayId, int itemId) async {
+    try {
+      await _localSource.copySetsToAll(dayId, itemId);
+      return Right(unit);
+    } catch (e) {
+      return Left(DatabaseFailure(errorMsg: ''));
+    }
+  }
 }

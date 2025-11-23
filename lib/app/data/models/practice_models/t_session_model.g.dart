@@ -18,10 +18,10 @@ TSessionModel _$TSessionModelFromJson(Map<String, dynamic> json) =>
       finishedAt: json['finished_at'] == null
           ? null
           : DateTime.parse(json['finished_at'] as String),
-      progress: (json['progress'] as num?)?.toDouble() ?? 0,
+      progress: (json['progress'] as num).toDouble(),
       apiId: (json['api_id'] as num?)?.toInt(),
-      version: (json['version'] as num?)?.toInt() ?? 0,
-      isSynced: json['is_synced'] as bool? ?? false,
+      version: (json['version'] as num).toInt(),
+      isSynced: json['is_synced'] as bool,
     );
 
 Map<String, dynamic> _$TSessionModelToJson(TSessionModel instance) =>

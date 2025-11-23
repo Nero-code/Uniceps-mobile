@@ -49,6 +49,7 @@
   "record": "Record",
   "before": "Before",
   "after": "After",
+  "applyToAll": "Apply to all",
   
   "sessions": "Sessions",
   "sessionsReport": "Sessions Report",
@@ -75,6 +76,7 @@
   "calender":"Calender",
   "list":"List",
   "attendenceLog":"Attendence Log",
+  "addExercise": "Add Exercise",
 
   "scrTitleMyRoutines": "My Routines",
   "scrTitleProfile": "Profile",

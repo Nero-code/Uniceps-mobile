@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
           create: (context) => LocaleCubit()..getSavedLanguageCode(),
         ),
         BlocProvider<AccountCubit>(
-          create: (context) => AccountCubit(di.sl())..getUserAccount(),
+          create: (context) => AccountCubit(di.sl(), di.sl())..getUserAccount(),
         ),
         BlocProvider(
           create: (context) => MembershipBloc(di.sl())..add(const MembershipEvent.getCurrentPlan()),

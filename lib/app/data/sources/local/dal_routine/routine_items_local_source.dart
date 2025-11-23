@@ -13,6 +13,8 @@ abstract class IRoutineItemsLocalSourceContract {
   Future<List<RoutineItemDto>> addItems(List<RoutineItemDto> list);
   Future<List<RoutineItemDto>> reorderItems(List<RoutineItemDto> list);
   Future<void> removeItem(RoutineItemDto item);
+
+  Future<void> copySetsToAll(int dayId, int itemId);
 }
 
 // This is the concrete Routine Items Local Source implementation
@@ -164,5 +166,21 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
     }
 
     return res;
+  }
+
+  @override
+  Future<void> copySetsToAll(int dayId, int itemId) async {
+    final sets = await (_database.select(_database.routineSets)..where((f) => f.routineItemId.equals(itemId))).get();
+    if (sets.isEmpty) return;
+
+    final items = await (_database.select(_database.routineItems)..where((f) => f.dayId.equals(dayId))).get();
+    for (final i in items) {
+      await (_database.delete(_database.routineSets)..where((f) => f.routineItemId.equals(i.id))).go();
+      for (final s in sets) {
+        await (_database.into(_database.routineSets).insert(
+              RoutineSetsCompanion.insert(roundIndex: s.roundIndex, repsCount: s.repsCount, routineItemId: i.id),
+            ));
+      }
+    }
   }
 }

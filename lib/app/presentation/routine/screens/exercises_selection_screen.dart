@@ -54,11 +54,12 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen> wit
               lazy: false,
               child: Scaffold(
                 appBar: AppBar(
+                  centerTitle: true,
                   title: BlocBuilder<ExercisesV2SelectionCubit, ExercisesV2SelectionState>(
                     builder: (context, state) {
                       // return Text(
                       //     "${selected.isEmpty ? "Exercises" : selected.length}");
-                      return Text("${widget.dayName}:   ${state.selected.length + widget.presentExerciseIds.length}");
+                      return Text("${widget.dayName}: ${state.selected.length + widget.presentExerciseIds.length}");
                     },
                   ),
                   bottom: TabBar(

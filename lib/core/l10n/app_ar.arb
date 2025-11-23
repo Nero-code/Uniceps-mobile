@@ -49,6 +49,7 @@
   "record": "سجل",
   "before": "قبل",
   "after": "بعد",
+  "applyToAll": "تطبيق للكل",
   
   "sessions": "الجلسات",
   "sessionsReport": "تقرير الجلسات",
@@ -74,6 +75,7 @@
   "calender": "التقويم",
   "list": "قائمة",
   "attendenceLog":"سجل الحضور",
+  "addExercise": "اضافة تمرين",
 
   "scrTitleMyRoutines": "البرامج الرياضية",
   "scrTitleProfile": "الحساب الشخصي",

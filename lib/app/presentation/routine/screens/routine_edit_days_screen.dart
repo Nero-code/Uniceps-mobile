@@ -199,7 +199,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
         children: [
           ScaffoldMessenger(
             child: Scaffold(
-              appBar: AppBar(title: Text(widget.routineName)),
+              appBar: AppBar(title: Text(widget.routineName), centerTitle: true),
               body: Stack(
                 children: [
                   BlocBuilder<DaysEditBloc, DaysEditState>(
@@ -219,10 +219,11 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                             //
                             SizedBox(
                               width: screenSize.width,
-                              height: screenSize.height * 0.06,
+                              height: 50,
                               child: ListView(
                                 controller: tabController,
                                 scrollDirection: Axis.horizontal,
+                                padding: EdgeInsets.only(bottom: 5.0),
                                 children: [
                                   ...state.days.map(
                                     (day) => DayTabWidget(

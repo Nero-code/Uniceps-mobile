@@ -9,7 +9,7 @@ import 'package:uniceps/app/data/sources/services/internet_client/client_helper.
 import 'package:uniceps/app/data/sources/services/sync/sync_contract.dart';
 import 'package:uniceps/core/constants/constants.dart';
 
-class TSessionSyncService implements SyncContract {
+class TSessionSyncService implements TSessionSyncContract {
   final AppDatabase _database;
   final ClientHelper _client;
   final InternetConnectionChecker _connectionChecker;
@@ -26,22 +26,29 @@ class TSessionSyncService implements SyncContract {
         _logger = logger;
 
   final doneList = <int>[];
-  final queue = StreamController<TSessionModel>();
+  var queue = StreamController<TSessionModel>();
 
   @override
   void start() {
+    _logger.t('TSession SyncService Starting!');
     _init();
   }
 
   @override
   void dispose() async {
-    await queue.close();
+    if (!queue.isClosed) {
+      await queue.close();
+    }
   }
 
   void _init() async {
-    queue.stream.asyncMap(_syncSession);
+    queue = StreamController<TSessionModel>();
+    queue.stream.asyncMap(_syncSession).listen((_) {});
+
     final unSyncedFinishedSessions = await readAll();
     _onData(unSyncedFinishedSessions);
+
+    _logger.t('TSession SyncService Started!');
   }
 
   Future<List<TypedResult>> readAll() {

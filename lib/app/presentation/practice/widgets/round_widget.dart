@@ -114,7 +114,7 @@ class _RoundWidgetState extends State<RoundWidget> {
           BoxButton(
             background: widget.log != null ? Colors.green.shade50 : Colors.grey.shade200,
             borderRadius: 10,
-            padding: 3.0,
+            padding: const EdgeInsets.all(3.0),
             onTap: () {
               final log = widget.log?.copywith(weight: double.tryParse(weightCtl.text) ?? 0.0) ??
                   TLog(

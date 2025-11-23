@@ -87,7 +87,7 @@ class _PlansScreenState extends State<PlansScreen> {
                         buyPlanAndReset: (i) {
                           return const SizedBox();
                         },
-                        error: (f) => const ErrorPage()),
+                        error: (f) => ErrorPage(message: f.getErrorMessage())),
                   ),
                   DataTable(
                     columnSpacing: 24,
@@ -181,18 +181,14 @@ class _PlansScreenState extends State<PlansScreen> {
                 color: Colors.white,
                 padding: const EdgeInsets.all(8.0),
                 child: BlocConsumer<PlansBloc, PlansState>(
-                  listener: (context, state) {
-                    state.maybeWhen(
-                      buyPlanAndReset: (paymentResponse) async {
-                        final res = await launchUrl(Uri.parse(paymentResponse.paymentUrl));
-                        if (res && context.mounted) {
-                          context.read<MembershipBloc>().add(const MembershipEvent.getCurrentPlan());
-                          Navigator.pop(context);
-                        }
-                      },
-                      orElse: () {},
-                    );
-                  },
+                  listener: (context, state) => state.whenOrNull(buyPlanAndReset: (paymentResponse) async {
+                    final res = await launchUrl(Uri.parse(paymentResponse.paymentUrl));
+                    if (res && context.mounted) {
+                      context.read<MembershipBloc>().add(const MembershipEvent.getCurrentPlan());
+                      Navigator.pop(context);
+                    }
+                    return null;
+                  }),
                   buildWhen: (previous, current) =>
                       current.maybeWhen(orElse: () => true, buyPlanAndReset: (res) => false),
                   builder: (context, state) {

@@ -4,12 +4,14 @@ import 'package:uniceps/app/data/models/account_models/payment_response.dart';
 import 'package:uniceps/app/data/models/account_models/plan_item_model.dart';
 import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_source.dart';
+import 'package:uniceps/app/data/sources/services/sync/sync_contract.dart';
 import 'package:uniceps/app/domain/classes/account_entities/account.dart';
 import 'package:uniceps/app/domain/classes/account_entities/membership.dart';
 import 'package:uniceps/app/domain/classes/account_entities/plan.dart';
 import 'package:uniceps/app/domain/classes/account_entities/plan_item.dart';
 import 'package:uniceps/app/domain/contracts/account/i_account_service.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/injection_dependency.dart' as di;
 
 class AccountRepo implements IAccountService {
   final IAccountLocalSource _localSource;
@@ -55,6 +57,8 @@ class AccountRepo implements IAccountService {
   Future<Either<Failure, Unit>> logout() async {
     try {
       await _localSource.logout();
+      di.sl<TSessionSyncContract>().dispose();
+
       return const Right(unit);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));

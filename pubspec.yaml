@@ -115,6 +115,7 @@ flutter:
     - images/muscle-groups/
     - images/test_imgs/
     - images/cap_uni/
+    - assets/captain_quotes.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -146,6 +147,15 @@ flutter:
           weight: 800
         - asset: fonts/cairo/Cairo-Black.ttf
           weight: 900
+    
+    - family: Playwrite
+      fonts:
+        - asset: fonts/playwrite/Playwrite-ExtraLight.ttf
+          weight: 200
+        - asset: fonts/playwrite/Playwrite-Light.ttf
+          weight: 300
+        - asset: fonts/playwrite/Playwrite-Regular.ttf
+          weight: 400
 
   #   - family: Trajan Pro
   #     fonts:
