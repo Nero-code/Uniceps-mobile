@@ -51,8 +51,16 @@ class DailyQuote {
 
   const DailyQuote({required this.quote, required this.date});
 
-  factory DailyQuote.fromJson(Map<String, dynamic> json) =>
-      DailyQuote(quote: json['quote'], date: DateTime.parse(json['date']));
+  factory DailyQuote.fromJson(Map<String, dynamic> json) {
+    final q = json['quote'] as Map;
+    Map<Lang, String> quote = {};
+    for (MapEntry m in q.entries) {
+      quote.addAll({parseLang(m.key.toString()): m.value});
+    }
 
-  Map<String, dynamic> toJson() => {'quote': quote, 'date': date.toIso8601String()};
+    return DailyQuote(quote: quote, date: DateTime.parse(json['date']));
+  }
+
+  Map<String, dynamic> toJson() =>
+      {'quote': quote.map((lang, sentance) => MapEntry(lang.name, sentance)), 'date': date.toIso8601String()};
 }

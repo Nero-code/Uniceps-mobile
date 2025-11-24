@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart' as z;
 import 'package:flutter/material.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/logs_report.dart';
@@ -26,7 +28,7 @@ class PerformanceScreen extends StatefulWidget {
 }
 
 class _PerformanceScreenState extends State<PerformanceScreen> {
-  Future<bool>? routinesTrigger;
+  Completer<bool>? routinesTrigger;
   List<Routine> routines = [];
   Routine? selectedRoutine;
   Future<z.Either<PerformanceFailure, SessionsReport>>? sessionsReport;
@@ -40,15 +42,25 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
   }
 
   Future<void> initialize() async {
+    routinesTrigger = Completer();
     final rEither = await widget.routineCommnds.getAllRoutines();
-    rEither.fold<void>(
-      (l) => routinesTrigger = Future.error(l),
-      (r) {
-        routines = r;
-        routines.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-        routinesTrigger = Future.value(true);
-      },
-    );
+    try {
+      rEither.fold(
+        (l) {
+          // routinesTrigger = Future.error(l);
+          routinesTrigger?.completeError(l);
+          return null;
+        },
+        (r) {
+          routines = r;
+          routines.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+          // return (routinesTrigger = Future.value(true));
+          routinesTrigger?.complete(true);
+        },
+      );
+    } catch (e) {
+      print(e.toString());
+    }
     if (routines.isNotEmpty) {
       selectRoutine(routines.first);
     }
@@ -68,9 +80,9 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
     final screenSize = MediaQuery.sizeOf(context);
     return Scaffold(
       body: FutureBuilder(
-        future: routinesTrigger,
+        future: routinesTrigger?.future,
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
             return CustomScrollView(
               slivers: [
                 SliverAppBar(
@@ -164,6 +176,8 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
                 ),
               ],
             );
+          } else if (snapshot.hasError) {
+            return Center(child: Text(locale.noTrainingProgram));
           }
           return const LoadingIndicator();
         },

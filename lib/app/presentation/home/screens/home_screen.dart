@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
+import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
 import 'package:uniceps/app/presentation/home/widgets/alert_bar.dart';
 import 'package:uniceps/app/presentation/home/widgets/captain_uni_card.dart';
 import 'package:uniceps/app/presentation/home/widgets/practice_day_item.dart';
@@ -36,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
     final locale = AppLocalizations.of(context)!;
+    final lang = context.read<LocaleCubit>().state.locale.languageCode;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
@@ -132,15 +135,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ),
                         const SizedBox(),
-                        CaptainUniCard(
-                          imagePath: IMG_CAP_MOTIVE,
-                          needsFlip: false,
-                          content: "content",
-                          gradient: LinearGradient(colors: [
-                            Theme.of(context).colorScheme.primary,
-                            Theme.of(context).colorScheme.secondary,
-                          ]),
-                        ),
+                        BlocBuilder<DailyQuoteCubit, DailyQuoteState>(
+                            builder: (context, state) => state.map(
+                                  initial: (_) => const LoadingIndicator(),
+                                  loaded: (s) => CaptainUniCard(
+                                    imagePath: IMG_CAP_MOTIVE,
+                                    needsFlip: false,
+                                    content: s.quote.quote[parseLang(lang)]!,
+                                    gradient: LinearGradient(colors: [
+                                      Theme.of(context).colorScheme.primary,
+                                      Theme.of(context).colorScheme.secondary,
+                                    ]),
+                                  ),
+                                )),
                       ],
                     ),
                   ),

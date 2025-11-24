@@ -8,6 +8,7 @@ import 'package:uniceps/app/presentation/auth/screens/email_auth_screen.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
+import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/measurement/screens/measurement_screen.dart';
 import 'package:uniceps/app/presentation/performance/screens/measurement_tool_screen.dart';
@@ -85,6 +86,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => SessionBloc(commands: di.sl())..add(const SessionEvent.getLastActiveSession()),
+        ),
+        BlocProvider(
+          create: (context) => DailyQuoteCubit(di.sl())..getQuote(),
         ),
       ],
       child: BlocBuilder<LocaleCubit, ChangedLangState>(
