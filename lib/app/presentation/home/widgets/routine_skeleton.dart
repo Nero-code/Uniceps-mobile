@@ -8,21 +8,24 @@ class RoutineSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.sizeOf(context).width * .5,
-      height: 100,
+    return SizedBox.square(
+      dimension: 100,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Material(
+        child: Ink(
           // borderRadius: BorderRadius.circular(15.0),
-          color: Colors.white,
-          shape: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(15)),
-            borderSide: BorderSide(color: Colors.grey, width: 0.5),
+
+          // shape: const OutlineInputBorder(
+          //   borderRadius: BorderRadius.all(Radius.circular(15)),
+          //   borderSide: BorderSide(color: Colors.grey, width: 0.5),
+          // ),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: const Color.fromARGB(29, 96, 125, 139),
           ),
           // elevation: 1,
           child: InkWell(
-            borderRadius: const BorderRadius.all(Radius.circular(15)),
+            borderRadius: const BorderRadius.all(Radius.circular(100)),
             onTap: onTap,
             child: Center(
               child: onTap != null ? const Icon(Icons.add, size: 50, color: Colors.grey) : const LoadingIndicator(),

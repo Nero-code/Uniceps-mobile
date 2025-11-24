@@ -40,46 +40,50 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab> with AutomaticK
             return Stack(
               children: [
                 ReorderableListView(
-                  footer: InkWell(
-                    onTap: () {
-                      final presentItems = items.map((i) => i.exercise.apiId!).toList();
-                      Navigator.push<List<ExerciseV2>>(
-                          context,
-                          MaterialPageRoute(
-                            builder: (c) => MultiBlocProvider(
-                              providers: [
-                                BlocProvider(
-                                  create: (context) => MuscleGroupBloc(commands: di.sl())..add(GetMuscleGroupsEvent()),
-                                ),
-                                BlocProvider(
-                                  create: (context) => ExercisesV2Bloc(commands: di.sl()),
-                                ),
-                                BlocProvider.value(value: context.read<ItemsEditBloc>()),
-                              ],
-                              child: ExercisesSelectionScreen(
-                                dayId: widget.dayId,
-                                dayName: widget.dayName,
-                                presentExerciseIds: presentItems,
-                              ),
-                            ),
-                          ));
-                    },
-                    child: Container(
+                  footer: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Ink(
                       height: 50,
-                      margin: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(10),
                         color: Theme.of(context).colorScheme.primary,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.add, color: Colors.white),
-                          Text(
-                            locale.addExercise,
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(10),
+                        onTap: () {
+                          final presentItems = items.map((i) => i.exercise.apiId!).toList();
+                          Navigator.push<List<ExerciseV2>>(
+                              context,
+                              MaterialPageRoute(
+                                builder: (c) => MultiBlocProvider(
+                                  providers: [
+                                    BlocProvider(
+                                      create: (context) =>
+                                          MuscleGroupBloc(commands: di.sl())..add(GetMuscleGroupsEvent()),
+                                    ),
+                                    BlocProvider(
+                                      create: (context) => ExercisesV2Bloc(commands: di.sl()),
+                                    ),
+                                    BlocProvider.value(value: context.read<ItemsEditBloc>()),
+                                  ],
+                                  child: ExercisesSelectionScreen(
+                                    dayId: widget.dayId,
+                                    dayName: widget.dayName,
+                                    presentExerciseIds: presentItems,
+                                  ),
+                                ),
+                              ));
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.add, color: Colors.white),
+                            Text(
+                              locale.addExercise,
+                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

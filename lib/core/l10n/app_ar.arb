@@ -50,6 +50,8 @@
   "before": "قبل",
   "after": "بعد",
   "applyToAll": "تطبيق للكل",
+  "dayLimitAlert": "سجل دخولك لتحصل على 3 ايام مجانية",
+  "routineLimitAlert": "سجل دخولك لتتمكن من تصنيع البرامج",
   
   "sessions": "الجلسات",
   "sessionsReport": "تقرير الجلسات",
@@ -76,6 +78,7 @@
   "list": "قائمة",
   "attendenceLog":"سجل الحضور",
   "addExercise": "اضافة تمرين",
+  "addRoutine": "اضافة برنامج",
 
   "scrTitleMyRoutines": "البرامج الرياضية",
   "scrTitleProfile": "الحساب الشخصي",
@@ -135,6 +138,7 @@
   "emptyHomeCard": "اختر احد النوادي لعرضه",
   "emptyAttendence": "لا يوجد سجل حضور",
   "emptyRoutineItems": "لا يوجد عناصر, اضغط على زر (+) لاضافة تمارين",
+  "emptyDays": "لا يوجد ايام, اضغط على + لاضافة يوم!",
 
   "sessionsReportNoValues": "لا يوجد جلسات لهذا البرنامج, عد بعد التمرين!",
   "sessionsReportInvalidValues": "قيم الجلسة غير صحيحة!",

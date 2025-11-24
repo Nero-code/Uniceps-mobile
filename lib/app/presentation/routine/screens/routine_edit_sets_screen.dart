@@ -52,9 +52,7 @@ class _RoutineEditSetsScreenState extends State<RoutineEditSetsScreen> {
             delegate: SliverChildListDelegate.fixed(
               [
                 BlocBuilder<SetsEditBloc, SetsEditState>(
-                  buildWhen: (previous, current) {
-                    return current is SetsEditLoadedState;
-                  },
+                  buildWhen: (previous, current) => current is SetsEditLoadedState,
                   builder: (context, state) {
                     if (state is SetsEditLoadedState) {
                       sets.clear();

@@ -16,6 +16,7 @@ import 'package:uniceps/app/presentation/home/widgets/practice_panel.dart';
 import 'package:uniceps/app/presentation/home/widgets/routine_skeleton.dart';
 import 'package:uniceps/app/presentation/practice/screens/practice_screen.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_with_heat.dart';
+import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
@@ -139,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             builder: (context, state) => state.map(
                                   initial: (_) => const LoadingIndicator(),
                                   loaded: (s) => CaptainUniCard(
-                                    imagePath: IMG_CAP_MOTIVE,
+                                    imagePath: CaptainImages.motive,
                                     needsFlip: false,
                                     content: s.quote.quote[parseLang(lang)]!,
                                     gradient: LinearGradient(colors: [
@@ -211,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(height: 10),
                           SizedBox(
                             height: screenSize.height * 0.3,
-                            child: const Image(image: AssetImage(IMG_CAP_SELECT_DAY)),
+                            child: const Image(image: AssetImage(CaptainImages.selectDay)),
                           ),
                           Text(locale.dayQuete),
                           ...state.c.trainingDays.map((day) => PracticeDayItem(
@@ -242,8 +243,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       orElse: () => Column(
                         children: [
                           Image(
-                            image: const AssetImage(IMG_BLANK),
-                            width: screenSize.width * .75,
+                            image: const AssetImage(CaptainImages.noTrainingDays),
+                            width: screenSize.width * .60,
                           ),
                           Text(locale.noTrainingProgram),
                         ],

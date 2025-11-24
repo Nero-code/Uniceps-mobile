@@ -126,11 +126,6 @@ const IMG_WARNING = "images/photos/warning.png";
 const IMG_NO_PROGRAM = "images/photos/no_program.png";
 const IMG_NO_ATTENDENCE = "images/photos/attendence_err.png";
 const IMG_NO_MEASUREMENTS = "images/photos/measurements_err.png";
-
-const IMG_CAP_MOTIVE = "images/cap_uni/cap_motive.png";
-const IMG_CAP_MEMBERSHIP = "images/cap_uni/cap_membership.png";
-const IMG_CAP_SELECT_DAY = "images/cap_uni/cap_select_day.png";
-
 const IMG_PREMIUM = "images/photos/premium.png";
 
 ///

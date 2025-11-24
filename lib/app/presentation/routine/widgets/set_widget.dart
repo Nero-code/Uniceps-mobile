@@ -128,9 +128,8 @@ class _SetWidgetState extends State<SetWidget> {
                     onSubmitted: (val) {
                       // BlocProvider.of<SetsEditBloc>(context)
                       //     .add(UpdateSetEvent(set: widget.set.copyWith(reps: int.parse(_controller.text))));
-                      // setState(() {
-                      //   hasChanged = false;
-                      // });
+                      // setState(() => hasChanged = false);
+
                       if (!widget.isLast) {
                         _focusNode.nextFocus();
                       }

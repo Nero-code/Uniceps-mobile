@@ -6,7 +6,6 @@ import 'package:uniceps/app/presentation/home/blocs/current_routine/current_rout
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/routines_with_heat/routines_with_heat_bloc.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_with_heat.dart';
-import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_create_dialog.dart';
@@ -14,6 +13,7 @@ import 'package:uniceps/app/presentation/routine/dialogs/routine_delete_dialog.d
 import 'package:uniceps/app/presentation/routine/dialogs/routine_options_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_set_current_dialog.dart';
 import 'package:uniceps/app/presentation/routine/screens/routine_edit_days_screen.dart';
+import 'package:uniceps/core/widgets/premium_alert.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/injection_dependency.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -157,18 +157,19 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                         final membershipBloc = context.watch<MembershipBloc>();
 
                         final canCreate = accountCubit.state.when(
-                            initial: () => false,
-                            unauthenticated: () =>
-                                state.maybeWhen(orElse: () => false, loaded: (routines) => routines.isEmpty),
-                            hasAccount: (s) => membershipBloc.state.maybeWhen(
-                                orElse: () => state.maybeWhen(
-                                      orElse: () => false,
-                                      loaded: (routines) => routines.isEmpty,
-                                    ),
-                                loaded: (_) => true));
+                          initial: () => false,
+                          unauthenticated: () => state.maybeWhen(
+                            orElse: () => false,
+                            loaded: (routines) => routines.isEmpty,
+                          ),
+                          hasAccount: (s) => membershipBloc.state.maybeWhen(
+                            orElse: () => state.maybeWhen(orElse: () => false, loaded: (routines) => routines.isEmpty),
+                            loaded: (_) => true,
+                          ),
+                        );
 
                         return Material(
-                          color: canCreate ? const Color.fromARGB(255, 59, 146, 146) : Colors.amber,
+                          color: const Color.fromARGB(255, 59, 146, 146),
                           child: InkWell(
                             onTap: canCreate
                                 ? () => _createRoutine(
@@ -176,7 +177,7 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                                       (name) =>
                                           context.read<RoutinesWithHeatBloc>().add(RoutinesWithHeatEvent.create(name)),
                                     )
-                                : () => Navigator.pushNamed(context, AppRoutes.plans),
+                                : () => showDialog(context: context, builder: (_) => const PremiumAlert()),
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Row(
@@ -184,17 +185,18 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                                 children: [
                                   canCreate
                                       ? const Icon(Icons.add, color: Colors.white)
-                                      : Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                      : const Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 8.0),
                                           child: Image(
                                             image: AssetImage(IMG_PREMIUM),
-                                            color: Colors.white,
-                                            width: 15,
-                                            height: 15,
+                                            color: Colors.amber,
+                                            width: 20,
+                                            height: 20,
                                           ),
                                         ),
                                   Text(
-                                    canCreate ? locale.add : locale.upgrade,
+                                    // canCreate ? locale.add : locale.upgrade,
+                                    locale.addRoutine,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,

@@ -10,8 +10,8 @@ import 'package:uniceps/app/presentation/plans/blocs/plans_bloc.dart';
 import 'package:uniceps/app/presentation/plans/widgets/plan_widget.dart';
 import 'package:uniceps/app/presentation/screens/error_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -55,7 +55,7 @@ class _PlansScreenState extends State<PlansScreen> {
                     },
                   ),
                   CaptainUniCard(
-                    imagePath: IMG_CAP_MEMBERSHIP,
+                    imagePath: CaptainImages.membership,
                     needsFlip: true,
                     content: "sdfsdfsdfasd",
                     gradient: LinearGradient(colors: [

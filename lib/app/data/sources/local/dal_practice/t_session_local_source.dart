@@ -208,7 +208,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
 
       dayItems.add(itemDto);
     }
-    assert(dayItems.isNotEmpty);
+    dayItems.sort((a, b) => a.index.compareTo(b.index));
     final t = RoutineDayDto.fromTable(day.first, dayItems);
     return t;
   }

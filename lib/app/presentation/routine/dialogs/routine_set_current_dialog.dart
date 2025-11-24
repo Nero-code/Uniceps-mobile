@@ -19,7 +19,7 @@ class RoutineSetCurrentDialog extends StatelessWidget {
     final ar = context.read<LocaleCubit>().state.isRtl();
 
     return AlertDialog(
-      icon: const Icon(Icons.stars),
+      icon: const Icon(Icons.flag, size: 40),
       title: Text("${locale.setCurrent}${ar ? '؟' : '?'}"),
       content: Text(locale.setCurrentAlertContent(routineName)),
       actions: [

@@ -50,6 +50,8 @@
   "before": "Before",
   "after": "After",
   "applyToAll": "Apply to all",
+  "dayLimitAlert": "Login to get 3 free days",
+  "routineLimitAlert": "Login to add routines",
   
   "sessions": "Sessions",
   "sessionsReport": "Sessions Report",
@@ -77,6 +79,7 @@
   "list":"List",
   "attendenceLog":"Attendence Log",
   "addExercise": "Add Exercise",
+  "addRoutine": "Add Routine",
 
   "scrTitleMyRoutines": "My Routines",
   "scrTitleProfile": "Profile",
@@ -135,7 +138,8 @@
   "emptyTriningDaysMap": "No Training Program yet",
   "emptyHomeCard": "No Gym Specified, select a gym to load data",
   "emptyAttendence": "Not a member",
-  "emptyRoutineItems": "no items, try the (+) button",
+  "emptyRoutineItems": "No items, try the (+) button",
+  "emptyDays": "No days, press + to add a day!",
 
   "sessionsReportNoValues": "No sessions found for this routine, Try practicing!",
   "sessionsReportInvalidValues": "Malformed sessions values!",

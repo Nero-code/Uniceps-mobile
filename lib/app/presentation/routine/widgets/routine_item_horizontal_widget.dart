@@ -98,7 +98,7 @@ class _RoutineItemHorizontalWidgetState extends State<RoutineItemHorizontalWidge
                                 );
                               },
                             ),
-                            SizedBox(height: 5.0),
+                            const SizedBox(height: 5.0),
                             BoxButton(
                               // background: Colors.blueGrey.shade50,
                               background: Colors.transparent,
@@ -139,7 +139,7 @@ class _RoutineItemHorizontalWidgetState extends State<RoutineItemHorizontalWidge
                                       onPressed: () => Navigator.pop(context),
                                       child: Text("  ${locale.cancel}  "),
                                     ),
-                                    SizedBox(width: 5.0),
+                                    const SizedBox(width: 5.0),
                                     ElevatedButton(
                                       style: ButtonStyle(
                                         backgroundColor: WidgetStatePropertyAll(Colors.red.shade300),

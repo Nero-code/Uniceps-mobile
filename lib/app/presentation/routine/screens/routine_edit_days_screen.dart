@@ -8,8 +8,8 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/days_edit/days_edit_bloc.dart';
-import 'package:uniceps/core/constants/app_routes.dart';
-import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/core/constants/cap_images.dart';
+import 'package:uniceps/core/widgets/limit_alert.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_add_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_delete_dialog.dart';
@@ -21,6 +21,7 @@ import 'package:uniceps/app/presentation/routine/widgets/day_tab_widget.dart';
 import 'package:uniceps/core/extensions.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/core/widgets/premium_alert.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 
 class RoutineEditScreen extends StatefulWidget {
@@ -223,7 +224,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                               child: ListView(
                                 controller: tabController,
                                 scrollDirection: Axis.horizontal,
-                                padding: EdgeInsets.only(bottom: 5.0),
+                                padding: const EdgeInsets.only(bottom: 5.0),
                                 children: [
                                   ...state.days.map(
                                     (day) => DayTabWidget(
@@ -279,18 +280,32 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                   Builder(builder: (context) {
                                     final accountCubit = context.watch<AccountCubit>();
                                     final membershipBloc = context.watch<MembershipBloc>();
-                                    final canAdd = accountCubit.state.when(
-                                        initial: () => false,
-                                        unauthenticated: () => state.days.isEmpty,
-                                        hasAccount: (s) => membershipBloc.state
-                                            .maybeWhen(orElse: () => state.days.isEmpty, loaded: (m) => true));
                                     return IconButton(
                                       iconSize: 20,
                                       splashRadius: 20,
                                       icon: const Icon(Icons.add),
-                                      onPressed: canAdd
-                                          ? () {
-                                              _addDay(
+                                      onPressed: accountCubit.state.map(
+                                        initial: (_) => null,
+                                        unauthenticated: (_) => state.days.isEmpty
+                                            ? () => _addDay(
+                                                  "${locale.day} ${state.days.length + 1}",
+                                                  (name) => BlocProvider.of<DaysEditBloc>(context).add(
+                                                    AddDayEvent(
+                                                      day: RoutineDay(
+                                                        routineId: widget.routineId,
+                                                        name: name,
+                                                        index: state.days.length,
+                                                        exercises: [],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                            : () => showDialog(
+                                                  context: context,
+                                                  builder: (_) => LimitAlert(content: locale.dayLimitAlert),
+                                                ),
+                                        hasAccount: (_) => membershipBloc.state.maybeMap(
+                                          loaded: (_) => () => _addDay(
                                                 "${locale.day} ${state.days.length + 1}",
                                                 (name) => BlocProvider.of<DaysEditBloc>(context).add(
                                                   AddDayEvent(
@@ -302,35 +317,11 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                                     ),
                                                   ),
                                                 ),
-                                              );
-                                            }
-                                          : () => showDialog(
-                                                context: context,
-                                                builder: (context) => AlertDialog(
-                                                  title: Center(
-                                                    child: Image(
-                                                      image: AssetImage(IMG_PREMIUM),
-                                                      color: Colors.amber,
-                                                      width: MediaQuery.sizeOf(context).width * .2,
-                                                      height: MediaQuery.sizeOf(context).width * .2,
-                                                    ),
-                                                  ),
-                                                  content: Text(locale.upgradeAlert),
-                                                  actions: [
-                                                    Center(
-                                                      child: ElevatedButton(
-                                                        style: ElevatedButton.styleFrom(
-                                                          backgroundColor: Colors.amber,
-                                                          foregroundColor: Colors.white,
-                                                        ),
-                                                        onPressed: () =>
-                                                            Navigator.pushReplacementNamed(context, AppRoutes.plans),
-                                                        child: Text(locale.upgrade),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
                                               ),
+                                          orElse: () => () =>
+                                              showDialog(context: context, builder: (context) => const PremiumAlert()),
+                                        ),
+                                      ),
                                     );
                                   }),
                                 ],
@@ -338,23 +329,35 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                             ),
 
                             Expanded(
-                                child: PageView(
-                              controller: pageController,
-                              onPageChanged: (value) => setState(() {
-                                selectedIndex = value;
+                                child: state.days.isEmpty
+                                    ? Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image(
+                                            image: const AssetImage(CaptainImages.emptyDays),
+                                            width: screenSize.width * .5,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(locale.emptyDays),
+                                        ],
+                                      )
+                                    : PageView(
+                                        controller: pageController,
+                                        onPageChanged: (value) => setState(() {
+                                          selectedIndex = value;
 
-                                tabController.animateTo(
-                                    value * (screenSize.width * 0.5) / state.days[value].name.length,
-                                    duration: Durations.medium4,
-                                    curve: Curves.linear);
-                              }),
-                              children: [
-                                ...state.days.map((day) => RoutineItemEditTab(
-                                      dayId: day.id!,
-                                      dayName: day.name,
-                                    ))
-                              ],
-                            )),
+                                          tabController.animateTo(
+                                              value * (screenSize.width * 0.5) / state.days[value].name.length,
+                                              duration: Durations.medium4,
+                                              curve: Curves.linear);
+                                        }),
+                                        children: state.days
+                                            .map((day) => RoutineItemEditTab(
+                                                  dayId: day.id!,
+                                                  dayName: day.name,
+                                                ))
+                                            .toList(),
+                                      )),
                           ],
                         );
                       } else if (state is DaysEditErrorState) {

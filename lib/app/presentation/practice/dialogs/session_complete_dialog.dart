@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/core/constants/cap_images.dart';
 
 class SessionCompleteDialog extends StatelessWidget {
   const SessionCompleteDialog({super.key});
@@ -44,6 +45,7 @@ class SessionCompleteDialog extends StatelessWidget {
             ),
             child: Column(
               children: [
+                const Expanded(child: Image(image: AssetImage(CaptainImages.finishSession))),
                 Center(
                   child: Text(
                     locale.welldone,
@@ -52,26 +54,6 @@ class SessionCompleteDialog extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(255, 69, 114, 126),
                     ),
-                  ),
-                ),
-                const Expanded(
-                  child: Icon(
-                    Icons.workspace_premium_rounded,
-                    size: 150,
-                    color: Colors.green,
-                    shadows: [
-                      Shadow(
-                        offset: Offset(2, 2),
-                        color: Color.fromARGB(141, 158, 158, 158),
-                        blurRadius: 3,
-                      ),
-                      Shadow(
-                        offset: Offset(-2, -2),
-                        color: Colors.white60,
-                        blurRadius: 3,
-                      ),
-                    ],
-                    // color: Color.fromARGB(255, 94, 147, 160),
                   ),
                 ),
                 SizedBox(

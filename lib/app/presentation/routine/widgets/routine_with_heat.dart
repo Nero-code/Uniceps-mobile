@@ -103,7 +103,7 @@ class RoutineWithHeat extends StatelessWidget {
                           const Icon(Icons.calendar_month, size: 18),
                           const SizedBox(width: 8.0),
                           Text(
-                            DateFormat.yMd().format(routine.createdAt),
+                            DateFormat('d/M/y').format(routine.createdAt),
                             style: const TextStyle(),
                           ),
                           const SizedBox(width: 8.0),
