@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
+import 'package:uniceps/app/presentation/home/widgets/water_gauge.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RoutineWithHeat extends StatelessWidget {
@@ -104,7 +105,7 @@ class RoutineWithHeat extends StatelessWidget {
                           const SizedBox(width: 8.0),
                           Text(
                             DateFormat('d/M/y').format(routine.createdAt),
-                            style: const TextStyle(),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(width: 8.0),
                           if (routine.isCurrent)
@@ -118,43 +119,61 @@ class RoutineWithHeat extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox.square(
-                  dimension: 70,
-                  child: Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: SizedBox.square(
-                          dimension: 50,
-                          child:
-                              // Icon(
-                              //   Icons.local_fire_department,
-                              //   size: 50,
-                              //   color: Colors.teal,
-                              // ),
-                              CircularProgressIndicator(
-                            value: heat.value,
-                            strokeWidth: 5,
-                            strokeCap: StrokeCap.round,
-                            color: heat.color,
-                            backgroundColor: Color.fromARGB(57, 158, 158, 158),
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "${heat.sessionCount}",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                // SizedBox.square(
+                //   dimension: 70,
+                //   child: Stack(
+                //     children: [
+                //       Align(
+                //         alignment: Alignment.center,
+                //         child: SizedBox.square(
+                //           dimension: 50,
+                //           child:
+                //               // Icon(
+                //               //   Icons.local_fire_department,
+                //               //   size: 50,
+                //               //   color: Colors.teal,
+                //               // ),
+                //               CircularProgressIndicator(
+                //             value: heat.value,
+                //             strokeWidth: 5,
+                //             strokeCap: StrokeCap.round,
+                //             color: heat.color,
+                //             backgroundColor: Color.fromARGB(57, 158, 158, 158),
+                //           ),
+                //         ),
+                //       ),
+                //       Align(
+                //         alignment: Alignment.center,
+                //         child: Text(
+                //           "${heat.sessionCount}",
+                //           style: TextStyle(
+                //             fontSize: 20,
+                //             fontWeight: FontWeight.w300,
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(width: 5.0),
+
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    WaveBottleGauge(
+                      value: heat.value.clamp(0, 1),
+                      size: 50,
+                      width: 1,
+                      fillColor: Colors.lightBlue.withOpacity(0.5),
+                      borderColor: Colors.grey.shade300,
+                      backgroundColor: Colors.grey.shade100,
+                    ),
+                    Text(
+                      '${heat.sessionCount}',
+                      style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18, color: Colors.black54),
+                    ),
+                  ],
                 ),
-                SizedBox(width: 5.0),
               ],
             ),
           ),

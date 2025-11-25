@@ -71,6 +71,7 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   sqlite3_flutter_libs: ^0.5.33
   graphic: ^2.6.0
+  path_drawing: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -116,6 +117,7 @@ flutter:
     - images/test_imgs/
     - images/cap_uni/
     - assets/captain_quotes.json
+    - assets/cap_motive.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

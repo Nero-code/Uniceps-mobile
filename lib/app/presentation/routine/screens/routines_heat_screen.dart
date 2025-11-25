@@ -80,7 +80,7 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                   return Column(
                     children: [
                       Expanded(
-                        child: state.routines.isEmpty
+                        child: state.routines.isNotEmpty
                             ? ListView(
                                 padding: const EdgeInsets.only(bottom: 50.0),
                                 children: state.routines
@@ -154,7 +154,14 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                                     )
                                     .toList(),
                               )
-                            : EmptyPage(imageName: CaptainImages.emptyRoutines, message: locale.emptyRoutines),
+                            : EmptyPage(
+                                imageName: CaptainImages.emptyRoutines,
+                                message: locale.emptyRoutines,
+                                imageSize: Size(
+                                  MediaQuery.sizeOf(context).width * .5,
+                                  MediaQuery.sizeOf(context).width * .5,
+                                ),
+                              ),
                       ),
                       Builder(builder: (context) {
                         final accountCubit = context.watch<AccountCubit>();

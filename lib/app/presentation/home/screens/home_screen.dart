@@ -147,6 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Theme.of(context).colorScheme.primary,
                                       Theme.of(context).colorScheme.secondary,
                                     ]),
+                                    onCapTap: () => print('cap tap tapped... or Clicked!'),
                                   ),
                                 )),
                       ],
