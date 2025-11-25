@@ -3,9 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/app/domain/commands/measurement_usecases/measurement_commands.dart';
 import 'package:uniceps/app/presentation/performance/widgets/muscle_difference_widget.dart';
+import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/constants/muscles_images.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/widgets/empty_page.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 
 const imgs = [
@@ -120,12 +121,13 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
                 ],
               );
             } else if (snapshot.hasError) {
-              return Center(
-                child: Text((snapshot.error as MeasurementFailure).when(
-                  msOffline: () => locale.errNoInternet,
-                  noRecords: () => locale.emptyMeasure,
-                  msDbFailure: () => locale.error,
-                )),
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: EmptyPage(
+                  imageName: CaptainImages.noMeasurements,
+                  message: locale.emptyMeasure,
+                  imageSize: Size(MediaQuery.sizeOf(context).width * .5, MediaQuery.sizeOf(context).width * .5),
+                ),
               );
             }
             return const LoadingIndicator();

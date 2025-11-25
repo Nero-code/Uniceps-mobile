@@ -130,7 +130,7 @@
 
   "empty": "No Records to show",
   "emptySubs": "No Subscriptions",
-  "emptyMeasure": "No Measurements",
+  "emptyMeasure": "No Measurements to compare, insert you body measurements to see the results",
   "emptyExcercises": "No Exercises",
   "emptySubscriptions": "No Subscriptions yet",
   "emptyMeasurements": "No Measurements yet",
@@ -257,6 +257,13 @@
   "@setCurrentAlertContent": {
     "placeHolders": {
       "item": { "type": "string" }
+    }
+  },
+
+  "premiumReminder": "Your Subscription will end after {days} day(s), renew now!",
+  "@premiumReminder": {
+    "placeHolders": {
+      "days": { "type": "int" }
     }
   },
 

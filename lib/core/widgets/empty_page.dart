@@ -17,7 +17,7 @@ class EmptyPage extends StatelessWidget {
           height: imageSize.height,
         ),
         const SizedBox(height: 10),
-        Text(message),
+        Text(message, textAlign: TextAlign.center),
       ],
     );
   }

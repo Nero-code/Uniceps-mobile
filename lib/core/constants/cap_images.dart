@@ -6,4 +6,6 @@ abstract class CaptainImages {
   static const noTrainingDays = 'images/cap_uni/cap_no_training_days.png';
   static const emptyRoutines = 'images/cap_uni/cap_empty_routines.png';
   static const emptyDays = 'images/cap_uni/cap_empty_days.png';
+  static const about = 'images/cap_uni/cap_about.png';
+  static const noMeasurements = 'images/cap_uni/cap_empty_measurements.png';
 }

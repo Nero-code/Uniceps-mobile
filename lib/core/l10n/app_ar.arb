@@ -129,7 +129,7 @@
 
   "empty": "المحتوى فارغ",
   "emptySubs": "لا يوجد اشتراكات",
-  "emptyMeasure": "لا يوجد قياسات",
+  "emptyMeasure": "لا يوجد قياسات لمقارنتها, ادخل مقاسات جسمك لنرى النتائج",
   "emptyExcercises": "لا يوجد تمارين",
   "emptySubscriptions": "لا يوجد اشتراكات",
   "emptyMeasurements": "لا يوجد قياسات حاليا",
@@ -259,6 +259,13 @@
     }
   },
   
+  "premiumReminder": "سوف ينتهي اشتراكك بعد {days} يوم جدد الان!",
+  "@premiumReminder": {
+    "placeHolders": {
+      "days": { "type": "int" }
+    }
+  },
+
   "signinAlert": "سجل دخولك الان لتصفح كامل التطبيق",
   "upgrade": "تفعيل",
   "upgradeAlert": "فعل باقة Premium من اجل افضل استفادة",

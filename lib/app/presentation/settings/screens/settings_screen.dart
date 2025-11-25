@@ -37,8 +37,18 @@ class SettingsScreen extends StatelessWidget {
               hasAccount: (acc) => membershipBloc.state.map(
                 initial: (_) => const SizedBox(),
                 loading: (_) => const SizedBox(),
-                loaded: (m) => Text(m.m.endDate.difference(DateTime.now()).inDays.toString()),
                 error: (value) => const PremiumBanner(),
+                loaded: (m) => m.m.endDate.difference(DateTime.now()).inDays < 5
+                    ? InkWell(
+                        onTap: () => Navigator.pushNamed(context, AppRoutes.plans),
+                        child: Ink(
+                          width: MediaQuery.sizeOf(context).width,
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.amber.withOpacity(0.2),
+                          child: Center(child: Text(locale.premiumReminder(5))),
+                        ),
+                      )
+                    : const SizedBox(),
               ),
             );
           }),
