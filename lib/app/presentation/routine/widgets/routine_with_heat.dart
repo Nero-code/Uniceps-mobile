@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
 import 'package:uniceps/app/presentation/home/widgets/water_gauge.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RoutineWithHeat extends StatelessWidget {
   const RoutineWithHeat({
@@ -21,7 +21,7 @@ class RoutineWithHeat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final local = AppLocalizations.of(context)!;
+    final locale = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       child: Material(
@@ -109,10 +109,21 @@ class RoutineWithHeat extends StatelessWidget {
                           ),
                           const SizedBox(width: 8.0),
                           if (routine.isCurrent)
-                            const Icon(
-                              Icons.flag,
-                              color: Colors.pink,
-                              size: 20,
+                            // const Icon(
+                            //   Icons.flag,
+                            //   color: Colors.pink,
+                            //   size: 20,
+                            // ),
+                            Ink(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
+                              decoration: BoxDecoration(
+                                color: Colors.green.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Text(
+                                locale.active,
+                                style: TextStyle(color: Colors.green, fontSize: 11, fontWeight: FontWeight.bold),
+                              ),
                             ),
                         ],
                       ),

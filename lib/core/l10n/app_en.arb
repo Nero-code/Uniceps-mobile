@@ -33,6 +33,7 @@
   "level": "Level:",
   "apply" : "Apply",
   "search": "Search",
+  "active": "Active",
   "nothingChanged": "Nothing Changed",
   "logout": "Logout",
   "logoutAlert": "Logout?",

@@ -33,6 +33,7 @@
   "level": "المستوى:",
   "apply" : "تطبيق",
   "search": "بحث",
+  "active": "فعال",
   "nothingChanged": "لا يوجد تغيير في البيانات",
   "logout": "تسجيل الخروج",
   "logoutAlert": "تسجيل الخروج؟",
