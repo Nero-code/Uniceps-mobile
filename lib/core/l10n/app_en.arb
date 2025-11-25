@@ -140,6 +140,7 @@
   "emptyAttendence": "Not a member",
   "emptyRoutineItems": "No items, try the (+) button",
   "emptyDays": "No days, press + to add a day!",
+  "emptyRoutines": "Are you ready to head to the top?\nThis is not just an upgrade... it's a map to your stronger and smarter version",
 
   "sessionsReportNoValues": "No sessions found for this routine, Try practicing!",
   "sessionsReportInvalidValues": "Malformed sessions values!",

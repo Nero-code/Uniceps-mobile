@@ -318,8 +318,22 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                                   ),
                                                 ),
                                               ),
-                                          orElse: () => () =>
-                                              showDialog(context: context, builder: (context) => const PremiumAlert()),
+                                          orElse: () => () => state.days.length < 3
+                                              ? _addDay(
+                                                  "${locale.day} ${state.days.length + 1}",
+                                                  (name) => BlocProvider.of<DaysEditBloc>(context).add(
+                                                    AddDayEvent(
+                                                      day: RoutineDay(
+                                                        routineId: widget.routineId,
+                                                        name: name,
+                                                        index: state.days.length,
+                                                        exercises: [],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : showDialog(
+                                                  context: context, builder: (context) => const PremiumAlert()),
                                         ),
                                       ),
                                     );

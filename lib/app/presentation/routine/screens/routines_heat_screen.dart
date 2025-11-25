@@ -6,7 +6,9 @@ import 'package:uniceps/app/presentation/home/blocs/current_routine/current_rout
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/routines_with_heat/routines_with_heat_bloc.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_with_heat.dart';
+import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/core/widgets/empty_page.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_create_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_delete_dialog.dart';
@@ -78,79 +80,81 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                   return Column(
                     children: [
                       Expanded(
-                        child: ListView(
-                          padding: const EdgeInsets.only(bottom: 50.0),
-                          children: state.routines
-                              .map(
-                                (e) => RoutineWithHeat(
-                                  routine: e.routine,
-                                  heat: e.heat,
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          RoutineEditScreen(routineId: e.routine.id!, routineName: e.routine.name),
-                                    ),
-                                  ),
-                                  onMenu: () async {
-                                    final canDelete = context
-                                        .read<SessionBloc>()
-                                        .state
-                                        .maybeWhen(orElse: () => false, noActiveSession: () => true);
+                        child: state.routines.isEmpty
+                            ? ListView(
+                                padding: const EdgeInsets.only(bottom: 50.0),
+                                children: state.routines
+                                    .map(
+                                      (e) => RoutineWithHeat(
+                                        routine: e.routine,
+                                        heat: e.heat,
+                                        onTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => RoutineEditScreen(
+                                                routineId: e.routine.id!, routineName: e.routine.name),
+                                          ),
+                                        ),
+                                        onMenu: () async {
+                                          final canDelete = context
+                                              .read<SessionBloc>()
+                                              .state
+                                              .maybeWhen(orElse: () => false, noActiveSession: () => true);
 
-                                    final res = await showDialog<Option>(
-                                        context: context,
-                                        builder: (context) => RoutineOptionsDialog(routineName: e.routine.name));
+                                          final res = await showDialog<Option>(
+                                              context: context,
+                                              builder: (context) => RoutineOptionsDialog(routineName: e.routine.name));
 
-                                    // print("selected option: $res");
-                                    switch (res) {
-                                      case Option.edit:
-                                        _renameRoutine(e.routine.name, (name) {
-                                          if (name == e.routine.name) return;
-                                          BlocProvider.of<RoutinesWithHeatBloc>(context)
-                                              .add(RoutinesWithHeatEvent.update(e.routine.copyWith(name: name)));
-                                        });
-                                        break;
+                                          // print("selected option: $res");
+                                          switch (res) {
+                                            case Option.edit:
+                                              _renameRoutine(e.routine.name, (name) {
+                                                if (name == e.routine.name) return;
+                                                BlocProvider.of<RoutinesWithHeatBloc>(context)
+                                                    .add(RoutinesWithHeatEvent.update(e.routine.copyWith(name: name)));
+                                              });
+                                              break;
 
-                                      case Option.delete:
-                                        if (canDelete) {
-                                          _deleteRoutine(e.routine.name, () {
-                                            BlocProvider.of<RoutinesWithHeatBloc>(context)
-                                                .add(RoutinesWithHeatEvent.delete(e.routine));
-                                          });
-                                        } else {
-                                          if (context.mounted) {
-                                            ScaffoldMessenger.of(context).clearSnackBars();
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(
-                                                backgroundColor: Colors.red,
-                                                content: Text(locale.errOpenSessionDelete),
-                                              ),
-                                            );
+                                            case Option.delete:
+                                              if (canDelete) {
+                                                _deleteRoutine(e.routine.name, () {
+                                                  BlocProvider.of<RoutinesWithHeatBloc>(context)
+                                                      .add(RoutinesWithHeatEvent.delete(e.routine));
+                                                });
+                                              } else {
+                                                if (context.mounted) {
+                                                  ScaffoldMessenger.of(context).clearSnackBars();
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    SnackBar(
+                                                      backgroundColor: Colors.red,
+                                                      content: Text(locale.errOpenSessionDelete),
+                                                    ),
+                                                  );
+                                                }
+                                              }
+                                              break;
+
+                                            case Option.setCurrent:
+                                              _setCurrentRoutine(
+                                                () async {
+                                                  final rBloc = BlocProvider.of<RoutinesWithHeatBloc>(context)
+                                                    ..add(RoutinesWithHeatEvent.setCurrent(e.routine));
+                                                  await rBloc.stream.skip(1).first;
+                                                  if (context.mounted) {
+                                                    BlocProvider.of<CurrentRoutineCubit>(context).getCurrentRoutine();
+                                                  }
+                                                },
+                                                e.routine.name,
+                                              );
+                                              break;
+                                            default:
                                           }
-                                        }
-                                        break;
-
-                                      case Option.setCurrent:
-                                        _setCurrentRoutine(
-                                          () async {
-                                            final rBloc = BlocProvider.of<RoutinesWithHeatBloc>(context)
-                                              ..add(RoutinesWithHeatEvent.setCurrent(e.routine));
-                                            await rBloc.stream.skip(1).first;
-                                            if (context.mounted) {
-                                              BlocProvider.of<CurrentRoutineCubit>(context).getCurrentRoutine();
-                                            }
-                                          },
-                                          e.routine.name,
-                                        );
-                                        break;
-                                      default:
-                                    }
-                                  },
-                                ),
+                                        },
+                                      ),
+                                    )
+                                    .toList(),
                               )
-                              .toList(),
-                        ),
+                            : EmptyPage(imageName: CaptainImages.emptyRoutines, message: locale.emptyRoutines),
                       ),
                       Builder(builder: (context) {
                         final accountCubit = context.watch<AccountCubit>();
