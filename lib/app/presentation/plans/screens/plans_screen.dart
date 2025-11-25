@@ -57,7 +57,7 @@ class _PlansScreenState extends State<PlansScreen> {
                   CaptainUniCard(
                     imagePath: CaptainImages.membership,
                     needsFlip: true,
-                    content: "sdfsdfsdfasd",
+                    content: locale.captainUniUpgradeQuote,
                     gradient: LinearGradient(colors: [
                       Theme.of(context).colorScheme.primary,
                       Theme.of(context).colorScheme.secondary,

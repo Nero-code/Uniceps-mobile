@@ -43,12 +43,12 @@ class CaptainUniCard extends StatelessWidget {
                   children: [
                     Text(
                       locale.captainUni,
-                      style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "$content الالتزام التمرين يساعدك بالاقتراب من اهدافك تدرب الان!!الالتزام التمرين يساعدك بالاقتراب من اهدافك تدرب الان!!",
+                      content,
                       softWrap: true,
-                      style: TextStyle(color: Colors.white, fontSize: 14),
+                      style: const TextStyle(color: Colors.white, fontSize: 14),
                     ),
                   ],
                 ),

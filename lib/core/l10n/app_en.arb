@@ -52,6 +52,7 @@
   "applyToAll": "Apply to all",
   "dayLimitAlert": "Login to get 3 free days",
   "routineLimitAlert": "Login to add routines",
+  "captainUniUpgradeQuote": "Are you ready to head to the top?\nThis is not just an upgrade... it's a map to your stronger and smarter version",
   
   "sessions": "Sessions",
   "sessionsReport": "Sessions Report",
@@ -140,7 +141,7 @@
   "emptyAttendence": "Not a member",
   "emptyRoutineItems": "No items, try the (+) button",
   "emptyDays": "No days, press + to add a day!",
-  "emptyRoutines": "Are you ready to head to the top?\nThis is not just an upgrade... it's a map to your stronger and smarter version",
+  "emptyRoutines": "Lets build a special workout to achieve your goals!",
 
   "sessionsReportNoValues": "No sessions found for this routine, Try practicing!",
   "sessionsReportInvalidValues": "Malformed sessions values!",
