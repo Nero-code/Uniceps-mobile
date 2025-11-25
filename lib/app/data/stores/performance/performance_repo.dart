@@ -77,12 +77,14 @@ class PerformanceRepo implements IPerformanceContract {
   Future<Either<PerformanceFailure, LogsReport>> getLogsReport(int routineId) async {
     if (!sessionsBuffer.containsKey(routineId)) return const Left(PerformanceFailure.noValues());
 
-    double maxWeight = 0, avgWeight = 0, minWeight = 0, totalWeight = 0;
-    double maxVolume = 0, avgVolume = 0, minVolume = 0, totalVolume = 0;
+    double maxWeight = 0, avgWeight = 0, totalWeight = 0;
+    double? minWeight;
+    double maxVolume = 0, avgVolume = 0, totalVolume = 0;
+    double? minVolume;
     List<double> intensity = [], density = [];
 
+    final sessions = sessionsBuffer[routineId]!;
     try {
-      final sessions = sessionsBuffer[routineId]!;
       for (final s in sessions) {
         int totalReps = 0;
 
@@ -90,8 +92,8 @@ class PerformanceRepo implements IPerformanceContract {
             .map((log) {
               totalReps += log.reps;
               totalWeight += log.weight;
-              maxWeight = log.weight > maxWeight ? log.weight : maxWeight;
-              minWeight = log.weight < minWeight ? log.weight : minWeight;
+              maxWeight = maxWeight < log.weight ? log.weight : maxWeight;
+              minWeight = (minWeight ?? log.weight) > log.weight ? log.weight : minWeight;
 
               return log.setIndex * log.reps * (log.weight == 0 ? 1.0 : log.weight);
             })
@@ -100,22 +102,27 @@ class PerformanceRepo implements IPerformanceContract {
         avgWeight = totalWeight / s.logs.length;
 
         totalVolume += volume;
+        maxVolume = maxVolume > volume ? maxVolume : volume.toDouble();
+        minVolume = (minVolume ?? volume) < volume ? minVolume : volume.toDouble();
+
         intensity.add(totalReps != 0 ? volume / totalReps : 0);
-        final duration = s.createdAt.difference(s.finishedAt!).inMinutes;
+        final duration = s.finishedAt!.difference(s.createdAt).inMinutes;
         density.add(duration > 0 ? volume / duration : 0);
       }
     } catch (e) {
       return const Left(PerformanceFailure.invalidValues());
     }
 
+    avgVolume = totalVolume / sessions.length;
+
     return Right(LogsReport(
       maxWeight: maxWeight,
       avgWeight: avgWeight,
-      minWeight: minWeight,
+      minWeight: minWeight ?? 0,
       totalWeights: totalWeight,
       maxVolume: maxVolume,
       avgVolume: avgVolume,
-      minVolume: minVolume,
+      minVolume: minVolume ?? 0,
       totalVolume: totalVolume,
       intensity: intensity,
       density: density,
