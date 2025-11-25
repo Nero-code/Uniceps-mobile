@@ -122,7 +122,7 @@ class SessionReportCard extends StatelessWidget {
                     style: const TextStyle(fontSize: 10),
                   ),
                   Text(
-                    '${report.progressRate}',
+                    formatNum(report.progressRate),
                     style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -140,5 +140,9 @@ class SessionReportCard extends StatelessWidget {
     final m = twoDigits(d.inMinutes.remainder(60));
     final h = twoDigits(d.inHours);
     return '$h:$m:$s';
+  }
+
+  String formatNum(double x) {
+    return x.toStringAsFixed(1);
   }
 }

@@ -146,7 +146,7 @@ class PhysicalReportCard extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             locale.physicalReportDisclaimer,
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
           ),
         ],
       ),

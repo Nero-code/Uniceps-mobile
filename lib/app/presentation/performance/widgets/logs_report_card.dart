@@ -30,7 +30,7 @@ class LogsReportCard extends StatelessWidget {
               min: r.minWeight,
               total: r.totalWeights,
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             AnalyticsCard(
               title: locale.exerciseDensity,
               icon: const Icon(Icons.menu_open_rounded, color: Colors.blue),
@@ -42,7 +42,7 @@ class LogsReportCard extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Row(
           children: [
             AnalyticsCard(
@@ -54,7 +54,7 @@ class LogsReportCard extends StatelessWidget {
               min: r.minVolume,
               total: r.totalVolume,
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             AnalyticsCard(
               title: locale.exerciseIntensity,
               icon: const Icon(Icons.keyboard_double_arrow_down, color: Colors.orange),

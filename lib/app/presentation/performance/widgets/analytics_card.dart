@@ -64,7 +64,7 @@ class AnalyticsCard extends StatelessWidget {
                             const Icon(Icons.arrow_drop_up_rounded, color: Colors.green),
                             const SizedBox(width: 5),
                             Text(
-                              '$max',
+                              formatNum(max),
                               style: const TextStyle(fontSize: 16),
                             ),
                           ],
@@ -74,7 +74,7 @@ class AnalyticsCard extends StatelessWidget {
                             const Icon(Icons.remove_rounded, color: Colors.grey),
                             const SizedBox(width: 5),
                             Text(
-                              '$avg',
+                              formatNum(avg),
                               style: const TextStyle(fontSize: 14),
                             ),
                           ],
@@ -84,7 +84,7 @@ class AnalyticsCard extends StatelessWidget {
                             const Icon(Icons.arrow_drop_down_rounded, color: Colors.pink),
                             const SizedBox(width: 5),
                             Text(
-                              '$min',
+                              formatNum(min),
                               style: const TextStyle(fontSize: 12),
                             ),
                           ],
@@ -94,7 +94,7 @@ class AnalyticsCard extends StatelessWidget {
                             const Icon(Icons.savings_outlined, color: Colors.brown),
                             const SizedBox(width: 5),
                             Text(
-                              '$total',
+                              formatNum(total),
                               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
                             ),
                           ],
@@ -107,5 +107,9 @@ class AnalyticsCard extends StatelessWidget {
             ),
           ],
         ));
+  }
+
+  String formatNum(double x) {
+    return x.toStringAsFixed(1);
   }
 }
