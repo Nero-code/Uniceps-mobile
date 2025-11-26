@@ -3,17 +3,14 @@ import 'package:uniceps/core/constants/constants.dart';
 
 class ExerciseV2 {
   const ExerciseV2({
-    required this.id,
     required this.apiId,
-    required this.muscleGroupId,
     required this.name,
     required this.muscleGroupTranslations,
     required this.imageUrl,
     required this.imageBitMap,
   });
 
-  final int? id, apiId;
-  final int muscleGroupId;
+  final int apiId;
   final String name, imageUrl;
 
   final Map<Lang, String> muscleGroupTranslations;
@@ -22,10 +19,9 @@ class ExerciseV2 {
   @override
   String toString() {
     return """{
-    id: $id,
+    apiId: $apiId,
     name: $name,
     muscleGroupTranslations: $muscleGroupTranslations,
-    muscleGroupId: $muscleGroupId,
     imageUrl: $imageUrl,
   }""";
   }

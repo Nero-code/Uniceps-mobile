@@ -51,7 +51,7 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab> with AutomaticK
                       child: InkWell(
                         borderRadius: BorderRadius.circular(10),
                         onTap: () {
-                          final presentItems = items.map((i) => i.exercise.apiId!).toList();
+                          final presentItems = items.map((i) => i.exercise.apiId).toList();
                           Navigator.push<List<ExerciseV2>>(
                               context,
                               MaterialPageRoute(

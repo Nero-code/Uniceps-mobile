@@ -48,7 +48,7 @@ class _ExercisesListTabState extends State<ExercisesListTab> with AutomaticKeepA
               padding: EdgeInsets.all(spacing),
               itemCount: state.list.length,
               itemBuilder: (context, index) {
-                final isPresent = widget.presentExId.contains(state.list[index].apiId!);
+                final isPresent = widget.presentExId.contains(state.list[index].apiId);
                 return Stack(
                   children: [
                     ExerciseGridWidget(
@@ -69,14 +69,14 @@ class _ExercisesListTabState extends State<ExercisesListTab> with AutomaticKeepA
                                   print("added");
                                   // -------------------------------------------------
                                   // Add exercise here and parent widget and notify
-                                  selectedIds.add(state.list[index].apiId!);
+                                  selectedIds.add(state.list[index].apiId);
                                   widget.onSelect(state.list[index], false);
                                   // -------------------------------------------------
                                 } else {
                                   print("removed");
                                   // -------------------------------------------------
                                   // Remove exercise here and parent widget and notify
-                                  selectedIds.remove(state.list[index].apiId!);
+                                  selectedIds.remove(state.list[index].apiId);
                                   widget.onSelect(state.list[index], true);
                                   // -------------------------------------------------
                                 }

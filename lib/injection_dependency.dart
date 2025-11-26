@@ -11,7 +11,6 @@ import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.
 import 'package:uniceps/app/data/sources/local/dal_measurements/measurements_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_practice/t_session_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_profile/profile_local_source.dart';
-import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_days_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_items_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart';
@@ -160,7 +159,7 @@ Future<void> init() async {
   sl.registerLazySingleton<IRoutineItemsLocalSourceContract>(
       () => RoutineItemsLocalSourceImpl(database: sl(), imagesCache: imagesCache));
   sl.registerLazySingleton<IRoutineSetsLocalSourceContract>(() => RoutineSetsLocalSourceImpl(database: sl()));
-  sl.registerLazySingleton<IExercisesLocalSourceContract>(() => ExercisesLocalSource(database: sl()));
+  // sl.registerLazySingleton<IExercisesLocalSourceContract>(() => ExercisesLocalSource(database: sl()));
 
   //  A U T H   S O U R C E S
   sl.registerLazySingleton<IOTPAuthSource>(() => OTPAuthSource(client: sl(), logger: sl()));
@@ -201,8 +200,10 @@ Future<void> init() async {
   sl.registerLazySingleton<IRoutineDaysContract>(() => RoutineDaysRepo(localSource: sl()));
   sl.registerLazySingleton<IRoutineItemsContract>(() => RoutineItemsRepo(localSource: sl(), mediaHelper: sl()));
   sl.registerLazySingleton<IRoutineSetsContract>(() => RoutineSetsRepo(localSource: sl()));
-  sl.registerLazySingleton<IExercisesContract>(
-      () => ExercisesRepo(internet: sl(), remoteSource: sl(), localSource: sl()));
+  sl.registerLazySingleton<IExercisesContract>(() => ExercisesRepo(
+        internet: sl(),
+        remoteSource: sl(), /*localSource: sl()*/
+      ));
 
   //  A U T H   R E P O
   sl.registerLazySingleton<IOTPAuthRepo>(

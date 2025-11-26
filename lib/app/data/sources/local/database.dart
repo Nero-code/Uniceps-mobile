@@ -5,7 +5,6 @@ import 'package:uniceps/app/data/sources/local/tables/measurement/measurement_ta
 import 'package:uniceps/app/data/sources/local/tables/practice/t_logs_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/practice/t_sessions_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/routine/days_group_table.dart';
-import 'package:uniceps/app/data/sources/local/tables/routine/exercise_groups_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/routine/exercises_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/routine/routine_items_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/routine/routines_table.dart';
@@ -24,7 +23,7 @@ part 'database.g.dart';
     RoutineItems,
     RoutineSets,
     Exercises,
-    ExerciseGroups,
+    // ExerciseGroups,
     TSessions,
     TLogs,
     // - Measurements

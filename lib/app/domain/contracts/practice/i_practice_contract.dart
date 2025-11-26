@@ -10,7 +10,7 @@ abstract class IPracticeContract {
   Future<Either<Failure, Tuple2<Routine, int?>>> getCurrentRoutine();
   Future<Either<Failure, Tuple2<Routine, RoutineHeat?>>> getCurrentRoutineWithHeat();
 
-  Future<Either<Failure, RoutineDay>> getDayItems(int dayId);
+  Future<Either<Failure, RoutineDay>> getPracticeDay(int dayId);
 
   Future<Either<Failure, TSession>> getPreviousSession();
   Future<Either<Failure, TSession>> startTrainingSession(int dayId, String dayName);

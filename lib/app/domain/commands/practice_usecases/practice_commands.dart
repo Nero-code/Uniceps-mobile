@@ -15,7 +15,7 @@ class PracticeCommands {
   Future<Either<Failure, Tuple2<Routine, RoutineHeat?>>> getCurrentRoutineWithHeat() =>
       _repo.getCurrentRoutineWithHeat();
 
-  Future<Either<Failure, RoutineDay>> getdayItems(int dayId) => _repo.getDayItems(dayId);
+  Future<Either<Failure, RoutineDay>> getPracticeDay(int dayId) => _repo.getPracticeDay(dayId);
   Future<Either<Failure, TSession>> getLastActiveSession() => _repo.getPreviousSession();
   Future<Either<Failure, TSession>> startTrainingSession(int dayId, String dayName) =>
       _repo.startTrainingSession(dayId, dayName);

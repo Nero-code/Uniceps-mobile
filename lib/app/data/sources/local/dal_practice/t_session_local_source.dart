@@ -16,7 +16,7 @@ import 'package:uniceps/core/errors/exceptions.dart';
 abstract class ITSessionLocalSourceContract {
   Future<Tuple2<RoutineDto?, int?>> getCurrentRoutine();
   Future<Tuple2<RoutineDto?, RoutineHeat?>> getCurrentRoutineWithHeat();
-  Future<RoutineDayDto> getDayItems(int dayId);
+  Future<RoutineDayDto> getPracticeDay(int dayId);
 
   Future<List<TSessionModel>> getSessionsByRoutine(int routineId);
 
@@ -83,7 +83,6 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       days: days,
       items: [],
       exercises: [],
-      groups: [],
       sets: [],
     ).toDto();
     // -----------------------------------
@@ -95,8 +94,9 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     return Tuple2(routine, lastDayId?.dayId);
   }
 
+  // TODO: Rename to getPracticeDay();
   @override
-  Future<RoutineDayDto> getDayItems(int dayId) async {
+  Future<RoutineDayDto> getPracticeDay(int dayId) async {
     // First we check if day exists.
     final day = await (_database.select(_database.daysGroup)..where((f) => f.id.equals(dayId))).get();
     if (day.isEmpty) throw EmptyCacheExeption(); // No day exists
@@ -116,7 +116,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       // leftOuterJoin(itemsAlias, itemsAlias.dayId.equals(dayId)),
 
       // Get `Exercises` for these `items`.
-      leftOuterJoin(exAlias, exAlias.id.equalsExp(itemsAlias.exerciseId)),
+      leftOuterJoin(exAlias, exAlias.apiId.equalsExp(itemsAlias.exerciseId)),
 
       // Get `Sets` for these `items`.
       leftOuterJoin(setsAlias, setsAlias.routineItemId.equalsExp(itemsAlias.id)),
@@ -132,7 +132,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     final List<db.RoutineSet> sets = [];
     final List<db.TLog> logs = [];
 
-    final groups = await _database.select(_database.exerciseGroups).get();
+    // final groups = await _database.select(_database.exerciseGroups).get();
 
     // Algorithm for fetching [routine] Starting Point.
     for (final row in res) {
@@ -158,11 +158,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     final logsByEx = <int, List<db.TLog>>{};
     for (final i in logs) {
       if (logsByEx.containsKey(i.exerciseId)) continue;
-      logsByEx.addAll({
-        i.exerciseId: logs.where((log) {
-          return log.exerciseId == i.exerciseId;
-        }).toList()
-      });
+      logsByEx.addAll({i.exerciseId: logs.where((log) => log.exerciseId == i.exerciseId).toList()});
     }
     // ---------------------------
 
@@ -200,11 +196,11 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
 
       // itemSets.toSet().toList();
 
-      final exercise = exercises.firstWhere((e) => e.id == itemTable.exerciseId);
+      final exercise = exercises.firstWhere((e) => e.apiId == itemTable.exerciseId);
       final img = _imagesCache.get(exercise.imageUrl);
-      final group = groups.firstWhere((g) => g.apiId == exercise.muscleGroup);
-      final itemDto = RoutineItemDto.fromTable(
-          itemTable, ExerciseV2Dto.fromTable(exercise, group, exercise.imageUrl, img), itemSets);
+      // final group = groups.firstWhere((g) => g.apiId == exercise.muscleGroup);
+      final itemDto =
+          RoutineItemDto.fromTable(itemTable, ExerciseV2Dto.fromTable(exercise, exercise.imageUrl, img), itemSets);
 
       dayItems.add(itemDto);
     }

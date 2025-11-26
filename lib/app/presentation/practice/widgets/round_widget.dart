@@ -9,7 +9,7 @@ import 'package:uniceps/core/widgets/box_botton.dart';
 class RoundWidget extends StatefulWidget {
   const RoundWidget({
     super.key,
-    required this.onLog,
+    // required this.onLog,
     required this.sessionId,
     required this.exId,
     required this.exIndex,
@@ -24,7 +24,7 @@ class RoundWidget extends StatefulWidget {
   final TLog? log;
   final int totalProgress;
 
-  final VoidCallback onLog;
+  // final VoidCallback onLog;
 
   @override
   State<RoundWidget> createState() => _RoundWidgetState();

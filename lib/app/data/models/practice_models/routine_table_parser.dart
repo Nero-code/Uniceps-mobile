@@ -15,7 +15,7 @@ class RoutineTableParser {
   final List<DaysGroupData> days;
   final List<RoutineItem> items;
   final List<Exercise> exercises;
-  final List<ExerciseGroup> groups;
+  // final List<ExerciseGroup> groups;
   final List<RoutineSet> sets;
 
   const RoutineTableParser({
@@ -25,7 +25,7 @@ class RoutineTableParser {
     required this.days,
     required this.items,
     required this.exercises,
-    required this.groups,
+    // required this.groups,
     required this.sets,
   });
 
@@ -48,14 +48,12 @@ class RoutineTableParser {
             }
           }
 
-          final exercise =
-              exercises.firstWhere((e) => e.apiId == itemTable.exerciseId);
+          final exercise = exercises.firstWhere((e) => e.apiId == itemTable.exerciseId);
           final img = imagesCache.get(exercise.imageUrl);
-          final group =
-              groups.firstWhere((g) => g.apiId == exercise.muscleGroup);
+
           final itemDto = RoutineItemDto.fromTable(
             itemTable,
-            ExerciseV2Dto.fromTable(exercise, group, exercise.imageUrl, img),
+            ExerciseV2Dto.fromTable(exercise, exercise.imageUrl, img),
             itemSets,
           );
 

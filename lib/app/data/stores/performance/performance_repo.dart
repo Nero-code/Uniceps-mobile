@@ -42,8 +42,10 @@ class PerformanceRepo implements IPerformanceContract {
       return const Left(PerformanceFailure.invalidValues());
     }
 
-    Duration maxDuration, avgDuration, minDuration, totalDuration;
-    maxDuration = avgDuration = minDuration = totalDuration = Duration.zero;
+    Duration maxDuration, avgDuration, totalDuration;
+    Duration? minDuration;
+    maxDuration = avgDuration = totalDuration = Duration.zero;
+
     double progressRate = 0;
     final list = sessionsBuffer[routineId]!;
     list.sort((a, b) => a.createdAt.compareTo(b.createdAt));
@@ -51,12 +53,12 @@ class PerformanceRepo implements IPerformanceContract {
     for (final s in list) {
       final sDuration = s.finishedAt!.difference(s.createdAt);
       maxDuration = sDuration.compareTo(maxDuration) > 0 ? sDuration : maxDuration;
-      minDuration = sDuration.compareTo(minDuration) < 0 ? sDuration : minDuration;
+      minDuration = sDuration.compareTo(minDuration ?? sDuration) <= 0 ? sDuration : minDuration;
       totalDuration += sDuration;
       progressRate += s.logs.length;
     }
 
-    final avgSeconds = (maxDuration - minDuration).inSeconds / 2;
+    final avgSeconds = (maxDuration - (minDuration ?? maxDuration)).inSeconds / 2;
     avgDuration = Duration(seconds: avgSeconds.round());
     if (totalDuration.inMinutes != 0) {
       progressRate = progressRate / totalDuration.inMinutes;
@@ -65,7 +67,7 @@ class PerformanceRepo implements IPerformanceContract {
     return Right(SessionsReport(
       maxDuration: maxDuration,
       avgDuration: avgDuration,
-      minDuration: minDuration,
+      minDuration: minDuration ?? Duration.zero,
       totalDuration: totalDuration,
       progressRate: progressRate,
       sessionsCount: list.length,
@@ -88,17 +90,14 @@ class PerformanceRepo implements IPerformanceContract {
       for (final s in sessions) {
         int totalReps = 0;
 
-        final volume = s.logs
-            .map((log) {
-              totalReps += log.reps;
-              totalWeight += log.weight;
-              maxWeight = maxWeight < log.weight ? log.weight : maxWeight;
-              minWeight = (minWeight ?? log.weight) > log.weight ? log.weight : minWeight;
+        final volume = s.logs.map((log) {
+          totalReps += log.reps;
+          totalWeight += log.weight;
+          maxWeight = maxWeight < log.weight ? log.weight : maxWeight;
+          minWeight = (minWeight ?? log.weight) > log.weight ? log.weight : minWeight;
 
-              return log.setIndex * log.reps * (log.weight == 0 ? 1.0 : log.weight);
-            })
-            .reduce((a, b) => a + b)
-            .round();
+          return log.setIndex * log.reps * (log.weight == 0 ? 1.0 : log.weight);
+        }).reduce((a, b) => a + b);
         avgWeight = totalWeight / s.logs.length;
 
         totalVolume += volume;

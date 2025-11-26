@@ -26,7 +26,7 @@ class PracticeBody extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: sets.map((i) {
         return RoundWidget(
-          onLog: () {},
+          // onLog: () {},
           totalProgress: totalProgress,
           sessionId: sessionId,
           exId: exId,

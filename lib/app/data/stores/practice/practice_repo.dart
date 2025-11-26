@@ -31,9 +31,9 @@ class PracticeRepo implements IPracticeContract {
   }
 
   @override
-  Future<Either<Failure, RoutineDay>> getDayItems(int dayId) async {
+  Future<Either<Failure, RoutineDay>> getPracticeDay(int dayId) async {
     try {
-      final res = await _localSource.getDayItems(dayId);
+      final res = await _localSource.getPracticeDay(dayId);
       return Right(res.toEntity());
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));

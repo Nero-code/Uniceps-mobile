@@ -8,4 +8,5 @@ abstract class CaptainImages {
   static const emptyDays = 'images/cap_uni/cap_empty_days.png';
   static const about = 'images/cap_uni/cap_about.png';
   static const noMeasurements = 'images/cap_uni/cap_empty_measurements.png';
+  static const emptyMeasurement = 'images/cap_uni/cap_empty_measure.png';
 }
