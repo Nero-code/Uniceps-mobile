@@ -30,15 +30,16 @@ class MeasureWidget extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
                 border: Border.all(color: Colors.black, width: .5),
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: const [
-                  BoxShadow(
-                    offset: Offset(0, 3),
-                    color: Colors.grey,
-                    blurRadius: 3,
-                    spreadRadius: -1,
-                  ),
+                  // BoxShadow(
+                  //   offset: Offset(0, 3),
+                  //   color: Colors.grey,
+                  //   blurRadius: 3,
+                  //   spreadRadius: -1,
+                  // ),
                 ]),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),

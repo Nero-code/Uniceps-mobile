@@ -78,6 +78,7 @@ class MuscleDifferenceWidget extends StatelessWidget {
 
   String gainPercentage() {
     if (newVal == null || oldVal == null) return '---';
+    if (newVal == 0 && oldVal == 0) return '---';
     if (oldVal == 0.0) return '100.0';
     return (((newVal! - oldVal!) / oldVal!) * 100).toStringAsFixed(1);
   }

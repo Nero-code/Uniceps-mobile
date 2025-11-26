@@ -24,14 +24,16 @@ class _SetMeasureDialogState extends State<SetMeasureDialog> {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
+    final screen = MediaQuery.sizeOf(context);
     return AlertDialog(
-      title: Text(widget.title),
+      title: Center(child: Text(widget.title)),
       content: SizedBox(
         height: 50,
         child: Center(
           child: SizedBox(
             width: 100,
             child: TextField(
+              autofocus: true,
               controller: controller,
               textDirection: TextDirection.ltr,
               textAlign: TextAlign.center,
@@ -40,27 +42,33 @@ class _SetMeasureDialogState extends State<SetMeasureDialog> {
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
               ],
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              decoration: const InputDecoration(border: OutlineInputBorder(), isDense: true),
+              decoration: const InputDecoration(isDense: true),
             ),
           ),
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(locale.cancel),
-        ),
-        ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(Colors.green.shade300),
-            foregroundColor: const WidgetStatePropertyAll(Colors.white),
+        SizedBox(
+          width: screen.width * .3,
+          child: OutlinedButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(locale.cancel),
           ),
-          onPressed: () {
-            if (controller.text.isEmpty || controller.text == '.') return;
-            widget.onPositive(double.parse(controller.text));
-            Navigator.pop(context);
-          },
-          child: Text(locale.ok),
+        ),
+        SizedBox(
+          width: screen.width * .3,
+          child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(Colors.green.shade300),
+              foregroundColor: const WidgetStatePropertyAll(Colors.white),
+            ),
+            onPressed: () {
+              if (controller.text.isEmpty || controller.text == '.') return;
+              widget.onPositive(double.parse(controller.text));
+              Navigator.pop(context);
+            },
+            child: Text(locale.ok),
+          ),
         ),
       ],
     );

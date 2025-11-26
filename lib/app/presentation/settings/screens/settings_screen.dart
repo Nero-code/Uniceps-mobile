@@ -80,7 +80,7 @@ class SettingsScreen extends StatelessWidget {
               TableRow(
                 children: [
                   SettingsTile(
-                    icon: Icons.leaderboard,
+                    icon: Icons.straighten_rounded,
                     iconsColor: Colors.green,
                     title: locale.measurements,
                     subtitle: "yoyoyoyo",

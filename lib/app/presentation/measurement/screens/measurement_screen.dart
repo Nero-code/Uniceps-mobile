@@ -5,6 +5,8 @@ import 'package:intl/intl.dart' as intl;
 import 'package:uniceps/app/presentation/measurement/dialogs/delete_dialog.dart';
 import 'package:uniceps/app/presentation/measurement/screens/add_edit_measurement_screen.dart';
 import 'package:uniceps/app/presentation/measurement/widgets/multifab_menu.dart';
+import 'package:uniceps/core/constants/cap_images.dart';
+import 'package:uniceps/core/widgets/empty_page.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/core/constants/muscles_images.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
@@ -46,7 +48,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
 
   @override
   Widget build(BuildContext context) {
-    // final screen = MediaQuery.sizeOf(context);
+    final screen = MediaQuery.sizeOf(context);
     final locale = AppLocalizations.of(context)!;
     final isRtl = context.read<LocaleCubit>().state.isRtl();
     return BlocProvider(
@@ -187,10 +189,10 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                         ],
                       ),
                     ),
-                    Positioned(
+                    Positioned.directional(
                       top: 30,
-                      left: isRtl ? 25.0 : null,
-                      right: isRtl ? null : 25,
+                      end: 20,
+                      textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
                       child: AnimatedStackMenu(
                         spacing: 50,
                         direction: isRtl ? Direction.left : Direction.right,
@@ -260,42 +262,40 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                   ],
                 );
               },
-              error: (state) => Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      state.f.when(
-                        msOffline: () => locale.errNoInternet,
-                        noRecords: () => locale.emptyMeasurements,
-                        msDbFailure: () => locale.error,
-                      ),
-                    ),
-                    const SizedBox(height: 5.0),
-                    IconButton(
-                      onPressed: state.f.maybeWhen(
-                        noRecords: () => () => Navigator.push(
+              error: (state) {
+                return SizedBox.expand(
+                  child: Stack(
+                    children: [
+                      Positioned.directional(
+                        top: 30.0,
+                        end: 20.0,
+                        textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
+                        child: IconButton.filled(
+                          style: IconButton.styleFrom(
+                            foregroundColor: Colors.blue,
+                            backgroundColor: Colors.blue.shade50,
+                          ),
+                          onPressed: () => Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (_) => BlocProvider.value(
                                       value: context.read<MeasurementBloc>(),
                                       child: const AddEditMeasurementScreen(),
-                                    ))),
-                        orElse: () =>
-                            () => context.read<MeasurementBloc>().add(const MeasurementEvent.getMeasurements()),
-                      ),
-                      icon: state.f.maybeWhen(
-                        orElse: () => const Icon(Icons.refresh),
-                        noRecords: () => const Icon(
-                          Icons.add,
-                          size: 50,
-                          color: Colors.blue,
+                                    )),
+                          ),
+                          icon: const Icon(Icons.add),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
+                      Center(
+                          child: EmptyPage(
+                        imageName: CaptainImages.emptyMeasurement,
+                        message: locale.emptyMeasurements,
+                        imageSize: Size(screen.width * .7, screen.width * .7),
+                      )),
+                    ],
+                  ),
+                );
+              },
             );
           },
         ),

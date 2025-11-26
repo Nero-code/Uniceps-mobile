@@ -4,6 +4,7 @@ import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/app/domain/commands/measurement_usecases/measurement_commands.dart';
 import 'package:uniceps/app/presentation/performance/widgets/muscle_difference_widget.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/constants/muscles_images.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/core/widgets/empty_page.dart';
@@ -57,6 +58,7 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
+    final primaryColor = Theme.of(context).colorScheme.primary;
     return Scaffold(
       body: FutureBuilder(
           future: future,
@@ -65,8 +67,17 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
               measurements = snapshot.data!;
               return CustomScrollView(
                 slivers: [
-                  const SliverAppBar(
-                    title: Text('Measurements Tool'),
+                  SliverAppBar(
+                    centerTitle: true,
+                    title: Text(locale.scrTitleCompareTool),
+                    actions: const [
+                      Image(
+                        image: AssetImage(APP_LOGO),
+                        width: 40,
+                        height: 40,
+                      ),
+                      SizedBox(width: 5),
+                    ],
                   ),
                   SliverToBoxAdapter(
                     child: SizedBox(
@@ -77,13 +88,17 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
                           // OLD
                           DropdownButton(
                             icon: const Icon(Icons.calendar_month, size: 20),
-                            hint: const Text('--/--/----', style: TextStyle(fontWeight: FontWeight.w300)),
+                            hint: const Text('--/--/--', style: TextStyle(fontWeight: FontWeight.w300)),
                             elevation: 1,
                             value: oldM,
                             borderRadius: BorderRadius.circular(10),
                             items: measurements
-                                .map((m) =>
-                                    DropdownMenuItem(value: m, child: Text(DateFormat.yMd().format(m.checkDate))))
+                                .map((m) => DropdownMenuItem(
+                                    value: m,
+                                    child: Text(
+                                      DateFormat.yMd().format(m.checkDate),
+                                      style: TextStyle(color: primaryColor),
+                                    )))
                                 .toList(),
                             onChanged: (v) => setState(() => oldM = v),
                           ),
@@ -92,13 +107,15 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
                           // NEW
                           DropdownButton(
                             icon: const Icon(Icons.calendar_month, size: 20),
-                            hint: const Text('--/--/----', style: TextStyle(fontWeight: FontWeight.w300)),
+                            hint: const Text('--/--/--', style: TextStyle(fontWeight: FontWeight.w300)),
                             elevation: 1,
                             value: newM,
                             borderRadius: BorderRadius.circular(10),
                             items: measurements
-                                .map((m) =>
-                                    DropdownMenuItem(value: m, child: Text(DateFormat.yMd().format(m.checkDate))))
+                                .map((m) => DropdownMenuItem(
+                                    value: m,
+                                    child: Text(DateFormat.yMd().format(m.checkDate),
+                                        style: TextStyle(color: primaryColor))))
                                 .toList(),
                             onChanged: (v) => setState(() => newM = v),
                           ),

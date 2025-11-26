@@ -89,6 +89,7 @@ class SessionReportCard extends StatelessWidget {
                       child: CircularProgressIndicator(
                         color: report.color.withOpacity(0.3),
                         value: report.value,
+                        backgroundColor: Colors.white,
                         strokeWidth: 10,
                         strokeAlign: 1,
                         strokeCap: StrokeCap.round,

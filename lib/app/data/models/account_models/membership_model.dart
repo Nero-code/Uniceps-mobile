@@ -3,11 +3,12 @@ import 'package:uniceps/app/domain/classes/account_entities/membership.dart';
 
 part 'membership_model.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
+@JsonSerializable()
 class MembershipModel {
-  final int? id;
-  final String planName;
+  @JsonKey(name: 'id')
   final String planId;
+  @JsonKey(name: 'plan')
+  final String planName;
   final double price;
   final DateTime startDate;
   final DateTime endDate;
@@ -15,7 +16,6 @@ class MembershipModel {
   final bool isGift;
 
   const MembershipModel({
-    this.id,
     required this.planName,
     required this.planId,
     required this.price,

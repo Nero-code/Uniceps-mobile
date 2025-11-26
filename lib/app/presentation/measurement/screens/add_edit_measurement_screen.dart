@@ -36,7 +36,8 @@ class _AddEditMeasurementScreenState extends State<AddEditMeasurementScreen> {
     final locale = AppLocalizations.of(context)!;
     return Scaffold(
         appBar: AppBar(
-          title: Text(intl.DateFormat.yMd().format(widget.m?.checkDate ?? DateTime.now())),
+          centerTitle: true,
+          title: Text(intl.DateFormat('d/M/y').format(widget.m?.checkDate ?? DateTime.now())),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -268,6 +269,7 @@ class _AddEditMeasurementScreenState extends State<AddEditMeasurementScreen> {
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * .75,
                 child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
                     onPressed: measure.isNotEmpty
                         ? () async {
                             final bloc = context.read<MeasurementBloc>();
@@ -290,7 +292,10 @@ class _AddEditMeasurementScreenState extends State<AddEditMeasurementScreen> {
                             );
                           }
                         : null,
-                    child: Text(locale.save)),
+                    child: Text(
+                      locale.save,
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    )),
               ),
             ],
           ),
