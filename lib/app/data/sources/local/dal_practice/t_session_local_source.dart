@@ -349,12 +349,13 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       final res = await (_database.select(_database.tSessions)
             ..where((f) => f.dayId.equals(day.id) & f.finishedAt.isNotNull()))
           .get();
-      if (res.isEmpty) throw EmptyCacheExeption();
       for (final s in res) {
         final logs = await (_database.select(_database.tLogs)..where((f) => f.sessionId.equals(s.tsId))).get();
         sessions.add(TSessionModel.fromTable(s, logs));
       }
     }
+
+    if (sessions.isEmpty) throw EmptyCacheExeption();
     return sessions;
   }
 }

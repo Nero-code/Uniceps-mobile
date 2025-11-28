@@ -91,7 +91,7 @@ class AnalyticsCard extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            const Icon(Icons.savings_outlined, color: Colors.brown),
+                            const Icon(Icons.pie_chart, color: Colors.grey),
                             const SizedBox(width: 5),
                             Text(
                               formatNum(total),

@@ -31,9 +31,9 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
   Completer<bool>? routinesTrigger;
   List<Routine> routines = [];
   Routine? selectedRoutine;
-  Future<z.Either<PerformanceFailure, SessionsReport>>? sessionsReport;
-  Future<z.Either<PerformanceFailure, LogsReport>>? logsReport;
-  Future<z.Either<PerformanceFailure, PhysicalReport>>? physicalReport;
+  z.Either<PerformanceFailure, SessionsReport>? sessionsReport;
+  z.Either<PerformanceFailure, LogsReport>? logsReport;
+  z.Either<PerformanceFailure, PhysicalReport>? physicalReport;
 
   @override
   void initState() {
@@ -44,33 +44,33 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
   Future<void> initialize() async {
     routinesTrigger = Completer();
     final rEither = await widget.routineCommnds.getAllRoutines();
-    try {
-      rEither.fold(
-        (l) {
-          // routinesTrigger = Future.error(l);
-          routinesTrigger?.completeError(l);
-          return null;
-        },
-        (r) {
-          routines = r;
-          routines.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-          // return (routinesTrigger = Future.value(true));
-          routinesTrigger?.complete(true);
-        },
-      );
-    } catch (e) {
-      print(e.toString());
+    final res = rEither.fold(
+      (l) {
+        // routinesTrigger = Future.error(l);
+        routinesTrigger?.completeError(l);
+        return false;
+      },
+      (r) {
+        routines = r;
+        routines.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        // return (routinesTrigger = Future.value(true));
+        return true;
+      },
+    );
+    if (!res) {
+      return;
     }
     if (routines.isNotEmpty) {
-      selectRoutine(routines.first);
+      await selectRoutine(routines.first);
+      routinesTrigger?.complete(true);
     }
   }
 
   Future<void> selectRoutine(Routine r) async {
     selectedRoutine = r;
-    sessionsReport = widget.performanceCommands.getSessionsReport(r.id!);
-    logsReport = widget.performanceCommands.getLogsReport(r.id!);
-    physicalReport = widget.performanceCommands.getPhysicalReport();
+    sessionsReport = await widget.performanceCommands.getSessionsReport(r.id!);
+    logsReport = await widget.performanceCommands.getLogsReport(r.id!);
+    physicalReport = await widget.performanceCommands.getPhysicalReport();
     setState(() {});
   }
 
@@ -113,21 +113,14 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
                 //
 
                 SliverToBoxAdapter(
-                  child: FutureBuilder(
-                      future: sessionsReport,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return snapshot.data!.fold(
-                            (l) => NoReportWidget(
-                                message: l.when(
-                              noValues: () => locale.sessionsReportNoValues,
-                              invalidValues: () => locale.sessionsReportInvalidValues,
-                            )),
-                            (r) => SessionReportCard(report: r),
-                          );
-                        }
-                        return const LoadingIndicator();
-                      }),
+                  child: sessionsReport?.fold(
+                    (l) => NoReportWidget(
+                        message: l.when(
+                      noValues: () => locale.sessionsReportNoValues,
+                      invalidValues: () => locale.sessionsReportInvalidValues,
+                    )),
+                    (r) => SessionReportCard(report: r),
+                  ),
                 ),
 
                 //
@@ -137,20 +130,13 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: FutureBuilder(
-                        future: logsReport,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return snapshot.data!.fold(
-                                (l) => NoReportWidget(
-                                        message: l.when(
-                                      noValues: () => locale.logsReportNoValues,
-                                      invalidValues: () => locale.logsReportInvalidValues,
-                                    )),
-                                (r) => LogsReportCard(r: r));
-                          }
-                          return const LoadingIndicator();
-                        }),
+                    child: logsReport?.fold(
+                        (l) => NoReportWidget(
+                                message: l.when(
+                              noValues: () => locale.logsReportNoValues,
+                              invalidValues: () => locale.logsReportInvalidValues,
+                            )),
+                        (r) => LogsReportCard(r: r)),
                   ),
                 ),
 
@@ -158,21 +144,14 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
                 //  Physical Report
                 //
                 SliverToBoxAdapter(
-                  child: FutureBuilder(
-                      future: physicalReport,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return snapshot.data!.fold(
-                            (l) => NoReportWidget(
-                                message: l.when(
-                              noValues: () => locale.physicalReportNoValues,
-                              invalidValues: () => locale.physicalReportInvalidValues,
-                            )),
-                            (r) => PhysicalReportCard(report: r),
-                          );
-                        }
-                        return LoadingIndicator();
-                      }),
+                  child: physicalReport?.fold(
+                    (l) => NoReportWidget(
+                        message: l.when(
+                      noValues: () => locale.physicalReportNoValues,
+                      invalidValues: () => locale.physicalReportInvalidValues,
+                    )),
+                    (r) => PhysicalReportCard(report: r),
+                  ),
                 ),
               ],
             );
