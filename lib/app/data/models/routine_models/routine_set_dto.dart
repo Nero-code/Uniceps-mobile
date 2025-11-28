@@ -1,8 +1,7 @@
 // import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uniceps/app/data/sources/local/database.dart' as db;
-import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart'
-    as rs;
+import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart' as rs;
 
 // part 'routine_day_dto.freezed.dart';
 part 'routine_set_dto.g.dart';
@@ -10,9 +9,24 @@ part 'routine_set_dto.g.dart';
 @JsonSerializable()
 class RoutineSetDto {
   final int? id, apiId;
-  final int routineItemId, index, reps, version;
-  final double? weight;
+
+  @JsonKey(defaultValue: 0)
+  final int routineItemId;
+
+  @JsonKey(name: 'Order')
+  final int index;
+
+  @JsonKey(name: 'Repetition')
+  final int reps;
+
+  @JsonKey(defaultValue: 0)
+  final int version;
+
+  @JsonKey(defaultValue: false)
   final bool isSynced;
+
+  final double? weight;
+
   const RoutineSetDto({
     required this.id,
     required this.apiId,
@@ -46,19 +60,17 @@ class RoutineSetDto {
         isSynced: isSynced,
       );
 
-  factory RoutineSetDto.fromJson(Map<String, dynamic> json) =>
-      _$RoutineSetDtoFromJson(json);
+  factory RoutineSetDto.fromJson(Map<String, dynamic> json) => _$RoutineSetDtoFromJson(json);
 
-  factory RoutineSetDto.fromTable(db.RoutineSet setItem, [double? weight]) =>
-      RoutineSetDto(
-          id: setItem.id,
-          apiId: setItem.apiId,
-          routineItemId: setItem.routineItemId,
-          version: setItem.version,
-          index: setItem.roundIndex,
-          reps: setItem.repsCount,
-          weight: weight,
-          isSynced: setItem.isSynced);
+  factory RoutineSetDto.fromTable(db.RoutineSet setItem, [double? weight]) => RoutineSetDto(
+      id: setItem.id,
+      apiId: setItem.apiId,
+      routineItemId: setItem.routineItemId,
+      version: setItem.version,
+      index: setItem.roundIndex,
+      reps: setItem.repsCount,
+      weight: weight,
+      isSynced: setItem.isSynced);
 
   RoutineSetDto copyWith({
     int? id,

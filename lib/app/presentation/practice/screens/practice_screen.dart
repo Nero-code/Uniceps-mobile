@@ -68,28 +68,48 @@ class _PracticeScreenState extends State<PracticeScreen> {
                 appBar: AppBar(
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   centerTitle: true,
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: BlocSelector<PracticeCubit, PracticeState, String>(
-                          selector: (state) => (state is PracticeLoadedState) ? state.day.name : "",
-                          builder: (context, dayName) => Text(dayName),
+
+                  shadowColor: Colors.black,
+                  bottom: PreferredSize(
+                    preferredSize: Size(screenSize.width, 30),
+                    child: BlocBuilder<StopwatchCubit, StopwatchState>(
+                      builder: (context, state) => Text(
+                        state.time,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          // color: Colors.grey.shade700,
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 30,
                         ),
                       ),
-                      const SizedBox(width: 5),
-                      BlocBuilder<StopwatchCubit, StopwatchState>(
-                        builder: (context, state) => Text(
-                          state.time,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w100,
-                            color: Colors.grey.shade700,
-                            fontSize: 26,
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
+                  title: BlocSelector<PracticeCubit, PracticeState, String>(
+                    selector: (state) => (state is PracticeLoadedState) ? state.day.name : "",
+                    builder: (context, dayName) => Text(dayName, style: TextStyle(color: Colors.grey.shade700)),
+                  ),
+                  // title: Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Expanded(
+                  //       child: BlocSelector<PracticeCubit, PracticeState, String>(
+                  //         selector: (state) => (state is PracticeLoadedState) ? state.day.name : "",
+                  //         builder: (context, dayName) => Text(dayName),
+                  //       ),
+                  //     ),
+                  //     const SizedBox(width: 5),
+                  //     BlocBuilder<StopwatchCubit, StopwatchState>(
+                  //       builder: (context, state) => Text(
+                  //         state.time,
+                  //         style: TextStyle(
+                  //           fontWeight: FontWeight.w100,
+                  //           color: Colors.grey.shade700,
+                  //           fontSize: 26,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ),
                 body: Stack(
                   children: [
@@ -105,6 +125,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                           return SingleChildScrollView(
                             padding: const EdgeInsets.only(bottom: 100),
                             child: ExpansionPanelList(
+                              animationDuration: const Duration(milliseconds: 500),
                               expandedHeaderPadding: EdgeInsets.zero,
                               expansionCallback: _expansionCallback,
                               children: state.day.exercises

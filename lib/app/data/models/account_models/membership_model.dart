@@ -7,11 +7,17 @@ part 'membership_model.g.dart';
 class MembershipModel {
   @JsonKey(name: 'id')
   final String planId;
+
   @JsonKey(name: 'plan')
   final String planName;
+
   final double price;
   final DateTime startDate;
   final DateTime endDate;
+
+  @JsonKey(defaultValue: false)
+  final bool isNotified;
+
   final bool isActive;
   final bool isGift;
 
@@ -21,6 +27,7 @@ class MembershipModel {
     required this.price,
     required this.startDate,
     required this.endDate,
+    required this.isNotified,
     required this.isActive,
     required this.isGift,
   });
@@ -33,6 +40,7 @@ class MembershipModel {
         endDate: DateTime(2099),
         isActive: true,
         isGift: false,
+        isNotified: false,
       );
 
   factory MembershipModel.fromJson(Map<String, dynamic> json) => _$MembershipModelFromJson(json);
@@ -45,6 +53,7 @@ class MembershipModel {
         price: s.price,
         startDate: s.startDate,
         endDate: s.endDate,
+        isNotified: s.isNotified,
         isActive: s.isActive,
         isGift: s.isGift,
       );
@@ -55,7 +64,29 @@ class MembershipModel {
         price: price,
         startDate: startDate,
         endDate: endDate,
+        isNotified: isNotified,
         isActive: isActive,
         isGift: isGift,
+      );
+
+  MembershipModel copyWith({
+    String? planId,
+    String? planName,
+    double? price,
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? isNotified,
+    bool? isActive,
+    bool? isGift,
+  }) =>
+      MembershipModel(
+        planName: planName ?? this.planName,
+        planId: planId ?? this.planId,
+        price: price ?? this.price,
+        startDate: startDate ?? this.startDate,
+        endDate: endDate ?? this.endDate,
+        isNotified: isNotified ?? this.isNotified,
+        isActive: isActive ?? this.isActive,
+        isGift: isGift ?? this.isGift,
       );
 }

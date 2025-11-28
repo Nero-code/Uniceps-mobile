@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart' as ex;
@@ -45,6 +47,33 @@ class ExerciseV2Dto {
       imageBitMap: null,
     );
   }
+  Map<String, dynamic> toJson() => {
+        'id': apiId,
+        'name': name,
+        'muscleGroupTranslations': encodeTranslations(muscleGroupTranslations),
+        'imageUrl': imageUrl,
+        'imageBitMap': imageBitMap,
+      };
+
+  factory ExerciseV2Dto.fromFile(Map<String, dynamic> json) {
+    Map<Lang, String> map = {};
+    if (json['Muscle'] != null) {
+      map = parseTranslations(jsonEncode(json['Muscle']));
+    }
+    return ExerciseV2Dto(
+      apiId: json['ExerciseId'],
+      name: json['ExerciseName'],
+      muscleGroupTranslations: map,
+      imageUrl: json['ExerciseUrl'],
+      imageBitMap: null,
+    );
+  }
+  Map<String, dynamic> toFile() => {
+        'ExerciseId': apiId,
+        'ExerciseName': name,
+        'Muscle': muscleGroupTranslations.map((key, value) => MapEntry(key.name, value)),
+        'ExerciseUrl': imageUrl,
+      };
 
   factory ExerciseV2Dto.fromTable(Exercise exercise, String imageUrl, Uint8List? imageBitMap) => ExerciseV2Dto(
       apiId: exercise.apiId,
@@ -66,12 +95,4 @@ class ExerciseV2Dto {
           muscleGroupTranslations: muscleGroupTranslations ?? this.muscleGroupTranslations,
           imageUrl: imageUrl ?? this.imageUrl,
           imageBitMap: imageBitMap ?? this.imageBitMap);
-
-  Map<String, dynamic> toJson() => {
-        'id': apiId,
-        'name': name,
-        'muscleGroupTranslations': encodeTranslations(muscleGroupTranslations),
-        'imageUrl': imageUrl,
-        'imageBitMap': imageBitMap,
-      };
 }

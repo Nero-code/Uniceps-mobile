@@ -4,6 +4,7 @@ class Membership {
   final double price;
   final DateTime startDate;
   final DateTime endDate;
+  final bool isNotified;
   final bool isActive;
   final bool isGift;
 
@@ -13,6 +14,7 @@ class Membership {
     required this.price,
     required this.startDate,
     required this.endDate,
+    required this.isNotified,
     required this.isActive,
     required this.isGift,
   });

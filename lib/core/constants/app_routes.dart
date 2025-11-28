@@ -28,5 +28,7 @@ abstract class AppRoutes {
   static const subscriptions = '/profile/subscriptions';
   static const measurements = '/profile/measurements';
   static const measurementTool = '/measurement_tool';
+
   static const about = "/profile/about";
+  static const capAbout = "/profile/cap_about";
 }

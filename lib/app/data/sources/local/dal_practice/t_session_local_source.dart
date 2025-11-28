@@ -94,7 +94,6 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     return Tuple2(routine, lastDayId?.dayId);
   }
 
-  // TODO: Rename to getPracticeDay();
   @override
   Future<RoutineDayDto> getPracticeDay(int dayId) async {
     // First we check if day exists.
@@ -292,14 +291,20 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     int? lastDayId;
     Duration duration = Duration.zero;
     DateTime newestSessionDate = DateTime(2000);
+    DateTime oldestSessionDate = DateTime.now();
 
     final days = await (_database.select(_database.daysGroup)..where((f) => f.routineId.equals(routine.id))).get();
     for (final day in days) {
       final sessions = await (_database.select(_database.tSessions)..where((f) => f.dayId.equals(day.id))).get();
-      tc = sessions.length;
+      tc += sessions.length;
       final range = sessions.map((e) => e.startedAt).toList()..sort();
       if (range.isNotEmpty) {
-        duration = range.last.difference(range.first);
+        // Get first-ever session and start from there
+        if (oldestSessionDate.difference(range.first).inHours > 0) {
+          oldestSessionDate = range.first;
+        }
+
+        // Get latest session and map to its day
         if (newestSessionDate.difference(range.last).inHours < 0) {
           newestSessionDate = range.last;
           lastDayId = day.id;
@@ -312,8 +317,10 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
             await (_database.select(_database.routineSets)..where((f) => f.routineItemId.equals(item.id))).get();
         sc += sets.length;
       }
-      ic = items.length;
+      ic += items.length;
     }
+
+    duration += DateTime.now().difference(oldestSessionDate);
     dc = days.length;
 
     final res = RoutineDto.fromTable(routine, days.map(RoutineDayDto.fromTable).toList());

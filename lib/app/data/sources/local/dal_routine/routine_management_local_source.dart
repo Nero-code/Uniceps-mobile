@@ -1,7 +1,9 @@
 import 'package:drift/drift.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
+import 'package:uniceps/app/data/models/routine_result.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
+import 'package:uniceps/core/constants/constants.dart';
 
 abstract class IRoutineManagementLocalSourceContract {
   Future<List<RoutineDto>> getAllRoutines();
@@ -10,7 +12,7 @@ abstract class IRoutineManagementLocalSourceContract {
   Future<RoutineDto> updateRoutine(RoutineDto dto);
   Future<void> setCurrentRoutine(RoutineDto dto);
   Future<void> deleteRoutine(RoutineDto dto);
-  Future<void> shareRoutine(RoutineDto dto);
+  Stream<Stage> insertFullRoutine(RoutineDto dto);
 }
 
 class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceContract {
@@ -57,12 +59,6 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
   }
 
   @override
-  Future<void> shareRoutine(RoutineDto dto) async {
-    // TODO: implement shareRoutine
-    throw UnimplementedError();
-  }
-
-  @override
   Future<List<({RoutineHeat heat, RoutineDto routine})>> getAllRoutinesWithHeat() async {
     // Part 1:
     //   Get all routines.
@@ -76,16 +72,28 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
     for (final routine in routines) {
       int dc, ic, sc, tc;
       dc = ic = sc = tc = 0;
+      int? lastDayId;
       Duration duration = Duration.zero;
+      DateTime newestSessionDate = DateTime(2000);
+      DateTime oldestSessionDate = DateTime.now();
       final days = await (_database.select(_database.daysGroup)..where((f) => f.routineId.equals(routine.id))).get();
       print("step 2: days.length = ${days.length}");
       for (final day in days) {
         final sessions = await (_database.select(_database.tSessions)..where((f) => f.dayId.equals(day.id))).get();
-        tc = sessions.length;
+        tc += sessions.length;
         final range = sessions.map((e) => e.startedAt).toList()..sort();
 
         if (range.isNotEmpty) {
-          duration = DateTime.now().difference(range.first);
+          // Get first-ever session and start from there
+          if (oldestSessionDate.difference(range.first).inHours > 0) {
+            oldestSessionDate = range.first;
+          }
+
+          // Get latest session and map to its day
+          if (newestSessionDate.difference(range.last).inHours < 0) {
+            newestSessionDate = range.last;
+            lastDayId = day.id;
+          }
         }
 
         final items = await (_database.select(_database.routineItems)..where((f) => f.dayId.equals(day.id))).get();
@@ -97,9 +105,9 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
           sc += sets.length;
           print("step 4: sets.length = ${sets.length}");
         }
-        ic = items.length;
+        ic += items.length;
       }
-      dc = days.length;
+      dc += days.length;
       result.add((
         routine: RoutineDto.fromTable(routine),
         heat: RoutineHeat(
@@ -109,9 +117,47 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
           days: dc,
           exercises: ic,
           sets: sc,
+          lastdayId: lastDayId,
         )
       ));
     }
     return result;
+  }
+
+  @override
+  Stream<Stage> insertFullRoutine(RoutineDto dto) async* {
+    // Create New Routine
+    final routineId = await _database.into(_database.routines).insert(RoutinesCompanion.insert(name: dto.name));
+    // Create Days
+    for (final d in dto.daysDto) {
+      final dayId = await _database
+          .into(_database.daysGroup)
+          .insert(DaysGroupCompanion.insert(index: d.index, dayName: d.name, routineId: routineId));
+      yield Stage.days; // move one step for Day
+      // Create Items
+      for (final i in d.items) {
+        var ex = await (_database.select(_database.exercises)..where((f) => f.apiId.equals(i.exerciseV2Dto.apiId)))
+            .getSingleOrNull();
+        if (ex == null) {
+          await _database.into(_database.exercises).insert(ExercisesCompanion.insert(
+                apiId: Value(i.exerciseV2Dto.apiId),
+                name: i.exerciseV2Dto.name,
+                imageUrl: i.exerciseV2Dto.imageUrl,
+                muscleGroupTranslations: encodeTranslations(i.exerciseV2Dto.muscleGroupTranslations),
+              ));
+        }
+        final itemId = await _database
+            .into(_database.routineItems)
+            .insert(RoutineItemsCompanion.insert(index: i.index, exerciseId: i.exerciseV2Dto.apiId, dayId: dayId));
+        yield Stage.items; // move one step for Item
+        // Create Sets
+        for (final s in i.setsDto) {
+          await _database
+              .into(_database.routineSets)
+              .insert(RoutineSetsCompanion.insert(roundIndex: s.index, repsCount: s.reps, routineItemId: itemId));
+          yield Stage.sets; // move one step for Set
+        }
+      }
+    }
   }
 }

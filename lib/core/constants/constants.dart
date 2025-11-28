@@ -48,9 +48,13 @@ Map<Lang, String> parseTranslations(String muscleGroupTranslations) {
   return dec.map<Lang, String>((key, value) => MapEntry(parseLang(key.toString()), value.toString()));
 }
 
+Map<Lang, String> parseTransFromFile(Map<String, dynamic> muscleGroupTranslations) {
+  return muscleGroupTranslations.map<Lang, String>((key, value) => MapEntry(parseLang(key), value.toString()));
+}
+
 Lang parseLang(String lang) {
   return Lang.values.firstWhere(
-    (l) => l.val == lang,
+    (l) => l.val == lang.toLowerCase(),
   );
 }
 

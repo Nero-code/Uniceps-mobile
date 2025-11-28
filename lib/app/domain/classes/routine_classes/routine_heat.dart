@@ -11,17 +11,17 @@ class RoutineHeat {
 
   double get value {
     final countNorm = sessionCount / 30;
-    final timeNorm = duration.inDays / 60;
-    final norm = countNorm - timeNorm > 0 ? countNorm : timeNorm;
+    final timeNorm = duration.inDays == 0 ? 0 : duration.inDays / 60;
+    final norm = countNorm > timeNorm ? countNorm : timeNorm;
 
     if (norm >= 1) return 1;
-    return norm;
+    return double.parse(norm.toStringAsFixed(2));
   }
 
   Color get color {
     final countNorm = sessionCount / 30;
     final timeNorm = duration.inDays / 60;
-    final norm = countNorm - timeNorm > 0 ? countNorm : timeNorm;
+    final norm = countNorm > timeNorm ? countNorm : timeNorm;
 
     if (norm >= 1) return Colors.red;
     if (norm >= .75) return Color.lerp(Colors.amber, Colors.red, (norm - .75) * 4)!;

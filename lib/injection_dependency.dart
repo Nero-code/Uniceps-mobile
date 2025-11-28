@@ -20,6 +20,7 @@ import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_sourc
 import 'package:uniceps/app/data/sources/remote/dal_auth/auth_contracts.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/email_auth_remote_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
+import 'package:uniceps/app/data/sources/services/import/file_parse_service.dart';
 import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/data/sources/services/internet_client/http_client_helper.dart';
 import 'package:uniceps/app/data/sources/services/media_helper.dart';
@@ -196,7 +197,7 @@ Future<void> init() async {
   sl.registerLazySingleton<IRoutineManagementContract>(
       () => RoutineManagementRepo(localSource: sl(), internet: sl(), clientHelper: sl()));
   sl.registerLazySingleton<IRoutineWithHeatContract>(
-      () => RoutineWithHeatRepo(localSource: sl(), internet: sl(), clientHelper: sl()));
+      () => RoutineWithHeatRepo(localSource: sl(), mediaHelper: sl(), fileParseService: sl()));
   sl.registerLazySingleton<IRoutineDaysContract>(() => RoutineDaysRepo(localSource: sl()));
   sl.registerLazySingleton<IRoutineItemsContract>(() => RoutineItemsRepo(localSource: sl(), mediaHelper: sl()));
   sl.registerLazySingleton<IRoutineSetsContract>(() => RoutineSetsRepo(localSource: sl()));
@@ -279,6 +280,8 @@ Future<void> init() async {
       ),
     ),
   );
+
+  sl.registerLazySingleton(() => FileParseService());
 
   sl.registerLazySingleton<UpdateService>(() => UpdateService(connectionChecker: sl(), client: sl()));
 

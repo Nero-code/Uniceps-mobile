@@ -111,14 +111,4 @@ class RoutineManagementRepo implements IRoutineManagementContract {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
   }
-
-  @override
-  Future<Either<Failure, Unit>> shareRoutine(Routine routine, int userId) async {
-    try {
-      await _localSource.shareRoutine(routine.toDto());
-      return const Right(unit);
-    } catch (e) {
-      return Left(DatabaseFailure(errorMsg: ""));
-    }
-  }
 }

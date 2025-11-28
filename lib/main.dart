@@ -10,6 +10,7 @@ import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
+import 'package:uniceps/app/presentation/home/screens/cap_about_screen.dart';
 import 'package:uniceps/app/presentation/measurement/screens/measurement_screen.dart';
 import 'package:uniceps/app/presentation/performance/screens/measurement_tool_screen.dart';
 import 'package:uniceps/app/presentation/performance/screens/performance_screen.dart';
@@ -93,13 +94,6 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocBuilder<LocaleCubit, ChangedLangState>(
         builder: (context, state) {
-          // SystemChrome.setSystemUIOverlayStyle(
-          //   SystemUiOverlayStyle(
-          //     statusBarColor: Colors.transparent,
-          //     systemNavigationBarColor:
-          //         Theme.of(context).colorScheme.background,
-          //   ),
-          // );
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             navigatorKey: NavigatorKey.navigatorKey,
@@ -134,6 +128,7 @@ class MyApp extends StatelessWidget {
 
               //  AUX
               AppRoutes.about: (_) => const AboutScreen(),
+              AppRoutes.capAbout: (_) => const CapAboutScreen(),
             },
           );
         },

@@ -30,15 +30,15 @@ class TSessionSyncService implements TSessionSyncContract {
 
   @override
   void start() {
-    _logger.t('TSession SyncService Starting!');
-    _init();
+    // _logger.t('TSession SyncService Starting!');
+    // _init();
   }
 
   @override
   void dispose() async {
-    if (!queue.isClosed) {
-      await queue.close();
-    }
+    // if (!queue.isClosed) {
+    //   await queue.close();
+    // }
   }
 
   void _init() async {
@@ -101,3 +101,5 @@ class TSessionSyncService implements TSessionSyncContract {
     }
   }
 }
+// token date: 28/11/2025 - 8:35 am
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoib3NhbWFzZGExMTEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6WyIwYmExZmMwYy0wMjA0LTQ3NDMtYTE1NS1hZjRhNjJhMjc3MWEiLCIwYmExZmMwYy0wMjA0LTQ3NDMtYTE1NS1hZjRhNjJhMjc3MWEiXSwianRpIjoiZDcxY2VkMTctYzdlNC00MmZhLWFhYTQtMzRkY2JhZGZiMWRiIiwidXNlclR5cGUiOiJOb3JtYWwiLCJleHAiOjE3NjY4OTk3ODEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QiLCJhdWQiOiJGbHV0dGVyLWFwcCJ9.lHD6xFTRISHf02RVHBQP9ZjQPuz3uoG_2ukXhekKE7c

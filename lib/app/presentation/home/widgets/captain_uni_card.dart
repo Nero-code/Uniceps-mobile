@@ -31,7 +31,7 @@ class CaptainUniCard extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(top: screenSize.width * .18, left: 10, right: 10),
           child: InkWell(
-            onTap: () {},
+            onTap: onCapTap,
             borderRadius: BorderRadius.circular(20),
             child: Ink(
               padding: const EdgeInsets.all(8.0),

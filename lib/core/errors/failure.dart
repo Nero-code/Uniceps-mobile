@@ -28,6 +28,15 @@ class PerformanceFailure with _$PerformanceFailure {
   const factory PerformanceFailure.noValues() = _NoValues;
   const factory PerformanceFailure.invalidValues() = _InvalidValues;
 }
+
+@freezed
+class FileParseFailure with _$FileParseFailure {
+  const factory FileParseFailure.fOffline() = _FOffline;
+  const factory FileParseFailure.noFileSelected() = _NoFileSelected;
+  const factory FileParseFailure.unsupportedVersion() = _UnsupportedVersion;
+  const factory FileParseFailure.parserMismatch() = _ParserMismatch;
+  const factory FileParseFailure.corruptedFile() = _CorruptedFile;
+}
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------

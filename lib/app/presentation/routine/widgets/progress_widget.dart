@@ -3,9 +3,18 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 
 class ProgressWidget extends StatelessWidget {
-  const ProgressWidget({super.key, required this.percent});
+  const ProgressWidget({
+    super.key,
+    required this.percent,
+    this.color = secondaryBlue,
+    this.backgroundColor = Colors.transparent,
+    this.dimension = 70.0,
+    this.strokeWidth = 7.0,
+  });
 
   final double percent;
+  final Color color, backgroundColor;
+  final double dimension, strokeWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -18,25 +27,25 @@ class ProgressWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-              width: 70,
-              height: 70,
+            SizedBox.square(
+              dimension: dimension,
               child: Stack(
                 children: [
-                  SizedBox(
-                    width: 70,
-                    height: 70,
+                  SizedBox.square(
+                    dimension: dimension,
                     child: CircularProgressIndicator(
                       value: percent,
                       strokeAlign: -1.0,
-                      strokeWidth: 7.0,
+                      strokeWidth: strokeWidth,
                       strokeCap: StrokeCap.round,
-                      color: secondaryBlue,
+                      color: color,
+                      backgroundColor: backgroundColor,
                     ),
                   ),
                   Center(
                     child: Text(
                       formatProgress(percent),
+                      textDirection: TextDirection.ltr,
                       style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),
                     ),
                   ),

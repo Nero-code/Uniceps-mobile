@@ -5,6 +5,8 @@ import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/routines_with_heat/routines_with_heat_bloc.dart';
+import 'package:uniceps/app/presentation/routine/dialogs/routine_import_dialog.dart';
+import 'package:uniceps/app/presentation/routine/dialogs/routine_import_progress_dialog.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_with_heat.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/constants/constants.dart';
@@ -58,6 +60,15 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
     showDialog(context: context, builder: (_) => RoutineSetCurrentDialog(routineName: name, onConfirm: onConfirm));
   }
 
+  void _importRoutineAlert(RoutinesWithHeatBloc bloc) async {
+    showDialog(
+        context: context,
+        builder: (_) => BlocProvider.value(
+              value: bloc,
+              child: RoutineImportDialog(onConfirm: () => bloc.add(const RoutinesWithHeatEvent.import())),
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
@@ -66,10 +77,24 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
       create: (context) => RoutinesWithHeatBloc(sl())..add(const RoutinesWithHeatEvent.getRoutines()),
       child: Scaffold(
           appBar: AppBar(title: Text(locale.scrTitleMyRoutines)),
-          body: BlocBuilder<RoutinesWithHeatBloc, RoutinesWithHeatState>(
+          body: BlocConsumer<RoutinesWithHeatBloc, RoutinesWithHeatState>(
+            listenWhen: (previous, current) =>
+                previous.maybeWhen(loaded: (_) => true, orElse: () => false) &&
+                current.maybeWhen(importing: (_) => true, orElse: () => false),
+            listener: (context, state) {
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) => BlocProvider.value(
+                        value: context.read<RoutinesWithHeatBloc>(),
+                        child: const RoutineImportProgressDialog(),
+                      ));
+            },
+            buildWhen: (p, c) => c.maybeWhen(importing: (_) => false, orElse: () => true),
             builder: (context, state) {
               return state.map(
                 initial: (_) => const SizedBox(),
+                importing: (_) => const SizedBox(),
                 loading: (_) => const LoadingIndicator(),
                 error: (state) => ReloadScreenWidget(
                     f: state.f,
@@ -178,46 +203,80 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                             loaded: (_) => true,
                           ),
                         );
+                        final canImport = accountCubit.state.maybeWhen(hasAccount: (_) => true, orElse: () => true);
 
-                        return Material(
-                          color: const Color.fromARGB(255, 59, 146, 146),
-                          child: InkWell(
-                            onTap: canCreate
-                                ? () => _createRoutine(
-                                      "${locale.newRoutine} $routinesLength",
-                                      (name) =>
-                                          context.read<RoutinesWithHeatBloc>().add(RoutinesWithHeatEvent.create(name)),
-                                    )
-                                : () => showDialog(context: context, builder: (_) => const PremiumAlert()),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  canCreate
-                                      ? const Icon(Icons.add, color: Colors.white)
-                                      : const Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                          child: Image(
-                                            image: AssetImage(IMG_PREMIUM),
-                                            color: Colors.amber,
-                                            width: 20,
-                                            height: 20,
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: Material(
+                                color: Theme.of(context).colorScheme.primary,
+                                child: InkWell(
+                                  onTap: canCreate
+                                      ? () => _createRoutine(
+                                            "${locale.newRoutine} $routinesLength",
+                                            (name) => context
+                                                .read<RoutinesWithHeatBloc>()
+                                                .add(RoutinesWithHeatEvent.create(name)),
+                                          )
+                                      : () => showDialog(context: context, builder: (_) => const PremiumAlert()),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        canCreate
+                                            ? const Icon(Icons.add, color: Colors.white)
+                                            : const Padding(
+                                                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                                child: Image(
+                                                  image: AssetImage(IMG_PREMIUM),
+                                                  color: Colors.amber,
+                                                  width: 20,
+                                                  height: 20,
+                                                ),
+                                              ),
+                                        Text(
+                                          // canCreate ? locale.add : locale.upgrade,
+                                          locale.addRoutine,
+                                          style: const TextStyle(
+                                            // fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: Colors.white,
                                           ),
                                         ),
-                                  Text(
-                                    // canCreate ? locale.add : locale.upgrade,
-                                    locale.addRoutine,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Colors.white,
+                                      ],
                                     ),
                                   ),
-                                ],
+                                ),
                               ),
                             ),
-                          ),
+                            Expanded(
+                              child: Ink(
+                                color: canImport ? Theme.of(context).colorScheme.secondary : Colors.grey.shade300,
+                                child: InkWell(
+                                  onTap: canImport ? () => _importRoutineAlert(context.read()) : null,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(Icons.download, color: Colors.white),
+                                        Text(
+                                          // canCreate ? locale.add : locale.upgrade,
+                                          locale.importRoutine,
+                                          style: const TextStyle(
+                                            // fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         );
                       })
                     ],

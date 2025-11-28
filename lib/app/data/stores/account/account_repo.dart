@@ -39,8 +39,8 @@ class AccountRepo implements IAccountService {
     if (await _checker.hasConnection) {
       try {
         final subscriptionPlan = await _remoteSource.getUserMembership();
-        await _localSource.saveUserMembership(subscriptionPlan);
-        return Right(subscriptionPlan.toEntity());
+        final shouldNotify = await _localSource.saveUserMembership(subscriptionPlan);
+        return Right(subscriptionPlan.copyWith(isNotified: shouldNotify).toEntity());
       } catch (e) {
         return const Left(MembershipFailure.cantGetPlan());
       }

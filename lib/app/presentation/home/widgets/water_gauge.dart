@@ -100,7 +100,7 @@ class _WaveBottlePainter extends CustomPainter {
     // Wave path
     final wavePath = Path();
     final baseHeight = size.height * (1 - value); // water level
-    final amplitude = size.height * .05; // wave height
+    final amplitude = size.height * (.05); // wave height
     final wavelength = size.width / 2.0;
 
     wavePath.moveTo(0, baseHeight);

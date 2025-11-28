@@ -10,7 +10,9 @@ abstract class IAccountLocalSource {
   Future<MembershipModel> getCurrentPlan();
 
   Future<void> saveUserAccount(AccountModel userAccount);
-  Future<void> saveUserMembership(MembershipModel subscriptionPlan);
+
+  /// Returns a `Should Notify?` boolean
+  Future<bool> saveUserMembership(MembershipModel subscriptionPlan);
 
   Future<void> logout();
 }
@@ -18,6 +20,8 @@ abstract class IAccountLocalSource {
 class AccountLocalSource implements IAccountLocalSource {
   final FlutterSecureStorage _secureStorage;
   final AppDatabase _database;
+
+  static const planKey = 'plan';
 
   AccountLocalSource({required FlutterSecureStorage secureStorage, required AppDatabase database})
       : _secureStorage = secureStorage,
@@ -35,11 +39,16 @@ class AccountLocalSource implements IAccountLocalSource {
 
   @override
   Future<MembershipModel> getCurrentPlan() async {
-    final res = await _secureStorage.read(key: 'plan');
+    final res = await _secureStorage.read(key: planKey);
     if (res == null) {
       return MembershipModel.free();
     }
-    return MembershipModel.fromJson(jsonDecode(res));
+    final memebership = MembershipModel.fromJson(jsonDecode(res));
+    if (DateTime.now().difference(memebership.endDate).inDays > 0) {
+      await _secureStorage.delete(key: planKey);
+      return MembershipModel.free();
+    }
+    return memebership;
   }
 
   @override
@@ -48,8 +57,18 @@ class AccountLocalSource implements IAccountLocalSource {
   }
 
   @override
-  Future<void> saveUserMembership(MembershipModel subscriptionPlan) async {
-    await _secureStorage.write(key: 'plan', value: jsonEncode(subscriptionPlan.toJson()));
+  Future<bool> saveUserMembership(MembershipModel subscriptionPlan) async {
+    final oldM = await _secureStorage.read(key: planKey);
+    if (oldM == null) {
+      await _secureStorage.write(key: planKey, value: jsonEncode(subscriptionPlan.toJson()));
+      return true;
+    }
+    final mem = MembershipModel.fromJson(jsonDecode(oldM));
+    if (subscriptionPlan.endDate.compareTo(mem.endDate) > 0) {
+      await _secureStorage.write(key: planKey, value: jsonEncode(subscriptionPlan.toJson()));
+      return true;
+    }
+    return false;
   }
 
   @override

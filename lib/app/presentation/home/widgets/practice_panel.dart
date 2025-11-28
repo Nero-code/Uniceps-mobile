@@ -86,7 +86,7 @@ class PracticePanel extends StatelessWidget {
               child: Badge(
                 padding: const EdgeInsets.symmetric(vertical: 5.0),
                 backgroundColor: Colors.amber,
-                isLabelVisible: mem.state.maybeWhen(orElse: () => true, loaded: (_) => false),
+                isLabelVisible: mem.state.maybeWhen(orElse: () => false, error: (_) => true),
                 label: const Image(
                   image: AssetImage(IMG_PREMIUM),
                   color: Colors.white,
@@ -98,7 +98,7 @@ class PracticePanel extends StatelessWidget {
                   width: smallBtnSize,
                   height: smallBtnSize,
                   background: btnBackgroundColor,
-                  onTap: mem.state.whenOrNull(loaded: (_) => onAnalytics) ?? onAnalytics, // TODO: Remove bypass...
+                  onTap: mem.state.whenOrNull(loaded: (_) => onAnalytics),
                   child: Icon(
                     Icons.bar_chart_rounded,
                     size: smallBtnIcon,

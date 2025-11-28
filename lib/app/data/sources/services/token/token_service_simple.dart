@@ -1,7 +1,8 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:uniceps/app/data/sources/services/token/token_contract.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
-class SimpleTokenService {
+class SimpleTokenService implements TokenContract {
   static const _accessTokenKey = 'access_token';
 
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
@@ -20,5 +21,17 @@ class SimpleTokenService {
 
   Future<void> deleteAccessToken() async {
     await _storage.delete(key: _accessTokenKey);
+  }
+
+  @override
+  Future<Session> getSession() {
+    // TODO: implement getSession
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setSession(Session s) {
+    // TODO: implement setSession
+    throw UnimplementedError();
   }
 }

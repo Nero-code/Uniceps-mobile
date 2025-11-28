@@ -13,5 +13,4 @@ class RoutineManagementCommands implements ICommand {
   Future<Either<Failure, List<Routine>>> updateRoutine(Routine routine) => _repo.updateRoutine(routine);
   Future<Either<Failure, List<Routine>>> setCurrentRoutine(Routine routine) => _repo.setCurrentRoutine(routine);
   Future<Either<Failure, List<Routine>>> deleteRoutine(Routine routine) => _repo.deleteRoutine(routine);
-  Future<Either<Failure, Unit>> shareRoutine(Routine routine, int userId) => _repo.shareRoutine(routine, userId);
 }

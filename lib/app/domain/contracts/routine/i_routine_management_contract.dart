@@ -9,5 +9,4 @@ abstract class IRoutineManagementContract {
   Future<Either<Failure, List<Routine>>> updateRoutine(Routine routine);
   Future<Either<Failure, List<Routine>>> deleteRoutine(Routine routine);
   Future<Either<Failure, List<Routine>>> setCurrentRoutine(Routine routine);
-  Future<Either<Failure, Unit>> shareRoutine(Routine routine, int userId);
 }
