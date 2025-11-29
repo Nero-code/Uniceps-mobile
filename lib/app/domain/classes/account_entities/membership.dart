@@ -8,6 +8,10 @@ class Membership {
   final bool isActive;
   final bool isGift;
 
+  bool get aboutToEnd => endDate.difference(DateTime.now()).inDays - 5 < 0;
+  int get daysLeft => endDate.difference(DateTime.now()).inDays;
+  int get totalDays => endDate.difference(startDate).inDays;
+
   const Membership({
     required this.planName,
     required this.planId,
