@@ -57,14 +57,20 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Scaffold(
               appBar: AppBar(
-                centerTitle: true,
-                backgroundColor: Theme.of(context).colorScheme.surface,
-                title: Text(APP_NAME,
-                    style: TextStyle(fontFamily: 'Playwrite', color: Theme.of(context).colorScheme.primary)),
-                // leading: const Center(
-                //   child: Image(image: AssetImage(APP_LOGO), height: 30, width: 30),
-                // ),
-              ),
+                  centerTitle: true,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  title: Text(APP_NAME,
+                      style: TextStyle(fontFamily: 'Playwrite', color: Theme.of(context).colorScheme.primary)),
+                  actions: [
+                    IconButton(
+                      iconSize: 25,
+                      onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
+                      icon: const Icon(
+                        Icons.settings,
+                        color: Colors.blueGrey,
+                      ),
+                    ),
+                  ]),
               body: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -88,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ))),
                                   error: (e) => () => print(e.getErrorMessage()),
                                   orElse: () => () {}),
-                              onSettings: () => Navigator.pushNamed(context, AppRoutes.settings),
+                              onMeasurement: () => Navigator.pushNamed(context, AppRoutes.measurements),
                               onAnalytics: () => Navigator.pushNamed(context, AppRoutes.performance),
                               mainIcon: state.maybeWhen(
                                 loading: () => const LoadingIndicator(),
@@ -100,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 loaded: (s) => const Icon(
                                   Icons.rocket_launch,
                                   size: 50,
-                                  color: Colors.amber,
+                                  color: Colors.green,
                                 ),
                                 error: (f) => const Icon(
                                   Icons.refresh,

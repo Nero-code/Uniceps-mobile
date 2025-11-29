@@ -5,7 +5,7 @@ class SettingsTile extends StatelessWidget {
     super.key,
     required this.icon,
     required this.title,
-    required this.subtitle,
+    this.subtitle = '',
     required this.iconsColor,
     this.backColor = Colors.white54,
     this.onPressed,

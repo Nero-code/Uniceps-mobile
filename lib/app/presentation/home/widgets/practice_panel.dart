@@ -10,13 +10,13 @@ class PracticePanel extends StatelessWidget {
     super.key,
     required this.mainIcon,
     required this.onPractice,
-    required this.onSettings,
+    required this.onMeasurement,
     this.onAnalytics,
     this.onStreak,
   });
   final Widget mainIcon;
   final VoidCallback onPractice;
-  final VoidCallback onSettings;
+  final VoidCallback onMeasurement;
   final VoidCallback? onAnalytics;
   final VoidCallback? onStreak;
 
@@ -102,7 +102,7 @@ class PracticePanel extends StatelessWidget {
                   child: Icon(
                     Icons.bar_chart_rounded,
                     size: smallBtnIcon,
-                    color: Colors.red,
+                    color: Colors.orange,
                   ),
                 ),
               ),
@@ -115,12 +115,12 @@ class PracticePanel extends StatelessWidget {
               width: smallBtnSize,
               height: smallBtnSize,
               background: btnBackgroundColor,
-              onTap: onSettings,
+              onTap: onMeasurement,
               child: Icon(
-                Icons.settings,
+                Icons.architecture,
                 size: smallBtnIcon,
                 // color: Colors.black54,
-                color: Colors.blueGrey.shade700,
+                color: Colors.red,
               ),
             ),
           ),
