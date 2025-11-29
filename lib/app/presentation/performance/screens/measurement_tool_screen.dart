@@ -17,12 +17,12 @@ const imgs = [
   MusclesImages.shoulder,
   MusclesImages.chest,
   MusclesImages.waist,
-  MusclesImages.lArm,
   MusclesImages.rArm,
-  MusclesImages.lThigh,
+  MusclesImages.lArm,
   MusclesImages.rThigh,
-  MusclesImages.lLeg,
+  MusclesImages.lThigh,
   MusclesImages.rLeg,
+  MusclesImages.lLeg,
   MusclesImages.hips,
 ];
 
