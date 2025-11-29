@@ -307,51 +307,50 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
     final local = AppLocalizations.of(context)!;
     const verticalGap = 5.0;
     child = SingleChildScrollView(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            textDirection: TextDirection.rtl,
-            children: [
-              MeasureWidget(image: MusclesImages.height, title: local.height, value: m.height),
-              MeasureWidget(image: MusclesImages.neck, title: local.nick, value: m.neck),
-              MeasureWidget(image: MusclesImages.shoulder, title: local.shoulders, value: m.shoulders),
-            ],
-          ),
-          const SizedBox(height: verticalGap),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            textDirection: TextDirection.rtl,
-            children: [
-              MeasureWidget(image: MusclesImages.lArm, title: local.lArm, value: m.lArm),
-              MeasureWidget(image: MusclesImages.chest, title: local.chest, value: m.chest),
-              MeasureWidget(image: MusclesImages.rArm, title: local.rArm, value: m.rArm),
-            ],
-          ),
-          const SizedBox(height: verticalGap),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            textDirection: TextDirection.rtl,
-            children: [
-              MeasureWidget(image: MusclesImages.lThigh, title: local.lThigh, value: m.lThigh),
-              MeasureWidget(image: MusclesImages.waist, title: local.waist, value: m.waist),
-              MeasureWidget(image: MusclesImages.rThigh, title: local.rThigh, value: m.rThigh),
-            ],
-          ),
-          const SizedBox(height: verticalGap),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            textDirection: TextDirection.rtl,
-            children: [
-              MeasureWidget(image: MusclesImages.lLeg, title: local.lLeg, value: m.lLeg), // rLeg
-              MeasureWidget(image: MusclesImages.hips, title: local.hips, value: m.hips),
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                MeasureWidget(image: MusclesImages.shoulder, title: local.shoulders, value: m.shoulders),
+                MeasureWidget(image: MusclesImages.neck, title: local.nick, value: m.neck),
+                MeasureWidget(image: MusclesImages.height, title: local.height, value: m.height),
+              ],
+            ),
+            const SizedBox(height: verticalGap),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                MeasureWidget(image: MusclesImages.rArm, title: local.lArm, value: m.lArm),
+                MeasureWidget(image: MusclesImages.chest, title: local.chest, value: m.chest),
+                MeasureWidget(image: MusclesImages.lArm, title: local.rArm, value: m.rArm),
+              ],
+            ),
+            const SizedBox(height: verticalGap),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                MeasureWidget(image: MusclesImages.rThigh, title: local.lThigh, value: m.lThigh),
+                MeasureWidget(image: MusclesImages.waist, title: local.waist, value: m.waist),
+                MeasureWidget(image: MusclesImages.lThigh, title: local.rThigh, value: m.rThigh),
+              ],
+            ),
+            const SizedBox(height: verticalGap),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                MeasureWidget(image: MusclesImages.rLeg, title: local.lLeg, value: m.lLeg), // rLeg
+                MeasureWidget(image: MusclesImages.hips, title: local.hips, value: m.hips),
 
-              MeasureWidget(image: MusclesImages.rLeg, title: local.rLeg, value: m.rLeg),
-            ],
-          ),
-          const SizedBox(height: verticalGap),
-          MeasureWidget(image: MusclesImages.weight, title: local.weight, isCm: false, value: m.weight),
-        ],
+                MeasureWidget(image: MusclesImages.lLeg, title: local.rLeg, value: m.rLeg),
+              ],
+            ),
+            const SizedBox(height: verticalGap),
+            MeasureWidget(image: MusclesImages.weight, title: local.weight, isCm: false, value: m.weight),
+          ],
+        ),
       ),
     );
   }

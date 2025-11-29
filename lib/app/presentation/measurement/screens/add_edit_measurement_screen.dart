@@ -40,264 +40,202 @@ class _AddEditMeasurementScreenState extends State<AddEditMeasurementScreen> {
           title: Text(intl.DateFormat('d/M/y').format(widget.m?.checkDate ?? DateTime.now())),
         ),
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                textDirection: TextDirection.rtl,
-                children: [
-                  MeasureWidget(
-                    image: MusclesImages.height,
-                    title: locale.height,
-                    value: measure['height'],
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (_) => SetMeasureDialog(
-                          title: locale.height,
-                          onPositive: (val) => setState(
-                                () => measure.addAll(
-                                  {"height": val},
-                                ),
-                              )),
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    MeasureWidget(
+                      image: MusclesImages.shoulder,
+                      title: locale.shoulders,
+                      value: measure['shoulders'],
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) => SetMeasureDialog(
+                            title: locale.shoulders,
+                            onPositive: (val) => setState(() => measure.addAll({"shoulders": val}))),
+                      ),
                     ),
-                  ),
-                  MeasureWidget(
-                    image: MusclesImages.neck,
-                    title: locale.nick,
-                    value: measure['neck'],
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (_) => SetMeasureDialog(
-                          title: locale.nick,
-                          onPositive: (val) => setState(
-                                () => measure.addAll(
-                                  {"neck": val},
-                                ),
-                              )),
+                    MeasureWidget(
+                      image: MusclesImages.neck,
+                      title: locale.nick,
+                      value: measure['neck'],
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) => SetMeasureDialog(
+                            title: locale.nick, onPositive: (val) => setState(() => measure.addAll({"neck": val}))),
+                      ),
                     ),
-                  ),
-                  MeasureWidget(
-                    image: MusclesImages.shoulder,
-                    title: locale.shoulders,
-                    value: measure['shoulders'],
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (_) => SetMeasureDialog(
-                          title: locale.shoulders,
-                          onPositive: (val) => setState(
-                                () => measure.addAll(
-                                  {"shoulders": val},
-                                ),
-                              )),
+                    MeasureWidget(
+                      image: MusclesImages.height,
+                      title: locale.height,
+                      value: measure['height'],
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) => SetMeasureDialog(
+                            title: locale.height, onPositive: (val) => setState(() => measure.addAll({"height": val}))),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: verticalGap),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                textDirection: TextDirection.rtl,
-                children: [
-                  MeasureWidget(
-                    image: MusclesImages.lArm,
-                    title: locale.lArm,
-                    value: measure['l_arm'],
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (_) => SetMeasureDialog(
-                          title: locale.lArm,
-                          onPositive: (val) => setState(
-                                () => measure.addAll(
-                                  {"l_arm": val},
-                                ),
-                              )),
+                  ],
+                ),
+                SizedBox(height: verticalGap),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    MeasureWidget(
+                      image: MusclesImages.rArm,
+                      title: locale.lArm,
+                      value: measure['l_arm'],
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) => SetMeasureDialog(
+                            title: locale.lArm, onPositive: (val) => setState(() => measure.addAll({"l_arm": val}))),
+                      ),
                     ),
-                  ),
-                  MeasureWidget(
-                    image: MusclesImages.chest,
-                    title: locale.chest,
-                    value: measure['chest'],
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (_) => SetMeasureDialog(
-                          title: locale.chest,
-                          onPositive: (val) => setState(
-                                () => measure.addAll(
-                                  {"chest": val},
-                                ),
-                              )),
+                    MeasureWidget(
+                      image: MusclesImages.chest,
+                      title: locale.chest,
+                      value: measure['chest'],
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) => SetMeasureDialog(
+                            title: locale.chest, onPositive: (val) => setState(() => measure.addAll({"chest": val}))),
+                      ),
                     ),
-                  ),
-                  MeasureWidget(
-                    image: MusclesImages.rArm,
-                    title: locale.rArm,
-                    value: measure['r_arm'],
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (_) => SetMeasureDialog(
-                          title: locale.rArm,
-                          onPositive: (val) => setState(
-                                () => measure.addAll(
-                                  {"r_arm": val},
-                                ),
-                              )),
+                    MeasureWidget(
+                      image: MusclesImages.lArm,
+                      title: locale.rArm,
+                      value: measure['r_arm'],
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) => SetMeasureDialog(
+                            title: locale.rArm, onPositive: (val) => setState(() => measure.addAll({"r_arm": val}))),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: verticalGap),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                textDirection: TextDirection.rtl,
-                children: [
-                  MeasureWidget(
-                    image: MusclesImages.lThigh,
-                    title: locale.lThigh,
-                    value: measure['l_thigh'],
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (_) => SetMeasureDialog(
-                          title: locale.lThigh,
-                          onPositive: (val) => setState(
-                                () => measure.addAll(
-                                  {"l_thigh": val},
-                                ),
-                              )),
+                  ],
+                ),
+                SizedBox(height: verticalGap),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    MeasureWidget(
+                      image: MusclesImages.rThigh,
+                      title: locale.lThigh,
+                      value: measure['l_thigh'],
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) => SetMeasureDialog(
+                            title: locale.lThigh,
+                            onPositive: (val) => setState(() => measure.addAll({"l_thigh": val}))),
+                      ),
                     ),
-                  ),
-                  MeasureWidget(
-                    image: MusclesImages.waist,
-                    title: locale.waist,
-                    value: measure['waist'],
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (_) => SetMeasureDialog(
-                          title: locale.waist,
-                          onPositive: (val) => setState(
-                                () => measure.addAll(
-                                  {"waist": val},
-                                ),
-                              )),
+                    MeasureWidget(
+                      image: MusclesImages.waist,
+                      title: locale.waist,
+                      value: measure['waist'],
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) => SetMeasureDialog(
+                            title: locale.waist, onPositive: (val) => setState(() => measure.addAll({"waist": val}))),
+                      ),
                     ),
-                  ),
-                  MeasureWidget(
-                    image: MusclesImages.rThigh,
-                    title: locale.rThigh,
-                    value: measure['r_thigh'],
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (_) => SetMeasureDialog(
-                          title: locale.rThigh,
-                          onPositive: (val) => setState(
-                                () => measure.addAll(
-                                  {"r_thigh": val},
-                                ),
-                              )),
+                    MeasureWidget(
+                      image: MusclesImages.lThigh,
+                      title: locale.rThigh,
+                      value: measure['r_thigh'],
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) => SetMeasureDialog(
+                            title: locale.rThigh,
+                            onPositive: (val) => setState(() => measure.addAll({"r_thigh": val}))),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: verticalGap),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                textDirection: TextDirection.rtl,
-                children: [
-                  MeasureWidget(
-                    image: MusclesImages.lLeg,
-                    title: locale.lLeg,
-                    value: measure['l_leg'],
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (_) => SetMeasureDialog(
-                          title: locale.lLeg,
-                          onPositive: (val) => setState(
-                                () => measure.addAll(
-                                  {"l_leg": val},
-                                ),
-                              )),
+                  ],
+                ),
+                SizedBox(height: verticalGap),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    MeasureWidget(
+                      image: MusclesImages.rLeg,
+                      title: locale.lLeg,
+                      value: measure['l_leg'],
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) => SetMeasureDialog(
+                            title: locale.lLeg, onPositive: (val) => setState(() => measure.addAll({"l_leg": val}))),
+                      ),
                     ),
-                  ),
-                  MeasureWidget(
-                    image: MusclesImages.hips,
-                    title: locale.hips,
-                    value: measure['hips'],
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (_) => SetMeasureDialog(
-                          title: locale.hips,
-                          onPositive: (val) => setState(
-                                () => measure.addAll(
-                                  {"hips": val},
-                                ),
-                              )),
+                    MeasureWidget(
+                      image: MusclesImages.hips,
+                      title: locale.hips,
+                      value: measure['hips'],
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) => SetMeasureDialog(
+                            title: locale.hips, onPositive: (val) => setState(() => measure.addAll({"hips": val}))),
+                      ),
                     ),
-                  ),
-                  MeasureWidget(
-                    image: MusclesImages.rLeg,
-                    title: locale.rLeg,
-                    value: measure['r_leg'],
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (_) => SetMeasureDialog(
-                          title: locale.rLeg,
-                          onPositive: (val) => setState(
-                                () => measure.addAll(
-                                  {"r_leg": val},
-                                ),
-                              )),
+                    MeasureWidget(
+                      image: MusclesImages.lLeg,
+                      title: locale.rLeg,
+                      value: measure['r_leg'],
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) => SetMeasureDialog(
+                            title: locale.rLeg, onPositive: (val) => setState(() => measure.addAll({"r_leg": val}))),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: verticalGap),
-              MeasureWidget(
-                image: MusclesImages.weight,
-                title: locale.weight,
-                isCm: false,
-                value: measure['weight'],
-                onPressed: () => showDialog(
-                  context: context,
-                  builder: (_) => SetMeasureDialog(
-                    title: locale.hips,
-                    onPositive: (val) => setState(() => measure.addAll(
-                          {"weight": val},
-                        )),
+                  ],
+                ),
+                SizedBox(height: verticalGap),
+                MeasureWidget(
+                  image: MusclesImages.weight,
+                  title: locale.weight,
+                  isCm: false,
+                  value: measure['weight'],
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (_) => SetMeasureDialog(
+                        title: locale.hips, onPositive: (val) => setState(() => measure.addAll({"weight": val}))),
                   ),
                 ),
-              ),
-              SizedBox(height: verticalGap * 3),
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width * .75,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
-                    onPressed: measure.isNotEmpty
-                        ? () async {
-                            final bloc = context.read<MeasurementBloc>();
-                            if (measure['id'] == null) {
-                              bloc.add(MeasurementEvent.createMeasurement(assemble(measure)));
-                            } else {
-                              bloc.add(MeasurementEvent.updateMeasurement(assemble(measure)));
+                SizedBox(height: verticalGap * 3),
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * .75,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
+                      onPressed: measure.isNotEmpty
+                          ? () async {
+                              final bloc = context.read<MeasurementBloc>();
+                              if (measure['id'] == null) {
+                                bloc.add(MeasurementEvent.createMeasurement(assemble(measure)));
+                              } else {
+                                bloc.add(MeasurementEvent.updateMeasurement(assemble(measure)));
+                              }
+                              final st = await bloc.stream.skip(1).first;
+                              st.maybeMap(
+                                dirty: (_) => Navigator.pop(context),
+                                error: (s) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content: Text(
+                                    locale.error,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor: Colors.red,
+                                )),
+                                orElse: () {},
+                              );
                             }
-                            final st = await bloc.stream.skip(1).first;
-                            st.maybeMap(
-                              dirty: (_) => Navigator.pop(context),
-                              error: (s) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(
-                                  locale.error,
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                                backgroundColor: Colors.red,
-                              )),
-                              orElse: () {},
-                            );
-                          }
-                        : null,
-                    child: Text(
-                      locale.save,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                    )),
-              ),
-            ],
+                          : null,
+                      child: Text(
+                        locale.save,
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      )),
+                ),
+              ],
+            ),
           ),
         ));
   }
