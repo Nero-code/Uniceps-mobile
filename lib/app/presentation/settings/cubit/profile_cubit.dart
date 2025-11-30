@@ -11,7 +11,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   final ProfileUsecases _commands;
   ProfileCubit(this._commands) : super(const ProfileState.initial());
   Future<void> getProfile() async {
-    emit(ProfileState.loading());
+    emit(const ProfileState.loading());
 
     final either = await _commands.getProfile();
     either.fold(
@@ -21,7 +21,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> saveProfile(Player p) async {
-    emit(ProfileState.loading());
+    emit(const ProfileState.loading());
     final either = await _commands.submitProfileData(p);
     either.fold(
       (l) => emit(ProfileState.error(l)),

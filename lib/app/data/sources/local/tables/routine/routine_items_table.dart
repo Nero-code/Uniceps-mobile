@@ -15,7 +15,7 @@ class RoutineItems extends Table {
 
   // Foreign Keys
   IntColumn get exerciseId =>
-      integer().references(Exercises, #id, onUpdate: KeyAction.cascade, onDelete: KeyAction.cascade)();
+      integer().references(Exercises, #apiId, onUpdate: KeyAction.cascade, onDelete: KeyAction.cascade)();
   IntColumn get dayId =>
       integer().references(DaysGroup, #id, onUpdate: KeyAction.cascade, onDelete: KeyAction.cascade)();
 }

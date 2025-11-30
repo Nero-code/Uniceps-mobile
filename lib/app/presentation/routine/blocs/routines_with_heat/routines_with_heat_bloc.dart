@@ -20,12 +20,14 @@ class RoutinesWithHeatBloc extends Bloc<RoutinesWithHeatEvent, RoutinesWithHeatS
         (r) => emit(_Loaded(r)),
       );
     });
-    on<_Import>((event, emit) async {
-      var importRoutine = _usecases.importRoutine();
-      await for (final res in importRoutine) {
-        emit(_Importing(result: res));
-      }
-    });
+    on<_Import>(
+      (event, emit) async {
+        var importRoutine = _usecases.importRoutine();
+        await for (final res in importRoutine) {
+          emit(_Importing(result: res));
+        }
+      },
+    );
     on<_Create>((event, emit) async {
       emit(const _Loading());
 

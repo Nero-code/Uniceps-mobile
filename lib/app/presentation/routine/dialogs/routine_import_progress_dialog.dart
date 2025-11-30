@@ -48,7 +48,10 @@ class RoutineImportProgressDialog extends StatelessWidget {
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red.shade300, foregroundColor: Colors.white),
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          context.read<RoutinesWithHeatBloc>().add(const RoutinesWithHeatEvent.getRoutines());
+                          Navigator.pop(context);
+                        },
                         child: Text(locale.cancel),
                       ),
                     if (result.stage == Stage.done)

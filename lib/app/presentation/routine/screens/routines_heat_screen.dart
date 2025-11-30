@@ -130,7 +130,7 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                                               context: context,
                                               builder: (context) => RoutineOptionsDialog(routineName: e.routine.name));
 
-                                          // print("selected option: $res");
+                                          // print("selected option: //");
                                           switch (res) {
                                             case Option.edit:
                                               _renameRoutine(e.routine.name, (name) {
@@ -213,7 +213,7 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                                 child: InkWell(
                                   onTap: canCreate
                                       ? () => _createRoutine(
-                                            "${locale.newRoutine} $routinesLength",
+                                            "${locale.newRoutine} ",
                                             (name) => context
                                                 .read<RoutinesWithHeatBloc>()
                                                 .add(RoutinesWithHeatEvent.create(name)),

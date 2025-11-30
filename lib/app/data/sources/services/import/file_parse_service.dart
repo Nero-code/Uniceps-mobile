@@ -8,8 +8,7 @@ class FileParseService {
   static const supportedVersion = 1;
 
   Future<UniFile> readFile() async {
-    const XTypeGroup typeGroup = XTypeGroup(label: 'documents', extensions: ['uni']);
-
+    const XTypeGroup typeGroup = XTypeGroup(label: 'Uniceps Files', extensions: ['unx']);
     final XFile? file = await openFile(acceptedTypeGroups: [typeGroup]);
 
     if (file == null) throw NoFileSelectedException();
