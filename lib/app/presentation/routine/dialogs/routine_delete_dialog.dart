@@ -21,19 +21,33 @@ class RoutineDeleteDialog extends StatelessWidget {
     return AlertDialog(
       icon: const Icon(Icons.delete, color: Colors.red, size: 40),
       title: Text("${locale.delete}${ar ? '؟' : '?'}"),
-      content: Text(locale.deleteAlertContent(routineName)),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(locale.cancel),
-        ),
-        ElevatedButton(
-            onPressed: () {
-              onConfirm();
-              Navigator.pop(context);
-            },
-            child: Text(locale.confirm)),
-      ],
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(locale.deleteAlertContent(routineName)),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(locale.cancel),
+                ),
+              ),
+              Expanded(
+                child: ElevatedButton(
+                    onPressed: () {
+                      onConfirm();
+                      Navigator.pop(context);
+                    },
+                    child: Text(locale.confirm)),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

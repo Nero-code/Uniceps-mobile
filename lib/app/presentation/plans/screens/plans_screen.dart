@@ -7,13 +7,14 @@ import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/widgets/alert_bar.dart';
 import 'package:uniceps/app/presentation/home/widgets/captain_uni_card.dart';
 import 'package:uniceps/app/presentation/plans/blocs/plans_bloc.dart';
+import 'package:uniceps/app/presentation/plans/dialogs/payment_confirm_dialog.dart';
+import 'package:uniceps/app/presentation/plans/dialogs/payment_method_dialog.dart';
 import 'package:uniceps/app/presentation/plans/widgets/plan_widget.dart';
 import 'package:uniceps/app/presentation/screens/error_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
-import 'package:url_launcher/url_launcher.dart';
 
 class PlansScreen extends StatefulWidget {
   const PlansScreen({super.key});
@@ -180,15 +181,7 @@ class _PlansScreenState extends State<PlansScreen> {
               child: Container(
                 color: Colors.white,
                 padding: const EdgeInsets.all(8.0),
-                child: BlocConsumer<PlansBloc, PlansState>(
-                  listener: (context, state) => state.whenOrNull(buyPlanAndReset: (paymentResponse) async {
-                    final res = await launchUrl(Uri.parse(paymentResponse.paymentUrl));
-                    if (res && context.mounted) {
-                      context.read<MembershipBloc>().add(const MembershipEvent.getCurrentPlan());
-                      Navigator.pop(context);
-                    }
-                    return null;
-                  }),
+                child: BlocBuilder<PlansBloc, PlansState>(
                   buildWhen: (previous, current) =>
                       current.maybeWhen(orElse: () => true, buyPlanAndReset: (res) => false),
                   builder: (context, state) {
@@ -197,38 +190,32 @@ class _PlansScreenState extends State<PlansScreen> {
                     return ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(backgroundColor: Colors.amber, foregroundColor: Colors.white),
                         onPressed: activateBtn
-                            ? () => showDialog(
-                                context: context,
-                                builder: (_) => BlocProvider.value(
-                                      value: context.read<PlansBloc>(),
-                                      child: AlertDialog(
-                                        title: Text(locale.buyPlanQuestion),
-                                        content: Text(locale.buyPlancontent(selectedPlan?.durationString ?? '')),
-                                        actions: [
-                                          ElevatedButton.icon(
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.amber, foregroundColor: Colors.white),
-                                            label: Text(
-                                              locale.ok,
-                                              style: const TextStyle(fontWeight: FontWeight.bold),
-                                            ),
-                                            icon: const Icon(Icons.done),
-                                            onPressed: selectedPlan != null
-                                                ? () async {
-                                                    context.read<PlansBloc>().add(PlansEvent.buyPlan(selectedPlan!));
-
-                                                    Navigator.pop(context);
-                                                  }
-                                                : null,
-                                          ),
-                                          TextButton.icon(
-                                            label: Text(locale.cancel),
-                                            icon: const Icon(Icons.close),
-                                            onPressed: () => Navigator.pop(context),
-                                          ),
-                                        ],
-                                      ),
-                                    ))
+                            ? () {
+                                showDialog<bool>(
+                                  context: context,
+                                  builder: (_) => BlocProvider.value(
+                                    value: context.read<PlansBloc>(),
+                                    child: PaymentConfirmationDialog(
+                                      planName: selectedPlan?.durationString ?? '',
+                                      onConfirm: selectedPlan != null
+                                          ? () {
+                                              context.read<PlansBloc>().add(PlansEvent.buyPlan(selectedPlan!));
+                                              Navigator.pushReplacement(
+                                                context,
+                                                DialogRoute(
+                                                  context: context,
+                                                  builder: (_) => BlocProvider.value(
+                                                    value: context.read<PlansBloc>(),
+                                                    child: const PaymentMethodDialog(),
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          : null,
+                                    ),
+                                  ),
+                                );
+                              }
                             : null,
                         label: Text(
                           locale.buyNow,

@@ -17,46 +17,61 @@ class RenameDayDialog extends StatelessWidget {
     return AlertDialog(
       icon: const Icon(Icons.edit),
       title: Text(locale.rename),
-      content: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          // contentPadding:
-          //     const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
-          hintText: oldDay.name,
-          hintStyle: const TextStyle(fontWeight: FontWeight.w300, color: Colors.grey),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.blueGrey.shade50), borderRadius: BorderRadius.circular(15)),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-          fillColor: Colors.blueGrey.shade50,
-          filled: true,
-          // hintText: initialName,
-          // hintStyle: TextStyle(color: Colors.grey),
-        ),
-        focusNode: _node,
-        onTap: () {
-          if (!_node.hasFocus) {
-            controller.selection = TextSelection(baseOffset: 0, extentOffset: controller.text.length);
-          }
-        },
-        onTapOutside: (_) => _node.unfocus(),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(locale.cancel),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            if (controller.text.isEmpty || controller.text == oldDay.name) {
-              return;
-            }
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              // contentPadding:
+              //     const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
+              hintText: oldDay.name,
+              hintStyle: const TextStyle(fontWeight: FontWeight.w300, color: Colors.grey),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blueGrey.shade50), borderRadius: BorderRadius.circular(15)),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+              fillColor: Colors.blueGrey.shade50,
+              filled: true,
+              // hintText: initialName,
+              // hintStyle: TextStyle(color: Colors.grey),
+            ),
+            focusNode: _node,
+            onTap: () {
+              if (!_node.hasFocus) {
+                controller.selection = TextSelection(baseOffset: 0, extentOffset: controller.text.length);
+              }
+            },
+            onTapOutside: (_) => _node.unfocus(),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(locale.cancel),
+                ),
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (controller.text.isEmpty || controller.text == oldDay.name) {
+                      return;
+                    }
 
-            onSubmit(oldDay.copyWith(name: controller.text));
-            Navigator.pop(context, oldDay.copyWith(name: controller.text));
-          },
-          child: Text(locale.ok),
-        ),
-      ],
+                    onSubmit(oldDay.copyWith(name: controller.text));
+                    Navigator.pop(context, oldDay.copyWith(name: controller.text));
+                  },
+                  child: Text(locale.ok),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

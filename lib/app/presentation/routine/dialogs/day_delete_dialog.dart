@@ -22,24 +22,37 @@ class DayDeleteDialog extends StatelessWidget {
         size: 40,
       ),
       title: Text("${locale.delete}${rtl ? '؟' : '?'} ${dayToDelete.name}"),
-      content: Text(locale.deleteAlertContent(dayToDelete.name)),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(locale.cancel),
-        ),
-        ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(Colors.red.shade300),
-            foregroundColor: const WidgetStatePropertyAll(Colors.white),
-          ),
-          onPressed: () {
-            onPositive(dayToDelete);
-            Navigator.pop(context);
-          },
-          child: Text(locale.ok),
-        ),
-      ],
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(locale.deleteAlertContent(dayToDelete.name)),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(locale.cancel),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Colors.red.shade300),
+                    foregroundColor: const WidgetStatePropertyAll(Colors.white),
+                  ),
+                  onPressed: () {
+                    onPositive(dayToDelete);
+                    Navigator.pop(context);
+                  },
+                  child: Text(locale.ok),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

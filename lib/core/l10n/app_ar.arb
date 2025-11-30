@@ -236,6 +236,10 @@
   "captainUni": "كابتن يوني",
 
   "buyNow": "اشتري الان",
+  
+  "paymentDialogContent": "اختر طريقة الدفع المناسبة لك",
+  "cash": "كاش",
+  "card": "بطاقة",
 
   "buyPlanQuestion": "شراء الباقة؟",
   "buyPlancontent": "هل انت متاكد من شراء باقة {planName}! المدة الزمنية ستضاف الى المدة القديمة ان وجدت",

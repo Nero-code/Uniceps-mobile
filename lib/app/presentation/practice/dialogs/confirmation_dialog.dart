@@ -11,20 +11,32 @@ class ConfirmationDialog extends StatelessWidget {
     final locale = AppLocalizations.of(context)!;
     return AlertDialog(
       title: Text(locale.finish),
-      content: Text(locale.finishAlertContent),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context, false),
-          child: Text(locale.cancel),
-        ),
-        // ElevatedButton(onPressed: () => Navigator.pop(context, true), child: Text(locale.confirm)),
-        ElevatedButton(
-            onPressed: () {
-              onConfirm();
-              Navigator.pop(context);
-            },
-            child: Text(locale.confirm)),
-      ],
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(locale.finishAlertContent),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: Text(locale.cancel),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton(
+                    onPressed: () {
+                      onConfirm();
+                      Navigator.pop(context);
+                    },
+                    child: Text(locale.confirm)),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

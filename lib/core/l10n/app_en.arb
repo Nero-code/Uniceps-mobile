@@ -238,6 +238,10 @@
 
   "buyNow": "Buy Now",
 
+  "paymentDialogContent": "Choose your preffered payment method",
+  "cash": "Cash",
+  "card": "Card",
+
   "buyPlanQuestion": "Buy Plan?",
   "buyPlancontent": "Are you sure you want to buy {planName}! the durations will accumilate if previous plan is present",
   "@buyPlanContent": {
