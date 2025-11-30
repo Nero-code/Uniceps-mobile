@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
-import 'package:uniceps/app/presentation/settings/cubit/profile_cubit.dart';
+import 'package:uniceps/app/presentation/settings/cubits/profile/profile_cubit.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';

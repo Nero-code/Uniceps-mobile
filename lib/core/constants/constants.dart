@@ -163,6 +163,7 @@ const API_V2 = r"uniceps.runasp.net";
 
 /// https://trio-verse.com
 const URL = "https://trio-verse.com";
+const TELEGRAM = "https://t.me/uniceps_bot";
 const HTTP_REFRESH = "/refresh";
 const HTTP_HANDSHAKE = "/handshake";
 const HTTP_GUEST_MODE = "/guest";

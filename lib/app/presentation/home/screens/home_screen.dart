@@ -16,6 +16,7 @@ import 'package:uniceps/app/presentation/home/widgets/practice_panel.dart';
 import 'package:uniceps/app/presentation/home/widgets/routine_skeleton.dart';
 import 'package:uniceps/app/presentation/practice/screens/practice_screen.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_with_heat.dart';
+import 'package:uniceps/app/presentation/settings/dialogs/qr_alert_dialog.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
@@ -61,10 +62,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   title: Text(APP_NAME,
                       style: TextStyle(fontFamily: 'Playwrite', color: Theme.of(context).colorScheme.primary)),
+                  leading: IconButton(
+                    onPressed: () => showDialog(context: context, builder: (_) => QrAlertDialog()),
+                    icon: const Icon(Icons.qr_code_2_outlined),
+                    color: Colors.blueGrey,
+                  ),
                   actions: [
                     IconButton(
                       iconSize: 25,
-                      onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
+                      onPressed: () => Navigator.pushNamed(context, AppRoutes.plans),
                       icon: const Icon(
                         Icons.settings,
                         color: Colors.blueGrey,

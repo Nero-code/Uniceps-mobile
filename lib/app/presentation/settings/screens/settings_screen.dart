@@ -19,7 +19,9 @@ class SettingsScreen extends StatelessWidget {
     final locale = AppLocalizations.of(context)!;
     // final screenSize = MediaQuery.sizeOf(context);
     return Scaffold(
-      appBar: AppBar(title: Text(locale.scrTitleSettings)),
+      appBar: AppBar(
+        title: Text(locale.scrTitleSettings),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
