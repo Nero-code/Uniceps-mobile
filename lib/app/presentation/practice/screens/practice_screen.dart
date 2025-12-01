@@ -46,9 +46,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
         // Closing-Session State
         // When: (previous, current) => current is NoActiveSessionState,
         listenWhen: (previous, current) => current.maybeWhen(orElse: () => false, noActiveSession: () => true),
-        listener: (context, state) async {
-          await showDialog(context: context, builder: (context) => const SessionCompleteDialog());
-          if (context.mounted) Navigator.pop(context);
+        listener: (context, state) {
+          showDialog(context: context, builder: (context) => const SessionCompleteDialog());
         },
         // --------------------------------------------------------
         buildWhen: (previous, current) => current.maybeWhen(orElse: () => false, loaded: (session) => true),

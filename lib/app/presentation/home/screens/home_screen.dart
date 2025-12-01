@@ -249,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           child: const PracticeScreen(),
                                         ),
                                       ));
-                                  await panelController.close();
+                                  panelController.close();
                                 },
                               )),
                         ],

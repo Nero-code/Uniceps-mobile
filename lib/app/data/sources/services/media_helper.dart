@@ -54,12 +54,12 @@ class ImageMediaHelper implements MediaHelper {
       for (var imageUrl in imageUrls) {
         logger.d("is image available?");
         if (imagesCache.get(imageUrl) == null) {
-          logger.d("NO!");
+          logger.d("NO!: $imageUrl");
           final res = await client.get(Uri.parse(imageUrl));
           if (res.statusCode == 200) {
             await imagesCache.put(imageUrl, res.bodyBytes);
           } else {
-            logger.e('Internet cut off suddenly');
+            logger.e('Internet cut off suddenly: ${res.body}');
             throw NoInternetException();
           }
         }

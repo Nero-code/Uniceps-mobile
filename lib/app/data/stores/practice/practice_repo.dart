@@ -105,6 +105,7 @@ class PracticeRepo implements IPracticeContract {
     try {
       final res = await _localSource.getCurrentRoutineWithHeat();
       if (res.head != null) {
+        res.head!.daysDto.sort((a, b) => a.index.compareTo(b.index));
         return Right(Tuple2(res.head!.toEntity(), res.tail));
       }
       return const Left(EmptyCacheFailure(errorMessage: ""));

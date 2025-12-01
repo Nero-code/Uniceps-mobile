@@ -22,28 +22,58 @@ class _AddEditMeasurementScreenState extends State<AddEditMeasurementScreen> {
   final verticalGap = 5.0;
 
   final Map<String, dynamic> measure = {};
+  DateTime selectedDate = DateTime.now();
 
   @override
   void initState() {
     super.initState();
     if (widget.m != null) {
       measure.addAll(MeasurementModel.fromEntity(widget.m!).toJson());
+      selectedDate = widget.m!.checkDate;
+    }
+  }
+
+  Future<void> _pickDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate, // default today
+      firstDate: DateTime(2000), // earliest allowed date
+      lastDate: DateTime(2050), // latest allowed date
+    );
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(intl.DateFormat('d/M/y').format(widget.m?.checkDate ?? DateTime.now())),
+          title: InkWell(
+            onTap: _pickDate,
+            borderRadius: BorderRadius.circular(15),
+            child: Ink(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Text(intl.DateFormat('d-M-y').format(selectedDate)),
+            ),
+          ),
         ),
         body: SingleChildScrollView(
           child: Directionality(
             textDirection: TextDirection.ltr,
             child: Column(
               children: [
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -258,7 +288,7 @@ class _AddEditMeasurementScreenState extends State<AddEditMeasurementScreen> {
         waist: json['waist'] ?? 0.0,
         chest: json['chest'] ?? 0.0,
         hips: json['hips'] ?? 0.0,
-        checkDate: DateTime.tryParse(json['check_date'] ?? '') ?? DateTime.now(),
+        checkDate: selectedDate,
         version: json['version'] ?? 0,
         isSynced: json['is_synced'] ?? false,
       );

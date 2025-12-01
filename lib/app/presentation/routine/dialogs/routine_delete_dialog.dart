@@ -25,9 +25,7 @@ class RoutineDeleteDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(locale.deleteAlertContent(routineName)),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Row(
             children: [
               Expanded(
@@ -36,8 +34,10 @@ class RoutineDeleteDialog extends StatelessWidget {
                   child: Text(locale.cancel),
                 ),
               ),
+              const SizedBox(width: 10),
               Expanded(
                 child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
                     onPressed: () {
                       onConfirm();
                       Navigator.pop(context);

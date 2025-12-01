@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/routine_models/extensions.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
 import 'package:uniceps/app/data/models/routine_result.dart';
@@ -16,16 +17,19 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
   final IRoutineManagementLocalSourceContract _localSource;
   final FileParseService _fileParseService;
   final MediaHelper _mediaHelper;
+  final Logger _logger;
 
   final List<({Routine routine, RoutineHeat heat})> routines = [];
 
-  RoutineWithHeatRepo({
-    required IRoutineManagementLocalSourceContract localSource,
-    required FileParseService fileParseService,
-    required MediaHelper mediaHelper,
-  })  : _localSource = localSource,
+  RoutineWithHeatRepo(
+      {required IRoutineManagementLocalSourceContract localSource,
+      required FileParseService fileParseService,
+      required MediaHelper mediaHelper,
+      required Logger logger})
+      : _localSource = localSource,
         _fileParseService = fileParseService,
-        _mediaHelper = mediaHelper;
+        _mediaHelper = mediaHelper,
+        _logger = logger;
 
   @override
   Future<Either<Failure, List<({RoutineHeat heat, Routine routine})>>> getAllRoutinesWithHeat() async {
@@ -47,6 +51,7 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
       routines.add((routine: res.toEntity(), heat: RoutineHeat.cold(res.name)));
       return Right(routines);
     } catch (e) {
+      _logger.e('Error: create Routine', error: e);
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
   }
@@ -58,13 +63,13 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
 
       for (int i = 0; i < routines.length; i++) {
         if (routines[i].routine.id == routine.id) {
-          routines.removeAt(i);
-          routines.insert(i, (routine: routine, heat: routines[i].heat));
+          routines[i] = (routine: routine, heat: routines[i].heat);
           break;
         }
       }
       return Right(routines);
     } catch (e) {
+      _logger.e('Error: update Routine', error: e);
       return Left(DatabaseFailure(errorMsg: ""));
     }
   }
@@ -130,12 +135,14 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
       yield const RoutineResult(progress: 1, stage: Stage.done);
       return;
     } on NoInternetException {
+      print('NoInternetException');
       yield const RoutineResult(
         progress: -1,
         stage: Stage.error,
         error: FileParseFailure.fOffline(),
       );
     } on OfflineFailure {
+      print('OfflineFailure');
       yield const RoutineResult(
         progress: -1,
         stage: Stage.error,
@@ -166,6 +173,7 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
         error: FileParseFailure.unsupportedVersion(),
       );
     } catch (e) {
+      print(e.toString());
       yield const RoutineResult(
         progress: -1,
         stage: Stage.error,

@@ -34,15 +34,17 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
   Future<RoutineDto> createRoutine(String routineName) async {
     _logger.t("create routine => inside local source");
     final id = await _database.managers.routines.create((o) => o(name: routineName));
-    final routine = await _database.managers.routines.filter((f) => f.id(id)).getSingle();
+    final routine = await _database.managers.routines.filter((f) => f.id.equals(id)).getSingle();
     _logger.t("create routine => inside local source finished");
     return RoutineDto.fromTable(routine);
   }
 
   @override
   Future<RoutineDto> updateRoutine(RoutineDto dto) async {
-    await (_database.update(_database.routines)..where((f) => f.id.equals(dto.id!)))
-        .write(RoutinesCompanion.custom(name: Constant(dto.name)));
+    await (_database.update(_database.routines)..where((f) => f.id.equals(dto.id!))).write(
+      RoutinesCompanion.custom(name: Constant(dto.name)),
+    );
+
     return dto;
   }
 

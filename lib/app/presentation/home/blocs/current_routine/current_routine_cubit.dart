@@ -15,12 +15,12 @@ class CurrentRoutineCubit extends Cubit<CurrentRoutineState> {
         super(const _Initial());
 
   Future<void> getCurrentRoutine() async {
-    emit(const _Loading());
+    emit(const CurrentRoutineState.loading());
 
     final either = await _commands.getCurrentRoutineWithHeat();
     either.fold(
-      (l) => emit(_Error(l)),
-      (r) => emit(_Loaded(r.head, r.tail!)),
+      (l) => emit(CurrentRoutineState.error(l)),
+      (r) => emit(CurrentRoutineState.loaded(r.head, r.tail!)),
     );
   }
 }

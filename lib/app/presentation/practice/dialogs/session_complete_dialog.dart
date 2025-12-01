@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
+import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SessionCompleteDialog extends StatelessWidget {
   const SessionCompleteDialog({super.key});
@@ -63,7 +66,10 @@ class SessionCompleteDialog extends StatelessWidget {
                         // backgroundColor: Color.fromARGB(255, 94, 147, 160),
                         backgroundColor: Colors.amber,
                         foregroundColor: Colors.white),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      context.read<CurrentRoutineCubit>().getCurrentRoutine();
+                      Navigator.popUntil(context, (route) => route.settings.name == AppRoutes.home);
+                    },
                     child: Text(locale.great),
                   ),
                 ),

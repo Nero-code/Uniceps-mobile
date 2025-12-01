@@ -145,7 +145,7 @@ Future<void> init() async {
   sl.registerLazySingleton<IRoutineManagementContract>(
       () => RoutineManagementRepo(localSource: sl(), internet: sl(), clientHelper: sl()));
   sl.registerLazySingleton<IRoutineWithHeatContract>(
-      () => RoutineWithHeatRepo(localSource: sl(), mediaHelper: sl(), fileParseService: sl()));
+      () => RoutineWithHeatRepo(localSource: sl(), mediaHelper: sl(), fileParseService: sl(), logger: sl()));
   sl.registerLazySingleton<IRoutineDaysContract>(() => RoutineDaysRepo(localSource: sl(), logger: sl()));
   sl.registerLazySingleton<IRoutineItemsContract>(() => RoutineItemsRepo(localSource: sl(), mediaHelper: sl()));
   sl.registerLazySingleton<IRoutineSetsContract>(() => RoutineSetsRepo(localSource: sl(), logger: sl()));

@@ -182,7 +182,7 @@ class RoutineWithHeat extends StatelessWidget {
                     ),
                     Text(
                       '${heat.sessionCount}',
-                      style: const TextStyle(fontWeight: FontWeight.w300, fontSize: 18, color: Colors.black54),
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black54),
                     ),
                   ],
                 ),

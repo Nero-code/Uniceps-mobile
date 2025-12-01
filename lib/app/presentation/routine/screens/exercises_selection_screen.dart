@@ -62,6 +62,37 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen> wit
                       return Text("${widget.dayName}: ${state.selected.length + widget.presentExerciseIds.length}");
                     },
                   ),
+                  actions: [
+                    BlocBuilder<ExercisesV2SelectionCubit, ExercisesV2SelectionState>(builder: (context, state) {
+                      return IconButton(
+                        onPressed: () async {
+                          context
+                              .read<ItemsEditBloc>()
+                              .add(AddRoutineItemsEvent(dayId: widget.dayId, items: state.selected));
+                          showDialog(
+                              context: context,
+                              builder: (_) => BlocProvider.value(
+                                    value: context.read<ItemsEditBloc>(),
+                                    child: AlertDialog(
+                                      content: BlocConsumer<ItemsEditBloc, ItemsEditState>(
+                                        listenWhen: (previous, current) =>
+                                            previous is ItemsDownloadingState && current is ItemsEditLoadedState,
+                                        listener: (context, state) => Navigator.pop(context),
+                                        builder: (context, state) {
+                                          return ProgressWidget(
+                                              percent: state is ItemsDownloadingState ? state.progress : 0);
+                                        },
+                                      ),
+                                    ),
+                                  ));
+                          // Navigator.pop(context,
+                          //   state.selected.isEmpty ? null : state.selected);
+                        },
+                        icon: Icon(Icons.done_all_rounded),
+                        color: Theme.of(context).colorScheme.primary,
+                      );
+                    }),
+                  ],
                   bottom: TabBar(
                     tabAlignment: TabAlignment.start,
                     controller: _tabController,
@@ -71,39 +102,39 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen> wit
                     ],
                   ),
                 ),
-                floatingActionButton: BlocBuilder<ExercisesV2SelectionCubit, ExercisesV2SelectionState>(
-                  builder: (context, state) {
-                    return FloatingActionButton(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Colors.white,
-                      heroTag: "exercises FAB",
-                      onPressed: () async {
-                        context
-                            .read<ItemsEditBloc>()
-                            .add(AddRoutineItemsEvent(dayId: widget.dayId, items: state.selected));
-                        showDialog(
-                            context: context,
-                            builder: (_) => BlocProvider.value(
-                                  value: context.read<ItemsEditBloc>(),
-                                  child: AlertDialog(
-                                    content: BlocConsumer<ItemsEditBloc, ItemsEditState>(
-                                      listenWhen: (previous, current) =>
-                                          previous is ItemsDownloadingState && current is ItemsEditLoadedState,
-                                      listener: (context, state) => Navigator.pop(context),
-                                      builder: (context, state) {
-                                        return ProgressWidget(
-                                            percent: state is ItemsDownloadingState ? state.progress : 0);
-                                      },
-                                    ),
-                                  ),
-                                ));
-                        // Navigator.pop(context,
-                        //   state.selected.isEmpty ? null : state.selected);
-                      },
-                      child: const Icon(Icons.done),
-                    );
-                  },
-                ),
+                // floatingActionButton: BlocBuilder<ExercisesV2SelectionCubit, ExercisesV2SelectionState>(
+                //   builder: (context, state) {
+                //     return FloatingActionButton(
+                //       backgroundColor: Theme.of(context).colorScheme.primary,
+                //       foregroundColor: Colors.white,
+                //       heroTag: "exercises FAB",
+                //       onPressed: () async {
+                //         context
+                //             .read<ItemsEditBloc>()
+                //             .add(AddRoutineItemsEvent(dayId: widget.dayId, items: state.selected));
+                //         showDialog(
+                //             context: context,
+                //             builder: (_) => BlocProvider.value(
+                //                   value: context.read<ItemsEditBloc>(),
+                //                   child: AlertDialog(
+                //                     content: BlocConsumer<ItemsEditBloc, ItemsEditState>(
+                //                       listenWhen: (previous, current) =>
+                //                           previous is ItemsDownloadingState && current is ItemsEditLoadedState,
+                //                       listener: (context, state) => Navigator.pop(context),
+                //                       builder: (context, state) {
+                //                         return ProgressWidget(
+                //                             percent: state is ItemsDownloadingState ? state.progress : 0);
+                //                       },
+                //                     ),
+                //                   ),
+                //                 ));
+                //         // Navigator.pop(context,
+                //         //   state.selected.isEmpty ? null : state.selected);
+                //       },
+                //       child: const Icon(Icons.done),
+                //     );
+                //   },
+                // ),
                 body: TabBarView(
                   controller: _tabController,
                   children: state.groups

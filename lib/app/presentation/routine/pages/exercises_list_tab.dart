@@ -52,7 +52,7 @@ class _ExercisesListTabState extends State<ExercisesListTab> with AutomaticKeepA
                 return Stack(
                   children: [
                     ExerciseGridWidget(
-                      isSelected: selectedIds.contains(state.list[index].apiId),
+                      isSelected: isPresent || selectedIds.contains(state.list[index].apiId),
                       exercise: state.list[index],
                       index: index,
                     ),
@@ -84,10 +84,14 @@ class _ExercisesListTabState extends State<ExercisesListTab> with AutomaticKeepA
                       ),
                     ),
                     if (isPresent)
-                      const Positioned(
-                        top: 0.0,
-                        right: 0.0,
-                        child: Icon(Icons.done_outline_rounded),
+                      Positioned(
+                        top: 10.0,
+                        right: 10.0,
+                        child: Icon(
+                          Icons.done,
+                          size: 20,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
                       ),
                   ],
                 );

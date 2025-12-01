@@ -307,7 +307,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
         }
 
         // Get latest session and map to its day
-        if (newestSessionDate.difference(range.last).inHours < 0) {
+        if (newestSessionDate.difference(range.last).inSeconds < 0) {
           newestSessionDate = range.last;
           lastDayId = day.id;
         }

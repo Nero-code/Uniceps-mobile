@@ -213,7 +213,7 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                                 child: InkWell(
                                   onTap: canCreate
                                       ? () => _createRoutine(
-                                            "${locale.newRoutine} ",
+                                            "${locale.newRoutine} $routinesLength",
                                             (name) => context
                                                 .read<RoutinesWithHeatBloc>()
                                                 .add(RoutinesWithHeatEvent.create(name)),
