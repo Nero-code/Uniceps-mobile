@@ -31,18 +31,18 @@ class RoutineTableParser {
 
   RoutineDto toDto() {
     List<RoutineDayDto> routineDays = [];
-    print("found routine");
+    // debugPrint("found routine");
     for (final dayTable in days) {
-      print("found day");
+      // debugPrint("found day");
       //
       List<RoutineItemDto> dayItems = [];
       for (final itemTable in items) {
-        print("found item");
+        // debugPrint("found item");
         if (itemTable.dayId == dayTable.id) {
           //
           List<RoutineSetDto> itemSets = [];
           for (final setTable in sets) {
-            print("found set");
+            // debugPrint("found set");
             if (setTable.routineItemId == itemTable.id) {
               itemSets.add(RoutineSetDto.fromTable(setTable));
             }
@@ -64,13 +64,13 @@ class RoutineTableParser {
       final dayDto = RoutineDayDto.fromTable(dayTable, dayItems);
       routineDays.add(dayDto);
     }
-    print(routine.name);
-    for (var element in routineDays) {
-      print(element.name);
-      for (var item in element.items) {
-        print(item.exerciseV2Dto.name);
-      }
-    }
+    // debugPrint(routine.name);
+    // for (var element in routineDays) {
+    //   // debugPrint(element.name);
+    //   for (var item in element.items) {
+    //     // debugPrint(item.exerciseV2Dto.name);
+    //   }
+    // }
     return RoutineDto.fromTable(routine, routineDays);
   }
 }

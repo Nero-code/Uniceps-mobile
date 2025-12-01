@@ -12,8 +12,7 @@ class StopwatchCubit extends Cubit<StopwatchState> {
   Timer? _timer;
   Duration? _duration;
   final SharedPreferences prefs;
-  StopwatchCubit({required this.prefs})
-      : super(const StopwatchState(time: "00:00:00", isRunning: false));
+  StopwatchCubit({required this.prefs}) : super(const StopwatchState(time: "00:00:00", isRunning: false));
 
   void getStopwatchTime() {
     final time = prefs.getString('time');
@@ -41,11 +40,7 @@ class StopwatchCubit extends Cubit<StopwatchState> {
   void stopStopwatch() async {
     _stopwatch.stop();
     _timer?.cancel();
-    await prefs.setString("time",
-        formatDuration(_stopwatch.elapsed + (_duration ?? Duration.zero)));
-
-    // emit(StopwatchState(
-    //     time: formatDuration(_stopwatch.elapsed), isRunning: false));
+    await prefs.setString("time", formatDuration(_stopwatch.elapsed + (_duration ?? Duration.zero)));
   }
 
   void resetStopwatch() async {
@@ -54,10 +49,8 @@ class StopwatchCubit extends Cubit<StopwatchState> {
     _stopwatch.reset();
     _duration = null;
 
-    await prefs.setString("time",
-        formatDuration(_stopwatch.elapsed + (_duration ?? Duration.zero)));
-    emit(StopwatchState(
-        time: formatDuration(_stopwatch.elapsed), isRunning: true));
+    await prefs.setString("time", formatDuration(_stopwatch.elapsed + (_duration ?? Duration.zero)));
+    emit(StopwatchState(time: formatDuration(_stopwatch.elapsed), isRunning: true));
   }
 
   String formatDuration(Duration duration) {
@@ -71,11 +64,9 @@ class StopwatchCubit extends Cubit<StopwatchState> {
 
   @override
   Future<void> close() async {
-    print("Closed Stopwatch Cubit!!!");
     _stopwatch.stop();
     _timer?.cancel();
-    await prefs.setString("time",
-        formatDuration(_stopwatch.elapsed + (_duration ?? Duration.zero)));
+    await prefs.setString("time", formatDuration(_stopwatch.elapsed + (_duration ?? Duration.zero)));
     return super.close();
   }
 }

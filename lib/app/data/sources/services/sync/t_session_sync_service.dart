@@ -30,15 +30,15 @@ class TSessionSyncService implements TSessionSyncContract {
 
   @override
   void start() {
-    // _logger.t('TSession SyncService Starting!');
-    // _init();
+    _logger.t('TSession SyncService Starting!');
+    _init();
   }
 
   @override
   void dispose() async {
-    // if (!queue.isClosed) {
-    //   await queue.close();
-    // }
+    if (!queue.isClosed) {
+      await queue.close();
+    }
   }
 
   void _init() async {

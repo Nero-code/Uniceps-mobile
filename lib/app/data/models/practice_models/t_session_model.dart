@@ -7,20 +7,32 @@ import 'package:uniceps/app/data/models/practice_models/extensions.dart';
 part 't_session_model.g.dart';
 
 @JsonSerializable(explicitToJson: true, fieldRename: FieldRename.snake)
-class TSessionModel extends TSession {
+class TSessionModel {
+  final int? id;
+  final int dayId;
+  final String dayName;
   final List<TLogModel> logs;
+  final DateTime createdAt;
+  final DateTime? finishedAt;
+
+  final double progress;
+
+  final int? apiId;
+  final int version;
+  final bool isSynced;
+
   const TSessionModel({
-    required super.id,
-    required super.dayId,
-    required super.dayName,
+    required this.id,
+    required this.dayId,
+    required this.dayName,
     required this.logs,
-    required super.createdAt,
-    required super.finishedAt,
-    required super.progress,
-    required super.apiId,
-    required super.version,
-    required super.isSynced,
-  }) : super(logs: logs);
+    required this.createdAt,
+    required this.finishedAt,
+    required this.progress,
+    required this.apiId,
+    required this.version,
+    required this.isSynced,
+  });
 
   factory TSessionModel.fromTable(db.TSession table, List<db.TLog> logs) => TSessionModel(
         id: table.tsId,
@@ -49,6 +61,16 @@ class TSessionModel extends TSession {
       apiId: e.apiId,
       version: e.version,
       isSynced: e.isSynced);
+
+  TSession toEntity() => TSession(
+        id: id,
+        dayId: dayId,
+        dayName: dayName,
+        logs: logs,
+        apiId: apiId,
+        createdAt: createdAt,
+        finishedAt: finishedAt,
+      );
 
   TSessionModel copywith({
     int? id,

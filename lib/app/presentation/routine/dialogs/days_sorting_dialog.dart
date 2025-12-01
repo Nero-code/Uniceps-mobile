@@ -53,13 +53,10 @@ class _DaysSortingDialogState extends State<DaysSortingDialog> {
                   ))
               .toList(),
           onReorder: (oldIndex, newIndex) {
-            print("onReorder: $oldIndex : $newIndex");
             final item = reorderedList.removeAt(oldIndex);
 
-            print("onReorder 1: $reorderedList");
             reorderedList.insert(newIndex - (newIndex > oldIndex ? 1 : 0), item);
 
-            print("onReorder 2: $reorderedList");
             setState(() {});
           },
         ),

@@ -254,7 +254,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                           case 1: // reorder
                                             _reorderDays(
                                               (sortedDays) {
-                                                print("Added Event: DaysReorder");
                                                 BlocProvider.of<DaysEditBloc>(context).add(
                                                     ReorderDaysEvent(newOrder: sortedDays, version: state.version + 1));
                                               },
@@ -272,8 +271,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                             break;
                                           default:
                                         }
-
-                                        print(res);
                                       },
                                     ),
                                   ),

@@ -11,7 +11,7 @@ class WheelScrollDemo extends StatelessWidget {
           itemExtent: 120, // height of each item
           perspective: 0.003, // controls 3D depth
           diameterRatio: 3.0, // how “curved” the wheel looks
-          physics: FixedExtentScrollPhysics(),
+          physics: const FixedExtentScrollPhysics(),
           childDelegate: ListWheelChildBuilderDelegate(
             builder: (context, index) {
               return Card(
@@ -22,7 +22,7 @@ class WheelScrollDemo extends StatelessWidget {
                 child: Center(
                   child: Text(
                     "Item $index",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -52,7 +52,7 @@ class HorizontalWheelDemo extends StatelessWidget {
             itemExtent: 120,
             perspective: 0.003,
             diameterRatio: 2.0,
-            physics: FixedExtentScrollPhysics(),
+            physics: const FixedExtentScrollPhysics(),
             childDelegate: ListWheelChildBuilderDelegate(
               builder: (context, index) {
                 return RotatedBox(
@@ -65,7 +65,7 @@ class HorizontalWheelDemo extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "Item $index",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 24,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

@@ -35,7 +35,7 @@ class PerformanceRepo implements IPerformanceContract {
   Future<Either<PerformanceFailure, SessionsReport>> getSessionsReport(int routineId) async {
     try {
       final res = await tSessionsLocalSource.getSessionsByRoutine(routineId);
-      sessionsBuffer.addAll({routineId: res});
+      sessionsBuffer.addAll({routineId: res.map((e) => e.toEntity()).toList()});
     } on EmptyCacheExeption {
       return const Left(PerformanceFailure.noValues());
     } catch (e) {

@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: Text(APP_NAME,
                       style: TextStyle(fontFamily: 'Playwrite', color: Theme.of(context).colorScheme.primary)),
                   leading: IconButton(
-                    onPressed: () => showDialog(context: context, builder: (_) => QrAlertDialog()),
+                    onPressed: () => showDialog(context: context, builder: (_) => const QrAlertDialog()),
                     icon: const Icon(Icons.qr_code_2_outlined),
                     color: Colors.blueGrey,
                   ),
@@ -98,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 value: context.read<StopwatchCubit>()..startStopWatch(),
                                                 child: const PracticeScreen(),
                                               ))),
+                                  // ignore: avoid_print
                                   error: (e) => () => print(e.getErrorMessage()),
                                   orElse: () => () {}),
                               onMeasurement: () => Navigator.pushNamed(context, AppRoutes.measurements),

@@ -34,7 +34,7 @@ class _PerspectiveListState extends State<PerspectiveList> {
                   opacity: scale,
                   child: Container(
                     height: 150,
-                    margin: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                    margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                     decoration: BoxDecoration(
                       color: Colors.blue.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(16),
@@ -42,7 +42,7 @@ class _PerspectiveListState extends State<PerspectiveList> {
                     child: Center(
                       child: Text(
                         "Item $index",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 24,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

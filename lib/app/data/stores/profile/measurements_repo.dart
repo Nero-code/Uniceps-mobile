@@ -60,7 +60,7 @@ class MeasurementsRepo implements IMeasurementContract {
       buffer.removeWhere((e) => e.id == m.id);
       return const Right(unit);
     } catch (e) {
-      return const Left(const MeasurementFailure.msDbFailure());
+      return const Left(MeasurementFailure.msDbFailure());
     }
   }
 }

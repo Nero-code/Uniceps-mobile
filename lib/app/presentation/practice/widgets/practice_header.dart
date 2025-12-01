@@ -41,7 +41,7 @@ class PracticeHeader extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.exercise.name, style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(item.exercise.name, style: const TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 5),
                   LinearProgressIndicator(
                     value: item.sets.isNotEmpty ? logs.length / item.sets.length : 0,

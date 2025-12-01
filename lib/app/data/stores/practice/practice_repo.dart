@@ -45,7 +45,7 @@ class PracticeRepo implements IPracticeContract {
     try {
       _session = await _localSource.getPreviousSession();
 
-      if (_session != null) return Right(_session!);
+      if (_session != null) return Right(_session!.toEntity());
       return const Left(EmptyCacheFailure(errorMessage: ""));
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
@@ -57,7 +57,7 @@ class PracticeRepo implements IPracticeContract {
     try {
       _session = await _localSource.startTrainingSession(dayId, dayName);
 
-      return Right(_session!);
+      return Right(_session!.toEntity());
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
@@ -83,7 +83,7 @@ class PracticeRepo implements IPracticeContract {
         _session!.logs[oldLogIndex] = res;
       }
 
-      return Right(_session!);
+      return Right(_session!.toEntity());
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }

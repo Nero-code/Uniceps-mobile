@@ -1,5 +1,4 @@
-import 'dart:typed_data';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart' as di;
 import 'package:hive_flutter/hive_flutter.dart';
@@ -85,59 +84,8 @@ Future<void> init() async {
   ///  V2   R E Q U I R E D
   final imagesCache = await Hive.openBox<Uint8List>("ExerciseImages");
 
-  sl.registerLazySingleton<MediaHelper>(() => ImageMediaHelper(imagesCache: imagesCache, checker: sl(), client: sl()));
-
-  // D E P R I C A T E D
-  // final userBox = await Hive.openBox<Map<dynamic, dynamic>>("User");
-  // final profileBox = await Hive.openBox<Map<dynamic, dynamic>>("Profile");
-  // final trainBox = await Hive.openBox<Map<dynamic, dynamic>>("Training");
-  // final lastWeightBox = await Hive.openBox<double>("LastWeight");
-  // final gymsBox = await Hive.openBox<Map<dynamic, dynamic>>("Gyms");
-  // final myGyms = await Hive.openBox<Map<dynamic, dynamic>>("MyGyms");
-  // final subsBox = await Hive.openBox<List<dynamic>>("Subs");
-  // final measureBox = await Hive.openBox<Map<dynamic, dynamic>>("Metrics");
-  // final handshakesBox = await Hive.openBox<Map<dynamic, dynamic>>("HandShakes");
-  // final attendenceBox = await Hive.openBox<List<dynamic>>("Attendence");
-  // final imagesBox = await Hive.openBox<Uint8List>("Images");
-  // final selectedGym = await Hive.openBox<bool>("SelectedGym");
-  // final playerInGymBox =
-  //     await Hive.openBox<Map<dynamic, dynamic>>("PlayerInGym");
-  // await userBox.clear();
-  // await profileBox.clear();
-  // await trainBox.clear();
-  // await lastWeightBox.clear();
-  // await gymsBox.clear();
-  // await myGyms.clear();
-  // await subsBox.clear();
-  // await measureBox.clear();
-  // await handshakesBox.clear();
-  // await attendenceBox.clear();
-  // // await imagesBox.clear();
-  // await selectedGym.clear();
-  // await playerInGymBox.clear();
-  // Future<void> clear() async {
-  //   await userBox.clear();
-  //   await profileBox.clear();
-  //   await trainBox.clear();
-  //   await lastWeightBox.clear();
-  //   await gymsBox.clear();
-  //   await myGyms.clear();
-  //   await subsBox.clear();
-  //   await measureBox.clear();
-  //   await handshakesBox.clear();
-  //   await attendenceBox.clear();
-  //   await imagesBox.clear();
-  //   await selectedGym.clear();
-  //   await playerInGymBox.clear();
-  // }
-  // sl.registerLazySingleton<ImageCacheManager>(
-  //   () => ImageCacheManager(
-  //     imagesCache: imagesBox,
-  //     checker: sl(),
-  //     client: sl(),
-  //     logger: sl(),
-  //   ),
-  // );
+  sl.registerLazySingleton<MediaHelper>(
+      () => ImageMediaHelper(imagesCache: imagesCache, checker: sl(), client: sl(), logger: sl()));
 
   /////////
   ////////
@@ -151,11 +99,11 @@ Future<void> init() async {
   sl.registerLazySingleton<IProfileLocalSource>(() => ProfileLocalSource(prefs: prefs, logger: sl()));
 
   sl.registerLazySingleton<ITSessionLocalSourceContract>(
-      () => TSessionLocalSource(database: sl(), imagesCache: imagesCache));
+      () => TSessionLocalSource(database: sl(), imagesCache: imagesCache, logger: sl()));
 
   //  R O U T I N E   S O U R C E S
   sl.registerLazySingleton<IRoutineManagementLocalSourceContract>(
-      () => RoutineManagementLocalSourceImpl(database: sl()));
+      () => RoutineManagementLocalSourceImpl(database: sl(), logger: sl()));
   sl.registerLazySingleton<IRoutineDaysLocalSourceContract>(() => RoutineDaysLocalSourceImpl(dataBase: sl()));
   sl.registerLazySingleton<IRoutineItemsLocalSourceContract>(
       () => RoutineItemsLocalSourceImpl(database: sl(), imagesCache: imagesCache));
@@ -198,21 +146,31 @@ Future<void> init() async {
       () => RoutineManagementRepo(localSource: sl(), internet: sl(), clientHelper: sl()));
   sl.registerLazySingleton<IRoutineWithHeatContract>(
       () => RoutineWithHeatRepo(localSource: sl(), mediaHelper: sl(), fileParseService: sl()));
-  sl.registerLazySingleton<IRoutineDaysContract>(() => RoutineDaysRepo(localSource: sl()));
+  sl.registerLazySingleton<IRoutineDaysContract>(() => RoutineDaysRepo(localSource: sl(), logger: sl()));
   sl.registerLazySingleton<IRoutineItemsContract>(() => RoutineItemsRepo(localSource: sl(), mediaHelper: sl()));
-  sl.registerLazySingleton<IRoutineSetsContract>(() => RoutineSetsRepo(localSource: sl()));
-  sl.registerLazySingleton<IExercisesContract>(() => ExercisesRepo(
-        internet: sl(),
-        remoteSource: sl(), /*localSource: sl()*/
-      ));
+  sl.registerLazySingleton<IRoutineSetsContract>(() => RoutineSetsRepo(localSource: sl(), logger: sl()));
+  sl.registerLazySingleton<IExercisesContract>(() => ExercisesRepo(internet: sl(), remoteSource: sl()));
 
   //  A U T H   R E P O
-  sl.registerLazySingleton<IOTPAuthRepo>(
-      () => EmailAuthRepo(otpAuthSource: sl(), tokenService: sl(), accountLocalSource: sl(), connection: sl()));
-  sl.registerLazySingleton<IAccountService>(() => AccountRepo(localSource: sl(), remoteSource: sl(), checker: sl()));
+  sl.registerLazySingleton<IOTPAuthRepo>(() => EmailAuthRepo(
+        otpAuthSource: sl(),
+        tokenService: sl(),
+        accountLocalSource: sl(),
+        connection: sl(),
+        logger: sl(),
+      ));
+  sl.registerLazySingleton<IAccountService>(() => AccountRepo(
+        localSource: sl(),
+        remoteSource: sl(),
+        checker: sl(),
+        logger: sl(),
+      ));
 
   //  M E A S U R E M E N T S   R E P O
-  sl.registerLazySingleton<IMeasurementContract>(() => MeasurementsRepo(localSource: sl(), logger: sl()));
+  sl.registerLazySingleton<IMeasurementContract>(() => MeasurementsRepo(
+        localSource: sl(),
+        logger: sl(),
+      ));
   sl.registerLazySingleton<IPerformanceContract>(() => PerformanceRepo(
         profileLocalSource: sl(),
         routineLocalSource: sl(),
@@ -262,7 +220,7 @@ Future<void> init() async {
 
   sl.registerLazySingleton<Logger>(
     () => Logger(
-      level: Level.all,
+      level: kReleaseMode ? Level.error : Level.all,
       printer: PrettyPrinter(
         dateTimeFormat: DateTimeFormat.dateAndTime,
         // printEmojis: false,

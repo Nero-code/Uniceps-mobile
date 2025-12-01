@@ -66,14 +66,12 @@ class _ExercisesListTabState extends State<ExercisesListTab> with AutomaticKeepA
                             ? null
                             : () {
                                 if (!selectedIds.contains(state.list[index].apiId)) {
-                                  print("added");
                                   // -------------------------------------------------
                                   // Add exercise here and parent widget and notify
                                   selectedIds.add(state.list[index].apiId);
                                   widget.onSelect(state.list[index], false);
                                   // -------------------------------------------------
                                 } else {
-                                  print("removed");
                                   // -------------------------------------------------
                                   // Remove exercise here and parent widget and notify
                                   selectedIds.remove(state.list[index].apiId);

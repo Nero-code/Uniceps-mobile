@@ -34,7 +34,7 @@ class PracticeBody extends StatelessWidget {
           log: logs.where((l) => l.setIndex == sets[i].index).firstOrNull,
         ),
         if (i != sets.length - 1)
-          Divider(
+          const Divider(
             indent: 20,
             endIndent: 20,
             thickness: 0.5,

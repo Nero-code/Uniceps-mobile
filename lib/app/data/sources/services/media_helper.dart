@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
@@ -15,11 +16,13 @@ class ImageMediaHelper implements MediaHelper {
   final Box<Uint8List> imagesCache;
   final InternetConnectionChecker checker;
   final Client client;
+  final Logger logger;
 
   const ImageMediaHelper({
     required this.imagesCache,
     required this.checker,
     required this.client,
+    required this.logger,
   });
 
   @override
@@ -35,7 +38,7 @@ class ImageMediaHelper implements MediaHelper {
           return res.bodyBytes;
         }
       } catch (e) {
-        print(e.toString());
+        logger.e(e.toString(), error: e);
         rethrow;
       }
     }
@@ -44,18 +47,19 @@ class ImageMediaHelper implements MediaHelper {
 
   @override
   Stream<double> saveImages(List<String> imageUrls) async* {
-    print("Checking connection....");
+    logger.d("Checking connection....");
     if (await checker.hasConnection) {
       yield 0;
-      print("Checked!");
+      logger.d("Checked!");
       for (var imageUrl in imageUrls) {
-        print("is image available?");
+        logger.d("is image available?");
         if (imagesCache.get(imageUrl) == null) {
-          print("NO!");
+          logger.d("NO!");
           final res = await client.get(Uri.parse(imageUrl));
           if (res.statusCode == 200) {
             await imagesCache.put(imageUrl, res.bodyBytes);
           } else {
+            logger.e('Internet cut off suddenly');
             throw NoInternetException();
           }
         }
@@ -63,6 +67,7 @@ class ImageMediaHelper implements MediaHelper {
       }
       return;
     }
+    logger.e('No Internet Connection');
     throw OfflineFailure(errorMessage: 'no internet');
   }
 }

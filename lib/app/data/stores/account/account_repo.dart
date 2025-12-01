@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/account_models/payment_response.dart';
 import 'package:uniceps/app/data/models/account_models/plan_item_model.dart';
 import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart';
@@ -17,13 +18,17 @@ class AccountRepo implements IAccountService {
   final IAccountLocalSource _localSource;
   final IAccountRemoteSource _remoteSource;
   final InternetConnectionChecker _checker;
-  const AccountRepo(
-      {required IAccountLocalSource localSource,
-      required IAccountRemoteSource remoteSource,
-      required InternetConnectionChecker checker})
-      : _localSource = localSource,
+  final Logger _logger;
+
+  const AccountRepo({
+    required IAccountLocalSource localSource,
+    required IAccountRemoteSource remoteSource,
+    required InternetConnectionChecker checker,
+    required Logger logger,
+  })  : _localSource = localSource,
         _remoteSource = remoteSource,
-        _checker = checker;
+        _checker = checker,
+        _logger = logger;
 
   @override
   Future<Either<Failure, Account>> getUserAccount() async {
@@ -70,12 +75,10 @@ class AccountRepo implements IAccountService {
     if (await _checker.hasConnection) {
       try {
         final res = await _remoteSource.getPlans();
-        print("Success: Got Plan");
+        _logger.t("Success: Got Plan");
         return Right(res.toEntity());
       } catch (e) {
-        print("-----------------------");
-        print(e);
-        print("-----------------------");
+        _logger.e("Error while getting plan", error: e);
         return Left(ServerFailure(errMsg: ""));
       }
     }
@@ -89,9 +92,7 @@ class AccountRepo implements IAccountService {
         final res = await _remoteSource.buyPlan(PlanItemModel.fromEntity(item));
         return Right(res);
       } catch (e) {
-        print("--------------------------");
-        print(e);
-        print("--------------------------");
+        _logger.e("Error while buying plan", error: e);
         return Left(ServerFailure(errMsg: "errMsg"));
       }
     }
@@ -100,7 +101,6 @@ class AccountRepo implements IAccountService {
 
   @override
   Future<Either<Failure, Unit>> deleteAccount() async {
-    // TODO: implement deleteAccount
     throw UnimplementedError();
   }
 }

@@ -19,9 +19,9 @@ class RoutineSkeleton extends StatelessWidget {
           //   borderRadius: BorderRadius.all(Radius.circular(15)),
           //   borderSide: BorderSide(color: Colors.grey, width: 0.5),
           // ),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            color: const Color.fromARGB(29, 96, 125, 139),
+            color: Color.fromARGB(29, 96, 125, 139),
           ),
           // elevation: 1,
           child: InkWell(

@@ -49,10 +49,10 @@ class CaptainUniCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          locale.captainUni + ":",
+                          "${locale.captainUni}:",
                           style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text(
                           content,
                           softWrap: true,

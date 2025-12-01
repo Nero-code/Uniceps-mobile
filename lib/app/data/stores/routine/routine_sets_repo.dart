@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/routine_models/extensions.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_set_dto.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_sets_local_source.dart';
@@ -7,8 +8,14 @@ import 'package:uniceps/app/domain/contracts/routine/i_routine_sets_contract.dar
 import 'package:uniceps/core/errors/failure.dart';
 
 class RoutineSetsRepo implements IRoutineSetsContract {
-  RoutineSetsRepo({required IRoutineSetsLocalSourceContract localSource}) : _localSource = localSource;
+  RoutineSetsRepo({
+    required IRoutineSetsLocalSourceContract localSource,
+    required Logger logger,
+  })  : _localSource = localSource,
+        _logger = logger;
+
   final IRoutineSetsLocalSourceContract _localSource;
+  final Logger _logger;
 
   final Map<int, List<RoutineSet>> lazyItemSetsBuffer = {};
 
@@ -19,6 +26,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
       lazyItemSetsBuffer.addAll({itemId: res.map((s) => s.toEntity()).toList()});
       return Right(lazyItemSetsBuffer[itemId]!);
     } catch (e) {
+      _logger.e("Error: getItemSets", error: e);
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
   }
@@ -43,7 +51,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
 
       return Right(allsets);
     } catch (e) {
-      print("Error: $e");
+      _logger.e("Error: addItemSets", error: e);
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
   }
@@ -58,6 +66,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
         ..sort((a, b) => a.index.compareTo(b.index));
       return Right(lazyItemSetsBuffer[updated.routineItemId]!);
     } catch (e) {
+      _logger.e("Error: updateSet", error: e);
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
   }
@@ -83,6 +92,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
 
       return Right(lazyItemSetsBuffer[setToRemove.routineItemId]!);
     } catch (e) {
+      _logger.e("Error: removeItemSet", error: e);
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
   }
@@ -94,6 +104,7 @@ class RoutineSetsRepo implements IRoutineSetsContract {
       lazyItemSetsBuffer.remove(itemId);
       return const Right(unit);
     } catch (e) {
+      _logger.e("Error: removeAllItemSets", error: e);
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
   }

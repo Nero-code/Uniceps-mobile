@@ -42,7 +42,6 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
         emit(ItemsDownloadingState(progress: sum));
       }
 
-      print("eventitems l: ${event.items.length}");
       final either = await _commands.addItems(event.dayId, event.items);
       either.fold(
         (l) => emit(ItemsEditErrorState(failure: l)),
@@ -61,15 +60,9 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
     });
 
     on<ReorderRoutineItemsEvent>((event, emit) async {
-      for (final i in event.newOrder) {
-        print("${i.exercise.name} : ${i.id} : ${i.index}");
-      }
       final list = <RoutineItem>[];
       for (int i = 0; i < event.newOrder.length; i++) {
         list.add(event.newOrder[i].copyWith(index: i));
-      }
-      for (final i in list) {
-        print("${i.exercise.name} : ${i.id} : ${i.index}");
       }
       final either = await _commands.reorderItems(list);
       either.fold(

@@ -23,11 +23,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<_VerifyCode>((event, emit) async {
       emit(const AuthState.loading());
 
-      final res =
-          await _usecases.validateOTP(credential: event.email, otp: event.code);
-      print("--------------AuthBloc---------------");
-      print(res.runtimeType);
-      print("-----------------------------");
+      final res = await _usecases.validateOTP(credential: event.email, otp: event.code);
+
       res.fold(
         (l) => emit(AuthState.error(l)),
         (r) => emit(const AuthState.authenticated()),

@@ -8,8 +8,10 @@ import 'package:flutter/foundation.dart';
 /// and showing the notification dialog on screen while the app is `Dismissed`.
 @pragma('vm:entry-point')
 Future<void> _backgroundNotificationHandler(RemoteMessage message, String langCode) async {
-  print("Background Service");
-  print(message.toMap());
+  if (kDebugMode) {
+    print("Background Service");
+    print(message.toMap());
+  }
 }
 
 /// Firebase NotificationService integration, But [onBackgroundMessage]
@@ -32,6 +34,7 @@ class NotificationService {
       badge: true,
       sound: true,
     );
+    // ignore: avoid_print
     if (kDebugMode) FirebaseMessaging.onMessage.listen((e) => print(e.toMap()));
   }
 
@@ -39,8 +42,10 @@ class NotificationService {
   ///
   /// and showing the notification dialog on screen while the app is `Dismissed`.
   Future<void> _backgroundNotificationHandler(RemoteMessage message) async {
-    print("Background Service");
-    print(message.toMap());
+    if (kDebugMode) {
+      print("Background Service");
+      print(message.toMap());
+    }
   }
 
   /// Adds a listener on the `onMessage` stream and calls `onNotification`

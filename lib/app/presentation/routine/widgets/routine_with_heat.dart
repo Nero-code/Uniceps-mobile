@@ -44,7 +44,7 @@ class RoutineWithHeat extends StatelessWidget {
                   dimension: 30,
                   child: onMenu != null
                       ? IconButton(
-                          style: IconButton.styleFrom(padding: EdgeInsets.all(3.0), iconSize: 20),
+                          style: IconButton.styleFrom(padding: const EdgeInsets.all(3.0), iconSize: 20),
                           onPressed: onMenu,
                           icon: const Icon(Icons.more_vert_rounded, size: 20),
                         )
@@ -115,14 +115,14 @@ class RoutineWithHeat extends StatelessWidget {
                             //   size: 20,
                             // ),
                             Ink(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
                               decoration: BoxDecoration(
                                 color: Colors.green.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: Text(
                                 locale.active,
-                                style: TextStyle(color: Colors.green, fontSize: 11, fontWeight: FontWeight.bold),
+                                style: const TextStyle(color: Colors.green, fontSize: 11, fontWeight: FontWeight.bold),
                               ),
                             ),
                         ],
@@ -182,7 +182,7 @@ class RoutineWithHeat extends StatelessWidget {
                     ),
                     Text(
                       '${heat.sessionCount}',
-                      style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18, color: Colors.black54),
+                      style: const TextStyle(fontWeight: FontWeight.w300, fontSize: 18, color: Colors.black54),
                     ),
                   ],
                 ),

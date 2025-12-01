@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
 import 'package:uniceps/app/data/models/routine_result.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
@@ -16,9 +17,12 @@ abstract class IRoutineManagementLocalSourceContract {
 }
 
 class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceContract {
-  const RoutineManagementLocalSourceImpl({required AppDatabase database}) : _database = database;
-
   final AppDatabase _database;
+  final Logger _logger;
+
+  const RoutineManagementLocalSourceImpl({required AppDatabase database, required Logger logger})
+      : _database = database,
+        _logger = logger;
 
   @override
   Future<List<RoutineDto>> getAllRoutines() async {
@@ -28,10 +32,10 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
 
   @override
   Future<RoutineDto> createRoutine(String routineName) async {
-    print("create routine => inside local source");
+    _logger.t("create routine => inside local source");
     final id = await _database.managers.routines.create((o) => o(name: routineName));
     final routine = await _database.managers.routines.filter((f) => f.id(id)).getSingle();
-    print("create routine => inside local source finished");
+    _logger.t("create routine => inside local source finished");
     return RoutineDto.fromTable(routine);
   }
 
@@ -65,7 +69,7 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
     final routines = await _database.select(_database.routines).get();
     final List<({RoutineHeat heat, RoutineDto routine})> result = [];
 
-    print("step 1: routines.length = ${routines.length}");
+    _logger.t("step 1: routines.length = ${routines.length}");
 
     // Part 2:
     //   Get Heat objects.
@@ -77,7 +81,7 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
       DateTime newestSessionDate = DateTime(2000);
       DateTime oldestSessionDate = DateTime.now();
       final days = await (_database.select(_database.daysGroup)..where((f) => f.routineId.equals(routine.id))).get();
-      print("step 2: days.length = ${days.length}");
+      _logger.t("step 2: days.length = ${days.length}");
       for (final day in days) {
         final sessions = await (_database.select(_database.tSessions)..where((f) => f.dayId.equals(day.id))).get();
         tc += sessions.length;
@@ -98,12 +102,12 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
 
         final items = await (_database.select(_database.routineItems)..where((f) => f.dayId.equals(day.id))).get();
 
-        print("step 3: items.length = ${items.length}");
+        _logger.t("step 3: items.length = ${items.length}");
         for (final item in items) {
           final sets =
               await (_database.select(_database.routineSets)..where((f) => f.routineItemId.equals(item.id))).get();
           sc += sets.length;
-          print("step 4: sets.length = ${sets.length}");
+          _logger.t("step 4: sets.length = ${sets.length}");
         }
         ic += items.length;
       }

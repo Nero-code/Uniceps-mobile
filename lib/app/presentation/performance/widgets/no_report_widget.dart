@@ -13,7 +13,7 @@ class NoReportWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.sizeOf(context).width,
-      margin: EdgeInsets.only(top: 8.0),
+      margin: const EdgeInsets.only(top: 8.0),
       color: background,
       child: Padding(
         padding: const EdgeInsets.all(8.0),

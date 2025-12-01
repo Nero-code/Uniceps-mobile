@@ -25,7 +25,7 @@ class RoutineDeleteDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(locale.deleteAlertContent(routineName)),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(

@@ -25,13 +25,11 @@ class SimpleTokenService implements TokenContract {
 
   @override
   Future<Session> getSession() {
-    // TODO: implement getSession
     throw UnimplementedError();
   }
 
   @override
   Future<void> setSession(Session s) {
-    // TODO: implement setSession
     throw UnimplementedError();
   }
 }

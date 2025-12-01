@@ -43,7 +43,7 @@ class RenameDayDialog extends StatelessWidget {
             },
             onTapOutside: (_) => _node.unfocus(),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -54,7 +54,7 @@ class RenameDayDialog extends StatelessWidget {
                   child: Text(locale.cancel),
                 ),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {

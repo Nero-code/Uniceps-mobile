@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -19,10 +21,9 @@ class NoTokenHttpClientHelper implements ClientHelper {
       {bool needsHeader = true, Map<String, String>? queryParams}) async {
     final res = await _client.get(Uri.https(api, urlPart, queryParams));
 
-    if (kDebugMode) {
-      print("getHandler code: ${res.statusCode}");
-      print("getHandler body: ${res.body}");
-    }
+    print("getHandler code: ${res.statusCode}");
+    print("getHandler body: ${res.body}");
+
     handleHttpStatus(res);
 
     return fromJson(jsonDecode(res.body));

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:drift/drift.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/practice_models/routine_table_parser.dart';
 import 'package:uniceps/app/data/models/practice_models/t_log_model.dart';
 import 'package:uniceps/app/data/models/practice_models/t_session_model.dart';
@@ -27,14 +28,17 @@ abstract class ITSessionLocalSourceContract {
 }
 
 class TSessionLocalSource implements ITSessionLocalSourceContract {
-  const TSessionLocalSource({
-    required Box<Uint8List> imagesCache,
-    required db.AppDatabase database,
-  })  : _database = database,
-        _imagesCache = imagesCache;
-
   final db.AppDatabase _database;
   final Box<Uint8List> _imagesCache;
+  final Logger _logger;
+
+  const TSessionLocalSource({
+    required db.AppDatabase database,
+    required Box<Uint8List> imagesCache,
+    required Logger logger,
+  })  : _database = database,
+        _imagesCache = imagesCache,
+        _logger = logger;
 
   @override
   Future<Tuple2<RoutineDto?, int?>> getCurrentRoutine() async {
@@ -68,11 +72,11 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       // Get day from row and add if absent
       final day = row.readTableOrNull(daysAlias);
       if (day != null && !days.contains(day)) days.add(day);
-      print("drift day: ${day.runtimeType}");
+      _logger.t("drift day: ${day.runtimeType}");
 
       final session = row.readTableOrNull(sessionsAlias);
       if (session != null && !sessions.contains(session)) sessions.add(session);
-      print("drift day: ${day.runtimeType}");
+      _logger.t("drift day: ${day.runtimeType}");
     }
     // ----------------------------------------------------------
 
@@ -86,8 +90,6 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       sets: [],
     ).toDto();
     // -----------------------------------
-    // print("training days:  ${days.length}");
-    // print("training items: ${items.length}");
 
     final lastDayId = (sessions..sort((a, b) => b.startedAt.compareTo(a.startedAt))).firstOrNull;
 
@@ -166,7 +168,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       //
       List<RoutineSetDto> itemSets = [];
       for (final setTable in sets) {
-        print("found set");
+        _logger.t("found set");
         if (setTable.routineItemId == itemTable.id) {
           // To get the last weight on a [set] there are multiple things to do.
           //
@@ -178,9 +180,9 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
           final weights = logsByEx[itemTable.exerciseId]?.where((log) => log.setIndex == setTable.roundIndex).toList();
           // * Then we sort in a descending order, so that the first item is the last.
           weights?.sort((a, b) => b.completedAt.compareTo(a.completedAt));
-          // print("----------------");
+
           // for (final w in weights) {
-          //   print("""
+          //   _logger.t("""
           //     logid:     ${w.logId}
           //     exId:      ${w.exerciseId}
           //     setIndex:  ${w.setIndex}
@@ -188,7 +190,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
           //     completed: ${w.completedAt}
           // """);
           // }
-          // print("----------------");
+
           itemSets.add(RoutineSetDto.fromTable(setTable, weights?.firstOrNull?.weight));
         }
       }
