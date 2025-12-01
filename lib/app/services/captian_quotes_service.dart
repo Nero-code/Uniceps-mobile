@@ -21,7 +21,11 @@ class CaptianQuotesService {
     final oldQuote = _prefs.getString(quotekey);
     DailyQuote quote;
     if (oldQuote == null) {
-      final sentance = quotes[Random().nextInt(quotes.length - 1)];
+      final sentance = {
+        Lang.ar: 'مرحبا بك في تطبيق Uniceps الرياضي,انا الكابتن يوني هيا نبدا في استكشاف اقسام وميزات التطبيق!',
+        Lang.en:
+            'Welcome to Uniceps fitness app, my name is captain Uni, lets start discovering the app\'s sections and features!',
+      };
       quote = DailyQuote(quote: sentance, date: DateTime.now());
     } else {
       final decodedOldQuote = DailyQuote.fromJson(jsonDecode(oldQuote) as Map<String, dynamic>);
