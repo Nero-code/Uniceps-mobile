@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/practice_entities/t_session.dart';
+import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/practice/blocs/practice/practice_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/stopwatch/stopwatch_cubit.dart';
@@ -9,19 +12,65 @@ import 'package:uniceps/app/presentation/practice/dialogs/confirmation_dialog.da
 import 'package:uniceps/app/presentation/practice/dialogs/session_complete_dialog.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_body.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_header.dart';
-import 'package:uniceps/app/presentation/screens/loading_page.dart';
+import 'package:uniceps/app/services/notification_service.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 
 class PracticeScreen extends StatefulWidget {
-  const PracticeScreen({super.key});
-
+  const PracticeScreen({super.key, required this.dayName});
+  final String dayName;
   @override
   State<PracticeScreen> createState() => _PracticeScreenState();
 }
 
-class _PracticeScreenState extends State<PracticeScreen> {
+class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObserver {
   int? expandedId, totalProgress;
+
+  Timer? timer;
+  Duration seconds = Duration.zero;
+  @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // final locale = AppLocalizations.of(context)!;
+    if (state == AppLifecycleState.paused) {
+      final elapsed = context.read<StopwatchCubit>().stoptime;
+      context.read<StopwatchCubit>().stopStopwatch();
+      timer = Timer.periodic(
+        const Duration(seconds: 1),
+        (timer) {
+          seconds += const Duration(seconds: 1);
+          NotificationService.showNotification(id: 0, title: widget.dayName, body: formatDuration(elapsed + seconds));
+        },
+      );
+    }
+    if (state == AppLifecycleState.resumed) {
+      NotificationService.closeAll();
+      timer?.cancel();
+      context.read<StopwatchCubit>().startStopWatch(seconds);
+      seconds = Duration.zero;
+    }
+  }
+
+  String formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String hours = twoDigits(duration.inHours);
+    String minutes = twoDigits(duration.inMinutes.remainder(60));
+    String seconds = twoDigits(duration.inSeconds.remainder(60));
+
+    return "$hours:$minutes:$seconds";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +86,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
         }
         if (context.mounted) {
           context.read<StopwatchCubit>().stopStopwatch();
+          context.read<CurrentRoutineCubit>().getCurrentRoutine();
         }
       },
       child: BlocConsumer<SessionBloc, SessionState>(
@@ -44,131 +94,168 @@ class _PracticeScreenState extends State<PracticeScreen> {
         // Closing-Session State
         // When: (previous, current) => current is NoActiveSessionState,
         listenWhen: (previous, current) => current.maybeWhen(orElse: () => false, noActiveSession: () => true),
-        listener: (context, state) async {
-          await showDialog(context: context, builder: (context) => const SessionCompleteDialog());
-          if (context.mounted) Navigator.pop(context);
+        listener: (context, state) {
+          showDialog(context: context, builder: (context) => const SessionCompleteDialog());
         },
         // --------------------------------------------------------
         buildWhen: (previous, current) => current.maybeWhen(orElse: () => false, loaded: (session) => true),
         builder: (context, sessionState) {
           return sessionState.map(
-              initial: (_) => const SizedBox(),
-              loading: (_) => const Material(child: LoadingPage()),
-              noActiveSession: (_) => const SizedBox(),
-              loaded: (sessionState) => BlocProvider(
-                    create: (context) => PracticeCubit(commands: di.sl())..getPracticeDay(sessionState.session.dayId),
-                    child: Scaffold(
-                      appBar: AppBar(
-                        backgroundColor: Theme.of(context).colorScheme.surface,
-                        centerTitle: true,
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: BlocSelector<PracticeCubit, PracticeState, String>(
-                                selector: (state) => (state is PracticeLoadedState) ? state.day.name : "",
-                                builder: (context, dayName) => Text(dayName),
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            BlocBuilder<StopwatchCubit, StopwatchState>(
-                              builder: (context, state) => Text(
-                                state.time,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w100,
-                                  color: Colors.grey.shade700,
-                                  fontSize: 26,
-                                ),
-                              ),
-                            ),
-                          ],
+            initial: (_) => const SizedBox(),
+            loading: (_) => const Material(child: LoadingIndicator()),
+            noActiveSession: (_) => const SizedBox(),
+            error: (state) => Material(
+              child: Center(
+                child: Text(state.failure.getErrorMessage()),
+              ),
+            ),
+            loaded: (sessionState) => BlocProvider(
+              create: (context) => PracticeCubit(commands: di.sl())..getPracticeDay(sessionState.session.dayId),
+              child: Scaffold(
+                appBar: AppBar(
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  centerTitle: true,
+
+                  shadowColor: Colors.black,
+                  bottom: PreferredSize(
+                    preferredSize: Size(screenSize.width, 30),
+                    child: BlocBuilder<StopwatchCubit, StopwatchState>(
+                      builder: (context, state) => Text(
+                        state.time,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          // color: Colors.grey.shade700,
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 30,
                         ),
-                      ),
-                      body: Stack(
-                        children: [
-                          const SizedBox.expand(),
-                          BlocBuilder<PracticeCubit, PracticeState>(
-                            buildWhen: (previous, current) => current is PracticeLoadedState,
-                            builder: (context, state) {
-                              if (state is PracticeLoadedState) {
-                                totalProgress = state.day.exercises.map((e) => e.sets.length).reduce((a, b) => a + b);
-                                return SingleChildScrollView(
-                                  padding: const EdgeInsets.only(bottom: 100),
-                                  child: ExpansionPanelList(
-                                    expandedHeaderPadding: EdgeInsets.zero,
-                                    expansionCallback: _expansionCallback,
-                                    children: state.day.exercises
-                                        .map(
-                                          (i) => ExpansionPanel(
-                                            backgroundColor: const Color.fromARGB(255, 250, 250, 250),
-                                            isExpanded: expandedId == i.index,
-                                            canTapOnHeader: true,
-                                            headerBuilder: (_, __) => PracticeHeader(item: i),
-                                            body: PracticeBody(
-                                              sessionId: sessionState.session.id!,
-                                              exId: i.exercise.apiId!,
-                                              exIndex: i.index,
-                                              sets: i.sets,
-                                              totalProgress: totalProgress ?? 0,
-                                              logs: sessionState.session.logs
-                                                  .where((log) => log.exerciseId == i.exercise.apiId)
-                                                  .toList(),
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                  ),
-                                );
-                              } else if (state is PracticeErrorState) {
-                                return Center(child: Text(state.failure.getErrorMessage()));
-                              }
-                              return const LoadingPage();
-                            },
-                          ),
-                          Positioned(
-                            bottom: 0.0,
-                            width: screenSize.width,
-                            child: Container(
-                              height: 60,
-                              padding: const EdgeInsets.all(8.0),
-                              color: Colors.white,
-                              child: ElevatedButton(
-                                  onPressed: () {
-                                    final fullSession = sessionState.session.logs.length == totalProgress;
-                                    _finishSession(context, sessionState.session, fullSession);
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(Icons.bolt, size: 25),
-                                      Text(
-                                        locale.finish,
-                                        style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
-                                      ),
-                                    ],
-                                  )),
-                            ),
-                          ),
-                        ],
                       ),
                     ),
                   ),
-              error: (state) => Material(
-                    child: Center(
-                      child: Text(state.failure.getErrorMessage()),
+                  title: BlocSelector<PracticeCubit, PracticeState, String>(
+                    selector: (state) => (state is PracticeLoadedState) ? state.day.name : "",
+                    builder: (context, dayName) => Text(dayName, style: TextStyle(color: Colors.grey.shade700)),
+                  ),
+                  // title: Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Expanded(
+                  //       child: BlocSelector<PracticeCubit, PracticeState, String>(
+                  //         selector: (state) => (state is PracticeLoadedState) ? state.day.name : "",
+                  //         builder: (context, dayName) => Text(dayName),
+                  //       ),
+                  //     ),
+                  //     const SizedBox(width: 5),
+                  //     BlocBuilder<StopwatchCubit, StopwatchState>(
+                  //       builder: (context, state) => Text(
+                  //         state.time,
+                  //         style: TextStyle(
+                  //           fontWeight: FontWeight.w100,
+                  //           color: Colors.grey.shade700,
+                  //           fontSize: 26,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                ),
+                body: Stack(
+                  children: [
+                    const SizedBox.expand(),
+                    BlocBuilder<PracticeCubit, PracticeState>(
+                      buildWhen: (previous, current) => current is PracticeLoadedState,
+                      builder: (context, state) {
+                        if (state is PracticeLoadedState) {
+                          if (state.day.exercises.isNotEmpty) {
+                            totalProgress = state.day.exercises.map((e) => e.sets.length).reduce((a, b) => a + b);
+                          }
+
+                          return SingleChildScrollView(
+                            padding: const EdgeInsets.only(bottom: 100),
+                            child: ExpansionPanelList(
+                              animationDuration: const Duration(milliseconds: 500),
+                              expandedHeaderPadding: EdgeInsets.zero,
+                              expansionCallback: _expansionCallback,
+                              children: state.day.exercises
+                                  .map(
+                                    (i) => ExpansionPanel(
+                                      backgroundColor: const Color.fromARGB(255, 250, 250, 250),
+                                      isExpanded: expandedId == i.index,
+                                      canTapOnHeader: true,
+                                      headerBuilder: (_, __) => PracticeHeader(item: i),
+                                      body: PracticeBody(
+                                        sessionId: sessionState.session.id!,
+                                        exId: i.exercise.apiId,
+                                        exIndex: i.index,
+                                        sets: i.sets,
+                                        totalProgress: totalProgress ?? 0,
+                                        logs: sessionState.session.logs
+                                            .where((log) => log.exerciseId == i.exercise.apiId)
+                                            .toList(),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          );
+                        } else if (state is PracticeErrorState) {
+                          return Center(child: Text(state.failure.getErrorMessage()));
+                        }
+                        return const LoadingIndicator();
+                      },
                     ),
-                  ));
+                    Positioned(
+                      bottom: 0.0,
+                      width: screenSize.width,
+                      child: Container(
+                        height: 60,
+                        padding: const EdgeInsets.all(8.0),
+                        color: Colors.white,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              final fullSession = sessionState.session.logs.length == totalProgress;
+                              _finishSession(context, sessionState.session, fullSession);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.bolt, size: 25),
+                                Text(
+                                  locale.finish,
+                                  style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+                                ),
+                              ],
+                            )),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
         },
       ),
     );
   }
 
-  void _finishSession(BuildContext context, TSession session, bool fullSession) async {
-    final confirmation = await showDialog<bool>(context: context, builder: (context) => const ConfirmationDialog());
-    if ((confirmation ?? false) && context.mounted) {
-      context.read<SessionBloc>().add(SessionEvent.stopSession(session, fullSession));
-      context.read<StopwatchCubit>().resetStopwatch();
-    }
+  void _finishSession(BuildContext context, TSession session, bool fullSession) {
+    showDialog<bool>(
+        context: context,
+        builder: (_) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: context.read<SessionBloc>()),
+              BlocProvider.value(value: context.read<StopwatchCubit>()),
+              BlocProvider.value(value: context.read<CurrentRoutineCubit>()),
+            ],
+            child: ConfirmationDialog(
+              onConfirm: () {
+                context.read<SessionBloc>().add(SessionEvent.stopSession(session, fullSession));
+                context.read<StopwatchCubit>().resetStopwatch();
+                context.read<CurrentRoutineCubit>().getCurrentRoutine();
+              },
+            ),
+          );
+        });
   }
 
   void _expansionCallback(int panelIndex, bool isExpanded) {

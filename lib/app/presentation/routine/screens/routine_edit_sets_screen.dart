@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
 import 'package:uniceps/app/presentation/routine/blocs/sets_edit/sets_edit_bloc.dart';
 import 'package:uniceps/app/presentation/routine/widgets/set_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,19 +15,9 @@ class RoutineEditSetsScreen extends StatefulWidget {
 }
 
 class _RoutineEditSetsScreenState extends State<RoutineEditSetsScreen> {
-  late final List<RoutineSet> sets;
-  final List<TextEditingController> controllers = [];
   final _focusScopeNode = FocusScopeNode();
 
-  @override
-  void initState() {
-    super.initState();
-
-    sets = widget.item.sets;
-    for (var s in sets) {
-      controllers.add(TextEditingController(text: s.reps.toString()));
-    }
-  }
+  Map<int, int> sets = {};
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +52,14 @@ class _RoutineEditSetsScreenState extends State<RoutineEditSetsScreen> {
             delegate: SliverChildListDelegate.fixed(
               [
                 BlocBuilder<SetsEditBloc, SetsEditState>(
-                  buildWhen: (previous, current) {
-                    return current is SetsEditLoadedState;
-                  },
+                  buildWhen: (previous, current) => current is SetsEditLoadedState,
                   builder: (context, state) {
+                    if (state is SetsEditLoadedState) {
+                      sets.clear();
+                      for (final s in state.sets) {
+                        sets.addAll({s.id!: s.reps});
+                      }
+                    }
                     return Column(
                       children: [
                         Text(locale.setsAndRounds),

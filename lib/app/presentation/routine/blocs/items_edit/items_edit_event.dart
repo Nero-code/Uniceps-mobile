@@ -28,3 +28,8 @@ class ReorderRoutineItemsEvent extends ItemsEditEvent {
   final List<RoutineItem> newOrder;
   const ReorderRoutineItemsEvent({required this.newOrder, this.version = 0});
 }
+
+class CopySetsToAll extends ItemsEditEvent {
+  final int dayId, itemId;
+  const CopySetsToAll({required this.dayId, required this.itemId});
+}

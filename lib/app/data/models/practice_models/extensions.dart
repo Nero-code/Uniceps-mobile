@@ -4,7 +4,7 @@ import 'package:uniceps/app/domain/classes/practice_entities/t_log.dart';
 import 'package:uniceps/app/domain/classes/practice_entities/t_session.dart';
 
 extension TLogExtension on TLog {
-  TLogModel asDto() => TLogModel(
+  TLogModel toDto() => TLogModel(
         id: id,
         sessionId: sessionId,
         exerciseId: exerciseId,
@@ -20,13 +20,15 @@ extension TLogExtension on TLog {
 }
 
 extension TSessionExtension on TSession {
-  TSessionModel asDto() => TSessionModel(
+  TSessionModel toDto() => TSessionModel(
         id: id,
+        apiId: apiId,
         dayId: dayId,
-        logs: logs,
+        dayName: dayName,
+        logs: logs.map((e) => e.toDto()).toList(),
         createdAt: createdAt,
         finishedAt: finishedAt,
-        apiId: apiId,
+        progress: progress,
         version: version,
         isSynced: isSynced,
       );

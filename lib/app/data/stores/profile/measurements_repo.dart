@@ -3,7 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
 import 'package:uniceps/app/data/sources/local/dal_measurements/measurements_local_source.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
-import 'package:uniceps/app/domain/contracts/profile_repo/i_measurement_service.dart';
+import 'package:uniceps/app/domain/contracts/profile/i_measurement_service.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class MeasurementsRepo implements IMeasurementContract {
@@ -13,54 +13,62 @@ class MeasurementsRepo implements IMeasurementContract {
 
   final List<Measurement> buffer = [];
   @override
-  Future<Either<Failure, List<Measurement>>> getMeasurements() async {
+  Future<Either<MeasurementFailure, List<Measurement>>> getMeasurements() async {
     try {
       if (buffer.isNotEmpty) return Right(buffer);
-
       final res = await localSource.getMeasurements();
-      if (res.isEmpty) return const Left(EmptyCacheFailure(errorMessage: ""));
+      //
+      if (res.isEmpty) return const Left(MeasurementFailure.noRecords());
+      //
+      res.sort((a, b) => b.checkDate.compareTo(a.checkDate));
       buffer.addAll(res.map((m) => m.toEntity()).toList());
-
       return Right(buffer);
     } catch (e) {
-      return Left(DatabaseFailure(errorMsg: "errorMsg"));
+      logger.e('Error: getMeasurements', error: e);
+      return const Left(MeasurementFailure.msDbFailure());
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> createMeasurement(Measurement m) async {
+  Future<Either<MeasurementFailure, Unit>> createMeasurement(Measurement m) async {
     try {
       final id = await localSource.saveMeasurement(MeasurementModel.fromEntity(m));
-      buffer.add(m.copyWith(id: id));
+      buffer
+        ..add(m.copyWith(id: id))
+        ..sort((a, b) => b.checkDate.compareTo(a.checkDate));
+
       return const Right(unit);
     } catch (e) {
-      return Left(DatabaseFailure(errorMsg: ""));
+      logger.e('Error: createMeasurement', error: e);
+      return const Left(MeasurementFailure.msDbFailure());
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> updateMeasurement(Measurement m) async {
+  Future<Either<MeasurementFailure, Unit>> updateMeasurement(Measurement m) async {
     try {
       final model = MeasurementModel.fromEntity(m);
       await localSource.saveMeasurement(model);
       buffer.removeWhere((e) => e.id == model.id);
       buffer
-        ..add(model.toEntity())
-        ..sort();
+        ..add(m)
+        ..sort((a, b) => b.checkDate.compareTo(a.checkDate));
       return const Right(unit);
     } catch (e) {
-      return Left(DatabaseFailure(errorMsg: ""));
+      logger.e('Error: updateMeasurement', error: e);
+      return const Left(MeasurementFailure.msDbFailure());
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> deleteMeasurement(Measurement m) async {
+  Future<Either<MeasurementFailure, Unit>> deleteMeasurement(Measurement m) async {
     try {
       await localSource.deleteMeasurement(MeasurementModel.fromEntity(m));
       buffer.removeWhere((e) => e.id == m.id);
       return const Right(unit);
     } catch (e) {
-      return Left(DatabaseFailure(errorMsg: ""));
+      logger.e('Error: deleteMeasurement', error: e);
+      return const Left(MeasurementFailure.msDbFailure());
     }
   }
 }

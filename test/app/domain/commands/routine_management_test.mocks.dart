@@ -8,7 +8,7 @@ import 'dart:async' as _i4;
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart' as _i6;
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_management_contract.dart'
+import 'package:uniceps/app/domain/contracts/routine/i_routine_management_contract.dart'
     as _i3;
 import 'package:uniceps/core/errors/failure.dart' as _i5;
 
@@ -137,30 +137,4 @@ class MockIRoutineManagementContract extends _i1.Mock
           ),
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Routine>>>);
-
-  @override
-  _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>> shareRoutine(
-    _i6.Routine? routine,
-    int? userId,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #shareRoutine,
-          [
-            routine,
-            userId,
-          ],
-        ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>.value(
-            _FakeEither_0<_i5.Failure, _i2.Unit>(
-          this,
-          Invocation.method(
-            #shareRoutine,
-            [
-              routine,
-              userId,
-            ],
-          ),
-        )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>);
 }

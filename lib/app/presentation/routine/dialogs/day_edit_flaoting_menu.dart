@@ -33,7 +33,7 @@ class DayEditFlaotingMenu extends StatelessWidget {
                   onTap: onReorder,
                 ),
                 ListTile(
-                  title: Text(locale.remove),
+                  title: Text(locale.delete),
                   leading: const Icon(Icons.delete),
                   onTap: onRemove,
                 ),

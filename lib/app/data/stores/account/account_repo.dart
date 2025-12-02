@@ -1,27 +1,34 @@
 import 'package:dartz/dartz.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/account_models/payment_response.dart';
 import 'package:uniceps/app/data/models/account_models/plan_item_model.dart';
 import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_source.dart';
+import 'package:uniceps/app/data/sources/services/sync/sync_contract.dart';
 import 'package:uniceps/app/domain/classes/account_entities/account.dart';
 import 'package:uniceps/app/domain/classes/account_entities/membership.dart';
 import 'package:uniceps/app/domain/classes/account_entities/plan.dart';
 import 'package:uniceps/app/domain/classes/account_entities/plan_item.dart';
 import 'package:uniceps/app/domain/contracts/account/i_account_service.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/injection_dependency.dart' as di;
 
 class AccountRepo implements IAccountService {
   final IAccountLocalSource _localSource;
   final IAccountRemoteSource _remoteSource;
   final InternetConnectionChecker _checker;
-  const AccountRepo(
-      {required IAccountLocalSource localSource,
-      required IAccountRemoteSource remoteSource,
-      required InternetConnectionChecker checker})
-      : _localSource = localSource,
+  final Logger _logger;
+
+  const AccountRepo({
+    required IAccountLocalSource localSource,
+    required IAccountRemoteSource remoteSource,
+    required InternetConnectionChecker checker,
+    required Logger logger,
+  })  : _localSource = localSource,
         _remoteSource = remoteSource,
-        _checker = checker;
+        _checker = checker,
+        _logger = logger;
 
   @override
   Future<Either<Failure, Account>> getUserAccount() async {
@@ -37,8 +44,8 @@ class AccountRepo implements IAccountService {
     if (await _checker.hasConnection) {
       try {
         final subscriptionPlan = await _remoteSource.getUserMembership();
-        await _localSource.saveUserMembership(subscriptionPlan);
-        return Right(subscriptionPlan.toEntity());
+        final shouldNotify = await _localSource.saveUserMembership(subscriptionPlan);
+        return Right(subscriptionPlan.copyWith(isNotified: shouldNotify).toEntity());
       } catch (e) {
         return const Left(MembershipFailure.cantGetPlan());
       }
@@ -55,6 +62,8 @@ class AccountRepo implements IAccountService {
   Future<Either<Failure, Unit>> logout() async {
     try {
       await _localSource.logout();
+      di.sl<TSessionSyncContract>().dispose();
+
       return const Right(unit);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
@@ -66,12 +75,10 @@ class AccountRepo implements IAccountService {
     if (await _checker.hasConnection) {
       try {
         final res = await _remoteSource.getPlans();
-        print("Success: Got Plan");
+        _logger.t("Success: Got Plan");
         return Right(res.toEntity());
       } catch (e) {
-        print("-----------------------");
-        print(e);
-        print("-----------------------");
+        _logger.e("Error while getting plan", error: e);
         return Left(ServerFailure(errMsg: ""));
       }
     }
@@ -85,9 +92,7 @@ class AccountRepo implements IAccountService {
         final res = await _remoteSource.buyPlan(PlanItemModel.fromEntity(item));
         return Right(res);
       } catch (e) {
-        print("--------------------------");
-        print(e);
-        print("--------------------------");
+        _logger.e("Error while buying plan", error: e);
         return Left(ServerFailure(errMsg: "errMsg"));
       }
     }
@@ -96,7 +101,6 @@ class AccountRepo implements IAccountService {
 
   @override
   Future<Either<Failure, Unit>> deleteAccount() async {
-    // TODO: implement deleteAccount
     throw UnimplementedError();
   }
 }

@@ -1,17 +1,9 @@
 part of 'measurment_bloc.dart';
 
-sealed class MeasurementEvent extends Equatable {
-  const MeasurementEvent();
-
-  @override
-  List<Object> get props => [];
-}
-
-final class GetMeasurementsEvent extends MeasurementEvent {
-  const GetMeasurementsEvent();
-}
-
-final class AddMeasurementsEvent extends MeasurementEvent {
-  final Measurement measurement;
-  const AddMeasurementsEvent({required this.measurement});
+@freezed
+class MeasurementEvent with _$MeasurementEvent {
+  const factory MeasurementEvent.getMeasurements() = _GetMeasurements;
+  const factory MeasurementEvent.createMeasurement(Measurement m) = _CreateMeasurement;
+  const factory MeasurementEvent.updateMeasurement(Measurement m) = _UpdateMeasurement;
+  const factory MeasurementEvent.deleteMeasurement(Measurement m) = _DeleteMeasurement;
 }

@@ -7,12 +7,10 @@ import 'package:uniceps/core/errors/failure.dart';
 part 'routine_management_event.dart';
 part 'routine_management_state.dart';
 
-class RoutineManagementBloc
-    extends Bloc<RoutineManagementEvent, RoutineManagementState> {
+class RoutineManagementBloc extends Bloc<RoutineManagementEvent, RoutineManagementState> {
   final RoutineManagementCommands _usecases;
 
-  RoutineManagementBloc(
-      {required RoutineManagementCommands routineManagementUsecases})
+  RoutineManagementBloc({required RoutineManagementCommands routineManagementUsecases})
       : _usecases = routineManagementUsecases,
         super(RoutineManagementInitial()) {
     on<GetRoutinesEvent>((event, emit) async {
@@ -28,7 +26,6 @@ class RoutineManagementBloc
     on<CreateRoutineEvent>((event, emit) async {
       emit(RoutineManagementLoadingState());
 
-      print("create routine => inside bloc");
       final either = await _usecases.createRoutine(event.name);
       either.fold(
         (l) => emit(RoutineManagementErrorState(failure: l)),
@@ -53,8 +50,7 @@ class RoutineManagementBloc
         final either = await _usecases.setCurrentRoutine(event.routine);
         either.fold(
           (l) => emit(RoutineManagementErrorState(failure: l)),
-          (r) => emit(RoutineManagementLoadedState(
-              routines: r, version: event.version + 1)),
+          (r) => emit(RoutineManagementLoadedState(routines: r, version: event.version + 1)),
         );
       },
     );

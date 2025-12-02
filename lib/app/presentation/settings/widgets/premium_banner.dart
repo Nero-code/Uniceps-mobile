@@ -12,24 +12,23 @@ class PremiumBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(5.0),
       color: Colors.white,
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(5.0),
-            decoration: const BoxDecoration(
-                shape: BoxShape.circle, color: Colors.amber),
+            decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.amber),
             child: const Image(
               image: AssetImage(IMG_PREMIUM),
-              width: 25,
-              height: 25,
+              width: 15,
+              height: 15,
               color: Colors.white,
             ),
           ),
           Expanded(
               child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(locale.premiumAlertContent),
           )),
           SizedBox(
@@ -37,13 +36,13 @@ class PremiumBanner extends StatelessWidget {
             child: OutlinedButton(
               onPressed: () => Navigator.pushNamed(context, AppRoutes.plans),
               style: OutlinedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 0.0),
                 foregroundColor: Colors.amber.shade700,
-                side: BorderSide(color: Colors.amber, width: 1.0),
+                side: const BorderSide(color: Colors.amber, width: 1.0),
               ),
               child: Text(
                 locale.upgrade,
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
               ),
             ),
           ),

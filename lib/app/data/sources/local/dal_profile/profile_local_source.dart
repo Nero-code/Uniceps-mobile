@@ -1,7 +1,8 @@
-import 'package:hive_flutter/hive_flutter.dart';
+import 'dart:convert';
+
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/app/data/models/auth_models/player_model.dart';
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
 abstract class IProfileLocalSource {
@@ -12,22 +13,21 @@ abstract class IProfileLocalSource {
 
 class ProfileLocalSource implements IProfileLocalSource {
   const ProfileLocalSource({
-    required this.playerBox,
+    required this.prefs,
     required this.logger,
   });
 
-  final Box<Map<dynamic, dynamic>> playerBox;
   final Logger logger;
-
+  final SharedPreferences prefs;
   final title = "ProfileLocalSource";
 
   @override
   Future<PlayerModel> getProfileData() async {
     logger.t("$title --> getProfileData");
-    final res = playerBox.get(HIVE_PROFILE_BOX);
+    final res = prefs.getString('Profile');
     if (res != null) {
-      logger.d("NOT NULL: $res");
-      return PlayerModel.fromJson(res);
+      logger.t("NOT NULL: $res");
+      return PlayerModel.fromJson(jsonDecode(res));
     }
     throw EmptyCacheExeption();
   }
@@ -35,6 +35,6 @@ class ProfileLocalSource implements IProfileLocalSource {
   @override
   Future<void> savePlayerData(PlayerModel model) async {
     logger.t("$title --> saveProfileData");
-    return await playerBox.put(HIVE_PROFILE_BOX, model.toJson());
+    await prefs.setString('Profile', jsonEncode(model.toJson()));
   }
 }

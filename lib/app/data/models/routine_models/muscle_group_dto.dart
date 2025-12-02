@@ -1,4 +1,3 @@
-import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 import 'package:uniceps/core/constants/constants.dart';
 
@@ -12,12 +11,9 @@ class MuscleGroupDto {
     required this.muscleGroupTranslations,
   });
 
-  factory MuscleGroupDto.fromEntity(MuscleGroup e) => MuscleGroupDto(
-      id: e.id,
-      apiId: e.apiId,
-      muscleGroupTranslations: e.muscleGroupTranslations);
-  MuscleGroup toEntity() => MuscleGroup(
-      apiId: apiId, muscleGroupTranslations: (muscleGroupTranslations));
+  factory MuscleGroupDto.fromEntity(MuscleGroup e) =>
+      MuscleGroupDto(id: e.id, apiId: e.apiId, muscleGroupTranslations: e.muscleGroupTranslations);
+  MuscleGroup toEntity() => MuscleGroup(apiId: apiId, muscleGroupTranslations: (muscleGroupTranslations));
 
   factory MuscleGroupDto.fromJson(Map<String, dynamic> json) => MuscleGroupDto(
         apiId: json['id'],
@@ -27,11 +23,11 @@ class MuscleGroupDto {
         },
       );
 
-  factory MuscleGroupDto.fromTable(ExerciseGroup group) => MuscleGroupDto(
-      id: group.id,
-      apiId: group.apiId,
-      muscleGroupTranslations:
-          parseTranslations(group.muscleGroupTranslations));
+  // factory MuscleGroupDto.fromTable(ExerciseGroup group) => MuscleGroupDto(
+  //     id: group.id,
+  //     apiId: group.apiId,
+  //     muscleGroupTranslations:
+  //         parseTranslations(group.muscleGroupTranslations));
 
   Map<String, dynamic> toJson() => {
         "id": id,

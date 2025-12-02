@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
+import 'package:uniceps/app/data/models/routine_result.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_with_heat_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_with_heat_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class RoutineWithHeatCommands {
@@ -19,5 +20,7 @@ class RoutineWithHeatCommands {
       _repo.deleteRoutine(routine);
   Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> setCurrentRoutine(Routine routine) =>
       _repo.setCurrentRoutine(routine);
-  Future<Either<Failure, Unit>> shareRoutine(Routine routine, int userId) => _repo.shareRoutine(routine, userId);
+
+  Stream<RoutineResult> importRoutine() => _repo.importRoutineFromFile();
+  Future<bool> exportRoutineToFile(int routineId) => _repo.exportRoutineToFile(routineId);
 }

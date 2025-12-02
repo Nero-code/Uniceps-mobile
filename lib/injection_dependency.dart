@@ -1,5 +1,4 @@
-import 'dart:typed_data';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart' as di;
 import 'package:hive_flutter/hive_flutter.dart';
@@ -10,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_measurements/measurements_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_practice/t_session_local_source.dart';
-import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
+import 'package:uniceps/app/data/sources/local/dal_profile/profile_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_days_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_items_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart';
@@ -20,14 +19,19 @@ import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_sourc
 import 'package:uniceps/app/data/sources/remote/dal_auth/auth_contracts.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/email_auth_remote_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
-import 'package:uniceps/app/data/sources/services/client_helper.dart';
-import 'package:uniceps/app/data/sources/services/http_client_helper.dart';
+import 'package:uniceps/app/data/sources/services/import/file_parse_service.dart';
+import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
+import 'package:uniceps/app/data/sources/services/internet_client/http_client_helper.dart';
 import 'package:uniceps/app/data/sources/services/media_helper.dart';
-import 'package:uniceps/app/data/sources/services/token_service_simple.dart';
+import 'package:uniceps/app/data/sources/services/sync/sync_contract.dart';
+import 'package:uniceps/app/data/sources/services/sync/t_session_sync_service.dart';
+import 'package:uniceps/app/data/sources/services/token/token_service_simple.dart';
 import 'package:uniceps/app/data/stores/account/account_repo.dart';
 import 'package:uniceps/app/data/stores/auth/email_auth_repo.dart';
+import 'package:uniceps/app/data/stores/performance/performance_repo.dart';
 import 'package:uniceps/app/data/stores/practice/practice_repo.dart';
 import 'package:uniceps/app/data/stores/profile/measurements_repo.dart';
+import 'package:uniceps/app/data/stores/profile/profile_repo.dart';
 import 'package:uniceps/app/data/stores/routine/exercises_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_days_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_items_repo.dart';
@@ -36,8 +40,10 @@ import 'package:uniceps/app/data/stores/routine/routine_sets_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_with_heat_repo.dart';
 import 'package:uniceps/app/domain/commands/account_usecases/account_usecases.dart';
 import 'package:uniceps/app/domain/commands/auth_usecases/otp_usecases.dart';
-import 'package:uniceps/app/domain/commands/measurement/measurement_commands.dart';
+import 'package:uniceps/app/domain/commands/measurement_usecases/measurement_commands.dart';
+import 'package:uniceps/app/domain/commands/performance_usecases/performance_commands.dart';
 import 'package:uniceps/app/domain/commands/practice_usecases/practice_commands.dart';
+import 'package:uniceps/app/domain/commands/profile_usecases/profile_usecases.dart';
 import 'package:uniceps/app/domain/commands/routine_management/exercises_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_days_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_items_commands.dart';
@@ -45,15 +51,18 @@ import 'package:uniceps/app/domain/commands/routine_management/routine_managemen
 import 'package:uniceps/app/domain/commands/routine_management/routine_sets_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_with_heat_commands.dart';
 import 'package:uniceps/app/domain/contracts/account/i_account_service.dart';
-import 'package:uniceps/app/domain/contracts/auth_repo/i_auth_contracts.dart';
-import 'package:uniceps/app/domain/contracts/practice_repo/practice_contract.dart';
-import 'package:uniceps/app/domain/contracts/profile_repo/i_measurement_service.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_exercises_contract.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_days_contract.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_items_contract.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_sets_contract.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_management_contract.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_with_heat_contract.dart';
+import 'package:uniceps/app/domain/contracts/auth/i_auth_contracts.dart';
+import 'package:uniceps/app/domain/contracts/performance/i_performance_contract.dart';
+import 'package:uniceps/app/domain/contracts/practice/i_practice_contract.dart';
+import 'package:uniceps/app/domain/contracts/profile/i_measurement_service.dart';
+import 'package:uniceps/app/domain/contracts/profile/i_profile_service.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_exercises_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_days_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_items_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_sets_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_management_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_with_heat_contract.dart';
+import 'package:uniceps/app/services/captian_quotes_service.dart';
 import 'package:uniceps/app/services/update_service.dart';
 
 final sl = di.GetIt.instance;
@@ -75,59 +84,8 @@ Future<void> init() async {
   ///  V2   R E Q U I R E D
   final imagesCache = await Hive.openBox<Uint8List>("ExerciseImages");
 
-  sl.registerLazySingleton<MediaHelper>(() => ImageMediaHelper(imagesCache: imagesCache, checker: sl(), client: sl()));
-
-  // D E P R I C A T E D
-  // final userBox = await Hive.openBox<Map<dynamic, dynamic>>("User");
-  // final profileBox = await Hive.openBox<Map<dynamic, dynamic>>("Profile");
-  // final trainBox = await Hive.openBox<Map<dynamic, dynamic>>("Training");
-  // final lastWeightBox = await Hive.openBox<double>("LastWeight");
-  // final gymsBox = await Hive.openBox<Map<dynamic, dynamic>>("Gyms");
-  // final myGyms = await Hive.openBox<Map<dynamic, dynamic>>("MyGyms");
-  // final subsBox = await Hive.openBox<List<dynamic>>("Subs");
-  // final measureBox = await Hive.openBox<Map<dynamic, dynamic>>("Metrics");
-  // final handshakesBox = await Hive.openBox<Map<dynamic, dynamic>>("HandShakes");
-  // final attendenceBox = await Hive.openBox<List<dynamic>>("Attendence");
-  // final imagesBox = await Hive.openBox<Uint8List>("Images");
-  // final selectedGym = await Hive.openBox<bool>("SelectedGym");
-  // final playerInGymBox =
-  //     await Hive.openBox<Map<dynamic, dynamic>>("PlayerInGym");
-  // await userBox.clear();
-  // await profileBox.clear();
-  // await trainBox.clear();
-  // await lastWeightBox.clear();
-  // await gymsBox.clear();
-  // await myGyms.clear();
-  // await subsBox.clear();
-  // await measureBox.clear();
-  // await handshakesBox.clear();
-  // await attendenceBox.clear();
-  // // await imagesBox.clear();
-  // await selectedGym.clear();
-  // await playerInGymBox.clear();
-  // Future<void> clear() async {
-  //   await userBox.clear();
-  //   await profileBox.clear();
-  //   await trainBox.clear();
-  //   await lastWeightBox.clear();
-  //   await gymsBox.clear();
-  //   await myGyms.clear();
-  //   await subsBox.clear();
-  //   await measureBox.clear();
-  //   await handshakesBox.clear();
-  //   await attendenceBox.clear();
-  //   await imagesBox.clear();
-  //   await selectedGym.clear();
-  //   await playerInGymBox.clear();
-  // }
-  // sl.registerLazySingleton<ImageCacheManager>(
-  //   () => ImageCacheManager(
-  //     imagesCache: imagesBox,
-  //     checker: sl(),
-  //     client: sl(),
-  //     logger: sl(),
-  //   ),
-  // );
+  sl.registerLazySingleton<MediaHelper>(
+      () => ImageMediaHelper(imagesCache: imagesCache, checker: sl(), client: sl(), logger: sl()));
 
   /////////
   ////////
@@ -138,17 +96,19 @@ Future<void> init() async {
   ///
   //
 
+  sl.registerLazySingleton<IProfileLocalSource>(() => ProfileLocalSource(prefs: prefs, logger: sl()));
+
   sl.registerLazySingleton<ITSessionLocalSourceContract>(
-      () => TSessionLocalSource(database: sl(), imagesCache: imagesCache));
+      () => TSessionLocalSource(database: sl(), imagesCache: imagesCache, logger: sl()));
 
   //  R O U T I N E   S O U R C E S
   sl.registerLazySingleton<IRoutineManagementLocalSourceContract>(
-      () => RoutineManagementLocalSourceImpl(database: sl()));
+      () => RoutineManagementLocalSourceImpl(database: sl(), logger: sl()));
   sl.registerLazySingleton<IRoutineDaysLocalSourceContract>(() => RoutineDaysLocalSourceImpl(dataBase: sl()));
   sl.registerLazySingleton<IRoutineItemsLocalSourceContract>(
       () => RoutineItemsLocalSourceImpl(database: sl(), imagesCache: imagesCache));
   sl.registerLazySingleton<IRoutineSetsLocalSourceContract>(() => RoutineSetsLocalSourceImpl(database: sl()));
-  sl.registerLazySingleton<IExercisesLocalSourceContract>(() => ExercisesLocalSource(database: sl()));
+  // sl.registerLazySingleton<IExercisesLocalSourceContract>(() => ExercisesLocalSource(database: sl()));
 
   //  A U T H   S O U R C E S
   sl.registerLazySingleton<IOTPAuthSource>(() => OTPAuthSource(client: sl(), logger: sl()));
@@ -179,24 +139,44 @@ Future<void> init() async {
   ///
   //
 
+  sl.registerLazySingleton<IProfileService>(() => ProfileRepo(localSource: sl(), logger: sl()));
+
   sl.registerLazySingleton<IPracticeContract>(() => PracticeRepo(localSource: sl()));
   sl.registerLazySingleton<IRoutineManagementContract>(
       () => RoutineManagementRepo(localSource: sl(), internet: sl(), clientHelper: sl()));
   sl.registerLazySingleton<IRoutineWithHeatContract>(
-      () => RoutineWithHeatRepo(localSource: sl(), internet: sl(), clientHelper: sl()));
-  sl.registerLazySingleton<IRoutineDaysContract>(() => RoutineDaysRepo(localSource: sl()));
+      () => RoutineWithHeatRepo(localSource: sl(), mediaHelper: sl(), fileParseService: sl(), logger: sl()));
+  sl.registerLazySingleton<IRoutineDaysContract>(() => RoutineDaysRepo(localSource: sl(), logger: sl()));
   sl.registerLazySingleton<IRoutineItemsContract>(() => RoutineItemsRepo(localSource: sl(), mediaHelper: sl()));
-  sl.registerLazySingleton<IRoutineSetsContract>(() => RoutineSetsRepo(localSource: sl()));
-  sl.registerLazySingleton<IExercisesContract>(
-      () => ExercisesRepo(internet: sl(), remoteSource: sl(), localSource: sl()));
+  sl.registerLazySingleton<IRoutineSetsContract>(() => RoutineSetsRepo(localSource: sl(), logger: sl()));
+  sl.registerLazySingleton<IExercisesContract>(() => ExercisesRepo(internet: sl(), remoteSource: sl()));
 
   //  A U T H   R E P O
-  sl.registerLazySingleton<IOTPAuthRepo>(
-      () => EmailAuthRepo(otpAuthSource: sl(), tokenService: sl(), accountLocalSource: sl(), connection: sl()));
-  sl.registerLazySingleton<IAccountService>(() => AccountRepo(localSource: sl(), remoteSource: sl(), checker: sl()));
+  sl.registerLazySingleton<IOTPAuthRepo>(() => EmailAuthRepo(
+        otpAuthSource: sl(),
+        tokenService: sl(),
+        accountLocalSource: sl(),
+        connection: sl(),
+        logger: sl(),
+      ));
+  sl.registerLazySingleton<IAccountService>(() => AccountRepo(
+        localSource: sl(),
+        remoteSource: sl(),
+        checker: sl(),
+        logger: sl(),
+      ));
 
   //  M E A S U R E M E N T S   R E P O
-  sl.registerLazySingleton<IMeasurementContract>(() => MeasurementsRepo(localSource: sl(), logger: sl()));
+  sl.registerLazySingleton<IMeasurementContract>(() => MeasurementsRepo(
+        localSource: sl(),
+        logger: sl(),
+      ));
+  sl.registerLazySingleton<IPerformanceContract>(() => PerformanceRepo(
+        profileLocalSource: sl(),
+        routineLocalSource: sl(),
+        tSessionsLocalSource: sl(),
+        measurementsLocalSource: sl(),
+      ));
 
   /////////
   ////////
@@ -206,6 +186,7 @@ Future<void> init() async {
   ////
   ///
   //
+  sl.registerFactory(() => ProfileUsecases(repo: sl()));
 
   sl.registerFactory(() => AccountUsecases(repo: sl()));
   sl.registerFactory(() => PracticeCommands(repo: sl()));
@@ -217,6 +198,8 @@ Future<void> init() async {
   sl.registerFactory(() => ExercisesCommands(repo: sl()));
   sl.registerFactory(() => OtpUsecases(repo: sl()));
   sl.registerFactory(() => MeasurementCommands(repo: sl()));
+
+  sl.registerFactory(() => PerformanceCommands(repo: sl()));
 
   //////////////////////////////////////////////////////////////////////////////
   ///
@@ -237,7 +220,7 @@ Future<void> init() async {
 
   sl.registerLazySingleton<Logger>(
     () => Logger(
-      level: Level.all,
+      level: kReleaseMode ? Level.error : Level.all,
       printer: PrettyPrinter(
         dateTimeFormat: DateTimeFormat.dateAndTime,
         // printEmojis: false,
@@ -256,10 +239,16 @@ Future<void> init() async {
     ),
   );
 
-  sl.registerLazySingleton<UpdateService>(
-    () => UpdateService(
-      connectionChecker: sl(),
-      client: sl(),
-    ),
-  );
+  sl.registerLazySingleton(() => UniFileManager());
+
+  sl.registerLazySingleton<UpdateService>(() => UpdateService(connectionChecker: sl(), client: sl()));
+
+  sl.registerLazySingleton<TSessionSyncContract>(
+      () => TSessionSyncService(database: sl(), client: sl(), connectionChecker: sl(), logger: sl()),
+      dispose: (param) => param.dispose());
+
+  sl.registerLazySingleton(() => CaptianQuotesService(prefs: sl()));
+
+  // final notificationService =  NotificationService();
+  // notificationService.ini
 }

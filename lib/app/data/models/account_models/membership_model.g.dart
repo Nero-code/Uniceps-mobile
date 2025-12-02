@@ -8,28 +8,24 @@ part of 'membership_model.dart';
 
 MembershipModel _$MembershipModelFromJson(Map<String, dynamic> json) =>
     MembershipModel(
-      id: (json['id'] as num?)?.toInt(),
-      planName: json['planName'] as String,
-      planId: json['planId'] as String,
+      planName: json['plan'] as String,
+      planId: json['id'] as String,
       price: (json['price'] as num).toDouble(),
       startDate: DateTime.parse(json['startDate'] as String),
       endDate: DateTime.parse(json['endDate'] as String),
+      isNotified: json['isNotified'] as bool? ?? false,
       isActive: json['isActive'] as bool,
       isGift: json['isGift'] as bool,
-      permits: (json['permits'] as List<dynamic>)
-          .map((e) => PermissionModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
     );
 
 Map<String, dynamic> _$MembershipModelToJson(MembershipModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'planName': instance.planName,
-      'planId': instance.planId,
+      'id': instance.planId,
+      'plan': instance.planName,
       'price': instance.price,
       'startDate': instance.startDate.toIso8601String(),
       'endDate': instance.endDate.toIso8601String(),
+      'isNotified': instance.isNotified,
       'isActive': instance.isActive,
       'isGift': instance.isGift,
-      'permits': instance.permits,
     };

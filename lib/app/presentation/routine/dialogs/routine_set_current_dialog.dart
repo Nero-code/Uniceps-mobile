@@ -19,21 +19,34 @@ class RoutineSetCurrentDialog extends StatelessWidget {
     final ar = context.read<LocaleCubit>().state.isRtl();
 
     return AlertDialog(
-      icon: const Icon(Icons.stars),
+      icon: const Icon(Icons.flag, size: 40),
       title: Text("${locale.setCurrent}${ar ? '؟' : '?'}"),
-      content: Text(locale.setCurrentAlertContent(routineName)),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(locale.cancel),
-        ),
-        ElevatedButton(
-            onPressed: () {
-              onConfirm();
-              Navigator.pop(context);
-            },
-            child: Text(locale.confirm)),
-      ],
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(locale.setCurrentAlertContent(routineName)),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(locale.cancel),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton(
+                    onPressed: () {
+                      onConfirm();
+                      Navigator.pop(context);
+                    },
+                    child: Text(locale.confirm)),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

@@ -4,7 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_management_commands.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_management_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_management_contract.dart';
 
 import 'routine_management_test.mocks.dart';
 
@@ -44,8 +44,7 @@ void main() {
     });
 
     test('getAllRoutines - success scenario', () async {
-      when(mockRepo.getAllRoutines())
-          .thenAnswer((_) async => Right(mockRoutines));
+      when(mockRepo.getAllRoutines()).thenAnswer((_) async => Right(mockRoutines));
 
       final result = await commands.getAllRoutines();
 
@@ -68,8 +67,7 @@ void main() {
           trainingDays: [],
           isSynced: false);
 
-      when(mockRepo.createRoutine('Morning Routine'))
-          .thenAnswer((_) async => Right([...mockRoutines, newRoutine]));
+      when(mockRepo.createRoutine('Morning Routine')).thenAnswer((_) async => Right([...mockRoutines, newRoutine]));
 
       final result = await commands.createRoutine('Morning Routine');
 
@@ -97,8 +95,7 @@ void main() {
       );
 
       mockRoutines[1] = updatedRoutine;
-      when(mockRepo.updateRoutine(updatedRoutine))
-          .thenAnswer((_) async => Right(mockRoutines));
+      when(mockRepo.updateRoutine(updatedRoutine)).thenAnswer((_) async => Right(mockRoutines));
 
       final result = await commands.updateRoutine(updatedRoutine);
 
@@ -114,8 +111,7 @@ void main() {
     });
 
     test('deleteRoutine - success scenario', () async {
-      when(mockRepo.deleteRoutine(mockRoutines[1]))
-          .thenAnswer((_) async => Right(mockRoutines));
+      when(mockRepo.deleteRoutine(mockRoutines[1])).thenAnswer((_) async => Right(mockRoutines));
 
       final result = await commands.deleteRoutine(mockRoutines[1]);
 

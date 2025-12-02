@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
+import 'package:uniceps/core/constants/app_routes.dart';
+import 'package:uniceps/core/constants/cap_images.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SessionCompleteDialog extends StatelessWidget {
   const SessionCompleteDialog({super.key});
@@ -11,9 +15,9 @@ class SessionCompleteDialog extends StatelessWidget {
       color: Colors.transparent,
       child: Center(
         child: Container(
-          width: MediaQuery.sizeOf(context).width * 0.75,
-          height: MediaQuery.sizeOf(context).height * 0.5,
-          padding: const EdgeInsets.all(5.0),
+          width: MediaQuery.sizeOf(context).width * 0.6,
+          height: MediaQuery.sizeOf(context).width * 0.8,
+          padding: const EdgeInsets.all(10.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
             gradient: const LinearGradient(
@@ -27,40 +31,45 @@ class SessionCompleteDialog extends StatelessWidget {
           ),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(45),
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(40),
+              boxShadow: const [
+                BoxShadow(
+                  offset: Offset(5.0, 5.0),
+                  color: Color.fromARGB(141, 158, 158, 158),
+                  blurRadius: 3,
+                ),
+                BoxShadow(
+                  offset: Offset(-5.0, -5.0),
+                  color: Colors.white60,
+                  blurRadius: 3,
+                ),
+              ],
             ),
             child: Column(
               children: [
-                const Expanded(
-                  flex: 2,
-                  child: Icon(
-                    Icons.workspace_premium_rounded,
-                    size: 150,
-                    // color: Color.fromARGB(255, 94, 147, 160),
-                    color: Colors.amber,
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      locale.welldone,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                        color: Color.fromARGB(255, 69, 114, 126),
-                      ),
+                const Expanded(child: Image(image: AssetImage(CaptainImages.finishSession))),
+                Center(
+                  child: Text(
+                    locale.welldone,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 69, 114, 126),
                     ),
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.5,
+                  width: MediaQuery.sizeOf(context).width * 0.4,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         // backgroundColor: Color.fromARGB(255, 94, 147, 160),
                         backgroundColor: Colors.amber,
                         foregroundColor: Colors.white),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      context.read<CurrentRoutineCubit>().getCurrentRoutine();
+                      Navigator.popUntil(context, (route) => route.settings.name == AppRoutes.home);
+                    },
                     child: Text(locale.great),
                   ),
                 ),

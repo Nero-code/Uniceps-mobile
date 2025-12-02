@@ -22,19 +22,38 @@ class PracticeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: sets.map((i) {
-        return RoundWidget(
-          onLog: () {},
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      for (int i = 0; i < sets.length; i++) ...[
+        RoundWidget(
+          // onLog: () {},
           totalProgress: totalProgress,
           sessionId: sessionId,
           exId: exId,
           exIndex: exIndex,
-          set: i,
-          log: logs.where((l) => l.setIndex == i.index).firstOrNull,
+          set: sets[i],
+          log: logs.where((l) => l.setIndex == sets[i].index).firstOrNull,
+        ),
+        if (i != sets.length - 1)
+          const Divider(
+            indent: 20,
+            endIndent: 20,
+            thickness: 0.5,
+            // color: Colors.grey.shade200,
+            height: 0.5,
+          )
+      ]
+    ]
+        //  sets.map((i) {
+        //   return RoundWidget(
+        //     // onLog: () {},
+        //     totalProgress: totalProgress,
+        //     sessionId: sessionId,
+        //     exId: exId,
+        //     exIndex: exIndex,
+        //     set: i,
+        //     log: logs.where((l) => l.setIndex == i.index).firstOrNull,
+        //   );
+        // }).toList(),
         );
-      }).toList(),
-    );
   }
 }

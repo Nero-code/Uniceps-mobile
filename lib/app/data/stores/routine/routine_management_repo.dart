@@ -2,9 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:uniceps/app/data/models/routine_models/extensions.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart';
-import 'package:uniceps/app/data/sources/services/client_helper.dart';
+import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_management_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_management_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class RoutineManagementRepo implements IRoutineManagementContract {
@@ -27,6 +27,8 @@ class RoutineManagementRepo implements IRoutineManagementContract {
   Future<Either<Failure, List<Routine>>> getAllRoutines() async {
     try {
       final res = await _localSource.getAllRoutines();
+      if (res.isEmpty) return const Left(EmptyCacheFailure(errorMessage: ""));
+
       routines.clear();
       routines.addAll(res.map((r) => r.toEntity()));
       return Right(routines);
@@ -107,16 +109,6 @@ class RoutineManagementRepo implements IRoutineManagementContract {
       return Right(routines);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, Unit>> shareRoutine(Routine routine, int userId) async {
-    try {
-      await _localSource.shareRoutine(routine.toDto());
-      return const Right(unit);
-    } catch (e) {
-      return Left(DatabaseFailure(errorMsg: ""));
     }
   }
 }

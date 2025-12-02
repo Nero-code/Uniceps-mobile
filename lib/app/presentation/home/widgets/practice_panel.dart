@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
-import 'package:uniceps/app/presentation/home/widgets/level_indicator.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/box_botton.dart';
 
 class PracticePanel extends StatelessWidget {
@@ -9,13 +10,13 @@ class PracticePanel extends StatelessWidget {
     super.key,
     required this.mainIcon,
     required this.onPractice,
-    required this.onSettings,
+    required this.onMeasurement,
     this.onAnalytics,
     this.onStreak,
   });
   final Widget mainIcon;
   final VoidCallback onPractice;
-  final VoidCallback onSettings;
+  final VoidCallback onMeasurement;
   final VoidCallback? onAnalytics;
   final VoidCallback? onStreak;
 
@@ -76,21 +77,37 @@ class PracticePanel extends StatelessWidget {
               },
             ),
           ),
-          Align(
-            alignment: Alignment.lerp(Alignment.bottomLeft, Alignment.topCenter, .20)!,
-            child: BoxButton(
-              isCircle: true,
-              width: smallBtnSize,
-              height: smallBtnSize,
-              background: btnBackgroundColor,
-              onTap: onAnalytics,
-              child: Icon(
-                Icons.bar_chart_rounded,
-                size: smallBtnIcon,
-                color: Colors.red,
+          Builder(builder: (context) {
+            // final acc = context.watch<AccountCubit>();
+            final mem = context.watch<MembershipBloc>();
+
+            return Align(
+              alignment: Alignment.lerp(Alignment.bottomLeft, Alignment.topCenter, .20)!,
+              child: Badge(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                backgroundColor: Colors.amber,
+                isLabelVisible: mem.state.maybeWhen(orElse: () => false, error: (_) => true),
+                label: const Image(
+                  image: AssetImage(IMG_PREMIUM),
+                  color: Colors.white,
+                  width: 15,
+                  height: 15,
+                ),
+                child: BoxButton(
+                  isCircle: true,
+                  width: smallBtnSize,
+                  height: smallBtnSize,
+                  background: btnBackgroundColor,
+                  onTap: mem.state.whenOrNull(loaded: (_) => onAnalytics),
+                  child: Icon(
+                    Icons.bar_chart_rounded,
+                    size: smallBtnIcon,
+                    color: Colors.orange,
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          }),
           Align(
             alignment: Alignment.lerp(Alignment.bottomRight, Alignment.topCenter, .20)!,
             child: BoxButton(
@@ -98,45 +115,45 @@ class PracticePanel extends StatelessWidget {
               width: smallBtnSize,
               height: smallBtnSize,
               background: btnBackgroundColor,
-              onTap: onSettings,
+              onTap: onMeasurement,
               child: Icon(
-                Icons.settings,
+                Icons.architecture,
                 size: smallBtnIcon,
                 // color: Colors.black54,
-                color: Colors.blueGrey.shade700,
+                color: Colors.red,
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.lerp(Alignment.topLeft, Alignment.topCenter, 0.2)!,
-            child: BoxButton(
-              isCircle: true,
-              width: smallBtnSize,
-              height: smallBtnSize,
-              background: btnBackgroundColor,
-              onTap: onStreak,
-              child: const Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.local_fire_department,
-                      color: Colors.orange,
-                      size: 30,
-                    ),
-                    Text(
-                      "115",
-                      style: TextStyle(fontSize: 9),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.lerp(Alignment.topRight, Alignment.topCenter, 0.2)!,
-            child: const LevelIndicator(size: 60),
-          ),
+          // Align(
+          //   alignment: Alignment.lerp(Alignment.topLeft, Alignment.topCenter, 0.2)!,
+          //   child: BoxButton(
+          //     isCircle: true,
+          //     width: smallBtnSize,
+          //     height: smallBtnSize,
+          //     background: btnBackgroundColor,
+          //     onTap: onStreak,
+          //     child: const Center(
+          //       child: Column(
+          //         mainAxisSize: MainAxisSize.min,
+          //         children: [
+          //           Icon(
+          //             Icons.local_fire_department,
+          //             color: Colors.orange,
+          //             size: 30,
+          //           ),
+          //           // Text(
+          //           //   "115",
+          //           //   style: TextStyle(fontSize: 9),
+          //           // ),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // Align(
+          //   alignment: Alignment.lerp(Alignment.topRight, Alignment.topCenter, 0.2)!,
+          //   child: const LevelIndicator(size: 55),
+          // ),
         ],
       ),
     );

@@ -10,12 +10,12 @@ RoutineSetDto _$RoutineSetDtoFromJson(Map<String, dynamic> json) =>
     RoutineSetDto(
       id: (json['id'] as num?)?.toInt(),
       apiId: (json['apiId'] as num?)?.toInt(),
-      routineItemId: (json['routineItemId'] as num).toInt(),
-      version: (json['version'] as num).toInt(),
-      index: (json['index'] as num).toInt(),
-      reps: (json['reps'] as num).toInt(),
+      routineItemId: (json['routineItemId'] as num?)?.toInt() ?? 0,
+      version: (json['version'] as num?)?.toInt() ?? 0,
+      index: (json['Order'] as num).toInt(),
+      reps: (json['Repetition'] as num).toInt(),
       weight: (json['weight'] as num?)?.toDouble(),
-      isSynced: json['isSynced'] as bool,
+      isSynced: json['isSynced'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$RoutineSetDtoToJson(RoutineSetDto instance) =>
@@ -23,9 +23,9 @@ Map<String, dynamic> _$RoutineSetDtoToJson(RoutineSetDto instance) =>
       'id': instance.id,
       'apiId': instance.apiId,
       'routineItemId': instance.routineItemId,
-      'index': instance.index,
-      'reps': instance.reps,
+      'Order': instance.index,
+      'Repetition': instance.reps,
       'version': instance.version,
-      'weight': instance.weight,
       'isSynced': instance.isSynced,
+      'weight': instance.weight,
     };

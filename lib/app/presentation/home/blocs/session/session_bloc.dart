@@ -33,7 +33,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     // ------------------------------------------------
     // Start Session Event
     on<_StartSession>((event, emit) async {
-      final either = await _commands.startTrainingSession(event.dayId);
+      final either = await _commands.startTrainingSession(event.dayId, event.dayName);
 
       either.fold(
         (l) => emit(SessionState.error(l)),

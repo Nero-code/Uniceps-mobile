@@ -15,7 +15,7 @@ class RoutineTableParser {
   final List<DaysGroupData> days;
   final List<RoutineItem> items;
   final List<Exercise> exercises;
-  final List<ExerciseGroup> groups;
+  // final List<ExerciseGroup> groups;
   final List<RoutineSet> sets;
 
   const RoutineTableParser({
@@ -25,37 +25,35 @@ class RoutineTableParser {
     required this.days,
     required this.items,
     required this.exercises,
-    required this.groups,
+    // required this.groups,
     required this.sets,
   });
 
   RoutineDto toDto() {
     List<RoutineDayDto> routineDays = [];
-    print("found routine");
+    // debugPrint("found routine");
     for (final dayTable in days) {
-      print("found day");
+      // debugPrint("found day");
       //
       List<RoutineItemDto> dayItems = [];
       for (final itemTable in items) {
-        print("found item");
+        // debugPrint("found item");
         if (itemTable.dayId == dayTable.id) {
           //
           List<RoutineSetDto> itemSets = [];
           for (final setTable in sets) {
-            print("found set");
+            // debugPrint("found set");
             if (setTable.routineItemId == itemTable.id) {
               itemSets.add(RoutineSetDto.fromTable(setTable));
             }
           }
 
-          final exercise =
-              exercises.firstWhere((e) => e.apiId == itemTable.exerciseId);
+          final exercise = exercises.firstWhere((e) => e.apiId == itemTable.exerciseId);
           final img = imagesCache.get(exercise.imageUrl);
-          final group =
-              groups.firstWhere((g) => g.apiId == exercise.muscleGroup);
+
           final itemDto = RoutineItemDto.fromTable(
             itemTable,
-            ExerciseV2Dto.fromTable(exercise, group, exercise.imageUrl, img),
+            ExerciseV2Dto.fromTable(exercise, exercise.imageUrl, img),
             itemSets,
           );
 
@@ -66,13 +64,13 @@ class RoutineTableParser {
       final dayDto = RoutineDayDto.fromTable(dayTable, dayItems);
       routineDays.add(dayDto);
     }
-    print(routine.name);
-    for (var element in routineDays) {
-      print(element.name);
-      for (var item in element.items) {
-        print(item.exerciseV2Dto.name);
-      }
-    }
+    // debugPrint(routine.name);
+    // for (var element in routineDays) {
+    //   // debugPrint(element.name);
+    //   for (var item in element.items) {
+    //     // debugPrint(item.exerciseV2Dto.name);
+    //   }
+    // }
     return RoutineDto.fromTable(routine, routineDays);
   }
 }

@@ -814,18 +814,21 @@ mixin _$MeasurementFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() msOffline,
     required TResult Function() noRecords,
+    required TResult Function() msDbFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? msOffline,
     TResult? Function()? noRecords,
+    TResult? Function()? msDbFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? msOffline,
     TResult Function()? noRecords,
+    TResult Function()? msDbFailure,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -833,18 +836,21 @@ mixin _$MeasurementFailure {
   TResult map<TResult extends Object?>({
     required TResult Function(_MsOffline value) msOffline,
     required TResult Function(_NoRecords value) noRecords,
+    required TResult Function(_MsDbFailure value) msDbFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_MsOffline value)? msOffline,
     TResult? Function(_NoRecords value)? noRecords,
+    TResult? Function(_MsDbFailure value)? msDbFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_MsOffline value)? msOffline,
     TResult Function(_NoRecords value)? noRecords,
+    TResult Function(_MsDbFailure value)? msDbFailure,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -908,6 +914,7 @@ class _$MsOfflineImpl implements _MsOffline {
   TResult when<TResult extends Object?>({
     required TResult Function() msOffline,
     required TResult Function() noRecords,
+    required TResult Function() msDbFailure,
   }) {
     return msOffline();
   }
@@ -917,6 +924,7 @@ class _$MsOfflineImpl implements _MsOffline {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? msOffline,
     TResult? Function()? noRecords,
+    TResult? Function()? msDbFailure,
   }) {
     return msOffline?.call();
   }
@@ -926,6 +934,7 @@ class _$MsOfflineImpl implements _MsOffline {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? msOffline,
     TResult Function()? noRecords,
+    TResult Function()? msDbFailure,
     required TResult orElse(),
   }) {
     if (msOffline != null) {
@@ -939,6 +948,7 @@ class _$MsOfflineImpl implements _MsOffline {
   TResult map<TResult extends Object?>({
     required TResult Function(_MsOffline value) msOffline,
     required TResult Function(_NoRecords value) noRecords,
+    required TResult Function(_MsDbFailure value) msDbFailure,
   }) {
     return msOffline(this);
   }
@@ -948,6 +958,7 @@ class _$MsOfflineImpl implements _MsOffline {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_MsOffline value)? msOffline,
     TResult? Function(_NoRecords value)? noRecords,
+    TResult? Function(_MsDbFailure value)? msDbFailure,
   }) {
     return msOffline?.call(this);
   }
@@ -957,6 +968,7 @@ class _$MsOfflineImpl implements _MsOffline {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_MsOffline value)? msOffline,
     TResult Function(_NoRecords value)? noRecords,
+    TResult Function(_MsDbFailure value)? msDbFailure,
     required TResult orElse(),
   }) {
     if (msOffline != null) {
@@ -1010,6 +1022,7 @@ class _$NoRecordsImpl implements _NoRecords {
   TResult when<TResult extends Object?>({
     required TResult Function() msOffline,
     required TResult Function() noRecords,
+    required TResult Function() msDbFailure,
   }) {
     return noRecords();
   }
@@ -1019,6 +1032,7 @@ class _$NoRecordsImpl implements _NoRecords {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? msOffline,
     TResult? Function()? noRecords,
+    TResult? Function()? msDbFailure,
   }) {
     return noRecords?.call();
   }
@@ -1028,6 +1042,7 @@ class _$NoRecordsImpl implements _NoRecords {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? msOffline,
     TResult Function()? noRecords,
+    TResult Function()? msDbFailure,
     required TResult orElse(),
   }) {
     if (noRecords != null) {
@@ -1041,6 +1056,7 @@ class _$NoRecordsImpl implements _NoRecords {
   TResult map<TResult extends Object?>({
     required TResult Function(_MsOffline value) msOffline,
     required TResult Function(_NoRecords value) noRecords,
+    required TResult Function(_MsDbFailure value) msDbFailure,
   }) {
     return noRecords(this);
   }
@@ -1050,6 +1066,7 @@ class _$NoRecordsImpl implements _NoRecords {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_MsOffline value)? msOffline,
     TResult? Function(_NoRecords value)? noRecords,
+    TResult? Function(_MsDbFailure value)? msDbFailure,
   }) {
     return noRecords?.call(this);
   }
@@ -1059,6 +1076,7 @@ class _$NoRecordsImpl implements _NoRecords {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_MsOffline value)? msOffline,
     TResult Function(_NoRecords value)? noRecords,
+    TResult Function(_MsDbFailure value)? msDbFailure,
     required TResult orElse(),
   }) {
     if (noRecords != null) {
@@ -1070,4 +1088,1054 @@ class _$NoRecordsImpl implements _NoRecords {
 
 abstract class _NoRecords implements MeasurementFailure {
   const factory _NoRecords() = _$NoRecordsImpl;
+}
+
+/// @nodoc
+abstract class _$$MsDbFailureImplCopyWith<$Res> {
+  factory _$$MsDbFailureImplCopyWith(
+          _$MsDbFailureImpl value, $Res Function(_$MsDbFailureImpl) then) =
+      __$$MsDbFailureImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$MsDbFailureImplCopyWithImpl<$Res>
+    extends _$MeasurementFailureCopyWithImpl<$Res, _$MsDbFailureImpl>
+    implements _$$MsDbFailureImplCopyWith<$Res> {
+  __$$MsDbFailureImplCopyWithImpl(
+      _$MsDbFailureImpl _value, $Res Function(_$MsDbFailureImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$MsDbFailureImpl implements _MsDbFailure {
+  const _$MsDbFailureImpl();
+
+  @override
+  String toString() {
+    return 'MeasurementFailure.msDbFailure()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$MsDbFailureImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() msOffline,
+    required TResult Function() noRecords,
+    required TResult Function() msDbFailure,
+  }) {
+    return msDbFailure();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? msOffline,
+    TResult? Function()? noRecords,
+    TResult? Function()? msDbFailure,
+  }) {
+    return msDbFailure?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? msOffline,
+    TResult Function()? noRecords,
+    TResult Function()? msDbFailure,
+    required TResult orElse(),
+  }) {
+    if (msDbFailure != null) {
+      return msDbFailure();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_MsOffline value) msOffline,
+    required TResult Function(_NoRecords value) noRecords,
+    required TResult Function(_MsDbFailure value) msDbFailure,
+  }) {
+    return msDbFailure(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_MsOffline value)? msOffline,
+    TResult? Function(_NoRecords value)? noRecords,
+    TResult? Function(_MsDbFailure value)? msDbFailure,
+  }) {
+    return msDbFailure?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_MsOffline value)? msOffline,
+    TResult Function(_NoRecords value)? noRecords,
+    TResult Function(_MsDbFailure value)? msDbFailure,
+    required TResult orElse(),
+  }) {
+    if (msDbFailure != null) {
+      return msDbFailure(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _MsDbFailure implements MeasurementFailure {
+  const factory _MsDbFailure() = _$MsDbFailureImpl;
+}
+
+/// @nodoc
+mixin _$PerformanceFailure {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() noValues,
+    required TResult Function() invalidValues,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? noValues,
+    TResult? Function()? invalidValues,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? noValues,
+    TResult Function()? invalidValues,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_NoValues value) noValues,
+    required TResult Function(_InvalidValues value) invalidValues,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_NoValues value)? noValues,
+    TResult? Function(_InvalidValues value)? invalidValues,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_NoValues value)? noValues,
+    TResult Function(_InvalidValues value)? invalidValues,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PerformanceFailureCopyWith<$Res> {
+  factory $PerformanceFailureCopyWith(
+          PerformanceFailure value, $Res Function(PerformanceFailure) then) =
+      _$PerformanceFailureCopyWithImpl<$Res, PerformanceFailure>;
+}
+
+/// @nodoc
+class _$PerformanceFailureCopyWithImpl<$Res, $Val extends PerformanceFailure>
+    implements $PerformanceFailureCopyWith<$Res> {
+  _$PerformanceFailureCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+}
+
+/// @nodoc
+abstract class _$$NoValuesImplCopyWith<$Res> {
+  factory _$$NoValuesImplCopyWith(
+          _$NoValuesImpl value, $Res Function(_$NoValuesImpl) then) =
+      __$$NoValuesImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$NoValuesImplCopyWithImpl<$Res>
+    extends _$PerformanceFailureCopyWithImpl<$Res, _$NoValuesImpl>
+    implements _$$NoValuesImplCopyWith<$Res> {
+  __$$NoValuesImplCopyWithImpl(
+      _$NoValuesImpl _value, $Res Function(_$NoValuesImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$NoValuesImpl implements _NoValues {
+  const _$NoValuesImpl();
+
+  @override
+  String toString() {
+    return 'PerformanceFailure.noValues()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$NoValuesImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() noValues,
+    required TResult Function() invalidValues,
+  }) {
+    return noValues();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? noValues,
+    TResult? Function()? invalidValues,
+  }) {
+    return noValues?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? noValues,
+    TResult Function()? invalidValues,
+    required TResult orElse(),
+  }) {
+    if (noValues != null) {
+      return noValues();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_NoValues value) noValues,
+    required TResult Function(_InvalidValues value) invalidValues,
+  }) {
+    return noValues(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_NoValues value)? noValues,
+    TResult? Function(_InvalidValues value)? invalidValues,
+  }) {
+    return noValues?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_NoValues value)? noValues,
+    TResult Function(_InvalidValues value)? invalidValues,
+    required TResult orElse(),
+  }) {
+    if (noValues != null) {
+      return noValues(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _NoValues implements PerformanceFailure {
+  const factory _NoValues() = _$NoValuesImpl;
+}
+
+/// @nodoc
+abstract class _$$InvalidValuesImplCopyWith<$Res> {
+  factory _$$InvalidValuesImplCopyWith(
+          _$InvalidValuesImpl value, $Res Function(_$InvalidValuesImpl) then) =
+      __$$InvalidValuesImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$InvalidValuesImplCopyWithImpl<$Res>
+    extends _$PerformanceFailureCopyWithImpl<$Res, _$InvalidValuesImpl>
+    implements _$$InvalidValuesImplCopyWith<$Res> {
+  __$$InvalidValuesImplCopyWithImpl(
+      _$InvalidValuesImpl _value, $Res Function(_$InvalidValuesImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$InvalidValuesImpl implements _InvalidValues {
+  const _$InvalidValuesImpl();
+
+  @override
+  String toString() {
+    return 'PerformanceFailure.invalidValues()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$InvalidValuesImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() noValues,
+    required TResult Function() invalidValues,
+  }) {
+    return invalidValues();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? noValues,
+    TResult? Function()? invalidValues,
+  }) {
+    return invalidValues?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? noValues,
+    TResult Function()? invalidValues,
+    required TResult orElse(),
+  }) {
+    if (invalidValues != null) {
+      return invalidValues();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_NoValues value) noValues,
+    required TResult Function(_InvalidValues value) invalidValues,
+  }) {
+    return invalidValues(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_NoValues value)? noValues,
+    TResult? Function(_InvalidValues value)? invalidValues,
+  }) {
+    return invalidValues?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_NoValues value)? noValues,
+    TResult Function(_InvalidValues value)? invalidValues,
+    required TResult orElse(),
+  }) {
+    if (invalidValues != null) {
+      return invalidValues(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _InvalidValues implements PerformanceFailure {
+  const factory _InvalidValues() = _$InvalidValuesImpl;
+}
+
+/// @nodoc
+mixin _$FileParseFailure {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() fOffline,
+    required TResult Function() noFileSelected,
+    required TResult Function() unsupportedVersion,
+    required TResult Function() parserMismatch,
+    required TResult Function() corruptedFile,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? fOffline,
+    TResult? Function()? noFileSelected,
+    TResult? Function()? unsupportedVersion,
+    TResult? Function()? parserMismatch,
+    TResult? Function()? corruptedFile,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? fOffline,
+    TResult Function()? noFileSelected,
+    TResult Function()? unsupportedVersion,
+    TResult Function()? parserMismatch,
+    TResult Function()? corruptedFile,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FOffline value) fOffline,
+    required TResult Function(_NoFileSelected value) noFileSelected,
+    required TResult Function(_UnsupportedVersion value) unsupportedVersion,
+    required TResult Function(_ParserMismatch value) parserMismatch,
+    required TResult Function(_CorruptedFile value) corruptedFile,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_FOffline value)? fOffline,
+    TResult? Function(_NoFileSelected value)? noFileSelected,
+    TResult? Function(_UnsupportedVersion value)? unsupportedVersion,
+    TResult? Function(_ParserMismatch value)? parserMismatch,
+    TResult? Function(_CorruptedFile value)? corruptedFile,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FOffline value)? fOffline,
+    TResult Function(_NoFileSelected value)? noFileSelected,
+    TResult Function(_UnsupportedVersion value)? unsupportedVersion,
+    TResult Function(_ParserMismatch value)? parserMismatch,
+    TResult Function(_CorruptedFile value)? corruptedFile,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $FileParseFailureCopyWith<$Res> {
+  factory $FileParseFailureCopyWith(
+          FileParseFailure value, $Res Function(FileParseFailure) then) =
+      _$FileParseFailureCopyWithImpl<$Res, FileParseFailure>;
+}
+
+/// @nodoc
+class _$FileParseFailureCopyWithImpl<$Res, $Val extends FileParseFailure>
+    implements $FileParseFailureCopyWith<$Res> {
+  _$FileParseFailureCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+}
+
+/// @nodoc
+abstract class _$$FOfflineImplCopyWith<$Res> {
+  factory _$$FOfflineImplCopyWith(
+          _$FOfflineImpl value, $Res Function(_$FOfflineImpl) then) =
+      __$$FOfflineImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$FOfflineImplCopyWithImpl<$Res>
+    extends _$FileParseFailureCopyWithImpl<$Res, _$FOfflineImpl>
+    implements _$$FOfflineImplCopyWith<$Res> {
+  __$$FOfflineImplCopyWithImpl(
+      _$FOfflineImpl _value, $Res Function(_$FOfflineImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$FOfflineImpl implements _FOffline {
+  const _$FOfflineImpl();
+
+  @override
+  String toString() {
+    return 'FileParseFailure.fOffline()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$FOfflineImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() fOffline,
+    required TResult Function() noFileSelected,
+    required TResult Function() unsupportedVersion,
+    required TResult Function() parserMismatch,
+    required TResult Function() corruptedFile,
+  }) {
+    return fOffline();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? fOffline,
+    TResult? Function()? noFileSelected,
+    TResult? Function()? unsupportedVersion,
+    TResult? Function()? parserMismatch,
+    TResult? Function()? corruptedFile,
+  }) {
+    return fOffline?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? fOffline,
+    TResult Function()? noFileSelected,
+    TResult Function()? unsupportedVersion,
+    TResult Function()? parserMismatch,
+    TResult Function()? corruptedFile,
+    required TResult orElse(),
+  }) {
+    if (fOffline != null) {
+      return fOffline();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FOffline value) fOffline,
+    required TResult Function(_NoFileSelected value) noFileSelected,
+    required TResult Function(_UnsupportedVersion value) unsupportedVersion,
+    required TResult Function(_ParserMismatch value) parserMismatch,
+    required TResult Function(_CorruptedFile value) corruptedFile,
+  }) {
+    return fOffline(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_FOffline value)? fOffline,
+    TResult? Function(_NoFileSelected value)? noFileSelected,
+    TResult? Function(_UnsupportedVersion value)? unsupportedVersion,
+    TResult? Function(_ParserMismatch value)? parserMismatch,
+    TResult? Function(_CorruptedFile value)? corruptedFile,
+  }) {
+    return fOffline?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FOffline value)? fOffline,
+    TResult Function(_NoFileSelected value)? noFileSelected,
+    TResult Function(_UnsupportedVersion value)? unsupportedVersion,
+    TResult Function(_ParserMismatch value)? parserMismatch,
+    TResult Function(_CorruptedFile value)? corruptedFile,
+    required TResult orElse(),
+  }) {
+    if (fOffline != null) {
+      return fOffline(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _FOffline implements FileParseFailure {
+  const factory _FOffline() = _$FOfflineImpl;
+}
+
+/// @nodoc
+abstract class _$$NoFileSelectedImplCopyWith<$Res> {
+  factory _$$NoFileSelectedImplCopyWith(_$NoFileSelectedImpl value,
+          $Res Function(_$NoFileSelectedImpl) then) =
+      __$$NoFileSelectedImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$NoFileSelectedImplCopyWithImpl<$Res>
+    extends _$FileParseFailureCopyWithImpl<$Res, _$NoFileSelectedImpl>
+    implements _$$NoFileSelectedImplCopyWith<$Res> {
+  __$$NoFileSelectedImplCopyWithImpl(
+      _$NoFileSelectedImpl _value, $Res Function(_$NoFileSelectedImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$NoFileSelectedImpl implements _NoFileSelected {
+  const _$NoFileSelectedImpl();
+
+  @override
+  String toString() {
+    return 'FileParseFailure.noFileSelected()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$NoFileSelectedImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() fOffline,
+    required TResult Function() noFileSelected,
+    required TResult Function() unsupportedVersion,
+    required TResult Function() parserMismatch,
+    required TResult Function() corruptedFile,
+  }) {
+    return noFileSelected();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? fOffline,
+    TResult? Function()? noFileSelected,
+    TResult? Function()? unsupportedVersion,
+    TResult? Function()? parserMismatch,
+    TResult? Function()? corruptedFile,
+  }) {
+    return noFileSelected?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? fOffline,
+    TResult Function()? noFileSelected,
+    TResult Function()? unsupportedVersion,
+    TResult Function()? parserMismatch,
+    TResult Function()? corruptedFile,
+    required TResult orElse(),
+  }) {
+    if (noFileSelected != null) {
+      return noFileSelected();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FOffline value) fOffline,
+    required TResult Function(_NoFileSelected value) noFileSelected,
+    required TResult Function(_UnsupportedVersion value) unsupportedVersion,
+    required TResult Function(_ParserMismatch value) parserMismatch,
+    required TResult Function(_CorruptedFile value) corruptedFile,
+  }) {
+    return noFileSelected(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_FOffline value)? fOffline,
+    TResult? Function(_NoFileSelected value)? noFileSelected,
+    TResult? Function(_UnsupportedVersion value)? unsupportedVersion,
+    TResult? Function(_ParserMismatch value)? parserMismatch,
+    TResult? Function(_CorruptedFile value)? corruptedFile,
+  }) {
+    return noFileSelected?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FOffline value)? fOffline,
+    TResult Function(_NoFileSelected value)? noFileSelected,
+    TResult Function(_UnsupportedVersion value)? unsupportedVersion,
+    TResult Function(_ParserMismatch value)? parserMismatch,
+    TResult Function(_CorruptedFile value)? corruptedFile,
+    required TResult orElse(),
+  }) {
+    if (noFileSelected != null) {
+      return noFileSelected(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _NoFileSelected implements FileParseFailure {
+  const factory _NoFileSelected() = _$NoFileSelectedImpl;
+}
+
+/// @nodoc
+abstract class _$$UnsupportedVersionImplCopyWith<$Res> {
+  factory _$$UnsupportedVersionImplCopyWith(_$UnsupportedVersionImpl value,
+          $Res Function(_$UnsupportedVersionImpl) then) =
+      __$$UnsupportedVersionImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$UnsupportedVersionImplCopyWithImpl<$Res>
+    extends _$FileParseFailureCopyWithImpl<$Res, _$UnsupportedVersionImpl>
+    implements _$$UnsupportedVersionImplCopyWith<$Res> {
+  __$$UnsupportedVersionImplCopyWithImpl(_$UnsupportedVersionImpl _value,
+      $Res Function(_$UnsupportedVersionImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$UnsupportedVersionImpl implements _UnsupportedVersion {
+  const _$UnsupportedVersionImpl();
+
+  @override
+  String toString() {
+    return 'FileParseFailure.unsupportedVersion()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$UnsupportedVersionImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() fOffline,
+    required TResult Function() noFileSelected,
+    required TResult Function() unsupportedVersion,
+    required TResult Function() parserMismatch,
+    required TResult Function() corruptedFile,
+  }) {
+    return unsupportedVersion();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? fOffline,
+    TResult? Function()? noFileSelected,
+    TResult? Function()? unsupportedVersion,
+    TResult? Function()? parserMismatch,
+    TResult? Function()? corruptedFile,
+  }) {
+    return unsupportedVersion?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? fOffline,
+    TResult Function()? noFileSelected,
+    TResult Function()? unsupportedVersion,
+    TResult Function()? parserMismatch,
+    TResult Function()? corruptedFile,
+    required TResult orElse(),
+  }) {
+    if (unsupportedVersion != null) {
+      return unsupportedVersion();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FOffline value) fOffline,
+    required TResult Function(_NoFileSelected value) noFileSelected,
+    required TResult Function(_UnsupportedVersion value) unsupportedVersion,
+    required TResult Function(_ParserMismatch value) parserMismatch,
+    required TResult Function(_CorruptedFile value) corruptedFile,
+  }) {
+    return unsupportedVersion(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_FOffline value)? fOffline,
+    TResult? Function(_NoFileSelected value)? noFileSelected,
+    TResult? Function(_UnsupportedVersion value)? unsupportedVersion,
+    TResult? Function(_ParserMismatch value)? parserMismatch,
+    TResult? Function(_CorruptedFile value)? corruptedFile,
+  }) {
+    return unsupportedVersion?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FOffline value)? fOffline,
+    TResult Function(_NoFileSelected value)? noFileSelected,
+    TResult Function(_UnsupportedVersion value)? unsupportedVersion,
+    TResult Function(_ParserMismatch value)? parserMismatch,
+    TResult Function(_CorruptedFile value)? corruptedFile,
+    required TResult orElse(),
+  }) {
+    if (unsupportedVersion != null) {
+      return unsupportedVersion(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _UnsupportedVersion implements FileParseFailure {
+  const factory _UnsupportedVersion() = _$UnsupportedVersionImpl;
+}
+
+/// @nodoc
+abstract class _$$ParserMismatchImplCopyWith<$Res> {
+  factory _$$ParserMismatchImplCopyWith(_$ParserMismatchImpl value,
+          $Res Function(_$ParserMismatchImpl) then) =
+      __$$ParserMismatchImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$ParserMismatchImplCopyWithImpl<$Res>
+    extends _$FileParseFailureCopyWithImpl<$Res, _$ParserMismatchImpl>
+    implements _$$ParserMismatchImplCopyWith<$Res> {
+  __$$ParserMismatchImplCopyWithImpl(
+      _$ParserMismatchImpl _value, $Res Function(_$ParserMismatchImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$ParserMismatchImpl implements _ParserMismatch {
+  const _$ParserMismatchImpl();
+
+  @override
+  String toString() {
+    return 'FileParseFailure.parserMismatch()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$ParserMismatchImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() fOffline,
+    required TResult Function() noFileSelected,
+    required TResult Function() unsupportedVersion,
+    required TResult Function() parserMismatch,
+    required TResult Function() corruptedFile,
+  }) {
+    return parserMismatch();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? fOffline,
+    TResult? Function()? noFileSelected,
+    TResult? Function()? unsupportedVersion,
+    TResult? Function()? parserMismatch,
+    TResult? Function()? corruptedFile,
+  }) {
+    return parserMismatch?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? fOffline,
+    TResult Function()? noFileSelected,
+    TResult Function()? unsupportedVersion,
+    TResult Function()? parserMismatch,
+    TResult Function()? corruptedFile,
+    required TResult orElse(),
+  }) {
+    if (parserMismatch != null) {
+      return parserMismatch();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FOffline value) fOffline,
+    required TResult Function(_NoFileSelected value) noFileSelected,
+    required TResult Function(_UnsupportedVersion value) unsupportedVersion,
+    required TResult Function(_ParserMismatch value) parserMismatch,
+    required TResult Function(_CorruptedFile value) corruptedFile,
+  }) {
+    return parserMismatch(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_FOffline value)? fOffline,
+    TResult? Function(_NoFileSelected value)? noFileSelected,
+    TResult? Function(_UnsupportedVersion value)? unsupportedVersion,
+    TResult? Function(_ParserMismatch value)? parserMismatch,
+    TResult? Function(_CorruptedFile value)? corruptedFile,
+  }) {
+    return parserMismatch?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FOffline value)? fOffline,
+    TResult Function(_NoFileSelected value)? noFileSelected,
+    TResult Function(_UnsupportedVersion value)? unsupportedVersion,
+    TResult Function(_ParserMismatch value)? parserMismatch,
+    TResult Function(_CorruptedFile value)? corruptedFile,
+    required TResult orElse(),
+  }) {
+    if (parserMismatch != null) {
+      return parserMismatch(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _ParserMismatch implements FileParseFailure {
+  const factory _ParserMismatch() = _$ParserMismatchImpl;
+}
+
+/// @nodoc
+abstract class _$$CorruptedFileImplCopyWith<$Res> {
+  factory _$$CorruptedFileImplCopyWith(
+          _$CorruptedFileImpl value, $Res Function(_$CorruptedFileImpl) then) =
+      __$$CorruptedFileImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$CorruptedFileImplCopyWithImpl<$Res>
+    extends _$FileParseFailureCopyWithImpl<$Res, _$CorruptedFileImpl>
+    implements _$$CorruptedFileImplCopyWith<$Res> {
+  __$$CorruptedFileImplCopyWithImpl(
+      _$CorruptedFileImpl _value, $Res Function(_$CorruptedFileImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$CorruptedFileImpl implements _CorruptedFile {
+  const _$CorruptedFileImpl();
+
+  @override
+  String toString() {
+    return 'FileParseFailure.corruptedFile()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$CorruptedFileImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() fOffline,
+    required TResult Function() noFileSelected,
+    required TResult Function() unsupportedVersion,
+    required TResult Function() parserMismatch,
+    required TResult Function() corruptedFile,
+  }) {
+    return corruptedFile();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? fOffline,
+    TResult? Function()? noFileSelected,
+    TResult? Function()? unsupportedVersion,
+    TResult? Function()? parserMismatch,
+    TResult? Function()? corruptedFile,
+  }) {
+    return corruptedFile?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? fOffline,
+    TResult Function()? noFileSelected,
+    TResult Function()? unsupportedVersion,
+    TResult Function()? parserMismatch,
+    TResult Function()? corruptedFile,
+    required TResult orElse(),
+  }) {
+    if (corruptedFile != null) {
+      return corruptedFile();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FOffline value) fOffline,
+    required TResult Function(_NoFileSelected value) noFileSelected,
+    required TResult Function(_UnsupportedVersion value) unsupportedVersion,
+    required TResult Function(_ParserMismatch value) parserMismatch,
+    required TResult Function(_CorruptedFile value) corruptedFile,
+  }) {
+    return corruptedFile(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_FOffline value)? fOffline,
+    TResult? Function(_NoFileSelected value)? noFileSelected,
+    TResult? Function(_UnsupportedVersion value)? unsupportedVersion,
+    TResult? Function(_ParserMismatch value)? parserMismatch,
+    TResult? Function(_CorruptedFile value)? corruptedFile,
+  }) {
+    return corruptedFile?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FOffline value)? fOffline,
+    TResult Function(_NoFileSelected value)? noFileSelected,
+    TResult Function(_UnsupportedVersion value)? unsupportedVersion,
+    TResult Function(_ParserMismatch value)? parserMismatch,
+    TResult Function(_CorruptedFile value)? corruptedFile,
+    required TResult orElse(),
+  }) {
+    if (corruptedFile != null) {
+      return corruptedFile(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CorruptedFile implements FileParseFailure {
+  const factory _CorruptedFile() = _$CorruptedFileImpl;
 }

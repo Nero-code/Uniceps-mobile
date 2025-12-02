@@ -1,21 +1,26 @@
-// import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart'
-    as rd;
+import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart' as rd;
 
-// part 'routine_day_dto.freezed.dart';
 part 'routine_day_dto.g.dart';
 
-// @freezed
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, fieldRename: FieldRename.pascal)
 class RoutineDayDto {
   final int? id, apiId;
-  final int index, routineId, version;
+  @JsonKey(name: 'Order')
+  final int index;
+
+  @JsonKey(defaultValue: 0)
+  final int routineId;
+
   final String name;
-  final bool isSynced;
   final List<RoutineItemDto> items;
+
+  @JsonKey(defaultValue: 0)
+  final int version;
+  @JsonKey(defaultValue: false)
+  final bool isSynced;
 
   const RoutineDayDto({
     required this.id,
@@ -49,22 +54,19 @@ class RoutineDayDto {
         isSynced: isSynced,
       );
 
-  factory RoutineDayDto.fromJson(Map<String, dynamic> json) =>
-      _$RoutineDayDtoFromJson(json);
+  factory RoutineDayDto.fromJson(Map<String, dynamic> json) => _$RoutineDayDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$RoutineDayDtoToJson(this);
 
-  factory RoutineDayDto.fromTable(DaysGroupData day,
-          [List<RoutineItemDto> items = const []]) =>
-      RoutineDayDto(
-          id: day.id,
-          apiId: day.apiId,
-          routineId: day.routineId,
-          version: day.version,
-          name: day.dayName,
-          index: day.index,
-          items: items,
-          isSynced: day.isSynced);
+  factory RoutineDayDto.fromTable(DaysGroupData day, [List<RoutineItemDto> items = const []]) => RoutineDayDto(
+      id: day.id,
+      apiId: day.apiId,
+      routineId: day.routineId,
+      version: day.version,
+      name: day.dayName,
+      index: day.index,
+      items: items,
+      isSynced: day.isSynced);
 
   RoutineDayDto copyWith({
     int? id,

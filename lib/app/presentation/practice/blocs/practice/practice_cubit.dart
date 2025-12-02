@@ -15,7 +15,7 @@ class PracticeCubit extends Cubit<PracticeState> {
   Future<void> getPracticeDay(int dayId) async {
     emit(PracticeLoadingState());
 
-    final either = await _commands.getdayItems(dayId);
+    final either = await _commands.getPracticeDay(dayId);
     either.fold(
       (l) => emit(PracticeErrorState(failure: l)),
       (r) => emit(PracticeLoadedState(day: r)),

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:drift/drift.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/practice_models/routine_table_parser.dart';
 import 'package:uniceps/app/data/models/practice_models/t_log_model.dart';
 import 'package:uniceps/app/data/models/practice_models/t_session_model.dart';
@@ -16,23 +17,28 @@ import 'package:uniceps/core/errors/exceptions.dart';
 abstract class ITSessionLocalSourceContract {
   Future<Tuple2<RoutineDto?, int?>> getCurrentRoutine();
   Future<Tuple2<RoutineDto?, RoutineHeat?>> getCurrentRoutineWithHeat();
-  Future<RoutineDayDto> getDayItems(int dayId);
+  Future<RoutineDayDto> getPracticeDay(int dayId);
+
+  Future<List<TSessionModel>> getSessionsByRoutine(int routineId);
 
   Future<TSessionModel?> getPreviousSession();
-  Future<TSessionModel> startTrainingSession(int dayId);
+  Future<TSessionModel> startTrainingSession(int dayId, String dayName);
   Future<TLogModel> logSet(TLogModel log, double sessionProgress);
   Future<void> finishTrainingSession(TSessionModel session, bool isFullSession);
 }
 
 class TSessionLocalSource implements ITSessionLocalSourceContract {
-  const TSessionLocalSource({
-    required Box<Uint8List> imagesCache,
-    required db.AppDatabase database,
-  })  : _database = database,
-        _imagesCache = imagesCache;
-
   final db.AppDatabase _database;
   final Box<Uint8List> _imagesCache;
+  final Logger _logger;
+
+  const TSessionLocalSource({
+    required db.AppDatabase database,
+    required Box<Uint8List> imagesCache,
+    required Logger logger,
+  })  : _database = database,
+        _imagesCache = imagesCache,
+        _logger = logger;
 
   @override
   Future<Tuple2<RoutineDto?, int?>> getCurrentRoutine() async {
@@ -66,11 +72,11 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       // Get day from row and add if absent
       final day = row.readTableOrNull(daysAlias);
       if (day != null && !days.contains(day)) days.add(day);
-      print("drift day: ${day.runtimeType}");
+      _logger.t("drift day: ${day.runtimeType}");
 
       final session = row.readTableOrNull(sessionsAlias);
       if (session != null && !sessions.contains(session)) sessions.add(session);
-      print("drift day: ${day.runtimeType}");
+      _logger.t("drift day: ${day.runtimeType}");
     }
     // ----------------------------------------------------------
 
@@ -81,12 +87,9 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       days: days,
       items: [],
       exercises: [],
-      groups: [],
       sets: [],
     ).toDto();
     // -----------------------------------
-    // print("training days:  ${days.length}");
-    // print("training items: ${items.length}");
 
     final lastDayId = (sessions..sort((a, b) => b.startedAt.compareTo(a.startedAt))).firstOrNull;
 
@@ -94,13 +97,14 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
   }
 
   @override
-  Future<RoutineDayDto> getDayItems(int dayId) async {
+  Future<RoutineDayDto> getPracticeDay(int dayId) async {
     // First we check if day exists.
     final day = await (_database.select(_database.daysGroup)..where((f) => f.id.equals(dayId))).get();
     if (day.isEmpty) throw EmptyCacheExeption(); // No day exists
 
     // Second, we fetch the day items.
-    final itemsAlias = _database.alias(_database.routineItems, 'it');
+    // final itemsAlias = _database.alias(_database.routineItems, 'it');
+    final itemsAlias = _database.routineItems;
     final exAlias = _database.alias(_database.exercises, 'ex');
     final setsAlias = _database.alias(_database.routineSets, 'se');
     final logsAlias = _database.alias(_database.tLogs, 'lo');
@@ -108,9 +112,9 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     // You're about to witness a developers' worst nightmare...
     //
     // --- THE JOIN QUERY ---
-    final res = await (_database.select(_database.routineItems).join([
+    final res = await ((_database.select(_database.routineItems)..where((f) => f.dayId.equals(dayId))).join([
       // Get `Items` under `dayId`.
-      leftOuterJoin(itemsAlias, itemsAlias.dayId.equals(dayId)),
+      // leftOuterJoin(itemsAlias, itemsAlias.dayId.equals(dayId)),
 
       // Get `Exercises` for these `items`.
       leftOuterJoin(exAlias, exAlias.apiId.equalsExp(itemsAlias.exerciseId)),
@@ -129,7 +133,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     final List<db.RoutineSet> sets = [];
     final List<db.TLog> logs = [];
 
-    final groups = await _database.select(_database.exerciseGroups).get();
+    // final groups = await _database.select(_database.exerciseGroups).get();
 
     // Algorithm for fetching [routine] Starting Point.
     for (final row in res) {
@@ -155,20 +159,16 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     final logsByEx = <int, List<db.TLog>>{};
     for (final i in logs) {
       if (logsByEx.containsKey(i.exerciseId)) continue;
-      logsByEx.addAll({
-        i.exerciseId: logs.where((log) {
-          return log.exerciseId == i.exerciseId;
-        }).toList()
-      });
+      logsByEx.addAll({i.exerciseId: logs.where((log) => log.exerciseId == i.exerciseId).toList()});
     }
     // ---------------------------
 
-    List<RoutineItemDto> dayItems = [];
+    final List<RoutineItemDto> dayItems = [];
     for (final itemTable in items) {
       //
       List<RoutineSetDto> itemSets = [];
       for (final setTable in sets) {
-        print("found set");
+        _logger.t("found set");
         if (setTable.routineItemId == itemTable.id) {
           // To get the last weight on a [set] there are multiple things to do.
           //
@@ -180,9 +180,9 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
           final weights = logsByEx[itemTable.exerciseId]?.where((log) => log.setIndex == setTable.roundIndex).toList();
           // * Then we sort in a descending order, so that the first item is the last.
           weights?.sort((a, b) => b.completedAt.compareTo(a.completedAt));
-          // print("----------------");
+
           // for (final w in weights) {
-          //   print("""
+          //   _logger.t("""
           //     logid:     ${w.logId}
           //     exId:      ${w.exerciseId}
           //     setIndex:  ${w.setIndex}
@@ -190,7 +190,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
           //     completed: ${w.completedAt}
           // """);
           // }
-          // print("----------------");
+
           itemSets.add(RoutineSetDto.fromTable(setTable, weights?.firstOrNull?.weight));
         }
       }
@@ -199,14 +199,15 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
 
       final exercise = exercises.firstWhere((e) => e.apiId == itemTable.exerciseId);
       final img = _imagesCache.get(exercise.imageUrl);
-      final group = groups.firstWhere((g) => g.apiId == exercise.muscleGroup);
-      final itemDto = RoutineItemDto.fromTable(
-          itemTable, ExerciseV2Dto.fromTable(exercise, group, exercise.imageUrl, img), itemSets);
+      // final group = groups.firstWhere((g) => g.apiId == exercise.muscleGroup);
+      final itemDto =
+          RoutineItemDto.fromTable(itemTable, ExerciseV2Dto.fromTable(exercise, exercise.imageUrl, img), itemSets);
 
       dayItems.add(itemDto);
     }
-
-    return RoutineDayDto.fromTable(day.first, dayItems);
+    dayItems.sort((a, b) => a.index.compareTo(b.index));
+    final t = RoutineDayDto.fromTable(day.first, dayItems);
+    return t;
   }
 
   @override
@@ -222,10 +223,10 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
   }
 
   @override
-  Future<TSessionModel> startTrainingSession(int dayId) async {
+  Future<TSessionModel> startTrainingSession(int dayId, String dayName) async {
     final session = await _database
         .into(_database.tSessions)
-        .insertReturning(db.TSessionsCompanion.insert(dayId: dayId, startedAt: DateTime.now()));
+        .insertReturning(db.TSessionsCompanion.insert(dayId: dayId, dayName: dayName, startedAt: DateTime.now()));
 
     return TSessionModel.fromTable(session, []);
   }
@@ -287,22 +288,29 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     // Part 2:
     //   Get Heat objects.
 
-    int dc, ic, sc, tc, lastDayId;
-    dc = ic = sc = tc = lastDayId = 0;
+    int dc, ic, sc, tc;
+    dc = ic = sc = tc = 0;
+    int? lastDayId;
     Duration duration = Duration.zero;
     DateTime newestSessionDate = DateTime(2000);
+    DateTime oldestSessionDate = DateTime.now();
 
     final days = await (_database.select(_database.daysGroup)..where((f) => f.routineId.equals(routine.id))).get();
     for (final day in days) {
       final sessions = await (_database.select(_database.tSessions)..where((f) => f.dayId.equals(day.id))).get();
-      tc = sessions.length;
+      tc += sessions.length;
       final range = sessions.map((e) => e.startedAt).toList()..sort();
+      if (range.isNotEmpty) {
+        // Get first-ever session and start from there
+        if (oldestSessionDate.difference(range.first).inHours > 0) {
+          oldestSessionDate = range.first;
+        }
 
-      duration = range.last.difference(range.first);
-
-      if (newestSessionDate.difference(range.last).inDays < 0) {
-        newestSessionDate = range.last;
-        lastDayId = day.id;
+        // Get latest session and map to its day
+        if (newestSessionDate.difference(range.last).inSeconds < 0) {
+          newestSessionDate = range.last;
+          lastDayId = day.id;
+        }
       }
 
       final items = await (_database.select(_database.routineItems)..where((f) => f.dayId.equals(day.id))).get();
@@ -311,8 +319,10 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
             await (_database.select(_database.routineSets)..where((f) => f.routineItemId.equals(item.id))).get();
         sc += sets.length;
       }
-      ic = items.length;
+      ic += items.length;
     }
+
+    duration += DateTime.now().difference(oldestSessionDate);
     dc = days.length;
 
     final res = RoutineDto.fromTable(routine, days.map(RoutineDayDto.fromTable).toList());
@@ -327,5 +337,27 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     );
 
     return Tuple2(res, heat);
+  }
+
+  @override
+  Future<List<TSessionModel>> getSessionsByRoutine(int routineId) async {
+    // final routine = await (_database.select(_database.routines)..where((f)=>f.id.equals(routineId))).getSingleOrNull();
+    // if(routine==null)throw EmptyCacheExeption();
+
+    final days = await (_database.select(_database.daysGroup)..where((f) => f.routineId.equals(routineId))).get();
+    if (days.isEmpty) throw EmptyCacheExeption();
+    final List<TSessionModel> sessions = [];
+    for (final day in days) {
+      final res = await (_database.select(_database.tSessions)
+            ..where((f) => f.dayId.equals(day.id) & f.finishedAt.isNotNull()))
+          .get();
+      for (final s in res) {
+        final logs = await (_database.select(_database.tLogs)..where((f) => f.sessionId.equals(s.tsId))).get();
+        sessions.add(TSessionModel.fromTable(s, logs));
+      }
+    }
+
+    if (sessions.isEmpty) throw EmptyCacheExeption();
+    return sessions;
   }
 }

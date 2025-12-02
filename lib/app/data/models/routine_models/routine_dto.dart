@@ -7,26 +7,39 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine.dart' as r;
 // part 'routine_dto.freezed.dart';
 part 'routine_dto.g.dart'; // Required for JSON serialization
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, fieldRename: FieldRename.pascal)
 class RoutineDto {
   final int? id, apiId;
+
+  @JsonKey(defaultValue: 0)
   final int version;
+
+  @JsonKey(name: 'RoutineName')
   final String name;
+
   final String? description;
-  final bool isCurrent, isSynced;
-  final DateTime createdAt, updatedAt;
-  final List<RoutineDayDto> trainingDaysDto;
+
+  @JsonKey(defaultValue: false)
+  final bool isCurrent;
+
+  @JsonKey(defaultValue: false)
+  final bool isSynced;
+
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  @JsonKey(name: 'Days')
+  final List<RoutineDayDto> daysDto;
 
   const RoutineDto({
-    required this.id,
-    required this.apiId,
+    this.id,
+    this.apiId,
     required this.version,
     required this.name,
-    required this.description,
+    this.description,
     required this.isCurrent,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.trainingDaysDto,
+    this.createdAt,
+    this.updatedAt,
+    required this.daysDto,
     required this.isSynced,
   });
 
@@ -39,7 +52,7 @@ class RoutineDto {
       isCurrent: e.isCurrent,
       createdAt: e.createdAt,
       updatedAt: e.updatedAt,
-      trainingDaysDto: e.trainingDays.map(RoutineDayDto.fromEntity).toList(),
+      daysDto: e.trainingDays.map(RoutineDayDto.fromEntity).toList(),
       isSynced: e.isSynced);
   r.Routine toEntity() => r.Routine(
       id: id,
@@ -47,13 +60,15 @@ class RoutineDto {
       version: version,
       name: name,
       description: description,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-      trainingDays: trainingDaysDto.map((d) => d.toEntity()).toList(),
+      createdAt: createdAt ?? DateTime.now(),
+      updatedAt: updatedAt ?? DateTime.now(),
+      trainingDays: daysDto.map((d) => d.toEntity()).toList(),
       isCurrent: isCurrent,
       isSynced: isSynced);
 
   factory RoutineDto.fromJson(Map<String, dynamic> json) => _$RoutineDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RoutineDtoToJson(this);
 
   factory RoutineDto.fromTable(db.Routine r, [List<RoutineDayDto> days = const []]) => RoutineDto(
         id: r.id,
@@ -63,10 +78,8 @@ class RoutineDto {
         description: r.description,
         createdAt: r.createdAt,
         updatedAt: r.updatedAt,
-        trainingDaysDto: days,
+        daysDto: days,
         isCurrent: r.isCurrent,
         isSynced: r.isSynced,
       );
-
-  Map<String, dynamic> toJson() => _$RoutineDtoToJson(this);
 }

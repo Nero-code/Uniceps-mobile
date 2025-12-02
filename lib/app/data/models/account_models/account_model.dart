@@ -28,8 +28,7 @@ class AccountModel {
         type: AccountType.guest,
       );
 
-  factory AccountModel.fromJson(Map<String, dynamic> json) =>
-      _$AccountModelFromJson(json);
+  factory AccountModel.fromJson(Map<String, dynamic> json) => _$AccountModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$AccountModelToJson(this);
 
@@ -41,16 +40,10 @@ class AccountModel {
       type: AccountType.normal);
 
   db.AccountsCompanion toTable() => db.AccountsCompanion(
-      email: drift.Value(email),
-      type: drift.Value(type),
-      createdAt: drift.Value(createdAt));
+      uid: drift.Value(uid), email: drift.Value(email), type: drift.Value(type), createdAt: drift.Value(createdAt));
 
-  factory AccountModel.fromEntity(Account account) => AccountModel(
-      uid: account.uid,
-      email: account.email,
-      createdAt: account.createdAt,
-      type: account.type);
+  factory AccountModel.fromEntity(Account account) =>
+      AccountModel(uid: account.uid, email: account.email, createdAt: account.createdAt, type: account.type);
 
-  Account toEntity() =>
-      Account(uid: uid, email: email, createdAt: createdAt, type: type);
+  Account toEntity() => Account(uid: uid, email: email, createdAt: createdAt, type: type);
 }

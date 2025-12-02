@@ -1,20 +1,22 @@
 import 'package:dartz/dartz.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/account_models/account_model.dart';
 import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/auth_contracts.dart';
-import 'package:uniceps/app/data/sources/services/token_service_simple.dart';
+import 'package:uniceps/app/data/sources/services/token/token_service_simple.dart';
 import 'package:uniceps/app/domain/classes/account_entities/account.dart';
-import 'package:uniceps/app/domain/contracts/auth_repo/i_auth_contracts.dart';
+import 'package:uniceps/app/domain/contracts/auth/i_auth_contracts.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class EmailAuthRepo implements IOTPAuthRepo {
-  EmailAuthRepo({
-    required this.otpAuthSource,
-    required this.tokenService,
-    required this.accountLocalSource,
-    required this.connection,
-  });
+  EmailAuthRepo(
+      {required this.otpAuthSource,
+      required this.tokenService,
+      required this.accountLocalSource,
+      required this.connection,
+      required Logger logger})
+      : _logger = logger;
 
   /// otpAuthSource is typeof [IOTPAuthSource] for otp-only email authentication
   final IOTPAuthSource otpAuthSource;
@@ -27,6 +29,8 @@ class EmailAuthRepo implements IOTPAuthRepo {
 
   /// connection is typeof [InternetConnectionChecker]
   final InternetConnectionChecker connection;
+
+  final Logger _logger;
 
   Account? tempAccount;
 
@@ -65,7 +69,7 @@ class EmailAuthRepo implements IOTPAuthRepo {
 
         return const Right(unit);
       } catch (e) {
-        print(e);
+        _logger.e('Error validating OTP', error: e);
         return const Left(AuthFailure.invalidCodeFailure());
       }
     }

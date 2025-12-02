@@ -12,14 +12,24 @@ import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 ///
 
 const APP_NAME = 'Uniceps';
-const APP_VERSION = 'v1.0.0';
+const APP_VERSION = 'v2.0.0';
 const APP_RELEASE_DATE = '10/10/2024';
 
 const APP_LOGO = "images/logo/Logo.png";
 const APP_LOGO_DARK = "images/logo/Logo-dark.png";
 const APP_LOGO_LIGHT = "images/logo/Logo-light.png";
 
-enum Gender { male, female }
+const ASSET_QUOTES = 'assets/captain_quotes.json';
+
+enum Gender {
+  male(1),
+  female(2);
+
+  final int val;
+  const Gender(this.val);
+}
+
+Gender parseGender(int val) => Gender.values.firstWhere((g) => g.val == val);
 
 enum Lang {
   en('en'),
@@ -35,10 +45,18 @@ String encodeTranslations(Map<Lang, String> trans) => jsonEncode(trans.map(
 
 Map<Lang, String> parseTranslations(String muscleGroupTranslations) {
   final dec = jsonDecode(muscleGroupTranslations) as Map;
-  return dec.map<Lang, String>((key, value) => MapEntry(parseLang(key), value.toString()));
+  return dec.map<Lang, String>((key, value) => MapEntry(parseLang(key.toString()), value.toString()));
 }
 
-Lang parseLang(String lang) => Lang.values.firstWhere((l) => l.name == lang);
+Map<Lang, String> parseTransFromFile(Map<String, dynamic> muscleGroupTranslations) {
+  return muscleGroupTranslations.map<Lang, String>((key, value) => MapEntry(parseLang(key), value.toString()));
+}
+
+Lang parseLang(String lang) {
+  return Lang.values.firstWhere(
+    (l) => l.val == lang.toLowerCase(),
+  );
+}
 
 enum ThemeType { light, dark }
 
@@ -112,11 +130,6 @@ const IMG_WARNING = "images/photos/warning.png";
 const IMG_NO_PROGRAM = "images/photos/no_program.png";
 const IMG_NO_ATTENDENCE = "images/photos/attendence_err.png";
 const IMG_NO_MEASUREMENTS = "images/photos/measurements_err.png";
-
-const IMG_CAP_MOTIVE = "images/cap_uni/cap_motive.png";
-const IMG_CAP_MEMBERSHIP = "images/cap_uni/cap_membership.png";
-const IMG_CAP_SELECT_DAY = "images/cap_uni/cap_select_day.png";
-
 const IMG_PREMIUM = "images/photos/premium.png";
 
 ///
@@ -141,15 +154,16 @@ final HEADERS = {
 
 const API = kDebugMode || kProfileMode ? r"https://uniceps.runasp.net/api" : r"https://uniceps.trio-verse.com/api/v1";
 
-const API_V2 = kDebugMode || kProfileMode ? r"uniceps.runasp.net" : r"uniceps.trio-verse.com/api/v1";
+// const API_V2 = kDebugMode || kProfileMode ? r"uniceps.runasp.net" : r"uniceps.trio-verse.com/api/v1";
+const API_V2 = r"uniceps.runasp.net";
+// const API_V2 = r"uniceps.trio-verse.com/api/v1";
 
 /// PRODUCTION URL
 // const API = r"https://uniceps.trio-verse.com/api/v1";
 
 /// https://trio-verse.com
 const URL = "https://trio-verse.com";
-const HTTP_REGISTER = "/api/Authentication";
-const HTTP_VERIFY_CODE = "/api/Authentication/VerifyOtp";
+const TELEGRAM = "https://t.me/uniceps_bot";
 const HTTP_REFRESH = "/refresh";
 const HTTP_HANDSHAKE = "/handshake";
 const HTTP_GUEST_MODE = "/guest";
@@ -167,18 +181,19 @@ const HTTP_TRAINING_PROGRAM = "/routines";
 const HTTP_IMAGES = "/images";
 const HTTP_SUBSCRIPTIONS = "/subscription";
 const HTTP_MEASURMENTS = "/metrics";
-
-const HTTP_MEMBERSHIP = "/api/Membership";
-
-const HTTP_PLAN = "/api/Plan/0";
-const HTTP_BUY_PLAN = "/api/Membership";
-
-const HTTP_MUSCLE_GROUPS = "/api/MuscleGroup";
-const HTTP_EXERCISES = "/api/Exercise";
-
 const HTTP_PRESENCE = "/attendances";
 const HTTP_GYMS = "/gyms";
 const HTTP_GYM_LOGO = "/logos";
+
+// V2 Routes
+const HTTP_SESSION_SYNC = '/api/Workout';
+const HTTP_MEMBERSHIP = "/api/Membership";
+const HTTP_REGISTER = "/api/Authentication";
+const HTTP_VERIFY_CODE = "/api/Authentication/VerifyOtp";
+const HTTP_PLAN = "/api/Plan/0";
+const HTTP_BUY_PLAN = "/api/Membership";
+const HTTP_MUSCLE_GROUPS = "/api/MuscleGroup";
+const HTTP_EXERCISES = "/api/Exercise";
 
 ///////////////////////////////////////////////////////////////////////////////
 ///

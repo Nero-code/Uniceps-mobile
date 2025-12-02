@@ -51,14 +51,11 @@ class DaysEditBloc extends Bloc<DaysEditEvent, DaysEditState> {
     });
     on<ReorderDaysEvent>((event, emit) async {
       emit(DaysEditLoadingState());
-      // final reorderedList = event.newOrder
-      //     .map((day) => day.copyWith(index: event.newOrder.indexOf(day)));
-      print("reorderVersion: ${event.version}");
+
       final either = await _commands.reorderDays(event.newOrder);
       either.fold(
         (l) => emit(DaysEditErrorState(failure: l)),
-        (r) => emit(
-            DaysEditLoadedState(days: List.from(r), version: event.version)),
+        (r) => emit(DaysEditLoadedState(days: List.from(r), version: event.version)),
       );
     });
   }

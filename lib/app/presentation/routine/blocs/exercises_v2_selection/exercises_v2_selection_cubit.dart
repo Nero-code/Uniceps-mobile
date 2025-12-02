@@ -4,8 +4,7 @@ import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 part 'exercises_v2_selection_state.dart';
 
 class ExercisesV2SelectionCubit extends Cubit<ExercisesV2SelectionState> {
-  ExercisesV2SelectionCubit()
-      : super(const ExercisesV2SelectionState(selected: []));
+  ExercisesV2SelectionCubit() : super(const ExercisesV2SelectionState(selected: []));
 
   final selected = <ExerciseV2>[];
 
@@ -15,7 +14,7 @@ class ExercisesV2SelectionCubit extends Cubit<ExercisesV2SelectionState> {
   }
 
   void deselectExersice(ExerciseV2 exercise) {
-    selected.removeWhere((e) => e.apiId! == exercise.apiId!);
+    selected.removeWhere((e) => e.apiId == exercise.apiId);
     emit(ExercisesV2SelectionState(selected: selected));
   }
 }

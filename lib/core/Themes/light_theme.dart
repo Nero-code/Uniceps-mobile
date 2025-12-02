@@ -25,6 +25,10 @@ const secondaryLighter = Color(0xFFDBF5F6);
 const secondaryLight = Color(0xFFB5EBE9);
 
 ThemeData lightTheme = ThemeData(
+  outlinedButtonTheme:
+      OutlinedButtonThemeData(style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.grey))),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(backgroundColor: mainBlueLight, foregroundColor: Colors.white)),
   fontFamily: 'Cairo',
   appBarTheme: const AppBarTheme().copyWith(
       // foregroundColor: Colors.black,

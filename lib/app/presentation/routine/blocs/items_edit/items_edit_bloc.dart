@@ -13,9 +13,7 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
   // List<RoutineItem> allItems = [];
   final MediaHelper _mediaHelper;
   final RoutineItemsCommands _commands;
-  ItemsEditBloc(
-      {required RoutineItemsCommands commands,
-      required MediaHelper mediaHelper})
+  ItemsEditBloc({required RoutineItemsCommands commands, required MediaHelper mediaHelper})
       : _commands = commands,
         _mediaHelper = mediaHelper,
         super(ItemsEditInitial()) {
@@ -37,15 +35,13 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
 
     on<AddRoutineItemsEvent>((event, emit) async {
       emit(ItemsEditLoadingState());
-      final imgStream =
-          _mediaHelper.saveImages(event.items.map((i) => i.imageUrl).toList());
+      final imgStream = _mediaHelper.saveImages(event.items.map((i) => i.imageUrl).toList());
       double sum = 0.0;
       await for (var i in imgStream) {
         sum += i;
         emit(ItemsDownloadingState(progress: sum));
       }
 
-      print("eventitems l: ${event.items.length}");
       final either = await _commands.addItems(event.dayId, event.items);
       either.fold(
         (l) => emit(ItemsEditErrorState(failure: l)),
@@ -64,20 +60,25 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
     });
 
     on<ReorderRoutineItemsEvent>((event, emit) async {
-      for (final i in event.newOrder) {
-        print("${i.exercise.name} : ${i.id} : ${i.index}");
-      }
       final list = <RoutineItem>[];
       for (int i = 0; i < event.newOrder.length; i++) {
         list.add(event.newOrder[i].copyWith(index: i));
-      }
-      for (final i in list) {
-        print("${i.exercise.name} : ${i.id} : ${i.index}");
       }
       final either = await _commands.reorderItems(list);
       either.fold(
         (l) => emit(ItemsEditErrorState(failure: l)),
         (r) => emit(ItemsEditLoadedState(items: r, version: event.version + 1)),
+      );
+    });
+
+    on<CopySetsToAll>((event, emit) async {
+      final items = (state as ItemsEditLoadedState).items;
+      emit(ItemsEditLoadingState());
+
+      final either = await _commands.copySetsToAll(event.dayId, event.itemId);
+      either.fold(
+        (l) => emit(ItemsEditErrorState(failure: l)),
+        (r) => emit(ItemsEditLoadedState(items: items)),
       );
     });
   }

@@ -8,7 +8,9 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/days_edit/days_edit_bloc.dart';
-import 'package:uniceps/app/presentation/screens/loading_page.dart';
+import 'package:uniceps/core/constants/cap_images.dart';
+import 'package:uniceps/core/widgets/account_limit_alert.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_add_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_delete_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_edit_flaoting_menu.dart';
@@ -19,6 +21,7 @@ import 'package:uniceps/app/presentation/routine/widgets/day_tab_widget.dart';
 import 'package:uniceps/core/extensions.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/core/widgets/premium_alert.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 
 class RoutineEditScreen extends StatefulWidget {
@@ -197,7 +200,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
         children: [
           ScaffoldMessenger(
             child: Scaffold(
-              appBar: AppBar(title: Text(widget.routineName)),
+              appBar: AppBar(title: Text(widget.routineName), centerTitle: true),
               body: Stack(
                 children: [
                   BlocBuilder<DaysEditBloc, DaysEditState>(
@@ -217,10 +220,11 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                             //
                             SizedBox(
                               width: screenSize.width,
-                              height: screenSize.height * 0.06,
+                              height: 50,
                               child: ListView(
                                 controller: tabController,
                                 scrollDirection: Axis.horizontal,
+                                padding: const EdgeInsets.only(bottom: 5.0),
                                 children: [
                                   ...state.days.map(
                                     (day) => DayTabWidget(
@@ -250,7 +254,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                           case 1: // reorder
                                             _reorderDays(
                                               (sortedDays) {
-                                                print("Added Event: DaysReorder");
                                                 BlocProvider.of<DaysEditBloc>(context).add(
                                                     ReorderDaysEvent(newOrder: sortedDays, version: state.version + 1));
                                               },
@@ -268,26 +271,38 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                             break;
                                           default:
                                         }
-
-                                        print(res);
                                       },
                                     ),
                                   ),
                                   Builder(builder: (context) {
                                     final accountCubit = context.watch<AccountCubit>();
                                     final membershipBloc = context.watch<MembershipBloc>();
-                                    final canAdd = accountCubit.state.when(
-                                        initial: () => false,
-                                        unauthenticated: () => state.days.isEmpty,
-                                        hasAccount: (s) => membershipBloc.state
-                                            .maybeWhen(orElse: () => state.days.isEmpty, loaded: (m) => true));
-                                    return canAdd
-                                        ? IconButton(
-                                            iconSize: 20,
-                                            splashRadius: 20,
-                                            icon: const Icon(Icons.add),
-                                            onPressed: () {
-                                              _addDay(
+                                    return IconButton(
+                                      iconSize: 20,
+                                      splashRadius: 20,
+                                      icon: const Icon(Icons.add),
+                                      onPressed: accountCubit.state.map(
+                                        initial: (_) => null,
+                                        unauthenticated: (_) => state.days.isEmpty
+                                            ? () => _addDay(
+                                                  "${locale.day} ${state.days.length + 1}",
+                                                  (name) => BlocProvider.of<DaysEditBloc>(context).add(
+                                                    AddDayEvent(
+                                                      day: RoutineDay(
+                                                        routineId: widget.routineId,
+                                                        name: name,
+                                                        index: state.days.length,
+                                                        exercises: [],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                            : () => showDialog(
+                                                  context: context,
+                                                  builder: (_) => AccountLimitAlert(content: locale.dayLimitAlert),
+                                                ),
+                                        hasAccount: (_) => membershipBloc.state.maybeMap(
+                                          loaded: (_) => () => _addDay(
                                                 "${locale.day} ${state.days.length + 1}",
                                                 (name) => BlocProvider.of<DaysEditBloc>(context).add(
                                                   AddDayEvent(
@@ -299,33 +314,61 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                                     ),
                                                   ),
                                                 ),
-                                              );
-                                            },
-                                          )
-                                        : const SizedBox();
+                                              ),
+                                          orElse: () => () => state.days.length < 3
+                                              ? _addDay(
+                                                  "${locale.day} ${state.days.length + 1}",
+                                                  (name) => BlocProvider.of<DaysEditBloc>(context).add(
+                                                    AddDayEvent(
+                                                      day: RoutineDay(
+                                                        routineId: widget.routineId,
+                                                        name: name,
+                                                        index: state.days.length,
+                                                        exercises: [],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : showDialog(
+                                                  context: context, builder: (context) => const PremiumAlert()),
+                                        ),
+                                      ),
+                                    );
                                   }),
                                 ],
                               ),
                             ),
 
                             Expanded(
-                                child: PageView(
-                              controller: pageController,
-                              onPageChanged: (value) => setState(() {
-                                selectedIndex = value;
+                                child: state.days.isEmpty
+                                    ? Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image(
+                                            image: const AssetImage(CaptainImages.emptyDays),
+                                            width: screenSize.width * .5,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(locale.emptyDays),
+                                        ],
+                                      )
+                                    : PageView(
+                                        controller: pageController,
+                                        onPageChanged: (value) => setState(() {
+                                          selectedIndex = value;
 
-                                tabController.animateTo(
-                                    value * (screenSize.width * 0.5) / state.days[value].name.length,
-                                    duration: Durations.medium4,
-                                    curve: Curves.linear);
-                              }),
-                              children: [
-                                ...state.days.map((day) => RoutineItemEditTab(
-                                      dayId: day.id!,
-                                      dayName: day.name,
-                                    ))
-                              ],
-                            )),
+                                          tabController.animateTo(
+                                              value * (screenSize.width * 0.5) / state.days[value].name.length,
+                                              duration: Durations.medium4,
+                                              curve: Curves.linear);
+                                        }),
+                                        children: state.days
+                                            .map((day) => RoutineItemEditTab(
+                                                  dayId: day.id!,
+                                                  dayName: day.name,
+                                                ))
+                                            .toList(),
+                                      )),
                           ],
                         );
                       } else if (state is DaysEditErrorState) {
@@ -334,7 +377,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                           callback: null,
                         );
                       }
-                      return const LoadingPage();
+                      return const LoadingIndicator();
                     },
                   ),
                 ],

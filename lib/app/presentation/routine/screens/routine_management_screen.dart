@@ -5,7 +5,7 @@ import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/routine_management/routine_management_bloc.dart';
-import 'package:uniceps/app/presentation/screens/loading_page.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_create_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_delete_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_options_dialog.dart';
@@ -189,7 +189,7 @@ class _RoutineManagementScreenState extends State<RoutineManagementScreen> {
                     f: state.failure,
                     callBack: () => BlocProvider.of<RoutineManagementBloc>(context).add(GetRoutinesEvent()));
               }
-              return const LoadingPage();
+              return const LoadingIndicator();
             },
           )),
     );

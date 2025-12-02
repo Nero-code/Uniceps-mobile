@@ -8,13 +8,20 @@ import 'package:uniceps/app/presentation/auth/screens/email_auth_screen.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
+import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
+import 'package:uniceps/app/presentation/home/screens/cap_about_screen.dart';
 import 'package:uniceps/app/presentation/measurement/screens/measurement_screen.dart';
+import 'package:uniceps/app/presentation/performance/screens/measurement_tool_screen.dart';
+import 'package:uniceps/app/presentation/performance/screens/performance_screen.dart';
 import 'package:uniceps/app/presentation/plans/screens/plans_screen.dart';
+import 'package:uniceps/app/presentation/profile/screens/profile_initial_screen.dart';
 import 'package:uniceps/app/presentation/routine/screens/routines_heat_screen.dart';
+import 'package:uniceps/app/presentation/settings/screens/profile_screen.dart';
 import 'package:uniceps/app/presentation/settings/screens/settings_screen.dart';
+import 'package:uniceps/app/services/notification_service.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
-import 'package:uniceps/app/presentation/screens/profile/settings/screens/about_screen.dart';
+import 'package:uniceps/app/presentation/screens/about_screen.dart';
 import 'package:uniceps/firebase_options.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
@@ -48,11 +55,13 @@ void main() async {
     sound: true,
   );
 
+  await NotificationService.init();
+
   debugPrint('User granted permission: ${settings.authorizationStatus}');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await FlutterDownloader.initialize(
-    debug: true,
+    debug: false,
     ignoreSsl: false,
   );
 
@@ -70,7 +79,7 @@ class MyApp extends StatelessWidget {
           create: (context) => LocaleCubit()..getSavedLanguageCode(),
         ),
         BlocProvider<AccountCubit>(
-          create: (context) => AccountCubit(di.sl())..getUserAccount(),
+          create: (context) => AccountCubit(di.sl(), di.sl())..getUserAccount(),
         ),
         BlocProvider(
           create: (context) => MembershipBloc(di.sl())..add(const MembershipEvent.getCurrentPlan()),
@@ -82,16 +91,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => SessionBloc(commands: di.sl())..add(const SessionEvent.getLastActiveSession()),
         ),
+        BlocProvider(
+          create: (context) => DailyQuoteCubit(di.sl())..getQuote(),
+        ),
       ],
       child: BlocBuilder<LocaleCubit, ChangedLangState>(
         builder: (context, state) {
-          // SystemChrome.setSystemUIOverlayStyle(
-          //   SystemUiOverlayStyle(
-          //     statusBarColor: Colors.transparent,
-          //     systemNavigationBarColor:
-          //         Theme.of(context).colorScheme.background,
-          //   ),
-          // );
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             navigatorKey: NavigatorKey.navigatorKey,
@@ -104,25 +109,29 @@ class MyApp extends StatelessWidget {
             initialRoute: AppRoutes.splash,
             routes: {
               //  MAIN
-              AppRoutes.splash: (context) => const SplashScreen(),
-              AppRoutes.home: (context) => const HomeScreen(),
+              AppRoutes.splash: (_) => const SplashScreen(),
+              AppRoutes.profileInitial: (_) => const ProfileInitialScreen(),
+              AppRoutes.profile: (_) => const ProfileScreen(),
+              AppRoutes.home: (_) => const HomeScreen(),
 
               // ROUTINE
-              // AppRoutes.routineManager: (context) =>
+              // AppRoutes.routineManager: (_) =>
               //     const RoutineManagementScreen(),
-
-              AppRoutes.routineManager: (context) => const RoutinesHeatScreen(),
+              AppRoutes.routineManager: (_) => const RoutinesHeatScreen(),
 
               //  AUTH
-              AppRoutes.auth: (context) => const EmailAuthScreen(),
+              AppRoutes.auth: (_) => const EmailAuthScreen(),
 
               // SETTINGS
-              AppRoutes.settings: (context) => const SettingsScreen(),
-              AppRoutes.measurements: (context) => const MeasurementScreen(),
-              AppRoutes.plans: (context) => const PlansScreen(),
+              AppRoutes.settings: (_) => const SettingsScreen(),
+              AppRoutes.measurements: (_) => const MeasurementScreen(),
+              AppRoutes.measurementTool: (_) => MeasurementToolScreen(commands: di.sl()),
+              AppRoutes.performance: (_) => PerformanceScreen(routineCommnds: di.sl(), performanceCommands: di.sl()),
+              AppRoutes.plans: (_) => const PlansScreen(),
 
               //  AUX
-              AppRoutes.about: (context) => const AboutScreen(),
+              AppRoutes.about: (_) => const AboutScreen(),
+              AppRoutes.capAbout: (_) => const CapAboutScreen(),
             },
           );
         },

@@ -5,7 +5,7 @@ class SettingsTile extends StatelessWidget {
     super.key,
     required this.icon,
     required this.title,
-    required this.subtitle,
+    this.subtitle = '',
     required this.iconsColor,
     this.backColor = Colors.white54,
     this.onPressed,
@@ -14,7 +14,7 @@ class SettingsTile extends StatelessWidget {
   final IconData icon;
   final String title, subtitle;
   final Color iconsColor, backColor;
-  final VoidCallback? onPressed;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {

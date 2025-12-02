@@ -9,7 +9,7 @@ import 'package:dartz/dartz.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart'
     as _i6;
-import 'package:uniceps/app/domain/contracts/routine_repo/i_routine_days_contract.dart'
+import 'package:uniceps/app/domain/contracts/routine/i_routine_days_contract.dart'
     as _i3;
 import 'package:uniceps/core/errors/failure.dart' as _i5;
 

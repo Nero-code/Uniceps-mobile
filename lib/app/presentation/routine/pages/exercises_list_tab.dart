@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/exercises_v2_bloc.dart';
-import 'package:uniceps/app/presentation/screens/loading_page.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/widgets/exercise_grid_widget.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 
@@ -24,8 +24,7 @@ class ExercisesListTab extends StatefulWidget {
   State<ExercisesListTab> createState() => _ExercisesListTabState();
 }
 
-class _ExercisesListTabState extends State<ExercisesListTab>
-    with AutomaticKeepAliveClientMixin {
+class _ExercisesListTabState extends State<ExercisesListTab> with AutomaticKeepAliveClientMixin {
   final double spacing = 8.0;
   List<int> selectedIds = [];
 
@@ -33,8 +32,8 @@ class _ExercisesListTabState extends State<ExercisesListTab>
   Widget build(BuildContext context) {
     super.build(context);
     return BlocProvider(
-      create: (context) => ExercisesV2Bloc(commands: di.sl())
-        ..add(GetExercisesByFilterEvent(filter: widget.muscleGroup)),
+      create: (context) =>
+          ExercisesV2Bloc(commands: di.sl())..add(GetExercisesByFilterEvent(filter: widget.muscleGroup)),
       lazy: false,
       child: BlocBuilder<ExercisesV2Bloc, ExercisesV2State>(
         builder: (context, state) {
@@ -49,12 +48,11 @@ class _ExercisesListTabState extends State<ExercisesListTab>
               padding: EdgeInsets.all(spacing),
               itemCount: state.list.length,
               itemBuilder: (context, index) {
-                final isPresent =
-                    widget.presentExId.contains(state.list[index].apiId!);
+                final isPresent = widget.presentExId.contains(state.list[index].apiId);
                 return Stack(
                   children: [
                     ExerciseGridWidget(
-                      isSelected: selectedIds.contains(state.list[index].apiId),
+                      isSelected: isPresent || selectedIds.contains(state.list[index].apiId),
                       exercise: state.list[index],
                       index: index,
                     ),
@@ -67,19 +65,16 @@ class _ExercisesListTabState extends State<ExercisesListTab>
                         onTap: isPresent
                             ? null
                             : () {
-                                if (!selectedIds
-                                    .contains(state.list[index].apiId)) {
-                                  print("added");
+                                if (!selectedIds.contains(state.list[index].apiId)) {
                                   // -------------------------------------------------
                                   // Add exercise here and parent widget and notify
-                                  selectedIds.add(state.list[index].apiId!);
+                                  selectedIds.add(state.list[index].apiId);
                                   widget.onSelect(state.list[index], false);
                                   // -------------------------------------------------
                                 } else {
-                                  print("removed");
                                   // -------------------------------------------------
                                   // Remove exercise here and parent widget and notify
-                                  selectedIds.remove(state.list[index].apiId!);
+                                  selectedIds.remove(state.list[index].apiId);
                                   widget.onSelect(state.list[index], true);
                                   // -------------------------------------------------
                                 }
@@ -89,10 +84,14 @@ class _ExercisesListTabState extends State<ExercisesListTab>
                       ),
                     ),
                     if (isPresent)
-                      const Positioned(
-                        top: 0.0,
-                        right: 0.0,
-                        child: Icon(Icons.done_outline_rounded),
+                      Positioned(
+                        top: 10.0,
+                        right: 10.0,
+                        child: Icon(
+                          Icons.done,
+                          size: 20,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
                       ),
                   ],
                 );
@@ -101,7 +100,7 @@ class _ExercisesListTabState extends State<ExercisesListTab>
           } else if (state is ExercisesV2ErrorState) {
             return Center(child: Text(state.failure.getErrorMessage()));
           }
-          return const LoadingPage();
+          return const LoadingIndicator();
         },
       ),
     );

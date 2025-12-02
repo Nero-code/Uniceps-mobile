@@ -59,7 +59,7 @@ class RoutineListTile extends StatelessWidget {
                     const SizedBox(width: 8.0),
                     Row(
                       children: [
-                        Icon(Icons.check_circle),
+                        const Icon(Icons.check_circle),
                         Text(
                           "${DateTime.now().difference(routine.createdAt).inDays}"
                           " "

@@ -91,6 +91,58 @@ class Measurement extends Equatable {
         isSynced: isSynced ?? this.isSynced,
       );
 
+  Measurement difference(Measurement other) => Measurement(
+        height: height - other.height,
+        weight: weight - other.weight,
+        lArm: lArm - other.lArm,
+        rArm: rArm - other.rArm,
+        lHumerus: lHumerus - other.lHumerus,
+        rHumerus: rHumerus - other.rHumerus,
+        lLeg: lLeg - other.lLeg,
+        rLeg: rLeg - other.rLeg,
+        lThigh: lThigh - other.lThigh,
+        rThigh: rThigh - other.rThigh,
+        neck: neck - other.neck,
+        shoulders: shoulders - other.shoulders,
+        waist: waist - other.waist,
+        chest: chest - other.chest,
+        hips: hips - other.hips,
+        checkDate: DateTime.now(),
+      );
+
+  double getByIndex(int index) {
+    switch (index) {
+      case 0:
+        return height;
+      case 1:
+        return weight;
+      case 2:
+        return neck;
+      case 3:
+        return shoulders;
+      case 4:
+        return chest;
+      case 5:
+        return waist;
+      case 6:
+        return lArm;
+      case 7:
+        return rArm;
+      case 8:
+        return lThigh;
+      case 9:
+        return rThigh;
+      case 10:
+        return lLeg;
+      case 11:
+        return rLeg;
+      case 12:
+        return hips;
+      default:
+        return 0.0;
+    }
+  }
+
   @override
   List<Object?> get props => [id];
 }
