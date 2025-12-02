@@ -9,7 +9,7 @@ import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/days_edit/days_edit_bloc.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
-import 'package:uniceps/core/widgets/limit_alert.dart';
+import 'package:uniceps/core/widgets/account_limit_alert.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_add_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_delete_dialog.dart';
@@ -299,7 +299,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                                 )
                                             : () => showDialog(
                                                   context: context,
-                                                  builder: (_) => LimitAlert(content: locale.dayLimitAlert),
+                                                  builder: (_) => AccountLimitAlert(content: locale.dayLimitAlert),
                                                 ),
                                         hasAccount: (_) => membershipBloc.state.maybeMap(
                                           loaded: (_) => () => _addDay(

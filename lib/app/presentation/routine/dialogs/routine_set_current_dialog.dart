@@ -25,6 +25,7 @@ class RoutineSetCurrentDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(locale.setCurrentAlertContent(routineName)),
+          const SizedBox(height: 10),
           Row(
             children: [
               Expanded(
@@ -33,6 +34,7 @@ class RoutineSetCurrentDialog extends StatelessWidget {
                   child: Text(locale.cancel),
                 ),
               ),
+              const SizedBox(width: 10),
               Expanded(
                 child: ElevatedButton(
                     onPressed: () {

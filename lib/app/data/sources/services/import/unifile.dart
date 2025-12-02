@@ -10,6 +10,9 @@ class UniFile {
     final json = jsonDecode(fileString);
     return UniFile(meta: MetaPart.fromFile(json['Meta']), data: json['Data']);
   }
+  String toFile() => jsonEncode(toMap());
+
+  Map<String, dynamic> toMap() => {'Meta': meta.toMap(), 'Data': data};
 }
 
 class MetaPart {
@@ -27,6 +30,12 @@ class MetaPart {
       source: (json['Source'] as String),
       schemaVersion: (json['SchemaVersion'] as num).toInt(),
       fileType: FileType.values.firstWhere((f) => f.title == json['FileType'].toString()));
+
+  Map<String, dynamic> toMap() => {
+        'Source': source,
+        'SchemaVersion': schemaVersion,
+        'FileType': fileType.title,
+      };
 }
 
 enum FileType {

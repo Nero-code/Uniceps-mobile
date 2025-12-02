@@ -3,9 +3,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 
-class RoutineImportDialog extends StatelessWidget {
-  const RoutineImportDialog({super.key, required this.onConfirm});
+class RoutineImportExportDialog extends StatelessWidget {
+  const RoutineImportExportDialog(
+      {super.key, required this.onConfirm, required this.title, required this.content, required this.isIn});
+
   final VoidCallback onConfirm;
+  final String title, content;
+  final bool isIn;
 
   @override
   Widget build(BuildContext context) {
@@ -13,12 +17,13 @@ class RoutineImportDialog extends StatelessWidget {
     final ar = context.read<LocaleCubit>().state.isRtl();
 
     return AlertDialog(
-      icon: const Icon(Icons.download, color: Color.fromARGB(255, 192, 192, 192), size: 50),
-      title: Text("${locale.importRoutine}${ar ? '؟' : '?'}"),
+      icon:
+          Icon(isIn ? Icons.download : Icons.import_export, color: const Color.fromARGB(255, 192, 192, 192), size: 50),
+      title: Text("$title${ar ? '؟' : '?'}"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(locale.importRoutineAlertContent),
+          Text(content),
           const SizedBox(height: 10),
           Row(
             children: [

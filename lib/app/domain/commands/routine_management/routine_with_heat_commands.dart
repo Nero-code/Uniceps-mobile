@@ -22,4 +22,5 @@ class RoutineWithHeatCommands {
       _repo.setCurrentRoutine(routine);
 
   Stream<RoutineResult> importRoutine() => _repo.importRoutineFromFile();
+  Future<bool> exportRoutineToFile(int routineId) => _repo.exportRoutineToFile(routineId);
 }

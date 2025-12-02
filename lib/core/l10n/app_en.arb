@@ -56,6 +56,8 @@
   "captainUniUpgradeQuote": "Are you ready to head to the top?\nThis is not just an upgrade... it's a map to your stronger and smarter version",
   "importRoutine": "Import Routine",
   "importRoutineAlertContent": "Make sure you have a file with .unx extension, then import it.",
+  "exportRoutine": "Export Routine",
+  "exportRoutineAlertContent": "Do you want to export Routine",
   
   "sessions": "Sessions",
   "sessionsReport": "Sessions Report",
@@ -92,7 +94,7 @@
   "scrTitleCompareTool": "Compare Tool",
   "setsAndRounds":"Sets & Rounds",
 
-   "noFileSelected": "No file selected",
+  "noFileSelected": "No file selected",
   "unsupportedVersion": "Unsupported version of selected file",
   "parserMismatch": "Unexpected file content",
   "corruptedFile": "Cannot open, the file is Corrupted",

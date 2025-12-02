@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 enum Option {
   edit,
   delete,
+  export,
   setCurrent,
 }
 
@@ -17,6 +18,7 @@ class RoutineOptionsDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     // final screenSize = MediaQuery.sizeOf(context);
     final locale = AppLocalizations.of(context)!;
+
     return AlertDialog(
       icon: const Icon(Icons.edit, size: 40),
       title: Text(routineName),
@@ -46,17 +48,17 @@ class RoutineOptionsDialog extends StatelessWidget {
           BoxButton(
             onTap: () => Navigator.pop(context, Option.setCurrent),
             // width: 75,
-            border: Border.all(color: Colors.amber.shade300, width: 2.0),
+            border: Border.all(color: Colors.green.shade300, width: 2.0),
             borderRadius: 10.0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               // mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.flag, color: Colors.amber),
+                const Icon(Icons.flag, color: Colors.green),
                 const SizedBox(width: 5.0),
                 Text(
                   locale.setCurrent,
-                  style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.amber),
+                  style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.green),
                 ),
               ],
             ),

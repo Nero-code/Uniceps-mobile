@@ -1,6 +1,10 @@
 import 'package:drift/drift.dart';
 import 'package:logger/logger.dart';
+import 'package:uniceps/app/data/models/routine_models/exercise_v2_dto.dart';
+import 'package:uniceps/app/data/models/routine_models/routine_day_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
+import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart';
+import 'package:uniceps/app/data/models/routine_models/routine_set_dto.dart';
 import 'package:uniceps/app/data/models/routine_result.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
@@ -14,6 +18,8 @@ abstract class IRoutineManagementLocalSourceContract {
   Future<void> setCurrentRoutine(RoutineDto dto);
   Future<void> deleteRoutine(RoutineDto dto);
   Stream<Stage> insertFullRoutine(RoutineDto dto);
+
+  Future<RoutineDto> getFullRoutine(int routineId);
 }
 
 class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceContract {
@@ -165,5 +171,31 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
         }
       }
     }
+  }
+
+  @override
+  Future<RoutineDto> getFullRoutine(int routineId) async {
+    final routine = await (_database.select(_database.routines)..where((f) => f.id.equals(routineId))).getSingle();
+    final routineDays =
+        await (_database.select(_database.daysGroup)..where((f) => f.routineId.equals(routineId))).get();
+    final List<RoutineItemDto> iTems = [];
+    final List<RoutineDayDto> days = [];
+    for (final d in routineDays) {
+      final items = await (_database.select(_database.routineItems)..where((f) => f.dayId.equals(d.id))).get();
+      for (final i in items) {
+        final ex =
+            await (_database.select(_database.exercises)..where((f) => f.apiId.equals(i.exerciseId))).getSingle();
+        final sets = await (_database.select(_database.routineSets)..where((f) => f.routineItemId.equals(i.id))).get();
+        iTems.add(
+          RoutineItemDto.fromTable(
+            i,
+            ExerciseV2Dto.fromTable(ex, ex.imageUrl, null),
+            sets.map((e) => RoutineSetDto.fromTable(e)).toList(),
+          ),
+        );
+      }
+      days.add(RoutineDayDto.fromTable(d, iTems));
+    }
+    return RoutineDto.fromTable(routine, days);
   }
 }

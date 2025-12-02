@@ -12,12 +12,14 @@ class RoutineWithHeat extends StatelessWidget {
     required this.heat,
     required this.onTap,
     this.onMenu,
+    this.onLongPress,
   });
 
   final Routine routine;
   final RoutineHeat heat;
   final void Function() onTap;
   final void Function()? onMenu;
+  final void Function()? onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +27,15 @@ class RoutineWithHeat extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       child: Material(
-        // borderRadius: BorderRadius.circular(15.0),
         color: Colors.white,
         shape: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(20)),
           borderSide: BorderSide(color: Colors.grey, width: 0.5),
         ),
-        // elevation: 1,
         child: InkWell(
           borderRadius: const BorderRadius.all(Radius.circular(20)),
           onTap: onTap,
-          // onLongPress: onLongPress,
+          onLongPress: onLongPress,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -70,30 +70,21 @@ class RoutineWithHeat extends StatelessWidget {
                             children: [
                               const Icon(Icons.calendar_view_day_rounded, size: 18, color: Colors.blue),
                               const SizedBox(width: 5.0),
-                              Text(
-                                "${heat.days}",
-                                style: const TextStyle(),
-                              ),
+                              Text("${heat.days}", style: const TextStyle()),
                             ],
                           ),
                           const SizedBox(width: 8.0),
                           Row(children: [
                             const Icon(Icons.fitness_center, size: 18, color: Colors.red),
                             const SizedBox(width: 5.0),
-                            Text(
-                              "${heat.exercises}",
-                              style: const TextStyle(),
-                            ),
+                            Text("${heat.exercises}", style: const TextStyle()),
                           ]),
                           const SizedBox(width: 8.0),
                           Row(
                             children: [
                               const Icon(Icons.sports, size: 18, color: Colors.orange),
                               const SizedBox(width: 5.0),
-                              Text(
-                                "${heat.sets}",
-                                style: const TextStyle(),
-                              ),
+                              Text("${heat.sets}", style: const TextStyle()),
                             ],
                           ),
                         ],
@@ -109,11 +100,6 @@ class RoutineWithHeat extends StatelessWidget {
                           ),
                           const SizedBox(width: 8.0),
                           if (routine.isCurrent)
-                            // const Icon(
-                            //   Icons.flag,
-                            //   color: Colors.pink,
-                            //   size: 20,
-                            // ),
                             Ink(
                               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
                               decoration: BoxDecoration(
@@ -130,44 +116,6 @@ class RoutineWithHeat extends StatelessWidget {
                     ],
                   ),
                 ),
-                // SizedBox.square(
-                //   dimension: 70,
-                //   child: Stack(
-                //     children: [
-                //       Align(
-                //         alignment: Alignment.center,
-                //         child: SizedBox.square(
-                //           dimension: 50,
-                //           child:
-                //               // Icon(
-                //               //   Icons.local_fire_department,
-                //               //   size: 50,
-                //               //   color: Colors.teal,
-                //               // ),
-                //               CircularProgressIndicator(
-                //             value: heat.value,
-                //             strokeWidth: 5,
-                //             strokeCap: StrokeCap.round,
-                //             color: heat.color,
-                //             backgroundColor: Color.fromARGB(57, 158, 158, 158),
-                //           ),
-                //         ),
-                //       ),
-                //       Align(
-                //         alignment: Alignment.center,
-                //         child: Text(
-                //           "${heat.sessionCount}",
-                //           style: TextStyle(
-                //             fontSize: 20,
-                //             fontWeight: FontWeight.w300,
-                //           ),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // SizedBox(width: 5.0),
-
                 Stack(
                   alignment: Alignment.center,
                   children: [
@@ -175,8 +123,7 @@ class RoutineWithHeat extends StatelessWidget {
                       value: heat.value.clamp(0, 1),
                       size: 50,
                       width: 1,
-                      // fillColor: Colors.red.withOpacity(0.75),
-                      fillColor: heat.color.withOpacity(0.75),
+                      fillColor: Colors.blue.withOpacity(0.75),
                       borderColor: Colors.grey.shade300,
                       backgroundColor: Colors.grey.shade100,
                     ),

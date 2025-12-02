@@ -11,6 +11,7 @@ import 'package:uniceps/app/presentation/routine/widgets/routine_with_heat.dart'
 import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/empty_page.dart';
+import 'package:uniceps/core/widgets/account_limit_alert.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_create_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/routine_delete_dialog.dart';
@@ -60,12 +61,28 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
     showDialog(context: context, builder: (_) => RoutineSetCurrentDialog(routineName: name, onConfirm: onConfirm));
   }
 
-  void _importRoutineAlert(RoutinesWithHeatBloc bloc) async {
+  void _importRoutineAlert(RoutinesWithHeatBloc bloc, String title, String content) {
     showDialog(
         context: context,
         builder: (_) => BlocProvider.value(
               value: bloc,
-              child: RoutineImportDialog(onConfirm: () => bloc.add(const RoutinesWithHeatEvent.import())),
+              child: RoutineImportExportDialog(
+                title: title,
+                content: content,
+                isIn: true,
+                onConfirm: () => bloc.add(const RoutinesWithHeatEvent.import()),
+              ),
+            ));
+  }
+
+  void _exportRoutineAlert(RoutinesWithHeatBloc bloc, String title, String content, int routineId) async {
+    showDialog(
+        context: context,
+        builder: (_) => RoutineImportExportDialog(
+              title: title,
+              content: content,
+              isIn: false,
+              onConfirm: () => bloc.add(RoutinesWithHeatEvent.export(routineId)),
             ));
   }
 
@@ -130,7 +147,6 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                                               context: context,
                                               builder: (context) => RoutineOptionsDialog(routineName: e.routine.name));
 
-                                          // print("selected option: //");
                                           switch (res) {
                                             case Option.edit:
                                               _renameRoutine(e.routine.name, (name) {
@@ -158,7 +174,16 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                                                 }
                                               }
                                               break;
-
+                                            case Option.export:
+                                              // if (canExport) {
+                                              _exportRoutineAlert(
+                                                context.read<RoutinesWithHeatBloc>(),
+                                                locale.exportRoutine,
+                                                '${locale.exportRoutineAlertContent} ${e.routine.name}',
+                                                e.routine.id!,
+                                              );
+                                              // }
+                                              break;
                                             case Option.setCurrent:
                                               _setCurrentRoutine(
                                                 () async {
@@ -189,21 +214,21 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                               ),
                       ),
                       Builder(builder: (context) {
-                        final accountCubit = context.watch<AccountCubit>();
-                        final membershipBloc = context.watch<MembershipBloc>();
+                        final acc = context.watch<AccountCubit>();
+                        final mem = context.watch<MembershipBloc>();
 
-                        final canCreate = accountCubit.state.when(
+                        final canCreate = acc.state.when(
                           initial: () => false,
                           unauthenticated: () => state.maybeWhen(
                             orElse: () => false,
                             loaded: (routines) => routines.isEmpty,
                           ),
-                          hasAccount: (s) => membershipBloc.state.maybeWhen(
+                          hasAccount: (s) => mem.state.maybeWhen(
                             orElse: () => state.maybeWhen(orElse: () => false, loaded: (routines) => routines.isEmpty),
                             loaded: (_) => true,
                           ),
                         );
-                        final canImport = accountCubit.state.maybeWhen(hasAccount: (_) => true, orElse: () => true);
+                        final canImport = acc.state.maybeWhen(hasAccount: (_) => true, orElse: () => true);
 
                         return Row(
                           children: [
@@ -211,14 +236,31 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                               child: Material(
                                 color: Theme.of(context).colorScheme.primary,
                                 child: InkWell(
-                                  onTap: canCreate
-                                      ? () => _createRoutine(
+                                  onTap: acc.state.maybeWhen(
+                                    orElse: () => state.routines.isEmpty
+                                        ? () => _createRoutine(
                                             "${locale.newRoutine} $routinesLength",
                                             (name) => context
                                                 .read<RoutinesWithHeatBloc>()
-                                                .add(RoutinesWithHeatEvent.create(name)),
-                                          )
-                                      : () => showDialog(context: context, builder: (_) => const PremiumAlert()),
+                                                .add(RoutinesWithHeatEvent.create(name)))
+                                        : () => showDialog(
+                                            context: context,
+                                            builder: (_) => AccountLimitAlert(content: locale.routineLimitAlert)),
+                                    hasAccount: (_) => mem.state.maybeWhen(
+                                      orElse: () => () => state.routines.isEmpty
+                                          ? () => _createRoutine(
+                                              "${locale.newRoutine} $routinesLength",
+                                              (name) => context
+                                                  .read<RoutinesWithHeatBloc>()
+                                                  .add(RoutinesWithHeatEvent.create(name)))
+                                          : showDialog(context: context, builder: (_) => const PremiumAlert()),
+                                      loaded: (m) => () => _createRoutine(
+                                          "${locale.newRoutine} $routinesLength",
+                                          (name) => context
+                                              .read<RoutinesWithHeatBloc>()
+                                              .add(RoutinesWithHeatEvent.create(name))),
+                                    ),
+                                  ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Row(
@@ -236,13 +278,8 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                                                 ),
                                               ),
                                         Text(
-                                          // canCreate ? locale.add : locale.upgrade,
                                           locale.addRoutine,
-                                          style: const TextStyle(
-                                            // fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Colors.white,
-                                          ),
+                                          style: const TextStyle(fontSize: 16, color: Colors.white),
                                         ),
                                       ],
                                     ),
@@ -254,7 +291,10 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                               child: Ink(
                                 color: canImport ? Theme.of(context).colorScheme.secondary : Colors.grey.shade300,
                                 child: InkWell(
-                                  onTap: canImport ? () => _importRoutineAlert(context.read()) : null,
+                                  onTap: canImport
+                                      ? () => _importRoutineAlert(
+                                          context.read(), locale.importRoutine, locale.importRoutineAlertContent)
+                                      : null,
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Row(

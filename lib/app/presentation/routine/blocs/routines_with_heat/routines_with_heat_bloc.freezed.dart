@@ -20,6 +20,7 @@ mixin _$RoutinesWithHeatEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() getRoutines,
     required TResult Function() import,
+    required TResult Function(int routineId) export,
     required TResult Function(String name) create,
     required TResult Function(Routine update) update,
     required TResult Function(Routine delete) delete,
@@ -30,6 +31,7 @@ mixin _$RoutinesWithHeatEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getRoutines,
     TResult? Function()? import,
+    TResult? Function(int routineId)? export,
     TResult? Function(String name)? create,
     TResult? Function(Routine update)? update,
     TResult? Function(Routine delete)? delete,
@@ -40,6 +42,7 @@ mixin _$RoutinesWithHeatEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getRoutines,
     TResult Function()? import,
+    TResult Function(int routineId)? export,
     TResult Function(String name)? create,
     TResult Function(Routine update)? update,
     TResult Function(Routine delete)? delete,
@@ -51,6 +54,7 @@ mixin _$RoutinesWithHeatEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_GetRoutines value) getRoutines,
     required TResult Function(_Import value) import,
+    required TResult Function(_Export value) export,
     required TResult Function(_Create value) create,
     required TResult Function(_Update value) update,
     required TResult Function(_Delete value) delete,
@@ -61,6 +65,7 @@ mixin _$RoutinesWithHeatEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_GetRoutines value)? getRoutines,
     TResult? Function(_Import value)? import,
+    TResult? Function(_Export value)? export,
     TResult? Function(_Create value)? create,
     TResult? Function(_Update value)? update,
     TResult? Function(_Delete value)? delete,
@@ -71,6 +76,7 @@ mixin _$RoutinesWithHeatEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_GetRoutines value)? getRoutines,
     TResult Function(_Import value)? import,
+    TResult Function(_Export value)? export,
     TResult Function(_Create value)? create,
     TResult Function(_Update value)? update,
     TResult Function(_Delete value)? delete,
@@ -139,6 +145,7 @@ class _$GetRoutinesImpl implements _GetRoutines {
   TResult when<TResult extends Object?>({
     required TResult Function() getRoutines,
     required TResult Function() import,
+    required TResult Function(int routineId) export,
     required TResult Function(String name) create,
     required TResult Function(Routine update) update,
     required TResult Function(Routine delete) delete,
@@ -152,6 +159,7 @@ class _$GetRoutinesImpl implements _GetRoutines {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getRoutines,
     TResult? Function()? import,
+    TResult? Function(int routineId)? export,
     TResult? Function(String name)? create,
     TResult? Function(Routine update)? update,
     TResult? Function(Routine delete)? delete,
@@ -165,6 +173,7 @@ class _$GetRoutinesImpl implements _GetRoutines {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getRoutines,
     TResult Function()? import,
+    TResult Function(int routineId)? export,
     TResult Function(String name)? create,
     TResult Function(Routine update)? update,
     TResult Function(Routine delete)? delete,
@@ -182,6 +191,7 @@ class _$GetRoutinesImpl implements _GetRoutines {
   TResult map<TResult extends Object?>({
     required TResult Function(_GetRoutines value) getRoutines,
     required TResult Function(_Import value) import,
+    required TResult Function(_Export value) export,
     required TResult Function(_Create value) create,
     required TResult Function(_Update value) update,
     required TResult Function(_Delete value) delete,
@@ -195,6 +205,7 @@ class _$GetRoutinesImpl implements _GetRoutines {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_GetRoutines value)? getRoutines,
     TResult? Function(_Import value)? import,
+    TResult? Function(_Export value)? export,
     TResult? Function(_Create value)? create,
     TResult? Function(_Update value)? update,
     TResult? Function(_Delete value)? delete,
@@ -208,6 +219,7 @@ class _$GetRoutinesImpl implements _GetRoutines {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_GetRoutines value)? getRoutines,
     TResult Function(_Import value)? import,
+    TResult Function(_Export value)? export,
     TResult Function(_Create value)? create,
     TResult Function(_Update value)? update,
     TResult Function(_Delete value)? delete,
@@ -265,6 +277,7 @@ class _$ImportImpl implements _Import {
   TResult when<TResult extends Object?>({
     required TResult Function() getRoutines,
     required TResult Function() import,
+    required TResult Function(int routineId) export,
     required TResult Function(String name) create,
     required TResult Function(Routine update) update,
     required TResult Function(Routine delete) delete,
@@ -278,6 +291,7 @@ class _$ImportImpl implements _Import {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getRoutines,
     TResult? Function()? import,
+    TResult? Function(int routineId)? export,
     TResult? Function(String name)? create,
     TResult? Function(Routine update)? update,
     TResult? Function(Routine delete)? delete,
@@ -291,6 +305,7 @@ class _$ImportImpl implements _Import {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getRoutines,
     TResult Function()? import,
+    TResult Function(int routineId)? export,
     TResult Function(String name)? create,
     TResult Function(Routine update)? update,
     TResult Function(Routine delete)? delete,
@@ -308,6 +323,7 @@ class _$ImportImpl implements _Import {
   TResult map<TResult extends Object?>({
     required TResult Function(_GetRoutines value) getRoutines,
     required TResult Function(_Import value) import,
+    required TResult Function(_Export value) export,
     required TResult Function(_Create value) create,
     required TResult Function(_Update value) update,
     required TResult Function(_Delete value) delete,
@@ -321,6 +337,7 @@ class _$ImportImpl implements _Import {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_GetRoutines value)? getRoutines,
     TResult? Function(_Import value)? import,
+    TResult? Function(_Export value)? export,
     TResult? Function(_Create value)? create,
     TResult? Function(_Update value)? update,
     TResult? Function(_Delete value)? delete,
@@ -334,6 +351,7 @@ class _$ImportImpl implements _Import {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_GetRoutines value)? getRoutines,
     TResult Function(_Import value)? import,
+    TResult Function(_Export value)? export,
     TResult Function(_Create value)? create,
     TResult Function(_Update value)? update,
     TResult Function(_Delete value)? delete,
@@ -349,6 +367,170 @@ class _$ImportImpl implements _Import {
 
 abstract class _Import implements RoutinesWithHeatEvent {
   const factory _Import() = _$ImportImpl;
+}
+
+/// @nodoc
+abstract class _$$ExportImplCopyWith<$Res> {
+  factory _$$ExportImplCopyWith(
+          _$ExportImpl value, $Res Function(_$ExportImpl) then) =
+      __$$ExportImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int routineId});
+}
+
+/// @nodoc
+class __$$ExportImplCopyWithImpl<$Res>
+    extends _$RoutinesWithHeatEventCopyWithImpl<$Res, _$ExportImpl>
+    implements _$$ExportImplCopyWith<$Res> {
+  __$$ExportImplCopyWithImpl(
+      _$ExportImpl _value, $Res Function(_$ExportImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? routineId = null,
+  }) {
+    return _then(_$ExportImpl(
+      null == routineId
+          ? _value.routineId
+          : routineId // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ExportImpl implements _Export {
+  const _$ExportImpl(this.routineId);
+
+  @override
+  final int routineId;
+
+  @override
+  String toString() {
+    return 'RoutinesWithHeatEvent.export(routineId: $routineId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ExportImpl &&
+            (identical(other.routineId, routineId) ||
+                other.routineId == routineId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, routineId);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ExportImplCopyWith<_$ExportImpl> get copyWith =>
+      __$$ExportImplCopyWithImpl<_$ExportImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() getRoutines,
+    required TResult Function() import,
+    required TResult Function(int routineId) export,
+    required TResult Function(String name) create,
+    required TResult Function(Routine update) update,
+    required TResult Function(Routine delete) delete,
+    required TResult Function(Routine update) setCurrent,
+  }) {
+    return export(routineId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? getRoutines,
+    TResult? Function()? import,
+    TResult? Function(int routineId)? export,
+    TResult? Function(String name)? create,
+    TResult? Function(Routine update)? update,
+    TResult? Function(Routine delete)? delete,
+    TResult? Function(Routine update)? setCurrent,
+  }) {
+    return export?.call(routineId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? getRoutines,
+    TResult Function()? import,
+    TResult Function(int routineId)? export,
+    TResult Function(String name)? create,
+    TResult Function(Routine update)? update,
+    TResult Function(Routine delete)? delete,
+    TResult Function(Routine update)? setCurrent,
+    required TResult orElse(),
+  }) {
+    if (export != null) {
+      return export(routineId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GetRoutines value) getRoutines,
+    required TResult Function(_Import value) import,
+    required TResult Function(_Export value) export,
+    required TResult Function(_Create value) create,
+    required TResult Function(_Update value) update,
+    required TResult Function(_Delete value) delete,
+    required TResult Function(_SetCurrent value) setCurrent,
+  }) {
+    return export(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_GetRoutines value)? getRoutines,
+    TResult? Function(_Import value)? import,
+    TResult? Function(_Export value)? export,
+    TResult? Function(_Create value)? create,
+    TResult? Function(_Update value)? update,
+    TResult? Function(_Delete value)? delete,
+    TResult? Function(_SetCurrent value)? setCurrent,
+  }) {
+    return export?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GetRoutines value)? getRoutines,
+    TResult Function(_Import value)? import,
+    TResult Function(_Export value)? export,
+    TResult Function(_Create value)? create,
+    TResult Function(_Update value)? update,
+    TResult Function(_Delete value)? delete,
+    TResult Function(_SetCurrent value)? setCurrent,
+    required TResult orElse(),
+  }) {
+    if (export != null) {
+      return export(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Export implements RoutinesWithHeatEvent {
+  const factory _Export(final int routineId) = _$ExportImpl;
+
+  int get routineId;
+  @JsonKey(ignore: true)
+  _$$ExportImplCopyWith<_$ExportImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -417,6 +599,7 @@ class _$CreateImpl implements _Create {
   TResult when<TResult extends Object?>({
     required TResult Function() getRoutines,
     required TResult Function() import,
+    required TResult Function(int routineId) export,
     required TResult Function(String name) create,
     required TResult Function(Routine update) update,
     required TResult Function(Routine delete) delete,
@@ -430,6 +613,7 @@ class _$CreateImpl implements _Create {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getRoutines,
     TResult? Function()? import,
+    TResult? Function(int routineId)? export,
     TResult? Function(String name)? create,
     TResult? Function(Routine update)? update,
     TResult? Function(Routine delete)? delete,
@@ -443,6 +627,7 @@ class _$CreateImpl implements _Create {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getRoutines,
     TResult Function()? import,
+    TResult Function(int routineId)? export,
     TResult Function(String name)? create,
     TResult Function(Routine update)? update,
     TResult Function(Routine delete)? delete,
@@ -460,6 +645,7 @@ class _$CreateImpl implements _Create {
   TResult map<TResult extends Object?>({
     required TResult Function(_GetRoutines value) getRoutines,
     required TResult Function(_Import value) import,
+    required TResult Function(_Export value) export,
     required TResult Function(_Create value) create,
     required TResult Function(_Update value) update,
     required TResult Function(_Delete value) delete,
@@ -473,6 +659,7 @@ class _$CreateImpl implements _Create {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_GetRoutines value)? getRoutines,
     TResult? Function(_Import value)? import,
+    TResult? Function(_Export value)? export,
     TResult? Function(_Create value)? create,
     TResult? Function(_Update value)? update,
     TResult? Function(_Delete value)? delete,
@@ -486,6 +673,7 @@ class _$CreateImpl implements _Create {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_GetRoutines value)? getRoutines,
     TResult Function(_Import value)? import,
+    TResult Function(_Export value)? export,
     TResult Function(_Create value)? create,
     TResult Function(_Update value)? update,
     TResult Function(_Delete value)? delete,
@@ -574,6 +762,7 @@ class _$UpdateImpl implements _Update {
   TResult when<TResult extends Object?>({
     required TResult Function() getRoutines,
     required TResult Function() import,
+    required TResult Function(int routineId) export,
     required TResult Function(String name) create,
     required TResult Function(Routine update) update,
     required TResult Function(Routine delete) delete,
@@ -587,6 +776,7 @@ class _$UpdateImpl implements _Update {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getRoutines,
     TResult? Function()? import,
+    TResult? Function(int routineId)? export,
     TResult? Function(String name)? create,
     TResult? Function(Routine update)? update,
     TResult? Function(Routine delete)? delete,
@@ -600,6 +790,7 @@ class _$UpdateImpl implements _Update {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getRoutines,
     TResult Function()? import,
+    TResult Function(int routineId)? export,
     TResult Function(String name)? create,
     TResult Function(Routine update)? update,
     TResult Function(Routine delete)? delete,
@@ -617,6 +808,7 @@ class _$UpdateImpl implements _Update {
   TResult map<TResult extends Object?>({
     required TResult Function(_GetRoutines value) getRoutines,
     required TResult Function(_Import value) import,
+    required TResult Function(_Export value) export,
     required TResult Function(_Create value) create,
     required TResult Function(_Update value) update,
     required TResult Function(_Delete value) delete,
@@ -630,6 +822,7 @@ class _$UpdateImpl implements _Update {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_GetRoutines value)? getRoutines,
     TResult? Function(_Import value)? import,
+    TResult? Function(_Export value)? export,
     TResult? Function(_Create value)? create,
     TResult? Function(_Update value)? update,
     TResult? Function(_Delete value)? delete,
@@ -643,6 +836,7 @@ class _$UpdateImpl implements _Update {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_GetRoutines value)? getRoutines,
     TResult Function(_Import value)? import,
+    TResult Function(_Export value)? export,
     TResult Function(_Create value)? create,
     TResult Function(_Update value)? update,
     TResult Function(_Delete value)? delete,
@@ -731,6 +925,7 @@ class _$DeleteImpl implements _Delete {
   TResult when<TResult extends Object?>({
     required TResult Function() getRoutines,
     required TResult Function() import,
+    required TResult Function(int routineId) export,
     required TResult Function(String name) create,
     required TResult Function(Routine update) update,
     required TResult Function(Routine delete) delete,
@@ -744,6 +939,7 @@ class _$DeleteImpl implements _Delete {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getRoutines,
     TResult? Function()? import,
+    TResult? Function(int routineId)? export,
     TResult? Function(String name)? create,
     TResult? Function(Routine update)? update,
     TResult? Function(Routine delete)? delete,
@@ -757,6 +953,7 @@ class _$DeleteImpl implements _Delete {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getRoutines,
     TResult Function()? import,
+    TResult Function(int routineId)? export,
     TResult Function(String name)? create,
     TResult Function(Routine update)? update,
     TResult Function(Routine delete)? delete,
@@ -774,6 +971,7 @@ class _$DeleteImpl implements _Delete {
   TResult map<TResult extends Object?>({
     required TResult Function(_GetRoutines value) getRoutines,
     required TResult Function(_Import value) import,
+    required TResult Function(_Export value) export,
     required TResult Function(_Create value) create,
     required TResult Function(_Update value) update,
     required TResult Function(_Delete value) delete,
@@ -787,6 +985,7 @@ class _$DeleteImpl implements _Delete {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_GetRoutines value)? getRoutines,
     TResult? Function(_Import value)? import,
+    TResult? Function(_Export value)? export,
     TResult? Function(_Create value)? create,
     TResult? Function(_Update value)? update,
     TResult? Function(_Delete value)? delete,
@@ -800,6 +999,7 @@ class _$DeleteImpl implements _Delete {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_GetRoutines value)? getRoutines,
     TResult Function(_Import value)? import,
+    TResult Function(_Export value)? export,
     TResult Function(_Create value)? create,
     TResult Function(_Update value)? update,
     TResult Function(_Delete value)? delete,
@@ -888,6 +1088,7 @@ class _$SetCurrentImpl implements _SetCurrent {
   TResult when<TResult extends Object?>({
     required TResult Function() getRoutines,
     required TResult Function() import,
+    required TResult Function(int routineId) export,
     required TResult Function(String name) create,
     required TResult Function(Routine update) update,
     required TResult Function(Routine delete) delete,
@@ -901,6 +1102,7 @@ class _$SetCurrentImpl implements _SetCurrent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getRoutines,
     TResult? Function()? import,
+    TResult? Function(int routineId)? export,
     TResult? Function(String name)? create,
     TResult? Function(Routine update)? update,
     TResult? Function(Routine delete)? delete,
@@ -914,6 +1116,7 @@ class _$SetCurrentImpl implements _SetCurrent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getRoutines,
     TResult Function()? import,
+    TResult Function(int routineId)? export,
     TResult Function(String name)? create,
     TResult Function(Routine update)? update,
     TResult Function(Routine delete)? delete,
@@ -931,6 +1134,7 @@ class _$SetCurrentImpl implements _SetCurrent {
   TResult map<TResult extends Object?>({
     required TResult Function(_GetRoutines value) getRoutines,
     required TResult Function(_Import value) import,
+    required TResult Function(_Export value) export,
     required TResult Function(_Create value) create,
     required TResult Function(_Update value) update,
     required TResult Function(_Delete value) delete,
@@ -944,6 +1148,7 @@ class _$SetCurrentImpl implements _SetCurrent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_GetRoutines value)? getRoutines,
     TResult? Function(_Import value)? import,
+    TResult? Function(_Export value)? export,
     TResult? Function(_Create value)? create,
     TResult? Function(_Update value)? update,
     TResult? Function(_Delete value)? delete,
@@ -957,6 +1162,7 @@ class _$SetCurrentImpl implements _SetCurrent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_GetRoutines value)? getRoutines,
     TResult Function(_Import value)? import,
+    TResult Function(_Export value)? export,
     TResult Function(_Create value)? create,
     TResult Function(_Update value)? update,
     TResult Function(_Delete value)? delete,

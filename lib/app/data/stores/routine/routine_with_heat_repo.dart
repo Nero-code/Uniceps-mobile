@@ -15,7 +15,7 @@ import 'package:uniceps/core/errors/failure.dart';
 
 class RoutineWithHeatRepo implements IRoutineWithHeatContract {
   final IRoutineManagementLocalSourceContract _localSource;
-  final FileParseService _fileParseService;
+  final UniFileManager _unifileManager;
   final MediaHelper _mediaHelper;
   final Logger _logger;
 
@@ -23,11 +23,11 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
 
   RoutineWithHeatRepo(
       {required IRoutineManagementLocalSourceContract localSource,
-      required FileParseService fileParseService,
+      required UniFileManager fileParseService,
       required MediaHelper mediaHelper,
       required Logger logger})
       : _localSource = localSource,
-        _fileParseService = fileParseService,
+        _unifileManager = fileParseService,
         _mediaHelper = mediaHelper,
         _logger = logger;
 
@@ -111,7 +111,7 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
   @override
   Stream<RoutineResult> importRoutineFromFile() async* {
     try {
-      final file = await _fileParseService.readFile();
+      final file = await _unifileManager.importFile();
       if (file.meta.fileType != FileType.routine) throw ParserMismatchExeption();
       final routine = RoutineDto.fromJson(file.data);
       // final routine = await _fileParseService.extract<RoutineDto>(file, RoutineDto.fromJson);
@@ -179,6 +179,18 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
         stage: Stage.error,
         error: FileParseFailure.fOffline(),
       );
+    }
+  }
+
+  @override
+  Future<bool> exportRoutineToFile(int routineId) async {
+    try {
+      final routine = await _localSource.getFullRoutine(routineId);
+      _unifileManager.exportRoutineToFile(fileName: routine.name, data: routine.toJson());
+      return true;
+    } catch (e) {
+      _logger.e('Error exporting routine', error: e);
+      return false;
     }
   }
 }

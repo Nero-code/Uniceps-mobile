@@ -29,11 +29,11 @@ Map<String, dynamic> _$TSessionModelToJson(TSessionModel instance) =>
       'id': instance.id,
       'day_id': instance.dayId,
       'day_name': instance.dayName,
+      'logs': instance.logs.map((e) => e.toJson()).toList(),
       'created_at': instance.createdAt.toIso8601String(),
       'finished_at': instance.finishedAt?.toIso8601String(),
       'progress': instance.progress,
       'api_id': instance.apiId,
       'version': instance.version,
       'is_synced': instance.isSynced,
-      'logs': instance.logs.map((e) => e.toJson()).toList(),
     };

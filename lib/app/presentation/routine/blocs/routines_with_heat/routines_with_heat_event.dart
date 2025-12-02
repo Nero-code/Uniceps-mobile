@@ -4,6 +4,7 @@ part of 'routines_with_heat_bloc.dart';
 class RoutinesWithHeatEvent with _$RoutinesWithHeatEvent {
   const factory RoutinesWithHeatEvent.getRoutines() = _GetRoutines;
   const factory RoutinesWithHeatEvent.import() = _Import;
+  const factory RoutinesWithHeatEvent.export(int routineId) = _Export;
   const factory RoutinesWithHeatEvent.create(String name) = _Create;
   const factory RoutinesWithHeatEvent.update(Routine update) = _Update;
   const factory RoutinesWithHeatEvent.delete(Routine delete) = _Delete;

@@ -13,4 +13,5 @@ abstract class IRoutineWithHeatContract {
   Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> setCurrentRoutine(Routine routine);
 
   Stream<RoutineResult> importRoutineFromFile();
+  Future<bool> exportRoutineToFile(int routineId);
 }

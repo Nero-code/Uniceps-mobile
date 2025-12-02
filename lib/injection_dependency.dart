@@ -239,7 +239,7 @@ Future<void> init() async {
     ),
   );
 
-  sl.registerLazySingleton(() => FileParseService());
+  sl.registerLazySingleton(() => UniFileManager());
 
   sl.registerLazySingleton<UpdateService>(() => UpdateService(connectionChecker: sl(), client: sl()));
 
