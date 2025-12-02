@@ -19,6 +19,7 @@ import 'package:uniceps/app/presentation/profile/screens/profile_initial_screen.
 import 'package:uniceps/app/presentation/routine/screens/routines_heat_screen.dart';
 import 'package:uniceps/app/presentation/settings/screens/profile_screen.dart';
 import 'package:uniceps/app/presentation/settings/screens/settings_screen.dart';
+import 'package:uniceps/app/services/notification_service.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/app/presentation/screens/about_screen.dart';
 import 'package:uniceps/firebase_options.dart';
@@ -53,6 +54,8 @@ void main() async {
     provisional: false,
     sound: true,
   );
+
+  await NotificationService.init();
 
   debugPrint('User granted permission: ${settings.authorizationStatus}');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);

@@ -251,7 +251,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                                                 .read<MeasurementBloc>()
                                                 .add(MeasurementEvent.deleteMeasurement(state.list[page])),
                                             itemName:
-                                                "${locale.record} ${intl.DateFormat.yMd().format(state.list[page].checkDate)}"),
+                                                "${locale.record} ${intl.DateFormat('d/M/y').format(state.list[page].checkDate)}"),
                                       ));
                             },
                             icon: const Icon(Icons.delete),

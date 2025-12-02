@@ -96,7 +96,7 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
                                 .map((m) => DropdownMenuItem(
                                     value: m,
                                     child: Text(
-                                      DateFormat.yMd().format(m.checkDate),
+                                      DateFormat('d/M/y').format(m.checkDate),
                                       style: TextStyle(color: primaryColor),
                                     )))
                                 .toList(),
@@ -114,7 +114,7 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
                             items: measurements
                                 .map((m) => DropdownMenuItem(
                                     value: m,
-                                    child: Text(DateFormat.yMd().format(m.checkDate),
+                                    child: Text(DateFormat('d/M/y').format(m.checkDate),
                                         style: TextStyle(color: primaryColor))))
                                 .toList(),
                             onChanged: (v) => setState(() => newM = v),

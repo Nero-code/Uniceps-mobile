@@ -20,9 +20,11 @@ class MeasurementsRepo implements IMeasurementContract {
       //
       if (res.isEmpty) return const Left(MeasurementFailure.noRecords());
       //
+      res.sort((a, b) => b.checkDate.compareTo(a.checkDate));
       buffer.addAll(res.map((m) => m.toEntity()).toList());
       return Right(buffer);
     } catch (e) {
+      logger.e('Error: getMeasurements', error: e);
       return const Left(MeasurementFailure.msDbFailure());
     }
   }
@@ -31,9 +33,13 @@ class MeasurementsRepo implements IMeasurementContract {
   Future<Either<MeasurementFailure, Unit>> createMeasurement(Measurement m) async {
     try {
       final id = await localSource.saveMeasurement(MeasurementModel.fromEntity(m));
-      buffer.add(m.copyWith(id: id));
+      buffer
+        ..add(m.copyWith(id: id))
+        ..sort((a, b) => b.checkDate.compareTo(a.checkDate));
+
       return const Right(unit);
     } catch (e) {
+      logger.e('Error: createMeasurement', error: e);
       return const Left(MeasurementFailure.msDbFailure());
     }
   }
@@ -45,10 +51,11 @@ class MeasurementsRepo implements IMeasurementContract {
       await localSource.saveMeasurement(model);
       buffer.removeWhere((e) => e.id == model.id);
       buffer
-        ..add(model.toEntity())
-        ..sort();
+        ..add(m)
+        ..sort((a, b) => b.checkDate.compareTo(a.checkDate));
       return const Right(unit);
     } catch (e) {
+      logger.e('Error: updateMeasurement', error: e);
       return const Left(MeasurementFailure.msDbFailure());
     }
   }
@@ -60,6 +67,7 @@ class MeasurementsRepo implements IMeasurementContract {
       buffer.removeWhere((e) => e.id == m.id);
       return const Right(unit);
     } catch (e) {
+      logger.e('Error: deleteMeasurement', error: e);
       return const Left(MeasurementFailure.msDbFailure());
     }
   }

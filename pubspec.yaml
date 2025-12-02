@@ -69,6 +69,7 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   sqlite3_flutter_libs: ^0.5.33
   file_selector: ^1.0.3
+  flutter_local_notifications: ^17.2.2
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,19 +12,65 @@ import 'package:uniceps/app/presentation/practice/dialogs/confirmation_dialog.da
 import 'package:uniceps/app/presentation/practice/dialogs/session_complete_dialog.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_body.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_header.dart';
+import 'package:uniceps/app/services/notification_service.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 
 class PracticeScreen extends StatefulWidget {
-  const PracticeScreen({super.key});
-
+  const PracticeScreen({super.key, required this.dayName});
+  final String dayName;
   @override
   State<PracticeScreen> createState() => _PracticeScreenState();
 }
 
-class _PracticeScreenState extends State<PracticeScreen> {
+class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObserver {
   int? expandedId, totalProgress;
+
+  Timer? timer;
+  Duration seconds = Duration.zero;
+  @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // final locale = AppLocalizations.of(context)!;
+    if (state == AppLifecycleState.paused) {
+      final elapsed = context.read<StopwatchCubit>().stoptime;
+      context.read<StopwatchCubit>().stopStopwatch();
+      timer = Timer.periodic(
+        const Duration(seconds: 1),
+        (timer) {
+          seconds += const Duration(seconds: 1);
+          NotificationService.showNotification(id: 0, title: widget.dayName, body: formatDuration(elapsed + seconds));
+        },
+      );
+    }
+    if (state == AppLifecycleState.resumed) {
+      NotificationService.closeAll();
+      timer?.cancel();
+      context.read<StopwatchCubit>().startStopWatch(seconds);
+      seconds = Duration.zero;
+    }
+  }
+
+  String formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String hours = twoDigits(duration.inHours);
+    String minutes = twoDigits(duration.inMinutes.remainder(60));
+    String seconds = twoDigits(duration.inSeconds.remainder(60));
+
+    return "$hours:$minutes:$seconds";
+  }
 
   @override
   Widget build(BuildContext context) {

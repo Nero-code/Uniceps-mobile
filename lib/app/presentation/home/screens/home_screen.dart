@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       MaterialPageRoute(
                                           builder: (_) => BlocProvider.value(
                                                 value: context.read<StopwatchCubit>()..startStopWatch(),
-                                                child: const PracticeScreen(),
+                                                child: PracticeScreen(dayName: s.dayName),
                                               ))),
                                   // ignore: avoid_print
                                   error: (e) => () => print(e.getErrorMessage()),
@@ -246,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               value: context.read<StopwatchCubit>()..startStopWatch(),
                                             ),
                                           ],
-                                          child: const PracticeScreen(),
+                                          child: PracticeScreen(dayName: day.name),
                                         ),
                                       ));
                                   panelController.close();
