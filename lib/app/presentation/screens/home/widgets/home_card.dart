@@ -8,7 +8,7 @@
 // import 'package:uniceps/core/constants/constants.dart';
 // import 'package:uniceps/core/widgets/error_widget.dart';
 // import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:uniceps/l10n/app_localizations.dart';
 // import 'package:uniceps/app/presentation/blocs/attendence/attendence_bloc.dart';
 // import 'package:uniceps/app/presentation/blocs/player_gym/player_gym_bloc.dart';
 // import 'package:uniceps/app/presentation/blocs/subscription/subs_bloc.dart';

@@ -5,8 +5,7 @@ import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/app/presentation/measurement/blocs/measurement/measurment_bloc.dart';
 import 'package:uniceps/app/presentation/measurement/dialogs/set_measure_dialog.dart';
 import 'package:uniceps/app/presentation/measurement/widgets/measure_widget.dart';
-import 'package:uniceps/core/constants/muscles_images.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/core/constants/muscles_images.dart';import 'package:uniceps/l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddEditMeasurementScreen extends StatefulWidget {

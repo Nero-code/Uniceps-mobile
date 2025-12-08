@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter/material.dart';import 'package:uniceps/l10n/app_localizations.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/sessions_report.dart';
 
 class SessionReportCard extends StatelessWidget {

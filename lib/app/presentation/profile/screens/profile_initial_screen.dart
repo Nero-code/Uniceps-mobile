@@ -6,8 +6,7 @@ import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/profile/cubit/profile_cubit.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/widgets/gender_selection_widget.dart';
-import 'package:uniceps/core/constants/constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/core/constants/constants.dart';import 'package:uniceps/l10n/app_localizations.dart';
 import 'package:uniceps/injection_dependency.dart';
 
 class ProfileInitialScreen extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class RoutineNameDialog extends StatelessWidget {
   RoutineNameDialog({super.key, required this.initialName, required this.isCreate, required this.onSubmit});

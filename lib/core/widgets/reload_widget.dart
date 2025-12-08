@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/core/errors/failure.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/core/errors/failure.dart';import 'package:uniceps/l10n/app_localizations.dart';
 
 ///   Error widget with image to identify error
 class ReloadScreenWidget extends StatelessWidget {

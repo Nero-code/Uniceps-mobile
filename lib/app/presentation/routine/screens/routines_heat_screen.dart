@@ -21,7 +21,7 @@ import 'package:uniceps/app/presentation/routine/screens/routine_edit_days_scree
 import 'package:uniceps/core/widgets/premium_alert.dart';
 import 'package:uniceps/core/widgets/reload_widget.dart';
 import 'package:uniceps/injection_dependency.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class RoutinesHeatScreen extends StatefulWidget {
   const RoutinesHeatScreen({super.key});

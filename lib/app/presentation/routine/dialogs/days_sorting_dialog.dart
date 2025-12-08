@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class DaysSortingDialog extends StatefulWidget {
   const DaysSortingDialog({super.key, required this.days, required this.onReorder});

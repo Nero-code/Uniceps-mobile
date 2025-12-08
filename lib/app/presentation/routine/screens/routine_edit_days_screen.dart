@@ -20,7 +20,7 @@ import 'package:uniceps/app/presentation/routine/pages/routine_edit_items_tab.da
 import 'package:uniceps/app/presentation/routine/widgets/day_tab_widget.dart';
 import 'package:uniceps/core/extensions.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 import 'package:uniceps/core/widgets/premium_alert.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 

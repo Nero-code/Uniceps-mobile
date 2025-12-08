@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter/material.dart';import 'package:uniceps/l10n/app_localizations.dart';
 
 ///   A Color-Changeing Widget to represent selection
 class GenderSelectBox extends StatefulWidget {

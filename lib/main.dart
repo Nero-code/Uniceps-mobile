@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/app/presentation/auth/screens/email_auth_screen.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
@@ -25,7 +24,7 @@ import 'package:uniceps/app/presentation/screens/about_screen.dart';
 import 'package:uniceps/firebase_options.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 import 'package:uniceps/app/presentation/home/screens/home_screen.dart';
 import 'package:uniceps/splash.dart';
 import 'core/constants/app_routes.dart';
@@ -59,11 +58,6 @@ void main() async {
 
   debugPrint('User granted permission: ${settings.authorizationStatus}');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  await FlutterDownloader.initialize(
-    debug: false,
-    ignoreSsl: false,
-  );
 
   runApp(const MyApp());
 }

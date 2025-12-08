@@ -6,7 +6,7 @@ import 'package:uniceps/app/presentation/performance/widgets/muscle_difference_w
 import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/constants/muscles_images.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 import 'package:uniceps/core/widgets/empty_page.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 

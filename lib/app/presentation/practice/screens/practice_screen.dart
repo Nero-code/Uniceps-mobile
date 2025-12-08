@@ -13,8 +13,7 @@ import 'package:uniceps/app/presentation/practice/dialogs/session_complete_dialo
 import 'package:uniceps/app/presentation/practice/widgets/practice_body.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_header.dart';
 import 'package:uniceps/app/services/notification_service.dart';
-import 'package:uniceps/core/widgets/loading_page.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';import 'package:uniceps/l10n/app_localizations.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 
 class PracticeScreen extends StatefulWidget {

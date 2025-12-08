@@ -21,8 +21,7 @@ import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/injection_dependency.dart' as di;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/injection_dependency.dart' as di;import 'package:uniceps/l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

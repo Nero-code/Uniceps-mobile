@@ -214,7 +214,7 @@ Future<void> init() async {
   //     () => NoTokenHttpClientHelper(client: sl()));
   sl.registerLazySingleton<ClientHelper>(() => HttpClientHelper(client: sl(), tokenService: sl()));
 
-  sl.registerLazySingleton<InternetConnectionChecker>(() => InternetConnectionChecker());
+  sl.registerLazySingleton<InternetConnectionChecker>(() => InternetConnectionChecker.createInstance());
 
   sl.registerLazySingleton(() => SimpleTokenService());
 

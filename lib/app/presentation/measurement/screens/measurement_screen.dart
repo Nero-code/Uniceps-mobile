@@ -11,8 +11,7 @@ import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/core/constants/muscles_images.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/app/presentation/measurement/blocs/measurement/measurment_bloc.dart';
-import 'package:uniceps/app/presentation/measurement/widgets/measure_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/app/presentation/measurement/widgets/measure_widget.dart';import 'package:uniceps/l10n/app_localizations.dart';
 import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 

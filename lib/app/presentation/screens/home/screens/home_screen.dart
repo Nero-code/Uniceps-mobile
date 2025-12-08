@@ -30,7 +30,7 @@
 // import 'package:uniceps/app/presentation/screens/home/widgets/sliding_panal_decoration.dart';
 // import 'package:uniceps/app/presentation/screens/home/widgets/progress_widget.dart';
 // import 'package:uniceps/app/presentation/screens/home/widgets/training_day_list_item.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:uniceps/l10n/app_localizations.dart';
 // import 'package:uniceps/app/presentation/screens/home/widgets/training_group.dart';
 // import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 // import 'package:uniceps/app/presentation/blocs/locale/training_section_cubit.dart';

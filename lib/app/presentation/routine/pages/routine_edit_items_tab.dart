@@ -7,7 +7,7 @@ import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_blo
 import 'package:uniceps/app/presentation/routine/screens/exercises_selection_screen.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_item_horizontal_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 
 class RoutineItemEditTab extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class PremiumBanner extends StatelessWidget {
   const PremiumBanner({

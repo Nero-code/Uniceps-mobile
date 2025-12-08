@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class RoutineListTile extends StatelessWidget {
   const RoutineListTile({super.key, required this.routine, required this.onTap, required this.onLongPress});

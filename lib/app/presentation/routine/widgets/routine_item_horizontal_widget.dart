@@ -8,7 +8,7 @@ import 'package:uniceps/app/presentation/routine/screens/routine_edit_sets_scree
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/box_botton.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class RoutineItemHorizontalWidget extends StatefulWidget {
   const RoutineItemHorizontalWidget({super.key, required this.item, required this.copyToAll});
