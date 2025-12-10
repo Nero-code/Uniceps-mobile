@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';import 'package:uniceps/l10n/app_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
+import 'package:uniceps/l10n/app_localizations.dart';
+
+import '../../../../core/errors/failure.dart';
 
 class EmailAuthScreen extends StatefulWidget {
   const EmailAuthScreen({super.key});
@@ -35,11 +38,13 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
           backgroundColor: Theme.of(context).colorScheme.surface,
         ),
         body: BlocConsumer<AuthBloc, AuthState>(
-          listener: (context, state) => state.whenOrNull(authenticated: () {
-            context.read<AccountCubit>().getUserAccount();
-            Navigator.pop(context);
-            return null;
-          }),
+          listener: (context, state) => state.whenOrNull(
+            authenticated: () {
+              context.read<AccountCubit>().getUserAccount();
+              Navigator.pop(context);
+              return null;
+            },
+          ),
           builder: (context, state) => Directionality(
             textDirection: TextDirection.ltr,
             child: SingleChildScrollView(
@@ -62,20 +67,20 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                     textDirection: TextDirection.ltr,
                     // readOnly: true,
                     enabled: state.maybeWhen(
-                        initial: () => true,
-                        error: (f) => f.when(
-                            aOffline: () => true,
-                            invalidEmailFailure: () => true,
-                            invalidCodeFailure: () => false,
-                            unautherizedFailure: () => false),
-                        orElse: () => false),
+                      initial: () => true,
+                      error: (f) => f.when(
+                        aOffline: () => true,
+                        invalidEmailFailure: () => true,
+                        invalidCodeFailure: () => false,
+                        unautherizedFailure: () => false,
+                      ),
+                      orElse: () => false,
+                    ),
 
                     decoration: InputDecoration(
                       // filled: true,
                       // fillColor: Colors.grey.shade100,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(radius),
-                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(radius)),
                       hintText: "john.doe@gmail.com",
                       label: const Text("Email"),
                       prefixIcon: const Icon(Icons.person),
@@ -96,10 +101,11 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                       codeSent: () => true,
                       authenticated: () => false,
                       error: (f) => f.when(
-                          aOffline: () => true,
-                          invalidEmailFailure: () => false,
-                          invalidCodeFailure: () => true,
-                          unautherizedFailure: () => false),
+                        aOffline: () => true,
+                        invalidEmailFailure: () => false,
+                        invalidCodeFailure: () => true,
+                        unautherizedFailure: () => false,
+                      ),
                       loading: () => false,
                     ),
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -108,9 +114,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                     decoration: InputDecoration(
                       // filled: true,
                       // fillColor: Colors.grey.shade100,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(radius),
-                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(radius)),
                       label: const Text("Code"),
                       prefixIcon: const Icon(Icons.lock_rounded),
                     ),
@@ -123,29 +127,31 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.teal, foregroundColor: Colors.white),
                       onPressed: state.when(
-                        initial: () => () => context
-                            .read<AuthBloc>()
-                            .add(AuthEvent.requestEmailAuth(emailController.text.trim().toLowerCase())),
-                        codeSent: () => (() => context
-                            .read<AuthBloc>()
-                            .add(AuthEvent.verifyCode(emailController.text.trim().toLowerCase(), codeController.text))),
+                        initial: () =>
+                            () => context.read<AuthBloc>().add(
+                              AuthEvent.requestEmailAuth(emailController.text.trim().toLowerCase()),
+                            ),
+                        codeSent: () => (() => context.read<AuthBloc>().add(
+                          AuthEvent.verifyCode(emailController.text.trim().toLowerCase(), codeController.text),
+                        )),
                         error: (f) => f.when(
                           // Offline
-                          aOffline: () => () => (codeController.text.isEmpty)
-                              ? AuthEvent.requestEmailAuth(
-                                  emailController.text.trim().toLowerCase(),
-                                )
+                          aOffline: () =>
+                              () => (codeController.text.isEmpty)
+                              ? AuthEvent.requestEmailAuth(emailController.text.trim().toLowerCase())
                               : context.read<AuthBloc>().add(
-                                  AuthEvent.verifyCode(emailController.text.trim().toLowerCase(), codeController.text)),
+                                  AuthEvent.verifyCode(emailController.text.trim().toLowerCase(), codeController.text),
+                                ),
 
                           // InvalidEmailFailure
-                          invalidEmailFailure: () => () => AuthEvent.requestEmailAuth(
-                                emailController.text.trim().toLowerCase(),
-                              ),
+                          invalidEmailFailure: () =>
+                              () => AuthEvent.requestEmailAuth(emailController.text.trim().toLowerCase()),
 
                           // InvalidCodeFailure
-                          invalidCodeFailure: () => () => context.read<AuthBloc>().add(
-                              AuthEvent.verifyCode(emailController.text.trim().toLowerCase(), codeController.text)),
+                          invalidCodeFailure: () =>
+                              () => context.read<AuthBloc>().add(
+                                AuthEvent.verifyCode(emailController.text.trim().toLowerCase(), codeController.text),
+                              ),
 
                           // UnautherizedFailure
                           unautherizedFailure: () => null,
@@ -156,7 +162,9 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                       icon: SizedBox.square(
                         dimension: 15,
                         child: state.maybeWhen(
-                            loading: () => const CircularProgressIndicator(strokeWidth: 2.0), orElse: () => null),
+                          loading: () => const CircularProgressIndicator(strokeWidth: 2.0),
+                          orElse: () => null,
+                        ),
                       ),
                       label: Text(
                         locale.signin,

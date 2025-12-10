@@ -45,6 +45,7 @@
   "delete": "حذف",
   "finish": "انهاء",
   "finishAlertContent": "هل انتهيت من التدريب؟ سيتم اغلاق هذه الجلسة وتصنيفها ك منتهية!",
+  "practiceNotificationBody": "هناك جلسة تدريب نشطة - عد وواصل التقدم",
   "welldone": "احسنت!",
   "great": "رائع!",
   "record": "سجل",

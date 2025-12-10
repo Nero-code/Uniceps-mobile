@@ -8,53 +8,50 @@ part 'stopwatch_state.dart';
 
 class StopwatchCubit extends Cubit<StopwatchState> {
   final stopwatch = Stopwatch();
-  bool get isRunning => stopwatch.isRunning;
+  // bool get isRunning => stopwatch.isRunning;
   Timer? _timer;
-  Duration? _duration;
+  // Duration? _duration;
   final SharedPreferences prefs;
   StopwatchCubit({required this.prefs}) : super(const StopwatchState(time: "00:00:00", isRunning: false));
 
-  void getStopwatchTime() {
-    final time = prefs.getString('time');
-    if (time != null) {
-      final parseTime = time.split(':').map(int.parse).toList();
-      _duration = Duration(
-        hours: parseTime[0],
-        minutes: parseTime[1],
-        seconds: parseTime[2],
-      );
-      emit(StopwatchState(isRunning: false, time: time));
-    }
-  }
+  // void getStopwatchTime() {
+  //   final time = prefs.getString('time');
+  //   if (time != null) {
+  //     final parseTime = time.split(':').map(int.parse).toList();
+  //     _duration = Duration(
+  //       hours: parseTime[0],
+  //       minutes: parseTime[1],
+  //       seconds: parseTime[2],
+  //     );
+  //     emit(StopwatchState(isRunning: false, time: time));
+  //   }
+  // }
 
   void startStopWatch([Duration elapsed = Duration.zero]) {
+    _timer?.cancel();
     stopwatch.start();
-    _duration = (_duration ?? Duration.zero) + elapsed;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      emit(StopwatchState(
-        time: formatDuration(stopwatch.elapsed + (_duration ?? Duration.zero)),
-        isRunning: true,
-      ));
+      emit(StopwatchState(time: formatDuration(elapsed + stopwatch.elapsed), isRunning: true));
     });
   }
 
-  void stopStopwatch() async {
-    stopwatch.stop();
-    _timer?.cancel();
-    await prefs.setString("time", formatDuration(stopwatch.elapsed + (_duration ?? Duration.zero)));
-  }
+  // void stopStopwatch() async {
+  //   stopwatch.stop();
+  //   _timer?.cancel();
+  //   await prefs.setString("time", formatDuration(stopwatch.elapsed + (_duration ?? Duration.zero)));
+  // }
 
   void resetStopwatch() async {
     _timer?.cancel();
     stopwatch.stop();
     stopwatch.reset();
-    _duration = null;
+    // _duration = null;
 
-    await prefs.setString("time", formatDuration(Duration.zero));
-    emit(StopwatchState(time: formatDuration(stopwatch.elapsed), isRunning: true));
+    // await prefs.setString("time", formatDuration(Duration.zero));
+    emit(StopwatchState(time: formatDuration(stopwatch.elapsed), isRunning: false));
   }
 
-  Duration get stoptime => stopwatch.elapsed + (_duration ?? Duration.zero);
+  // Duration get stoptime => stopwatch.elapsed + (_duration ?? Duration.zero);
 
   String formatDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
@@ -67,9 +64,9 @@ class StopwatchCubit extends Cubit<StopwatchState> {
 
   @override
   Future<void> close() async {
-    stopwatch.stop();
+    stopwatch.reset();
     _timer?.cancel();
-    await prefs.setString("time", formatDuration(stopwatch.elapsed + (_duration ?? Duration.zero)));
+    // await prefs.setString("time", formatDuration(stopwatch.elapsed + (_duration ?? Duration.zero)));
     await super.close();
   }
 }

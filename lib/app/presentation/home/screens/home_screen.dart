@@ -5,23 +5,26 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
+import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
+import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
+import 'package:uniceps/app/presentation/home/blocs/stopwatch/stopwatch_cubit.dart';
 import 'package:uniceps/app/presentation/home/widgets/alert_bar.dart';
 import 'package:uniceps/app/presentation/home/widgets/captain_uni_card.dart';
 import 'package:uniceps/app/presentation/home/widgets/practice_day_item.dart';
-import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
-import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
-import 'package:uniceps/app/presentation/home/blocs/stopwatch/stopwatch_cubit.dart';
 import 'package:uniceps/app/presentation/home/widgets/practice_panel.dart';
 import 'package:uniceps/app/presentation/home/widgets/routine_skeleton.dart';
 import 'package:uniceps/app/presentation/practice/screens/practice_screen.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_with_heat.dart';
 import 'package:uniceps/app/presentation/settings/dialogs/qr_alert_dialog.dart';
-import 'package:uniceps/core/constants/cap_images.dart';
-import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
+import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/injection_dependency.dart' as di;import 'package:uniceps/l10n/app_localizations.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
+import 'package:uniceps/injection_dependency.dart' as di;
+import 'package:uniceps/l10n/app_localizations.dart';
+
+import '../../../../core/errors/failure.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -51,31 +54,31 @@ class _HomeScreenState extends State<HomeScreen> {
         SystemNavigator.pop();
       },
       child: BlocProvider(
-        create: (context) => StopwatchCubit(prefs: di.sl())..getStopwatchTime(),
+        create: (context) => StopwatchCubit(prefs: di.sl()),
         lazy: false,
         child: Stack(
           children: [
             Scaffold(
               appBar: AppBar(
-                  centerTitle: true,
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                  title: Text(APP_NAME,
-                      style: TextStyle(fontFamily: 'Playwrite', color: Theme.of(context).colorScheme.primary)),
-                  leading: IconButton(
-                    onPressed: () => showDialog(context: context, builder: (_) => const QrAlertDialog()),
-                    icon: const Icon(Icons.qr_code_2_outlined),
-                    color: Colors.blueGrey,
+                centerTitle: true,
+                backgroundColor: Theme.of(context).colorScheme.surface,
+                title: Text(
+                  APP_NAME,
+                  style: TextStyle(fontFamily: 'Playwrite', color: Theme.of(context).colorScheme.primary),
+                ),
+                leading: IconButton(
+                  onPressed: () => showDialog(context: context, builder: (_) => const QrAlertDialog()),
+                  icon: const Icon(Icons.qr_code_2_outlined),
+                  color: Colors.blueGrey,
+                ),
+                actions: [
+                  IconButton(
+                    iconSize: 25,
+                    onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
+                    icon: const Icon(Icons.settings, color: Colors.blueGrey),
                   ),
-                  actions: [
-                    IconButton(
-                      iconSize: 25,
-                      onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
-                      icon: const Icon(
-                        Icons.settings,
-                        color: Colors.blueGrey,
-                      ),
-                    ),
-                  ]),
+                ],
+              ),
               body: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -89,36 +92,31 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder: (context, state) {
                             return PracticePanel(
                               onPractice: state.maybeWhen(
-                                  noActiveSession: () => panelController.open,
-                                  loaded: (s) => () => Navigator.push(
+                                noActiveSession: () => panelController.open,
+                                loaded: (s) =>
+                                    () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (_) => BlocProvider.value(
-                                                value: context.read<StopwatchCubit>()..startStopWatch(),
-                                                child: PracticeScreen(dayName: s.dayName),
-                                              ))),
-                                  // ignore: avoid_print
-                                  error: (e) => () => print(e.getErrorMessage()),
-                                  orElse: () => () {}),
+                                        builder: (_) => BlocProvider.value(
+                                          value: context.read<StopwatchCubit>()
+                                            ..startStopWatch(DateTime.now().difference(s.createdAt)),
+                                          child: PracticeScreen(dayName: s.dayName, startDate: s.createdAt),
+                                        ),
+                                      ),
+                                    ),
+                                // ignore: avoid_print
+                                error: (e) =>
+                                    () => print(e.getErrorMessage()),
+                                orElse: () => () {},
+                              ),
                               onMeasurement: () => Navigator.pushNamed(context, AppRoutes.measurements),
                               onAnalytics: () => Navigator.pushNamed(context, AppRoutes.performance),
                               mainIcon: state.maybeWhen(
                                 loading: () => const LoadingIndicator(),
-                                noActiveSession: () => Icon(
-                                  Icons.rocket,
-                                  size: 50,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                loaded: (s) => const Icon(
-                                  Icons.rocket_launch,
-                                  size: 50,
-                                  color: Colors.green,
-                                ),
-                                error: (f) => const Icon(
-                                  Icons.refresh,
-                                  color: Colors.red,
-                                  size: 50,
-                                ),
+                                noActiveSession: () =>
+                                    Icon(Icons.rocket, size: 50, color: Theme.of(context).colorScheme.primary),
+                                loaded: (s) => const Icon(Icons.rocket_launch, size: 50, color: Colors.green),
+                                error: (f) => const Icon(Icons.refresh, color: Colors.red, size: 50),
                                 orElse: () => const SizedBox(),
                               ),
                             );
@@ -127,41 +125,48 @@ class _HomeScreenState extends State<HomeScreen> {
                         BlocBuilder<CurrentRoutineCubit, CurrentRoutineState>(
                           builder: (context, state) {
                             return state.map(
-                                initial: (_) => const SizedBox(),
-                                loading: (_) => const RoutineSkeleton(),
-                                loaded: (state) => RoutineWithHeat(
-                                    routine: state.c,
-                                    heat: state.heat,
-                                    onMenu: null,
-                                    onTap: () async {
-                                      await Navigator.pushNamed(context, AppRoutes.routineManager);
-                                      if (context.mounted) {
-                                        context.read<CurrentRoutineCubit>().getCurrentRoutine();
-                                      }
-                                    }),
-                                error: (state) => RoutineSkeleton(onTap: () async {
-                                      await Navigator.pushNamed(context, AppRoutes.routineManager);
-                                      if (context.mounted) {
-                                        context.read<CurrentRoutineCubit>().getCurrentRoutine();
-                                      }
-                                    }));
+                              initial: (_) => const SizedBox(),
+                              loading: (_) => const RoutineSkeleton(),
+                              loaded: (state) => RoutineWithHeat(
+                                routine: state.c,
+                                heat: state.heat,
+                                onMenu: null,
+                                onTap: () async {
+                                  await Navigator.pushNamed(context, AppRoutes.routineManager);
+                                  if (context.mounted) {
+                                    context.read<CurrentRoutineCubit>().getCurrentRoutine();
+                                  }
+                                },
+                              ),
+                              error: (state) => RoutineSkeleton(
+                                onTap: () async {
+                                  await Navigator.pushNamed(context, AppRoutes.routineManager);
+                                  if (context.mounted) {
+                                    context.read<CurrentRoutineCubit>().getCurrentRoutine();
+                                  }
+                                },
+                              ),
+                            );
                           },
                         ),
                         const SizedBox(),
                         BlocBuilder<DailyQuoteCubit, DailyQuoteState>(
-                            builder: (context, state) => state.map(
-                                  initial: (_) => const LoadingIndicator(),
-                                  loaded: (s) => CaptainUniCard(
-                                    imagePath: CaptainImages.motive,
-                                    needsFlip: false,
-                                    content: s.quote.quote[parseLang(lang)]!,
-                                    gradient: LinearGradient(colors: [
-                                      Theme.of(context).colorScheme.primary,
-                                      Theme.of(context).colorScheme.secondary,
-                                    ]),
-                                    onCapTap: () => Navigator.pushNamed(context, AppRoutes.capAbout),
-                                  ),
-                                )),
+                          builder: (context, state) => state.map(
+                            initial: (_) => const LoadingIndicator(),
+                            loaded: (s) => CaptainUniCard(
+                              imagePath: CaptainImages.motive,
+                              needsFlip: false,
+                              content: s.quote.quote[parseLang(lang)]!,
+                              gradient: LinearGradient(
+                                colors: [
+                                  Theme.of(context).colorScheme.primary,
+                                  Theme.of(context).colorScheme.secondary,
+                                ],
+                              ),
+                              onCapTap: () => Navigator.pushNamed(context, AppRoutes.capAbout),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -184,22 +189,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           hasAccount: (acc) => membershipBloc.state.maybeMap(
                             orElse: () => const SizedBox(),
                             error: (err) => err.f.maybeMap(
-                                orElse: () => notifyUpgrade
-                                    ? AlertBar(
-                                        color: Colors.amber.shade300,
-                                        foregroundColor: Colors.black87,
-                                        content: Text(
-                                          locale.upgradeAlert,
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            color: Color.fromRGBO(47, 53, 53, 1),
-                                            fontWeight: FontWeight.w300,
-                                          ),
+                              orElse: () => notifyUpgrade
+                                  ? AlertBar(
+                                      color: Colors.amber.shade300,
+                                      foregroundColor: Colors.black87,
+                                      content: Text(
+                                        locale.upgradeAlert,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Color.fromRGBO(47, 53, 53, 1),
+                                          fontWeight: FontWeight.w300,
                                         ),
-                                        actionText: locale.upgrade,
-                                        action: () => Navigator.pushNamed(context, AppRoutes.plans),
-                                        close: () => setState(() => notifyUpgrade = false))
-                                    : const SizedBox()),
+                                      ),
+                                      actionText: locale.upgrade,
+                                      action: () => Navigator.pushNamed(context, AppRoutes.plans),
+                                      close: () => setState(() => notifyUpgrade = false),
+                                    )
+                                  : const SizedBox(),
+                            ),
                           ),
                         );
                       },
@@ -228,37 +235,33 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: const Image(image: AssetImage(CaptainImages.selectDay)),
                           ),
                           Text(locale.dayQuete),
-                          ...state.c.trainingDays.map((day) => PracticeDayItem(
-                                day: day,
-                                isSelected: state.heat.lastdayId == day.id,
-                                onSelect: () async {
-                                  context.read<SessionBloc>().add(SessionEvent.startSession(day.id!, day.name));
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => MultiBlocProvider(
-                                          providers: [
-                                            BlocProvider.value(
-                                              value: context.read<SessionBloc>(),
-                                            ),
-                                            BlocProvider.value(
-                                              value: context.read<StopwatchCubit>()..startStopWatch(),
-                                            ),
-                                          ],
-                                          child: PracticeScreen(dayName: day.name),
-                                        ),
-                                      ));
-                                  panelController.close();
-                                },
-                              )),
+                          ...state.c.trainingDays.map(
+                            (day) => PracticeDayItem(
+                              day: day,
+                              isSelected: state.heat.lastdayId == day.id,
+                              onSelect: () async {
+                                context.read<SessionBloc>().add(SessionEvent.startSession(day.id!, day.name));
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => MultiBlocProvider(
+                                      providers: [
+                                        BlocProvider.value(value: context.read<SessionBloc>()),
+                                        BlocProvider.value(value: context.read<StopwatchCubit>()..startStopWatch()),
+                                      ],
+                                      child: PracticeScreen(dayName: day.name, startDate: DateTime.now()),
+                                    ),
+                                  ),
+                                );
+                                panelController.close();
+                              },
+                            ),
+                          ),
                         ],
                       ),
                       orElse: () => Column(
                         children: [
-                          Image(
-                            image: const AssetImage(CaptainImages.noTrainingDays),
-                            width: screenSize.width * .60,
-                          ),
+                          Image(image: const AssetImage(CaptainImages.noTrainingDays), width: screenSize.width * .60),
                           Text(locale.noTrainingProgram),
                         ],
                       ),

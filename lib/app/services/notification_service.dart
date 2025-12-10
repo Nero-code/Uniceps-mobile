@@ -4,7 +4,7 @@ class NotificationService {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
 
   static Future<void> init() async {
-    const AndroidInitializationSettings androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const AndroidInitializationSettings androidInit = AndroidInitializationSettings('ic_stat');
 
     const InitializationSettings initSettings = InitializationSettings(android: androidInit);
 
@@ -15,25 +15,22 @@ class NotificationService {
     required int id,
     required String title,
     required String body,
+    bool onlyAlertOnce = false,
+    bool ongoing = false,
+    bool autoCancel = true,
     String? payload,
   }) async {
-    const androidDetails = AndroidNotificationDetails(
+    final androidDetails = AndroidNotificationDetails(
       'default_channel',
       'Default Notifications',
       importance: Importance.max,
       priority: Priority.high,
-      onlyAlertOnce: true,
-      ongoing: true, // 👈 makes it non-dismissible
-      autoCancel: false, // 👈 prevents swipe dismissal
+      onlyAlertOnce: onlyAlertOnce,
+      ongoing: ongoing, // 👈 makes it non-dismissible
+      autoCancel: autoCancel, // 👈 prevents swipe dismissal
     );
 
-    await _notificationsPlugin.show(
-      id,
-      title,
-      body,
-      const NotificationDetails(android: androidDetails),
-      payload: payload,
-    );
+    await _notificationsPlugin.show(id, title, body, NotificationDetails(android: androidDetails), payload: payload);
   }
 
   static Future<void> closeAll() async {

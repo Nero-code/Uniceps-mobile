@@ -143,6 +143,10 @@ class AppLocalizationsAr extends AppLocalizations {
       'هل انتهيت من التدريب؟ سيتم اغلاق هذه الجلسة وتصنيفها ك منتهية!';
 
   @override
+  String get practiceNotificationBody =>
+      'هناك جلسة تدريب نشطة - عد وواصل التقدم';
+
+  @override
   String get welldone => 'احسنت!';
 
   @override

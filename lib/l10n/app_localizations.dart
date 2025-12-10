@@ -362,6 +362,12 @@ abstract class AppLocalizations {
   /// **'have you finished training? this session will be closed and marked as finished!'**
   String get finishAlertContent;
 
+  /// No description provided for @practiceNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'An active session is waiting - practice now and stay on track'**
+  String get practiceNotificationBody;
+
   /// No description provided for @welldone.
   ///
   /// In en, this message translates to:

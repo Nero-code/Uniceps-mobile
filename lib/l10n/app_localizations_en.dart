@@ -143,6 +143,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'have you finished training? this session will be closed and marked as finished!';
 
   @override
+  String get practiceNotificationBody =>
+      'An active session is waiting - practice now and stay on track';
+
+  @override
   String get welldone => 'Well Done!';
 
   @override
