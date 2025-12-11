@@ -36,17 +36,13 @@ class _PerspectiveListState extends State<PerspectiveList> {
                     height: 150,
                     margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                     decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.5),
+                      color: Colors.blue.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Center(
                       child: Text(
                         "Item $index",
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: const TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),

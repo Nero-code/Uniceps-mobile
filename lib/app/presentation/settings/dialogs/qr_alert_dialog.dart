@@ -5,7 +5,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:uniceps/app/presentation/settings/cubits/gym_qr/gym_qr_cubit.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class QrAlertDialog extends StatefulWidget {
   const QrAlertDialog({super.key});

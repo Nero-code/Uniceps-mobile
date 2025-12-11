@@ -8,7 +8,7 @@ import 'package:uniceps/app/presentation/routine/widgets/progress_widget.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/pages/exercises_list_tab.dart';
 import 'package:uniceps/core/constants/constants.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:uniceps/l10n/app_localizations.dart';
 
 class ExercisesSelectionScreen extends StatefulWidget {
   const ExercisesSelectionScreen(

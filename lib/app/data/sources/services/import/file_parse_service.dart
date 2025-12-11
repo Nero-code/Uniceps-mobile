@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_selector/file_selector.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/sources/services/import/unifile.dart';
 
 class UniFileManager {
   static const supportedVersion = 1;
+  final Logger _logger;
+  const UniFileManager({required Logger logger}) : _logger = logger;
 
   /// Save directly to a picked directory
   // Future<String?> saveToDirectory({
@@ -34,6 +37,7 @@ class UniFileManager {
     try {
       final bytes = await file.readAsBytes();
       final contents = const Utf8Decoder().convert(bytes);
+      _logger.d('File contents: $contents');
       uniFile = UniFile.fromFile(contents);
     } catch (e) {
       throw CorruptedFileException();
@@ -51,24 +55,20 @@ class UniFileManager {
     int counter = 1;
     var file = File('$path/$fileName.unx');
     while (file.existsSync()) {
-      file = File("${path}/$fileName($counter).unx");
+      file = File("$path/$fileName($counter).unx");
       counter++;
     }
 
-    final unifile = UniFile(
-      meta: const MetaPart(
-        source: '',
-        schemaVersion: supportedVersion,
-        fileType: FileType.routine,
-      ),
+    final uniFile = UniFile(
+      meta: const MetaPart(source: 'source', schemaVersion: supportedVersion, fileType: FileType.routine),
       data: data,
     ).toFile();
-    // await saveToDirectory(fileName: fileName, bytes: utf8.encode(unifile));
-    await file.writeAsString(unifile, mode: FileMode.writeOnly, flush: true);
+    // await saveToDirectory(fileName: fileName, bytes: utf8.encode(uniFile));
+    await file.writeAsString(uniFile, mode: FileMode.writeOnly);
   }
 }
 
-class ParserMismatchExeption implements Exception {}
+class ParserMismatchException implements Exception {}
 
 class CorruptedFileException implements Exception {}
 

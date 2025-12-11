@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,1400 +9,832 @@ part of 'session_bloc.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
 /// @nodoc
 mixin _$SessionEvent {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() getLastActiveSession,
-    required TResult Function(int dayId, String dayName) startSession,
-    required TResult Function(TLog log, double progress) logSet,
-    required TResult Function(TSession session, bool fullSession) stopSession,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getLastActiveSession,
-    TResult? Function(int dayId, String dayName)? startSession,
-    TResult? Function(TLog log, double progress)? logSet,
-    TResult? Function(TSession session, bool fullSession)? stopSession,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getLastActiveSession,
-    TResult Function(int dayId, String dayName)? startSession,
-    TResult Function(TLog log, double progress)? logSet,
-    TResult Function(TSession session, bool fullSession)? stopSession,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GetLastActiveSession value) getLastActiveSession,
-    required TResult Function(_StartSession value) startSession,
-    required TResult Function(_LogSet value) logSet,
-    required TResult Function(_StopSession value) stopSession,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetLastActiveSession value)? getLastActiveSession,
-    TResult? Function(_StartSession value)? startSession,
-    TResult? Function(_LogSet value)? logSet,
-    TResult? Function(_StopSession value)? stopSession,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetLastActiveSession value)? getLastActiveSession,
-    TResult Function(_StartSession value)? startSession,
-    TResult Function(_LogSet value)? logSet,
-    TResult Function(_StopSession value)? stopSession,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SessionEvent);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'SessionEvent()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $SessionEventCopyWith<$Res> {
-  factory $SessionEventCopyWith(
-          SessionEvent value, $Res Function(SessionEvent) then) =
-      _$SessionEventCopyWithImpl<$Res, SessionEvent>;
+class $SessionEventCopyWith<$Res>  {
+$SessionEventCopyWith(SessionEvent _, $Res Function(SessionEvent) __);
 }
 
-/// @nodoc
-class _$SessionEventCopyWithImpl<$Res, $Val extends SessionEvent>
-    implements $SessionEventCopyWith<$Res> {
-  _$SessionEventCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+/// Adds pattern-matching-related methods to [SessionEvent].
+extension SessionEventPatterns on SessionEvent {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _GetLastActiveSession value)?  getLastActiveSession,TResult Function( _StartSession value)?  startSession,TResult Function( _LogSet value)?  logSet,TResult Function( _StopSession value)?  stopSession,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _GetLastActiveSession() when getLastActiveSession != null:
+return getLastActiveSession(_that);case _StartSession() when startSession != null:
+return startSession(_that);case _LogSet() when logSet != null:
+return logSet(_that);case _StopSession() when stopSession != null:
+return stopSession(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _GetLastActiveSession value)  getLastActiveSession,required TResult Function( _StartSession value)  startSession,required TResult Function( _LogSet value)  logSet,required TResult Function( _StopSession value)  stopSession,}){
+final _that = this;
+switch (_that) {
+case _GetLastActiveSession():
+return getLastActiveSession(_that);case _StartSession():
+return startSession(_that);case _LogSet():
+return logSet(_that);case _StopSession():
+return stopSession(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _GetLastActiveSession value)?  getLastActiveSession,TResult? Function( _StartSession value)?  startSession,TResult? Function( _LogSet value)?  logSet,TResult? Function( _StopSession value)?  stopSession,}){
+final _that = this;
+switch (_that) {
+case _GetLastActiveSession() when getLastActiveSession != null:
+return getLastActiveSession(_that);case _StartSession() when startSession != null:
+return startSession(_that);case _LogSet() when logSet != null:
+return logSet(_that);case _StopSession() when stopSession != null:
+return stopSession(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  getLastActiveSession,TResult Function( int dayId,  String dayName)?  startSession,TResult Function( TLog log,  double progress)?  logSet,TResult Function( TSession session,  bool fullSession)?  stopSession,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _GetLastActiveSession() when getLastActiveSession != null:
+return getLastActiveSession();case _StartSession() when startSession != null:
+return startSession(_that.dayId,_that.dayName);case _LogSet() when logSet != null:
+return logSet(_that.log,_that.progress);case _StopSession() when stopSession != null:
+return stopSession(_that.session,_that.fullSession);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  getLastActiveSession,required TResult Function( int dayId,  String dayName)  startSession,required TResult Function( TLog log,  double progress)  logSet,required TResult Function( TSession session,  bool fullSession)  stopSession,}) {final _that = this;
+switch (_that) {
+case _GetLastActiveSession():
+return getLastActiveSession();case _StartSession():
+return startSession(_that.dayId,_that.dayName);case _LogSet():
+return logSet(_that.log,_that.progress);case _StopSession():
+return stopSession(_that.session,_that.fullSession);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  getLastActiveSession,TResult? Function( int dayId,  String dayName)?  startSession,TResult? Function( TLog log,  double progress)?  logSet,TResult? Function( TSession session,  bool fullSession)?  stopSession,}) {final _that = this;
+switch (_that) {
+case _GetLastActiveSession() when getLastActiveSession != null:
+return getLastActiveSession();case _StartSession() when startSession != null:
+return startSession(_that.dayId,_that.dayName);case _LogSet() when logSet != null:
+return logSet(_that.log,_that.progress);case _StopSession() when stopSession != null:
+return stopSession(_that.session,_that.fullSession);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-abstract class _$$GetLastActiveSessionImplCopyWith<$Res> {
-  factory _$$GetLastActiveSessionImplCopyWith(_$GetLastActiveSessionImpl value,
-          $Res Function(_$GetLastActiveSessionImpl) then) =
-      __$$GetLastActiveSessionImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$GetLastActiveSessionImplCopyWithImpl<$Res>
-    extends _$SessionEventCopyWithImpl<$Res, _$GetLastActiveSessionImpl>
-    implements _$$GetLastActiveSessionImplCopyWith<$Res> {
-  __$$GetLastActiveSessionImplCopyWithImpl(_$GetLastActiveSessionImpl _value,
-      $Res Function(_$GetLastActiveSessionImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$GetLastActiveSessionImpl implements _GetLastActiveSession {
-  const _$GetLastActiveSessionImpl();
-
-  @override
-  String toString() {
-    return 'SessionEvent.getLastActiveSession()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$GetLastActiveSessionImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() getLastActiveSession,
-    required TResult Function(int dayId, String dayName) startSession,
-    required TResult Function(TLog log, double progress) logSet,
-    required TResult Function(TSession session, bool fullSession) stopSession,
-  }) {
-    return getLastActiveSession();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getLastActiveSession,
-    TResult? Function(int dayId, String dayName)? startSession,
-    TResult? Function(TLog log, double progress)? logSet,
-    TResult? Function(TSession session, bool fullSession)? stopSession,
-  }) {
-    return getLastActiveSession?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getLastActiveSession,
-    TResult Function(int dayId, String dayName)? startSession,
-    TResult Function(TLog log, double progress)? logSet,
-    TResult Function(TSession session, bool fullSession)? stopSession,
-    required TResult orElse(),
-  }) {
-    if (getLastActiveSession != null) {
-      return getLastActiveSession();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GetLastActiveSession value) getLastActiveSession,
-    required TResult Function(_StartSession value) startSession,
-    required TResult Function(_LogSet value) logSet,
-    required TResult Function(_StopSession value) stopSession,
-  }) {
-    return getLastActiveSession(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetLastActiveSession value)? getLastActiveSession,
-    TResult? Function(_StartSession value)? startSession,
-    TResult? Function(_LogSet value)? logSet,
-    TResult? Function(_StopSession value)? stopSession,
-  }) {
-    return getLastActiveSession?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetLastActiveSession value)? getLastActiveSession,
-    TResult Function(_StartSession value)? startSession,
-    TResult Function(_LogSet value)? logSet,
-    TResult Function(_StopSession value)? stopSession,
-    required TResult orElse(),
-  }) {
-    if (getLastActiveSession != null) {
-      return getLastActiveSession(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _GetLastActiveSession implements SessionEvent {
-  const factory _GetLastActiveSession() = _$GetLastActiveSessionImpl;
-}
-
-/// @nodoc
-abstract class _$$StartSessionImplCopyWith<$Res> {
-  factory _$$StartSessionImplCopyWith(
-          _$StartSessionImpl value, $Res Function(_$StartSessionImpl) then) =
-      __$$StartSessionImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({int dayId, String dayName});
-}
-
-/// @nodoc
-class __$$StartSessionImplCopyWithImpl<$Res>
-    extends _$SessionEventCopyWithImpl<$Res, _$StartSessionImpl>
-    implements _$$StartSessionImplCopyWith<$Res> {
-  __$$StartSessionImplCopyWithImpl(
-      _$StartSessionImpl _value, $Res Function(_$StartSessionImpl) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? dayId = null,
-    Object? dayName = null,
-  }) {
-    return _then(_$StartSessionImpl(
-      null == dayId
-          ? _value.dayId
-          : dayId // ignore: cast_nullable_to_non_nullable
-              as int,
-      null == dayName
-          ? _value.dayName
-          : dayName // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$StartSessionImpl implements _StartSession {
-  const _$StartSessionImpl(this.dayId, this.dayName);
 
-  @override
-  final int dayId;
-  @override
-  final String dayName;
+class _GetLastActiveSession implements SessionEvent {
+  const _GetLastActiveSession();
+  
 
-  @override
-  String toString() {
-    return 'SessionEvent.startSession(dayId: $dayId, dayName: $dayName)';
-  }
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$StartSessionImpl &&
-            (identical(other.dayId, dayId) || other.dayId == dayId) &&
-            (identical(other.dayName, dayName) || other.dayName == dayName));
-  }
 
-  @override
-  int get hashCode => Object.hash(runtimeType, dayId, dayName);
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$StartSessionImplCopyWith<_$StartSessionImpl> get copyWith =>
-      __$$StartSessionImplCopyWithImpl<_$StartSessionImpl>(this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() getLastActiveSession,
-    required TResult Function(int dayId, String dayName) startSession,
-    required TResult Function(TLog log, double progress) logSet,
-    required TResult Function(TSession session, bool fullSession) stopSession,
-  }) {
-    return startSession(dayId, dayName);
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getLastActiveSession,
-    TResult? Function(int dayId, String dayName)? startSession,
-    TResult? Function(TLog log, double progress)? logSet,
-    TResult? Function(TSession session, bool fullSession)? stopSession,
-  }) {
-    return startSession?.call(dayId, dayName);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getLastActiveSession,
-    TResult Function(int dayId, String dayName)? startSession,
-    TResult Function(TLog log, double progress)? logSet,
-    TResult Function(TSession session, bool fullSession)? stopSession,
-    required TResult orElse(),
-  }) {
-    if (startSession != null) {
-      return startSession(dayId, dayName);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GetLastActiveSession value) getLastActiveSession,
-    required TResult Function(_StartSession value) startSession,
-    required TResult Function(_LogSet value) logSet,
-    required TResult Function(_StopSession value) stopSession,
-  }) {
-    return startSession(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetLastActiveSession value)? getLastActiveSession,
-    TResult? Function(_StartSession value)? startSession,
-    TResult? Function(_LogSet value)? logSet,
-    TResult? Function(_StopSession value)? stopSession,
-  }) {
-    return startSession?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetLastActiveSession value)? getLastActiveSession,
-    TResult Function(_StartSession value)? startSession,
-    TResult Function(_LogSet value)? logSet,
-    TResult Function(_StopSession value)? stopSession,
-    required TResult orElse(),
-  }) {
-    if (startSession != null) {
-      return startSession(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GetLastActiveSession);
 }
 
-abstract class _StartSession implements SessionEvent {
-  const factory _StartSession(final int dayId, final String dayName) =
-      _$StartSessionImpl;
 
-  int get dayId;
-  String get dayName;
-  @JsonKey(ignore: true)
-  _$$StartSessionImplCopyWith<_$StartSessionImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'SessionEvent.getLastActiveSession()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _StartSession implements SessionEvent {
+  const _StartSession(this.dayId, this.dayName);
+  
+
+ final  int dayId;
+ final  String dayName;
+
+/// Create a copy of SessionEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$StartSessionCopyWith<_StartSession> get copyWith => __$StartSessionCopyWithImpl<_StartSession>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StartSession&&(identical(other.dayId, dayId) || other.dayId == dayId)&&(identical(other.dayName, dayName) || other.dayName == dayName));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,dayId,dayName);
+
+@override
+String toString() {
+  return 'SessionEvent.startSession(dayId: $dayId, dayName: $dayName)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$LogSetImplCopyWith<$Res> {
-  factory _$$LogSetImplCopyWith(
-          _$LogSetImpl value, $Res Function(_$LogSetImpl) then) =
-      __$$LogSetImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({TLog log, double progress});
+abstract mixin class _$StartSessionCopyWith<$Res> implements $SessionEventCopyWith<$Res> {
+  factory _$StartSessionCopyWith(_StartSession value, $Res Function(_StartSession) _then) = __$StartSessionCopyWithImpl;
+@useResult
+$Res call({
+ int dayId, String dayName
+});
+
+
+
+
+}
+/// @nodoc
+class __$StartSessionCopyWithImpl<$Res>
+    implements _$StartSessionCopyWith<$Res> {
+  __$StartSessionCopyWithImpl(this._self, this._then);
+
+  final _StartSession _self;
+  final $Res Function(_StartSession) _then;
+
+/// Create a copy of SessionEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? dayId = null,Object? dayName = null,}) {
+  return _then(_StartSession(
+null == dayId ? _self.dayId : dayId // ignore: cast_nullable_to_non_nullable
+as int,null == dayName ? _self.dayName : dayName // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
 }
 
-/// @nodoc
-class __$$LogSetImplCopyWithImpl<$Res>
-    extends _$SessionEventCopyWithImpl<$Res, _$LogSetImpl>
-    implements _$$LogSetImplCopyWith<$Res> {
-  __$$LogSetImplCopyWithImpl(
-      _$LogSetImpl _value, $Res Function(_$LogSetImpl) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? log = null,
-    Object? progress = null,
-  }) {
-    return _then(_$LogSetImpl(
-      null == log
-          ? _value.log
-          : log // ignore: cast_nullable_to_non_nullable
-              as TLog,
-      null == progress
-          ? _value.progress
-          : progress // ignore: cast_nullable_to_non_nullable
-              as double,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$LogSetImpl implements _LogSet {
-  const _$LogSetImpl(this.log, this.progress);
 
-  @override
-  final TLog log;
-  @override
-  final double progress;
+class _LogSet implements SessionEvent {
+  const _LogSet(this.log, this.progress);
+  
 
-  @override
-  String toString() {
-    return 'SessionEvent.logSet(log: $log, progress: $progress)';
-  }
+ final  TLog log;
+ final  double progress;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LogSetImpl &&
-            (identical(other.log, log) || other.log == log) &&
-            (identical(other.progress, progress) ||
-                other.progress == progress));
-  }
+/// Create a copy of SessionEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$LogSetCopyWith<_LogSet> get copyWith => __$LogSetCopyWithImpl<_LogSet>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, log, progress);
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$LogSetImplCopyWith<_$LogSetImpl> get copyWith =>
-      __$$LogSetImplCopyWithImpl<_$LogSetImpl>(this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() getLastActiveSession,
-    required TResult Function(int dayId, String dayName) startSession,
-    required TResult Function(TLog log, double progress) logSet,
-    required TResult Function(TSession session, bool fullSession) stopSession,
-  }) {
-    return logSet(log, progress);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getLastActiveSession,
-    TResult? Function(int dayId, String dayName)? startSession,
-    TResult? Function(TLog log, double progress)? logSet,
-    TResult? Function(TSession session, bool fullSession)? stopSession,
-  }) {
-    return logSet?.call(log, progress);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getLastActiveSession,
-    TResult Function(int dayId, String dayName)? startSession,
-    TResult Function(TLog log, double progress)? logSet,
-    TResult Function(TSession session, bool fullSession)? stopSession,
-    required TResult orElse(),
-  }) {
-    if (logSet != null) {
-      return logSet(log, progress);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GetLastActiveSession value) getLastActiveSession,
-    required TResult Function(_StartSession value) startSession,
-    required TResult Function(_LogSet value) logSet,
-    required TResult Function(_StopSession value) stopSession,
-  }) {
-    return logSet(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetLastActiveSession value)? getLastActiveSession,
-    TResult? Function(_StartSession value)? startSession,
-    TResult? Function(_LogSet value)? logSet,
-    TResult? Function(_StopSession value)? stopSession,
-  }) {
-    return logSet?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetLastActiveSession value)? getLastActiveSession,
-    TResult Function(_StartSession value)? startSession,
-    TResult Function(_LogSet value)? logSet,
-    TResult Function(_StopSession value)? stopSession,
-    required TResult orElse(),
-  }) {
-    if (logSet != null) {
-      return logSet(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LogSet&&(identical(other.log, log) || other.log == log)&&(identical(other.progress, progress) || other.progress == progress));
 }
 
-abstract class _LogSet implements SessionEvent {
-  const factory _LogSet(final TLog log, final double progress) = _$LogSetImpl;
 
-  TLog get log;
-  double get progress;
-  @JsonKey(ignore: true)
-  _$$LogSetImplCopyWith<_$LogSetImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+int get hashCode => Object.hash(runtimeType,log,progress);
+
+@override
+String toString() {
+  return 'SessionEvent.logSet(log: $log, progress: $progress)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$StopSessionImplCopyWith<$Res> {
-  factory _$$StopSessionImplCopyWith(
-          _$StopSessionImpl value, $Res Function(_$StopSessionImpl) then) =
-      __$$StopSessionImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({TSession session, bool fullSession});
+abstract mixin class _$LogSetCopyWith<$Res> implements $SessionEventCopyWith<$Res> {
+  factory _$LogSetCopyWith(_LogSet value, $Res Function(_LogSet) _then) = __$LogSetCopyWithImpl;
+@useResult
+$Res call({
+ TLog log, double progress
+});
+
+
+
+
+}
+/// @nodoc
+class __$LogSetCopyWithImpl<$Res>
+    implements _$LogSetCopyWith<$Res> {
+  __$LogSetCopyWithImpl(this._self, this._then);
+
+  final _LogSet _self;
+  final $Res Function(_LogSet) _then;
+
+/// Create a copy of SessionEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? log = null,Object? progress = null,}) {
+  return _then(_LogSet(
+null == log ? _self.log : log // ignore: cast_nullable_to_non_nullable
+as TLog,null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
+as double,
+  ));
 }
 
-/// @nodoc
-class __$$StopSessionImplCopyWithImpl<$Res>
-    extends _$SessionEventCopyWithImpl<$Res, _$StopSessionImpl>
-    implements _$$StopSessionImplCopyWith<$Res> {
-  __$$StopSessionImplCopyWithImpl(
-      _$StopSessionImpl _value, $Res Function(_$StopSessionImpl) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? session = null,
-    Object? fullSession = null,
-  }) {
-    return _then(_$StopSessionImpl(
-      null == session
-          ? _value.session
-          : session // ignore: cast_nullable_to_non_nullable
-              as TSession,
-      null == fullSession
-          ? _value.fullSession
-          : fullSession // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$StopSessionImpl implements _StopSession {
-  const _$StopSessionImpl(this.session, this.fullSession);
 
-  @override
-  final TSession session;
-  @override
-  final bool fullSession;
+class _StopSession implements SessionEvent {
+  const _StopSession(this.session, this.fullSession);
+  
 
-  @override
-  String toString() {
-    return 'SessionEvent.stopSession(session: $session, fullSession: $fullSession)';
-  }
+ final  TSession session;
+ final  bool fullSession;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$StopSessionImpl &&
-            (identical(other.session, session) || other.session == session) &&
-            (identical(other.fullSession, fullSession) ||
-                other.fullSession == fullSession));
-  }
+/// Create a copy of SessionEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$StopSessionCopyWith<_StopSession> get copyWith => __$StopSessionCopyWithImpl<_StopSession>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, session, fullSession);
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$StopSessionImplCopyWith<_$StopSessionImpl> get copyWith =>
-      __$$StopSessionImplCopyWithImpl<_$StopSessionImpl>(this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() getLastActiveSession,
-    required TResult Function(int dayId, String dayName) startSession,
-    required TResult Function(TLog log, double progress) logSet,
-    required TResult Function(TSession session, bool fullSession) stopSession,
-  }) {
-    return stopSession(session, fullSession);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getLastActiveSession,
-    TResult? Function(int dayId, String dayName)? startSession,
-    TResult? Function(TLog log, double progress)? logSet,
-    TResult? Function(TSession session, bool fullSession)? stopSession,
-  }) {
-    return stopSession?.call(session, fullSession);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getLastActiveSession,
-    TResult Function(int dayId, String dayName)? startSession,
-    TResult Function(TLog log, double progress)? logSet,
-    TResult Function(TSession session, bool fullSession)? stopSession,
-    required TResult orElse(),
-  }) {
-    if (stopSession != null) {
-      return stopSession(session, fullSession);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GetLastActiveSession value) getLastActiveSession,
-    required TResult Function(_StartSession value) startSession,
-    required TResult Function(_LogSet value) logSet,
-    required TResult Function(_StopSession value) stopSession,
-  }) {
-    return stopSession(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetLastActiveSession value)? getLastActiveSession,
-    TResult? Function(_StartSession value)? startSession,
-    TResult? Function(_LogSet value)? logSet,
-    TResult? Function(_StopSession value)? stopSession,
-  }) {
-    return stopSession?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetLastActiveSession value)? getLastActiveSession,
-    TResult Function(_StartSession value)? startSession,
-    TResult Function(_LogSet value)? logSet,
-    TResult Function(_StopSession value)? stopSession,
-    required TResult orElse(),
-  }) {
-    if (stopSession != null) {
-      return stopSession(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StopSession&&(identical(other.session, session) || other.session == session)&&(identical(other.fullSession, fullSession) || other.fullSession == fullSession));
 }
 
-abstract class _StopSession implements SessionEvent {
-  const factory _StopSession(final TSession session, final bool fullSession) =
-      _$StopSessionImpl;
 
-  TSession get session;
-  bool get fullSession;
-  @JsonKey(ignore: true)
-  _$$StopSessionImplCopyWith<_$StopSessionImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+int get hashCode => Object.hash(runtimeType,session,fullSession);
+
+@override
+String toString() {
+  return 'SessionEvent.stopSession(session: $session, fullSession: $fullSession)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$StopSessionCopyWith<$Res> implements $SessionEventCopyWith<$Res> {
+  factory _$StopSessionCopyWith(_StopSession value, $Res Function(_StopSession) _then) = __$StopSessionCopyWithImpl;
+@useResult
+$Res call({
+ TSession session, bool fullSession
+});
+
+
+
+
+}
+/// @nodoc
+class __$StopSessionCopyWithImpl<$Res>
+    implements _$StopSessionCopyWith<$Res> {
+  __$StopSessionCopyWithImpl(this._self, this._then);
+
+  final _StopSession _self;
+  final $Res Function(_StopSession) _then;
+
+/// Create a copy of SessionEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? session = null,Object? fullSession = null,}) {
+  return _then(_StopSession(
+null == session ? _self.session : session // ignore: cast_nullable_to_non_nullable
+as TSession,null == fullSession ? _self.fullSession : fullSession // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+
+
 }
 
 /// @nodoc
 mixin _$SessionState {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function() noActiveSession,
-    required TResult Function(TSession session) loaded,
-    required TResult Function(Failure failure) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function()? noActiveSession,
-    TResult? Function(TSession session)? loaded,
-    TResult? Function(Failure failure)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function()? noActiveSession,
-    TResult Function(TSession session)? loaded,
-    TResult Function(Failure failure)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_NoActiveSession value) noActiveSession,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_NoActiveSession value)? noActiveSession,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_NoActiveSession value)? noActiveSession,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SessionState);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'SessionState()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $SessionStateCopyWith<$Res> {
-  factory $SessionStateCopyWith(
-          SessionState value, $Res Function(SessionState) then) =
-      _$SessionStateCopyWithImpl<$Res, SessionState>;
+class $SessionStateCopyWith<$Res>  {
+$SessionStateCopyWith(SessionState _, $Res Function(SessionState) __);
 }
 
-/// @nodoc
-class _$SessionStateCopyWithImpl<$Res, $Val extends SessionState>
-    implements $SessionStateCopyWith<$Res> {
-  _$SessionStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+/// Adds pattern-matching-related methods to [SessionState].
+extension SessionStatePatterns on SessionState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _NoActiveSession value)?  noActiveSession,TResult Function( _Loaded value)?  loaded,TResult Function( _Error value)?  error,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial(_that);case _Loading() when loading != null:
+return loading(_that);case _NoActiveSession() when noActiveSession != null:
+return noActiveSession(_that);case _Loaded() when loaded != null:
+return loaded(_that);case _Error() when error != null:
+return error(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _NoActiveSession value)  noActiveSession,required TResult Function( _Loaded value)  loaded,required TResult Function( _Error value)  error,}){
+final _that = this;
+switch (_that) {
+case _Initial():
+return initial(_that);case _Loading():
+return loading(_that);case _NoActiveSession():
+return noActiveSession(_that);case _Loaded():
+return loaded(_that);case _Error():
+return error(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _NoActiveSession value)?  noActiveSession,TResult? Function( _Loaded value)?  loaded,TResult? Function( _Error value)?  error,}){
+final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial(_that);case _Loading() when loading != null:
+return loading(_that);case _NoActiveSession() when noActiveSession != null:
+return noActiveSession(_that);case _Loaded() when loaded != null:
+return loaded(_that);case _Error() when error != null:
+return error(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  noActiveSession,TResult Function( TSession session)?  loaded,TResult Function( Failure failure)?  error,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial();case _Loading() when loading != null:
+return loading();case _NoActiveSession() when noActiveSession != null:
+return noActiveSession();case _Loaded() when loaded != null:
+return loaded(_that.session);case _Error() when error != null:
+return error(_that.failure);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  noActiveSession,required TResult Function( TSession session)  loaded,required TResult Function( Failure failure)  error,}) {final _that = this;
+switch (_that) {
+case _Initial():
+return initial();case _Loading():
+return loading();case _NoActiveSession():
+return noActiveSession();case _Loaded():
+return loaded(_that.session);case _Error():
+return error(_that.failure);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  noActiveSession,TResult? Function( TSession session)?  loaded,TResult? Function( Failure failure)?  error,}) {final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial();case _Loading() when loading != null:
+return loading();case _NoActiveSession() when noActiveSession != null:
+return noActiveSession();case _Loaded() when loaded != null:
+return loaded(_that.session);case _Error() when error != null:
+return error(_that.failure);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-abstract class _$$InitialImplCopyWith<$Res> {
-  factory _$$InitialImplCopyWith(
-          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
-      __$$InitialImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$InitialImplCopyWithImpl<$Res>
-    extends _$SessionStateCopyWithImpl<$Res, _$InitialImpl>
-    implements _$$InitialImplCopyWith<$Res> {
-  __$$InitialImplCopyWithImpl(
-      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$InitialImpl implements _Initial {
-  const _$InitialImpl();
-
-  @override
-  String toString() {
-    return 'SessionState.initial()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$InitialImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function() noActiveSession,
-    required TResult Function(TSession session) loaded,
-    required TResult Function(Failure failure) error,
-  }) {
-    return initial();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function()? noActiveSession,
-    TResult? Function(TSession session)? loaded,
-    TResult? Function(Failure failure)? error,
-  }) {
-    return initial?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function()? noActiveSession,
-    TResult Function(TSession session)? loaded,
-    TResult Function(Failure failure)? error,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_NoActiveSession value) noActiveSession,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-  }) {
-    return initial(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_NoActiveSession value)? noActiveSession,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-  }) {
-    return initial?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_NoActiveSession value)? noActiveSession,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Initial implements SessionState {
-  const factory _Initial() = _$InitialImpl;
-}
-
-/// @nodoc
-abstract class _$$LoadingImplCopyWith<$Res> {
-  factory _$$LoadingImplCopyWith(
-          _$LoadingImpl value, $Res Function(_$LoadingImpl) then) =
-      __$$LoadingImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$LoadingImplCopyWithImpl<$Res>
-    extends _$SessionStateCopyWithImpl<$Res, _$LoadingImpl>
-    implements _$$LoadingImplCopyWith<$Res> {
-  __$$LoadingImplCopyWithImpl(
-      _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
-      : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LoadingImpl implements _Loading {
-  const _$LoadingImpl();
 
-  @override
-  String toString() {
-    return 'SessionState.loading()';
-  }
+class _Initial implements SessionState {
+  const _Initial();
+  
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LoadingImpl);
-  }
 
-  @override
-  int get hashCode => runtimeType.hashCode;
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function() noActiveSession,
-    required TResult Function(TSession session) loaded,
-    required TResult Function(Failure failure) error,
-  }) {
-    return loading();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function()? noActiveSession,
-    TResult? Function(TSession session)? loaded,
-    TResult? Function(Failure failure)? error,
-  }) {
-    return loading?.call();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function()? noActiveSession,
-    TResult Function(TSession session)? loaded,
-    TResult Function(Failure failure)? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_NoActiveSession value) noActiveSession,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-  }) {
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_NoActiveSession value)? noActiveSession,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-  }) {
-    return loading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_NoActiveSession value)? noActiveSession,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial);
 }
 
-abstract class _Loading implements SessionState {
-  const factory _Loading() = _$LoadingImpl;
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'SessionState.initial()';
 }
 
-/// @nodoc
-abstract class _$$NoActiveSessionImplCopyWith<$Res> {
-  factory _$$NoActiveSessionImplCopyWith(_$NoActiveSessionImpl value,
-          $Res Function(_$NoActiveSessionImpl) then) =
-      __$$NoActiveSessionImplCopyWithImpl<$Res>;
+
 }
 
-/// @nodoc
-class __$$NoActiveSessionImplCopyWithImpl<$Res>
-    extends _$SessionStateCopyWithImpl<$Res, _$NoActiveSessionImpl>
-    implements _$$NoActiveSessionImplCopyWith<$Res> {
-  __$$NoActiveSessionImplCopyWithImpl(
-      _$NoActiveSessionImpl _value, $Res Function(_$NoActiveSessionImpl) _then)
-      : super(_value, _then);
-}
+
+
 
 /// @nodoc
 
-class _$NoActiveSessionImpl implements _NoActiveSession {
-  const _$NoActiveSessionImpl();
 
-  @override
-  String toString() {
-    return 'SessionState.noActiveSession()';
-  }
+class _Loading implements SessionState {
+  const _Loading();
+  
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$NoActiveSessionImpl);
-  }
 
-  @override
-  int get hashCode => runtimeType.hashCode;
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function() noActiveSession,
-    required TResult Function(TSession session) loaded,
-    required TResult Function(Failure failure) error,
-  }) {
-    return noActiveSession();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function()? noActiveSession,
-    TResult? Function(TSession session)? loaded,
-    TResult? Function(Failure failure)? error,
-  }) {
-    return noActiveSession?.call();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function()? noActiveSession,
-    TResult Function(TSession session)? loaded,
-    TResult Function(Failure failure)? error,
-    required TResult orElse(),
-  }) {
-    if (noActiveSession != null) {
-      return noActiveSession();
-    }
-    return orElse();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_NoActiveSession value) noActiveSession,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-  }) {
-    return noActiveSession(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_NoActiveSession value)? noActiveSession,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-  }) {
-    return noActiveSession?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_NoActiveSession value)? noActiveSession,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    required TResult orElse(),
-  }) {
-    if (noActiveSession != null) {
-      return noActiveSession(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading);
 }
 
-abstract class _NoActiveSession implements SessionState {
-  const factory _NoActiveSession() = _$NoActiveSessionImpl;
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'SessionState.loading()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _NoActiveSession implements SessionState {
+  const _NoActiveSession();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoActiveSession);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'SessionState.noActiveSession()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _Loaded implements SessionState {
+  const _Loaded(this.session);
+  
+
+ final  TSession session;
+
+/// Create a copy of SessionState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$LoadedCopyWith<_Loaded> get copyWith => __$LoadedCopyWithImpl<_Loaded>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loaded&&(identical(other.session, session) || other.session == session));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,session);
+
+@override
+String toString() {
+  return 'SessionState.loaded(session: $session)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$LoadedImplCopyWith<$Res> {
-  factory _$$LoadedImplCopyWith(
-          _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
-      __$$LoadedImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({TSession session});
+abstract mixin class _$LoadedCopyWith<$Res> implements $SessionStateCopyWith<$Res> {
+  factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) = __$LoadedCopyWithImpl;
+@useResult
+$Res call({
+ TSession session
+});
+
+
+
+
+}
+/// @nodoc
+class __$LoadedCopyWithImpl<$Res>
+    implements _$LoadedCopyWith<$Res> {
+  __$LoadedCopyWithImpl(this._self, this._then);
+
+  final _Loaded _self;
+  final $Res Function(_Loaded) _then;
+
+/// Create a copy of SessionState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? session = null,}) {
+  return _then(_Loaded(
+null == session ? _self.session : session // ignore: cast_nullable_to_non_nullable
+as TSession,
+  ));
 }
 
-/// @nodoc
-class __$$LoadedImplCopyWithImpl<$Res>
-    extends _$SessionStateCopyWithImpl<$Res, _$LoadedImpl>
-    implements _$$LoadedImplCopyWith<$Res> {
-  __$$LoadedImplCopyWithImpl(
-      _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? session = null,
-  }) {
-    return _then(_$LoadedImpl(
-      null == session
-          ? _value.session
-          : session // ignore: cast_nullable_to_non_nullable
-              as TSession,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl(this.session);
 
-  @override
-  final TSession session;
+class _Error implements SessionState {
+  const _Error(this.failure);
+  
 
-  @override
-  String toString() {
-    return 'SessionState.loaded(session: $session)';
-  }
+ final  Failure failure;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LoadedImpl &&
-            (identical(other.session, session) || other.session == session));
-  }
+/// Create a copy of SessionState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ErrorCopyWith<_Error> get copyWith => __$ErrorCopyWithImpl<_Error>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, session);
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
-      __$$LoadedImplCopyWithImpl<_$LoadedImpl>(this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function() noActiveSession,
-    required TResult Function(TSession session) loaded,
-    required TResult Function(Failure failure) error,
-  }) {
-    return loaded(session);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function()? noActiveSession,
-    TResult? Function(TSession session)? loaded,
-    TResult? Function(Failure failure)? error,
-  }) {
-    return loaded?.call(session);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function()? noActiveSession,
-    TResult Function(TSession session)? loaded,
-    TResult Function(Failure failure)? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded(session);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_NoActiveSession value) noActiveSession,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-  }) {
-    return loaded(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_NoActiveSession value)? noActiveSession,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-  }) {
-    return loaded?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_NoActiveSession value)? noActiveSession,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.failure, failure) || other.failure == failure));
 }
 
-abstract class _Loaded implements SessionState {
-  const factory _Loaded(final TSession session) = _$LoadedImpl;
 
-  TSession get session;
-  @JsonKey(ignore: true)
-  _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+int get hashCode => Object.hash(runtimeType,failure);
+
+@override
+String toString() {
+  return 'SessionState.error(failure: $failure)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$ErrorImplCopyWith<$Res> {
-  factory _$$ErrorImplCopyWith(
-          _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
-      __$$ErrorImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({Failure failure});
-}
+abstract mixin class _$ErrorCopyWith<$Res> implements $SessionStateCopyWith<$Res> {
+  factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) = __$ErrorCopyWithImpl;
+@useResult
+$Res call({
+ Failure failure
+});
 
+
+
+
+}
 /// @nodoc
-class __$$ErrorImplCopyWithImpl<$Res>
-    extends _$SessionStateCopyWithImpl<$Res, _$ErrorImpl>
-    implements _$$ErrorImplCopyWith<$Res> {
-  __$$ErrorImplCopyWithImpl(
-      _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
-      : super(_value, _then);
+class __$ErrorCopyWithImpl<$Res>
+    implements _$ErrorCopyWith<$Res> {
+  __$ErrorCopyWithImpl(this._self, this._then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? failure = null,
-  }) {
-    return _then(_$ErrorImpl(
-      null == failure
-          ? _value.failure
-          : failure // ignore: cast_nullable_to_non_nullable
-              as Failure,
-    ));
-  }
+  final _Error _self;
+  final $Res Function(_Error) _then;
+
+/// Create a copy of SessionState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
+  return _then(_Error(
+null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as Failure,
+  ));
 }
 
-/// @nodoc
 
-class _$ErrorImpl implements _Error {
-  const _$ErrorImpl(this.failure);
-
-  @override
-  final Failure failure;
-
-  @override
-  String toString() {
-    return 'SessionState.error(failure: $failure)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ErrorImpl &&
-            (identical(other.failure, failure) || other.failure == failure));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, failure);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
-      __$$ErrorImplCopyWithImpl<_$ErrorImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function() noActiveSession,
-    required TResult Function(TSession session) loaded,
-    required TResult Function(Failure failure) error,
-  }) {
-    return error(failure);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function()? noActiveSession,
-    TResult? Function(TSession session)? loaded,
-    TResult? Function(Failure failure)? error,
-  }) {
-    return error?.call(failure);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function()? noActiveSession,
-    TResult Function(TSession session)? loaded,
-    TResult Function(Failure failure)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(failure);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_NoActiveSession value) noActiveSession,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_NoActiveSession value)? noActiveSession,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_NoActiveSession value)? noActiveSession,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
 }
 
-abstract class _Error implements SessionState {
-  const factory _Error(final Failure failure) = _$ErrorImpl;
-
-  Failure get failure;
-  @JsonKey(ignore: true)
-  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on

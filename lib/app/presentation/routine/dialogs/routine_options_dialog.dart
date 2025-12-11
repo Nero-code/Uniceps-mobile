@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
+import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/core/widgets/account_limit_alert.dart';
 import 'package:uniceps/core/widgets/box_botton.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/core/widgets/premium_alert.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
-enum Option {
-  edit,
-  delete,
-  export,
-  setCurrent,
-}
+enum Option { edit, delete, export, setCurrent }
 
 class RoutineOptionsDialog extends StatelessWidget {
   const RoutineOptionsDialog({super.key, required this.routineName});
@@ -62,6 +63,43 @@ class RoutineOptionsDialog extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+          const SizedBox(height: 10),
+          Builder(
+            builder: (context) {
+              final acc = context.watch<AccountCubit>();
+              final mem = context.watch<MembershipBloc>();
+
+              final hasAccount = acc.state.maybeWhen(hasAccount: (_) => true, orElse: () => false);
+              final isPremium = mem.state.maybeWhen(loaded: (_) => true, orElse: () => false);
+              return BoxButton(
+                onTap: hasAccount
+                    ? isPremium
+                          ? () => Navigator.pop(context, Option.export)
+                          : () => showDialog(context: context, builder: (_) => PremiumAlert())
+                    : () => AccountLimitAlert(content: locale.exportRoutineAuthAlertContent),
+                // width: 75,
+                border: Border.all(color: Colors.blue.shade300, width: 2.0),
+                borderRadius: 10.0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  // mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (!(hasAccount && isPremium)) ...[
+                      Image(image: AssetImage(IMG_PREMIUM), width: 20, height: 20, color: Colors.amber),
+                      const SizedBox(width: 5.0),
+                    ],
+
+                    const Icon(Icons.import_export, color: Colors.blue),
+                    const SizedBox(width: 5.0),
+                    Text(
+                      locale.exportRoutine,
+                      style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.blue),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
           const SizedBox(height: 10),
           BoxButton(

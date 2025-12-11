@@ -25,10 +25,10 @@ class AccountRepo implements IAccountService {
     required IAccountRemoteSource remoteSource,
     required InternetConnectionChecker checker,
     required Logger logger,
-  })  : _localSource = localSource,
-        _remoteSource = remoteSource,
-        _checker = checker,
-        _logger = logger;
+  }) : _localSource = localSource,
+       _remoteSource = remoteSource,
+       _checker = checker,
+       _logger = logger;
 
   @override
   Future<Either<Failure, Account>> getUserAccount() async {
@@ -53,7 +53,7 @@ class AccountRepo implements IAccountService {
       try {
         return Right((await _localSource.getCurrentPlan()).toEntity());
       } catch (e) {
-        return const Left(MembershipFailure.cantGetPlan());
+        return const Left(MembershipFailure.mmOffline());
       }
     }
   }

@@ -2,19 +2,19 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
+import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
+import 'package:uniceps/app/presentation/measurement/blocs/measurement/measurment_bloc.dart';
 import 'package:uniceps/app/presentation/measurement/dialogs/delete_dialog.dart';
 import 'package:uniceps/app/presentation/measurement/screens/add_edit_measurement_screen.dart';
+import 'package:uniceps/app/presentation/measurement/widgets/measure_widget.dart';
 import 'package:uniceps/app/presentation/measurement/widgets/multifab_menu.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
+import 'package:uniceps/core/constants/muscles_images.dart';
 import 'package:uniceps/core/widgets/empty_page.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
-import 'package:uniceps/core/constants/muscles_images.dart';
-import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
-import 'package:uniceps/app/presentation/measurement/blocs/measurement/measurment_bloc.dart';
-import 'package:uniceps/app/presentation/measurement/widgets/measure_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class MeasurementScreen extends StatefulWidget {
   const MeasurementScreen({super.key});
@@ -106,10 +106,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                                       child: child,
                                     );
                                   },
-                                  child: SizedBox(
-                                    key: ValueKey<int>(page),
-                                    child: child,
-                                  ),
+                                  child: SizedBox(key: ValueKey<int>(page), child: child),
                                 ),
                               ],
                             ),
@@ -118,10 +115,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                         ),
                       ),
                     ),
-                    const Positioned(
-                      top: 25,
-                      child: BackButton(),
-                    ),
+                    const Positioned(top: 25, child: BackButton()),
                     Positioned(
                       bottom: 0.0,
                       width: MediaQuery.sizeOf(context).width,
@@ -130,10 +124,11 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                         children: [
                           IconButton(
                             style: IconButton.styleFrom(
-                                side: BorderSide(color: Colors.grey.shade300),
-                                padding: EdgeInsets.zero,
-                                backgroundColor: Colors.white,
-                                surfaceTintColor: Colors.blue),
+                              side: BorderSide(color: Colors.grey.shade300),
+                              padding: EdgeInsets.zero,
+                              backgroundColor: Colors.white.withAlpha(50),
+                              surfaceTintColor: Colors.blue,
+                            ),
                             onPressed: () async {
                               //  RTL  -->  Left (previous)
                               if (isLoading) return;
@@ -145,10 +140,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                                 await animate(true);
                               }
                             },
-                            icon: Icon(
-                              Icons.arrow_back_ios_new_rounded,
-                              color: Colors.grey.shade600,
-                            ),
+                            icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.grey.shade600),
                           ),
                           PageTransitionSwitcher(
                             duration: const Duration(milliseconds: 500),
@@ -167,10 +159,11 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                           ),
                           IconButton(
                             style: IconButton.styleFrom(
-                                side: BorderSide(color: Colors.grey.shade300),
-                                padding: EdgeInsets.zero,
-                                backgroundColor: Colors.white,
-                                surfaceTintColor: Colors.blue),
+                              side: BorderSide(color: Colors.grey.shade300),
+                              padding: EdgeInsets.zero,
+                              backgroundColor: Colors.white.withAlpha(50),
+                              surfaceTintColor: Colors.blue,
+                            ),
                             onPressed: () async {
                               //  RTL  -->  Right (Next)
                               if (isLoading) return;
@@ -181,10 +174,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                                 await animate(false);
                               }
                             },
-                            icon: Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              color: Colors.grey.shade600,
-                            ),
+                            icon: Icon(Icons.arrow_forward_ios_rounded, color: Colors.grey.shade600),
                           ),
                         ],
                       ),
@@ -199,7 +189,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                         toggleButton: (animation, toggle) => IconButton.filled(
                           style: IconButton.styleFrom(
                             foregroundColor: Colors.grey.shade700,
-                            backgroundColor: Colors.grey.shade200,
+                            backgroundColor: Colors.grey.withAlpha(50),
                           ),
                           onPressed: toggle,
                           icon: AnimatedIcon(icon: AnimatedIcons.menu_close, progress: animation),
@@ -208,22 +198,23 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                           IconButton.filled(
                             style: IconButton.styleFrom(
                               foregroundColor: Colors.blue,
-                              backgroundColor: Colors.blue.shade50,
+                              backgroundColor: Colors.blue.withAlpha(50),
                             ),
                             onPressed: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => BlocProvider.value(
-                                        value: context.read<MeasurementBloc>(),
-                                        child: const AddEditMeasurementScreen(),
-                                      )),
+                                builder: (_) => BlocProvider.value(
+                                  value: context.read<MeasurementBloc>(),
+                                  child: const AddEditMeasurementScreen(),
+                                ),
+                              ),
                             ),
                             icon: const Icon(Icons.add),
                           ),
                           IconButton.filled(
                             style: IconButton.styleFrom(
                               foregroundColor: Colors.green,
-                              backgroundColor: Colors.green.shade50,
+                              backgroundColor: Colors.green.withAlpha(50),
                             ),
                             onPressed: () => Navigator.push(
                               context,
@@ -239,20 +230,22 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                           IconButton.filled(
                             style: IconButton.styleFrom(
                               foregroundColor: Colors.red,
-                              backgroundColor: Colors.red.shade50,
+                              backgroundColor: Colors.red.withAlpha(50),
                             ),
                             onPressed: () {
                               showDialog(
-                                  context: context,
-                                  builder: (_) => BlocProvider.value(
-                                        value: context.read<MeasurementBloc>(),
-                                        child: DeleteDialog(
-                                            onPositive: () => context
-                                                .read<MeasurementBloc>()
-                                                .add(MeasurementEvent.deleteMeasurement(state.list[page])),
-                                            itemName:
-                                                "${locale.record} ${intl.DateFormat('d/M/y').format(state.list[page].checkDate)}"),
-                                      ));
+                                context: context,
+                                builder: (_) => BlocProvider.value(
+                                  value: context.read<MeasurementBloc>(),
+                                  child: DeleteDialog(
+                                    onPositive: () => context.read<MeasurementBloc>().add(
+                                      MeasurementEvent.deleteMeasurement(state.list[page]),
+                                    ),
+                                    itemName:
+                                        "${locale.record} ${intl.DateFormat('d/M/y').format(state.list[page].checkDate)}",
+                                  ),
+                                ),
+                              );
                             },
                             icon: const Icon(Icons.delete),
                           ),
@@ -266,32 +259,35 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                 return SizedBox.expand(
                   child: Stack(
                     children: [
+                      Positioned.directional(top: 30, textDirection: isRtl ? .rtl : .ltr, child: BackButton()),
                       Positioned.directional(
                         top: 30.0,
                         end: 20.0,
-                        textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
+                        textDirection: isRtl ? .rtl : .ltr,
                         child: IconButton.filled(
                           style: IconButton.styleFrom(
                             foregroundColor: Colors.blue,
-                            backgroundColor: Colors.blue.shade50,
+                            backgroundColor: Colors.blue.withAlpha(50),
                           ),
                           onPressed: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => BlocProvider.value(
-                                      value: context.read<MeasurementBloc>(),
-                                      child: const AddEditMeasurementScreen(),
-                                    )),
+                              builder: (_) => BlocProvider.value(
+                                value: context.read<MeasurementBloc>(),
+                                child: const AddEditMeasurementScreen(),
+                              ),
+                            ),
                           ),
                           icon: const Icon(Icons.add),
                         ),
                       ),
                       Center(
-                          child: EmptyPage(
-                        imageName: CaptainImages.emptyMeasurement,
-                        message: locale.emptyMeasurements,
-                        imageSize: Size(screen.width * .7, screen.width * .7),
-                      )),
+                        child: EmptyPage(
+                          imageName: CaptainImages.emptyMeasurement,
+                          message: locale.emptyMeasurements,
+                          imageSize: Size(screen.width * .7, screen.width * .7),
+                        ),
+                      ),
                     ],
                   ),
                 );

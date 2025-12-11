@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
 import 'package:uniceps/app/presentation/settings/cubits/profile/profile_cubit.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/gender_selection_widget.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';

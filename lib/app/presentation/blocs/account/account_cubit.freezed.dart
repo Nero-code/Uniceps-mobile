@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,428 +9,308 @@ part of 'account_cubit.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
 /// @nodoc
 mixin _$AccountState {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() unauthenticated,
-    required TResult Function(Account account) hasAccount,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? unauthenticated,
-    TResult? Function(Account account)? hasAccount,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? unauthenticated,
-    TResult Function(Account account)? hasAccount,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Unauthenticated value) unauthenticated,
-    required TResult Function(_HasAccount value) hasAccount,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Unauthenticated value)? unauthenticated,
-    TResult? Function(_HasAccount value)? hasAccount,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Unauthenticated value)? unauthenticated,
-    TResult Function(_HasAccount value)? hasAccount,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AccountState);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AccountState()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $AccountStateCopyWith<$Res> {
-  factory $AccountStateCopyWith(
-          AccountState value, $Res Function(AccountState) then) =
-      _$AccountStateCopyWithImpl<$Res, AccountState>;
+class $AccountStateCopyWith<$Res>  {
+$AccountStateCopyWith(AccountState _, $Res Function(AccountState) __);
 }
 
-/// @nodoc
-class _$AccountStateCopyWithImpl<$Res, $Val extends AccountState>
-    implements $AccountStateCopyWith<$Res> {
-  _$AccountStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+/// Adds pattern-matching-related methods to [AccountState].
+extension AccountStatePatterns on AccountState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Unauthenticated value)?  unauthenticated,TResult Function( _HasAccount value)?  hasAccount,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial(_that);case _Unauthenticated() when unauthenticated != null:
+return unauthenticated(_that);case _HasAccount() when hasAccount != null:
+return hasAccount(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Unauthenticated value)  unauthenticated,required TResult Function( _HasAccount value)  hasAccount,}){
+final _that = this;
+switch (_that) {
+case _Initial():
+return initial(_that);case _Unauthenticated():
+return unauthenticated(_that);case _HasAccount():
+return hasAccount(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Unauthenticated value)?  unauthenticated,TResult? Function( _HasAccount value)?  hasAccount,}){
+final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial(_that);case _Unauthenticated() when unauthenticated != null:
+return unauthenticated(_that);case _HasAccount() when hasAccount != null:
+return hasAccount(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  unauthenticated,TResult Function( Account account)?  hasAccount,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial();case _Unauthenticated() when unauthenticated != null:
+return unauthenticated();case _HasAccount() when hasAccount != null:
+return hasAccount(_that.account);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  unauthenticated,required TResult Function( Account account)  hasAccount,}) {final _that = this;
+switch (_that) {
+case _Initial():
+return initial();case _Unauthenticated():
+return unauthenticated();case _HasAccount():
+return hasAccount(_that.account);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  unauthenticated,TResult? Function( Account account)?  hasAccount,}) {final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial();case _Unauthenticated() when unauthenticated != null:
+return unauthenticated();case _HasAccount() when hasAccount != null:
+return hasAccount(_that.account);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-abstract class _$$InitialImplCopyWith<$Res> {
-  factory _$$InitialImplCopyWith(
-          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
-      __$$InitialImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$InitialImplCopyWithImpl<$Res>
-    extends _$AccountStateCopyWithImpl<$Res, _$InitialImpl>
-    implements _$$InitialImplCopyWith<$Res> {
-  __$$InitialImplCopyWithImpl(
-      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$InitialImpl implements _Initial {
-  const _$InitialImpl();
-
-  @override
-  String toString() {
-    return 'AccountState.initial()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$InitialImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() unauthenticated,
-    required TResult Function(Account account) hasAccount,
-  }) {
-    return initial();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? unauthenticated,
-    TResult? Function(Account account)? hasAccount,
-  }) {
-    return initial?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? unauthenticated,
-    TResult Function(Account account)? hasAccount,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Unauthenticated value) unauthenticated,
-    required TResult Function(_HasAccount value) hasAccount,
-  }) {
-    return initial(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Unauthenticated value)? unauthenticated,
-    TResult? Function(_HasAccount value)? hasAccount,
-  }) {
-    return initial?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Unauthenticated value)? unauthenticated,
-    TResult Function(_HasAccount value)? hasAccount,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Initial implements AccountState {
-  const factory _Initial() = _$InitialImpl;
-}
-
-/// @nodoc
-abstract class _$$UnauthenticatedImplCopyWith<$Res> {
-  factory _$$UnauthenticatedImplCopyWith(_$UnauthenticatedImpl value,
-          $Res Function(_$UnauthenticatedImpl) then) =
-      __$$UnauthenticatedImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$UnauthenticatedImplCopyWithImpl<$Res>
-    extends _$AccountStateCopyWithImpl<$Res, _$UnauthenticatedImpl>
-    implements _$$UnauthenticatedImplCopyWith<$Res> {
-  __$$UnauthenticatedImplCopyWithImpl(
-      _$UnauthenticatedImpl _value, $Res Function(_$UnauthenticatedImpl) _then)
-      : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$UnauthenticatedImpl implements _Unauthenticated {
-  const _$UnauthenticatedImpl();
 
-  @override
-  String toString() {
-    return 'AccountState.unauthenticated()';
-  }
+class _Initial implements AccountState {
+  const _Initial();
+  
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$UnauthenticatedImpl);
-  }
 
-  @override
-  int get hashCode => runtimeType.hashCode;
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() unauthenticated,
-    required TResult Function(Account account) hasAccount,
-  }) {
-    return unauthenticated();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? unauthenticated,
-    TResult? Function(Account account)? hasAccount,
-  }) {
-    return unauthenticated?.call();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? unauthenticated,
-    TResult Function(Account account)? hasAccount,
-    required TResult orElse(),
-  }) {
-    if (unauthenticated != null) {
-      return unauthenticated();
-    }
-    return orElse();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Unauthenticated value) unauthenticated,
-    required TResult Function(_HasAccount value) hasAccount,
-  }) {
-    return unauthenticated(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Unauthenticated value)? unauthenticated,
-    TResult? Function(_HasAccount value)? hasAccount,
-  }) {
-    return unauthenticated?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Unauthenticated value)? unauthenticated,
-    TResult Function(_HasAccount value)? hasAccount,
-    required TResult orElse(),
-  }) {
-    if (unauthenticated != null) {
-      return unauthenticated(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial);
 }
 
-abstract class _Unauthenticated implements AccountState {
-  const factory _Unauthenticated() = _$UnauthenticatedImpl;
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AccountState.initial()';
 }
 
-/// @nodoc
-abstract class _$$HasAccountImplCopyWith<$Res> {
-  factory _$$HasAccountImplCopyWith(
-          _$HasAccountImpl value, $Res Function(_$HasAccountImpl) then) =
-      __$$HasAccountImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({Account account});
+
 }
 
-/// @nodoc
-class __$$HasAccountImplCopyWithImpl<$Res>
-    extends _$AccountStateCopyWithImpl<$Res, _$HasAccountImpl>
-    implements _$$HasAccountImplCopyWith<$Res> {
-  __$$HasAccountImplCopyWithImpl(
-      _$HasAccountImpl _value, $Res Function(_$HasAccountImpl) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? account = null,
-  }) {
-    return _then(_$HasAccountImpl(
-      null == account
-          ? _value.account
-          : account // ignore: cast_nullable_to_non_nullable
-              as Account,
-    ));
-  }
-}
+
 
 /// @nodoc
 
-class _$HasAccountImpl implements _HasAccount {
-  const _$HasAccountImpl(this.account);
 
-  @override
-  final Account account;
+class _Unauthenticated implements AccountState {
+  const _Unauthenticated();
+  
 
-  @override
-  String toString() {
-    return 'AccountState.hasAccount(account: $account)';
-  }
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$HasAccountImpl &&
-            (identical(other.account, account) || other.account == account));
-  }
 
-  @override
-  int get hashCode => Object.hash(runtimeType, account);
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$HasAccountImplCopyWith<_$HasAccountImpl> get copyWith =>
-      __$$HasAccountImplCopyWithImpl<_$HasAccountImpl>(this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() unauthenticated,
-    required TResult Function(Account account) hasAccount,
-  }) {
-    return hasAccount(account);
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? unauthenticated,
-    TResult? Function(Account account)? hasAccount,
-  }) {
-    return hasAccount?.call(account);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? unauthenticated,
-    TResult Function(Account account)? hasAccount,
-    required TResult orElse(),
-  }) {
-    if (hasAccount != null) {
-      return hasAccount(account);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Unauthenticated value) unauthenticated,
-    required TResult Function(_HasAccount value) hasAccount,
-  }) {
-    return hasAccount(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Unauthenticated value)? unauthenticated,
-    TResult? Function(_HasAccount value)? hasAccount,
-  }) {
-    return hasAccount?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Unauthenticated value)? unauthenticated,
-    TResult Function(_HasAccount value)? hasAccount,
-    required TResult orElse(),
-  }) {
-    if (hasAccount != null) {
-      return hasAccount(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Unauthenticated);
 }
 
-abstract class _HasAccount implements AccountState {
-  const factory _HasAccount(final Account account) = _$HasAccountImpl;
 
-  Account get account;
-  @JsonKey(ignore: true)
-  _$$HasAccountImplCopyWith<_$HasAccountImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AccountState.unauthenticated()';
 }
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _HasAccount implements AccountState {
+  const _HasAccount(this.account);
+  
+
+ final  Account account;
+
+/// Create a copy of AccountState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$HasAccountCopyWith<_HasAccount> get copyWith => __$HasAccountCopyWithImpl<_HasAccount>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HasAccount&&(identical(other.account, account) || other.account == account));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,account);
+
+@override
+String toString() {
+  return 'AccountState.hasAccount(account: $account)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$HasAccountCopyWith<$Res> implements $AccountStateCopyWith<$Res> {
+  factory _$HasAccountCopyWith(_HasAccount value, $Res Function(_HasAccount) _then) = __$HasAccountCopyWithImpl;
+@useResult
+$Res call({
+ Account account
+});
+
+
+
+
+}
+/// @nodoc
+class __$HasAccountCopyWithImpl<$Res>
+    implements _$HasAccountCopyWith<$Res> {
+  __$HasAccountCopyWithImpl(this._self, this._then);
+
+  final _HasAccount _self;
+  final $Res Function(_HasAccount) _then;
+
+/// Create a copy of AccountState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? account = null,}) {
+  return _then(_HasAccount(
+null == account ? _self.account : account // ignore: cast_nullable_to_non_nullable
+as Account,
+  ));
+}
+
+
+}
+
+// dart format on

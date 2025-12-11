@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/app/data/models/routine_result.dart';
 import 'package:uniceps/app/presentation/routine/blocs/routines_with_heat/routines_with_heat_bloc.dart';
 import 'package:uniceps/app/presentation/routine/widgets/progress_widget.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
+
+import '../../../../core/errors/failure.dart';
 
 class RoutineImportProgressDialog extends StatelessWidget {
   const RoutineImportProgressDialog({super.key});
@@ -14,57 +16,54 @@ class RoutineImportProgressDialog extends StatelessWidget {
     return BlocBuilder<RoutinesWithHeatBloc, RoutinesWithHeatState>(
       builder: (context, state) {
         return state.maybeWhen(
-            importing: (result) => AlertDialog(
-                  icon: const Icon(
-                    Icons.download,
-                    size: 50,
-                  ),
-                  title: Text(locale.importRoutine),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ProgressWidget(
-                        percent: result.progress,
-                        backgroundColor: result.stage == Stage.error ? Colors.red.shade200 : Colors.white,
-                      ),
-                      const SizedBox(height: 10),
-                      Text(sectionContentOf(result.stage, locale)),
-                      if (result.stage == Stage.error)
-                        Text(
-                          result.error!.when(
-                            fOffline: () => locale.errNoInternet,
-                            noFileSelected: () => locale.noFileSelected,
-                            unsupportedVersion: () => locale.unsupportedVersion,
-                            parserMismatch: () => locale.parserMismatch,
-                            corruptedFile: () => locale.corruptedFile,
-                          ),
-                          style: const TextStyle(color: Colors.red, fontSize: 11),
-                        ),
-                    ],
-                  ),
-                  actionsAlignment: MainAxisAlignment.center,
-                  actions: [
-                    if (result.stage == Stage.error)
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red.shade300, foregroundColor: Colors.white),
-                        onPressed: () {
-                          context.read<RoutinesWithHeatBloc>().add(const RoutinesWithHeatEvent.getRoutines());
-                          Navigator.pop(context);
-                        },
-                        child: Text(locale.cancel),
-                      ),
-                    if (result.stage == Stage.done)
-                      ElevatedButton(
-                        onPressed: () {
-                          context.read<RoutinesWithHeatBloc>().add(const RoutinesWithHeatEvent.getRoutines());
-                          Navigator.pop(context);
-                        },
-                        child: Text(locale.ok),
-                      ),
-                  ],
+          importing: (result) => AlertDialog(
+            icon: const Icon(Icons.download, size: 50),
+            title: Text(locale.importRoutine),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ProgressWidget(
+                  percent: result.progress,
+                  backgroundColor: result.stage == Stage.error ? Colors.red.shade200 : Colors.white,
                 ),
-            orElse: () => const SizedBox());
+                const SizedBox(height: 10),
+                Text(sectionContentOf(result.stage, locale)),
+                if (result.stage == Stage.error)
+                  Text(
+                    result.error!.when(
+                      fOffline: () => locale.errNoInternet,
+                      noFileSelected: () => locale.noFileSelected,
+                      unsupportedVersion: () => locale.unsupportedVersion,
+                      parserMismatch: () => locale.parserMismatch,
+                      corruptedFile: () => locale.corruptedFile,
+                    ),
+                    style: const TextStyle(color: Colors.red, fontSize: 11),
+                  ),
+              ],
+            ),
+            actionsAlignment: MainAxisAlignment.center,
+            actions: [
+              if (result.stage == Stage.error)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red.shade300, foregroundColor: Colors.white),
+                  onPressed: () {
+                    context.read<RoutinesWithHeatBloc>().add(const RoutinesWithHeatEvent.getRoutines());
+                    Navigator.pop(context);
+                  },
+                  child: Text(locale.cancel),
+                ),
+              if (result.stage == Stage.done)
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<RoutinesWithHeatBloc>().add(const RoutinesWithHeatEvent.getRoutines());
+                    Navigator.pop(context);
+                  },
+                  child: Text(locale.ok),
+                ),
+            ],
+          ),
+          orElse: () => const SizedBox(),
+        );
       },
     );
   }

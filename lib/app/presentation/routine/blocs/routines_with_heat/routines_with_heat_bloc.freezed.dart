@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,1984 +9,1048 @@ part of 'routines_with_heat_bloc.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
 /// @nodoc
 mixin _$RoutinesWithHeatEvent {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() getRoutines,
-    required TResult Function() import,
-    required TResult Function(int routineId) export,
-    required TResult Function(String name) create,
-    required TResult Function(Routine update) update,
-    required TResult Function(Routine delete) delete,
-    required TResult Function(Routine update) setCurrent,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getRoutines,
-    TResult? Function()? import,
-    TResult? Function(int routineId)? export,
-    TResult? Function(String name)? create,
-    TResult? Function(Routine update)? update,
-    TResult? Function(Routine delete)? delete,
-    TResult? Function(Routine update)? setCurrent,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getRoutines,
-    TResult Function()? import,
-    TResult Function(int routineId)? export,
-    TResult Function(String name)? create,
-    TResult Function(Routine update)? update,
-    TResult Function(Routine delete)? delete,
-    TResult Function(Routine update)? setCurrent,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GetRoutines value) getRoutines,
-    required TResult Function(_Import value) import,
-    required TResult Function(_Export value) export,
-    required TResult Function(_Create value) create,
-    required TResult Function(_Update value) update,
-    required TResult Function(_Delete value) delete,
-    required TResult Function(_SetCurrent value) setCurrent,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetRoutines value)? getRoutines,
-    TResult? Function(_Import value)? import,
-    TResult? Function(_Export value)? export,
-    TResult? Function(_Create value)? create,
-    TResult? Function(_Update value)? update,
-    TResult? Function(_Delete value)? delete,
-    TResult? Function(_SetCurrent value)? setCurrent,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetRoutines value)? getRoutines,
-    TResult Function(_Import value)? import,
-    TResult Function(_Export value)? export,
-    TResult Function(_Create value)? create,
-    TResult Function(_Update value)? update,
-    TResult Function(_Delete value)? delete,
-    TResult Function(_SetCurrent value)? setCurrent,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RoutinesWithHeatEvent);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'RoutinesWithHeatEvent()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $RoutinesWithHeatEventCopyWith<$Res> {
-  factory $RoutinesWithHeatEventCopyWith(RoutinesWithHeatEvent value,
-          $Res Function(RoutinesWithHeatEvent) then) =
-      _$RoutinesWithHeatEventCopyWithImpl<$Res, RoutinesWithHeatEvent>;
+class $RoutinesWithHeatEventCopyWith<$Res>  {
+$RoutinesWithHeatEventCopyWith(RoutinesWithHeatEvent _, $Res Function(RoutinesWithHeatEvent) __);
 }
 
-/// @nodoc
-class _$RoutinesWithHeatEventCopyWithImpl<$Res,
-        $Val extends RoutinesWithHeatEvent>
-    implements $RoutinesWithHeatEventCopyWith<$Res> {
-  _$RoutinesWithHeatEventCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+/// Adds pattern-matching-related methods to [RoutinesWithHeatEvent].
+extension RoutinesWithHeatEventPatterns on RoutinesWithHeatEvent {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _GetRoutines value)?  getRoutines,TResult Function( _Import value)?  import,TResult Function( _Export value)?  export,TResult Function( _Create value)?  create,TResult Function( _Update value)?  update,TResult Function( _Delete value)?  delete,TResult Function( _SetCurrent value)?  setCurrent,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _GetRoutines() when getRoutines != null:
+return getRoutines(_that);case _Import() when import != null:
+return import(_that);case _Export() when export != null:
+return export(_that);case _Create() when create != null:
+return create(_that);case _Update() when update != null:
+return update(_that);case _Delete() when delete != null:
+return delete(_that);case _SetCurrent() when setCurrent != null:
+return setCurrent(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _GetRoutines value)  getRoutines,required TResult Function( _Import value)  import,required TResult Function( _Export value)  export,required TResult Function( _Create value)  create,required TResult Function( _Update value)  update,required TResult Function( _Delete value)  delete,required TResult Function( _SetCurrent value)  setCurrent,}){
+final _that = this;
+switch (_that) {
+case _GetRoutines():
+return getRoutines(_that);case _Import():
+return import(_that);case _Export():
+return export(_that);case _Create():
+return create(_that);case _Update():
+return update(_that);case _Delete():
+return delete(_that);case _SetCurrent():
+return setCurrent(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _GetRoutines value)?  getRoutines,TResult? Function( _Import value)?  import,TResult? Function( _Export value)?  export,TResult? Function( _Create value)?  create,TResult? Function( _Update value)?  update,TResult? Function( _Delete value)?  delete,TResult? Function( _SetCurrent value)?  setCurrent,}){
+final _that = this;
+switch (_that) {
+case _GetRoutines() when getRoutines != null:
+return getRoutines(_that);case _Import() when import != null:
+return import(_that);case _Export() when export != null:
+return export(_that);case _Create() when create != null:
+return create(_that);case _Update() when update != null:
+return update(_that);case _Delete() when delete != null:
+return delete(_that);case _SetCurrent() when setCurrent != null:
+return setCurrent(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  getRoutines,TResult Function()?  import,TResult Function( int routineId)?  export,TResult Function( String name)?  create,TResult Function( Routine update)?  update,TResult Function( Routine delete)?  delete,TResult Function( Routine update)?  setCurrent,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _GetRoutines() when getRoutines != null:
+return getRoutines();case _Import() when import != null:
+return import();case _Export() when export != null:
+return export(_that.routineId);case _Create() when create != null:
+return create(_that.name);case _Update() when update != null:
+return update(_that.update);case _Delete() when delete != null:
+return delete(_that.delete);case _SetCurrent() when setCurrent != null:
+return setCurrent(_that.update);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  getRoutines,required TResult Function()  import,required TResult Function( int routineId)  export,required TResult Function( String name)  create,required TResult Function( Routine update)  update,required TResult Function( Routine delete)  delete,required TResult Function( Routine update)  setCurrent,}) {final _that = this;
+switch (_that) {
+case _GetRoutines():
+return getRoutines();case _Import():
+return import();case _Export():
+return export(_that.routineId);case _Create():
+return create(_that.name);case _Update():
+return update(_that.update);case _Delete():
+return delete(_that.delete);case _SetCurrent():
+return setCurrent(_that.update);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  getRoutines,TResult? Function()?  import,TResult? Function( int routineId)?  export,TResult? Function( String name)?  create,TResult? Function( Routine update)?  update,TResult? Function( Routine delete)?  delete,TResult? Function( Routine update)?  setCurrent,}) {final _that = this;
+switch (_that) {
+case _GetRoutines() when getRoutines != null:
+return getRoutines();case _Import() when import != null:
+return import();case _Export() when export != null:
+return export(_that.routineId);case _Create() when create != null:
+return create(_that.name);case _Update() when update != null:
+return update(_that.update);case _Delete() when delete != null:
+return delete(_that.delete);case _SetCurrent() when setCurrent != null:
+return setCurrent(_that.update);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-abstract class _$$GetRoutinesImplCopyWith<$Res> {
-  factory _$$GetRoutinesImplCopyWith(
-          _$GetRoutinesImpl value, $Res Function(_$GetRoutinesImpl) then) =
-      __$$GetRoutinesImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$GetRoutinesImplCopyWithImpl<$Res>
-    extends _$RoutinesWithHeatEventCopyWithImpl<$Res, _$GetRoutinesImpl>
-    implements _$$GetRoutinesImplCopyWith<$Res> {
-  __$$GetRoutinesImplCopyWithImpl(
-      _$GetRoutinesImpl _value, $Res Function(_$GetRoutinesImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$GetRoutinesImpl implements _GetRoutines {
-  const _$GetRoutinesImpl();
-
-  @override
-  String toString() {
-    return 'RoutinesWithHeatEvent.getRoutines()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$GetRoutinesImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() getRoutines,
-    required TResult Function() import,
-    required TResult Function(int routineId) export,
-    required TResult Function(String name) create,
-    required TResult Function(Routine update) update,
-    required TResult Function(Routine delete) delete,
-    required TResult Function(Routine update) setCurrent,
-  }) {
-    return getRoutines();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getRoutines,
-    TResult? Function()? import,
-    TResult? Function(int routineId)? export,
-    TResult? Function(String name)? create,
-    TResult? Function(Routine update)? update,
-    TResult? Function(Routine delete)? delete,
-    TResult? Function(Routine update)? setCurrent,
-  }) {
-    return getRoutines?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getRoutines,
-    TResult Function()? import,
-    TResult Function(int routineId)? export,
-    TResult Function(String name)? create,
-    TResult Function(Routine update)? update,
-    TResult Function(Routine delete)? delete,
-    TResult Function(Routine update)? setCurrent,
-    required TResult orElse(),
-  }) {
-    if (getRoutines != null) {
-      return getRoutines();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GetRoutines value) getRoutines,
-    required TResult Function(_Import value) import,
-    required TResult Function(_Export value) export,
-    required TResult Function(_Create value) create,
-    required TResult Function(_Update value) update,
-    required TResult Function(_Delete value) delete,
-    required TResult Function(_SetCurrent value) setCurrent,
-  }) {
-    return getRoutines(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetRoutines value)? getRoutines,
-    TResult? Function(_Import value)? import,
-    TResult? Function(_Export value)? export,
-    TResult? Function(_Create value)? create,
-    TResult? Function(_Update value)? update,
-    TResult? Function(_Delete value)? delete,
-    TResult? Function(_SetCurrent value)? setCurrent,
-  }) {
-    return getRoutines?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetRoutines value)? getRoutines,
-    TResult Function(_Import value)? import,
-    TResult Function(_Export value)? export,
-    TResult Function(_Create value)? create,
-    TResult Function(_Update value)? update,
-    TResult Function(_Delete value)? delete,
-    TResult Function(_SetCurrent value)? setCurrent,
-    required TResult orElse(),
-  }) {
-    if (getRoutines != null) {
-      return getRoutines(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _GetRoutines implements RoutinesWithHeatEvent {
-  const factory _GetRoutines() = _$GetRoutinesImpl;
-}
-
-/// @nodoc
-abstract class _$$ImportImplCopyWith<$Res> {
-  factory _$$ImportImplCopyWith(
-          _$ImportImpl value, $Res Function(_$ImportImpl) then) =
-      __$$ImportImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$ImportImplCopyWithImpl<$Res>
-    extends _$RoutinesWithHeatEventCopyWithImpl<$Res, _$ImportImpl>
-    implements _$$ImportImplCopyWith<$Res> {
-  __$$ImportImplCopyWithImpl(
-      _$ImportImpl _value, $Res Function(_$ImportImpl) _then)
-      : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ImportImpl implements _Import {
-  const _$ImportImpl();
 
-  @override
-  String toString() {
-    return 'RoutinesWithHeatEvent.import()';
-  }
+class _GetRoutines implements RoutinesWithHeatEvent {
+  const _GetRoutines();
+  
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ImportImpl);
-  }
 
-  @override
-  int get hashCode => runtimeType.hashCode;
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() getRoutines,
-    required TResult Function() import,
-    required TResult Function(int routineId) export,
-    required TResult Function(String name) create,
-    required TResult Function(Routine update) update,
-    required TResult Function(Routine delete) delete,
-    required TResult Function(Routine update) setCurrent,
-  }) {
-    return import();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getRoutines,
-    TResult? Function()? import,
-    TResult? Function(int routineId)? export,
-    TResult? Function(String name)? create,
-    TResult? Function(Routine update)? update,
-    TResult? Function(Routine delete)? delete,
-    TResult? Function(Routine update)? setCurrent,
-  }) {
-    return import?.call();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getRoutines,
-    TResult Function()? import,
-    TResult Function(int routineId)? export,
-    TResult Function(String name)? create,
-    TResult Function(Routine update)? update,
-    TResult Function(Routine delete)? delete,
-    TResult Function(Routine update)? setCurrent,
-    required TResult orElse(),
-  }) {
-    if (import != null) {
-      return import();
-    }
-    return orElse();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GetRoutines value) getRoutines,
-    required TResult Function(_Import value) import,
-    required TResult Function(_Export value) export,
-    required TResult Function(_Create value) create,
-    required TResult Function(_Update value) update,
-    required TResult Function(_Delete value) delete,
-    required TResult Function(_SetCurrent value) setCurrent,
-  }) {
-    return import(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetRoutines value)? getRoutines,
-    TResult? Function(_Import value)? import,
-    TResult? Function(_Export value)? export,
-    TResult? Function(_Create value)? create,
-    TResult? Function(_Update value)? update,
-    TResult? Function(_Delete value)? delete,
-    TResult? Function(_SetCurrent value)? setCurrent,
-  }) {
-    return import?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetRoutines value)? getRoutines,
-    TResult Function(_Import value)? import,
-    TResult Function(_Export value)? export,
-    TResult Function(_Create value)? create,
-    TResult Function(_Update value)? update,
-    TResult Function(_Delete value)? delete,
-    TResult Function(_SetCurrent value)? setCurrent,
-    required TResult orElse(),
-  }) {
-    if (import != null) {
-      return import(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GetRoutines);
 }
 
-abstract class _Import implements RoutinesWithHeatEvent {
-  const factory _Import() = _$ImportImpl;
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'RoutinesWithHeatEvent.getRoutines()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _Import implements RoutinesWithHeatEvent {
+  const _Import();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Import);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'RoutinesWithHeatEvent.import()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _Export implements RoutinesWithHeatEvent {
+  const _Export(this.routineId);
+  
+
+ final  int routineId;
+
+/// Create a copy of RoutinesWithHeatEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ExportCopyWith<_Export> get copyWith => __$ExportCopyWithImpl<_Export>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Export&&(identical(other.routineId, routineId) || other.routineId == routineId));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,routineId);
+
+@override
+String toString() {
+  return 'RoutinesWithHeatEvent.export(routineId: $routineId)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$ExportImplCopyWith<$Res> {
-  factory _$$ExportImplCopyWith(
-          _$ExportImpl value, $Res Function(_$ExportImpl) then) =
-      __$$ExportImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({int routineId});
+abstract mixin class _$ExportCopyWith<$Res> implements $RoutinesWithHeatEventCopyWith<$Res> {
+  factory _$ExportCopyWith(_Export value, $Res Function(_Export) _then) = __$ExportCopyWithImpl;
+@useResult
+$Res call({
+ int routineId
+});
+
+
+
+
+}
+/// @nodoc
+class __$ExportCopyWithImpl<$Res>
+    implements _$ExportCopyWith<$Res> {
+  __$ExportCopyWithImpl(this._self, this._then);
+
+  final _Export _self;
+  final $Res Function(_Export) _then;
+
+/// Create a copy of RoutinesWithHeatEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? routineId = null,}) {
+  return _then(_Export(
+null == routineId ? _self.routineId : routineId // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
 }
 
-/// @nodoc
-class __$$ExportImplCopyWithImpl<$Res>
-    extends _$RoutinesWithHeatEventCopyWithImpl<$Res, _$ExportImpl>
-    implements _$$ExportImplCopyWith<$Res> {
-  __$$ExportImplCopyWithImpl(
-      _$ExportImpl _value, $Res Function(_$ExportImpl) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? routineId = null,
-  }) {
-    return _then(_$ExportImpl(
-      null == routineId
-          ? _value.routineId
-          : routineId // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$ExportImpl implements _Export {
-  const _$ExportImpl(this.routineId);
 
-  @override
-  final int routineId;
+class _Create implements RoutinesWithHeatEvent {
+  const _Create(this.name);
+  
 
-  @override
-  String toString() {
-    return 'RoutinesWithHeatEvent.export(routineId: $routineId)';
-  }
+ final  String name;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ExportImpl &&
-            (identical(other.routineId, routineId) ||
-                other.routineId == routineId));
-  }
+/// Create a copy of RoutinesWithHeatEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$CreateCopyWith<_Create> get copyWith => __$CreateCopyWithImpl<_Create>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, routineId);
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ExportImplCopyWith<_$ExportImpl> get copyWith =>
-      __$$ExportImplCopyWithImpl<_$ExportImpl>(this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() getRoutines,
-    required TResult Function() import,
-    required TResult Function(int routineId) export,
-    required TResult Function(String name) create,
-    required TResult Function(Routine update) update,
-    required TResult Function(Routine delete) delete,
-    required TResult Function(Routine update) setCurrent,
-  }) {
-    return export(routineId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getRoutines,
-    TResult? Function()? import,
-    TResult? Function(int routineId)? export,
-    TResult? Function(String name)? create,
-    TResult? Function(Routine update)? update,
-    TResult? Function(Routine delete)? delete,
-    TResult? Function(Routine update)? setCurrent,
-  }) {
-    return export?.call(routineId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getRoutines,
-    TResult Function()? import,
-    TResult Function(int routineId)? export,
-    TResult Function(String name)? create,
-    TResult Function(Routine update)? update,
-    TResult Function(Routine delete)? delete,
-    TResult Function(Routine update)? setCurrent,
-    required TResult orElse(),
-  }) {
-    if (export != null) {
-      return export(routineId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GetRoutines value) getRoutines,
-    required TResult Function(_Import value) import,
-    required TResult Function(_Export value) export,
-    required TResult Function(_Create value) create,
-    required TResult Function(_Update value) update,
-    required TResult Function(_Delete value) delete,
-    required TResult Function(_SetCurrent value) setCurrent,
-  }) {
-    return export(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetRoutines value)? getRoutines,
-    TResult? Function(_Import value)? import,
-    TResult? Function(_Export value)? export,
-    TResult? Function(_Create value)? create,
-    TResult? Function(_Update value)? update,
-    TResult? Function(_Delete value)? delete,
-    TResult? Function(_SetCurrent value)? setCurrent,
-  }) {
-    return export?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetRoutines value)? getRoutines,
-    TResult Function(_Import value)? import,
-    TResult Function(_Export value)? export,
-    TResult Function(_Create value)? create,
-    TResult Function(_Update value)? update,
-    TResult Function(_Delete value)? delete,
-    TResult Function(_SetCurrent value)? setCurrent,
-    required TResult orElse(),
-  }) {
-    if (export != null) {
-      return export(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Create&&(identical(other.name, name) || other.name == name));
 }
 
-abstract class _Export implements RoutinesWithHeatEvent {
-  const factory _Export(final int routineId) = _$ExportImpl;
 
-  int get routineId;
-  @JsonKey(ignore: true)
-  _$$ExportImplCopyWith<_$ExportImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+int get hashCode => Object.hash(runtimeType,name);
+
+@override
+String toString() {
+  return 'RoutinesWithHeatEvent.create(name: $name)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$CreateImplCopyWith<$Res> {
-  factory _$$CreateImplCopyWith(
-          _$CreateImpl value, $Res Function(_$CreateImpl) then) =
-      __$$CreateImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String name});
+abstract mixin class _$CreateCopyWith<$Res> implements $RoutinesWithHeatEventCopyWith<$Res> {
+  factory _$CreateCopyWith(_Create value, $Res Function(_Create) _then) = __$CreateCopyWithImpl;
+@useResult
+$Res call({
+ String name
+});
+
+
+
+
+}
+/// @nodoc
+class __$CreateCopyWithImpl<$Res>
+    implements _$CreateCopyWith<$Res> {
+  __$CreateCopyWithImpl(this._self, this._then);
+
+  final _Create _self;
+  final $Res Function(_Create) _then;
+
+/// Create a copy of RoutinesWithHeatEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? name = null,}) {
+  return _then(_Create(
+null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
 }
 
-/// @nodoc
-class __$$CreateImplCopyWithImpl<$Res>
-    extends _$RoutinesWithHeatEventCopyWithImpl<$Res, _$CreateImpl>
-    implements _$$CreateImplCopyWith<$Res> {
-  __$$CreateImplCopyWithImpl(
-      _$CreateImpl _value, $Res Function(_$CreateImpl) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? name = null,
-  }) {
-    return _then(_$CreateImpl(
-      null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$CreateImpl implements _Create {
-  const _$CreateImpl(this.name);
 
-  @override
-  final String name;
+class _Update implements RoutinesWithHeatEvent {
+  const _Update(this.update);
+  
 
-  @override
-  String toString() {
-    return 'RoutinesWithHeatEvent.create(name: $name)';
-  }
+ final  Routine update;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CreateImpl &&
-            (identical(other.name, name) || other.name == name));
-  }
+/// Create a copy of RoutinesWithHeatEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UpdateCopyWith<_Update> get copyWith => __$UpdateCopyWithImpl<_Update>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, name);
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$CreateImplCopyWith<_$CreateImpl> get copyWith =>
-      __$$CreateImplCopyWithImpl<_$CreateImpl>(this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() getRoutines,
-    required TResult Function() import,
-    required TResult Function(int routineId) export,
-    required TResult Function(String name) create,
-    required TResult Function(Routine update) update,
-    required TResult Function(Routine delete) delete,
-    required TResult Function(Routine update) setCurrent,
-  }) {
-    return create(name);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getRoutines,
-    TResult? Function()? import,
-    TResult? Function(int routineId)? export,
-    TResult? Function(String name)? create,
-    TResult? Function(Routine update)? update,
-    TResult? Function(Routine delete)? delete,
-    TResult? Function(Routine update)? setCurrent,
-  }) {
-    return create?.call(name);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getRoutines,
-    TResult Function()? import,
-    TResult Function(int routineId)? export,
-    TResult Function(String name)? create,
-    TResult Function(Routine update)? update,
-    TResult Function(Routine delete)? delete,
-    TResult Function(Routine update)? setCurrent,
-    required TResult orElse(),
-  }) {
-    if (create != null) {
-      return create(name);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GetRoutines value) getRoutines,
-    required TResult Function(_Import value) import,
-    required TResult Function(_Export value) export,
-    required TResult Function(_Create value) create,
-    required TResult Function(_Update value) update,
-    required TResult Function(_Delete value) delete,
-    required TResult Function(_SetCurrent value) setCurrent,
-  }) {
-    return create(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetRoutines value)? getRoutines,
-    TResult? Function(_Import value)? import,
-    TResult? Function(_Export value)? export,
-    TResult? Function(_Create value)? create,
-    TResult? Function(_Update value)? update,
-    TResult? Function(_Delete value)? delete,
-    TResult? Function(_SetCurrent value)? setCurrent,
-  }) {
-    return create?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetRoutines value)? getRoutines,
-    TResult Function(_Import value)? import,
-    TResult Function(_Export value)? export,
-    TResult Function(_Create value)? create,
-    TResult Function(_Update value)? update,
-    TResult Function(_Delete value)? delete,
-    TResult Function(_SetCurrent value)? setCurrent,
-    required TResult orElse(),
-  }) {
-    if (create != null) {
-      return create(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Update&&(identical(other.update, update) || other.update == update));
 }
 
-abstract class _Create implements RoutinesWithHeatEvent {
-  const factory _Create(final String name) = _$CreateImpl;
 
-  String get name;
-  @JsonKey(ignore: true)
-  _$$CreateImplCopyWith<_$CreateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+int get hashCode => Object.hash(runtimeType,update);
+
+@override
+String toString() {
+  return 'RoutinesWithHeatEvent.update(update: $update)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$UpdateImplCopyWith<$Res> {
-  factory _$$UpdateImplCopyWith(
-          _$UpdateImpl value, $Res Function(_$UpdateImpl) then) =
-      __$$UpdateImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({Routine update});
+abstract mixin class _$UpdateCopyWith<$Res> implements $RoutinesWithHeatEventCopyWith<$Res> {
+  factory _$UpdateCopyWith(_Update value, $Res Function(_Update) _then) = __$UpdateCopyWithImpl;
+@useResult
+$Res call({
+ Routine update
+});
+
+
+
+
+}
+/// @nodoc
+class __$UpdateCopyWithImpl<$Res>
+    implements _$UpdateCopyWith<$Res> {
+  __$UpdateCopyWithImpl(this._self, this._then);
+
+  final _Update _self;
+  final $Res Function(_Update) _then;
+
+/// Create a copy of RoutinesWithHeatEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? update = null,}) {
+  return _then(_Update(
+null == update ? _self.update : update // ignore: cast_nullable_to_non_nullable
+as Routine,
+  ));
 }
 
-/// @nodoc
-class __$$UpdateImplCopyWithImpl<$Res>
-    extends _$RoutinesWithHeatEventCopyWithImpl<$Res, _$UpdateImpl>
-    implements _$$UpdateImplCopyWith<$Res> {
-  __$$UpdateImplCopyWithImpl(
-      _$UpdateImpl _value, $Res Function(_$UpdateImpl) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? update = null,
-  }) {
-    return _then(_$UpdateImpl(
-      null == update
-          ? _value.update
-          : update // ignore: cast_nullable_to_non_nullable
-              as Routine,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$UpdateImpl implements _Update {
-  const _$UpdateImpl(this.update);
 
-  @override
-  final Routine update;
+class _Delete implements RoutinesWithHeatEvent {
+  const _Delete(this.delete);
+  
 
-  @override
-  String toString() {
-    return 'RoutinesWithHeatEvent.update(update: $update)';
-  }
+ final  Routine delete;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$UpdateImpl &&
-            (identical(other.update, update) || other.update == update));
-  }
+/// Create a copy of RoutinesWithHeatEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$DeleteCopyWith<_Delete> get copyWith => __$DeleteCopyWithImpl<_Delete>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, update);
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$UpdateImplCopyWith<_$UpdateImpl> get copyWith =>
-      __$$UpdateImplCopyWithImpl<_$UpdateImpl>(this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() getRoutines,
-    required TResult Function() import,
-    required TResult Function(int routineId) export,
-    required TResult Function(String name) create,
-    required TResult Function(Routine update) update,
-    required TResult Function(Routine delete) delete,
-    required TResult Function(Routine update) setCurrent,
-  }) {
-    return update(this.update);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getRoutines,
-    TResult? Function()? import,
-    TResult? Function(int routineId)? export,
-    TResult? Function(String name)? create,
-    TResult? Function(Routine update)? update,
-    TResult? Function(Routine delete)? delete,
-    TResult? Function(Routine update)? setCurrent,
-  }) {
-    return update?.call(this.update);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getRoutines,
-    TResult Function()? import,
-    TResult Function(int routineId)? export,
-    TResult Function(String name)? create,
-    TResult Function(Routine update)? update,
-    TResult Function(Routine delete)? delete,
-    TResult Function(Routine update)? setCurrent,
-    required TResult orElse(),
-  }) {
-    if (update != null) {
-      return update(this.update);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GetRoutines value) getRoutines,
-    required TResult Function(_Import value) import,
-    required TResult Function(_Export value) export,
-    required TResult Function(_Create value) create,
-    required TResult Function(_Update value) update,
-    required TResult Function(_Delete value) delete,
-    required TResult Function(_SetCurrent value) setCurrent,
-  }) {
-    return update(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetRoutines value)? getRoutines,
-    TResult? Function(_Import value)? import,
-    TResult? Function(_Export value)? export,
-    TResult? Function(_Create value)? create,
-    TResult? Function(_Update value)? update,
-    TResult? Function(_Delete value)? delete,
-    TResult? Function(_SetCurrent value)? setCurrent,
-  }) {
-    return update?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetRoutines value)? getRoutines,
-    TResult Function(_Import value)? import,
-    TResult Function(_Export value)? export,
-    TResult Function(_Create value)? create,
-    TResult Function(_Update value)? update,
-    TResult Function(_Delete value)? delete,
-    TResult Function(_SetCurrent value)? setCurrent,
-    required TResult orElse(),
-  }) {
-    if (update != null) {
-      return update(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Delete&&(identical(other.delete, delete) || other.delete == delete));
 }
 
-abstract class _Update implements RoutinesWithHeatEvent {
-  const factory _Update(final Routine update) = _$UpdateImpl;
 
-  Routine get update;
-  @JsonKey(ignore: true)
-  _$$UpdateImplCopyWith<_$UpdateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+int get hashCode => Object.hash(runtimeType,delete);
+
+@override
+String toString() {
+  return 'RoutinesWithHeatEvent.delete(delete: $delete)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$DeleteImplCopyWith<$Res> {
-  factory _$$DeleteImplCopyWith(
-          _$DeleteImpl value, $Res Function(_$DeleteImpl) then) =
-      __$$DeleteImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({Routine delete});
+abstract mixin class _$DeleteCopyWith<$Res> implements $RoutinesWithHeatEventCopyWith<$Res> {
+  factory _$DeleteCopyWith(_Delete value, $Res Function(_Delete) _then) = __$DeleteCopyWithImpl;
+@useResult
+$Res call({
+ Routine delete
+});
+
+
+
+
+}
+/// @nodoc
+class __$DeleteCopyWithImpl<$Res>
+    implements _$DeleteCopyWith<$Res> {
+  __$DeleteCopyWithImpl(this._self, this._then);
+
+  final _Delete _self;
+  final $Res Function(_Delete) _then;
+
+/// Create a copy of RoutinesWithHeatEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? delete = null,}) {
+  return _then(_Delete(
+null == delete ? _self.delete : delete // ignore: cast_nullable_to_non_nullable
+as Routine,
+  ));
 }
 
-/// @nodoc
-class __$$DeleteImplCopyWithImpl<$Res>
-    extends _$RoutinesWithHeatEventCopyWithImpl<$Res, _$DeleteImpl>
-    implements _$$DeleteImplCopyWith<$Res> {
-  __$$DeleteImplCopyWithImpl(
-      _$DeleteImpl _value, $Res Function(_$DeleteImpl) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? delete = null,
-  }) {
-    return _then(_$DeleteImpl(
-      null == delete
-          ? _value.delete
-          : delete // ignore: cast_nullable_to_non_nullable
-              as Routine,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$DeleteImpl implements _Delete {
-  const _$DeleteImpl(this.delete);
 
-  @override
-  final Routine delete;
+class _SetCurrent implements RoutinesWithHeatEvent {
+  const _SetCurrent(this.update);
+  
 
-  @override
-  String toString() {
-    return 'RoutinesWithHeatEvent.delete(delete: $delete)';
-  }
+ final  Routine update;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$DeleteImpl &&
-            (identical(other.delete, delete) || other.delete == delete));
-  }
+/// Create a copy of RoutinesWithHeatEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SetCurrentCopyWith<_SetCurrent> get copyWith => __$SetCurrentCopyWithImpl<_SetCurrent>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, delete);
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$DeleteImplCopyWith<_$DeleteImpl> get copyWith =>
-      __$$DeleteImplCopyWithImpl<_$DeleteImpl>(this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() getRoutines,
-    required TResult Function() import,
-    required TResult Function(int routineId) export,
-    required TResult Function(String name) create,
-    required TResult Function(Routine update) update,
-    required TResult Function(Routine delete) delete,
-    required TResult Function(Routine update) setCurrent,
-  }) {
-    return delete(this.delete);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getRoutines,
-    TResult? Function()? import,
-    TResult? Function(int routineId)? export,
-    TResult? Function(String name)? create,
-    TResult? Function(Routine update)? update,
-    TResult? Function(Routine delete)? delete,
-    TResult? Function(Routine update)? setCurrent,
-  }) {
-    return delete?.call(this.delete);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getRoutines,
-    TResult Function()? import,
-    TResult Function(int routineId)? export,
-    TResult Function(String name)? create,
-    TResult Function(Routine update)? update,
-    TResult Function(Routine delete)? delete,
-    TResult Function(Routine update)? setCurrent,
-    required TResult orElse(),
-  }) {
-    if (delete != null) {
-      return delete(this.delete);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GetRoutines value) getRoutines,
-    required TResult Function(_Import value) import,
-    required TResult Function(_Export value) export,
-    required TResult Function(_Create value) create,
-    required TResult Function(_Update value) update,
-    required TResult Function(_Delete value) delete,
-    required TResult Function(_SetCurrent value) setCurrent,
-  }) {
-    return delete(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetRoutines value)? getRoutines,
-    TResult? Function(_Import value)? import,
-    TResult? Function(_Export value)? export,
-    TResult? Function(_Create value)? create,
-    TResult? Function(_Update value)? update,
-    TResult? Function(_Delete value)? delete,
-    TResult? Function(_SetCurrent value)? setCurrent,
-  }) {
-    return delete?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetRoutines value)? getRoutines,
-    TResult Function(_Import value)? import,
-    TResult Function(_Export value)? export,
-    TResult Function(_Create value)? create,
-    TResult Function(_Update value)? update,
-    TResult Function(_Delete value)? delete,
-    TResult Function(_SetCurrent value)? setCurrent,
-    required TResult orElse(),
-  }) {
-    if (delete != null) {
-      return delete(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SetCurrent&&(identical(other.update, update) || other.update == update));
 }
 
-abstract class _Delete implements RoutinesWithHeatEvent {
-  const factory _Delete(final Routine delete) = _$DeleteImpl;
 
-  Routine get delete;
-  @JsonKey(ignore: true)
-  _$$DeleteImplCopyWith<_$DeleteImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+int get hashCode => Object.hash(runtimeType,update);
+
+@override
+String toString() {
+  return 'RoutinesWithHeatEvent.setCurrent(update: $update)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$SetCurrentImplCopyWith<$Res> {
-  factory _$$SetCurrentImplCopyWith(
-          _$SetCurrentImpl value, $Res Function(_$SetCurrentImpl) then) =
-      __$$SetCurrentImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({Routine update});
-}
+abstract mixin class _$SetCurrentCopyWith<$Res> implements $RoutinesWithHeatEventCopyWith<$Res> {
+  factory _$SetCurrentCopyWith(_SetCurrent value, $Res Function(_SetCurrent) _then) = __$SetCurrentCopyWithImpl;
+@useResult
+$Res call({
+ Routine update
+});
 
+
+
+
+}
 /// @nodoc
-class __$$SetCurrentImplCopyWithImpl<$Res>
-    extends _$RoutinesWithHeatEventCopyWithImpl<$Res, _$SetCurrentImpl>
-    implements _$$SetCurrentImplCopyWith<$Res> {
-  __$$SetCurrentImplCopyWithImpl(
-      _$SetCurrentImpl _value, $Res Function(_$SetCurrentImpl) _then)
-      : super(_value, _then);
+class __$SetCurrentCopyWithImpl<$Res>
+    implements _$SetCurrentCopyWith<$Res> {
+  __$SetCurrentCopyWithImpl(this._self, this._then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? update = null,
-  }) {
-    return _then(_$SetCurrentImpl(
-      null == update
-          ? _value.update
-          : update // ignore: cast_nullable_to_non_nullable
-              as Routine,
-    ));
-  }
+  final _SetCurrent _self;
+  final $Res Function(_SetCurrent) _then;
+
+/// Create a copy of RoutinesWithHeatEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? update = null,}) {
+  return _then(_SetCurrent(
+null == update ? _self.update : update // ignore: cast_nullable_to_non_nullable
+as Routine,
+  ));
 }
 
-/// @nodoc
 
-class _$SetCurrentImpl implements _SetCurrent {
-  const _$SetCurrentImpl(this.update);
-
-  @override
-  final Routine update;
-
-  @override
-  String toString() {
-    return 'RoutinesWithHeatEvent.setCurrent(update: $update)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SetCurrentImpl &&
-            (identical(other.update, update) || other.update == update));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, update);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$SetCurrentImplCopyWith<_$SetCurrentImpl> get copyWith =>
-      __$$SetCurrentImplCopyWithImpl<_$SetCurrentImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() getRoutines,
-    required TResult Function() import,
-    required TResult Function(int routineId) export,
-    required TResult Function(String name) create,
-    required TResult Function(Routine update) update,
-    required TResult Function(Routine delete) delete,
-    required TResult Function(Routine update) setCurrent,
-  }) {
-    return setCurrent(this.update);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getRoutines,
-    TResult? Function()? import,
-    TResult? Function(int routineId)? export,
-    TResult? Function(String name)? create,
-    TResult? Function(Routine update)? update,
-    TResult? Function(Routine delete)? delete,
-    TResult? Function(Routine update)? setCurrent,
-  }) {
-    return setCurrent?.call(this.update);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getRoutines,
-    TResult Function()? import,
-    TResult Function(int routineId)? export,
-    TResult Function(String name)? create,
-    TResult Function(Routine update)? update,
-    TResult Function(Routine delete)? delete,
-    TResult Function(Routine update)? setCurrent,
-    required TResult orElse(),
-  }) {
-    if (setCurrent != null) {
-      return setCurrent(this.update);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GetRoutines value) getRoutines,
-    required TResult Function(_Import value) import,
-    required TResult Function(_Export value) export,
-    required TResult Function(_Create value) create,
-    required TResult Function(_Update value) update,
-    required TResult Function(_Delete value) delete,
-    required TResult Function(_SetCurrent value) setCurrent,
-  }) {
-    return setCurrent(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetRoutines value)? getRoutines,
-    TResult? Function(_Import value)? import,
-    TResult? Function(_Export value)? export,
-    TResult? Function(_Create value)? create,
-    TResult? Function(_Update value)? update,
-    TResult? Function(_Delete value)? delete,
-    TResult? Function(_SetCurrent value)? setCurrent,
-  }) {
-    return setCurrent?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetRoutines value)? getRoutines,
-    TResult Function(_Import value)? import,
-    TResult Function(_Export value)? export,
-    TResult Function(_Create value)? create,
-    TResult Function(_Update value)? update,
-    TResult Function(_Delete value)? delete,
-    TResult Function(_SetCurrent value)? setCurrent,
-    required TResult orElse(),
-  }) {
-    if (setCurrent != null) {
-      return setCurrent(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _SetCurrent implements RoutinesWithHeatEvent {
-  const factory _SetCurrent(final Routine update) = _$SetCurrentImpl;
-
-  Routine get update;
-  @JsonKey(ignore: true)
-  _$$SetCurrentImplCopyWith<_$SetCurrentImpl> get copyWith =>
-      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 mixin _$RoutinesWithHeatState {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(RoutineResult result) importing,
-    required TResult Function(
-            List<({RoutineHeat heat, Routine routine})> routines)
-        loaded,
-    required TResult Function(Failure f) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(RoutineResult result)? importing,
-    TResult? Function(List<({RoutineHeat heat, Routine routine})> routines)?
-        loaded,
-    TResult? Function(Failure f)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(RoutineResult result)? importing,
-    TResult Function(List<({RoutineHeat heat, Routine routine})> routines)?
-        loaded,
-    TResult Function(Failure f)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Importing value) importing,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Importing value)? importing,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Importing value)? importing,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RoutinesWithHeatState);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'RoutinesWithHeatState()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $RoutinesWithHeatStateCopyWith<$Res> {
-  factory $RoutinesWithHeatStateCopyWith(RoutinesWithHeatState value,
-          $Res Function(RoutinesWithHeatState) then) =
-      _$RoutinesWithHeatStateCopyWithImpl<$Res, RoutinesWithHeatState>;
+class $RoutinesWithHeatStateCopyWith<$Res>  {
+$RoutinesWithHeatStateCopyWith(RoutinesWithHeatState _, $Res Function(RoutinesWithHeatState) __);
 }
 
-/// @nodoc
-class _$RoutinesWithHeatStateCopyWithImpl<$Res,
-        $Val extends RoutinesWithHeatState>
-    implements $RoutinesWithHeatStateCopyWith<$Res> {
-  _$RoutinesWithHeatStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+/// Adds pattern-matching-related methods to [RoutinesWithHeatState].
+extension RoutinesWithHeatStatePatterns on RoutinesWithHeatState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Importing value)?  importing,TResult Function( _Loaded value)?  loaded,TResult Function( _Error value)?  error,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial(_that);case _Loading() when loading != null:
+return loading(_that);case _Importing() when importing != null:
+return importing(_that);case _Loaded() when loaded != null:
+return loaded(_that);case _Error() when error != null:
+return error(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Importing value)  importing,required TResult Function( _Loaded value)  loaded,required TResult Function( _Error value)  error,}){
+final _that = this;
+switch (_that) {
+case _Initial():
+return initial(_that);case _Loading():
+return loading(_that);case _Importing():
+return importing(_that);case _Loaded():
+return loaded(_that);case _Error():
+return error(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Importing value)?  importing,TResult? Function( _Loaded value)?  loaded,TResult? Function( _Error value)?  error,}){
+final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial(_that);case _Loading() when loading != null:
+return loading(_that);case _Importing() when importing != null:
+return importing(_that);case _Loaded() when loaded != null:
+return loaded(_that);case _Error() when error != null:
+return error(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( RoutineResult result)?  importing,TResult Function( List<({Routine routine, RoutineHeat heat})> routines)?  loaded,TResult Function( Failure f)?  error,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial();case _Loading() when loading != null:
+return loading();case _Importing() when importing != null:
+return importing(_that.result);case _Loaded() when loaded != null:
+return loaded(_that.routines);case _Error() when error != null:
+return error(_that.f);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( RoutineResult result)  importing,required TResult Function( List<({Routine routine, RoutineHeat heat})> routines)  loaded,required TResult Function( Failure f)  error,}) {final _that = this;
+switch (_that) {
+case _Initial():
+return initial();case _Loading():
+return loading();case _Importing():
+return importing(_that.result);case _Loaded():
+return loaded(_that.routines);case _Error():
+return error(_that.f);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( RoutineResult result)?  importing,TResult? Function( List<({Routine routine, RoutineHeat heat})> routines)?  loaded,TResult? Function( Failure f)?  error,}) {final _that = this;
+switch (_that) {
+case _Initial() when initial != null:
+return initial();case _Loading() when loading != null:
+return loading();case _Importing() when importing != null:
+return importing(_that.result);case _Loaded() when loaded != null:
+return loaded(_that.routines);case _Error() when error != null:
+return error(_that.f);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-abstract class _$$InitialImplCopyWith<$Res> {
-  factory _$$InitialImplCopyWith(
-          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
-      __$$InitialImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$InitialImplCopyWithImpl<$Res>
-    extends _$RoutinesWithHeatStateCopyWithImpl<$Res, _$InitialImpl>
-    implements _$$InitialImplCopyWith<$Res> {
-  __$$InitialImplCopyWithImpl(
-      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$InitialImpl implements _Initial {
-  const _$InitialImpl();
-
-  @override
-  String toString() {
-    return 'RoutinesWithHeatState.initial()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$InitialImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(RoutineResult result) importing,
-    required TResult Function(
-            List<({RoutineHeat heat, Routine routine})> routines)
-        loaded,
-    required TResult Function(Failure f) error,
-  }) {
-    return initial();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(RoutineResult result)? importing,
-    TResult? Function(List<({RoutineHeat heat, Routine routine})> routines)?
-        loaded,
-    TResult? Function(Failure f)? error,
-  }) {
-    return initial?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(RoutineResult result)? importing,
-    TResult Function(List<({RoutineHeat heat, Routine routine})> routines)?
-        loaded,
-    TResult Function(Failure f)? error,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Importing value) importing,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-  }) {
-    return initial(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Importing value)? importing,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-  }) {
-    return initial?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Importing value)? importing,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Initial implements RoutinesWithHeatState {
-  const factory _Initial() = _$InitialImpl;
-}
-
-/// @nodoc
-abstract class _$$LoadingImplCopyWith<$Res> {
-  factory _$$LoadingImplCopyWith(
-          _$LoadingImpl value, $Res Function(_$LoadingImpl) then) =
-      __$$LoadingImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$LoadingImplCopyWithImpl<$Res>
-    extends _$RoutinesWithHeatStateCopyWithImpl<$Res, _$LoadingImpl>
-    implements _$$LoadingImplCopyWith<$Res> {
-  __$$LoadingImplCopyWithImpl(
-      _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
-      : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LoadingImpl implements _Loading {
-  const _$LoadingImpl();
 
-  @override
-  String toString() {
-    return 'RoutinesWithHeatState.loading()';
-  }
+class _Initial implements RoutinesWithHeatState {
+  const _Initial();
+  
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LoadingImpl);
-  }
 
-  @override
-  int get hashCode => runtimeType.hashCode;
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(RoutineResult result) importing,
-    required TResult Function(
-            List<({RoutineHeat heat, Routine routine})> routines)
-        loaded,
-    required TResult Function(Failure f) error,
-  }) {
-    return loading();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(RoutineResult result)? importing,
-    TResult? Function(List<({RoutineHeat heat, Routine routine})> routines)?
-        loaded,
-    TResult? Function(Failure f)? error,
-  }) {
-    return loading?.call();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(RoutineResult result)? importing,
-    TResult Function(List<({RoutineHeat heat, Routine routine})> routines)?
-        loaded,
-    TResult Function(Failure f)? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Importing value) importing,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-  }) {
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Importing value)? importing,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-  }) {
-    return loading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Importing value)? importing,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial);
 }
 
-abstract class _Loading implements RoutinesWithHeatState {
-  const factory _Loading() = _$LoadingImpl;
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'RoutinesWithHeatState.initial()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _Loading implements RoutinesWithHeatState {
+  const _Loading();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'RoutinesWithHeatState.loading()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _Importing implements RoutinesWithHeatState {
+  const _Importing({required this.result});
+  
+
+ final  RoutineResult result;
+
+/// Create a copy of RoutinesWithHeatState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ImportingCopyWith<_Importing> get copyWith => __$ImportingCopyWithImpl<_Importing>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Importing&&(identical(other.result, result) || other.result == result));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,result);
+
+@override
+String toString() {
+  return 'RoutinesWithHeatState.importing(result: $result)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$ImportingImplCopyWith<$Res> {
-  factory _$$ImportingImplCopyWith(
-          _$ImportingImpl value, $Res Function(_$ImportingImpl) then) =
-      __$$ImportingImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({RoutineResult result});
+abstract mixin class _$ImportingCopyWith<$Res> implements $RoutinesWithHeatStateCopyWith<$Res> {
+  factory _$ImportingCopyWith(_Importing value, $Res Function(_Importing) _then) = __$ImportingCopyWithImpl;
+@useResult
+$Res call({
+ RoutineResult result
+});
+
+
+
+
+}
+/// @nodoc
+class __$ImportingCopyWithImpl<$Res>
+    implements _$ImportingCopyWith<$Res> {
+  __$ImportingCopyWithImpl(this._self, this._then);
+
+  final _Importing _self;
+  final $Res Function(_Importing) _then;
+
+/// Create a copy of RoutinesWithHeatState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? result = null,}) {
+  return _then(_Importing(
+result: null == result ? _self.result : result // ignore: cast_nullable_to_non_nullable
+as RoutineResult,
+  ));
 }
 
-/// @nodoc
-class __$$ImportingImplCopyWithImpl<$Res>
-    extends _$RoutinesWithHeatStateCopyWithImpl<$Res, _$ImportingImpl>
-    implements _$$ImportingImplCopyWith<$Res> {
-  __$$ImportingImplCopyWithImpl(
-      _$ImportingImpl _value, $Res Function(_$ImportingImpl) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? result = null,
-  }) {
-    return _then(_$ImportingImpl(
-      result: null == result
-          ? _value.result
-          : result // ignore: cast_nullable_to_non_nullable
-              as RoutineResult,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$ImportingImpl implements _Importing {
-  const _$ImportingImpl({required this.result});
 
-  @override
-  final RoutineResult result;
+class _Loaded implements RoutinesWithHeatState {
+  const _Loaded(final  List<({Routine routine, RoutineHeat heat})> routines): _routines = routines;
+  
 
-  @override
-  String toString() {
-    return 'RoutinesWithHeatState.importing(result: $result)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ImportingImpl &&
-            (identical(other.result, result) || other.result == result));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, result);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ImportingImplCopyWith<_$ImportingImpl> get copyWith =>
-      __$$ImportingImplCopyWithImpl<_$ImportingImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(RoutineResult result) importing,
-    required TResult Function(
-            List<({RoutineHeat heat, Routine routine})> routines)
-        loaded,
-    required TResult Function(Failure f) error,
-  }) {
-    return importing(result);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(RoutineResult result)? importing,
-    TResult? Function(List<({RoutineHeat heat, Routine routine})> routines)?
-        loaded,
-    TResult? Function(Failure f)? error,
-  }) {
-    return importing?.call(result);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(RoutineResult result)? importing,
-    TResult Function(List<({RoutineHeat heat, Routine routine})> routines)?
-        loaded,
-    TResult Function(Failure f)? error,
-    required TResult orElse(),
-  }) {
-    if (importing != null) {
-      return importing(result);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Importing value) importing,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-  }) {
-    return importing(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Importing value)? importing,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-  }) {
-    return importing?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Importing value)? importing,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    required TResult orElse(),
-  }) {
-    if (importing != null) {
-      return importing(this);
-    }
-    return orElse();
-  }
+ final  List<({Routine routine, RoutineHeat heat})> _routines;
+ List<({Routine routine, RoutineHeat heat})> get routines {
+  if (_routines is EqualUnmodifiableListView) return _routines;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_routines);
 }
 
-abstract class _Importing implements RoutinesWithHeatState {
-  const factory _Importing({required final RoutineResult result}) =
-      _$ImportingImpl;
 
-  RoutineResult get result;
-  @JsonKey(ignore: true)
-  _$$ImportingImplCopyWith<_$ImportingImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+/// Create a copy of RoutinesWithHeatState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$LoadedCopyWith<_Loaded> get copyWith => __$LoadedCopyWithImpl<_Loaded>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loaded&&const DeepCollectionEquality().equals(other._routines, _routines));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_routines));
+
+@override
+String toString() {
+  return 'RoutinesWithHeatState.loaded(routines: $routines)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$LoadedImplCopyWith<$Res> {
-  factory _$$LoadedImplCopyWith(
-          _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
-      __$$LoadedImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({List<({RoutineHeat heat, Routine routine})> routines});
+abstract mixin class _$LoadedCopyWith<$Res> implements $RoutinesWithHeatStateCopyWith<$Res> {
+  factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) = __$LoadedCopyWithImpl;
+@useResult
+$Res call({
+ List<({Routine routine, RoutineHeat heat})> routines
+});
+
+
+
+
+}
+/// @nodoc
+class __$LoadedCopyWithImpl<$Res>
+    implements _$LoadedCopyWith<$Res> {
+  __$LoadedCopyWithImpl(this._self, this._then);
+
+  final _Loaded _self;
+  final $Res Function(_Loaded) _then;
+
+/// Create a copy of RoutinesWithHeatState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? routines = null,}) {
+  return _then(_Loaded(
+null == routines ? _self._routines : routines // ignore: cast_nullable_to_non_nullable
+as List<({Routine routine, RoutineHeat heat})>,
+  ));
 }
 
-/// @nodoc
-class __$$LoadedImplCopyWithImpl<$Res>
-    extends _$RoutinesWithHeatStateCopyWithImpl<$Res, _$LoadedImpl>
-    implements _$$LoadedImplCopyWith<$Res> {
-  __$$LoadedImplCopyWithImpl(
-      _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? routines = null,
-  }) {
-    return _then(_$LoadedImpl(
-      null == routines
-          ? _value._routines
-          : routines // ignore: cast_nullable_to_non_nullable
-              as List<({RoutineHeat heat, Routine routine})>,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl(final List<({RoutineHeat heat, Routine routine})> routines)
-      : _routines = routines;
 
-  final List<({RoutineHeat heat, Routine routine})> _routines;
-  @override
-  List<({RoutineHeat heat, Routine routine})> get routines {
-    if (_routines is EqualUnmodifiableListView) return _routines;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_routines);
-  }
+class _Error implements RoutinesWithHeatState {
+  const _Error(this.f);
+  
 
-  @override
-  String toString() {
-    return 'RoutinesWithHeatState.loaded(routines: $routines)';
-  }
+ final  Failure f;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LoadedImpl &&
-            const DeepCollectionEquality().equals(other._routines, _routines));
-  }
+/// Create a copy of RoutinesWithHeatState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ErrorCopyWith<_Error> get copyWith => __$ErrorCopyWithImpl<_Error>(this, _$identity);
 
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_routines));
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
-      __$$LoadedImplCopyWithImpl<_$LoadedImpl>(this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(RoutineResult result) importing,
-    required TResult Function(
-            List<({RoutineHeat heat, Routine routine})> routines)
-        loaded,
-    required TResult Function(Failure f) error,
-  }) {
-    return loaded(routines);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(RoutineResult result)? importing,
-    TResult? Function(List<({RoutineHeat heat, Routine routine})> routines)?
-        loaded,
-    TResult? Function(Failure f)? error,
-  }) {
-    return loaded?.call(routines);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(RoutineResult result)? importing,
-    TResult Function(List<({RoutineHeat heat, Routine routine})> routines)?
-        loaded,
-    TResult Function(Failure f)? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded(routines);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Importing value) importing,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-  }) {
-    return loaded(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Importing value)? importing,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-  }) {
-    return loaded?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Importing value)? importing,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.f, f) || other.f == f));
 }
 
-abstract class _Loaded implements RoutinesWithHeatState {
-  const factory _Loaded(
-          final List<({RoutineHeat heat, Routine routine})> routines) =
-      _$LoadedImpl;
 
-  List<({RoutineHeat heat, Routine routine})> get routines;
-  @JsonKey(ignore: true)
-  _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+int get hashCode => Object.hash(runtimeType,f);
+
+@override
+String toString() {
+  return 'RoutinesWithHeatState.error(f: $f)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$ErrorImplCopyWith<$Res> {
-  factory _$$ErrorImplCopyWith(
-          _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
-      __$$ErrorImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({Failure f});
-}
+abstract mixin class _$ErrorCopyWith<$Res> implements $RoutinesWithHeatStateCopyWith<$Res> {
+  factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) = __$ErrorCopyWithImpl;
+@useResult
+$Res call({
+ Failure f
+});
 
+
+
+
+}
 /// @nodoc
-class __$$ErrorImplCopyWithImpl<$Res>
-    extends _$RoutinesWithHeatStateCopyWithImpl<$Res, _$ErrorImpl>
-    implements _$$ErrorImplCopyWith<$Res> {
-  __$$ErrorImplCopyWithImpl(
-      _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
-      : super(_value, _then);
+class __$ErrorCopyWithImpl<$Res>
+    implements _$ErrorCopyWith<$Res> {
+  __$ErrorCopyWithImpl(this._self, this._then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? f = null,
-  }) {
-    return _then(_$ErrorImpl(
-      null == f
-          ? _value.f
-          : f // ignore: cast_nullable_to_non_nullable
-              as Failure,
-    ));
-  }
+  final _Error _self;
+  final $Res Function(_Error) _then;
+
+/// Create a copy of RoutinesWithHeatState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? f = null,}) {
+  return _then(_Error(
+null == f ? _self.f : f // ignore: cast_nullable_to_non_nullable
+as Failure,
+  ));
 }
 
-/// @nodoc
 
-class _$ErrorImpl implements _Error {
-  const _$ErrorImpl(this.f);
-
-  @override
-  final Failure f;
-
-  @override
-  String toString() {
-    return 'RoutinesWithHeatState.error(f: $f)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ErrorImpl &&
-            (identical(other.f, f) || other.f == f));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, f);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
-      __$$ErrorImplCopyWithImpl<_$ErrorImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(RoutineResult result) importing,
-    required TResult Function(
-            List<({RoutineHeat heat, Routine routine})> routines)
-        loaded,
-    required TResult Function(Failure f) error,
-  }) {
-    return error(f);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(RoutineResult result)? importing,
-    TResult? Function(List<({RoutineHeat heat, Routine routine})> routines)?
-        loaded,
-    TResult? Function(Failure f)? error,
-  }) {
-    return error?.call(f);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(RoutineResult result)? importing,
-    TResult Function(List<({RoutineHeat heat, Routine routine})> routines)?
-        loaded,
-    TResult Function(Failure f)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(f);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Importing value) importing,
-    required TResult Function(_Loaded value) loaded,
-    required TResult Function(_Error value) error,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_Loading value)? loading,
-    TResult? Function(_Importing value)? importing,
-    TResult? Function(_Loaded value)? loaded,
-    TResult? Function(_Error value)? error,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Importing value)? importing,
-    TResult Function(_Loaded value)? loaded,
-    TResult Function(_Error value)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
 }
 
-abstract class _Error implements RoutinesWithHeatState {
-  const factory _Error(final Failure f) = _$ErrorImpl;
-
-  Failure get f;
-  @JsonKey(ignore: true)
-  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on

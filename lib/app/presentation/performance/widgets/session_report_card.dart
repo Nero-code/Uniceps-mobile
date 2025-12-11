@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/sessions_report.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class SessionReportCard extends StatelessWidget {
-  const SessionReportCard({
-    super.key,
-    required this.report,
-  });
+  const SessionReportCard({super.key, required this.report});
   final SessionsReport report;
 
   @override
@@ -17,16 +14,10 @@ class SessionReportCard extends StatelessWidget {
       width: screenSize.width,
       margin: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
       padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(15),
-      ),
+      decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(15)),
       child: Column(
         children: [
-          Text(
-            locale.sessionsReport,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
+          Text(locale.sessionsReport, style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8.0),
           Row(
             children: [
@@ -87,7 +78,7 @@ class SessionReportCard extends StatelessWidget {
                     SizedBox.square(
                       dimension: screenSize.width * .2,
                       child: CircularProgressIndicator(
-                        color: report.color.withOpacity(0.3),
+                        color: report.color.withValues(alpha: 0.7),
                         value: report.value,
                         backgroundColor: Colors.white,
                         strokeWidth: 10,
@@ -97,10 +88,7 @@ class SessionReportCard extends StatelessWidget {
                     ),
                     Column(
                       children: [
-                        Text(
-                          locale.sessions,
-                          style: const TextStyle(fontSize: 10),
-                        ),
+                        Text(locale.sessions, style: const TextStyle(fontSize: 10)),
                         Text(
                           '${report.sessionsCount}',
                           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -111,23 +99,21 @@ class SessionReportCard extends StatelessWidget {
                 ),
               ),
               Expanded(
-                  child: Column(
-                children: [
-                  // Icon(
-                  //   Icons.local_fire_department_rounded,
-                  //   color: report.color,
-                  //   size: 35,
-                  // ),
-                  Text(
-                    locale.progressRate,
-                    style: const TextStyle(fontSize: 10),
-                  ),
-                  Text(
-                    formatNum(report.progressRate),
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              )),
+                child: Column(
+                  children: [
+                    // Icon(
+                    //   Icons.local_fire_department_rounded,
+                    //   color: report.color,
+                    //   size: 35,
+                    // ),
+                    Text(locale.progressRate, style: const TextStyle(fontSize: 10)),
+                    Text(
+                      formatNum(report.progressRate),
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ],

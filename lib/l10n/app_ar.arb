@@ -1,0 +1,299 @@
+{
+  "hello": "مرحبا, ",
+  
+  "welcome": "اهلا بك",
+  "signin": "تسجيل الدخول",
+  "login": "تسجيل الدخول",
+  "forgotPassword": "نسيت كلمة السر؟",
+  "email": "البريد الالكتروني",
+  "emailError": "الرجاء ادخال البريد الالكتروني",
+  "password": "كلمة السر",
+  "passwordError": "الرجاء ادخال كلمة السر",
+  "verify": "تأكيد",
+  "verifyCode": "تأكيد الكود",
+  "code": "الكود",
+  "codeError": "الكود خاطئ!",
+  "changePassword": "تغيير كلمة السر",
+  "gymBoxTitle": "الرجاء ادخال الكود المأخوذ من النادي",
+  "authBoxTitle": "الرجاء ادخال البريد الالكتروني",
+  "profileTitle": "اخبرنا عن نفسك",
+  
+  "ok": "موافق",
+  "no": "لا",
+  "or": "أو",
+  "cancel": "الغاء",
+  "skip": "تخطي <",
+  "confirm": "تأكيد",
+  "add": "اضافة",
+  "edit": "تعديل",
+  "update": "تعديل",
+  "reorder": "اعادة ترتيب",
+  "newVersion": "يوجد تحديث جديد!",
+  "save": "حفظ",
+  "level": "المستوى:",
+  "apply" : "تطبيق",
+  "search": "بحث",
+  "active": "فعال",
+  "nothingChanged": "لا يوجد تغيير في البيانات",
+  "logout": "تسجيل الخروج",
+  "logoutAlert": "تسجيل الخروج؟",
+  "logoutAlertContents": "انت الأن على وشك تسجيل الخروج, قد تتعرض معلوماتك للحذف, هل انت متأكد؟",
+  "download":"تنزيل",
+  "rename": "تغيير الاسم",
+  "setCurrent": "تفعيل",
+  "remove": "ازالة",
+  "delete": "حذف",
+  "finish": "انهاء",
+  "finishAlertContent": "هل انتهيت من التدريب؟ سيتم اغلاق هذه الجلسة وتصنيفها ك منتهية!",
+  "practiceNotificationBody": "هناك جلسة تدريب نشطة - عد وواصل التقدم",
+  "welldone": "احسنت!",
+  "great": "رائع!",
+  "record": "سجل",
+  "before": "قبل",
+  "after": "بعد",
+  "applyToAll": "تطبيق للكل",
+  "dayLimitAlert": "سجل دخولك لتحصل على 3 ايام مجانية",
+  "routineLimitAlert": "سجل دخولك لتتمكن من تصنيع البرامج",
+  "captainUniUpgradeQuote": "هل أنت مستعد لتنطلق نحو القمة؟\n​هذه ليست مجرد ترقية... إنها الخريطة الحقيقية لنسختك الأقوى والأذكى",
+  "importRoutine": "استيراد برنامج",
+  "importRoutineAlertContent": "تاكد من وجود ملف ذو لاحقة .unx في جهازك, ثم قم باستيراده.",
+  "exportRoutine": "اصدار برنامج",
+  "exportRoutineAlertContent": "هل تريد اصدار البرنامج",
+  "exportRoutineAuthAlertContent": "الرجاء تسجيل الدخول اولا كي تصدر البرنامج",
+  
+  "sessions": "الجلسات",
+  "sessionsReport": "تقرير الجلسات",
+  "weightsReport": "تقرير الاوزان",
+  "exerciseDensity": "كثافة التمرين",
+  "exerciseIntensity": "شدة التمرين",
+  "exerciseVolume": "حجم التمرين",
+  "physicalReport": "التقرير الجسدي",
+  "progressRate": "معدل الانجاز",
+
+  "price": "السعر",
+  "discount":"الحسم",
+  "status": "الحالة",
+  "address": "العنوان",
+  "owner": "المالك",
+  "telephone": "الهاتف",
+  "subscription": "الأشتراكات",
+  "subscriptions": "الأشتراكات",
+  "balance": "الرصيد",
+  "sport": "الرياضة",
+  "measurements": "القياسات",
+  "language": "اللغة",
+  "calender": "التقويم",
+  "list": "قائمة",
+  "attendenceLog":"سجل الحضور",
+  "addExercise": "اضافة تمرين",
+  "addRoutine": "اضافة برنامج",
+
+  "scrTitleMyRoutines": "البرامج الرياضية",
+  "scrTitleProfile": "الحساب الشخصي",
+  "scrTitleSettings": "الاعدادات",
+  "scrTitlePerformance": "الاداء",
+  "scrTitleCompareTool": "اداة المقارنة",
+  "setsAndRounds":"العدات والجولات",
+
+  "noFileSelected": "لم يتم تحديد ملف",
+  "unsupportedVersion": "اصدار الملف غير مدعوم",
+  "parserMismatch": "محتويات الملف غير متوقعة",
+  "corruptedFile": "تعذر الفتح, الملف تالف",
+
+  "startingImport": "جاري فتح الملف...",
+  "gettingImagesImport": "جاري تنزيل الصور...",
+  "addingDaysImport": "جاري اضافة الايام...",
+  "addingItemsImport": "جاري اضافة التمارين...",
+  "addingSetsImport": "جاري اضافة الجولات...",
+  "done": "تمت العملية بنجاح",
+
+  "chooseLang": "اختر اللغة:",
+  "about": "حول",
+  "gyms": "النوادي",
+  "trainer": "المدرب",
+
+  "height": "الطول",
+  "heightError": "ضع طولك",
+  "weight": "الوزن",
+  "weightError": "",
+  "lastWeight": "آخر وزن",
+
+  "arms": "الذراعين",
+  "lArm": "ذراع يسرى",
+  "rArm": "ذراع يمنى",
+
+  "humerus": "الساعدين",
+  "lHumerus": "ساعد أيسر",
+  "rHumerus": "ساعد أيمن",
+
+  "legs": "الارجل",
+  "lLeg": "ساق يسرى",
+  "rLeg": "ساق يمنى",
+
+  "thighs": "الفخذين",
+  "lThigh": "فخذ أيسر",
+  "rThigh": "فخذ أيمن",
+  "nick": "العنق",
+  "shoulders": "الاكتاف",
+  "waist": "الخصر",
+  "chest": "الصدر",
+  "hips": "الارداف",
+  "checkDate": "تاريخ الصدور",
+
+  "enteredAt": "وقت الدخول",
+  "exitedAt": "وقت الخروج",
+  "codeNum": "رقم الكود",
+
+  "reps": "العدات",
+
+  "empty": "المحتوى فارغ",
+  "emptySubs": "لا يوجد اشتراكات",
+  "emptyMeasure": "لا يوجد قياسات لمقارنتها, ادخل مقاسات جسمك لنرى النتائج",
+  "emptyExcercises": "لا يوجد تمارين",
+  "emptySubscriptions": "لا يوجد اشتراكات",
+  "emptyMeasurements": "لا يوجد قياسات حاليا",
+  "emptyExercisesList": "لا يوجد تمارين لهذه المجموعة",
+  "emptyGymsList": "لا يوجد نوادي",
+  "emptyHandshakes": "لست عضوا في اي نادي",
+  "emptyTriningDaysMap": "لا يوجد برنامج تدريبي",
+  "emptyHomeCard": "اختر احد النوادي لعرضه",
+  "emptyAttendence": "لا يوجد سجل حضور",
+  "emptyRoutineItems": "لا يوجد عناصر, اضغط على زر (+) لاضافة تمارين",
+  "emptyDays": "لا يوجد ايام, اضغط على + لاضافة يوم!",
+  "emptyRoutines": "هيا لنبني برنامج تدريبي مميز يحقق اهدافنا!",
+
+  "sessionsReportNoValues": "لا يوجد جلسات لهذا البرنامج, عد بعد التمرين!",
+  "sessionsReportInvalidValues": "قيم الجلسة غير صحيحة!",
+  "logsReportNoValues": "لا يوجد تقرير اداء لهذا البرنامج",
+  "logsReportInvalidValues": "قيم الاداء غير صحيحة!",
+  "physicalReportNoValues": "لا يوجد قياسات لديك, قم بادخال قياس!",
+  "physicalReportInvalidValues": "قيم القياسات غير صحيحة!",
+  "physicalReportDisclaimer": "ملاحظة: هذه القيم ليست دقيقة, يرجى مراجعة مختصين للتاكد من هذه القيم",
+  
+  "error": "حدث خطأ ما",
+  "profile": "الحساب",
+
+  "pName": "الاسم",
+  "pNameError": "الرجاء ادخال الاسم الكامل",
+  "phoneNum": "رقم الهاتف",
+  "phoneNumError": "الرجاء ادخال رقم الهاتف",
+  "birthDate": "تاريخ الميلاد:",
+  "birthDateError": "الرجاء ادخال سنة الميلاد",
+  "gender": "الجنس:",
+  "genderError": "الرجاء اختيار الجنس",
+
+  "male": "ذكر",
+  "female": "انثى",
+
+  "payment": "الدفعة",
+  "paid": "مدفوع",
+  "notPaid": "غير مدفوع",
+  "remaining": "المتبقي",
+
+  "versionInfo": "معلومات الاصدار",
+  "version": "رقم الاصدار",
+  "versionDate": "تاريخ الاصدار",
+  "developers" : "المطورون",
+
+  "support": "الدعم",
+  "supportPage": "صفحتنا",
+  "faqs": "الاسئلة الشائعة",
+
+  "privacy": "الخصوصية",
+  "privacyPolicy": "سياسة الخصوصية",
+  "userAgreement": "اتفاقية المستخدم",
+  "termsOfUse": "شروط الاستخدام",
+
+  "noGymSpecified": "لست مسجلا في اي نادي",
+  "noTrainingProgram": "ليس لديك برنامج تدريبي",
+
+  "errNoInternet":"لا يوجد اتصال بالانترنت",
+  "errServerException":"حدث خطأ في الخادم, الرجاء المحاولة لاحقا",
+  "errUnknown":"حدث خطأ غير معروف",
+  "errOpenSessionDelete": "لا يمكن الحذف بوجود جلسة فعالة!",
+
+  "endOfSubDate": "تاريخ نهاية الاشتراك",
+  "dayQuete": "ماذا سنستهدف اليوم؟",
+  "letsStart": "هيا لنبدأ...",
+
+  "day":"يوم",
+  "date":"التاريخ",
+  "map": "الخطة اليومية",
+  "availableGyms": "المنضمون لنا",
+
+  "deleteBtn": "حذف الحساب",
+  "deleteAccount": "حذف الحساب؟",
+  "deleteAccountContent": "انت الان على وشك حذف الحساب الخاص بك لدينا, هل انت متأكد؟",
+
+  "chackForUpdate": "جاري التحقق من التحديثات...",
+  "gettingRoutine": "جاري تحميل البرنامج...",
+
+  "guestMode": "الدخول كزائر",
+  "guestModeEditErr": "لا يمكن تعديل معلومات الزائر",
+
+
+  "newRoutine": "برنامج",
+  "sortDays": "ترتيب الايام",
+
+  "commingSoon": "قريبا!",
+
+  "captainUni": "كابتن يوني",
+
+  "buyNow": "اشتري الان",
+  "paymentDone": "تم شراء الباقة بنجاح",
+  
+  "paymentDialogContent": "اختر طريقة الدفع المناسبة لك",
+  "cash": "كاش",
+  "card": "بطاقة",
+
+  "buyPlanQuestion": "شراء الباقة؟",
+  "buyPlancontent": "هل انت متاكد من شراء باقة {planName}! المدة الزمنية ستضاف الى المدة القديمة ان وجدت",
+  "@buyPlanContent": {
+    "placeHolders": {
+      "planName": { "type": "string" }
+    }
+  },
+  
+  "memberDurationAlart": "بقي لديك !{count} يوم حتى تاريخ {date}!",
+  "@memberDurationAlart": {
+    "placeHolders": {
+      "count": { "type": "num" },
+      "date": { "type": "string" }
+    }
+  },
+
+  "muscleGroup": "المجموعة العضلية: {group}",
+  "@muscleGroup": {
+    "placeHolders": {
+      "group": { "type": "String" }
+    }
+  },
+
+  "deleteAlertContent": "هل انت متاكد من حذف {item}؟ سيتم حذف كل العناصر المرتبطة بهذا العنصر",
+  "@deleteAlertContent": {
+    "placeHolders": {
+      "item": { "type": "string" }
+    }
+  },
+
+  "setCurrentAlertContent": "هل تريد تفعيل البرنامج {item}؟",
+  "@setCurrentAlertContent": {
+    "placeHolders": {
+      "item": { "type": "string" }
+    }
+  },
+  
+  "premiumReminder": "سوف ينتهي اشتراكك بعد {days} يوم جدد الان!",
+  "@premiumReminder": {
+    "placeHolders": {
+      "days": { "type": "int" }
+    }
+  },
+
+  "signinAlert": "سجل دخولك الان لتصفح كامل التطبيق",
+  "upgrade": "تفعيل",
+  "upgradeAlert": "فعل باقة Premium من اجل افضل استفادة",
+  "premiumAlertContent": "استمتع بكامل الميزات مع باقة Premium",
+
+  "captainUniAboutContent": "أهلين فيك، أنا الكابتن يوني.\nأنا الشخصية يلي رح ترافقك بتطبيق يوني سيبس، وشغلي إني سهّل عليك كل خطوة وتخلّي تجربتك مريحة وواضحة.\nدوري الأساسي إني عرّفك على التطبيق، وورجيك كيف تستخدم كل قسم فيه بدون تعقيد.\nوبساعدك كمان تختار البرنامج الرياضي اللي بناسبك، لحتى تبلّش بطريقة صحيحة ومريحة لإلك.\nمع كل تمرين بتعمله، أنا بجمّع إحصاءاتك وبورجيك نتائجك لتشوف تقدّمك يوم بعد يوم.\nما بوعدك تغيّر حياتك بيوم وليلة… بس بوعدك كون موجود جنبك بكل مرحلة.\nأنا هون لوجّهك، أشرحلك، وشجّعك، لحتى تستفيد من التطبيق لأقصى درجة.\nوبالنهاية… اعتبرني صديق وخبير عم يمشي معك خطوة بخطوة، ومبسوط يشوفك عم تتقدم."
+}

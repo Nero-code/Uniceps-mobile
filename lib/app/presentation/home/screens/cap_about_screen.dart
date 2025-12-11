@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/core/constants/cap_images.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:uniceps/core/constants/cap_images.dart';import 'package:uniceps/l10n/app_localizations.dart';
 
 class CapAboutScreen extends StatelessWidget {
   const CapAboutScreen({super.key});
