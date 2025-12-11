@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:logger/logger.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:uniceps/app/data/models/routine_models/extensions.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
 import 'package:uniceps/app/data/models/routine_result.dart';
@@ -21,15 +22,15 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
 
   final List<({Routine routine, RoutineHeat heat})> routines = [];
 
-  RoutineWithHeatRepo(
-      {required IRoutineManagementLocalSourceContract localSource,
-      required UniFileManager fileParseService,
-      required MediaHelper mediaHelper,
-      required Logger logger})
-      : _localSource = localSource,
-        _unifileManager = fileParseService,
-        _mediaHelper = mediaHelper,
-        _logger = logger;
+  RoutineWithHeatRepo({
+    required IRoutineManagementLocalSourceContract localSource,
+    required UniFileManager fileParseService,
+    required MediaHelper mediaHelper,
+    required Logger logger,
+  }) : _localSource = localSource,
+       _unifileManager = fileParseService,
+       _mediaHelper = mediaHelper,
+       _logger = logger;
 
   @override
   Future<Either<Failure, List<({RoutineHeat heat, Routine routine})>>> getAllRoutinesWithHeat() async {
@@ -112,7 +113,7 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
   Stream<RoutineResult> importRoutineFromFile() async* {
     try {
       final file = await _unifileManager.importFile();
-      if (file.meta.fileType != FileType.routine) throw ParserMismatchExeption();
+      if (file.meta.fileType != FileType.routine) throw ParserMismatchException();
       final routine = RoutineDto.fromJson(file.data);
       // final routine = await _fileParseService.extract<RoutineDto>(file, RoutineDto.fromJson);
 
@@ -135,55 +136,49 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
       yield const RoutineResult(progress: 1, stage: Stage.done);
       return;
     } on NoInternetException {
-      print('NoInternetException');
-      yield const RoutineResult(
-        progress: -1,
-        stage: Stage.error,
-        error: FileParseFailure.fOffline(),
-      );
+      _logger.d('NoInternetException');
+      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.fOffline());
     } on OfflineFailure {
-      print('OfflineFailure');
-      yield const RoutineResult(
-        progress: -1,
-        stage: Stage.error,
-        error: FileParseFailure.fOffline(),
-      );
-    } on ParserMismatchExeption {
-      yield const RoutineResult(
-        progress: -1,
-        stage: Stage.error,
-        error: FileParseFailure.parserMismatch(),
-      );
+      _logger.d('OfflineFailure');
+      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.fOffline());
+    } on ParserMismatchException {
+      _logger.d('ParserMismatchException');
+      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.parserMismatch());
     } on CorruptedFileException {
-      yield const RoutineResult(
-        progress: -1,
-        stage: Stage.error,
-        error: FileParseFailure.corruptedFile(),
-      );
+      _logger.d('CorruptedFileException');
+      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.corruptedFile());
     } on NoFileSelectedException {
-      yield const RoutineResult(
-        progress: -1,
-        stage: Stage.error,
-        error: FileParseFailure.noFileSelected(),
-      );
+      _logger.d('NoFileSelectedException');
+      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.noFileSelected());
     } on UnsupportedException {
-      yield const RoutineResult(
-        progress: -1,
-        stage: Stage.error,
-        error: FileParseFailure.unsupportedVersion(),
-      );
+      _logger.d('UnsupportedException');
+      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.unsupportedVersion());
     } catch (e) {
-      print(e.toString());
-      yield const RoutineResult(
-        progress: -1,
-        stage: Stage.error,
-        error: FileParseFailure.fOffline(),
-      );
+      _logger.e('Error in importRoutineFromFile', error: e);
+      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.fOffline());
     }
   }
 
   @override
   Future<bool> exportRoutineToFile(int routineId) async {
+    // Use .storage, which generally maps to the appropriate storage permissions
+    // based on the underlying Android SDK version.
+    PermissionStatus status = await Permission.storage.status;
+
+    // If permanently denied, guide the user to App Settings
+    if (status.isPermanentlyDenied) {
+      // Show a dialog explaining why permission is needed, then call openAppSettings()
+      await openAppSettings();
+      return false;
+    }
+    if (!status.isGranted) {
+      status = await Permission.storage.request();
+      if (!status.isGranted) {
+        _logger.e("User did not grant storage permission");
+        return false;
+      }
+    }
+
     try {
       final routine = await _localSource.getFullRoutine(routineId);
       _unifileManager.exportRoutineToFile(fileName: routine.name, data: routine.toJson());

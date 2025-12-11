@@ -33,7 +33,7 @@
     <application
         android:label="Uniceps"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"

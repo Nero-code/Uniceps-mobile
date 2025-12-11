@@ -59,6 +59,7 @@
   "importRoutineAlertContent": "Make sure you have a file with .unx extension, then import it.",
   "exportRoutine": "Export Routine",
   "exportRoutineAlertContent": "Do you want to export Routine",
+  "exportRoutineAuthAlertContent": "Please login to export this routine",
   
   "sessions": "Sessions",
   "sessionsReport": "Sessions Report",

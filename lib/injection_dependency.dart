@@ -59,8 +59,8 @@ import 'package:uniceps/app/domain/contracts/profile/i_profile_service.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_exercises_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_days_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_items_contract.dart';
-import 'package:uniceps/app/domain/contracts/routine/i_routine_sets_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_management_contract.dart';
+import 'package:uniceps/app/domain/contracts/routine/i_routine_sets_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_with_heat_contract.dart';
 import 'package:uniceps/app/services/captian_quotes_service.dart';
 import 'package:uniceps/app/services/update_service.dart';
@@ -85,7 +85,8 @@ Future<void> init() async {
   final imagesCache = await Hive.openBox<Uint8List>("ExerciseImages");
 
   sl.registerLazySingleton<MediaHelper>(
-      () => ImageMediaHelper(imagesCache: imagesCache, checker: sl(), client: sl(), logger: sl()));
+    () => ImageMediaHelper(imagesCache: imagesCache, checker: sl(), client: sl(), logger: sl()),
+  );
 
   /////////
   ////////
@@ -99,14 +100,17 @@ Future<void> init() async {
   sl.registerLazySingleton<IProfileLocalSource>(() => ProfileLocalSource(prefs: prefs, logger: sl()));
 
   sl.registerLazySingleton<ITSessionLocalSourceContract>(
-      () => TSessionLocalSource(database: sl(), imagesCache: imagesCache, logger: sl()));
+    () => TSessionLocalSource(database: sl(), imagesCache: imagesCache, logger: sl()),
+  );
 
   //  R O U T I N E   S O U R C E S
   sl.registerLazySingleton<IRoutineManagementLocalSourceContract>(
-      () => RoutineManagementLocalSourceImpl(database: sl(), logger: sl()));
+    () => RoutineManagementLocalSourceImpl(database: sl(), logger: sl()),
+  );
   sl.registerLazySingleton<IRoutineDaysLocalSourceContract>(() => RoutineDaysLocalSourceImpl(dataBase: sl()));
   sl.registerLazySingleton<IRoutineItemsLocalSourceContract>(
-      () => RoutineItemsLocalSourceImpl(database: sl(), imagesCache: imagesCache));
+    () => RoutineItemsLocalSourceImpl(database: sl(), imagesCache: imagesCache),
+  );
   sl.registerLazySingleton<IRoutineSetsLocalSourceContract>(() => RoutineSetsLocalSourceImpl(database: sl()));
   // sl.registerLazySingleton<IExercisesLocalSourceContract>(() => ExercisesLocalSource(database: sl()));
 
@@ -143,40 +147,40 @@ Future<void> init() async {
 
   sl.registerLazySingleton<IPracticeContract>(() => PracticeRepo(localSource: sl()));
   sl.registerLazySingleton<IRoutineManagementContract>(
-      () => RoutineManagementRepo(localSource: sl(), internet: sl(), clientHelper: sl()));
+    () => RoutineManagementRepo(localSource: sl(), internet: sl(), clientHelper: sl()),
+  );
   sl.registerLazySingleton<IRoutineWithHeatContract>(
-      () => RoutineWithHeatRepo(localSource: sl(), mediaHelper: sl(), fileParseService: sl(), logger: sl()));
+    () => RoutineWithHeatRepo(localSource: sl(), mediaHelper: sl(), fileParseService: sl(), logger: sl()),
+  );
   sl.registerLazySingleton<IRoutineDaysContract>(() => RoutineDaysRepo(localSource: sl(), logger: sl()));
   sl.registerLazySingleton<IRoutineItemsContract>(() => RoutineItemsRepo(localSource: sl(), mediaHelper: sl()));
   sl.registerLazySingleton<IRoutineSetsContract>(() => RoutineSetsRepo(localSource: sl(), logger: sl()));
   sl.registerLazySingleton<IExercisesContract>(() => ExercisesRepo(internet: sl(), remoteSource: sl()));
 
   //  A U T H   R E P O
-  sl.registerLazySingleton<IOTPAuthRepo>(() => EmailAuthRepo(
-        otpAuthSource: sl(),
-        tokenService: sl(),
-        accountLocalSource: sl(),
-        connection: sl(),
-        logger: sl(),
-      ));
-  sl.registerLazySingleton<IAccountService>(() => AccountRepo(
-        localSource: sl(),
-        remoteSource: sl(),
-        checker: sl(),
-        logger: sl(),
-      ));
+  sl.registerLazySingleton<IOTPAuthRepo>(
+    () => EmailAuthRepo(
+      otpAuthSource: sl(),
+      tokenService: sl(),
+      accountLocalSource: sl(),
+      connection: sl(),
+      logger: sl(),
+    ),
+  );
+  sl.registerLazySingleton<IAccountService>(
+    () => AccountRepo(localSource: sl(), remoteSource: sl(), checker: sl(), logger: sl()),
+  );
 
   //  M E A S U R E M E N T S   R E P O
-  sl.registerLazySingleton<IMeasurementContract>(() => MeasurementsRepo(
-        localSource: sl(),
-        logger: sl(),
-      ));
-  sl.registerLazySingleton<IPerformanceContract>(() => PerformanceRepo(
-        profileLocalSource: sl(),
-        routineLocalSource: sl(),
-        tSessionsLocalSource: sl(),
-        measurementsLocalSource: sl(),
-      ));
+  sl.registerLazySingleton<IMeasurementContract>(() => MeasurementsRepo(localSource: sl(), logger: sl()));
+  sl.registerLazySingleton<IPerformanceContract>(
+    () => PerformanceRepo(
+      profileLocalSource: sl(),
+      routineLocalSource: sl(),
+      tSessionsLocalSource: sl(),
+      measurementsLocalSource: sl(),
+    ),
+  );
 
   /////////
   ////////
@@ -239,13 +243,14 @@ Future<void> init() async {
     ),
   );
 
-  sl.registerLazySingleton(() => UniFileManager());
+  sl.registerLazySingleton(() => UniFileManager(logger: sl()));
 
   sl.registerLazySingleton<UpdateService>(() => UpdateService(connectionChecker: sl(), client: sl()));
 
   sl.registerLazySingleton<TSessionSyncContract>(
-      () => TSessionSyncService(database: sl(), client: sl(), connectionChecker: sl(), logger: sl()),
-      dispose: (param) => param.dispose());
+    () => TSessionSyncService(database: sl(), client: sl(), connectionChecker: sl(), logger: sl()),
+    dispose: (param) => param.dispose(),
+  );
 
   sl.registerLazySingleton(() => CaptianQuotesService(prefs: sl()));
 

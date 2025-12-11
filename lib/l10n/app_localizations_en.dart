@@ -188,6 +188,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportRoutineAlertContent => 'Do you want to export Routine';
 
   @override
+  String get exportRoutineAuthAlertContent =>
+      'Please login to export this routine';
+
+  @override
   String get sessions => 'Sessions';
 
   @override

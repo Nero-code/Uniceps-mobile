@@ -188,6 +188,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exportRoutineAlertContent => 'هل تريد اصدار البرنامج';
 
   @override
+  String get exportRoutineAuthAlertContent =>
+      'الرجاء تسجيل الدخول اولا كي تصدر البرنامج';
+
+  @override
   String get sessions => 'الجلسات';
 
   @override

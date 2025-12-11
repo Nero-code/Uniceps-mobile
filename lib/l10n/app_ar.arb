@@ -59,6 +59,7 @@
   "importRoutineAlertContent": "تاكد من وجود ملف ذو لاحقة .unx في جهازك, ثم قم باستيراده.",
   "exportRoutine": "اصدار برنامج",
   "exportRoutineAlertContent": "هل تريد اصدار البرنامج",
+  "exportRoutineAuthAlertContent": "الرجاء تسجيل الدخول اولا كي تصدر البرنامج",
   
   "sessions": "الجلسات",
   "sessionsReport": "تقرير الجلسات",
@@ -99,12 +100,12 @@
   "parserMismatch": "محتويات الملف غير متوقعة",
   "corruptedFile": "تعذر الفتح, الملف تالف",
 
-"startingImport": "جاري فتح الملف...",
-"gettingImagesImport": "جاري تنزيل الصور...",
-"addingDaysImport": "جاري اضافة الايام...",
-"addingItemsImport": "جاري اضافة التمارين...",
-"addingSetsImport": "جاري اضافة الجولات...",
-"done": "تمت العملية بنجاح",
+  "startingImport": "جاري فتح الملف...",
+  "gettingImagesImport": "جاري تنزيل الصور...",
+  "addingDaysImport": "جاري اضافة الايام...",
+  "addingItemsImport": "جاري اضافة التمارين...",
+  "addingSetsImport": "جاري اضافة الجولات...",
+  "done": "تمت العملية بنجاح",
 
   "chooseLang": "اختر اللغة:",
   "about": "حول",

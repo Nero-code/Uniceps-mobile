@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/core/widgets/account_limit_alert.dart';
 import 'package:uniceps/core/widgets/box_botton.dart';
+import 'package:uniceps/core/widgets/premium_alert.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class PracticePanel extends StatelessWidget {
   const PracticePanel({
@@ -37,7 +41,7 @@ class PracticePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
-    // final locale = AppLocalizations.of(context)!;
+    final locale = AppLocalizations.of(context)!;
     return Container(
       width: screenSize.width,
       height: screenSize.height * .30,
@@ -56,10 +60,7 @@ class PracticePanel extends StatelessWidget {
                         strokeCap: StrokeCap.round,
                         color: Theme.of(context).colorScheme.secondary,
                         strokeWidth: 5,
-                        value: state.maybeWhen(
-                          loaded: (session) => session.progress,
-                          orElse: () => 0.0,
-                        ),
+                        value: state.maybeWhen(loaded: (session) => session.progress, orElse: () => 0.0),
                       ),
                     ),
                     BoxButton(
@@ -77,37 +78,41 @@ class PracticePanel extends StatelessWidget {
               },
             ),
           ),
-          Builder(builder: (context) {
-            // final acc = context.watch<AccountCubit>();
-            final mem = context.watch<MembershipBloc>();
+          Builder(
+            builder: (context) {
+              final acc = context.watch<AccountCubit>();
+              final mem = context.watch<MembershipBloc>();
 
-            return Align(
-              alignment: Alignment.lerp(Alignment.bottomLeft, Alignment.topCenter, .20)!,
-              child: Badge(
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                backgroundColor: Colors.amber,
-                isLabelVisible: mem.state.maybeWhen(orElse: () => false, error: (_) => true),
-                label: const Image(
-                  image: AssetImage(IMG_PREMIUM),
-                  color: Colors.white,
-                  width: 15,
-                  height: 15,
-                ),
-                child: BoxButton(
-                  isCircle: true,
-                  width: smallBtnSize,
-                  height: smallBtnSize,
-                  background: btnBackgroundColor,
-                  onTap: mem.state.whenOrNull(loaded: (_) => onAnalytics),
-                  child: Icon(
-                    Icons.bar_chart_rounded,
-                    size: smallBtnIcon,
-                    color: Colors.orange,
+              final hasAccount = acc.state.maybeWhen(hasAccount: (_) => true, orElse: () => false);
+              final isPremium = mem.state.maybeWhen(loaded: (_) => true, orElse: () => false);
+
+              return Align(
+                alignment: Alignment.lerp(Alignment.bottomLeft, Alignment.topCenter, .20)!,
+                child: Badge(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  backgroundColor: Colors.amber,
+                  isLabelVisible: mem.state.maybeWhen(orElse: () => false, error: (_) => true),
+                  label: const Image(image: AssetImage(IMG_PREMIUM), color: Colors.white, width: 15, height: 15),
+                  child: BoxButton(
+                    isCircle: true,
+                    width: smallBtnSize,
+                    height: smallBtnSize,
+                    background: btnBackgroundColor,
+                    // onTap: mem.state.whenOrNull(loaded: (_) => onAnalytics),
+                    onTap: hasAccount
+                        ? isPremium
+                              ? onAnalytics
+                              : () => showDialog(context: context, builder: (_) => PremiumAlert())
+                        : () => showDialog(
+                            context: context,
+                            builder: (_) => AccountLimitAlert(content: locale.signinAlert),
+                          ),
+                    child: Icon(Icons.bar_chart_rounded, size: smallBtnIcon, color: Colors.orange),
                   ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+          ),
           Align(
             alignment: Alignment.lerp(Alignment.bottomRight, Alignment.topCenter, .20)!,
             child: BoxButton(

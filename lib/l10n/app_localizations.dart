@@ -446,6 +446,12 @@ abstract class AppLocalizations {
   /// **'Do you want to export Routine'**
   String get exportRoutineAlertContent;
 
+  /// No description provided for @exportRoutineAuthAlertContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Please login to export this routine'**
+  String get exportRoutineAuthAlertContent;
+
   /// No description provided for @sessions.
   ///
   /// In en, this message translates to:

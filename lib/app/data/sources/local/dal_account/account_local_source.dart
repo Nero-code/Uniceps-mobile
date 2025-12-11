@@ -24,8 +24,8 @@ class AccountLocalSource implements IAccountLocalSource {
   static const planKey = 'plan';
 
   AccountLocalSource({required FlutterSecureStorage secureStorage, required AppDatabase database})
-      : _secureStorage = secureStorage,
-        _database = database;
+    : _secureStorage = secureStorage,
+      _database = database;
 
   /// ### Get User Account:
   ///
@@ -41,12 +41,12 @@ class AccountLocalSource implements IAccountLocalSource {
   Future<MembershipModel> getCurrentPlan() async {
     final res = await _secureStorage.read(key: planKey);
     if (res == null) {
-      return MembershipModel.free();
+      throw Exception('No plan found');
     }
     final memebership = MembershipModel.fromJson(jsonDecode(res));
     if (DateTime.now().difference(memebership.endDate).inDays > 0) {
       await _secureStorage.delete(key: planKey);
-      return MembershipModel.free();
+      throw Exception('Plan Expired');
     }
     return memebership;
   }

@@ -28,6 +28,7 @@ class RoutineWithHeat extends StatelessWidget {
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       child: Material(
         color: Colors.white,
+        // color: Theme.of(context).colorScheme.surfaceContainerLow,
         shape: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(20)),
           borderSide: BorderSide(color: Colors.grey, width: 0.5),
@@ -74,11 +75,13 @@ class RoutineWithHeat extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(width: 8.0),
-                          Row(children: [
-                            const Icon(Icons.fitness_center, size: 18, color: Colors.red),
-                            const SizedBox(width: 5.0),
-                            Text("${heat.exercises}", style: const TextStyle()),
-                          ]),
+                          Row(
+                            children: [
+                              const Icon(Icons.fitness_center, size: 18, color: Colors.red),
+                              const SizedBox(width: 5.0),
+                              Text("${heat.exercises}", style: const TextStyle()),
+                            ],
+                          ),
                           const SizedBox(width: 8.0),
                           Row(
                             children: [
