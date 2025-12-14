@@ -20,6 +20,8 @@ class AccountUsecases {
 
   Future<Either<Failure, PaymentResponse>> buyPlan(PlanItem item) => _repo.buyPlan(item);
 
+  Future<Either<MembershipFailure, Membership>> notifyNewMembership() => _repo.notifyNewMembership();
+
   Future<Either<Failure, Unit>> logout() => _repo.logout();
 
   Future<Either<Failure, Unit>> deleteAccount() => _repo.deleteAccount();

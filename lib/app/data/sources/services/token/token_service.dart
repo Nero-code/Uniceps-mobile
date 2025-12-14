@@ -8,13 +8,10 @@ import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
 class TokenService {
-  TokenService({
-    required http.Client client,
-    required FlutterSecureStorage storage,
-    required Logger logger,
-  })  : _client = client,
-        _storage = storage,
-        _logger = logger;
+  TokenService({required http.Client client, required FlutterSecureStorage storage, required Logger logger})
+    : _client = client,
+      _storage = storage,
+      _logger = logger;
 
   final http.Client _client;
   final FlutterSecureStorage _storage;
@@ -27,7 +24,7 @@ class TokenService {
     if (isSessionCreated) {
       return _session;
     }
-    throw SessionGenerationException();
+    throw InvalidTokenException();
   }
 
   // bool get isLoggedIn => _refreshToken != null;
@@ -57,10 +54,7 @@ class TokenService {
         _logger.t("result Code : ${res.statusCode}");
         _logger.t("result body : ${res.body}");
         if (res.statusCode == 200 || res.statusCode == 201) {
-          _session = Session(
-            accessToken: jsonDecode(res.body)['access'],
-            createdAt: DateTime.now(),
-          );
+          _session = Session(accessToken: jsonDecode(res.body)['access'], createdAt: DateTime.now());
           _logger.t("createSession => New Session Available (Done)!");
           return true;
         }
@@ -90,8 +84,13 @@ class TokenService {
     if (_session == null) return true;
 
     try {
-      final res = await _client.post(Uri.parse("$API" "$HTTP_REFRESH_TOKEN"),
-          body: jsonEncode({"refresh": refreshToken, "device_token": await FirebaseMessaging.instance.getToken()}));
+      final res = await _client.post(
+        Uri.parse(
+          "$API"
+          "$HTTP_REFRESH_TOKEN",
+        ),
+        body: jsonEncode({"refresh": refreshToken, "device_token": await FirebaseMessaging.instance.getToken()}),
+      );
       if (res.statusCode == 200 || res.statusCode == 201) {
         // final userDto = UserDto.fromJson(res.data);
         // await _storage.setString('refresh', userDto.refreshToken);
@@ -107,8 +106,8 @@ class TokenService {
 
 class Session {
   const Session({required String accessToken, required DateTime createdAt})
-      : _createdAt = createdAt,
-        _accessToken = accessToken;
+    : _createdAt = createdAt,
+      _accessToken = accessToken;
   final String _accessToken;
   final DateTime _createdAt;
 

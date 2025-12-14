@@ -29,7 +29,7 @@ class PlanWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                Radio(value: value, onChanged: (v) => null /*onTap()*/),
+                Radio(value: value),
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [

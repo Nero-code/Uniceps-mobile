@@ -103,22 +103,33 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
         body: BlocConsumer<RoutinesWithHeatBloc, RoutinesWithHeatState>(
           listenWhen: (previous, current) =>
               previous.maybeWhen(loaded: (_) => true, orElse: () => false) &&
-              current.maybeWhen(importing: (_) => true, orElse: () => false),
+              current.maybeWhen(importing: (_) => true, exported: (_) => true, orElse: () => false),
           listener: (context, state) {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) => BlocProvider.value(
-                value: context.read<RoutinesWithHeatBloc>(),
-                child: const RoutineImportProgressDialog(),
+            state.maybeWhen(
+              importing: (_) => showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) => BlocProvider.value(
+                  value: context.read<RoutinesWithHeatBloc>(),
+                  child: const RoutineImportProgressDialog(),
+                ),
               ),
+              exported: (isDone) {
+                if (isDone) {
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(locale.exportRoutineDone)));
+                } else {
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(locale.errExportRoutine)));
+                }
+              },
+              orElse: () => null,
             );
           },
-          buildWhen: (p, c) => c.maybeWhen(importing: (_) => false, orElse: () => true),
+          buildWhen: (p, c) => c.maybeWhen(importing: (_) => false, exported: (_) => false, orElse: () => true),
           builder: (context, state) {
-            return state.map(
-              initial: (_) => const SizedBox(),
-              importing: (_) => const SizedBox(),
+            return state.maybeMap(
+              orElse: () => const SizedBox(),
               loading: (_) => const LoadingIndicator(),
               error: (state) => ReloadScreenWidget(
                 f: state.f,

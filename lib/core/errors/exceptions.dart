@@ -27,7 +27,8 @@ class MethodNotAllowedException implements Exception {}
 // ////////////////////////////////////////////////////////////////////////////
 class EmptyResponseException implements Exception {}
 
-class SessionGenerationException implements Exception {}
+// class SessionGenerationException implements Exception {}
+class InvalidTokenException implements Exception {}
 
 class BadRequestException implements Exception {}
 

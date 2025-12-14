@@ -60,6 +60,9 @@
   "exportRoutine": "Export Routine",
   "exportRoutineAlertContent": "Do you want to export Routine",
   "exportRoutineAuthAlertContent": "Please login to export this routine",
+  "exportRoutineDone": "Exported!, your file is ready",
+  "congrats": "Congratulations",
+  "congratsContent": "Hurray!, Premium Plan activated, all app features are now unlocked, have fun!",
   
   "sessions": "Sessions",
   "sessionsReport": "Sessions Report",
@@ -212,6 +215,7 @@
   "errServerException":"An error occurred from our side, try again later",
   "errUnknown":"Unknown error occurred",
   "errOpenSessionDelete": "you can't delete with an open session!",
+  "errExportRoutine": "Failed!, Could not export routine",
 
   "endOfSubDate": "End of subscription Date",
   "dayQuete": "what're you going to train today?",

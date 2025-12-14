@@ -22,23 +22,12 @@ class UnicepsPremium extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Theme.of(context).colorScheme.secondary,
-              Theme.of(context).colorScheme.primary,
-            ],
+            colors: [Theme.of(context).colorScheme.secondary, Theme.of(context).colorScheme.primary],
           ),
-          border: Border.all(
-            width: 2,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
+          border: Border.all(width: 2, color: Theme.of(context).colorScheme.secondary),
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, 3),
-              color: Colors.grey.shade300,
-              blurRadius: 2,
-              spreadRadius: 1,
-            ),
+            BoxShadow(offset: const Offset(0, 3), color: Colors.grey.shade300, blurRadius: 2, spreadRadius: 1),
           ],
         ),
         width: screenSize.width,
@@ -54,11 +43,7 @@ class UnicepsPremium extends StatelessWidget {
                   color: Colors.white,
                   width: 35,
                 ),
-                Image(
-                  image: const AssetImage(APP_LOGO_LIGHT),
-                  color: Colors.white,
-                  width: screenSize.width * .22,
-                ),
+                Image(image: const AssetImage(APP_LOGO_LIGHT), color: Colors.white, width: screenSize.width * .22),
               ],
             ),
             const SizedBox(width: 20),
@@ -86,22 +71,18 @@ class UnicepsPremium extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        '/ ${membership.daysLeft} ${locale.day}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
+                        '/ ${membership.totalDays} ${locale.day}',
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
                       ),
                     ],
                   ),
                   Text(
-                    intl.DateFormat('d/M/y').format(membership.startDate),
+                    intl.DateFormat('dd/MM/yyyy').format(membership.startDate),
                     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                   ),
-                  const Icon(Icons.keyboard_arrow_down_rounded, size: 15),
+                  const Icon(Icons.keyboard_arrow_down_rounded, size: 17, color: Colors.white),
                   Text(
-                    intl.DateFormat('d/M/y').format(membership.endDate),
+                    intl.DateFormat('dd/MM/yyyy').format(membership.endDate),
                     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -114,12 +95,8 @@ class UnicepsPremium extends StatelessWidget {
                 children: [
                   Center(
                     child: Text(
-                      membership.endDate.difference(DateTime.now()).inDays.toString(),
-                      style: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                      "${membership.daysLeft}",
+                      style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                   ),
                   Material(
@@ -133,16 +110,17 @@ class UnicepsPremium extends StatelessWidget {
                         child: Text(
                           membership.aboutToEnd ? locale.buyNow : locale.active,
                           style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: membership.aboutToEnd ? Colors.black : Colors.white),
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: membership.aboutToEnd ? Colors.black : Colors.white,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

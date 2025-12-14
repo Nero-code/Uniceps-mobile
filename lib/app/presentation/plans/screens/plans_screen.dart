@@ -191,7 +191,7 @@ class _PlansScreenState extends State<PlansScreen> {
                 bottom: 0.0,
                 width: screen.width,
                 child: Container(
-                  color: Colors.white,
+                  // color: Colors.white,
                   padding: const EdgeInsets.all(8.0),
                   child: BlocBuilder<PlansBloc, PlansState>(
                     buildWhen: (previous, current) =>

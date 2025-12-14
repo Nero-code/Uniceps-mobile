@@ -10,13 +10,13 @@ import 'package:uniceps/app/domain/contracts/auth/i_auth_contracts.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class EmailAuthRepo implements IOTPAuthRepo {
-  EmailAuthRepo(
-      {required this.otpAuthSource,
-      required this.tokenService,
-      required this.accountLocalSource,
-      required this.connection,
-      required Logger logger})
-      : _logger = logger;
+  EmailAuthRepo({
+    required this.otpAuthSource,
+    required this.tokenService,
+    required this.accountLocalSource,
+    required this.connection,
+    required Logger logger,
+  }) : _logger = logger;
 
   /// otpAuthSource is typeof [IOTPAuthSource] for otp-only email authentication
   final IOTPAuthSource otpAuthSource;
@@ -35,9 +35,7 @@ class EmailAuthRepo implements IOTPAuthRepo {
   Account? tempAccount;
 
   @override
-  Future<Either<AuthFailure, bool>> verifyCredential({
-    required String credential,
-  }) async {
+  Future<Either<AuthFailure, bool>> verifyCredential({required String credential}) async {
     if (await connection.hasConnection) {
       try {
         await otpAuthSource.verifyCredential(credential: credential);
@@ -51,20 +49,20 @@ class EmailAuthRepo implements IOTPAuthRepo {
   }
 
   @override
-  Future<Either<AuthFailure, Unit>> validateOTP(
-      {required String credential, required String otp, AccountType accountType = AccountType.normal}) async {
+  Future<Either<AuthFailure, Unit>> validateOTP({
+    required String credential,
+    required String otp,
+    AccountType accountType = AccountType.normal,
+  }) async {
     if (await connection.hasConnection) {
       try {
-        final res = await otpAuthSource.validateOTP(
-          otp: otp,
-          credential: credential,
-          parser: (json) => json,
-        );
-
+        final res = await otpAuthSource.validateOTP(otp: otp, credential: credential, parser: (json) => json);
+        _logger.i(res);
         await Future.wait([
-          tokenService.saveAccessToken(res['token']),
+          tokenService.saveAccessToken(res['token'], DateTime.parse(res['expiresAt'] as String)),
           accountLocalSource.saveUserAccount(
-              AccountModel(uid: res['id'], email: credential, createdAt: DateTime.now(), type: accountType))
+            AccountModel(uid: res['id'], email: credential, createdAt: DateTime.now(), type: accountType),
+          ),
         ]);
 
         return const Right(unit);

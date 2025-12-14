@@ -452,6 +452,24 @@ abstract class AppLocalizations {
   /// **'Please login to export this routine'**
   String get exportRoutineAuthAlertContent;
 
+  /// No description provided for @exportRoutineDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Exported!, your file is ready'**
+  String get exportRoutineDone;
+
+  /// No description provided for @congrats.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations'**
+  String get congrats;
+
+  /// No description provided for @congratsContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Hurray!, Premium Plan activated, all app features are now unlocked, have fun!'**
+  String get congratsContent;
+
   /// No description provided for @sessions.
   ///
   /// In en, this message translates to:
@@ -1213,6 +1231,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'you can\'t delete with an open session!'**
   String get errOpenSessionDelete;
+
+  /// No description provided for @errExportRoutine.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed!, Could not export routine'**
+  String get errExportRoutine;
 
   /// No description provided for @endOfSubDate.
   ///

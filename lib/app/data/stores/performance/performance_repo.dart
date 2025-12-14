@@ -57,22 +57,26 @@ class PerformanceRepo implements IPerformanceContract {
       totalDuration += sDuration;
       progressRate += s.logs.length;
     }
-
-    final avgSeconds = (maxDuration - (minDuration ?? maxDuration)).inSeconds / 2;
+    print('------------------');
+    print('maxD: $maxDuration, minD: $minDuration');
+    print('------------------');
+    final avgSeconds = (maxDuration + (minDuration ?? maxDuration)).inSeconds / 2;
     avgDuration = Duration(seconds: avgSeconds.round());
     if (totalDuration.inMinutes != 0) {
       progressRate = progressRate / totalDuration.inMinutes;
     }
 
-    return Right(SessionsReport(
-      maxDuration: maxDuration,
-      avgDuration: avgDuration,
-      minDuration: minDuration ?? Duration.zero,
-      totalDuration: totalDuration,
-      progressRate: progressRate,
-      sessionsCount: list.length,
-      firstSession: list.first.createdAt,
-    ));
+    return Right(
+      SessionsReport(
+        maxDuration: maxDuration,
+        avgDuration: avgDuration,
+        minDuration: minDuration ?? Duration.zero,
+        totalDuration: totalDuration,
+        progressRate: progressRate,
+        sessionsCount: list.length,
+        firstSession: list.first.createdAt,
+      ),
+    );
   }
 
   @override
@@ -90,14 +94,16 @@ class PerformanceRepo implements IPerformanceContract {
       for (final s in sessions) {
         int totalReps = 0;
 
-        final volume = s.logs.map((log) {
-          totalReps += log.reps;
-          totalWeight += log.weight;
-          maxWeight = maxWeight < log.weight ? log.weight : maxWeight;
-          minWeight = (minWeight ?? log.weight) > log.weight ? log.weight : minWeight;
+        final volume = s.logs
+            .map((log) {
+              totalReps += log.reps;
+              totalWeight += log.weight;
+              maxWeight = maxWeight < log.weight ? log.weight : maxWeight;
+              minWeight = (minWeight ?? log.weight) > log.weight ? log.weight : minWeight;
 
-          return log.setIndex * log.reps * (log.weight == 0 ? 1.0 : log.weight);
-        }).reduce((a, b) => a + b);
+              return log.setIndex * log.reps * (log.weight == 0 ? 1.0 : log.weight);
+            })
+            .reduce((a, b) => a + b);
         avgWeight = totalWeight / s.logs.length;
 
         totalVolume += volume;
@@ -114,18 +120,20 @@ class PerformanceRepo implements IPerformanceContract {
 
     avgVolume = totalVolume / sessions.length;
 
-    return Right(LogsReport(
-      maxWeight: maxWeight,
-      avgWeight: avgWeight,
-      minWeight: minWeight ?? 0,
-      totalWeights: totalWeight,
-      maxVolume: maxVolume,
-      avgVolume: avgVolume,
-      minVolume: minVolume ?? 0,
-      totalVolume: totalVolume,
-      intensity: intensity,
-      density: density,
-    ));
+    return Right(
+      LogsReport(
+        maxWeight: maxWeight,
+        avgWeight: avgWeight,
+        minWeight: minWeight ?? 0,
+        totalWeights: totalWeight,
+        maxVolume: maxVolume,
+        avgVolume: avgVolume,
+        minVolume: minVolume ?? 0,
+        totalVolume: totalVolume,
+        intensity: intensity,
+        density: density,
+      ),
+    );
   }
 
   @override

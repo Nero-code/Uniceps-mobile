@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';import 'package:uniceps/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class SessionCompleteDialog extends StatelessWidget {
   const SessionCompleteDialog({super.key});
@@ -20,10 +21,7 @@ class SessionCompleteDialog extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
             gradient: const LinearGradient(
-              colors: [
-                Colors.yellow,
-                Colors.amber,
-              ],
+              colors: [Colors.yellow, Colors.amber],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -33,16 +31,8 @@ class SessionCompleteDialog extends StatelessWidget {
               color: Colors.grey.shade100,
               borderRadius: BorderRadius.circular(40),
               boxShadow: const [
-                BoxShadow(
-                  offset: Offset(5.0, 5.0),
-                  color: Color.fromARGB(141, 158, 158, 158),
-                  blurRadius: 3,
-                ),
-                BoxShadow(
-                  offset: Offset(-5.0, -5.0),
-                  color: Colors.white60,
-                  blurRadius: 3,
-                ),
+                BoxShadow(offset: Offset(5.0, 5.0), color: Color.fromARGB(141, 158, 158, 158), blurRadius: 3),
+                BoxShadow(offset: Offset(-5.0, -5.0), color: Colors.white60, blurRadius: 3),
               ],
             ),
             child: Column(
@@ -62,11 +52,13 @@ class SessionCompleteDialog extends StatelessWidget {
                   width: MediaQuery.sizeOf(context).width * 0.4,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        // backgroundColor: Color.fromARGB(255, 94, 147, 160),
-                        backgroundColor: Colors.amber,
-                        foregroundColor: Colors.white),
+                      // backgroundColor: Color.fromARGB(255, 94, 147, 160),
+                      backgroundColor: Colors.amber,
+                      foregroundColor: Colors.white,
+                    ),
                     onPressed: () {
                       context.read<CurrentRoutineCubit>().getCurrentRoutine();
+
                       Navigator.popUntil(context, (route) => route.settings.name == AppRoutes.home);
                     },
                     child: Text(locale.great),

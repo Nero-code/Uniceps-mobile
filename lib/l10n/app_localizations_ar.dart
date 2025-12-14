@@ -192,6 +192,16 @@ class AppLocalizationsAr extends AppLocalizations {
       'الرجاء تسجيل الدخول اولا كي تصدر البرنامج';
 
   @override
+  String get exportRoutineDone => 'تم التصدير!, ملفك جاهز';
+
+  @override
+  String get congrats => 'تهانينا';
+
+  @override
+  String get congratsContent =>
+      'مبروك لقد تم تفعيل باقة Premium بنجاح, تم تفعيل جميع ميزات التطبيق... استمتع';
+
+  @override
   String get sessions => 'الجلسات';
 
   @override
@@ -575,6 +585,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get errOpenSessionDelete => 'لا يمكن الحذف بوجود جلسة فعالة!';
+
+  @override
+  String get errExportRoutine => 'فشلت العملية!, لم يتم تصدير الملف';
 
   @override
   String get endOfSubDate => 'تاريخ نهاية الاشتراك';

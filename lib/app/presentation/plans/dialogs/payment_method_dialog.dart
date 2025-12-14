@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';import 'package:uniceps/l10n/app_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/plans/blocs/plans_bloc.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PaymentMethodDialog extends StatelessWidget {
@@ -54,6 +55,7 @@ class PaymentMethodDialog extends StatelessWidget {
                         onPressed: () {
                           launchUrl(Uri.parse(TELEGRAM));
                           Navigator.popUntil(context, (route) => route.settings.name == AppRoutes.home);
+                          // SystemNavigator.pop();
                         },
                         label: Text(locale.cash),
                         icon: const Icon(Icons.payments_rounded),
@@ -69,6 +71,7 @@ class PaymentMethodDialog extends StatelessWidget {
                         onPressed: () {
                           launchUrl(Uri.parse(paymentResponse.paymentUrl!));
                           Navigator.popUntil(context, (route) => route.settings.name == AppRoutes.home);
+                          // SystemNavigator.pop();
                         },
                         label: Text(locale.card),
                         icon: const Icon(Icons.payment_rounded),
@@ -79,10 +82,7 @@ class PaymentMethodDialog extends StatelessWidget {
               ],
             );
           },
-          orElse: () => const SizedBox(
-            height: 50,
-            child: LoadingIndicator(),
-          ),
+          orElse: () => const SizedBox(height: 50, child: LoadingIndicator()),
         ),
       ),
     );

@@ -192,6 +192,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please login to export this routine';
 
   @override
+  String get exportRoutineDone => 'Exported!, your file is ready';
+
+  @override
+  String get congrats => 'Congratulations';
+
+  @override
+  String get congratsContent =>
+      'Hurray!, Premium Plan activated, all app features are now unlocked, have fun!';
+
+  @override
   String get sessions => 'Sessions';
 
   @override
@@ -577,6 +587,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errOpenSessionDelete => 'you can\'t delete with an open session!';
+
+  @override
+  String get errExportRoutine => 'Failed!, Could not export routine';
 
   @override
   String get endOfSubDate => 'End of subscription Date';

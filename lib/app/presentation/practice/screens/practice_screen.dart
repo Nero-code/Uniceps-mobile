@@ -43,24 +43,19 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final locale = AppLocalizations.of(context)!;
+    print('AppLifeCycle: $state');
     if (state == AppLifecycleState.paused) {
-      // final elapsed = context.read<StopwatchCubit>().stoptime;
       context.read<StopwatchCubit>().resetStopwatch();
-      // timer = Timer.periodic(
-      //   const Duration(seconds: 1),
-      //   (timer) {
-      //     seconds += const Duration(seconds: 1);
-      //     NotificationService.showNotification(id: 0, title: widget.dayName, body: formatDuration(elapsed + seconds));
-      //   },
-      // );
-
-      NotificationService.showNotification(id: 0, title: widget.dayName, body: locale.practiceNotificationBody);
+      NotificationService.showNotification(
+        id: 0,
+        title: widget.dayName,
+        body: locale.practiceNotificationBody,
+        onlyAlertOnce: true,
+      );
     }
     if (state == AppLifecycleState.resumed) {
-      NotificationService.closeAll();
-      // timer?.cancel();
+      /// NotificationService.closeAll();
       context.read<StopwatchCubit>().startStopWatch(DateTime.now().difference(widget.startDate));
-      // seconds = Duration.zero;
     }
   }
 
@@ -96,6 +91,7 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
         // When: (previous, current) => current is NoActiveSessionState,
         listenWhen: (previous, current) => current.maybeWhen(orElse: () => false, noActiveSession: () => true),
         listener: (context, state) {
+          NotificationService.closeAll();
           showDialog(context: context, builder: (context) => const SessionCompleteDialog());
         },
         // --------------------------------------------------------
