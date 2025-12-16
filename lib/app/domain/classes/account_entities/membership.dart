@@ -1,4 +1,6 @@
-class Membership {
+import 'package:equatable/equatable.dart';
+
+class Membership extends Equatable {
   final String planName;
   final String planId;
   final double price;
@@ -22,4 +24,7 @@ class Membership {
     required this.isActive,
     required this.isGift,
   });
+
+  @override
+  List<Object?> get props => [planId, planName, price, startDate, endDate, isNotified, isActive, isGift];
 }

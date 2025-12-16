@@ -11,23 +11,33 @@ class PaymentConfirmationDialog extends StatelessWidget {
     final locale = AppLocalizations.of(context)!;
     return AlertDialog(
       title: Text(locale.buyPlanQuestion),
-      content: Text(locale.buyPlancontent(planName)),
-      alignment: Alignment.center,
-      actions: [
-        Expanded(
-          child: OutlinedButton.icon(
-            label: Text(locale.cancel),
-            icon: const Icon(Icons.close),
-            onPressed: () => Navigator.pop(context, false),
+      content: Column(
+        mainAxisSize: .min,
+        children: [
+          Text(locale.buyPlancontent(planName)),
+          SizedBox(height: 5),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  label: Text(locale.cancel),
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context, false),
+                ),
+              ),
+              SizedBox(width: 5),
+              Expanded(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.amber, foregroundColor: Colors.white),
+                  label: Text(locale.ok, style: const TextStyle(fontWeight: .bold)),
+                  icon: const Icon(Icons.done),
+                  onPressed: onConfirm,
+                ),
+              ),
+            ],
           ),
-        ),
-        ElevatedButton.icon(
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.amber, foregroundColor: Colors.white),
-          label: Text(locale.ok, style: const TextStyle(fontWeight: FontWeight.bold)),
-          icon: const Icon(Icons.done),
-          onPressed: onConfirm,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

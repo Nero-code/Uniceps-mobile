@@ -24,7 +24,7 @@ class RoutineImportProgressDialog extends StatelessWidget {
               children: [
                 ProgressWidget(
                   percent: result.progress,
-                  backgroundColor: result.stage == Stage.error ? Colors.red.shade200 : Colors.white,
+                  progressBackground: result.stage == Stage.error ? Colors.red.shade200 : Colors.white,
                 ),
                 const SizedBox(height: 10),
                 Text(sectionContentOf(result.stage, locale)),

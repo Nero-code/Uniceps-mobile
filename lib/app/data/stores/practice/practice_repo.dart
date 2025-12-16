@@ -77,7 +77,7 @@ class PracticeRepo implements IPracticeContract {
       if (oldLogIndex == -1) {
         // if logs doesn't contain log, Then add it.
         _session!.logs.add(res);
-        _session = _session!.copywith(progress: totalProgress);
+        _session = _session!.copyWith(progress: totalProgress);
       } else {
         // else update it.
         _session!.logs[oldLogIndex] = res;

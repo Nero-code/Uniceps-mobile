@@ -3,16 +3,19 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/data/sources/services/token/token_service_simple.dart';
 
 class HttpClientHelper implements ClientHelper {
-  const HttpClientHelper({required Client client, required SimpleTokenService tokenService})
-      : _tokenService = tokenService,
-        _client = client;
+  const HttpClientHelper({required Client client, required SimpleTokenService tokenService, required Logger logger})
+    : _tokenService = tokenService,
+      _client = client,
+      _logger = logger;
 
   final Client _client;
   final SimpleTokenService _tokenService;
+  final Logger _logger;
   // final dataNodeInResponse = 'data';
 
   ///  For more custom behaivuar
@@ -20,15 +23,20 @@ class HttpClientHelper implements ClientHelper {
   SimpleTokenService get tokenService => _tokenService;
 
   @override
-  Future<T> getHandler<T>(String api, String urlPart, T Function(Map<String, dynamic> json) fromJson,
-      {bool needsHeader = true, Map<String, String>? queryParams}) async {
-    final res = await _client.get(
-      Uri.https(api, urlPart, queryParams),
-      headers: await getHeader(needsHeader),
-    );
+  Future<T> getHandler<T>(
+    String api,
+    String urlPart,
+    T Function(Map<String, dynamic> json) fromJson, {
+    bool needsHeader = true,
+    Map<String, String>? queryParams,
+  }) async {
+    final res = await _client.get(Uri.https(api, urlPart, queryParams), headers: await getHeader(needsHeader));
 
     if (kDebugMode) {
-      print("getHandler code: ${res.statusCode}\n" "URL: ${api + urlPart}");
+      print(
+        "getHandler code: ${res.statusCode}\n"
+        "URL: ${api + urlPart}",
+      );
       print("getHandler body: ${res.body}");
     }
     handleHttpStatus(res);
@@ -37,15 +45,20 @@ class HttpClientHelper implements ClientHelper {
   }
 
   @override
-  Future<List<T>> getListHandler<T>(String api, String urlPart, T Function(Map<String, dynamic>) fromJson,
-      {bool needsHeader = true, Map<String, String>? queryParams}) async {
-    final res = await _client.get(
-      Uri.https(api, urlPart, queryParams),
-      headers: await getHeader(needsHeader),
-    );
+  Future<List<T>> getListHandler<T>(
+    String api,
+    String urlPart,
+    T Function(Map<String, dynamic>) fromJson, {
+    bool needsHeader = true,
+    Map<String, String>? queryParams,
+  }) async {
+    final res = await _client.get(Uri.https(api, urlPart, queryParams), headers: await getHeader(needsHeader));
 
     if (kDebugMode) {
-      print("getListHandler code: ${res.statusCode}\n" "URL: ${api + urlPart}");
+      print(
+        "getListHandler code: ${res.statusCode}\n"
+        "URL: ${api + urlPart}",
+      );
       print("getListHandler body: ${res.body}");
     }
     handleHttpStatus(res);
@@ -76,9 +89,13 @@ class HttpClientHelper implements ClientHelper {
     );
 
     if (kDebugMode) {
-      print("getListHandler code: ${res.statusCode}\n" "URL: ${api + urlPart}");
+      print(
+        "getListHandler code: ${res.statusCode}\n"
+        "URL: ${api + urlPart}",
+      );
       print("getListHandler body: ${res.body}");
     }
+    _logger.t(res.body);
 
     handleHttpStatus(res);
 
@@ -97,7 +114,10 @@ class HttpClientHelper implements ClientHelper {
   @override
   Future<void> putHandler(String api, String urlPart, Map<String, dynamic> body, {bool needsHeader = true}) async {
     final res = await _client.put(
-      Uri.https("$api" "$urlPart"),
+      Uri.https(
+        "$api"
+        "$urlPart",
+      ),
       headers: await getHeader(needsHeader),
       body: body,
     );
@@ -111,7 +131,14 @@ class HttpClientHelper implements ClientHelper {
 
   @override
   Future<void> deleteHandler(String api, String urlPart, Map<String, dynamic> body, {bool needsHeader = true}) async {
-    final res = await _client.delete(Uri.https("$api" "$urlPart"), headers: await getHeader(needsHeader), body: body);
+    final res = await _client.delete(
+      Uri.https(
+        "$api"
+        "$urlPart",
+      ),
+      headers: await getHeader(needsHeader),
+      body: body,
+    );
 
     if (kDebugMode) {
       print("deleteHandler code: ${res.statusCode}");

@@ -34,25 +34,10 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+class _HomeScreenState extends State<HomeScreen> {
   final panelController = PanelController();
 
   bool notifyUpgrade = true;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    final hasMem = context.read<MembershipBloc>().state.maybeWhen(loaded: (_) => true, orElse: () => false);
-    if (state == AppLifecycleState.resumed && !hasMem) {
-      context.read<MembershipBloc>().add(MembershipEvent.getCurrentPlan());
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
