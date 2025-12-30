@@ -100,6 +100,7 @@ class _PlansScreenState extends State<PlansScreen> {
                     ),
                     DataTable(
                       columnSpacing: 24,
+                      dividerThickness: .5,
                       columns: [
                         DataColumn(
                           label: Text(ltr ? 'Feature' : 'الميزة', style: const TextStyle(fontWeight: FontWeight.bold)),

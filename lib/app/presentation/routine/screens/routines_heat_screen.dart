@@ -272,7 +272,7 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                                     hasAccount: (_) => mem.state.maybeWhen(
                                       orElse: () =>
                                           () => state.routines.isEmpty
-                                          ? () => _createRoutine(
+                                          ? _createRoutine(
                                               "${locale.newRoutine} $routinesLength",
                                               (name) => context.read<RoutinesWithHeatBloc>().add(
                                                 RoutinesWithHeatEvent.create(name),

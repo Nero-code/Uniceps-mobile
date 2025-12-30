@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart';
 // import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
@@ -12,17 +13,19 @@ class ExercisesRepo implements IExercisesContract {
   // final IExercisesLocalSourceContract _localSource;
   final IExercisesRemoteSourceContract _remoteSource;
   final InternetConnectionChecker _internet;
+  final Logger _logger;
 
   final List<ExerciseV2> allExercises = [];
 
-  ExercisesRepo(
-      {
-      // required IExercisesLocalSourceContract localSource,
-      required IExercisesRemoteSourceContract remoteSource,
-      required InternetConnectionChecker internet})
-      : _remoteSource = remoteSource,
-        // _localSource = localSource,
-        _internet = internet;
+  ExercisesRepo({
+    // required IExercisesLocalSourceContract localSource,
+    required IExercisesRemoteSourceContract remoteSource,
+    required InternetConnectionChecker internet,
+    required Logger logger,
+  }) : _remoteSource = remoteSource,
+       // _localSource = localSource,
+       _logger = logger,
+       _internet = internet;
   @override
   Future<Either<Failure, List<MuscleGroup>>> getExerciseGroups() async {
     if (await _internet.hasConnection) {

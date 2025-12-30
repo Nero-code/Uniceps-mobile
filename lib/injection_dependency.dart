@@ -158,7 +158,7 @@ Future<void> init() async {
   sl.registerLazySingleton<IRoutineDaysContract>(() => RoutineDaysRepo(localSource: sl(), logger: sl()));
   sl.registerLazySingleton<IRoutineItemsContract>(() => RoutineItemsRepo(localSource: sl(), mediaHelper: sl()));
   sl.registerLazySingleton<IRoutineSetsContract>(() => RoutineSetsRepo(localSource: sl(), logger: sl()));
-  sl.registerLazySingleton<IExercisesContract>(() => ExercisesRepo(internet: sl(), remoteSource: sl()));
+  sl.registerLazySingleton<IExercisesContract>(() => ExercisesRepo(internet: sl(), remoteSource: sl(), logger: sl()));
 
   //  A U T H   R E P O
   sl.registerLazySingleton<IOTPAuthRepo>(

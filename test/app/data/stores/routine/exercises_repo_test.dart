@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:logger/logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_v2_dto.dart';
@@ -20,11 +21,12 @@ void main() {
   late ExercisesRepo repo;
   late MockIExercisesRemoteSourceContract mockRemoteSource;
   late MockInternetConnectionChecker mockInternet;
+  final logger = Logger();
 
   setUp(() {
     mockRemoteSource = MockIExercisesRemoteSourceContract();
     mockInternet = MockInternetConnectionChecker();
-    repo = ExercisesRepo(remoteSource: mockRemoteSource, internet: mockInternet);
+    repo = ExercisesRepo(remoteSource: mockRemoteSource, internet: mockInternet, logger: logger);
   });
 
   final tMuscleGroup = const MuscleGroup(apiId: 1, muscleGroupTranslations: {Lang.en: 'Chest'});

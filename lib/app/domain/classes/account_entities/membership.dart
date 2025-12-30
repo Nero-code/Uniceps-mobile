@@ -11,7 +11,7 @@ class Membership extends Equatable {
   final bool isGift;
 
   bool get aboutToEnd => endDate.difference(DateTime.now()).inDays - 5 < 0;
-  int get daysLeft => endDate.difference(DateTime.now()).inDays;
+  int get daysLeft => endDate.difference(DateTime.now()).inDays + 1;
   int get totalDays => endDate.difference(startDate).inDays;
 
   const Membership({

@@ -13,7 +13,7 @@ import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 ///
 
 const APP_NAME = 'Uniceps';
-const APP_VERSION = 'v2.1.8+9';
+const APP_VERSION = 'v2.1.9+9';
 const APP_RELEASE_DATE = '10/10/2024';
 
 const APP_LOGO = "images/logo/Logo.png";
@@ -129,13 +129,13 @@ const API = kDebugMode || kProfileMode ? r"https://uniceps.runasp.net/api" : r"h
 
 // const API_V2 = kDebugMode || kProfileMode ? r"uniceps.runasp.net" : r"uniceps.trio-verse.com/api/v1";
 const API_V2 = r"uniceps.runasp.net";
-// const API_V2 = r"uniceps.trio-verse.com/api/v1";
+// const API_V2 = r"uniapi.trio-verse.com";
 
 /// PRODUCTION URL
 // const API = r"https://uniceps.trio-verse.com/api/v1";
 
 /// https://trio-verse.com
-const URL = "https://trio-verse.com";
+const URL = "https://uniceps.trio-verse.com";
 const TELEGRAM = "https://t.me/uniceps_bot";
 // const HTTP_REFRESH = "/refresh";
 // const HTTP_HANDSHAKE = "/handshake";
@@ -159,7 +159,7 @@ const HTTP_GYM_LOGO = "/logos";
 
 // V2 Routes
 const HTTP_SESSION_SYNC = '/api/Workout';
-const HTTP_MEMBERSHIP = "/api/Membership";
+const HTTP_MEMBERSHIP = "/api/Membership/0";
 const HTTP_REGISTER = "/api/Authentication";
 const HTTP_REFRESH_TOKEN = '/api/Authentication/RefreshToken';
 const HTTP_VERIFY_CODE = "/api/Authentication/VerifyOtp";

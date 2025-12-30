@@ -24,13 +24,14 @@ class AccountRemoteSource implements IAccountRemoteSource {
 
   @override
   Future<PlanModel> getPlans() async {
-    return (await _clientHelper.getListHandler(API_V2, HTTP_PLAN, PlanModel.fromJson, needsHeader: false)).first;
+    return (await _clientHelper.getListHandler(API_V2, HTTP_PLAN, PlanModel.fromJson)).first;
   }
 
   @override
   Future<PaymentResponse> buyPlan(PlanItemModel item) async {
-    final res = await _clientHelper.postHandler(API_V2, HTTP_BUY_PLAN, {"planItemId": item.id},
-        fromJson: PaymentResponse.fromJson);
+    final res = await _clientHelper.postHandler(API_V2, HTTP_BUY_PLAN, {
+      "planItemId": item.id,
+    }, fromJson: PaymentResponse.fromJson);
     return res!;
   }
 }
