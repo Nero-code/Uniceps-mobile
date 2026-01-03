@@ -4,10 +4,9 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   connectivity_plus
-  file_selector_windows
+  file_saver
   firebase_core
   flutter_secure_storage_windows
-  permission_handler_windows
   sqlite3_flutter_libs
   url_launcher_windows
 )

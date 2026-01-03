@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:logger/logger.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:uniceps/app/data/models/routine_models/extensions.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
 import 'package:uniceps/app/data/models/routine_result.dart';
@@ -118,10 +117,13 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
       // final routine = await _fileParseService.extract<RoutineDto>(file, RoutineDto.fromJson);
 
       final dl = routine.daysDto.length;
-      final il = routine.daysDto.map((a) => a.items.length).reduce((a, b) => a + b);
-      final sl = routine.daysDto.expand((d) => d.items.map((i) => i.setsDto.length)).reduce((a, b) => a + b);
+      final il = routine.daysDto.map((a) => a.items.length).fold(0, (a, b) => a + b);
+      final sl = routine.daysDto.expand((d) => d.items.map((i) => i.setsDto.length)).fold(0, (a, b) => a + b);
       final imgs = routine.daysDto.expand((day) => day.items.map((e) => e.exerciseV2Dto.imageUrl)).toList();
-      final totalProgress = dl + il + sl + imgs.length;
+
+      final tempProgress = dl + il + sl + imgs.length;
+      final totalProgress = (tempProgress == 0) ? 1 : tempProgress;
+
       double sum = 0;
 
       yield const RoutineResult(progress: 0, stage: Stage.start);
@@ -161,27 +163,9 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
 
   @override
   Future<bool> exportRoutineToFile(int routineId) async {
-    // Use .storage, which generally maps to the appropriate storage permissions
-    // based on the underlying Android SDK version.
-    PermissionStatus status = await Permission.storage.status;
-
-    // If permanently denied, guide the user to App Settings
-    if (status.isPermanentlyDenied) {
-      // Show a dialog explaining why permission is needed, then call openAppSettings()
-      await openAppSettings();
-      return false;
-    }
-    if (!status.isGranted) {
-      status = await Permission.storage.request();
-      if (!status.isGranted) {
-        _logger.e("User did not grant storage permission");
-        return false;
-      }
-    }
-
     try {
       final routine = await _localSource.getFullRoutine(routineId);
-      _unifileManager.exportRoutineToFile(fileName: routine.name, data: routine.toJson());
+      await _unifileManager.exportRoutineToFile(fileName: routine.name, data: routine.toJson());
       return true;
     } catch (e) {
       _logger.e('Error exporting routine', error: e);

@@ -1447,6 +1447,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hello, I’m Captain Uni.\nI’m the virtual guide who will accompany you inside the Uniceps app, and my job is to make every step easy and your experience smooth and clear.\nMy main role is to introduce you to the app and show you how to use each section without any confusion.\nI also help you choose the workout program that fits you best, so you can start your journey the right way.\nWith every workout you complete, I collect your stats and show you your results, so you can see your progress day by day.\nI can’t promise to change your life overnight… but I can promise to stay by your side at every stage.\nI’m here to guide you, explain things, and encourage you, so you can get the most out of the app.\nAnd in the end… consider me a friend and an experienced companion walking with you step by step, happy to see you improving.'**
   String get captainUniAboutContent;
+
+  /// No description provided for @msgSlowConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak internet connection'**
+  String get msgSlowConnection;
 }
 
 class _AppLocalizationsDelegate

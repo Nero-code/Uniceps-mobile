@@ -48,7 +48,7 @@ class OTPAuthSource implements IOTPAuthSource {
       body: jsonEncode({
         "otp": otp,
         "email": credential,
-        "notify_token": notifyToken,
+        "notifyToken": notifyToken,
         "deviceToken": androidInfo.device,
         "deviceId": androidInfo.id,
         "platform": platform,

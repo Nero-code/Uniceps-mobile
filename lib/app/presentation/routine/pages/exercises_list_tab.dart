@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/exercises_v2_bloc.dart';
-import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/widgets/exercise_grid_widget.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class ExercisesListTab extends StatefulWidget {
   const ExercisesListTab({
@@ -31,6 +32,7 @@ class _ExercisesListTabState extends State<ExercisesListTab> with AutomaticKeepA
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final locale = AppLocalizations.of(context)!;
     return BlocProvider(
       create: (context) =>
           ExercisesV2Bloc(commands: di.sl())..add(GetExercisesByFilterEvent(filter: widget.muscleGroup)),
@@ -87,19 +89,20 @@ class _ExercisesListTabState extends State<ExercisesListTab> with AutomaticKeepA
                       Positioned(
                         top: 10.0,
                         right: 10.0,
-                        child: Icon(
-                          Icons.done,
-                          size: 20,
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
+                        child: Icon(Icons.done, size: 20, color: Theme.of(context).colorScheme.secondary),
                       ),
                   ],
                 );
               },
             );
           } else if (state is ExercisesV2ErrorState) {
-            return Center(child: Text(state.failure.getErrorMessage()));
+            return Center(child: Text(locale.errNoInternet));
           }
+          // Future.delayed(Duration(seconds: 10)).then(
+          //   (_) => context.mounted
+          //       ? ScaffoldMessenger.maybeOf(context)?.showSnackBar(SnackBar(content: Text(locale.msgSlowConnection)))
+          //       : null,
+          // );
           return const LoadingIndicator();
         },
       ),

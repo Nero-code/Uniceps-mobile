@@ -3,11 +3,11 @@
 import 'package:flutter/foundation.dart';
 
 abstract class ApiRoutes {
-  static const API = kDebugMode || kProfileMode
-      ? r"https://uniceps.runasp.net/api"
-      : r"https://uniceps.trio-verse.com/api/v1";
+  // static const API = kDebugMode || kProfileMode
+  //     ? r"https://uniceps.runasp.net/api"
+  //     : r"https://uniceps.trio-verse.com/api/v1";
 
-  static const API_V2 = r"uniceps.runasp.net";
+  // static const API_V2 = r"uniceps.runasp.net";
 
   /// PRODUCTION URL
   // const API = r"https://uniceps.trio-verse.com/api/v1";
