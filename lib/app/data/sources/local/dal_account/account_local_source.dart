@@ -16,6 +16,7 @@ abstract class IAccountLocalSource {
   /// Returns a `Should Notify?` boolean
   Future<bool> saveUserMembership(MembershipModel subscriptionPlan);
   Future<MembershipModel> userMembershipNotified();
+  Future<void> clearMemberships();
 
   Future<void> logout();
 }
@@ -88,12 +89,6 @@ class AccountLocalSource implements IAccountLocalSource {
   }
 
   @override
-  Future<void> logout() async {
-    await _database.delete(_database.accounts).go();
-    await _secureStorage.deleteAll();
-  }
-
-  @override
   Future<MembershipModel> userMembershipNotified() async {
     final memString = await _secureStorage.read(key: planKey);
     if (memString != null) {
@@ -102,5 +97,16 @@ class AccountLocalSource implements IAccountLocalSource {
       return mem;
     }
     throw EmptyCacheExeption();
+  }
+
+  @override
+  Future<void> clearMemberships() async {
+    await _secureStorage.delete(key: planKey);
+  }
+
+  @override
+  Future<void> logout() async {
+    await _database.delete(_database.accounts).go();
+    await _secureStorage.deleteAll();
   }
 }

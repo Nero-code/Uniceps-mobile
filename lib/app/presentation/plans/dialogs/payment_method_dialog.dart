@@ -68,11 +68,13 @@ class PaymentMethodDialog extends StatelessWidget {
                           side: BorderSide(width: 0.5, color: Theme.of(context).colorScheme.primary),
                           elevation: 3,
                         ),
-                        onPressed: () {
-                          launchUrl(Uri.parse(paymentResponse.paymentUrl!));
-                          Navigator.popUntil(context, (route) => route.settings.name == AppRoutes.home);
-                          // SystemNavigator.pop();
-                        },
+                        onPressed: (paymentResponse.paymentUrl == null || paymentResponse.paymentUrl!.isEmpty)
+                            ? null
+                            : () {
+                                launchUrl(Uri.parse(paymentResponse.paymentUrl!));
+                                Navigator.popUntil(context, (route) => route.settings.name == AppRoutes.home);
+                                // SystemNavigator.pop();
+                              },
                         label: Text(locale.card),
                         icon: const Icon(Icons.payment_rounded),
                       ),

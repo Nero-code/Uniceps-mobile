@@ -164,9 +164,9 @@ class PerformanceRepo implements IPerformanceContract {
 
     double bf = 0;
     if (profile.gender == Gender.male && m.waist - m.neck > 0) {
-      bf = 86.01 * log10(m.waist - m.neck) - 70.041 * log10(m.height);
+      bf = 86.01 * log10(m.waist - m.neck) - 70.041 * log10(m.height) + 36.76;
     } else if (profile.gender == Gender.female && m.waist + m.hips - m.neck > 0) {
-      bf = 163.205 * log10(m.waist + m.hips - m.neck) - 97.684 * log10(m.height);
+      bf = 163.205 * log10(m.waist + m.hips - m.neck) - 97.684 * log10(m.height) - 78.387;
     }
 
     return Right(PhysicalReport(bmi: bmi, bmr: bmr, gender: profile.gender, bodyFatPercentage: bf));

@@ -78,6 +78,7 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen> wit
                             );
                             showDialog(
                               context: context,
+                              barrierDismissible: false,
                               builder: (_) => BlocProvider.value(
                                 value: context.read<ItemsEditBloc>(),
                                 child: AlertDialog(

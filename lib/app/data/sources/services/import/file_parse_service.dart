@@ -101,7 +101,7 @@ class UniFileManager {
     // 1. Create the UniFile object and convert it to its final string representation.
     final String fileContentString = UniFile(
       meta: const MetaPart(
-        source: 'uniceps_app', // It's good practice to name the source
+        source: 'uniceps_mobile', // It's good practice to name the source
         schemaVersion: supportedVersion,
         fileType: FileType.routine,
       ),

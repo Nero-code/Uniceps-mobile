@@ -128,8 +128,8 @@ final HEADERS = {
 const API = kDebugMode || kProfileMode ? r"https://uniceps.runasp.net/api" : r"https://uniceps.trio-verse.com/api/v1";
 
 // const API_V2 = kDebugMode || kProfileMode ? r"uniceps.runasp.net" : r"uniceps.trio-verse.com/api/v1";
-const API_V2 = r"uniceps.runasp.net";
-// const API_V2 = r"uniapi.trio-verse.com";
+// const API_V2 = r"uniceps.runasp.net";
+const API_V2 = r"uniapi.trio-verse.com";
 
 /// PRODUCTION URL
 // const API = r"https://uniceps.trio-verse.com/api/v1";
@@ -137,6 +137,7 @@ const API_V2 = r"uniceps.runasp.net";
 /// https://trio-verse.com
 const URL = "https://uniceps.trio-verse.com";
 const TELEGRAM = "https://t.me/uniceps_bot";
+const DELETE_ACCOUNT = "https://uniceps.trio-verse.com/privacy";
 // const HTTP_REFRESH = "/refresh";
 // const HTTP_HANDSHAKE = "/handshake";
 // const HTTP_GUEST_MODE = "/guest";

@@ -8,9 +8,6 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/days_edit/days_edit_bloc.dart';
-import 'package:uniceps/core/constants/cap_images.dart';
-import 'package:uniceps/core/widgets/account_limit_alert.dart';
-import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_add_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_delete_dialog.dart';
 import 'package:uniceps/app/presentation/routine/dialogs/day_edit_flaoting_menu.dart';
@@ -18,11 +15,14 @@ import 'package:uniceps/app/presentation/routine/dialogs/days_sorting_dialog.dar
 import 'package:uniceps/app/presentation/routine/dialogs/rename_day_dialog.dart';
 import 'package:uniceps/app/presentation/routine/pages/routine_edit_items_tab.dart';
 import 'package:uniceps/app/presentation/routine/widgets/day_tab_widget.dart';
+import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/extensions.dart';
+import 'package:uniceps/core/widgets/account_limit_alert.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
-import 'package:uniceps/l10n/app_localizations.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/core/widgets/premium_alert.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class RoutineEditScreen extends StatefulWidget {
   const RoutineEditScreen({super.key, required this.routineId, required this.routineName});
@@ -41,7 +41,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
   final panelController = PanelController();
 
   // final List<String> _tabs = ["1", "2", "3"];
-  List<RoutineDay> days = [];
+  // List<RoutineDay> days = [];
 
   int selectedIndex = 0;
 
@@ -62,9 +62,10 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
       duration: Durations.medium4,
     );
 
-    Animation<double> animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: controller, curve: Curves.easeInOut),
-    );
+    Animation<double> animation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
 
     OverlayEntry? overlayEntry;
     overlayEntry = OverlayEntry(
@@ -125,30 +126,21 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
   void _addDay(String initialName, void Function(String name) onAdd) async {
     await showDialog<String>(
       context: context,
-      builder: (context) => DayAddDialog(
-        initialName: initialName,
-        onDone: onAdd,
-      ),
+      builder: (context) => DayAddDialog(initialName: initialName, onDone: onAdd),
     );
   }
 
   void _renameDay(void Function(RoutineDay renamed) onSubmit) async {
     await showDialog(
       context: context,
-      builder: (_) => RenameDayDialog(
-        oldDay: selectedDay!,
-        onSubmit: onSubmit,
-      ),
+      builder: (_) => RenameDayDialog(oldDay: selectedDay!, onSubmit: onSubmit),
     );
   }
 
   void _reorderDays(void Function(List<RoutineDay> sortedDays) onReorder, List<RoutineDay> days) async {
     await showDialog<List<RoutineDay>>(
       context: context,
-      builder: (dialogContext) => DaysSortingDialog(
-        days: days,
-        onReorder: onReorder,
-      ),
+      builder: (dialogContext) => DaysSortingDialog(days: days, onReorder: onReorder),
     );
   }
 
@@ -159,20 +151,15 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
     }
     await showDialog(
       context: context,
-      builder: (context) => DayDeleteDialog(
-        dayToDelete: selectedDay!,
-        onPositive: onDelete,
-      ),
+      builder: (context) => DayDeleteDialog(dayToDelete: selectedDay!, onPositive: onDelete),
     );
   }
 
   void showSnack(Widget child, BuildContext context, [Color? backgroundColor]) {
     ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: child,
-      backgroundColor: backgroundColor,
-      showCloseIcon: true,
-    ));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: child, backgroundColor: backgroundColor, showCloseIcon: true));
   }
 
   @override
@@ -192,10 +179,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
     final locale = AppLocalizations.of(context)!;
     final screenSize = MediaQuery.sizeOf(context);
     return BlocProvider(
-      create: (context) => DaysEditBloc(commands: di.sl())
-        ..add(
-          GetDaysEvent(routineId: widget.routineId),
-        ),
+      create: (context) => DaysEditBloc(commands: di.sl())..add(GetDaysEvent(routineId: widget.routineId)),
       child: Stack(
         children: [
           ScaffoldMessenger(
@@ -233,8 +217,11 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                       isSelected: day.index == selectedIndex,
                                       onTap: () {
                                         selectedIndex = day.index;
-                                        pageController.animateToPage(day.index,
-                                            duration: Durations.medium4, curve: Curves.fastOutSlowIn);
+                                        pageController.animateToPage(
+                                          day.index,
+                                          duration: Durations.medium4,
+                                          curve: Curves.fastOutSlowIn,
+                                        );
                                         setState(() {});
                                       },
                                       onLongPress: (widgetKey) async {
@@ -247,26 +234,23 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                         switch (res) {
                                           case 0: // edit
                                             _renameDay(
-                                              (renamedDay) => BlocProvider.of<DaysEditBloc>(context)
-                                                  .add(RenameDayEvent(day: renamedDay)),
+                                              (renamedDay) => BlocProvider.of<DaysEditBloc>(
+                                                context,
+                                              ).add(RenameDayEvent(day: renamedDay)),
                                             );
                                             break;
                                           case 1: // reorder
-                                            _reorderDays(
-                                              (sortedDays) {
-                                                BlocProvider.of<DaysEditBloc>(context).add(
-                                                    ReorderDaysEvent(newOrder: sortedDays, version: state.version + 1));
-                                              },
-                                              state.days,
-                                            );
+                                            _reorderDays((sortedDays) {
+                                              BlocProvider.of<DaysEditBloc>(
+                                                context,
+                                              ).add(ReorderDaysEvent(newOrder: sortedDays, version: state.version + 1));
+                                            }, state.days);
                                             break;
                                           case 2: // remove
                                             _deleteDay(
-                                              (deleted) => BlocProvider.of<DaysEditBloc>(context).add(
-                                                RemoveDayEvent(
-                                                  dayToRemove: deleted,
-                                                ),
-                                              ),
+                                              (deleted) => BlocProvider.of<DaysEditBloc>(
+                                                context,
+                                              ).add(RemoveDayEvent(dayToRemove: deleted)),
                                             );
                                             break;
                                           default:
@@ -274,17 +258,18 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                       },
                                     ),
                                   ),
-                                  Builder(builder: (context) {
-                                    final accountCubit = context.watch<AccountCubit>();
-                                    final membershipBloc = context.watch<MembershipBloc>();
-                                    return IconButton(
-                                      iconSize: 20,
-                                      splashRadius: 20,
-                                      icon: const Icon(Icons.add),
-                                      onPressed: accountCubit.state.map(
-                                        initial: (_) => null,
-                                        unauthenticated: (_) => state.days.isEmpty
-                                            ? () => _addDay(
+                                  Builder(
+                                    builder: (context) {
+                                      final accountCubit = context.watch<AccountCubit>();
+                                      final membershipBloc = context.watch<MembershipBloc>();
+                                      return IconButton(
+                                        iconSize: 20,
+                                        splashRadius: 20,
+                                        icon: const Icon(Icons.add),
+                                        onPressed: accountCubit.state.map(
+                                          initial: (_) => null,
+                                          unauthenticated: (_) => state.days.isEmpty
+                                              ? () => _addDay(
                                                   "${locale.day} ${state.days.length + 1}",
                                                   (name) => BlocProvider.of<DaysEditBloc>(context).add(
                                                     AddDayEvent(
@@ -297,26 +282,13 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                                     ),
                                                   ),
                                                 )
-                                            : () => showDialog(
+                                              : () => showDialog(
                                                   context: context,
                                                   builder: (_) => AccountLimitAlert(content: locale.dayLimitAlert),
                                                 ),
-                                        hasAccount: (_) => membershipBloc.state.maybeMap(
-                                          loaded: (_) => () => _addDay(
-                                                "${locale.day} ${state.days.length + 1}",
-                                                (name) => BlocProvider.of<DaysEditBloc>(context).add(
-                                                  AddDayEvent(
-                                                    day: RoutineDay(
-                                                      routineId: widget.routineId,
-                                                      name: name,
-                                                      index: state.days.length,
-                                                      exercises: [],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                          orElse: () => () => state.days.length < 3
-                                              ? _addDay(
+                                          hasAccount: (_) => membershipBloc.state.maybeMap(
+                                            loaded: (_) =>
+                                                () => _addDay(
                                                   "${locale.day} ${state.days.length + 1}",
                                                   (name) => BlocProvider.of<DaysEditBloc>(context).add(
                                                     AddDayEvent(
@@ -328,54 +300,68 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
                                                       ),
                                                     ),
                                                   ),
-                                                )
-                                              : showDialog(
-                                                  context: context, builder: (context) => const PremiumAlert()),
+                                                ),
+                                            orElse: () =>
+                                                () => state.days.length < 3
+                                                ? _addDay(
+                                                    "${locale.day} ${state.days.length + 1}",
+                                                    (name) => BlocProvider.of<DaysEditBloc>(context).add(
+                                                      AddDayEvent(
+                                                        day: RoutineDay(
+                                                          routineId: widget.routineId,
+                                                          name: name,
+                                                          index: state.days.length,
+                                                          exercises: [],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                : showDialog(
+                                                    context: context,
+                                                    builder: (context) => const PremiumAlert(),
+                                                  ),
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  }),
+                                      );
+                                    },
+                                  ),
                                 ],
                               ),
                             ),
 
                             Expanded(
-                                child: state.days.isEmpty
-                                    ? Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Image(
-                                            image: const AssetImage(CaptainImages.emptyDays),
-                                            width: screenSize.width * .5,
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Text(locale.emptyDays),
-                                        ],
-                                      )
-                                    : PageView(
-                                        controller: pageController,
-                                        onPageChanged: (value) => setState(() {
-                                          selectedIndex = value;
+                              child: state.days.isEmpty
+                                  ? Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image(
+                                          image: const AssetImage(CaptainImages.emptyDays),
+                                          width: screenSize.width * .5,
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(locale.emptyDays),
+                                      ],
+                                    )
+                                  : PageView(
+                                      controller: pageController,
+                                      onPageChanged: (value) => setState(() {
+                                        selectedIndex = value;
 
-                                          tabController.animateTo(
-                                              value * (screenSize.width * 0.5) / state.days[value].name.length,
-                                              duration: Durations.medium4,
-                                              curve: Curves.linear);
-                                        }),
-                                        children: state.days
-                                            .map((day) => RoutineItemEditTab(
-                                                  dayId: day.id!,
-                                                  dayName: day.name,
-                                                ))
-                                            .toList(),
-                                      )),
+                                        tabController.animateTo(
+                                          value * (screenSize.width * 0.5) / state.days[value].name.length,
+                                          duration: Durations.medium4,
+                                          curve: Curves.linear,
+                                        );
+                                      }),
+                                      children: state.days
+                                          .map((day) => RoutineItemEditTab(dayId: day.id!, dayName: day.name))
+                                          .toList(),
+                                    ),
+                            ),
                           ],
                         );
                       } else if (state is DaysEditErrorState) {
-                        return ErrorScreenWidget(
-                          f: state.failure,
-                          callback: null,
-                        );
+                        return ErrorScreenWidget(f: state.failure, callback: null);
                       }
                       return const LoadingIndicator();
                     },

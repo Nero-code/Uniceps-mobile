@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class WaveBottleGauge extends StatefulWidget {
@@ -27,10 +28,7 @@ class _WaveBottleGaugeState extends State<WaveBottleGauge> with SingleTickerProv
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat(); // loop forever
+    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat(); // loop forever
   }
 
   @override
@@ -99,7 +97,8 @@ class _WaveBottlePainter extends CustomPainter {
 
     // Wave path
     final wavePath = Path();
-    final baseHeight = size.height * (1 - value); // water level
+
+    final baseHeight = size.height * (1 - (value == 1 ? 0.95 : value)); // water level
     final amplitude = size.height * (.02); // wave height
     final wavelength = size.width / 2.0;
 
