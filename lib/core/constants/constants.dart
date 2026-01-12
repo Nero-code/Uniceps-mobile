@@ -6,7 +6,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
-// import 'package:uniceps/core/environments/env.dart';
 
 ///
 ///   A P P   C O N S T A N T S
