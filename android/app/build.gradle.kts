@@ -72,6 +72,24 @@ android {
         }
     }
 
+    flavorDimensions("build") // Use parentheses for function calls in Kotlin DSL
+
+    productFlavors {
+        create("dev") { // Use create() for better practice
+            dimension = "build"
+            applicationIdSuffix = ".dev"
+            resValue("string", "app_name", "Uniceps DEV")
+        }
+        create("staging") {
+            dimension = "build"
+            applicationIdSuffix = ".staging"
+            resValue("string", "app_name", "Uniceps TEST")
+        }
+        create("prod") {
+            dimension = "build"
+            resValue("string", "app_name", "Uniceps")
+        }
+    }
 
 
     dependencies {

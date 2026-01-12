@@ -6,9 +6,9 @@ import 'package:uniceps/app/presentation/performance/widgets/muscle_difference_w
 import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/constants/muscles_images.dart';
-import 'package:uniceps/l10n/app_localizations.dart';
 import 'package:uniceps/core/widgets/empty_page.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 const imgs = [
   MusclesImages.height,
@@ -41,10 +41,7 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
 
   Future<List<Measurement>> getMeasurements() async {
     final either = await widget.commands.getMeasurements();
-    return either.fold(
-      (l) => Future.error(l),
-      (r) => Future.value(r),
-    );
+    return either.fold((l) => Future.error(l), (r) => Future.value(r));
   }
 
   late Future<List<Measurement>> future;
@@ -60,7 +57,8 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
     final locale = AppLocalizations.of(context)!;
     final primaryColor = Theme.of(context).colorScheme.primary;
     return Scaffold(
-      body: FutureBuilder(
+      body: SafeArea(
+        child: FutureBuilder(
           future: future,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -71,11 +69,7 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
                     centerTitle: true,
                     title: Text(locale.scrTitleCompareTool),
                     actions: const [
-                      Image(
-                        image: AssetImage(APP_LOGO),
-                        width: 40,
-                        height: 40,
-                      ),
+                      Image(image: AssetImage(APP_LOGO), width: 40, height: 40),
                       SizedBox(width: 5),
                     ],
                   ),
@@ -93,12 +87,15 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
                             value: oldM,
                             borderRadius: BorderRadius.circular(10),
                             items: measurements
-                                .map((m) => DropdownMenuItem(
+                                .map(
+                                  (m) => DropdownMenuItem(
                                     value: m,
                                     child: Text(
                                       DateFormat('d/M/y').format(m.checkDate),
                                       style: TextStyle(color: primaryColor),
-                                    )))
+                                    ),
+                                  ),
+                                )
                                 .toList(),
                             onChanged: (v) => setState(() => oldM = v),
                           ),
@@ -112,10 +109,15 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
                             value: newM,
                             borderRadius: BorderRadius.circular(10),
                             items: measurements
-                                .map((m) => DropdownMenuItem(
+                                .map(
+                                  (m) => DropdownMenuItem(
                                     value: m,
-                                    child: Text(DateFormat('d/M/y').format(m.checkDate),
-                                        style: TextStyle(color: primaryColor))))
+                                    child: Text(
+                                      DateFormat('d/M/y').format(m.checkDate),
+                                      style: TextStyle(color: primaryColor),
+                                    ),
+                                  ),
+                                )
                                 .toList(),
                             onChanged: (v) => setState(() => newM = v),
                           ),
@@ -148,7 +150,9 @@ class _MeasurementToolScreenState extends State<MeasurementToolScreen> {
               );
             }
             return const LoadingIndicator();
-          }),
+          },
+        ),
+      ),
     );
   }
 

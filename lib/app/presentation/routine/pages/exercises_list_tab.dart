@@ -47,7 +47,12 @@ class _ExercisesListTabState extends State<ExercisesListTab> with AutomaticKeepA
                 mainAxisSpacing: spacing,
                 crossAxisSpacing: spacing,
               ),
-              padding: EdgeInsets.all(spacing),
+              padding: EdgeInsets.only(
+                top: spacing,
+                left: spacing,
+                right: spacing,
+                bottom: MediaQuery.of(context).padding.bottom,
+              ),
               itemCount: state.list.length,
               itemBuilder: (context, index) {
                 final isPresent = widget.presentExId.contains(state.list[index].apiId);

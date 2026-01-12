@@ -13,7 +13,7 @@ import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 ///
 
 const APP_NAME = 'Uniceps';
-const APP_VERSION = 'v2.1.9+9';
+const APP_VERSION = "v2.1.11+11${String.fromEnvironment('VERSION_SUFFIX')}";
 const APP_RELEASE_DATE = '10/10/2024';
 
 const APP_LOGO = "images/logo/Logo.png";
@@ -129,14 +129,15 @@ const API = kDebugMode || kProfileMode ? r"https://uniceps.runasp.net/api" : r"h
 
 // const API_V2 = kDebugMode || kProfileMode ? r"uniceps.runasp.net" : r"uniceps.trio-verse.com/api/v1";
 // const API_V2 = r"uniceps.runasp.net";
-const API_V2 = r"uniapi.trio-verse.com";
+// const API_V2 = r"uniapi.trio-verse.com";
+const API_V2 = String.fromEnvironment('API_URL');
 
 /// PRODUCTION URL
 // const API = r"https://uniceps.trio-verse.com/api/v1";
 
 /// https://trio-verse.com
 const URL = "https://uniceps.trio-verse.com";
-const TELEGRAM = "https://t.me/uniceps_bot";
+const TELEGRAM = String.fromEnvironment('TELEGRAM');
 const DELETE_ACCOUNT = "https://uniceps.trio-verse.com/privacy";
 // const HTTP_REFRESH = "/refresh";
 // const HTTP_HANDSHAKE = "/handshake";
