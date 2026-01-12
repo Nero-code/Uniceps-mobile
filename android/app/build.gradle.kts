@@ -47,14 +47,30 @@ android {
         versionName = flutter.versionName
     }
     signingConfigs {
-        create("release") {
-            // Note: Use '?.let { file(it) }' for 'storeFile' to handle a potentially null value
-            // if the key.properties file is missing (e.g., during a debug build).
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storeFile = keystoreProperties["storeFile"]?.let { file(it as String) }
-            storePassword = keystoreProperties["storePassword"] as String
+//        create("release") {
+//            // Note: Use '?.let { file(it) }' for 'storeFile' to handle a potentially null value
+//            // if the key.properties file is missing (e.g., during a debug build).
+//            keyAlias = keystoreProperties["keyAlias"] as String
+//            keyPassword = keystoreProperties["keyPassword"] as String
+//            storeFile = keystoreProperties["storeFile"]?.let { file(it as String) }
+//            storePassword = keystoreProperties["storePassword"] as String
+//
+//        }
 
+        create("release") {
+            // 1. Get Values: Check Environment (GitHub) first, then local properties
+            val envAlias = System.getenv("PROPERTIES_KEY_ALIAS")
+            val envKeyPass = System.getenv("PROPERTIES_KEY_PASSWORD")
+            val envStorePass = System.getenv("PROPERTIES_KEYSTORE_PASSWORD")
+            val envStoreFile = System.getenv("PROPERTIES_KEYSTORE_FILE")
+
+            keyAlias = envAlias ?: (keystoreProperties["keyAlias"] as String?)
+            keyPassword = envKeyPass ?: (keystoreProperties["keyPassword"] as String?)
+            storePassword = envStorePass ?: (keystoreProperties["storePassword"] as String?)
+
+            // 2. Handle the File: Use the path from GitHub or the one from local properties
+            val filePath = envStoreFile ?: (keystoreProperties["storeFile"] as String?)
+            storeFile = filePath?.let { file(it) }
         }
     }
     buildTypes {

@@ -3,7 +3,8 @@ name: Staging Build
 on:
   push:
     branches:
-      - staging # Triggers on any push or merge to the staging branch
+      - staging
+  workflow_dispatch: # Allows you to run this manually from the Actions tab
 
 jobs:
   build:
@@ -24,7 +25,12 @@ jobs:
         with:
           channel: 'stable'
 
-      # Creates the sensitive files from Repository Secrets
+      # 1. Decode Keystore from Repository Secret
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
+
+      # 2. Create Config Files from Repository Secrets
       - name: Create Config Files
         run: |
           mkdir -p android/app/src/staging/
@@ -35,16 +41,31 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
       
-      # Build the specific flavor using the config file
+      # 3. Build signed APK
+      # The env variables here are picked up by your build.gradle System.getenv() calls
       - name: Build Staging APK
         run: |
           flutter build apk --release --flavor staging \
-          --dart-define-from-file=assets/config/config_staging.json
+          --dart-define-from-file=assets/config/config_staging.json \
+          --build-number=${{ github.run_number }}
+        env:
+          PROPERTIES_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          PROPERTIES_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          PROPERTIES_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          PROPERTIES_KEYSTORE_FILE: "keystore.jks"
 
-      # Makes the APK downloadable from the "Actions" tab
-      - name: Upload APK Artifact
-        uses: actions/upload-artifact@v4
+      # 4. Rename the APK so it has a version number
+      - name: Rename APK
+        run: mv build/app/outputs/flutter-apk/app-staging-release.apk build/app/outputs/flutter-apk/uniceps-staging-v${{ github.run_number }}.apk
+      
+      # 5. Create Release and add it to the releases section
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: staging-apk
-          path: build/app/outputs/flutter-apk/app-staging-release.apk
-          retention-days: 90
+          tag_name: v${{ github.run_number }}-staging
+          name: Staging Build v${{ github.run_number }}
+          body: "New staging build from commit ${{ github.sha }}"
+          prerelease: true
+          files: build/app/outputs/flutter-apk/uniceps-staging-v${{ github.run_number }}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
