@@ -56,12 +56,16 @@ jobs:
 
       # 4. Rename the APK so it has a version number
       - name: Rename APK
-        run: mv build/app/outputs/flutter-apk/app-staging-release.apk build/app/outputs/flutter-apk/app-staging-v${{ github.run_number }}.apk
-
-      # 5. Upload the file so you can download it from GitHub
-      - name: Upload APK Artifact
-        uses: actions/upload-artifact@v4
+        run: mv build/app/outputs/flutter-apk/app-staging-release.apk build/app/outputs/flutter-apk/uniceps-staging-v${{ github.run_number }}.apk
+      
+      # 5. Create Release and add it to the releases section
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: staging-build-v${{ github.run_number }}
-          path: build/app/outputs/flutter-apk/app-staging-v${{ github.run_number }}.apk
-          retention-days: 90
+          tag_name: v${{ github.run_number }}-staging
+          name: Staging Build v${{ github.run_number }}
+          body: "New staging build from commit ${{ github.sha }}"
+          prerelease: true
+          files: build/app/outputs/flutter-apk/uniceps-staging-v${{ github.run_number }}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
