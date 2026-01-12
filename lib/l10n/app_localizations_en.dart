@@ -192,6 +192,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please login to export this routine';
 
   @override
+  String get exportRoutineDone => 'Exported!, your file is ready';
+
+  @override
+  String get congrats => 'Congratulations';
+
+  @override
+  String get congratsContent =>
+      'Hurray!, Premium Plan activated, all app features are now unlocked, have fun!';
+
+  @override
   String get sessions => 'Sessions';
 
   @override
@@ -579,6 +589,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errOpenSessionDelete => 'you can\'t delete with an open session!';
 
   @override
+  String get errExportRoutine => 'Failed!, Could not export routine';
+
+  @override
   String get endOfSubDate => 'End of subscription Date';
 
   @override
@@ -697,4 +710,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get captainUniAboutContent =>
       'Hello, I’m Captain Uni.\nI’m the virtual guide who will accompany you inside the Uniceps app, and my job is to make every step easy and your experience smooth and clear.\nMy main role is to introduce you to the app and show you how to use each section without any confusion.\nI also help you choose the workout program that fits you best, so you can start your journey the right way.\nWith every workout you complete, I collect your stats and show you your results, so you can see your progress day by day.\nI can’t promise to change your life overnight… but I can promise to stay by your side at every stage.\nI’m here to guide you, explain things, and encourage you, so you can get the most out of the app.\nAnd in the end… consider me a friend and an experienced companion walking with you step by step, happy to see you improving.';
+
+  @override
+  String get msgSlowConnection => 'Weak internet connection';
 }

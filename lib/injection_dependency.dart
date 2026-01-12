@@ -63,6 +63,7 @@ import 'package:uniceps/app/domain/contracts/routine/i_routine_management_contra
 import 'package:uniceps/app/domain/contracts/routine/i_routine_sets_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_with_heat_contract.dart';
 import 'package:uniceps/app/services/captian_quotes_service.dart';
+import 'package:uniceps/app/services/device_info_sync_service.dart';
 import 'package:uniceps/app/services/update_service.dart';
 
 final sl = di.GetIt.instance;
@@ -116,7 +117,9 @@ Future<void> init() async {
 
   //  A U T H   S O U R C E S
   sl.registerLazySingleton<IOTPAuthSource>(() => OTPAuthSource(client: sl(), logger: sl()));
-  sl.registerLazySingleton<IAccountLocalSource>(() => AccountLocalSource(secureStorage: sl(), database: sl()));
+  sl.registerLazySingleton<IAccountLocalSource>(
+    () => AccountLocalSource(secureStorage: sl(), database: sl(), logger: sl()),
+  );
 
   //  M E A S U R E M E N T S   S O U R C E S
   sl.registerLazySingleton<IMeasurementsLocalSource>(() => MeasurementsLocalSource(database: sl(), logger: sl()));
@@ -155,7 +158,7 @@ Future<void> init() async {
   sl.registerLazySingleton<IRoutineDaysContract>(() => RoutineDaysRepo(localSource: sl(), logger: sl()));
   sl.registerLazySingleton<IRoutineItemsContract>(() => RoutineItemsRepo(localSource: sl(), mediaHelper: sl()));
   sl.registerLazySingleton<IRoutineSetsContract>(() => RoutineSetsRepo(localSource: sl(), logger: sl()));
-  sl.registerLazySingleton<IExercisesContract>(() => ExercisesRepo(internet: sl(), remoteSource: sl()));
+  sl.registerLazySingleton<IExercisesContract>(() => ExercisesRepo(internet: sl(), remoteSource: sl(), logger: sl()));
 
   //  A U T H   R E P O
   sl.registerLazySingleton<IOTPAuthRepo>(
@@ -168,7 +171,7 @@ Future<void> init() async {
     ),
   );
   sl.registerLazySingleton<IAccountService>(
-    () => AccountRepo(localSource: sl(), remoteSource: sl(), checker: sl(), logger: sl()),
+    () => AccountRepo(localSource: sl(), remoteSource: sl(), checker: sl(), tokenService: sl(), logger: sl()),
   );
 
   //  M E A S U R E M E N T S   R E P O
@@ -216,11 +219,11 @@ Future<void> init() async {
   sl.registerLazySingleton(() => client);
   // sl.registerLazySingleton<ClientHelper>(
   //     () => NoTokenHttpClientHelper(client: sl()));
-  sl.registerLazySingleton<ClientHelper>(() => HttpClientHelper(client: sl(), tokenService: sl()));
+  sl.registerLazySingleton<ClientHelper>(() => HttpClientHelper(client: sl(), tokenService: sl(), logger: sl()));
 
   sl.registerLazySingleton<InternetConnectionChecker>(() => InternetConnectionChecker.createInstance());
 
-  sl.registerLazySingleton(() => SimpleTokenService());
+  sl.registerLazySingleton(() => SimpleTokenService(storage: sl(), client: sl(), logger: sl()));
 
   sl.registerLazySingleton<Logger>(
     () => Logger(
@@ -251,6 +254,7 @@ Future<void> init() async {
     () => TSessionSyncService(database: sl(), client: sl(), connectionChecker: sl(), logger: sl()),
     dispose: (param) => param.dispose(),
   );
+  sl.registerLazySingleton(() => DeviceInfoSyncService(preferences: sl(), checker: sl(), client: sl(), logger: sl()));
 
   sl.registerLazySingleton(() => CaptianQuotesService(prefs: sl()));
 

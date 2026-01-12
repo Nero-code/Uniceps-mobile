@@ -100,252 +100,269 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
       create: (context) => RoutinesWithHeatBloc(sl())..add(const RoutinesWithHeatEvent.getRoutines()),
       child: Scaffold(
         appBar: AppBar(title: Text(locale.scrTitleMyRoutines)),
-        body: BlocConsumer<RoutinesWithHeatBloc, RoutinesWithHeatState>(
-          listenWhen: (previous, current) =>
-              previous.maybeWhen(loaded: (_) => true, orElse: () => false) &&
-              current.maybeWhen(importing: (_) => true, orElse: () => false),
-          listener: (context, state) {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) => BlocProvider.value(
-                value: context.read<RoutinesWithHeatBloc>(),
-                child: const RoutineImportProgressDialog(),
-              ),
-            );
-          },
-          buildWhen: (p, c) => c.maybeWhen(importing: (_) => false, orElse: () => true),
-          builder: (context, state) {
-            return state.map(
-              initial: (_) => const SizedBox(),
-              importing: (_) => const SizedBox(),
-              loading: (_) => const LoadingIndicator(),
-              error: (state) => ReloadScreenWidget(
-                f: state.f,
-                callBack: () =>
-                    BlocProvider.of<RoutinesWithHeatBloc>(context).add(const RoutinesWithHeatEvent.getRoutines()),
-              ),
-              loaded: (state) {
-                routinesLength = state.routines.length + 1;
-                return Column(
-                  children: [
-                    Expanded(
-                      child: state.routines.isNotEmpty
-                          ? ListView(
-                              padding: const EdgeInsets.only(bottom: 50.0),
-                              children: state.routines
-                                  .map(
-                                    (e) => RoutineWithHeat(
-                                      routine: e.routine,
-                                      heat: e.heat,
-                                      onTap: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              RoutineEditScreen(routineId: e.routine.id!, routineName: e.routine.name),
+        body: SafeArea(
+          top: false,
+          child: BlocConsumer<RoutinesWithHeatBloc, RoutinesWithHeatState>(
+            listenWhen: (previous, current) =>
+                previous.maybeWhen(loaded: (_) => true, orElse: () => false) &&
+                current.maybeWhen(importing: (_) => true, exported: (_) => true, orElse: () => false),
+            listener: (context, state) {
+              state.maybeWhen(
+                importing: (_) => showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) => BlocProvider.value(
+                    value: context.read<RoutinesWithHeatBloc>(),
+                    child: const RoutineImportProgressDialog(),
+                  ),
+                ),
+                exported: (isDone) {
+                  if (isDone) {
+                    ScaffoldMessenger.of(context).clearSnackBars();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(locale.exportRoutineDone)));
+                  } else {
+                    ScaffoldMessenger.of(context).clearSnackBars();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(locale.errExportRoutine)));
+                  }
+                },
+                orElse: () => null,
+              );
+            },
+            buildWhen: (p, c) => c.maybeWhen(importing: (_) => false, exported: (_) => false, orElse: () => true),
+            builder: (context, state) {
+              return state.maybeMap(
+                orElse: () => const SizedBox(),
+                loading: (_) => const LoadingIndicator(),
+                error: (state) => ReloadScreenWidget(
+                  f: state.f,
+                  callBack: () =>
+                      BlocProvider.of<RoutinesWithHeatBloc>(context).add(const RoutinesWithHeatEvent.getRoutines()),
+                ),
+                loaded: (state) {
+                  routinesLength = state.routines.length + 1;
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: state.routines.isNotEmpty
+                            ? ListView(
+                                padding: const EdgeInsets.only(bottom: 50.0),
+                                children: state.routines
+                                    .map(
+                                      (e) => RoutineWithHeat(
+                                        routine: e.routine,
+                                        heat: e.heat,
+                                        onTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => RoutineEditScreen(
+                                              routineId: e.routine.id!,
+                                              routineName: e.routine.name,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                      onMenu: () async {
-                                        final canDelete = context.read<SessionBloc>().state.maybeWhen(
-                                          orElse: () => false,
-                                          noActiveSession: () => true,
-                                        );
+                                        onMenu: () async {
+                                          final canDelete = context.read<SessionBloc>().state.maybeWhen(
+                                            orElse: () => false,
+                                            noActiveSession: () => true,
+                                          );
 
-                                        final res = await showDialog<Option>(
-                                          context: context,
-                                          builder: (context) => RoutineOptionsDialog(routineName: e.routine.name),
-                                        );
+                                          final res = await showDialog<Option>(
+                                            context: context,
+                                            builder: (context) => RoutineOptionsDialog(routineName: e.routine.name),
+                                          );
 
-                                        switch (res) {
-                                          case Option.edit:
-                                            _renameRoutine(e.routine.name, (name) {
-                                              if (name == e.routine.name) return;
-                                              BlocProvider.of<RoutinesWithHeatBloc>(
-                                                context,
-                                              ).add(RoutinesWithHeatEvent.update(e.routine.copyWith(name: name)));
-                                            });
-                                            break;
-
-                                          case Option.delete:
-                                            if (canDelete) {
-                                              _deleteRoutine(e.routine.name, () {
+                                          switch (res) {
+                                            case Option.edit:
+                                              _renameRoutine(e.routine.name, (name) {
+                                                if (name == e.routine.name) return;
                                                 BlocProvider.of<RoutinesWithHeatBloc>(
                                                   context,
-                                                ).add(RoutinesWithHeatEvent.delete(e.routine));
+                                                ).add(RoutinesWithHeatEvent.update(e.routine.copyWith(name: name)));
                                               });
-                                            } else {
-                                              if (context.mounted) {
-                                                ScaffoldMessenger.of(context).clearSnackBars();
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(
-                                                    backgroundColor: Colors.red,
-                                                    content: Text(locale.errOpenSessionDelete),
-                                                  ),
-                                                );
+                                              break;
+
+                                            case Option.delete:
+                                              if (canDelete) {
+                                                _deleteRoutine(e.routine.name, () {
+                                                  BlocProvider.of<RoutinesWithHeatBloc>(
+                                                    context,
+                                                  ).add(RoutinesWithHeatEvent.delete(e.routine));
+                                                });
+                                              } else {
+                                                if (context.mounted) {
+                                                  ScaffoldMessenger.of(context).clearSnackBars();
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    SnackBar(
+                                                      backgroundColor: Colors.red,
+                                                      content: Text(locale.errOpenSessionDelete),
+                                                    ),
+                                                  );
+                                                }
                                               }
-                                            }
-                                            break;
-                                          case Option.export:
-                                            // if (canExport) {
-                                            _exportRoutineAlert(
-                                              context.read<RoutinesWithHeatBloc>(),
-                                              locale.exportRoutine,
-                                              '${locale.exportRoutineAlertContent} ${e.routine.name}',
-                                              e.routine.id!,
-                                            );
-                                            // }
-                                            break;
-                                          case Option.setCurrent:
-                                            _setCurrentRoutine(() async {
-                                              final rBloc = BlocProvider.of<RoutinesWithHeatBloc>(context)
-                                                ..add(RoutinesWithHeatEvent.setCurrent(e.routine));
-                                              await rBloc.stream.skip(1).first;
-                                              if (context.mounted) {
-                                                BlocProvider.of<CurrentRoutineCubit>(context).getCurrentRoutine();
-                                              }
-                                            }, e.routine.name);
-                                            break;
-                                          default:
-                                        }
-                                      },
-                                    ),
-                                  )
-                                  .toList(),
-                            )
-                          : EmptyPage(
-                              imageName: CaptainImages.emptyRoutines,
-                              message: locale.emptyRoutines,
-                              imageSize: Size(
-                                MediaQuery.sizeOf(context).width * .5,
-                                MediaQuery.sizeOf(context).width * .5,
+                                              break;
+                                            case Option.export:
+                                              // if (canExport) {
+                                              _exportRoutineAlert(
+                                                context.read<RoutinesWithHeatBloc>(),
+                                                locale.exportRoutine,
+                                                '${locale.exportRoutineAlertContent} ${e.routine.name}',
+                                                e.routine.id!,
+                                              );
+                                              // }
+                                              break;
+                                            case Option.setCurrent:
+                                              _setCurrentRoutine(() async {
+                                                final rBloc = BlocProvider.of<RoutinesWithHeatBloc>(context)
+                                                  ..add(RoutinesWithHeatEvent.setCurrent(e.routine));
+                                                await rBloc.stream.skip(1).first;
+                                                if (context.mounted) {
+                                                  BlocProvider.of<CurrentRoutineCubit>(context).getCurrentRoutine();
+                                                }
+                                              }, e.routine.name);
+                                              break;
+                                            default:
+                                          }
+                                        },
+                                      ),
+                                    )
+                                    .toList(),
+                              )
+                            : EmptyPage(
+                                imageName: CaptainImages.emptyRoutines,
+                                message: locale.emptyRoutines,
+                                imageSize: Size(
+                                  MediaQuery.sizeOf(context).width * .5,
+                                  MediaQuery.sizeOf(context).width * .5,
+                                ),
                               ),
+                      ),
+                      Builder(
+                        builder: (context) {
+                          final acc = context.watch<AccountCubit>();
+                          final mem = context.watch<MembershipBloc>();
+
+                          final canCreate = acc.state.when(
+                            initial: () => false,
+                            unauthenticated: () =>
+                                state.maybeWhen(orElse: () => false, loaded: (routines) => routines.isEmpty),
+                            hasAccount: (s) => mem.state.maybeWhen(
+                              orElse: () =>
+                                  state.maybeWhen(orElse: () => false, loaded: (routines) => routines.isEmpty),
+                              loaded: (_) => true,
                             ),
-                    ),
-                    Builder(
-                      builder: (context) {
-                        final acc = context.watch<AccountCubit>();
-                        final mem = context.watch<MembershipBloc>();
+                          );
+                          final canImport = acc.state.maybeWhen(hasAccount: (_) => true, orElse: () => true);
 
-                        final canCreate = acc.state.when(
-                          initial: () => false,
-                          unauthenticated: () =>
-                              state.maybeWhen(orElse: () => false, loaded: (routines) => routines.isEmpty),
-                          hasAccount: (s) => mem.state.maybeWhen(
-                            orElse: () => state.maybeWhen(orElse: () => false, loaded: (routines) => routines.isEmpty),
-                            loaded: (_) => true,
-                          ),
-                        );
-                        final canImport = acc.state.maybeWhen(hasAccount: (_) => true, orElse: () => true);
-
-                        return Row(
-                          crossAxisAlignment: .end,
-                          children: [
-                            SizedBox(
-                              width: screenSize.width * .5,
-                              height: 50,
-                              child: Material(
-                                color: Theme.of(context).colorScheme.primary,
-                                child: InkWell(
-                                  onTap: acc.state.maybeWhen(
-                                    orElse: () => state.routines.isEmpty
-                                        ? () => _createRoutine(
-                                            "${locale.newRoutine} $routinesLength",
-                                            (name) => context.read<RoutinesWithHeatBloc>().add(
-                                              RoutinesWithHeatEvent.create(name),
-                                            ),
-                                          )
-                                        : () => showDialog(
-                                            context: context,
-                                            builder: (_) => AccountLimitAlert(content: locale.routineLimitAlert),
-                                          ),
-                                    hasAccount: (_) => mem.state.maybeWhen(
-                                      orElse: () =>
-                                          () => state.routines.isEmpty
+                          return Row(
+                            crossAxisAlignment: .end,
+                            children: [
+                              SizedBox(
+                                width: screenSize.width * .5,
+                                height: 50,
+                                child: Material(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  child: InkWell(
+                                    onTap: acc.state.maybeWhen(
+                                      orElse: () => state.routines.isEmpty
                                           ? () => _createRoutine(
                                               "${locale.newRoutine} $routinesLength",
                                               (name) => context.read<RoutinesWithHeatBloc>().add(
                                                 RoutinesWithHeatEvent.create(name),
                                               ),
                                             )
-                                          : showDialog(context: context, builder: (_) => const PremiumAlert()),
-                                      loaded: (m) =>
-                                          () => _createRoutine(
-                                            "${locale.newRoutine} $routinesLength",
-                                            (name) => context.read<RoutinesWithHeatBloc>().add(
-                                              RoutinesWithHeatEvent.create(name),
+                                          : () => showDialog(
+                                              context: context,
+                                              builder: (_) => AccountLimitAlert(content: locale.routineLimitAlert),
+                                            ),
+                                      hasAccount: (_) => mem.state.maybeWhen(
+                                        orElse: () =>
+                                            () => state.routines.isEmpty
+                                            ? _createRoutine(
+                                                "${locale.newRoutine} $routinesLength",
+                                                (name) => context.read<RoutinesWithHeatBloc>().add(
+                                                  RoutinesWithHeatEvent.create(name),
+                                                ),
+                                              )
+                                            : showDialog(context: context, builder: (_) => const PremiumAlert()),
+                                        loaded: (m) =>
+                                            () => _createRoutine(
+                                              "${locale.newRoutine} $routinesLength",
+                                              (name) => context.read<RoutinesWithHeatBloc>().add(
+                                                RoutinesWithHeatEvent.create(name),
+                                              ),
+                                            ),
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        spacing: 10,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          canCreate
+                                              ? const Icon(Icons.add, color: Colors.white)
+                                              : Image(
+                                                  image: AssetImage(IMG_PREMIUM),
+                                                  color: Colors.amber,
+                                                  width: 20,
+                                                  height: 20,
+                                                ),
+                                          Text(
+                                            locale.addRoutine,
+                                            style: const TextStyle(fontSize: 16, color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: screenSize.width * .5,
+                                height: 50,
+                                child: Ink(
+                                  color: canImport ? Theme.of(context).colorScheme.secondary : Colors.grey.shade300,
+                                  child: InkWell(
+                                    onTap: canImport
+                                        ? () => _importRoutineAlert(
+                                            context.read(),
+                                            locale.importRoutine,
+                                            locale.importRoutineAlertContent,
+                                          )
+                                        : null,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        spacing: 10,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+
+                                        children: [
+                                          const Icon(Icons.download, color: Colors.white),
+                                          Text(
+                                            // canCreate ? locale.add : locale.upgrade,
+                                            locale.importRoutine,
+                                            style: const TextStyle(
+                                              // fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                              color: Colors.white,
                                             ),
                                           ),
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Row(
-                                      spacing: 10,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        canCreate
-                                            ? const Icon(Icons.add, color: Colors.white)
-                                            : Image(
-                                                image: AssetImage(IMG_PREMIUM),
-                                                color: Colors.amber,
-                                                width: 20,
-                                                height: 20,
-                                              ),
-                                        Text(
-                                          locale.addRoutine,
-                                          style: const TextStyle(fontSize: 16, color: Colors.white),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              width: screenSize.width * .5,
-                              height: 50,
-                              child: Ink(
-                                color: canImport ? Theme.of(context).colorScheme.secondary : Colors.grey.shade300,
-                                child: InkWell(
-                                  onTap: canImport
-                                      ? () => _importRoutineAlert(
-                                          context.read(),
-                                          locale.importRoutine,
-                                          locale.importRoutineAlertContent,
-                                        )
-                                      : null,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Row(
-                                      spacing: 10,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-
-                                      children: [
-                                        const Icon(Icons.download, color: Colors.white),
-                                        Text(
-                                          // canCreate ? locale.add : locale.upgrade,
-                                          locale.importRoutine,
-                                          style: const TextStyle(
-                                            // fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          },
+                            ],
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );

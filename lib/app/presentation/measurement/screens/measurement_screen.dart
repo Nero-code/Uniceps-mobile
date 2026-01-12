@@ -55,44 +55,45 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
       create: (context) => MeasurementBloc(di.sl())..add(const MeasurementEvent.getMeasurements()),
       lazy: false,
       child: Scaffold(
-        body: BlocConsumer<MeasurementBloc, MeasurementState>(
-          listener: (context, state) => state.whenOrNull(
-            dirty: () => context.read<MeasurementBloc>().add(const MeasurementEvent.getMeasurements()),
-          ),
-          buildWhen: (_, current) => current.maybeWhen(orElse: () => true, dirty: () => false),
-          builder: (context, state) {
-            return state.map(
-              initial: (_) => const SizedBox(),
-              dirty: (_) => const SizedBox(),
-              loading: (_) => const LoadingIndicator(),
-              loaded: (state) {
-                childBuilder(state.list[page]);
-                return Stack(
-                  children: [
-                    GestureDetector(
-                      onHorizontalDragEnd: (details) async {
-                        if (isLoading) return;
+        body: SafeArea(
+          child: BlocConsumer<MeasurementBloc, MeasurementState>(
+            listener: (context, state) => state.whenOrNull(
+              dirty: () => context.read<MeasurementBloc>().add(const MeasurementEvent.getMeasurements()),
+            ),
+            buildWhen: (_, current) => current.maybeWhen(orElse: () => true, dirty: () => false),
+            builder: (context, state) {
+              return state.map(
+                initial: (_) => const SizedBox(),
+                dirty: (_) => const SizedBox(),
+                loading: (_) => const LoadingIndicator(),
+                loaded: (state) {
+                  childBuilder(state.list[page]);
+                  return Stack(
+                    children: [
+                      SizedBox.expand(),
+                      GestureDetector(
+                        onHorizontalDragEnd: (details) async {
+                          if (isLoading) return;
 
-                        if (details.primaryVelocity != null && details.primaryVelocity! > 0) {
-                          // print("Left");
-                          if (page < state.list.length - 1) {
-                            // ++page;
-                            await animate(true);
+                          if (details.primaryVelocity != null && details.primaryVelocity! > 0) {
+                            // print("Left");
+                            if (page < state.list.length - 1) {
+                              // ++page;
+                              await animate(true);
+                            }
+                          } else if (details.primaryVelocity != null && details.primaryVelocity! < 0) {
+                            // print("Right");
+                            if (page > 0) {
+                              // --page;
+                              await animate(false);
+                            }
                           }
-                        } else if (details.primaryVelocity != null && details.primaryVelocity! < 0) {
-                          // print("Right");
-                          if (page > 0) {
-                            // --page;
-                            await animate(false);
-                          }
-                        }
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.only(top: MediaQuery.sizeOf(context).height * 0.15),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Column(
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + kToolbarHeight),
+                          child: SingleChildScrollView(
+                            padding: EdgeInsets.only(bottom: 5),
+                            child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 PageTransitionSwitcher(
@@ -110,92 +111,157 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 5.0),
+                          ),
+                        ),
+                      ),
+                      const Positioned(top: 0, child: BackButton()),
+                      Positioned(
+                        bottom: 0.0,
+                        width: MediaQuery.sizeOf(context).width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            IconButton(
+                              style: IconButton.styleFrom(
+                                side: BorderSide(color: Colors.grey.shade300),
+                                padding: EdgeInsets.zero,
+                                backgroundColor: Colors.white.withAlpha(50),
+                                surfaceTintColor: Colors.blue,
+                              ),
+                              onPressed: () async {
+                                //  RTL  -->  Left (previous)
+                                if (isLoading) return;
+
+                                if (isRtl && page > 0) {
+                                  await animate(false);
+                                }
+                                if (!isRtl && page < state.list.length - 1) {
+                                  await animate(true);
+                                }
+                              },
+                              icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.grey.shade600),
+                            ),
+                            PageTransitionSwitcher(
+                              duration: const Duration(milliseconds: 500),
+                              reverse: isLeft,
+                              transitionBuilder: (child, primaryAnimation, secondaryAnimation) => SharedAxisTransition(
+                                animation: primaryAnimation,
+                                secondaryAnimation: secondaryAnimation,
+                                transitionType: SharedAxisTransitionType.horizontal,
+                                child: child,
+                              ),
+                              child: Text(
+                                key: ValueKey<String>("$page"),
+                                intl.DateFormat("dd/MM/yyyy").format(state.list[page].checkDate),
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            IconButton(
+                              style: IconButton.styleFrom(
+                                side: BorderSide(color: Colors.grey.shade300),
+                                padding: EdgeInsets.zero,
+                                backgroundColor: Colors.white.withAlpha(50),
+                                surfaceTintColor: Colors.blue,
+                              ),
+                              onPressed: () async {
+                                //  RTL  -->  Right (Next)
+                                if (isLoading) return;
+                                if (isRtl && page < state.list.length - 1) {
+                                  await animate(true);
+                                }
+                                if (!isRtl && page > 0) {
+                                  await animate(false);
+                                }
+                              },
+                              icon: Icon(Icons.arrow_forward_ios_rounded, color: Colors.grey.shade600),
+                            ),
                           ],
                         ),
                       ),
-                    ),
-                    const Positioned(top: 25, child: BackButton()),
-                    Positioned(
-                      bottom: 0.0,
-                      width: MediaQuery.sizeOf(context).width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          IconButton(
+                      Positioned.directional(
+                        end: 10,
+                        textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
+                        child: AnimatedStackMenu(
+                          spacing: 50,
+                          direction: isRtl ? Direction.left : Direction.right,
+                          toggleButton: (animation, toggle) => IconButton.filled(
                             style: IconButton.styleFrom(
-                              side: BorderSide(color: Colors.grey.shade300),
-                              padding: EdgeInsets.zero,
-                              backgroundColor: Colors.white.withAlpha(50),
-                              surfaceTintColor: Colors.blue,
+                              foregroundColor: Colors.grey.shade700,
+                              backgroundColor: Colors.grey.withAlpha(50),
                             ),
-                            onPressed: () async {
-                              //  RTL  -->  Left (previous)
-                              if (isLoading) return;
-
-                              if (isRtl && page > 0) {
-                                await animate(false);
-                              }
-                              if (!isRtl && page < state.list.length - 1) {
-                                await animate(true);
-                              }
-                            },
-                            icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.grey.shade600),
+                            onPressed: toggle,
+                            icon: AnimatedIcon(icon: AnimatedIcons.menu_close, progress: animation),
                           ),
-                          PageTransitionSwitcher(
-                            duration: const Duration(milliseconds: 500),
-                            reverse: isLeft,
-                            transitionBuilder: (child, primaryAnimation, secondaryAnimation) => SharedAxisTransition(
-                              animation: primaryAnimation,
-                              secondaryAnimation: secondaryAnimation,
-                              transitionType: SharedAxisTransitionType.horizontal,
-                              child: child,
+                          children: [
+                            IconButton.filled(
+                              style: IconButton.styleFrom(
+                                foregroundColor: Colors.blue,
+                                backgroundColor: Colors.blue.withAlpha(50),
+                              ),
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => BlocProvider.value(
+                                    value: context.read<MeasurementBloc>(),
+                                    child: const AddEditMeasurementScreen(),
+                                  ),
+                                ),
+                              ),
+                              icon: const Icon(Icons.add),
                             ),
-                            child: Text(
-                              key: ValueKey<String>("$page"),
-                              intl.DateFormat("dd/MM/yyyy").format(state.list[page].checkDate),
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            IconButton.filled(
+                              style: IconButton.styleFrom(
+                                foregroundColor: Colors.green,
+                                backgroundColor: Colors.green.withAlpha(50),
+                              ),
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => BlocProvider.value(
+                                    value: context.read<MeasurementBloc>(),
+                                    child: AddEditMeasurementScreen(m: state.list[page]),
+                                  ),
+                                ),
+                              ),
+                              icon: const Icon(Icons.edit),
                             ),
-                          ),
-                          IconButton(
-                            style: IconButton.styleFrom(
-                              side: BorderSide(color: Colors.grey.shade300),
-                              padding: EdgeInsets.zero,
-                              backgroundColor: Colors.white.withAlpha(50),
-                              surfaceTintColor: Colors.blue,
+                            IconButton.filled(
+                              style: IconButton.styleFrom(
+                                foregroundColor: Colors.red,
+                                backgroundColor: Colors.red.withAlpha(50),
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => BlocProvider.value(
+                                    value: context.read<MeasurementBloc>(),
+                                    child: DeleteDialog(
+                                      onPositive: () => context.read<MeasurementBloc>().add(
+                                        MeasurementEvent.deleteMeasurement(state.list[page]),
+                                      ),
+                                      itemName:
+                                          "${locale.record} ${intl.DateFormat('d/M/y').format(state.list[page].checkDate)}",
+                                    ),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.delete),
                             ),
-                            onPressed: () async {
-                              //  RTL  -->  Right (Next)
-                              if (isLoading) return;
-                              if (isRtl && page < state.list.length - 1) {
-                                await animate(true);
-                              }
-                              if (!isRtl && page > 0) {
-                                await animate(false);
-                              }
-                            },
-                            icon: Icon(Icons.arrow_forward_ios_rounded, color: Colors.grey.shade600),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned.directional(
-                      top: 30,
-                      end: 20,
-                      textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
-                      child: AnimatedStackMenu(
-                        spacing: 50,
-                        direction: isRtl ? Direction.left : Direction.right,
-                        toggleButton: (animation, toggle) => IconButton.filled(
-                          style: IconButton.styleFrom(
-                            foregroundColor: Colors.grey.shade700,
-                            backgroundColor: Colors.grey.withAlpha(50),
-                          ),
-                          onPressed: toggle,
-                          icon: AnimatedIcon(icon: AnimatedIcons.menu_close, progress: animation),
+                          ],
                         ),
-                        children: [
-                          IconButton.filled(
+                      ),
+                    ],
+                  );
+                },
+                error: (state) {
+                  return SizedBox.expand(
+                    child: Stack(
+                      children: [
+                        Positioned.directional(textDirection: isRtl ? .rtl : .ltr, child: BackButton()),
+                        Positioned.directional(
+                          end: 10.0,
+                          textDirection: isRtl ? .rtl : .ltr,
+                          child: IconButton.filled(
                             style: IconButton.styleFrom(
                               foregroundColor: Colors.blue,
                               backgroundColor: Colors.blue.withAlpha(50),
@@ -211,89 +277,21 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                             ),
                             icon: const Icon(Icons.add),
                           ),
-                          IconButton.filled(
-                            style: IconButton.styleFrom(
-                              foregroundColor: Colors.green,
-                              backgroundColor: Colors.green.withAlpha(50),
-                            ),
-                            onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => BlocProvider.value(
-                                  value: context.read<MeasurementBloc>(),
-                                  child: AddEditMeasurementScreen(m: state.list[page]),
-                                ),
-                              ),
-                            ),
-                            icon: const Icon(Icons.edit),
+                        ),
+                        Center(
+                          child: EmptyPage(
+                            imageName: CaptainImages.emptyMeasurement,
+                            message: locale.emptyMeasurements,
+                            imageSize: Size(screen.width * .7, screen.width * .7),
                           ),
-                          IconButton.filled(
-                            style: IconButton.styleFrom(
-                              foregroundColor: Colors.red,
-                              backgroundColor: Colors.red.withAlpha(50),
-                            ),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (_) => BlocProvider.value(
-                                  value: context.read<MeasurementBloc>(),
-                                  child: DeleteDialog(
-                                    onPositive: () => context.read<MeasurementBloc>().add(
-                                      MeasurementEvent.deleteMeasurement(state.list[page]),
-                                    ),
-                                    itemName:
-                                        "${locale.record} ${intl.DateFormat('d/M/y').format(state.list[page].checkDate)}",
-                                  ),
-                                ),
-                              );
-                            },
-                            icon: const Icon(Icons.delete),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                );
-              },
-              error: (state) {
-                return SizedBox.expand(
-                  child: Stack(
-                    children: [
-                      Positioned.directional(top: 30, textDirection: isRtl ? .rtl : .ltr, child: BackButton()),
-                      Positioned.directional(
-                        top: 30.0,
-                        end: 20.0,
-                        textDirection: isRtl ? .rtl : .ltr,
-                        child: IconButton.filled(
-                          style: IconButton.styleFrom(
-                            foregroundColor: Colors.blue,
-                            backgroundColor: Colors.blue.withAlpha(50),
-                          ),
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => BlocProvider.value(
-                                value: context.read<MeasurementBloc>(),
-                                child: const AddEditMeasurementScreen(),
-                              ),
-                            ),
-                          ),
-                          icon: const Icon(Icons.add),
-                        ),
-                      ),
-                      Center(
-                        child: EmptyPage(
-                          imageName: CaptainImages.emptyMeasurement,
-                          message: locale.emptyMeasurements,
-                          imageSize: Size(screen.width * .7, screen.width * .7),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          },
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );

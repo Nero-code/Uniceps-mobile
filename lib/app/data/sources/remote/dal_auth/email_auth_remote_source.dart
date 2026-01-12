@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
@@ -12,21 +13,17 @@ class OTPAuthSource implements IOTPAuthSource {
   final http.Client client;
   final Logger logger;
 
-  const OTPAuthSource({
-    required this.client,
-    required this.logger,
-  });
+  const OTPAuthSource({required this.client, required this.logger});
 
   @override
-  Future<bool> verifyCredential({
-    required String credential,
-    AccountType accountType = AccountType.normal,
-  }) async {
+  Future<bool> verifyCredential({required String credential, AccountType accountType = AccountType.normal}) async {
     logger.d("START FUNC: verifyEmail()");
 
-    final res = await client.post(Uri.https(API_V2, HTTP_REGISTER),
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
-        body: jsonEncode({"email": credential}));
+    final res = await client.post(
+      Uri.https(API_V2, HTTP_REGISTER),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+      body: jsonEncode({"email": credential}),
+    );
     logger.d("${res.statusCode}\n${res.body}");
 
     if (res.statusCode == 200 || res.statusCode == 201) {
@@ -42,12 +39,24 @@ class OTPAuthSource implements IOTPAuthSource {
     required T Function(Map<String, dynamic> json) parser,
   }) async {
     logger.d("START FUNC: validateOTP()");
-
+    final platform = 'Android';
+    final androidInfo = await DeviceInfoPlugin().androidInfo;
     final notifyToken = await FirebaseMessaging.instance.getToken();
-    final res = await client.post(Uri.https(API_V2, HTTP_VERIFY_CODE),
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
-        body: jsonEncode(
-            {"otp": otp, "email": credential, "notify_token": notifyToken}));
+    final res = await client.post(
+      Uri.https(API_V2, HTTP_VERIFY_CODE),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+      body: jsonEncode({
+        "otp": otp,
+        "email": credential,
+        "notifyToken": notifyToken,
+        "deviceToken": androidInfo.device,
+        "deviceId": androidInfo.id,
+        "platform": platform,
+        "appVersion": APP_VERSION,
+        "deviceModel": androidInfo.model,
+        "osVersion": "${androidInfo.version.sdkInt}",
+      }),
+    );
     logger.d("VerifyCode --> res.statusCode : ${res.statusCode}");
 
     if (res.statusCode == 200 || res.statusCode == 201) {
@@ -59,6 +68,7 @@ class OTPAuthSource implements IOTPAuthSource {
     throw ServerException();
   }
 }
+
 // {
 //   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoib3NhbWFzZGExMTEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6WyIwYmExZmMwYy0wMjA0LTQ3NDMtYTE1NS1hZjRhNjJhMjc3MWEiLCIwYmExZmMwYy0wMjA0LTQ3NDMtYTE1NS1hZjRhNjJhMjc3MWEiXSwianRpIjoiNmMxOTRiYjktYTIyNC00MzIwLWE2MzgtYjQxZGU5NWQ5MDNkIiwidXNlclR5cGUiOiJOb3JtYWwiLCJleHAiOjE3NjQ4NDI5OTQsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QiLCJhdWQiOiJGbHV0dGVyLWFwcCJ9.vG6QtrFZrx6SI-r5t53QHZ65MCV_8Rxlr1Tj3ofVW34",
 //   "expiresAt": "2025-12-04T10:09:54Z",

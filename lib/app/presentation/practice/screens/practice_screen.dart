@@ -43,24 +43,19 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final locale = AppLocalizations.of(context)!;
+    print('AppLifeCycle: $state');
     if (state == AppLifecycleState.paused) {
-      // final elapsed = context.read<StopwatchCubit>().stoptime;
       context.read<StopwatchCubit>().resetStopwatch();
-      // timer = Timer.periodic(
-      //   const Duration(seconds: 1),
-      //   (timer) {
-      //     seconds += const Duration(seconds: 1);
-      //     NotificationService.showNotification(id: 0, title: widget.dayName, body: formatDuration(elapsed + seconds));
-      //   },
-      // );
-
-      NotificationService.showNotification(id: 0, title: widget.dayName, body: locale.practiceNotificationBody);
+      NotificationService.showNotification(
+        id: 0,
+        title: widget.dayName,
+        body: locale.practiceNotificationBody,
+        onlyAlertOnce: true,
+      );
     }
     if (state == AppLifecycleState.resumed) {
-      NotificationService.closeAll();
-      // timer?.cancel();
+      /// NotificationService.closeAll();
       context.read<StopwatchCubit>().startStopWatch(DateTime.now().difference(widget.startDate));
-      // seconds = Duration.zero;
     }
   }
 
@@ -96,6 +91,7 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
         // When: (previous, current) => current is NoActiveSessionState,
         listenWhen: (previous, current) => current.maybeWhen(orElse: () => false, noActiveSession: () => true),
         listener: (context, state) {
+          NotificationService.closeAll();
           showDialog(context: context, builder: (context) => const SessionCompleteDialog());
         },
         // --------------------------------------------------------
@@ -155,74 +151,80 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
                   //   ],
                   // ),
                 ),
-                body: Stack(
-                  children: [
-                    const SizedBox.expand(),
-                    BlocBuilder<PracticeCubit, PracticeState>(
-                      buildWhen: (previous, current) => current is PracticeLoadedState,
-                      builder: (context, state) {
-                        if (state is PracticeLoadedState) {
-                          if (state.day.exercises.isNotEmpty) {
-                            totalProgress = state.day.exercises.map((e) => e.sets.length).reduce((a, b) => a + b);
-                          }
+                body: SafeArea(
+                  top: false,
+                  child: Stack(
+                    children: [
+                      const SizedBox.expand(),
+                      BlocBuilder<PracticeCubit, PracticeState>(
+                        buildWhen: (previous, current) => current is PracticeLoadedState,
+                        builder: (context, state) {
+                          if (state is PracticeLoadedState) {
+                            if (state.day.exercises.isNotEmpty) {
+                              totalProgress = state.day.exercises.map((e) => e.sets.length).reduce((a, b) => a + b);
+                            }
 
-                          return SingleChildScrollView(
-                            padding: const EdgeInsets.only(bottom: 100),
-                            child: ExpansionPanelList(
-                              animationDuration: const Duration(milliseconds: 500),
-                              expandedHeaderPadding: EdgeInsets.zero,
-                              expansionCallback: _expansionCallback,
-                              children: state.day.exercises
-                                  .map(
-                                    (i) => ExpansionPanel(
-                                      backgroundColor: const Color.fromARGB(255, 250, 250, 250),
-                                      isExpanded: expandedId == i.index,
-                                      canTapOnHeader: true,
-                                      headerBuilder: (_, _) => PracticeHeader(item: i),
-                                      body: PracticeBody(
-                                        sessionId: sessionState.session.id!,
-                                        exId: i.exercise.apiId,
-                                        exIndex: i.index,
-                                        sets: i.sets,
-                                        totalProgress: totalProgress ?? 0,
-                                        logs: sessionState.session.logs
-                                            .where((log) => log.exerciseId == i.exercise.apiId)
-                                            .toList(),
+                            return SingleChildScrollView(
+                              padding: const EdgeInsets.only(bottom: 100),
+                              child: ExpansionPanelList(
+                                animationDuration: const Duration(milliseconds: 500),
+                                expandedHeaderPadding: EdgeInsets.zero,
+                                expansionCallback: _expansionCallback,
+                                children: state.day.exercises
+                                    .map(
+                                      (i) => ExpansionPanel(
+                                        backgroundColor: const Color.fromARGB(255, 250, 250, 250),
+                                        isExpanded: expandedId == i.index,
+                                        canTapOnHeader: true,
+                                        headerBuilder: (_, _) => PracticeHeader(item: i),
+                                        body: PracticeBody(
+                                          sessionId: sessionState.session.id!,
+                                          exId: i.exercise.apiId,
+                                          exIndex: i.index,
+                                          sets: i.sets,
+                                          totalProgress: totalProgress ?? 0,
+                                          logs: sessionState.session.logs
+                                              .where((log) => log.exerciseId == i.exercise.apiId)
+                                              .toList(),
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                  .toList(),
+                                    )
+                                    .toList(),
+                              ),
+                            );
+                          } else if (state is PracticeErrorState) {
+                            return Center(child: Text(state.failure.getErrorMessage()));
+                          }
+                          return const LoadingIndicator();
+                        },
+                      ),
+                      Positioned(
+                        bottom: 0.0,
+                        width: screenSize.width,
+                        child: Container(
+                          height: 60,
+                          padding: const EdgeInsets.all(8.0),
+                          color: Colors.white,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              final fullSession = sessionState.session.logs.length == totalProgress;
+                              _finishSession(context, sessionState.session, fullSession);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.bolt, size: 25),
+                                Text(
+                                  locale.finish,
+                                  style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+                                ),
+                              ],
                             ),
-                          );
-                        } else if (state is PracticeErrorState) {
-                          return Center(child: Text(state.failure.getErrorMessage()));
-                        }
-                        return const LoadingIndicator();
-                      },
-                    ),
-                    Positioned(
-                      bottom: 0.0,
-                      width: screenSize.width,
-                      child: Container(
-                        height: 60,
-                        padding: const EdgeInsets.all(8.0),
-                        color: Colors.white,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            final fullSession = sessionState.session.logs.length == totalProgress;
-                            _finishSession(context, sessionState.session, fullSession);
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.bolt, size: 25),
-                              Text(locale.finish, style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 16)),
-                            ],
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

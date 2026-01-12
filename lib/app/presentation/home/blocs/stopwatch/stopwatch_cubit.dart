@@ -29,6 +29,7 @@ class StopwatchCubit extends Cubit<StopwatchState> {
 
   void startStopWatch([Duration elapsed = Duration.zero]) {
     _timer?.cancel();
+    stopwatch.reset();
     stopwatch.start();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       emit(StopwatchState(time: formatDuration(elapsed + stopwatch.elapsed), isRunning: true));

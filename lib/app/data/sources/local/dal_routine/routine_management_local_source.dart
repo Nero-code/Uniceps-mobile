@@ -27,8 +27,8 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
   final Logger _logger;
 
   const RoutineManagementLocalSourceImpl({required AppDatabase database, required Logger logger})
-      : _database = database,
-        _logger = logger;
+    : _database = database,
+      _logger = logger;
 
   @override
   Future<List<RoutineDto>> getAllRoutines() async {
@@ -47,9 +47,9 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
 
   @override
   Future<RoutineDto> updateRoutine(RoutineDto dto) async {
-    await (_database.update(_database.routines)..where((f) => f.id.equals(dto.id!))).write(
-      RoutinesCompanion.custom(name: Constant(dto.name)),
-    );
+    await (_database.update(
+      _database.routines,
+    )..where((f) => f.id.equals(dto.id!))).write(RoutinesCompanion.custom(name: Constant(dto.name)));
 
     return dto;
   }
@@ -57,12 +57,14 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
   @override
   Future<void> setCurrentRoutine(RoutineDto dto) async {
     // Remove flag from old routine.
-    await (_database.update(_database.routines)..where((f) => f.isCurrent.equals(true)))
-        .write(RoutinesCompanion.custom(isCurrent: const Constant(false)));
+    await (_database.update(
+      _database.routines,
+    )..where((f) => f.isCurrent.equals(true))).write(RoutinesCompanion.custom(isCurrent: const Constant(false)));
 
     // Add flag to new routine.
-    await (_database.update(_database.routines)..where((f) => f.id.equals(dto.id!)))
-        .write(RoutinesCompanion.custom(isCurrent: const Constant(true)));
+    await (_database.update(
+      _database.routines,
+    )..where((f) => f.id.equals(dto.id!))).write(RoutinesCompanion.custom(isCurrent: const Constant(true)));
   }
 
   @override
@@ -112,8 +114,9 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
 
         _logger.t("step 3: items.length = ${items.length}");
         for (final item in items) {
-          final sets =
-              await (_database.select(_database.routineSets)..where((f) => f.routineItemId.equals(item.id))).get();
+          final sets = await (_database.select(
+            _database.routineSets,
+          )..where((f) => f.routineItemId.equals(item.id))).get();
           sc += sets.length;
           _logger.t("step 4: sets.length = ${sets.length}");
         }
@@ -130,7 +133,7 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
           exercises: ic,
           sets: sc,
           lastdayId: lastDayId,
-        )
+        ),
       ));
     }
     return result;
@@ -148,15 +151,20 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
       yield Stage.days; // move one step for Day
       // Create Items
       for (final i in d.items) {
-        var ex = await (_database.select(_database.exercises)..where((f) => f.apiId.equals(i.exerciseV2Dto.apiId)))
-            .getSingleOrNull();
+        var ex = await (_database.select(
+          _database.exercises,
+        )..where((f) => f.apiId.equals(i.exerciseV2Dto.apiId))).getSingleOrNull();
         if (ex == null) {
-          await _database.into(_database.exercises).insert(ExercisesCompanion.insert(
-                apiId: Value(i.exerciseV2Dto.apiId),
-                name: i.exerciseV2Dto.name,
-                imageUrl: i.exerciseV2Dto.imageUrl,
-                muscleGroupTranslations: encodeTranslations(i.exerciseV2Dto.muscleGroupTranslations),
-              ));
+          await _database
+              .into(_database.exercises)
+              .insert(
+                ExercisesCompanion.insert(
+                  apiId: Value(i.exerciseV2Dto.apiId),
+                  name: i.exerciseV2Dto.name,
+                  imageUrl: i.exerciseV2Dto.imageUrl,
+                  muscleGroupTranslations: encodeTranslations(i.exerciseV2Dto.muscleGroupTranslations),
+                ),
+              );
         }
         final itemId = await _database
             .into(_database.routineItems)
@@ -176,15 +184,18 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
   @override
   Future<RoutineDto> getFullRoutine(int routineId) async {
     final routine = await (_database.select(_database.routines)..where((f) => f.id.equals(routineId))).getSingle();
-    final routineDays =
-        await (_database.select(_database.daysGroup)..where((f) => f.routineId.equals(routineId))).get();
-    final List<RoutineItemDto> iTems = [];
+    final routineDays = await (_database.select(
+      _database.daysGroup,
+    )..where((f) => f.routineId.equals(routineId))).get();
+
     final List<RoutineDayDto> days = [];
     for (final d in routineDays) {
+      final List<RoutineItemDto> iTems = [];
       final items = await (_database.select(_database.routineItems)..where((f) => f.dayId.equals(d.id))).get();
       for (final i in items) {
-        final ex =
-            await (_database.select(_database.exercises)..where((f) => f.apiId.equals(i.exerciseId))).getSingle();
+        final ex = await (_database.select(
+          _database.exercises,
+        )..where((f) => f.apiId.equals(i.exerciseId))).getSingle();
         final sets = await (_database.select(_database.routineSets)..where((f) => f.routineItemId.equals(i.id))).get();
         iTems.add(
           RoutineItemDto.fromTable(

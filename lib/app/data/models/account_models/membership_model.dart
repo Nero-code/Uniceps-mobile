@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uniceps/app/domain/classes/account_entities/membership.dart';
 
 part 'membership_model.g.dart';
 
 @JsonSerializable()
-class MembershipModel {
+class MembershipModel extends Equatable {
   @JsonKey(name: 'id')
   final String planId;
 
@@ -33,41 +34,41 @@ class MembershipModel {
   });
 
   factory MembershipModel.free() => MembershipModel(
-        planName: "Free",
-        planId: "",
-        price: 0,
-        startDate: DateTime.now(),
-        endDate: DateTime(2099),
-        isActive: true,
-        isGift: false,
-        isNotified: false,
-      );
+    planName: "Free",
+    planId: "",
+    price: 0,
+    startDate: DateTime.now(),
+    endDate: DateTime(2099),
+    isActive: true,
+    isGift: false,
+    isNotified: false,
+  );
 
   factory MembershipModel.fromJson(Map<String, dynamic> json) => _$MembershipModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$MembershipModelToJson(this);
 
   factory MembershipModel.fromEntity(Membership s) => MembershipModel(
-        planName: s.planName,
-        planId: s.planId,
-        price: s.price,
-        startDate: s.startDate,
-        endDate: s.endDate,
-        isNotified: s.isNotified,
-        isActive: s.isActive,
-        isGift: s.isGift,
-      );
+    planName: s.planName,
+    planId: s.planId,
+    price: s.price,
+    startDate: s.startDate,
+    endDate: s.endDate,
+    isNotified: s.isNotified,
+    isActive: s.isActive,
+    isGift: s.isGift,
+  );
 
   Membership toEntity() => Membership(
-        planName: planName,
-        planId: planId,
-        price: price,
-        startDate: startDate,
-        endDate: endDate,
-        isNotified: isNotified,
-        isActive: isActive,
-        isGift: isGift,
-      );
+    planName: planName,
+    planId: planId,
+    price: price,
+    startDate: startDate,
+    endDate: endDate,
+    isNotified: isNotified,
+    isActive: isActive,
+    isGift: isGift,
+  );
 
   MembershipModel copyWith({
     String? planId,
@@ -78,15 +79,17 @@ class MembershipModel {
     bool? isNotified,
     bool? isActive,
     bool? isGift,
-  }) =>
-      MembershipModel(
-        planName: planName ?? this.planName,
-        planId: planId ?? this.planId,
-        price: price ?? this.price,
-        startDate: startDate ?? this.startDate,
-        endDate: endDate ?? this.endDate,
-        isNotified: isNotified ?? this.isNotified,
-        isActive: isActive ?? this.isActive,
-        isGift: isGift ?? this.isGift,
-      );
+  }) => MembershipModel(
+    planName: planName ?? this.planName,
+    planId: planId ?? this.planId,
+    price: price ?? this.price,
+    startDate: startDate ?? this.startDate,
+    endDate: endDate ?? this.endDate,
+    isNotified: isNotified ?? this.isNotified,
+    isActive: isActive ?? this.isActive,
+    isGift: isGift ?? this.isGift,
+  );
+
+  @override
+  List<Object?> get props => [planId, planName, price, startDate, endDate, isNotified, isActive, isGift];
 }

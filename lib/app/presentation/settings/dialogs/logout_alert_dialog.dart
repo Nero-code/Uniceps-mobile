@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/l10n/app_localizations.dart';
-import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class LogoutAlertDialog extends StatelessWidget {
-  const LogoutAlertDialog({
-    super.key,
-  });
+  const LogoutAlertDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +23,10 @@ class LogoutAlertDialog extends StatelessWidget {
         TextButton(
           onPressed: () {
             context.read<AccountCubit>().logout();
+            context.read<MembershipBloc>().add(MembershipEvent.getCurrentPlan());
             Navigator.pop(context);
           },
-          child: Text(
-            locale.ok,
-            style: const TextStyle(color: Colors.red),
-          ),
+          child: Text(locale.ok, style: const TextStyle(color: Colors.red)),
         ),
       ],
     ).build(context);

@@ -44,7 +44,7 @@ class GymLogoWidget extends StatelessWidget {
                       child: Image(image: imageProvider),
                     );
                   },
-                  errorWidget: (_, __, ___) => const Padding(
+                  errorWidget: (_, _, _) => const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Image(
                       image: AssetImage(APP_LOGO_DARK),
