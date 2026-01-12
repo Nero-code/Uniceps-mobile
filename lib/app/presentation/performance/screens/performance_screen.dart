@@ -14,7 +14,8 @@ import 'package:uniceps/app/presentation/performance/widgets/physical_report_car
 import 'package:uniceps/app/presentation/performance/widgets/session_report_card.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/errors/failure.dart';
-import 'package:uniceps/core/widgets/loading_page.dart';import 'package:uniceps/l10n/app_localizations.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class PerformanceScreen extends StatefulWidget {
   const PerformanceScreen({super.key, required this.performanceCommands, required this.routineCommnds});
@@ -78,87 +79,91 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
     final locale = AppLocalizations.of(context)!;
     final screenSize = MediaQuery.sizeOf(context);
     return Scaffold(
-      body: FutureBuilder(
-        future: routinesTrigger?.future,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  centerTitle: true,
-                  pinned: true,
-                  actions: [
-                    IconButton(
-                      onPressed: () => Navigator.pushNamed(context, AppRoutes.measurementTool),
-                      icon: const Icon(Icons.straighten_rounded),
-                    ),
-                  ],
-                  title: SizedBox(
-                    width: screenSize.width * .75,
-                    child: DropdownButton(
-                      value: selectedRoutine,
-                      elevation: 1,
-                      borderRadius: BorderRadius.circular(10),
-                      onChanged: (value) => value != null ? selectRoutine(value) : null,
-                      items: routines.map((r) => DropdownMenuItem(value: r, child: Text(r.name))).toList(),
+      body: SafeArea(
+        child: FutureBuilder(
+          future: routinesTrigger?.future,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    centerTitle: true,
+                    pinned: true,
+                    actions: [
+                      IconButton(
+                        onPressed: () => Navigator.pushNamed(context, AppRoutes.measurementTool),
+                        icon: const Icon(Icons.straighten_rounded),
+                      ),
+                    ],
+                    title: SizedBox(
+                      width: screenSize.width * .75,
+                      child: DropdownButton(
+                        value: selectedRoutine,
+                        elevation: 1,
+                        borderRadius: BorderRadius.circular(10),
+                        onChanged: (value) => value != null ? selectRoutine(value) : null,
+                        items: routines.map((r) => DropdownMenuItem(value: r, child: Text(r.name))).toList(),
+                      ),
                     ),
                   ),
-                ),
 
-                const SliverToBoxAdapter(child: SizedBox(height: 10)),
+                  const SliverToBoxAdapter(child: SizedBox(height: 10)),
 
-                //
-                //  Sessions Report
-                //
-
-                SliverToBoxAdapter(
-                  child: sessionsReport?.fold(
-                    (l) => NoReportWidget(
+                  //
+                  //  Sessions Report
+                  //
+                  SliverToBoxAdapter(
+                    child: sessionsReport?.fold(
+                      (l) => NoReportWidget(
                         message: l.when(
-                      noValues: () => locale.sessionsReportNoValues,
-                      invalidValues: () => locale.sessionsReportInvalidValues,
-                    )),
-                    (r) => SessionReportCard(report: r),
+                          noValues: () => locale.sessionsReportNoValues,
+                          invalidValues: () => locale.sessionsReportInvalidValues,
+                        ),
+                      ),
+                      (r) => SessionReportCard(report: r),
+                    ),
                   ),
-                ),
 
-                //
-                //  Logs Report
-                //
-
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: logsReport?.fold(
+                  //
+                  //  Logs Report
+                  //
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: logsReport?.fold(
                         (l) => NoReportWidget(
-                                message: l.when(
-                              noValues: () => locale.logsReportNoValues,
-                              invalidValues: () => locale.logsReportInvalidValues,
-                            )),
-                        (r) => LogsReportCard(r: r)),
+                          message: l.when(
+                            noValues: () => locale.logsReportNoValues,
+                            invalidValues: () => locale.logsReportInvalidValues,
+                          ),
+                        ),
+                        (r) => LogsReportCard(r: r),
+                      ),
+                    ),
                   ),
-                ),
 
-                //
-                //  Physical Report
-                //
-                SliverToBoxAdapter(
-                  child: physicalReport?.fold(
-                    (l) => NoReportWidget(
+                  //
+                  //  Physical Report
+                  //
+                  SliverToBoxAdapter(
+                    child: physicalReport?.fold(
+                      (l) => NoReportWidget(
                         message: l.when(
-                      noValues: () => locale.physicalReportNoValues,
-                      invalidValues: () => locale.physicalReportInvalidValues,
-                    )),
-                    (r) => PhysicalReportCard(report: r),
+                          noValues: () => locale.physicalReportNoValues,
+                          invalidValues: () => locale.physicalReportInvalidValues,
+                        ),
+                      ),
+                      (r) => PhysicalReportCard(report: r),
+                    ),
                   ),
-                ),
-              ],
-            );
-          } else if (snapshot.hasError) {
-            return Center(child: Text(locale.noTrainingProgram));
-          }
-          return const LoadingIndicator();
-        },
+                ],
+              );
+            } else if (snapshot.hasError) {
+              return Center(child: Text(locale.noTrainingProgram));
+            }
+            return const LoadingIndicator();
+          },
+        ),
       ),
     );
   }

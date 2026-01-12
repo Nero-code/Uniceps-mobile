@@ -645,15 +645,16 @@ extension RoutinesWithHeatStatePatterns on RoutinesWithHeatState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Importing value)?  importing,TResult Function( _Loaded value)?  loaded,TResult Function( _Error value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Loaded value)?  loaded,TResult Function( _Error value)?  error,TResult Function( _Importing value)?  importing,TResult Function( _Exported value)?  exported,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
-return loading(_that);case _Importing() when importing != null:
-return importing(_that);case _Loaded() when loaded != null:
+return loading(_that);case _Loaded() when loaded != null:
 return loaded(_that);case _Error() when error != null:
-return error(_that);case _:
+return error(_that);case _Importing() when importing != null:
+return importing(_that);case _Exported() when exported != null:
+return exported(_that);case _:
   return orElse();
 
 }
@@ -671,15 +672,16 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Importing value)  importing,required TResult Function( _Loaded value)  loaded,required TResult Function( _Error value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Loaded value)  loaded,required TResult Function( _Error value)  error,required TResult Function( _Importing value)  importing,required TResult Function( _Exported value)  exported,}){
 final _that = this;
 switch (_that) {
 case _Initial():
 return initial(_that);case _Loading():
-return loading(_that);case _Importing():
-return importing(_that);case _Loaded():
+return loading(_that);case _Loaded():
 return loaded(_that);case _Error():
-return error(_that);case _:
+return error(_that);case _Importing():
+return importing(_that);case _Exported():
+return exported(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -696,15 +698,16 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Importing value)?  importing,TResult? Function( _Loaded value)?  loaded,TResult? Function( _Error value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Loaded value)?  loaded,TResult? Function( _Error value)?  error,TResult? Function( _Importing value)?  importing,TResult? Function( _Exported value)?  exported,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
-return loading(_that);case _Importing() when importing != null:
-return importing(_that);case _Loaded() when loaded != null:
+return loading(_that);case _Loaded() when loaded != null:
 return loaded(_that);case _Error() when error != null:
-return error(_that);case _:
+return error(_that);case _Importing() when importing != null:
+return importing(_that);case _Exported() when exported != null:
+return exported(_that);case _:
   return null;
 
 }
@@ -721,14 +724,15 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( RoutineResult result)?  importing,TResult Function( List<({Routine routine, RoutineHeat heat})> routines)?  loaded,TResult Function( Failure f)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<({Routine routine, RoutineHeat heat})> routines)?  loaded,TResult Function( Failure f)?  error,TResult Function( RoutineResult result)?  importing,TResult Function( bool isDone)?  exported,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
-return loading();case _Importing() when importing != null:
-return importing(_that.result);case _Loaded() when loaded != null:
+return loading();case _Loaded() when loaded != null:
 return loaded(_that.routines);case _Error() when error != null:
-return error(_that.f);case _:
+return error(_that.f);case _Importing() when importing != null:
+return importing(_that.result);case _Exported() when exported != null:
+return exported(_that.isDone);case _:
   return orElse();
 
 }
@@ -746,14 +750,15 @@ return error(_that.f);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( RoutineResult result)  importing,required TResult Function( List<({Routine routine, RoutineHeat heat})> routines)  loaded,required TResult Function( Failure f)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<({Routine routine, RoutineHeat heat})> routines)  loaded,required TResult Function( Failure f)  error,required TResult Function( RoutineResult result)  importing,required TResult Function( bool isDone)  exported,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
-return loading();case _Importing():
-return importing(_that.result);case _Loaded():
+return loading();case _Loaded():
 return loaded(_that.routines);case _Error():
-return error(_that.f);case _:
+return error(_that.f);case _Importing():
+return importing(_that.result);case _Exported():
+return exported(_that.isDone);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -770,14 +775,15 @@ return error(_that.f);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( RoutineResult result)?  importing,TResult? Function( List<({Routine routine, RoutineHeat heat})> routines)?  loaded,TResult? Function( Failure f)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<({Routine routine, RoutineHeat heat})> routines)?  loaded,TResult? Function( Failure f)?  error,TResult? Function( RoutineResult result)?  importing,TResult? Function( bool isDone)?  exported,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
-return loading();case _Importing() when importing != null:
-return importing(_that.result);case _Loaded() when loaded != null:
+return loading();case _Loaded() when loaded != null:
 return loaded(_that.routines);case _Error() when error != null:
-return error(_that.f);case _:
+return error(_that.f);case _Importing() when importing != null:
+return importing(_that.result);case _Exported() when exported != null:
+return exported(_that.isDone);case _:
   return null;
 
 }
@@ -848,72 +854,6 @@ String toString() {
 
 
 
-
-/// @nodoc
-
-
-class _Importing implements RoutinesWithHeatState {
-  const _Importing({required this.result});
-  
-
- final  RoutineResult result;
-
-/// Create a copy of RoutinesWithHeatState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$ImportingCopyWith<_Importing> get copyWith => __$ImportingCopyWithImpl<_Importing>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Importing&&(identical(other.result, result) || other.result == result));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,result);
-
-@override
-String toString() {
-  return 'RoutinesWithHeatState.importing(result: $result)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$ImportingCopyWith<$Res> implements $RoutinesWithHeatStateCopyWith<$Res> {
-  factory _$ImportingCopyWith(_Importing value, $Res Function(_Importing) _then) = __$ImportingCopyWithImpl;
-@useResult
-$Res call({
- RoutineResult result
-});
-
-
-
-
-}
-/// @nodoc
-class __$ImportingCopyWithImpl<$Res>
-    implements _$ImportingCopyWith<$Res> {
-  __$ImportingCopyWithImpl(this._self, this._then);
-
-  final _Importing _self;
-  final $Res Function(_Importing) _then;
-
-/// Create a copy of RoutinesWithHeatState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? result = null,}) {
-  return _then(_Importing(
-result: null == result ? _self.result : result // ignore: cast_nullable_to_non_nullable
-as RoutineResult,
-  ));
-}
-
-
-}
 
 /// @nodoc
 
@@ -1047,6 +987,138 @@ class __$ErrorCopyWithImpl<$Res>
   return _then(_Error(
 null == f ? _self.f : f // ignore: cast_nullable_to_non_nullable
 as Failure,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _Importing implements RoutinesWithHeatState {
+  const _Importing({required this.result});
+  
+
+ final  RoutineResult result;
+
+/// Create a copy of RoutinesWithHeatState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ImportingCopyWith<_Importing> get copyWith => __$ImportingCopyWithImpl<_Importing>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Importing&&(identical(other.result, result) || other.result == result));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,result);
+
+@override
+String toString() {
+  return 'RoutinesWithHeatState.importing(result: $result)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ImportingCopyWith<$Res> implements $RoutinesWithHeatStateCopyWith<$Res> {
+  factory _$ImportingCopyWith(_Importing value, $Res Function(_Importing) _then) = __$ImportingCopyWithImpl;
+@useResult
+$Res call({
+ RoutineResult result
+});
+
+
+
+
+}
+/// @nodoc
+class __$ImportingCopyWithImpl<$Res>
+    implements _$ImportingCopyWith<$Res> {
+  __$ImportingCopyWithImpl(this._self, this._then);
+
+  final _Importing _self;
+  final $Res Function(_Importing) _then;
+
+/// Create a copy of RoutinesWithHeatState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? result = null,}) {
+  return _then(_Importing(
+result: null == result ? _self.result : result // ignore: cast_nullable_to_non_nullable
+as RoutineResult,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _Exported implements RoutinesWithHeatState {
+  const _Exported({required this.isDone});
+  
+
+ final  bool isDone;
+
+/// Create a copy of RoutinesWithHeatState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ExportedCopyWith<_Exported> get copyWith => __$ExportedCopyWithImpl<_Exported>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Exported&&(identical(other.isDone, isDone) || other.isDone == isDone));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,isDone);
+
+@override
+String toString() {
+  return 'RoutinesWithHeatState.exported(isDone: $isDone)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ExportedCopyWith<$Res> implements $RoutinesWithHeatStateCopyWith<$Res> {
+  factory _$ExportedCopyWith(_Exported value, $Res Function(_Exported) _then) = __$ExportedCopyWithImpl;
+@useResult
+$Res call({
+ bool isDone
+});
+
+
+
+
+}
+/// @nodoc
+class __$ExportedCopyWithImpl<$Res>
+    implements _$ExportedCopyWith<$Res> {
+  __$ExportedCopyWithImpl(this._self, this._then);
+
+  final _Exported _self;
+  final $Res Function(_Exported) _then;
+
+/// Create a copy of RoutinesWithHeatState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? isDone = null,}) {
+  return _then(_Exported(
+isDone: null == isDone ? _self.isDone : isDone // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

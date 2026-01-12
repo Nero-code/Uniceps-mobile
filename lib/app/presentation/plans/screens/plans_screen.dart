@@ -100,6 +100,7 @@ class _PlansScreenState extends State<PlansScreen> {
                     ),
                     DataTable(
                       columnSpacing: 24,
+                      dividerThickness: .5,
                       columns: [
                         DataColumn(
                           label: Text(ltr ? 'Feature' : 'الميزة', style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -191,7 +192,7 @@ class _PlansScreenState extends State<PlansScreen> {
                 bottom: 0.0,
                 width: screen.width,
                 child: Container(
-                  color: Colors.white,
+                  // color: Colors.white,
                   padding: const EdgeInsets.all(8.0),
                   child: BlocBuilder<PlansBloc, PlansState>(
                     buildWhen: (previous, current) =>

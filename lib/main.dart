@@ -70,8 +70,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<LocaleCubit>(create: (context) => LocaleCubit()..getSavedLanguageCode()),
-        BlocProvider<AccountCubit>(create: (context) => AccountCubit(di.sl(), di.sl())..getUserAccount()),
+        BlocProvider(create: (context) => LocaleCubit()..getSavedLanguageCode()),
+        BlocProvider(create: (context) => AccountCubit(di.sl(), di.sl(), di.sl())..getUserAccount()),
         BlocProvider(create: (context) => MembershipBloc(di.sl())..add(const MembershipEvent.getCurrentPlan())),
         BlocProvider(create: (context) => CurrentRoutineCubit(commands: di.sl())..getCurrentRoutine(), lazy: false),
         BlocProvider(

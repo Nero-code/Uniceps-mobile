@@ -1,4 +1,6 @@
-class Membership {
+import 'package:equatable/equatable.dart';
+
+class Membership extends Equatable {
   final String planName;
   final String planId;
   final double price;
@@ -9,7 +11,7 @@ class Membership {
   final bool isGift;
 
   bool get aboutToEnd => endDate.difference(DateTime.now()).inDays - 5 < 0;
-  int get daysLeft => endDate.difference(DateTime.now()).inDays;
+  int get daysLeft => endDate.difference(DateTime.now()).inDays + 1;
   int get totalDays => endDate.difference(startDate).inDays;
 
   const Membership({
@@ -22,4 +24,7 @@ class Membership {
     required this.isActive,
     required this.isGift,
   });
+
+  @override
+  List<Object?> get props => [planId, planName, price, startDate, endDate, isNotified, isActive, isGift];
 }

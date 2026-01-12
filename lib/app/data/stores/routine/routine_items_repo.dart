@@ -9,10 +9,8 @@ import 'package:uniceps/app/domain/contracts/routine/i_routine_items_contract.da
 import 'package:uniceps/core/errors/failure.dart';
 
 class RoutineItemsRepo implements IRoutineItemsContract {
-  RoutineItemsRepo({
-    required IRoutineItemsLocalSourceContract localSource,
-    required MediaHelper mediaHelper,
-  }) : _localSource = localSource;
+  RoutineItemsRepo({required IRoutineItemsLocalSourceContract localSource, required MediaHelper mediaHelper})
+    : _localSource = localSource;
 
   final IRoutineItemsLocalSourceContract _localSource;
 

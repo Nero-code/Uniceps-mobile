@@ -43,7 +43,7 @@ class AnalyticsCard extends StatelessWidget {
                   height: 40,
                   padding: const EdgeInsets.all(5.0),
                   decoration: BoxDecoration(
-                    color: iconBackground.withValues(alpha: 0.85),
+                    color: iconBackground.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: icon,

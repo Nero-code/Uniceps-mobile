@@ -24,7 +24,11 @@ class DayAddDialog extends StatelessWidget {
             focusNode: _node,
             controller: _controller,
             decoration: InputDecoration(
-              border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(15)),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueGrey.shade50),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
               fillColor: Colors.blueGrey.shade50,
               filled: true,
             ),
@@ -39,10 +43,7 @@ class DayAddDialog extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: OutlinedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(locale.cancel),
-                ),
+                child: OutlinedButton(onPressed: () => Navigator.pop(context), child: Text(locale.cancel)),
               ),
               const SizedBox(width: 10),
               Expanded(

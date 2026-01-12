@@ -9,6 +9,7 @@ import 'package:uniceps/app/presentation/home/blocs/current_routine/current_rout
 import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/stopwatch/stopwatch_cubit.dart';
+import 'package:uniceps/app/presentation/home/dialogs/membership_congrats_dialog.dart';
 import 'package:uniceps/app/presentation/home/widgets/alert_bar.dart';
 import 'package:uniceps/app/presentation/home/widgets/captain_uni_card.dart';
 import 'package:uniceps/app/presentation/home/widgets/practice_day_item.dart';
@@ -58,6 +59,19 @@ class _HomeScreenState extends State<HomeScreen> {
         lazy: false,
         child: Stack(
           children: [
+            BlocListener<MembershipBloc, MembershipState>(
+              child: const SizedBox(),
+              listener: (context, state) => state.whenOrNull(
+                loaded: (m) {
+                  if (!m.isNotified) {
+                    showDialog(context: context, builder: (_) => MembershipCongratsDialog());
+                    context.read<MembershipBloc>().add(MembershipEvent.notifyNewMembership());
+                  }
+                  return;
+                },
+              ),
+            ),
+
             Scaffold(
               appBar: AppBar(
                 centerTitle: true,
@@ -212,6 +226,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                   ),
+                  // Center(
+                  //   child: SizedBox(
+                  //     width: 100,
+                  //     height: 100,
+                  //     child: ElevatedButton(onPressed: () {}, child: Text('')),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

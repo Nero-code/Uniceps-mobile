@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/l10n/app_localizations.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class ProgressWidget extends StatelessWidget {
   const ProgressWidget({
@@ -8,12 +8,13 @@ class ProgressWidget extends StatelessWidget {
     required this.percent,
     this.color = secondaryBlue,
     this.backgroundColor = Colors.transparent,
+    this.progressBackground = Colors.transparent,
     this.dimension = 70.0,
     this.strokeWidth = 7.0,
   });
 
   final double percent;
-  final Color color, backgroundColor;
+  final Color color, backgroundColor, progressBackground;
   final double dimension, strokeWidth;
 
   @override
@@ -21,7 +22,7 @@ class ProgressWidget extends StatelessWidget {
     final local = AppLocalizations.of(context)!;
     return Material(
       borderRadius: BorderRadius.circular(15.0),
-      // color: Colors.white,
+      color: backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -39,7 +40,7 @@ class ProgressWidget extends StatelessWidget {
                       strokeWidth: strokeWidth,
                       strokeCap: StrokeCap.round,
                       color: color,
-                      backgroundColor: backgroundColor,
+                      backgroundColor: progressBackground,
                     ),
                   ),
                   Center(

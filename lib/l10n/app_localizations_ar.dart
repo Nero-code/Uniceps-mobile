@@ -192,6 +192,16 @@ class AppLocalizationsAr extends AppLocalizations {
       'الرجاء تسجيل الدخول اولا كي تصدر البرنامج';
 
   @override
+  String get exportRoutineDone => 'تم التصدير!, ملفك جاهز';
+
+  @override
+  String get congrats => 'تهانينا';
+
+  @override
+  String get congratsContent =>
+      'مبروك لقد تم تفعيل باقة Premium بنجاح, تم تفعيل جميع ميزات التطبيق... استمتع';
+
+  @override
   String get sessions => 'الجلسات';
 
   @override
@@ -577,6 +587,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get errOpenSessionDelete => 'لا يمكن الحذف بوجود جلسة فعالة!';
 
   @override
+  String get errExportRoutine => 'فشلت العملية!, لم يتم تصدير الملف';
+
+  @override
   String get endOfSubDate => 'تاريخ نهاية الاشتراك';
 
   @override
@@ -694,4 +707,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get captainUniAboutContent =>
       'أهلين فيك، أنا الكابتن يوني.\nأنا الشخصية يلي رح ترافقك بتطبيق يوني سيبس، وشغلي إني سهّل عليك كل خطوة وتخلّي تجربتك مريحة وواضحة.\nدوري الأساسي إني عرّفك على التطبيق، وورجيك كيف تستخدم كل قسم فيه بدون تعقيد.\nوبساعدك كمان تختار البرنامج الرياضي اللي بناسبك، لحتى تبلّش بطريقة صحيحة ومريحة لإلك.\nمع كل تمرين بتعمله، أنا بجمّع إحصاءاتك وبورجيك نتائجك لتشوف تقدّمك يوم بعد يوم.\nما بوعدك تغيّر حياتك بيوم وليلة… بس بوعدك كون موجود جنبك بكل مرحلة.\nأنا هون لوجّهك، أشرحلك، وشجّعك، لحتى تستفيد من التطبيق لأقصى درجة.\nوبالنهاية… اعتبرني صديق وخبير عم يمشي معك خطوة بخطوة، ومبسوط يشوفك عم تتقدم.';
+
+  @override
+  String get msgSlowConnection => 'الاتصال بالانترنت ضعيف';
 }

@@ -12,6 +12,7 @@ abstract class IAccountService {
 
   Future<Either<Failure, Plan>> getPlans();
   Future<Either<Failure, PaymentResponse>> buyPlan(PlanItem item);
+  Future<Either<MembershipFailure, Membership>> notifyNewMembership();
 
   Future<Either<Failure, Unit>> logout();
   Future<Either<Failure, Unit>> deleteAccount();

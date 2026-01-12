@@ -23,6 +23,7 @@ class NotificationService {
     final androidDetails = AndroidNotificationDetails(
       'default_channel',
       'Default Notifications',
+      styleInformation: BigTextStyleInformation(body),
       importance: Importance.max,
       priority: Priority.high,
       onlyAlertOnce: onlyAlertOnce,
@@ -31,6 +32,10 @@ class NotificationService {
     );
 
     await _notificationsPlugin.show(id, title, body, NotificationDetails(android: androidDetails), payload: payload);
+  }
+
+  static Future<void> close(int id) async {
+    await _notificationsPlugin.cancel(id);
   }
 
   static Future<void> closeAll() async {

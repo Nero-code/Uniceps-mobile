@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/account_models/account_model.dart';
 import 'package:uniceps/app/data/models/account_models/membership_model.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
+import 'package:uniceps/core/errors/exceptions.dart';
 
 abstract class IAccountLocalSource {
   Future<AccountModel> getUserAccount();
@@ -13,6 +15,8 @@ abstract class IAccountLocalSource {
 
   /// Returns a `Should Notify?` boolean
   Future<bool> saveUserMembership(MembershipModel subscriptionPlan);
+  Future<MembershipModel> userMembershipNotified();
+  Future<void> clearMemberships();
 
   Future<void> logout();
 }
@@ -20,12 +24,16 @@ abstract class IAccountLocalSource {
 class AccountLocalSource implements IAccountLocalSource {
   final FlutterSecureStorage _secureStorage;
   final AppDatabase _database;
+  final Logger _logger;
 
   static const planKey = 'plan';
-
-  AccountLocalSource({required FlutterSecureStorage secureStorage, required AppDatabase database})
-    : _secureStorage = secureStorage,
-      _database = database;
+  const AccountLocalSource({
+    required FlutterSecureStorage secureStorage,
+    required AppDatabase database,
+    required Logger logger,
+  }) : _secureStorage = secureStorage,
+       _database = database,
+       _logger = logger;
 
   /// ### Get User Account:
   ///
@@ -43,32 +51,57 @@ class AccountLocalSource implements IAccountLocalSource {
     if (res == null) {
       throw Exception('No plan found');
     }
-    final memebership = MembershipModel.fromJson(jsonDecode(res));
-    if (DateTime.now().difference(memebership.endDate).inDays > 0) {
+    _logger.t('found Membership locally');
+    final membership = MembershipModel.fromJson(jsonDecode(res));
+    if (DateTime.now().difference(membership.endDate).inDays > 0) {
       await _secureStorage.delete(key: planKey);
       throw Exception('Plan Expired');
     }
-    return memebership;
+    return membership;
   }
 
   @override
   Future<void> saveUserAccount(AccountModel userAccount) async {
+    await _database.delete(_database.accounts).go();
     await _database.into(_database.accounts).insert(userAccount.toTable());
   }
 
   @override
-  Future<bool> saveUserMembership(MembershipModel subscriptionPlan) async {
+  Future<bool> saveUserMembership(MembershipModel membership) async {
     final oldM = await _secureStorage.read(key: planKey);
     if (oldM == null) {
-      await _secureStorage.write(key: planKey, value: jsonEncode(subscriptionPlan.toJson()));
+      _logger.i('Got New Membership');
+      await _secureStorage.write(key: planKey, value: jsonEncode(membership.toJson()));
       return true;
     }
     final mem = MembershipModel.fromJson(jsonDecode(oldM));
-    if (subscriptionPlan.endDate.compareTo(mem.endDate) > 0) {
-      await _secureStorage.write(key: planKey, value: jsonEncode(subscriptionPlan.toJson()));
+    if (membership.endDate.compareTo(mem.endDate) > 0) {
+      _logger.i('Got Extended Membership');
+      await _secureStorage.write(key: planKey, value: jsonEncode(membership.toJson()));
       return true;
     }
+    if (!mem.isNotified) {
+      _logger.i('Got Same Membership but did not notify user');
+      return true;
+    }
+    _logger.t('No New Membership');
     return false;
+  }
+
+  @override
+  Future<MembershipModel> userMembershipNotified() async {
+    final memString = await _secureStorage.read(key: planKey);
+    if (memString != null) {
+      var mem = MembershipModel.fromJson(jsonDecode(memString)).copyWith(isNotified: true);
+      await _secureStorage.write(key: planKey, value: jsonEncode(mem.toJson()));
+      return mem;
+    }
+    throw EmptyCacheExeption();
+  }
+
+  @override
+  Future<void> clearMemberships() async {
+    await _secureStorage.delete(key: planKey);
   }
 
   @override

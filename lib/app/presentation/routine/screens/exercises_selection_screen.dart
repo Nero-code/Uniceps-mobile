@@ -4,15 +4,20 @@ import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/muscle_group_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2_selection/exercises_v2_selection_cubit.dart';
 import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
-import 'package:uniceps/app/presentation/routine/widgets/progress_widget.dart';
-import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/pages/exercises_list_tab.dart';
+import 'package:uniceps/app/presentation/routine/widgets/progress_widget.dart';
 import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 // import 'package:uniceps/l10n/app_localizations.dart';
 
 class ExercisesSelectionScreen extends StatefulWidget {
-  const ExercisesSelectionScreen(
-      {super.key, required this.presentExerciseIds, required this.dayName, required this.dayId});
+  const ExercisesSelectionScreen({
+    super.key,
+    required this.presentExerciseIds,
+    required this.dayName,
+    required this.dayId,
+  });
 
   final List<int> presentExerciseIds;
   final String dayName;
@@ -40,6 +45,7 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen> wit
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!;
     final lang = BlocProvider.of<LocaleCubit>(context).state.isRtl();
     return BlocListener<ItemsEditBloc, ItemsEditState>(
       listenWhen: (previous, current) => previous is ItemsDownloadingState && current is ItemsEditLoadedState,
@@ -63,42 +69,49 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen> wit
                     },
                   ),
                   actions: [
-                    BlocBuilder<ExercisesV2SelectionCubit, ExercisesV2SelectionState>(builder: (context, state) {
-                      return IconButton(
-                        onPressed: () async {
-                          context
-                              .read<ItemsEditBloc>()
-                              .add(AddRoutineItemsEvent(dayId: widget.dayId, items: state.selected));
-                          showDialog(
+                    BlocBuilder<ExercisesV2SelectionCubit, ExercisesV2SelectionState>(
+                      builder: (context, state) {
+                        return IconButton(
+                          onPressed: () async {
+                            context.read<ItemsEditBloc>().add(
+                              AddRoutineItemsEvent(dayId: widget.dayId, items: state.selected),
+                            );
+                            showDialog(
                               context: context,
+                              barrierDismissible: false,
                               builder: (_) => BlocProvider.value(
-                                    value: context.read<ItemsEditBloc>(),
-                                    child: AlertDialog(
-                                      content: BlocConsumer<ItemsEditBloc, ItemsEditState>(
-                                        listenWhen: (previous, current) =>
-                                            previous is ItemsDownloadingState && current is ItemsEditLoadedState,
-                                        listener: (context, state) => Navigator.pop(context),
-                                        builder: (context, state) {
-                                          return ProgressWidget(
-                                              percent: state is ItemsDownloadingState ? state.progress : 0);
-                                        },
-                                      ),
-                                    ),
-                                  ));
-                          // Navigator.pop(context,
-                          //   state.selected.isEmpty ? null : state.selected);
-                        },
-                        icon: Icon(Icons.done_all_rounded),
-                        color: Theme.of(context).colorScheme.primary,
-                      );
-                    }),
+                                value: context.read<ItemsEditBloc>(),
+                                child: AlertDialog(
+                                  content: BlocConsumer<ItemsEditBloc, ItemsEditState>(
+                                    listenWhen: (previous, current) =>
+                                        previous is ItemsDownloadingState && current is ItemsEditLoadedState,
+                                    listener: (context, state) => Navigator.pop(context),
+                                    builder: (context, state) {
+                                      return ProgressWidget(
+                                        percent: state is ItemsDownloadingState ? state.progress : 0,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
+                            // Navigator.pop(context,
+                            //   state.selected.isEmpty ? null : state.selected);
+                          },
+                          icon: Icon(Icons.done_all_rounded),
+                          color: Theme.of(context).colorScheme.primary,
+                        );
+                      },
+                    ),
                   ],
                   bottom: TabBar(
                     tabAlignment: TabAlignment.start,
                     controller: _tabController,
                     isScrollable: true,
                     tabs: [
-                      ...state.groups.map((group) => Tab(text: group.muscleGroupTranslations[lang ? Lang.ar : Lang.en]))
+                      ...state.groups.map(
+                        (group) => Tab(text: group.muscleGroupTranslations[lang ? Lang.ar : Lang.en]),
+                      ),
                     ],
                   ),
                 ),
@@ -138,7 +151,9 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen> wit
                 body: TabBarView(
                   controller: _tabController,
                   children: state.groups
-                      .map((group) => Builder(builder: (context) {
+                      .map(
+                        (group) => Builder(
+                          builder: (context) {
                             return ExercisesListTab(
                               presentExId: widget.presentExerciseIds,
                               muscleGroup: group,
@@ -149,15 +164,15 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen> wit
                                     : BlocProvider.of<ExercisesV2SelectionCubit>(context).selectExercise(exercise);
                               },
                             );
-                          }))
+                          },
+                        ),
+                      )
                       .toList(),
                 ),
               ),
             );
           } else if (state is MuscleGroupErrorState) {
-            return Scaffold(
-              body: Center(child: Text(state.failure.getErrorMessage())),
-            );
+            return Scaffold(body: Center(child: Text(locale.errNoInternet)));
           }
           return const Scaffold(body: LoadingIndicator());
         },

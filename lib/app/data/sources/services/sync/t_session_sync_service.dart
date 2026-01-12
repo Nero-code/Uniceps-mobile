@@ -20,10 +20,10 @@ class TSessionSyncService implements TSessionSyncContract {
     required ClientHelper client,
     required InternetConnectionChecker connectionChecker,
     required Logger logger,
-  })  : _database = database,
-        _client = client,
-        _connectionChecker = connectionChecker,
-        _logger = logger;
+  }) : _database = database,
+       _client = client,
+       _connectionChecker = connectionChecker,
+       _logger = logger;
 
   final doneList = <int>[];
   var queue = StreamController<TSessionModel>();
@@ -53,8 +53,9 @@ class TSessionSyncService implements TSessionSyncContract {
 
   Future<List<TypedResult>> readAll() {
     final logA = _database.alias(_database.tLogs, 't');
-    return (_database.select(_database.tSessions)..where((f) => f.finishedAt.isNotNull() & f.apiId.isNull()))
-        .join([leftOuterJoin(logA, logA.sessionId.equalsExp(_database.tSessions.tsId))]).get();
+    return (_database.select(_database.tSessions)..where((f) => f.finishedAt.isNotNull() & f.apiId.isNull())).join([
+      leftOuterJoin(logA, logA.sessionId.equalsExp(_database.tSessions.tsId)),
+    ]).get();
   }
 
   void _onData(List<TypedResult> rows) async {
@@ -89,13 +90,20 @@ class TSessionSyncService implements TSessionSyncContract {
     }
 
     try {
-      final apiId =
-          await _client.postHandler(API_V2, HTTP_SESSION_SYNC, model.toJson(), fromJson: (json) => json['id'] as int);
+      final apiId = await _client.postHandler(
+        API_V2,
+        HTTP_SESSION_SYNC,
+        model.toJson(),
+        fromJson: (json) => json['id'] as int,
+      );
 
-      await (_database.update(_database.tSessions)..where((f) => f.tsId.equals(model.id!)))
-          .write(TSessionsCompanion.custom(apiId: Constant(apiId!), isSynced: const Constant(true)));
+      await (_database.update(_database.tSessions)..where((f) => f.tsId.equals(model.id!))).write(
+        TSessionsCompanion.custom(apiId: Constant(apiId!), isSynced: const Constant(true)),
+      );
 
       doneList.add(model.id!);
+      _logger.t('Session: ${model.toJson()}');
+      _logger.t('Session: ${model.toJson()}');
     } catch (e) {
       _logger.e(e.toString(), error: e);
     }
