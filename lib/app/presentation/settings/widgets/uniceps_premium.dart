@@ -101,19 +101,15 @@ class UnicepsPremium extends StatelessWidget {
                   ),
                   Material(
                     borderRadius: BorderRadius.circular(5),
-                    color: membership.aboutToEnd ? Colors.grey.shade200 : Colors.white30,
+                    color: Colors.white30,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(5),
-                      onTap: membership.aboutToEnd ? () {} : null,
+                      onTap: null,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          membership.aboutToEnd ? locale.buyNow : locale.active,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: membership.aboutToEnd ? Colors.black : Colors.white,
-                          ),
+                          locale.active,
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ),
                     ),
