@@ -7,9 +7,9 @@ import 'package:uniceps/core/constants/constants.dart';
 
 const quotekey = 'DailyQuote';
 
-class CaptianQuotesService {
+class CaptainQuotesService {
   final SharedPreferences _prefs;
-  const CaptianQuotesService({required SharedPreferences prefs}) : _prefs = prefs;
+  const CaptainQuotesService({required SharedPreferences prefs}) : _prefs = prefs;
 
   Future<DailyQuote> getQuote() async {
     final tempQuotes = jsonDecode(await rootBundle.loadString(ASSET_QUOTES)) as List;
@@ -65,6 +65,8 @@ class DailyQuote {
     return DailyQuote(quote: quote, date: DateTime.parse(json['date']));
   }
 
-  Map<String, dynamic> toJson() =>
-      {'quote': quote.map((lang, sentance) => MapEntry(lang.name, sentance)), 'date': date.toIso8601String()};
+  Map<String, dynamic> toJson() => {
+    'quote': quote.map((lang, sentance) => MapEntry(lang.name, sentance)),
+    'date': date.toIso8601String(),
+  };
 }

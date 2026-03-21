@@ -3,17 +3,18 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i3;
 
-import 'package:internet_connection_checker/internet_connection_checker.dart'
-    as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:uniceps/app/data/models/routine_models/exercise_v2_dto.dart'
-    as _i6;
-import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart'
+import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart'
     as _i5;
+import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart'
+    as _i4;
+import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart'
+    as _i6;
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart'
-    as _i3;
+    as _i2;
+import 'package:uniceps/app/services/network_info.dart' as _i7;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -30,300 +31,100 @@ import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_sou
 // ignore_for_file: subtype_of_sealed_class
 // ignore_for_file: invalid_use_of_internal_member
 
-class _FakeDuration_0 extends _i1.SmartFake implements Duration {
-  _FakeDuration_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeAddressCheckResult_1 extends _i1.SmartFake
-    implements _i2.AddressCheckResult {
-  _FakeAddressCheckResult_1(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
 /// A class which mocks [IExercisesRemoteSourceContract].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockIExercisesRemoteSourceContract extends _i1.Mock
-    implements _i3.IExercisesRemoteSourceContract {
+    implements _i2.IExercisesRemoteSourceContract {
   MockIExercisesRemoteSourceContract() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<List<_i5.MuscleGroupDto>> getExerciseGroups() =>
+  _i3.Future<List<_i4.MuscleGroupDto>> getExerciseGroups() =>
       (super.noSuchMethod(
             Invocation.method(#getExerciseGroups, []),
-            returnValue: _i4.Future<List<_i5.MuscleGroupDto>>.value(
-              <_i5.MuscleGroupDto>[],
+            returnValue: _i3.Future<List<_i4.MuscleGroupDto>>.value(
+              <_i4.MuscleGroupDto>[],
             ),
           )
-          as _i4.Future<List<_i5.MuscleGroupDto>>);
+          as _i3.Future<List<_i4.MuscleGroupDto>>);
 
   @override
-  _i4.Future<List<_i6.ExerciseV2Dto>> getAllExercises() =>
+  _i3.Future<List<_i5.ExerciseDto>> getAllExercises() =>
       (super.noSuchMethod(
             Invocation.method(#getAllExercises, []),
-            returnValue: _i4.Future<List<_i6.ExerciseV2Dto>>.value(
-              <_i6.ExerciseV2Dto>[],
+            returnValue: _i3.Future<List<_i5.ExerciseDto>>.value(
+              <_i5.ExerciseDto>[],
             ),
           )
-          as _i4.Future<List<_i6.ExerciseV2Dto>>);
+          as _i3.Future<List<_i5.ExerciseDto>>);
 
   @override
-  _i4.Future<List<_i6.ExerciseV2Dto>> getExercisesByFilter(String? filter) =>
-      (super.noSuchMethod(
-            Invocation.method(#getExercisesByFilter, [filter]),
-            returnValue: _i4.Future<List<_i6.ExerciseV2Dto>>.value(
-              <_i6.ExerciseV2Dto>[],
-            ),
-          )
-          as _i4.Future<List<_i6.ExerciseV2Dto>>);
-
-  @override
-  _i4.Future<List<_i6.ExerciseV2Dto>> getExercisesByGroup(
-    _i5.MuscleGroupDto? group,
+  _i3.Future<List<_i5.ExerciseDto>> getExercisesByGroup(
+    _i4.MuscleGroupDto? group,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#getExercisesByGroup, [group]),
-            returnValue: _i4.Future<List<_i6.ExerciseV2Dto>>.value(
-              <_i6.ExerciseV2Dto>[],
+            returnValue: _i3.Future<List<_i5.ExerciseDto>>.value(
+              <_i5.ExerciseDto>[],
             ),
           )
-          as _i4.Future<List<_i6.ExerciseV2Dto>>);
+          as _i3.Future<List<_i5.ExerciseDto>>);
 }
 
-/// A class which mocks [InternetConnectionChecker].
+/// A class which mocks [IExercisesLocalSourceContract].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockInternetConnectionChecker extends _i1.Mock
-    implements _i2.InternetConnectionChecker {
-  MockInternetConnectionChecker() {
+class MockIExercisesLocalSourceContract extends _i1.Mock
+    implements _i6.IExercisesLocalSourceContract {
+  MockIExercisesLocalSourceContract() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  bool get requireAllAddressesToRespond =>
+  _i3.Future<List<_i5.ExerciseDto>> getExercises() =>
       (super.noSuchMethod(
-            Invocation.getter(#requireAllAddressesToRespond),
-            returnValue: false,
-          )
-          as bool);
-
-  @override
-  bool get enableToCheckForSlowConnection =>
-      (super.noSuchMethod(
-            Invocation.getter(#enableToCheckForSlowConnection),
-            returnValue: false,
-          )
-          as bool);
-
-  @override
-  Duration get slowConnectionThreshold =>
-      (super.noSuchMethod(
-            Invocation.getter(#slowConnectionThreshold),
-            returnValue: _FakeDuration_0(
-              this,
-              Invocation.getter(#slowConnectionThreshold),
+            Invocation.method(#getExercises, []),
+            returnValue: _i3.Future<List<_i5.ExerciseDto>>.value(
+              <_i5.ExerciseDto>[],
             ),
           )
-          as Duration);
+          as _i3.Future<List<_i5.ExerciseDto>>);
 
   @override
-  Duration get checkTimeout =>
+  _i3.Future<List<_i5.ExerciseDto>> getExercisesByGroup(String? groupId) =>
       (super.noSuchMethod(
-            Invocation.getter(#checkTimeout),
-            returnValue: _FakeDuration_0(
-              this,
-              Invocation.getter(#checkTimeout),
+            Invocation.method(#getExercisesByGroup, [groupId]),
+            returnValue: _i3.Future<List<_i5.ExerciseDto>>.value(
+              <_i5.ExerciseDto>[],
             ),
           )
-          as Duration);
+          as _i3.Future<List<_i5.ExerciseDto>>);
 
   @override
-  Duration get checkInterval =>
+  _i3.Future<void> saveExercise(_i5.ExerciseDto? exercise) =>
       (super.noSuchMethod(
-            Invocation.getter(#checkInterval),
-            returnValue: _FakeDuration_0(
-              this,
-              Invocation.getter(#checkInterval),
-            ),
+            Invocation.method(#saveExercise, [exercise]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
           )
-          as Duration);
+          as _i3.Future<void>);
+}
+
+/// A class which mocks [NetworkInfo].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockNetworkInfo extends _i1.Mock implements _i7.NetworkInfo {
+  MockNetworkInfo() {
+    _i1.throwOnMissingStub(this);
+  }
 
   @override
-  List<_i2.AddressCheckOption> get addresses =>
-      (super.noSuchMethod(
-            Invocation.getter(#addresses),
-            returnValue: <_i2.AddressCheckOption>[],
-          )
-          as List<_i2.AddressCheckOption>);
-
-  @override
-  _i4.Stream<_i2.InternetConnectionStatus> get onStatusChange =>
-      (super.noSuchMethod(
-            Invocation.getter(#onStatusChange),
-            returnValue: _i4.Stream<_i2.InternetConnectionStatus>.empty(),
-          )
-          as _i4.Stream<_i2.InternetConnectionStatus>);
-
-  @override
-  bool get hasListeners =>
-      (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
-          as bool);
-
-  @override
-  _i4.Future<bool> get hasConnection =>
+  _i3.Future<bool> get hasConnection =>
       (super.noSuchMethod(
             Invocation.getter(#hasConnection),
-            returnValue: _i4.Future<bool>.value(false),
+            returnValue: _i3.Future<bool>.value(false),
           )
-          as _i4.Future<bool>);
-
-  @override
-  _i4.Future<_i2.InternetConnectionStatus> get connectionStatus =>
-      (super.noSuchMethod(
-            Invocation.getter(#connectionStatus),
-            returnValue: _i4.Future<_i2.InternetConnectionStatus>.value(
-              _i2.InternetConnectionStatus.connected,
-            ),
-          )
-          as _i4.Future<_i2.InternetConnectionStatus>);
-
-  @override
-  set requireAllAddressesToRespond(bool? value) => super.noSuchMethod(
-    Invocation.setter(#requireAllAddressesToRespond, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set enableToCheckForSlowConnection(bool? value) => super.noSuchMethod(
-    Invocation.setter(#enableToCheckForSlowConnection, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set slowConnectionThreshold(Duration? value) => super.noSuchMethod(
-    Invocation.setter(#slowConnectionThreshold, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set checkTimeout(Duration? value) => super.noSuchMethod(
-    Invocation.setter(#checkTimeout, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set checkInterval(Duration? value) => super.noSuchMethod(
-    Invocation.setter(#checkInterval, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set addresses(List<_i2.AddressCheckOption>? value) => super.noSuchMethod(
-    Invocation.setter(#addresses, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set setLastStatus(_i2.InternetConnectionStatus? status) => super.noSuchMethod(
-    Invocation.setter(#setLastStatus, status),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set setRequireAllAddressesToRespond(bool? value) => super.noSuchMethod(
-    Invocation.setter(#setRequireAllAddressesToRespond, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  Iterable<_i4.Future<_i2.AddressCheckResult>> createAddressCheckFutures(
-    List<_i2.AddressCheckOption>? addresses,
-  ) =>
-      (super.noSuchMethod(
-            Invocation.method(#createAddressCheckFutures, [addresses]),
-            returnValue: <_i4.Future<_i2.AddressCheckResult>>[],
-          )
-          as Iterable<_i4.Future<_i2.AddressCheckResult>>);
-
-  @override
-  _i4.Future<bool> checkConnectivity() =>
-      (super.noSuchMethod(
-            Invocation.method(#checkConnectivity, []),
-            returnValue: _i4.Future<bool>.value(false),
-          )
-          as _i4.Future<bool>);
-
-  @override
-  _i4.Future<_i2.AddressCheckResult> isHostReachable(
-    _i2.AddressCheckOption? option,
-  ) =>
-      (super.noSuchMethod(
-            Invocation.method(#isHostReachable, [option]),
-            returnValue: _i4.Future<_i2.AddressCheckResult>.value(
-              _FakeAddressCheckResult_1(
-                this,
-                Invocation.method(#isHostReachable, [option]),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.AddressCheckResult>);
-
-  @override
-  _i4.Future<void> maybeEmitStatusUpdate({
-    _i4.Timer? timer,
-    Function? cancelCallback,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(#maybeEmitStatusUpdate, [], {
-              #timer: timer,
-              #cancelCallback: cancelCallback,
-            }),
-            returnValue: _i4.Future<void>.value(),
-            returnValueForMissingStub: _i4.Future<void>.value(),
-          )
-          as _i4.Future<void>);
-
-  @override
-  void emitStatus(_i2.InternetConnectionStatus? newStatus) =>
-      super.noSuchMethod(
-        Invocation.method(#emitStatus, [newStatus]),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void startMonitoring() => super.noSuchMethod(
-    Invocation.method(#startMonitoring, []),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void cancelStatusUpdate() => super.noSuchMethod(
-    Invocation.method(#cancelStatusUpdate, []),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void configure({
-    Duration? timeout,
-    Duration? interval,
-    List<_i2.AddressCheckOption>? addresses,
-    _i2.SlowConnectionConfig? slowConnectionConfig,
-  }) => super.noSuchMethod(
-    Invocation.method(#configure, [], {
-      #timeout: timeout,
-      #interval: interval,
-      #addresses: addresses,
-      #slowConnectionConfig: slowConnectionConfig,
-    }),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void dispose() => super.noSuchMethod(
-    Invocation.method(#dispose, []),
-    returnValueForMissingStub: null,
-  );
+          as _i3.Future<bool>);
 }

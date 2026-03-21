@@ -1,9 +1,9 @@
-import 'package:uniceps/app/data/models/routine_models/exercise_v2_dto.dart';
+import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_day_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_set_dto.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_day.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
@@ -13,8 +13,8 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
 //   MuscleGroupDto toDto() => MuscleGroupDto.fromEntity(this);
 // }
 
-extension ExerciseV2Extension on ExerciseV2 {
-  ExerciseV2Dto toDto() => ExerciseV2Dto.fromEntity(this);
+extension ExerciseV2Extension on Exercise {
+  ExerciseDto toDto() => ExerciseDto.fromEntity(this);
 }
 
 //

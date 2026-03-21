@@ -1,16 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
 
 class ExerciseGridWidget extends StatelessWidget {
-  const ExerciseGridWidget({
-    super.key,
-    required this.exercise,
-    this.index = 0,
-    this.isSelected = false,
-  });
+  const ExerciseGridWidget({super.key, required this.exercise, this.index = 0, this.isSelected = false});
 
-  final ExerciseV2 exercise;
+  final Exercise exercise;
   final int index;
   final bool isSelected;
 
@@ -22,8 +17,7 @@ class ExerciseGridWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(15.0),
         // color: isSelected ? Colors.green :
         color: Colors.white,
-        border: Border.all(
-            width: 2, color: isSelected ? Colors.cyan.shade200 : Colors.white),
+        border: Border.all(width: 2, color: isSelected ? Colors.cyan.shade200 : Colors.white),
       ),
       padding: const EdgeInsets.all(5.0),
       child: Column(
@@ -31,17 +25,11 @@ class ExerciseGridWidget extends StatelessWidget {
           Expanded(
             flex: 3,
             child: CachedNetworkImage(
-              imageUrl: exercise.imageUrl,
-              progressIndicatorBuilder: (context, url, progress) => Center(
-                child: CircularProgressIndicator(value: progress.progress),
-              ),
-              errorWidget: (context, url, error) => Center(
-                child: Icon(
-                  Icons.broken_image_rounded,
-                  size: 40,
-                  color: Colors.red.shade300,
-                ),
-              ),
+              imageUrl: exercise.imagePath,
+              progressIndicatorBuilder: (context, url, progress) =>
+                  Center(child: CircularProgressIndicator(value: progress.progress)),
+              errorWidget: (context, url, error) =>
+                  Center(child: Icon(Icons.broken_image_rounded, size: 40, color: Colors.red.shade300)),
             ),
 
             // Image.network(
@@ -71,12 +59,7 @@ class ExerciseGridWidget extends StatelessWidget {
           Divider(color: Colors.grey.shade100),
           Expanded(
             child: Center(
-              child: Text(
-                exercise.name,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
+              child: Text(exercise.name, textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis),
             ),
           ),
         ],

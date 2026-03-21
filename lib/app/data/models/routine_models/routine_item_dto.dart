@@ -1,5 +1,5 @@
 // import 'package:json_annotation/json_annotation.dart';
-import 'package:uniceps/app/data/models/routine_models/exercise_v2_dto.dart';
+import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_set_dto.dart';
 import 'package:uniceps/app/data/sources/local/database.dart' as db;
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart' as ri;
@@ -19,7 +19,7 @@ class RoutineItemDto {
   final int dayId, version;
   final int index;
   final bool isSynced;
-  final ExerciseV2Dto exerciseV2Dto;
+  final ExerciseDto exerciseDto;
   final List<RoutineSetDto> setsDto;
   const RoutineItemDto({
     required this.id,
@@ -27,17 +27,17 @@ class RoutineItemDto {
     required this.dayId,
     required this.index,
     required this.version,
-    required this.exerciseV2Dto,
+    required this.exerciseDto,
     required this.setsDto,
     required this.isSynced,
   });
-  factory RoutineItemDto.create(int dayId, int index, ExerciseV2Dto exercise) => RoutineItemDto(
+  factory RoutineItemDto.create(int dayId, int index, ExerciseDto exercise) => RoutineItemDto(
     id: null,
     apiId: null,
     dayId: dayId,
     index: index,
     version: 0,
-    exerciseV2Dto: exercise,
+    exerciseDto: exercise,
     setsDto: [],
     isSynced: false,
   );
@@ -48,7 +48,7 @@ class RoutineItemDto {
     dayId: entity.dayId,
     index: entity.index,
     version: entity.version,
-    exerciseV2Dto: ExerciseV2Dto.fromEntity(entity.exercise),
+    exerciseDto: ExerciseDto.fromEntity(entity.exercise),
     setsDto: entity.sets.map(RoutineSetDto.fromEntity).toList(),
     isSynced: entity.isSynced,
   );
@@ -58,7 +58,7 @@ class RoutineItemDto {
     dayId: dayId,
     index: index,
     version: version,
-    exercise: exerciseV2Dto.toEntity(),
+    exercise: exerciseDto.toEntity(),
     sets: setsDto.map((e) => e.toEntity()).toList(),
     isSynced: isSynced,
   );
@@ -72,7 +72,7 @@ class RoutineItemDto {
     dayId: (json['dayId'] as num?)?.toInt() ?? 0,
     index: (json['Order'] as num).toInt(),
     version: (json['version'] as num?)?.toInt() ?? 0,
-    exerciseV2Dto: ExerciseV2Dto.fromFile(json), // Flat Exercise
+    exerciseDto: ExerciseDto.fromFile(json), // Flat Exercise
     setsDto: (json['Sets'] as List<dynamic>).map((e) => RoutineSetDto.fromJson(e as Map<String, dynamic>)).toList(),
     isSynced: json['isSynced'] as bool? ?? false,
   );
@@ -84,27 +84,24 @@ class RoutineItemDto {
     'Order': index,
     'version': version,
     'isSynced': isSynced,
-    ...exerciseV2Dto.toFile(),
+    ...exerciseDto.toFile(),
     'Sets': setsDto.map((e) => e.toJson()).toList(),
   };
 
   //
   //
   //
-  factory RoutineItemDto.fromTable(
-    db.RoutineItem item,
-    ExerciseV2Dto exercise, [
-    List<RoutineSetDto> sets = const [],
-  ]) => RoutineItemDto(
-    id: item.id,
-    apiId: item.apiId,
-    dayId: item.dayId,
-    index: item.index,
-    version: item.version,
-    exerciseV2Dto: exercise,
-    setsDto: sets,
-    isSynced: item.isSynced,
-  );
+  factory RoutineItemDto.fromTable(db.RoutineItem item, ExerciseDto exercise, [List<RoutineSetDto> sets = const []]) =>
+      RoutineItemDto(
+        id: item.id,
+        apiId: item.apiId,
+        dayId: item.dayId,
+        index: item.index,
+        version: item.version,
+        exerciseDto: exercise,
+        setsDto: sets,
+        isSynced: item.isSynced,
+      );
 
   RoutineItemDto copyWith({
     int? id,
@@ -112,7 +109,7 @@ class RoutineItemDto {
     int? dayId,
     int? index,
     int? version,
-    ExerciseV2Dto? exerciseV2Dto,
+    ExerciseDto? exerciseV2Dto,
     List<RoutineSetDto>? setsDto,
     bool? isSynced,
   }) => RoutineItemDto(
@@ -121,7 +118,7 @@ class RoutineItemDto {
     dayId: dayId ?? this.dayId,
     index: index ?? this.index,
     version: version ?? this.version,
-    exerciseV2Dto: exerciseV2Dto ?? this.exerciseV2Dto,
+    exerciseDto: exerciseV2Dto ?? this.exerciseDto,
     setsDto: setsDto ?? this.setsDto,
     isSynced: isSynced ?? this.isSynced,
   );
@@ -133,7 +130,7 @@ class RoutineItemDto {
     'index': instance.index,
     'version': instance.version,
     'isSynced': instance.isSynced,
-    ...instance.exerciseV2Dto.toFile(),
+    ...instance.exerciseDto.toFile(),
     'setsDto': instance.setsDto.map((e) => e.toJson()).toList(),
   };
 }

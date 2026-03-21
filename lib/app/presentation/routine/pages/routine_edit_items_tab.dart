@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/exercises_v2_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/muscle_group_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
 import 'package:uniceps/app/presentation/routine/screens/exercises_selection_screen.dart';
-import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_item_horizontal_widget.dart';
-import 'package:uniceps/l10n/app_localizations.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class RoutineItemEditTab extends StatefulWidget {
   const RoutineItemEditTab({super.key, required this.dayId, required this.dayName});
@@ -52,27 +52,26 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab> with AutomaticK
                         borderRadius: BorderRadius.circular(10),
                         onTap: () {
                           final presentItems = items.map((i) => i.exercise.apiId).toList();
-                          Navigator.push<List<ExerciseV2>>(
-                              context,
-                              MaterialPageRoute(
-                                builder: (c) => MultiBlocProvider(
-                                  providers: [
-                                    BlocProvider(
-                                      create: (context) =>
-                                          MuscleGroupBloc(commands: di.sl())..add(GetMuscleGroupsEvent()),
-                                    ),
-                                    BlocProvider(
-                                      create: (context) => ExercisesV2Bloc(commands: di.sl()),
-                                    ),
-                                    BlocProvider.value(value: context.read<ItemsEditBloc>()),
-                                  ],
-                                  child: ExercisesSelectionScreen(
-                                    dayId: widget.dayId,
-                                    dayName: widget.dayName,
-                                    presentExerciseIds: presentItems,
+                          Navigator.push<List<Exercise>>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (c) => MultiBlocProvider(
+                                providers: [
+                                  BlocProvider(
+                                    create: (context) =>
+                                        MuscleGroupBloc(commands: di.sl())..add(GetMuscleGroupsEvent()),
                                   ),
+                                  BlocProvider(create: (context) => ExercisesV2Bloc(commands: di.sl())),
+                                  BlocProvider.value(value: context.read<ItemsEditBloc>()),
+                                ],
+                                child: ExercisesSelectionScreen(
+                                  dayId: widget.dayId,
+                                  dayName: widget.dayName,
+                                  presentExerciseIds: presentItems,
                                 ),
-                              ));
+                              ),
+                            ),
+                          );
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -93,15 +92,19 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab> with AutomaticK
 
                     list.insert(newIndex - (newIndex > oldIndex ? 1 : 0), item);
 
-                    BlocProvider.of<ItemsEditBloc>(context)
-                        .add(ReorderRoutineItemsEvent(newOrder: list, version: state.version));
+                    BlocProvider.of<ItemsEditBloc>(
+                      context,
+                    ).add(ReorderRoutineItemsEvent(newOrder: list, version: state.version));
                   },
                   children: items
-                      .map((item) => RoutineItemHorizontalWidget(
+                      .map(
+                        (item) => RoutineItemHorizontalWidget(
                           key: ValueKey(item.id!),
                           item: item,
                           copyToAll: (itemId) =>
-                              context.read<ItemsEditBloc>().add(CopySetsToAll(dayId: widget.dayId, itemId: itemId))))
+                              context.read<ItemsEditBloc>().add(CopySetsToAll(dayId: widget.dayId, itemId: itemId)),
+                        ),
+                      )
                       .toList(),
                 ),
                 // Positioned.directional(
@@ -142,10 +145,8 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab> with AutomaticK
             );
           } else if (state is ItemsEditErrorState) {
             return Center(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(state.failure.getErrorMessage()),
-            ));
+              child: Padding(padding: const EdgeInsets.all(8.0), child: Text(state.failure.getErrorMessage())),
+            );
           }
           return const LoadingIndicator();
         },
@@ -155,11 +156,9 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab> with AutomaticK
 
   void showSnack(Widget child, BuildContext context, [Color? backgroundColor]) {
     ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: child,
-      backgroundColor: backgroundColor,
-      showCloseIcon: true,
-    ));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: child, backgroundColor: backgroundColor, showCloseIcon: true));
   }
 
   @override

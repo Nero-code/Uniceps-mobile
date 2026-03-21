@@ -1,20 +1,20 @@
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
+import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/constants/constants.dart';
 
 class DeviceInfoSyncService {
   static const syncFlag = '_syncFlag';
   final SharedPreferences _preferences;
-  final InternetConnectionChecker _checker;
+  final NetworkInfo _checker;
   final ClientHelper _client;
   final Logger _logger;
 
   const DeviceInfoSyncService({
     required SharedPreferences preferences,
-    required InternetConnectionChecker checker,
+    required NetworkInfo checker,
     required ClientHelper client,
     required Logger logger,
   }) : _preferences = preferences,

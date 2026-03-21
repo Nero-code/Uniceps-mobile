@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
+import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
@@ -14,7 +14,7 @@ abstract class MediaHelper {
 
 class ImageMediaHelper implements MediaHelper {
   final Box<Uint8List> imagesCache;
-  final InternetConnectionChecker checker;
+  final NetworkInfo checker;
   final Client client;
   final Logger logger;
 

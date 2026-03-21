@@ -1,13 +1,7 @@
-import 'package:uniceps/core/constants/constants.dart';
-
 class MuscleGroup {
   final int? id;
   final int apiId;
-  final Map<Lang, String> muscleGroupTranslations;
+  final String muscleGroup;
 
-  const MuscleGroup({
-    this.id,
-    required this.apiId,
-    required this.muscleGroupTranslations,
-  });
+  const MuscleGroup({this.id, required this.apiId, required this.muscleGroup});
 }

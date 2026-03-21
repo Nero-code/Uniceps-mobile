@@ -3,20 +3,19 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i3;
 
-import 'package:internet_connection_checker/internet_connection_checker.dart'
-    as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i9;
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart' as _i2;
-import 'package:uniceps/app/data/models/routine_result.dart' as _i7;
+import 'package:uniceps/app/data/models/routine_result.dart' as _i6;
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart'
-    as _i5;
+    as _i4;
 import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart'
     as _i8;
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart'
-    as _i6;
+    as _i5;
+import 'package:uniceps/app/services/network_info.dart' as _i7;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -38,19 +37,8 @@ class _FakeRoutineDto_0 extends _i1.SmartFake implements _i2.RoutineDto {
     : super(parent, parentInvocation);
 }
 
-class _FakeDuration_1 extends _i1.SmartFake implements Duration {
-  _FakeDuration_1(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeAddressCheckResult_2 extends _i1.SmartFake
-    implements _i3.AddressCheckResult {
-  _FakeAddressCheckResult_2(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeFuture_3<T1> extends _i1.SmartFake implements _i4.Future<T1> {
-  _FakeFuture_3(Object parent, Invocation parentInvocation)
+class _FakeFuture_1<T1> extends _i1.SmartFake implements _i3.Future<T1> {
+  _FakeFuture_1(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -58,331 +46,113 @@ class _FakeFuture_3<T1> extends _i1.SmartFake implements _i4.Future<T1> {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockIRoutineManagementLocalSourceContract extends _i1.Mock
-    implements _i5.IRoutineManagementLocalSourceContract {
+    implements _i4.IRoutineManagementLocalSourceContract {
   MockIRoutineManagementLocalSourceContract() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<List<_i2.RoutineDto>> getAllRoutines() =>
+  _i3.Future<List<_i2.RoutineDto>> getAllRoutines() =>
       (super.noSuchMethod(
             Invocation.method(#getAllRoutines, []),
-            returnValue: _i4.Future<List<_i2.RoutineDto>>.value(
+            returnValue: _i3.Future<List<_i2.RoutineDto>>.value(
               <_i2.RoutineDto>[],
             ),
           )
-          as _i4.Future<List<_i2.RoutineDto>>);
+          as _i3.Future<List<_i2.RoutineDto>>);
 
   @override
-  _i4.Future<List<({_i6.RoutineHeat heat, _i2.RoutineDto routine})>>
+  _i3.Future<List<({_i5.RoutineHeat heat, _i2.RoutineDto routine})>>
   getAllRoutinesWithHeat() =>
       (super.noSuchMethod(
             Invocation.method(#getAllRoutinesWithHeat, []),
             returnValue:
-                _i4.Future<
-                  List<({_i6.RoutineHeat heat, _i2.RoutineDto routine})>
-                >.value(<({_i6.RoutineHeat heat, _i2.RoutineDto routine})>[]),
+                _i3.Future<
+                  List<({_i5.RoutineHeat heat, _i2.RoutineDto routine})>
+                >.value(<({_i5.RoutineHeat heat, _i2.RoutineDto routine})>[]),
           )
-          as _i4.Future<
-            List<({_i6.RoutineHeat heat, _i2.RoutineDto routine})>
+          as _i3.Future<
+            List<({_i5.RoutineHeat heat, _i2.RoutineDto routine})>
           >);
 
   @override
-  _i4.Future<_i2.RoutineDto> createRoutine(String? routineName) =>
+  _i3.Future<_i2.RoutineDto> createRoutine(String? routineName) =>
       (super.noSuchMethod(
             Invocation.method(#createRoutine, [routineName]),
-            returnValue: _i4.Future<_i2.RoutineDto>.value(
+            returnValue: _i3.Future<_i2.RoutineDto>.value(
               _FakeRoutineDto_0(
                 this,
                 Invocation.method(#createRoutine, [routineName]),
               ),
             ),
           )
-          as _i4.Future<_i2.RoutineDto>);
+          as _i3.Future<_i2.RoutineDto>);
 
   @override
-  _i4.Future<_i2.RoutineDto> updateRoutine(_i2.RoutineDto? dto) =>
+  _i3.Future<_i2.RoutineDto> updateRoutine(_i2.RoutineDto? dto) =>
       (super.noSuchMethod(
             Invocation.method(#updateRoutine, [dto]),
-            returnValue: _i4.Future<_i2.RoutineDto>.value(
+            returnValue: _i3.Future<_i2.RoutineDto>.value(
               _FakeRoutineDto_0(this, Invocation.method(#updateRoutine, [dto])),
             ),
           )
-          as _i4.Future<_i2.RoutineDto>);
+          as _i3.Future<_i2.RoutineDto>);
 
   @override
-  _i4.Future<void> setCurrentRoutine(_i2.RoutineDto? dto) =>
+  _i3.Future<void> setCurrentRoutine(_i2.RoutineDto? dto) =>
       (super.noSuchMethod(
             Invocation.method(#setCurrentRoutine, [dto]),
-            returnValue: _i4.Future<void>.value(),
-            returnValueForMissingStub: _i4.Future<void>.value(),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
           )
-          as _i4.Future<void>);
+          as _i3.Future<void>);
 
   @override
-  _i4.Future<void> deleteRoutine(_i2.RoutineDto? dto) =>
+  _i3.Future<void> deleteRoutine(_i2.RoutineDto? dto) =>
       (super.noSuchMethod(
             Invocation.method(#deleteRoutine, [dto]),
-            returnValue: _i4.Future<void>.value(),
-            returnValueForMissingStub: _i4.Future<void>.value(),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
           )
-          as _i4.Future<void>);
+          as _i3.Future<void>);
 
   @override
-  _i4.Stream<_i7.Stage> insertFullRoutine(_i2.RoutineDto? dto) =>
+  _i3.Stream<_i6.Stage> insertFullRoutine(_i2.RoutineDto? dto) =>
       (super.noSuchMethod(
             Invocation.method(#insertFullRoutine, [dto]),
-            returnValue: _i4.Stream<_i7.Stage>.empty(),
+            returnValue: _i3.Stream<_i6.Stage>.empty(),
           )
-          as _i4.Stream<_i7.Stage>);
+          as _i3.Stream<_i6.Stage>);
 
   @override
-  _i4.Future<_i2.RoutineDto> getFullRoutine(int? routineId) =>
+  _i3.Future<_i2.RoutineDto> getFullRoutine(int? routineId) =>
       (super.noSuchMethod(
             Invocation.method(#getFullRoutine, [routineId]),
-            returnValue: _i4.Future<_i2.RoutineDto>.value(
+            returnValue: _i3.Future<_i2.RoutineDto>.value(
               _FakeRoutineDto_0(
                 this,
                 Invocation.method(#getFullRoutine, [routineId]),
               ),
             ),
           )
-          as _i4.Future<_i2.RoutineDto>);
+          as _i3.Future<_i2.RoutineDto>);
 }
 
-/// A class which mocks [InternetConnectionChecker].
+/// A class which mocks [NetworkInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockInternetConnectionChecker extends _i1.Mock
-    implements _i3.InternetConnectionChecker {
-  MockInternetConnectionChecker() {
+class MockNetworkInfo extends _i1.Mock implements _i7.NetworkInfo {
+  MockNetworkInfo() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  bool get requireAllAddressesToRespond =>
-      (super.noSuchMethod(
-            Invocation.getter(#requireAllAddressesToRespond),
-            returnValue: false,
-          )
-          as bool);
-
-  @override
-  bool get enableToCheckForSlowConnection =>
-      (super.noSuchMethod(
-            Invocation.getter(#enableToCheckForSlowConnection),
-            returnValue: false,
-          )
-          as bool);
-
-  @override
-  Duration get slowConnectionThreshold =>
-      (super.noSuchMethod(
-            Invocation.getter(#slowConnectionThreshold),
-            returnValue: _FakeDuration_1(
-              this,
-              Invocation.getter(#slowConnectionThreshold),
-            ),
-          )
-          as Duration);
-
-  @override
-  Duration get checkTimeout =>
-      (super.noSuchMethod(
-            Invocation.getter(#checkTimeout),
-            returnValue: _FakeDuration_1(
-              this,
-              Invocation.getter(#checkTimeout),
-            ),
-          )
-          as Duration);
-
-  @override
-  Duration get checkInterval =>
-      (super.noSuchMethod(
-            Invocation.getter(#checkInterval),
-            returnValue: _FakeDuration_1(
-              this,
-              Invocation.getter(#checkInterval),
-            ),
-          )
-          as Duration);
-
-  @override
-  List<_i3.AddressCheckOption> get addresses =>
-      (super.noSuchMethod(
-            Invocation.getter(#addresses),
-            returnValue: <_i3.AddressCheckOption>[],
-          )
-          as List<_i3.AddressCheckOption>);
-
-  @override
-  _i4.Stream<_i3.InternetConnectionStatus> get onStatusChange =>
-      (super.noSuchMethod(
-            Invocation.getter(#onStatusChange),
-            returnValue: _i4.Stream<_i3.InternetConnectionStatus>.empty(),
-          )
-          as _i4.Stream<_i3.InternetConnectionStatus>);
-
-  @override
-  bool get hasListeners =>
-      (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
-          as bool);
-
-  @override
-  _i4.Future<bool> get hasConnection =>
+  _i3.Future<bool> get hasConnection =>
       (super.noSuchMethod(
             Invocation.getter(#hasConnection),
-            returnValue: _i4.Future<bool>.value(false),
+            returnValue: _i3.Future<bool>.value(false),
           )
-          as _i4.Future<bool>);
-
-  @override
-  _i4.Future<_i3.InternetConnectionStatus> get connectionStatus =>
-      (super.noSuchMethod(
-            Invocation.getter(#connectionStatus),
-            returnValue: _i4.Future<_i3.InternetConnectionStatus>.value(
-              _i3.InternetConnectionStatus.connected,
-            ),
-          )
-          as _i4.Future<_i3.InternetConnectionStatus>);
-
-  @override
-  set requireAllAddressesToRespond(bool? value) => super.noSuchMethod(
-    Invocation.setter(#requireAllAddressesToRespond, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set enableToCheckForSlowConnection(bool? value) => super.noSuchMethod(
-    Invocation.setter(#enableToCheckForSlowConnection, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set slowConnectionThreshold(Duration? value) => super.noSuchMethod(
-    Invocation.setter(#slowConnectionThreshold, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set checkTimeout(Duration? value) => super.noSuchMethod(
-    Invocation.setter(#checkTimeout, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set checkInterval(Duration? value) => super.noSuchMethod(
-    Invocation.setter(#checkInterval, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set addresses(List<_i3.AddressCheckOption>? value) => super.noSuchMethod(
-    Invocation.setter(#addresses, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set setLastStatus(_i3.InternetConnectionStatus? status) => super.noSuchMethod(
-    Invocation.setter(#setLastStatus, status),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set setRequireAllAddressesToRespond(bool? value) => super.noSuchMethod(
-    Invocation.setter(#setRequireAllAddressesToRespond, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  Iterable<_i4.Future<_i3.AddressCheckResult>> createAddressCheckFutures(
-    List<_i3.AddressCheckOption>? addresses,
-  ) =>
-      (super.noSuchMethod(
-            Invocation.method(#createAddressCheckFutures, [addresses]),
-            returnValue: <_i4.Future<_i3.AddressCheckResult>>[],
-          )
-          as Iterable<_i4.Future<_i3.AddressCheckResult>>);
-
-  @override
-  _i4.Future<bool> checkConnectivity() =>
-      (super.noSuchMethod(
-            Invocation.method(#checkConnectivity, []),
-            returnValue: _i4.Future<bool>.value(false),
-          )
-          as _i4.Future<bool>);
-
-  @override
-  _i4.Future<_i3.AddressCheckResult> isHostReachable(
-    _i3.AddressCheckOption? option,
-  ) =>
-      (super.noSuchMethod(
-            Invocation.method(#isHostReachable, [option]),
-            returnValue: _i4.Future<_i3.AddressCheckResult>.value(
-              _FakeAddressCheckResult_2(
-                this,
-                Invocation.method(#isHostReachable, [option]),
-              ),
-            ),
-          )
-          as _i4.Future<_i3.AddressCheckResult>);
-
-  @override
-  _i4.Future<void> maybeEmitStatusUpdate({
-    _i4.Timer? timer,
-    Function? cancelCallback,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(#maybeEmitStatusUpdate, [], {
-              #timer: timer,
-              #cancelCallback: cancelCallback,
-            }),
-            returnValue: _i4.Future<void>.value(),
-            returnValueForMissingStub: _i4.Future<void>.value(),
-          )
-          as _i4.Future<void>);
-
-  @override
-  void emitStatus(_i3.InternetConnectionStatus? newStatus) =>
-      super.noSuchMethod(
-        Invocation.method(#emitStatus, [newStatus]),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void startMonitoring() => super.noSuchMethod(
-    Invocation.method(#startMonitoring, []),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void cancelStatusUpdate() => super.noSuchMethod(
-    Invocation.method(#cancelStatusUpdate, []),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void configure({
-    Duration? timeout,
-    Duration? interval,
-    List<_i3.AddressCheckOption>? addresses,
-    _i3.SlowConnectionConfig? slowConnectionConfig,
-  }) => super.noSuchMethod(
-    Invocation.method(#configure, [], {
-      #timeout: timeout,
-      #interval: interval,
-      #addresses: addresses,
-      #slowConnectionConfig: slowConnectionConfig,
-    }),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void dispose() => super.noSuchMethod(
-    Invocation.method(#dispose, []),
-    returnValueForMissingStub: null,
-  );
+          as _i3.Future<bool>);
 }
 
 /// A class which mocks [ClientHelper].
@@ -394,7 +164,7 @@ class MockClientHelper extends _i1.Mock implements _i8.ClientHelper {
   }
 
   @override
-  _i4.Future<T> getHandler<T>(
+  _i3.Future<T> getHandler<T>(
     String? api,
     String? urlPart,
     T Function(Map<String, dynamic>)? fromJson, {
@@ -417,9 +187,9 @@ class MockClientHelper extends _i1.Mock implements _i8.ClientHelper {
                       {#needsHeader: needsHeader, #queryParams: queryParams},
                     ),
                   ),
-                  (T v) => _i4.Future<T>.value(v),
+                  (T v) => _i3.Future<T>.value(v),
                 ) ??
-                _FakeFuture_3<T>(
+                _FakeFuture_1<T>(
                   this,
                   Invocation.method(
                     #getHandler,
@@ -428,10 +198,10 @@ class MockClientHelper extends _i1.Mock implements _i8.ClientHelper {
                   ),
                 ),
           )
-          as _i4.Future<T>);
+          as _i3.Future<T>);
 
   @override
-  _i4.Future<List<T>> getListHandler<T>(
+  _i3.Future<List<T>> getListHandler<T>(
     String? api,
     String? urlPart,
     T Function(Map<String, dynamic>)? fromJson, {
@@ -444,12 +214,12 @@ class MockClientHelper extends _i1.Mock implements _i8.ClientHelper {
               [api, urlPart, fromJson],
               {#needsHeader: needsHeader, #queryParams: queryParams},
             ),
-            returnValue: _i4.Future<List<T>>.value(<T>[]),
+            returnValue: _i3.Future<List<T>>.value(<T>[]),
           )
-          as _i4.Future<List<T>>);
+          as _i3.Future<List<T>>);
 
   @override
-  _i4.Future<T?> postHandler<T>(
+  _i3.Future<T?> postHandler<T>(
     String? api,
     String? urlPart,
     Map<String, dynamic>? body, {
@@ -463,12 +233,12 @@ class MockClientHelper extends _i1.Mock implements _i8.ClientHelper {
               [api, urlPart, body],
               {#fromJson: fromJson, #orElse: orElse, #needsHeader: needsHeader},
             ),
-            returnValue: _i4.Future<T?>.value(),
+            returnValue: _i3.Future<T?>.value(),
           )
-          as _i4.Future<T?>);
+          as _i3.Future<T?>);
 
   @override
-  _i4.Future<void> putHandler(
+  _i3.Future<void> putHandler(
     String? api,
     String? urlPart,
     Map<String, dynamic>? body, {
@@ -480,13 +250,13 @@ class MockClientHelper extends _i1.Mock implements _i8.ClientHelper {
               [api, urlPart, body],
               {#needsHeader: needsHeader},
             ),
-            returnValue: _i4.Future<void>.value(),
-            returnValueForMissingStub: _i4.Future<void>.value(),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
           )
-          as _i4.Future<void>);
+          as _i3.Future<void>);
 
   @override
-  _i4.Future<void> deleteHandler(
+  _i3.Future<void> deleteHandler(
     String? api,
     String? urlPart,
     Map<String, dynamic>? body, {
@@ -498,8 +268,8 @@ class MockClientHelper extends _i1.Mock implements _i8.ClientHelper {
               [api, urlPart, body],
               {#needsHeader: needsHeader},
             ),
-            returnValue: _i4.Future<void>.value(),
-            returnValueForMissingStub: _i4.Future<void>.value(),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
           )
-          as _i4.Future<void>);
+          as _i3.Future<void>);
 }

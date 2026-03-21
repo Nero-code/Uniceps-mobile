@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/account_models/payment_response.dart';
 import 'package:uniceps/app/data/models/account_models/plan_item_model.dart';
@@ -11,19 +10,20 @@ import 'package:uniceps/app/domain/classes/account_entities/membership.dart';
 import 'package:uniceps/app/domain/classes/account_entities/plan.dart';
 import 'package:uniceps/app/domain/classes/account_entities/plan_item.dart';
 import 'package:uniceps/app/domain/contracts/account/i_account_service.dart';
+import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class AccountRepo implements IAccountService {
   final IAccountLocalSource _localSource;
   final IAccountRemoteSource _remoteSource;
-  final InternetConnectionChecker _checker;
+  final NetworkInfo _checker;
   final SimpleTokenService _tokenService;
   final Logger _logger;
 
   const AccountRepo({
     required IAccountLocalSource localSource,
     required IAccountRemoteSource remoteSource,
-    required InternetConnectionChecker checker,
+    required NetworkInfo checker,
     required SimpleTokenService tokenService,
     required Logger logger,
   }) : _localSource = localSource,

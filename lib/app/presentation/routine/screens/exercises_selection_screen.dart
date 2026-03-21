@@ -6,7 +6,6 @@ import 'package:uniceps/app/presentation/routine/blocs/exercises_v2_selection/ex
 import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
 import 'package:uniceps/app/presentation/routine/pages/exercises_list_tab.dart';
 import 'package:uniceps/app/presentation/routine/widgets/progress_widget.dart';
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 // import 'package:uniceps/l10n/app_localizations.dart';
@@ -19,7 +18,7 @@ class ExercisesSelectionScreen extends StatefulWidget {
     required this.dayId,
   });
 
-  final List<int> presentExerciseIds;
+  final List<String> presentExerciseIds;
   final String dayName;
   final int dayId;
 
@@ -110,7 +109,8 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen> wit
                     isScrollable: true,
                     tabs: [
                       ...state.groups.map(
-                        (group) => Tab(text: group.muscleGroupTranslations[lang ? Lang.ar : Lang.en]),
+                        // (group) => Tab(text: group.muscleGroupTranslations[lang ? Lang.ar : Lang.en]),
+                        (group) => Tab(text: group.muscleGroup),
                       ),
                     ],
                   ),

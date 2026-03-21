@@ -53,7 +53,7 @@ void main() {
       TLogModel(
         id: 0,
         sessionId: 1,
-        exerciseId: 1,
+        exerciseId: '1',
         exerciseIndex: 0,
         setIndex: 0,
         reps: 5,

@@ -4,7 +4,8 @@ import 'package:uniceps/app/data/sources/local/tables/practice/t_sessions_table.
 class TLogs extends Table {
   late final logId = integer().autoIncrement()();
 
-  late final exerciseId = integer()();
+  // late final exerciseId = integer()();
+  late final exerciseId = text()(); // TODO: migrate
   late final exerciseIndex = integer()();
 
   late final setIndex = integer()();
@@ -18,6 +19,10 @@ class TLogs extends Table {
   late final isSynced = boolean().withDefault(const Constant(false))();
 
   // Foreign Key
-  late final sessionId = integer().references(TSessions, #tsId,
-      onDelete: KeyAction.cascade, onUpdate: KeyAction.cascade)();
+  late final sessionId = integer().references(
+    TSessions,
+    #tsId,
+    onDelete: KeyAction.cascade,
+    onUpdate: KeyAction.cascade,
+  )();
 }

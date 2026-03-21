@@ -1,24 +1,24 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/practice_models/t_session_model.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/data/sources/services/sync/sync_contract.dart';
+import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/constants/constants.dart';
 
 class TSessionSyncService implements TSessionSyncContract {
   final AppDatabase _database;
   final ClientHelper _client;
-  final InternetConnectionChecker _connectionChecker;
+  final NetworkInfo _connectionChecker;
   final Logger _logger;
 
   TSessionSyncService({
     required AppDatabase database,
     required ClientHelper client,
-    required InternetConnectionChecker connectionChecker,
+    required NetworkInfo connectionChecker,
     required Logger logger,
   }) : _database = database,
        _client = client,

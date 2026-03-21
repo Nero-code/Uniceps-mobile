@@ -1330,12 +1330,12 @@ class $ExercisesTable extends Exercises
   $ExercisesTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _apiIdMeta = const VerificationMeta('apiId');
   @override
-  late final GeneratedColumn<int> apiId = GeneratedColumn<int>(
+  late final GeneratedColumn<String> apiId = GeneratedColumn<String>(
     'api_id',
     aliasedName,
     false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
@@ -1357,23 +1357,131 @@ class $ExercisesTable extends Exercises
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _muscleGroupTranslationsMeta =
-      const VerificationMeta('muscleGroupTranslations');
+  static const VerificationMeta _muscleGroupMeta = const VerificationMeta(
+    'muscleGroup',
+  );
   @override
-  late final GeneratedColumn<String> muscleGroupTranslations =
-      GeneratedColumn<String>(
-        'muscle_group_translations',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: true,
-      );
+  late final GeneratedColumn<String> muscleGroup = GeneratedColumn<String>(
+    'muscle_group',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _muscleHeadMeta = const VerificationMeta(
+    'muscleHead',
+  );
+  @override
+  late final GeneratedColumn<String> muscleHead = GeneratedColumn<String>(
+    'muscle_head',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _auxMuscle1Meta = const VerificationMeta(
+    'auxMuscle1',
+  );
+  @override
+  late final GeneratedColumn<String> auxMuscle1 = GeneratedColumn<String>(
+    'aux_muscle1',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _auxMuscle2Meta = const VerificationMeta(
+    'auxMuscle2',
+  );
+  @override
+  late final GeneratedColumn<String> auxMuscle2 = GeneratedColumn<String>(
+    'aux_muscle2',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _auxMuscle3Meta = const VerificationMeta(
+    'auxMuscle3',
+  );
+  @override
+  late final GeneratedColumn<String> auxMuscle3 = GeneratedColumn<String>(
+    'aux_muscle3',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _lateralsMeta = const VerificationMeta(
+    'laterals',
+  );
+  @override
+  late final GeneratedColumn<String> laterals = GeneratedColumn<String>(
+    'laterals',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _toolMeta = const VerificationMeta('tool');
+  @override
+  late final GeneratedColumn<String> tool = GeneratedColumn<String>(
+    'tool',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _versionMeta = const VerificationMeta(
+    'version',
+  );
+  @override
+  late final GeneratedColumn<int> version = GeneratedColumn<int>(
+    'version',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(1),
+  );
+  static const VerificationMeta _mediaVersionMeta = const VerificationMeta(
+    'mediaVersion',
+  );
+  @override
+  late final GeneratedColumn<int> mediaVersion = GeneratedColumn<int>(
+    'media_version',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(1),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     apiId,
     name,
     imageUrl,
-    muscleGroupTranslations,
+    muscleGroup,
+    muscleHead,
+    auxMuscle1,
+    auxMuscle2,
+    auxMuscle3,
+    description,
+    laterals,
+    tool,
+    version,
+    mediaVersion,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1392,6 +1500,8 @@ class $ExercisesTable extends Exercises
         _apiIdMeta,
         apiId.isAcceptableOrUnknown(data['api_id']!, _apiIdMeta),
       );
+    } else if (isInserting) {
+      context.missing(_apiIdMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -1409,16 +1519,76 @@ class $ExercisesTable extends Exercises
     } else if (isInserting) {
       context.missing(_imageUrlMeta);
     }
-    if (data.containsKey('muscle_group_translations')) {
+    if (data.containsKey('muscle_group')) {
       context.handle(
-        _muscleGroupTranslationsMeta,
-        muscleGroupTranslations.isAcceptableOrUnknown(
-          data['muscle_group_translations']!,
-          _muscleGroupTranslationsMeta,
+        _muscleGroupMeta,
+        muscleGroup.isAcceptableOrUnknown(
+          data['muscle_group']!,
+          _muscleGroupMeta,
         ),
       );
     } else if (isInserting) {
-      context.missing(_muscleGroupTranslationsMeta);
+      context.missing(_muscleGroupMeta);
+    }
+    if (data.containsKey('muscle_head')) {
+      context.handle(
+        _muscleHeadMeta,
+        muscleHead.isAcceptableOrUnknown(data['muscle_head']!, _muscleHeadMeta),
+      );
+    }
+    if (data.containsKey('aux_muscle1')) {
+      context.handle(
+        _auxMuscle1Meta,
+        auxMuscle1.isAcceptableOrUnknown(data['aux_muscle1']!, _auxMuscle1Meta),
+      );
+    }
+    if (data.containsKey('aux_muscle2')) {
+      context.handle(
+        _auxMuscle2Meta,
+        auxMuscle2.isAcceptableOrUnknown(data['aux_muscle2']!, _auxMuscle2Meta),
+      );
+    }
+    if (data.containsKey('aux_muscle3')) {
+      context.handle(
+        _auxMuscle3Meta,
+        auxMuscle3.isAcceptableOrUnknown(data['aux_muscle3']!, _auxMuscle3Meta),
+      );
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('laterals')) {
+      context.handle(
+        _lateralsMeta,
+        laterals.isAcceptableOrUnknown(data['laterals']!, _lateralsMeta),
+      );
+    }
+    if (data.containsKey('tool')) {
+      context.handle(
+        _toolMeta,
+        tool.isAcceptableOrUnknown(data['tool']!, _toolMeta),
+      );
+    }
+    if (data.containsKey('version')) {
+      context.handle(
+        _versionMeta,
+        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
+      );
+    }
+    if (data.containsKey('media_version')) {
+      context.handle(
+        _mediaVersionMeta,
+        mediaVersion.isAcceptableOrUnknown(
+          data['media_version']!,
+          _mediaVersionMeta,
+        ),
+      );
     }
     return context;
   }
@@ -1430,7 +1600,7 @@ class $ExercisesTable extends Exercises
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Exercise(
       apiId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.string,
         data['${effectivePrefix}api_id'],
       )!,
       name: attachedDatabase.typeMapping.read(
@@ -1441,9 +1611,45 @@ class $ExercisesTable extends Exercises
         DriftSqlType.string,
         data['${effectivePrefix}image_url'],
       )!,
-      muscleGroupTranslations: attachedDatabase.typeMapping.read(
+      muscleGroup: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}muscle_group_translations'],
+        data['${effectivePrefix}muscle_group'],
+      )!,
+      muscleHead: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}muscle_head'],
+      ),
+      auxMuscle1: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}aux_muscle1'],
+      ),
+      auxMuscle2: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}aux_muscle2'],
+      ),
+      auxMuscle3: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}aux_muscle3'],
+      ),
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
+      laterals: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}laterals'],
+      ),
+      tool: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}tool'],
+      ),
+      version: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}version'],
+      )!,
+      mediaVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}media_version'],
       )!,
     );
   }
@@ -1455,25 +1661,64 @@ class $ExercisesTable extends Exercises
 }
 
 class Exercise extends DataClass implements Insertable<Exercise> {
-  final int apiId;
+  final String apiId;
   final String name;
   final String imageUrl;
-  final String muscleGroupTranslations;
+  final String muscleGroup;
+  final String? muscleHead;
+  final String? auxMuscle1;
+  final String? auxMuscle2;
+  final String? auxMuscle3;
+  final String? description;
+  final String? laterals;
+  final String? tool;
+  final int version;
+  final int mediaVersion;
   const Exercise({
     required this.apiId,
     required this.name,
     required this.imageUrl,
-    required this.muscleGroupTranslations,
+    required this.muscleGroup,
+    this.muscleHead,
+    this.auxMuscle1,
+    this.auxMuscle2,
+    this.auxMuscle3,
+    this.description,
+    this.laterals,
+    this.tool,
+    required this.version,
+    required this.mediaVersion,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['api_id'] = Variable<int>(apiId);
+    map['api_id'] = Variable<String>(apiId);
     map['name'] = Variable<String>(name);
     map['image_url'] = Variable<String>(imageUrl);
-    map['muscle_group_translations'] = Variable<String>(
-      muscleGroupTranslations,
-    );
+    map['muscle_group'] = Variable<String>(muscleGroup);
+    if (!nullToAbsent || muscleHead != null) {
+      map['muscle_head'] = Variable<String>(muscleHead);
+    }
+    if (!nullToAbsent || auxMuscle1 != null) {
+      map['aux_muscle1'] = Variable<String>(auxMuscle1);
+    }
+    if (!nullToAbsent || auxMuscle2 != null) {
+      map['aux_muscle2'] = Variable<String>(auxMuscle2);
+    }
+    if (!nullToAbsent || auxMuscle3 != null) {
+      map['aux_muscle3'] = Variable<String>(auxMuscle3);
+    }
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    if (!nullToAbsent || laterals != null) {
+      map['laterals'] = Variable<String>(laterals);
+    }
+    if (!nullToAbsent || tool != null) {
+      map['tool'] = Variable<String>(tool);
+    }
+    map['version'] = Variable<int>(version);
+    map['media_version'] = Variable<int>(mediaVersion);
     return map;
   }
 
@@ -1482,7 +1727,28 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       apiId: Value(apiId),
       name: Value(name),
       imageUrl: Value(imageUrl),
-      muscleGroupTranslations: Value(muscleGroupTranslations),
+      muscleGroup: Value(muscleGroup),
+      muscleHead: muscleHead == null && nullToAbsent
+          ? const Value.absent()
+          : Value(muscleHead),
+      auxMuscle1: auxMuscle1 == null && nullToAbsent
+          ? const Value.absent()
+          : Value(auxMuscle1),
+      auxMuscle2: auxMuscle2 == null && nullToAbsent
+          ? const Value.absent()
+          : Value(auxMuscle2),
+      auxMuscle3: auxMuscle3 == null && nullToAbsent
+          ? const Value.absent()
+          : Value(auxMuscle3),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+      laterals: laterals == null && nullToAbsent
+          ? const Value.absent()
+          : Value(laterals),
+      tool: tool == null && nullToAbsent ? const Value.absent() : Value(tool),
+      version: Value(version),
+      mediaVersion: Value(mediaVersion),
     );
   }
 
@@ -1492,47 +1758,99 @@ class Exercise extends DataClass implements Insertable<Exercise> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Exercise(
-      apiId: serializer.fromJson<int>(json['apiId']),
+      apiId: serializer.fromJson<String>(json['apiId']),
       name: serializer.fromJson<String>(json['name']),
       imageUrl: serializer.fromJson<String>(json['imageUrl']),
-      muscleGroupTranslations: serializer.fromJson<String>(
-        json['muscleGroupTranslations'],
-      ),
+      muscleGroup: serializer.fromJson<String>(json['muscleGroup']),
+      muscleHead: serializer.fromJson<String?>(json['muscleHead']),
+      auxMuscle1: serializer.fromJson<String?>(json['auxMuscle1']),
+      auxMuscle2: serializer.fromJson<String?>(json['auxMuscle2']),
+      auxMuscle3: serializer.fromJson<String?>(json['auxMuscle3']),
+      description: serializer.fromJson<String?>(json['description']),
+      laterals: serializer.fromJson<String?>(json['laterals']),
+      tool: serializer.fromJson<String?>(json['tool']),
+      version: serializer.fromJson<int>(json['version']),
+      mediaVersion: serializer.fromJson<int>(json['mediaVersion']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'apiId': serializer.toJson<int>(apiId),
+      'apiId': serializer.toJson<String>(apiId),
       'name': serializer.toJson<String>(name),
       'imageUrl': serializer.toJson<String>(imageUrl),
-      'muscleGroupTranslations': serializer.toJson<String>(
-        muscleGroupTranslations,
-      ),
+      'muscleGroup': serializer.toJson<String>(muscleGroup),
+      'muscleHead': serializer.toJson<String?>(muscleHead),
+      'auxMuscle1': serializer.toJson<String?>(auxMuscle1),
+      'auxMuscle2': serializer.toJson<String?>(auxMuscle2),
+      'auxMuscle3': serializer.toJson<String?>(auxMuscle3),
+      'description': serializer.toJson<String?>(description),
+      'laterals': serializer.toJson<String?>(laterals),
+      'tool': serializer.toJson<String?>(tool),
+      'version': serializer.toJson<int>(version),
+      'mediaVersion': serializer.toJson<int>(mediaVersion),
     };
   }
 
   Exercise copyWith({
-    int? apiId,
+    String? apiId,
     String? name,
     String? imageUrl,
-    String? muscleGroupTranslations,
+    String? muscleGroup,
+    Value<String?> muscleHead = const Value.absent(),
+    Value<String?> auxMuscle1 = const Value.absent(),
+    Value<String?> auxMuscle2 = const Value.absent(),
+    Value<String?> auxMuscle3 = const Value.absent(),
+    Value<String?> description = const Value.absent(),
+    Value<String?> laterals = const Value.absent(),
+    Value<String?> tool = const Value.absent(),
+    int? version,
+    int? mediaVersion,
   }) => Exercise(
     apiId: apiId ?? this.apiId,
     name: name ?? this.name,
     imageUrl: imageUrl ?? this.imageUrl,
-    muscleGroupTranslations:
-        muscleGroupTranslations ?? this.muscleGroupTranslations,
+    muscleGroup: muscleGroup ?? this.muscleGroup,
+    muscleHead: muscleHead.present ? muscleHead.value : this.muscleHead,
+    auxMuscle1: auxMuscle1.present ? auxMuscle1.value : this.auxMuscle1,
+    auxMuscle2: auxMuscle2.present ? auxMuscle2.value : this.auxMuscle2,
+    auxMuscle3: auxMuscle3.present ? auxMuscle3.value : this.auxMuscle3,
+    description: description.present ? description.value : this.description,
+    laterals: laterals.present ? laterals.value : this.laterals,
+    tool: tool.present ? tool.value : this.tool,
+    version: version ?? this.version,
+    mediaVersion: mediaVersion ?? this.mediaVersion,
   );
   Exercise copyWithCompanion(ExercisesCompanion data) {
     return Exercise(
       apiId: data.apiId.present ? data.apiId.value : this.apiId,
       name: data.name.present ? data.name.value : this.name,
       imageUrl: data.imageUrl.present ? data.imageUrl.value : this.imageUrl,
-      muscleGroupTranslations: data.muscleGroupTranslations.present
-          ? data.muscleGroupTranslations.value
-          : this.muscleGroupTranslations,
+      muscleGroup: data.muscleGroup.present
+          ? data.muscleGroup.value
+          : this.muscleGroup,
+      muscleHead: data.muscleHead.present
+          ? data.muscleHead.value
+          : this.muscleHead,
+      auxMuscle1: data.auxMuscle1.present
+          ? data.auxMuscle1.value
+          : this.auxMuscle1,
+      auxMuscle2: data.auxMuscle2.present
+          ? data.auxMuscle2.value
+          : this.auxMuscle2,
+      auxMuscle3: data.auxMuscle3.present
+          ? data.auxMuscle3.value
+          : this.auxMuscle3,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      laterals: data.laterals.present ? data.laterals.value : this.laterals,
+      tool: data.tool.present ? data.tool.value : this.tool,
+      version: data.version.present ? data.version.value : this.version,
+      mediaVersion: data.mediaVersion.present
+          ? data.mediaVersion.value
+          : this.mediaVersion,
     );
   }
 
@@ -1542,14 +1860,36 @@ class Exercise extends DataClass implements Insertable<Exercise> {
           ..write('apiId: $apiId, ')
           ..write('name: $name, ')
           ..write('imageUrl: $imageUrl, ')
-          ..write('muscleGroupTranslations: $muscleGroupTranslations')
+          ..write('muscleGroup: $muscleGroup, ')
+          ..write('muscleHead: $muscleHead, ')
+          ..write('auxMuscle1: $auxMuscle1, ')
+          ..write('auxMuscle2: $auxMuscle2, ')
+          ..write('auxMuscle3: $auxMuscle3, ')
+          ..write('description: $description, ')
+          ..write('laterals: $laterals, ')
+          ..write('tool: $tool, ')
+          ..write('version: $version, ')
+          ..write('mediaVersion: $mediaVersion')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(apiId, name, imageUrl, muscleGroupTranslations);
+  int get hashCode => Object.hash(
+    apiId,
+    name,
+    imageUrl,
+    muscleGroup,
+    muscleHead,
+    auxMuscle1,
+    auxMuscle2,
+    auxMuscle3,
+    description,
+    laterals,
+    tool,
+    version,
+    mediaVersion,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1557,55 +1897,133 @@ class Exercise extends DataClass implements Insertable<Exercise> {
           other.apiId == this.apiId &&
           other.name == this.name &&
           other.imageUrl == this.imageUrl &&
-          other.muscleGroupTranslations == this.muscleGroupTranslations);
+          other.muscleGroup == this.muscleGroup &&
+          other.muscleHead == this.muscleHead &&
+          other.auxMuscle1 == this.auxMuscle1 &&
+          other.auxMuscle2 == this.auxMuscle2 &&
+          other.auxMuscle3 == this.auxMuscle3 &&
+          other.description == this.description &&
+          other.laterals == this.laterals &&
+          other.tool == this.tool &&
+          other.version == this.version &&
+          other.mediaVersion == this.mediaVersion);
 }
 
 class ExercisesCompanion extends UpdateCompanion<Exercise> {
-  final Value<int> apiId;
+  final Value<String> apiId;
   final Value<String> name;
   final Value<String> imageUrl;
-  final Value<String> muscleGroupTranslations;
+  final Value<String> muscleGroup;
+  final Value<String?> muscleHead;
+  final Value<String?> auxMuscle1;
+  final Value<String?> auxMuscle2;
+  final Value<String?> auxMuscle3;
+  final Value<String?> description;
+  final Value<String?> laterals;
+  final Value<String?> tool;
+  final Value<int> version;
+  final Value<int> mediaVersion;
+  final Value<int> rowid;
   const ExercisesCompanion({
     this.apiId = const Value.absent(),
     this.name = const Value.absent(),
     this.imageUrl = const Value.absent(),
-    this.muscleGroupTranslations = const Value.absent(),
+    this.muscleGroup = const Value.absent(),
+    this.muscleHead = const Value.absent(),
+    this.auxMuscle1 = const Value.absent(),
+    this.auxMuscle2 = const Value.absent(),
+    this.auxMuscle3 = const Value.absent(),
+    this.description = const Value.absent(),
+    this.laterals = const Value.absent(),
+    this.tool = const Value.absent(),
+    this.version = const Value.absent(),
+    this.mediaVersion = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   ExercisesCompanion.insert({
-    this.apiId = const Value.absent(),
+    required String apiId,
     required String name,
     required String imageUrl,
-    required String muscleGroupTranslations,
-  }) : name = Value(name),
+    required String muscleGroup,
+    this.muscleHead = const Value.absent(),
+    this.auxMuscle1 = const Value.absent(),
+    this.auxMuscle2 = const Value.absent(),
+    this.auxMuscle3 = const Value.absent(),
+    this.description = const Value.absent(),
+    this.laterals = const Value.absent(),
+    this.tool = const Value.absent(),
+    this.version = const Value.absent(),
+    this.mediaVersion = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : apiId = Value(apiId),
+       name = Value(name),
        imageUrl = Value(imageUrl),
-       muscleGroupTranslations = Value(muscleGroupTranslations);
+       muscleGroup = Value(muscleGroup);
   static Insertable<Exercise> custom({
-    Expression<int>? apiId,
+    Expression<String>? apiId,
     Expression<String>? name,
     Expression<String>? imageUrl,
-    Expression<String>? muscleGroupTranslations,
+    Expression<String>? muscleGroup,
+    Expression<String>? muscleHead,
+    Expression<String>? auxMuscle1,
+    Expression<String>? auxMuscle2,
+    Expression<String>? auxMuscle3,
+    Expression<String>? description,
+    Expression<String>? laterals,
+    Expression<String>? tool,
+    Expression<int>? version,
+    Expression<int>? mediaVersion,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (apiId != null) 'api_id': apiId,
       if (name != null) 'name': name,
       if (imageUrl != null) 'image_url': imageUrl,
-      if (muscleGroupTranslations != null)
-        'muscle_group_translations': muscleGroupTranslations,
+      if (muscleGroup != null) 'muscle_group': muscleGroup,
+      if (muscleHead != null) 'muscle_head': muscleHead,
+      if (auxMuscle1 != null) 'aux_muscle1': auxMuscle1,
+      if (auxMuscle2 != null) 'aux_muscle2': auxMuscle2,
+      if (auxMuscle3 != null) 'aux_muscle3': auxMuscle3,
+      if (description != null) 'description': description,
+      if (laterals != null) 'laterals': laterals,
+      if (tool != null) 'tool': tool,
+      if (version != null) 'version': version,
+      if (mediaVersion != null) 'media_version': mediaVersion,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   ExercisesCompanion copyWith({
-    Value<int>? apiId,
+    Value<String>? apiId,
     Value<String>? name,
     Value<String>? imageUrl,
-    Value<String>? muscleGroupTranslations,
+    Value<String>? muscleGroup,
+    Value<String?>? muscleHead,
+    Value<String?>? auxMuscle1,
+    Value<String?>? auxMuscle2,
+    Value<String?>? auxMuscle3,
+    Value<String?>? description,
+    Value<String?>? laterals,
+    Value<String?>? tool,
+    Value<int>? version,
+    Value<int>? mediaVersion,
+    Value<int>? rowid,
   }) {
     return ExercisesCompanion(
       apiId: apiId ?? this.apiId,
       name: name ?? this.name,
       imageUrl: imageUrl ?? this.imageUrl,
-      muscleGroupTranslations:
-          muscleGroupTranslations ?? this.muscleGroupTranslations,
+      muscleGroup: muscleGroup ?? this.muscleGroup,
+      muscleHead: muscleHead ?? this.muscleHead,
+      auxMuscle1: auxMuscle1 ?? this.auxMuscle1,
+      auxMuscle2: auxMuscle2 ?? this.auxMuscle2,
+      auxMuscle3: auxMuscle3 ?? this.auxMuscle3,
+      description: description ?? this.description,
+      laterals: laterals ?? this.laterals,
+      tool: tool ?? this.tool,
+      version: version ?? this.version,
+      mediaVersion: mediaVersion ?? this.mediaVersion,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -1613,7 +2031,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (apiId.present) {
-      map['api_id'] = Variable<int>(apiId.value);
+      map['api_id'] = Variable<String>(apiId.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -1621,10 +2039,38 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     if (imageUrl.present) {
       map['image_url'] = Variable<String>(imageUrl.value);
     }
-    if (muscleGroupTranslations.present) {
-      map['muscle_group_translations'] = Variable<String>(
-        muscleGroupTranslations.value,
-      );
+    if (muscleGroup.present) {
+      map['muscle_group'] = Variable<String>(muscleGroup.value);
+    }
+    if (muscleHead.present) {
+      map['muscle_head'] = Variable<String>(muscleHead.value);
+    }
+    if (auxMuscle1.present) {
+      map['aux_muscle1'] = Variable<String>(auxMuscle1.value);
+    }
+    if (auxMuscle2.present) {
+      map['aux_muscle2'] = Variable<String>(auxMuscle2.value);
+    }
+    if (auxMuscle3.present) {
+      map['aux_muscle3'] = Variable<String>(auxMuscle3.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (laterals.present) {
+      map['laterals'] = Variable<String>(laterals.value);
+    }
+    if (tool.present) {
+      map['tool'] = Variable<String>(tool.value);
+    }
+    if (version.present) {
+      map['version'] = Variable<int>(version.value);
+    }
+    if (mediaVersion.present) {
+      map['media_version'] = Variable<int>(mediaVersion.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
     }
     return map;
   }
@@ -1635,7 +2081,17 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
           ..write('apiId: $apiId, ')
           ..write('name: $name, ')
           ..write('imageUrl: $imageUrl, ')
-          ..write('muscleGroupTranslations: $muscleGroupTranslations')
+          ..write('muscleGroup: $muscleGroup, ')
+          ..write('muscleHead: $muscleHead, ')
+          ..write('auxMuscle1: $auxMuscle1, ')
+          ..write('auxMuscle2: $auxMuscle2, ')
+          ..write('auxMuscle3: $auxMuscle3, ')
+          ..write('description: $description, ')
+          ..write('laterals: $laterals, ')
+          ..write('tool: $tool, ')
+          ..write('version: $version, ')
+          ..write('mediaVersion: $mediaVersion, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -1718,11 +2174,11 @@ class $RoutineItemsTable extends RoutineItems
     'exerciseId',
   );
   @override
-  late final GeneratedColumn<int> exerciseId = GeneratedColumn<int>(
+  late final GeneratedColumn<String> exerciseId = GeneratedColumn<String>(
     'exercise_id',
     aliasedName,
     false,
-    type: DriftSqlType.int,
+    type: DriftSqlType.string,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'REFERENCES exercises (api_id) ON UPDATE CASCADE ON DELETE CASCADE',
@@ -1848,7 +2304,7 @@ class $RoutineItemsTable extends RoutineItems
         data['${effectivePrefix}is_synced'],
       )!,
       exerciseId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.string,
         data['${effectivePrefix}exercise_id'],
       )!,
       dayId: attachedDatabase.typeMapping.read(
@@ -1871,7 +2327,7 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
   final String? notes;
   final int version;
   final bool isSynced;
-  final int exerciseId;
+  final String exerciseId;
   final int dayId;
   const RoutineItem({
     required this.id,
@@ -1896,7 +2352,7 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
     }
     map['version'] = Variable<int>(version);
     map['is_synced'] = Variable<bool>(isSynced);
-    map['exercise_id'] = Variable<int>(exerciseId);
+    map['exercise_id'] = Variable<String>(exerciseId);
     map['day_id'] = Variable<int>(dayId);
     return map;
   }
@@ -1930,7 +2386,7 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
       notes: serializer.fromJson<String?>(json['notes']),
       version: serializer.fromJson<int>(json['version']),
       isSynced: serializer.fromJson<bool>(json['isSynced']),
-      exerciseId: serializer.fromJson<int>(json['exerciseId']),
+      exerciseId: serializer.fromJson<String>(json['exerciseId']),
       dayId: serializer.fromJson<int>(json['dayId']),
     );
   }
@@ -1944,7 +2400,7 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
       'notes': serializer.toJson<String?>(notes),
       'version': serializer.toJson<int>(version),
       'isSynced': serializer.toJson<bool>(isSynced),
-      'exerciseId': serializer.toJson<int>(exerciseId),
+      'exerciseId': serializer.toJson<String>(exerciseId),
       'dayId': serializer.toJson<int>(dayId),
     };
   }
@@ -1956,7 +2412,7 @@ class RoutineItem extends DataClass implements Insertable<RoutineItem> {
     Value<String?> notes = const Value.absent(),
     int? version,
     bool? isSynced,
-    int? exerciseId,
+    String? exerciseId,
     int? dayId,
   }) => RoutineItem(
     id: id ?? this.id,
@@ -2030,7 +2486,7 @@ class RoutineItemsCompanion extends UpdateCompanion<RoutineItem> {
   final Value<String?> notes;
   final Value<int> version;
   final Value<bool> isSynced;
-  final Value<int> exerciseId;
+  final Value<String> exerciseId;
   final Value<int> dayId;
   const RoutineItemsCompanion({
     this.id = const Value.absent(),
@@ -2049,7 +2505,7 @@ class RoutineItemsCompanion extends UpdateCompanion<RoutineItem> {
     this.notes = const Value.absent(),
     this.version = const Value.absent(),
     this.isSynced = const Value.absent(),
-    required int exerciseId,
+    required String exerciseId,
     required int dayId,
   }) : index = Value(index),
        exerciseId = Value(exerciseId),
@@ -2061,7 +2517,7 @@ class RoutineItemsCompanion extends UpdateCompanion<RoutineItem> {
     Expression<String>? notes,
     Expression<int>? version,
     Expression<bool>? isSynced,
-    Expression<int>? exerciseId,
+    Expression<String>? exerciseId,
     Expression<int>? dayId,
   }) {
     return RawValuesInsertable({
@@ -2083,7 +2539,7 @@ class RoutineItemsCompanion extends UpdateCompanion<RoutineItem> {
     Value<String?>? notes,
     Value<int>? version,
     Value<bool>? isSynced,
-    Value<int>? exerciseId,
+    Value<String>? exerciseId,
     Value<int>? dayId,
   }) {
     return RoutineItemsCompanion(
@@ -2120,7 +2576,7 @@ class RoutineItemsCompanion extends UpdateCompanion<RoutineItem> {
       map['is_synced'] = Variable<bool>(isSynced.value);
     }
     if (exerciseId.present) {
-      map['exercise_id'] = Variable<int>(exerciseId.value);
+      map['exercise_id'] = Variable<String>(exerciseId.value);
     }
     if (dayId.present) {
       map['day_id'] = Variable<int>(dayId.value);
@@ -3178,11 +3634,11 @@ class $TLogsTable extends TLogs with TableInfo<$TLogsTable, TLog> {
     'exerciseId',
   );
   @override
-  late final GeneratedColumn<int> exerciseId = GeneratedColumn<int>(
+  late final GeneratedColumn<String> exerciseId = GeneratedColumn<String>(
     'exercise_id',
     aliasedName,
     false,
-    type: DriftSqlType.int,
+    type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
   static const VerificationMeta _exerciseIndexMeta = const VerificationMeta(
@@ -3412,7 +3868,7 @@ class $TLogsTable extends TLogs with TableInfo<$TLogsTable, TLog> {
         data['${effectivePrefix}log_id'],
       )!,
       exerciseId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.string,
         data['${effectivePrefix}exercise_id'],
       )!,
       exerciseIndex: attachedDatabase.typeMapping.read(
@@ -3462,7 +3918,7 @@ class $TLogsTable extends TLogs with TableInfo<$TLogsTable, TLog> {
 
 class TLog extends DataClass implements Insertable<TLog> {
   final int logId;
-  final int exerciseId;
+  final String exerciseId;
   final int exerciseIndex;
   final int setIndex;
   final int reps;
@@ -3489,7 +3945,7 @@ class TLog extends DataClass implements Insertable<TLog> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['log_id'] = Variable<int>(logId);
-    map['exercise_id'] = Variable<int>(exerciseId);
+    map['exercise_id'] = Variable<String>(exerciseId);
     map['exercise_index'] = Variable<int>(exerciseIndex);
     map['set_index'] = Variable<int>(setIndex);
     map['reps'] = Variable<int>(reps);
@@ -3529,7 +3985,7 @@ class TLog extends DataClass implements Insertable<TLog> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return TLog(
       logId: serializer.fromJson<int>(json['logId']),
-      exerciseId: serializer.fromJson<int>(json['exerciseId']),
+      exerciseId: serializer.fromJson<String>(json['exerciseId']),
       exerciseIndex: serializer.fromJson<int>(json['exerciseIndex']),
       setIndex: serializer.fromJson<int>(json['setIndex']),
       reps: serializer.fromJson<int>(json['reps']),
@@ -3546,7 +4002,7 @@ class TLog extends DataClass implements Insertable<TLog> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'logId': serializer.toJson<int>(logId),
-      'exerciseId': serializer.toJson<int>(exerciseId),
+      'exerciseId': serializer.toJson<String>(exerciseId),
       'exerciseIndex': serializer.toJson<int>(exerciseIndex),
       'setIndex': serializer.toJson<int>(setIndex),
       'reps': serializer.toJson<int>(reps),
@@ -3561,7 +4017,7 @@ class TLog extends DataClass implements Insertable<TLog> {
 
   TLog copyWith({
     int? logId,
-    int? exerciseId,
+    String? exerciseId,
     int? exerciseIndex,
     int? setIndex,
     int? reps,
@@ -3657,7 +4113,7 @@ class TLog extends DataClass implements Insertable<TLog> {
 
 class TLogsCompanion extends UpdateCompanion<TLog> {
   final Value<int> logId;
-  final Value<int> exerciseId;
+  final Value<String> exerciseId;
   final Value<int> exerciseIndex;
   final Value<int> setIndex;
   final Value<int> reps;
@@ -3682,7 +4138,7 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
   });
   TLogsCompanion.insert({
     this.logId = const Value.absent(),
-    required int exerciseId,
+    required String exerciseId,
     required int exerciseIndex,
     required int setIndex,
     required int reps,
@@ -3701,7 +4157,7 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
        sessionId = Value(sessionId);
   static Insertable<TLog> custom({
     Expression<int>? logId,
-    Expression<int>? exerciseId,
+    Expression<String>? exerciseId,
     Expression<int>? exerciseIndex,
     Expression<int>? setIndex,
     Expression<int>? reps,
@@ -3729,7 +4185,7 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
 
   TLogsCompanion copyWith({
     Value<int>? logId,
-    Value<int>? exerciseId,
+    Value<String>? exerciseId,
     Value<int>? exerciseIndex,
     Value<int>? setIndex,
     Value<int>? reps,
@@ -3762,7 +4218,7 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
       map['log_id'] = Variable<int>(logId.value);
     }
     if (exerciseId.present) {
-      map['exercise_id'] = Variable<int>(exerciseId.value);
+      map['exercise_id'] = Variable<String>(exerciseId.value);
     }
     if (exerciseIndex.present) {
       map['exercise_index'] = Variable<int>(exerciseIndex.value);
@@ -5964,17 +6420,37 @@ typedef $$DaysGroupTableProcessedTableManager =
     >;
 typedef $$ExercisesTableCreateCompanionBuilder =
     ExercisesCompanion Function({
-      Value<int> apiId,
+      required String apiId,
       required String name,
       required String imageUrl,
-      required String muscleGroupTranslations,
+      required String muscleGroup,
+      Value<String?> muscleHead,
+      Value<String?> auxMuscle1,
+      Value<String?> auxMuscle2,
+      Value<String?> auxMuscle3,
+      Value<String?> description,
+      Value<String?> laterals,
+      Value<String?> tool,
+      Value<int> version,
+      Value<int> mediaVersion,
+      Value<int> rowid,
     });
 typedef $$ExercisesTableUpdateCompanionBuilder =
     ExercisesCompanion Function({
-      Value<int> apiId,
+      Value<String> apiId,
       Value<String> name,
       Value<String> imageUrl,
-      Value<String> muscleGroupTranslations,
+      Value<String> muscleGroup,
+      Value<String?> muscleHead,
+      Value<String?> auxMuscle1,
+      Value<String?> auxMuscle2,
+      Value<String?> auxMuscle3,
+      Value<String?> description,
+      Value<String?> laterals,
+      Value<String?> tool,
+      Value<int> version,
+      Value<int> mediaVersion,
+      Value<int> rowid,
     });
 
 final class $$ExercisesTableReferences
@@ -5991,10 +6467,10 @@ final class $$ExercisesTableReferences
   );
 
   $$RoutineItemsTableProcessedTableManager get routineItemsRefs {
-    final manager = $$RoutineItemsTableTableManager(
-      $_db,
-      $_db.routineItems,
-    ).filter((f) => f.exerciseId.apiId.sqlEquals($_itemColumn<int>('api_id')!));
+    final manager = $$RoutineItemsTableTableManager($_db, $_db.routineItems)
+        .filter(
+          (f) => f.exerciseId.apiId.sqlEquals($_itemColumn<String>('api_id')!),
+        );
 
     final cache = $_typedResult.readTableOrNull(_routineItemsRefsTable($_db));
     return ProcessedTableManager(
@@ -6012,7 +6488,7 @@ class $$ExercisesTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get apiId => $composableBuilder(
+  ColumnFilters<String> get apiId => $composableBuilder(
     column: $table.apiId,
     builder: (column) => ColumnFilters(column),
   );
@@ -6027,8 +6503,53 @@ class $$ExercisesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get muscleGroupTranslations => $composableBuilder(
-    column: $table.muscleGroupTranslations,
+  ColumnFilters<String> get muscleGroup => $composableBuilder(
+    column: $table.muscleGroup,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get muscleHead => $composableBuilder(
+    column: $table.muscleHead,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get auxMuscle1 => $composableBuilder(
+    column: $table.auxMuscle1,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get auxMuscle2 => $composableBuilder(
+    column: $table.auxMuscle2,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get auxMuscle3 => $composableBuilder(
+    column: $table.auxMuscle3,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get laterals => $composableBuilder(
+    column: $table.laterals,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get tool => $composableBuilder(
+    column: $table.tool,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get mediaVersion => $composableBuilder(
+    column: $table.mediaVersion,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -6067,7 +6588,7 @@ class $$ExercisesTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get apiId => $composableBuilder(
+  ColumnOrderings<String> get apiId => $composableBuilder(
     column: $table.apiId,
     builder: (column) => ColumnOrderings(column),
   );
@@ -6082,8 +6603,53 @@ class $$ExercisesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get muscleGroupTranslations => $composableBuilder(
-    column: $table.muscleGroupTranslations,
+  ColumnOrderings<String> get muscleGroup => $composableBuilder(
+    column: $table.muscleGroup,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get muscleHead => $composableBuilder(
+    column: $table.muscleHead,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get auxMuscle1 => $composableBuilder(
+    column: $table.auxMuscle1,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get auxMuscle2 => $composableBuilder(
+    column: $table.auxMuscle2,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get auxMuscle3 => $composableBuilder(
+    column: $table.auxMuscle3,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get laterals => $composableBuilder(
+    column: $table.laterals,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get tool => $composableBuilder(
+    column: $table.tool,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get mediaVersion => $composableBuilder(
+    column: $table.mediaVersion,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -6097,7 +6663,7 @@ class $$ExercisesTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get apiId =>
+  GeneratedColumn<String> get apiId =>
       $composableBuilder(column: $table.apiId, builder: (column) => column);
 
   GeneratedColumn<String> get name =>
@@ -6106,8 +6672,47 @@ class $$ExercisesTableAnnotationComposer
   GeneratedColumn<String> get imageUrl =>
       $composableBuilder(column: $table.imageUrl, builder: (column) => column);
 
-  GeneratedColumn<String> get muscleGroupTranslations => $composableBuilder(
-    column: $table.muscleGroupTranslations,
+  GeneratedColumn<String> get muscleGroup => $composableBuilder(
+    column: $table.muscleGroup,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get muscleHead => $composableBuilder(
+    column: $table.muscleHead,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get auxMuscle1 => $composableBuilder(
+    column: $table.auxMuscle1,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get auxMuscle2 => $composableBuilder(
+    column: $table.auxMuscle2,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get auxMuscle3 => $composableBuilder(
+    column: $table.auxMuscle3,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get laterals =>
+      $composableBuilder(column: $table.laterals, builder: (column) => column);
+
+  GeneratedColumn<String> get tool =>
+      $composableBuilder(column: $table.tool, builder: (column) => column);
+
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<int> get mediaVersion => $composableBuilder(
+    column: $table.mediaVersion,
     builder: (column) => column,
   );
 
@@ -6165,27 +6770,67 @@ class $$ExercisesTableTableManager
               $$ExercisesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<int> apiId = const Value.absent(),
+                Value<String> apiId = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String> imageUrl = const Value.absent(),
-                Value<String> muscleGroupTranslations = const Value.absent(),
+                Value<String> muscleGroup = const Value.absent(),
+                Value<String?> muscleHead = const Value.absent(),
+                Value<String?> auxMuscle1 = const Value.absent(),
+                Value<String?> auxMuscle2 = const Value.absent(),
+                Value<String?> auxMuscle3 = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<String?> laterals = const Value.absent(),
+                Value<String?> tool = const Value.absent(),
+                Value<int> version = const Value.absent(),
+                Value<int> mediaVersion = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => ExercisesCompanion(
                 apiId: apiId,
                 name: name,
                 imageUrl: imageUrl,
-                muscleGroupTranslations: muscleGroupTranslations,
+                muscleGroup: muscleGroup,
+                muscleHead: muscleHead,
+                auxMuscle1: auxMuscle1,
+                auxMuscle2: auxMuscle2,
+                auxMuscle3: auxMuscle3,
+                description: description,
+                laterals: laterals,
+                tool: tool,
+                version: version,
+                mediaVersion: mediaVersion,
+                rowid: rowid,
               ),
           createCompanionCallback:
               ({
-                Value<int> apiId = const Value.absent(),
+                required String apiId,
                 required String name,
                 required String imageUrl,
-                required String muscleGroupTranslations,
+                required String muscleGroup,
+                Value<String?> muscleHead = const Value.absent(),
+                Value<String?> auxMuscle1 = const Value.absent(),
+                Value<String?> auxMuscle2 = const Value.absent(),
+                Value<String?> auxMuscle3 = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<String?> laterals = const Value.absent(),
+                Value<String?> tool = const Value.absent(),
+                Value<int> version = const Value.absent(),
+                Value<int> mediaVersion = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => ExercisesCompanion.insert(
                 apiId: apiId,
                 name: name,
                 imageUrl: imageUrl,
-                muscleGroupTranslations: muscleGroupTranslations,
+                muscleGroup: muscleGroup,
+                muscleHead: muscleHead,
+                auxMuscle1: auxMuscle1,
+                auxMuscle2: auxMuscle2,
+                auxMuscle3: auxMuscle3,
+                description: description,
+                laterals: laterals,
+                tool: tool,
+                version: version,
+                mediaVersion: mediaVersion,
+                rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -6253,7 +6898,7 @@ typedef $$RoutineItemsTableCreateCompanionBuilder =
       Value<String?> notes,
       Value<int> version,
       Value<bool> isSynced,
-      required int exerciseId,
+      required String exerciseId,
       required int dayId,
     });
 typedef $$RoutineItemsTableUpdateCompanionBuilder =
@@ -6264,7 +6909,7 @@ typedef $$RoutineItemsTableUpdateCompanionBuilder =
       Value<String?> notes,
       Value<int> version,
       Value<bool> isSynced,
-      Value<int> exerciseId,
+      Value<String> exerciseId,
       Value<int> dayId,
     });
 
@@ -6278,7 +6923,7 @@ final class $$RoutineItemsTableReferences
       );
 
   $$ExercisesTableProcessedTableManager get exerciseId {
-    final $_column = $_itemColumn<int>('exercise_id')!;
+    final $_column = $_itemColumn<String>('exercise_id')!;
 
     final manager = $$ExercisesTableTableManager(
       $_db,
@@ -6666,7 +7311,7 @@ class $$RoutineItemsTableTableManager
                 Value<String?> notes = const Value.absent(),
                 Value<int> version = const Value.absent(),
                 Value<bool> isSynced = const Value.absent(),
-                Value<int> exerciseId = const Value.absent(),
+                Value<String> exerciseId = const Value.absent(),
                 Value<int> dayId = const Value.absent(),
               }) => RoutineItemsCompanion(
                 id: id,
@@ -6686,7 +7331,7 @@ class $$RoutineItemsTableTableManager
                 Value<String?> notes = const Value.absent(),
                 Value<int> version = const Value.absent(),
                 Value<bool> isSynced = const Value.absent(),
-                required int exerciseId,
+                required String exerciseId,
                 required int dayId,
               }) => RoutineItemsCompanion.insert(
                 id: id,
@@ -7535,7 +8180,7 @@ typedef $$TSessionsTableProcessedTableManager =
 typedef $$TLogsTableCreateCompanionBuilder =
     TLogsCompanion Function({
       Value<int> logId,
-      required int exerciseId,
+      required String exerciseId,
       required int exerciseIndex,
       required int setIndex,
       required int reps,
@@ -7549,7 +8194,7 @@ typedef $$TLogsTableCreateCompanionBuilder =
 typedef $$TLogsTableUpdateCompanionBuilder =
     TLogsCompanion Function({
       Value<int> logId,
-      Value<int> exerciseId,
+      Value<String> exerciseId,
       Value<int> exerciseIndex,
       Value<int> setIndex,
       Value<int> reps,
@@ -7596,7 +8241,7 @@ class $$TLogsTableFilterComposer extends Composer<_$AppDatabase, $TLogsTable> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get exerciseId => $composableBuilder(
+  ColumnFilters<String> get exerciseId => $composableBuilder(
     column: $table.exerciseId,
     builder: (column) => ColumnFilters(column),
   );
@@ -7679,7 +8324,7 @@ class $$TLogsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get exerciseId => $composableBuilder(
+  ColumnOrderings<String> get exerciseId => $composableBuilder(
     column: $table.exerciseId,
     builder: (column) => ColumnOrderings(column),
   );
@@ -7760,7 +8405,7 @@ class $$TLogsTableAnnotationComposer
   GeneratedColumn<int> get logId =>
       $composableBuilder(column: $table.logId, builder: (column) => column);
 
-  GeneratedColumn<int> get exerciseId => $composableBuilder(
+  GeneratedColumn<String> get exerciseId => $composableBuilder(
     column: $table.exerciseId,
     builder: (column) => column,
   );
@@ -7846,7 +8491,7 @@ class $$TLogsTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> logId = const Value.absent(),
-                Value<int> exerciseId = const Value.absent(),
+                Value<String> exerciseId = const Value.absent(),
                 Value<int> exerciseIndex = const Value.absent(),
                 Value<int> setIndex = const Value.absent(),
                 Value<int> reps = const Value.absent(),
@@ -7872,7 +8517,7 @@ class $$TLogsTableTableManager
           createCompanionCallback:
               ({
                 Value<int> logId = const Value.absent(),
-                required int exerciseId,
+                required String exerciseId,
                 required int exerciseIndex,
                 required int setIndex,
                 required int reps,

@@ -119,7 +119,7 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
       final dl = routine.daysDto.length;
       final il = routine.daysDto.map((a) => a.items.length).fold(0, (a, b) => a + b);
       final sl = routine.daysDto.expand((d) => d.items.map((i) => i.setsDto.length)).fold(0, (a, b) => a + b);
-      final imgs = routine.daysDto.expand((day) => day.items.map((e) => e.exerciseV2Dto.imageUrl)).toList();
+      final imgs = routine.daysDto.expand((day) => day.items.map((e) => e.exerciseDto.imageUrl)).toList();
 
       final tempProgress = dl + il + sl + imgs.length;
       final totalProgress = (tempProgress == 0) ? 1 : tempProgress;

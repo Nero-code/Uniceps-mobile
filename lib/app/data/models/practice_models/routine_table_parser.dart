@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:uniceps/app/data/models/routine_models/exercise_v2_dto.dart';
+import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_day_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart';
@@ -53,7 +53,7 @@ class RoutineTableParser {
 
           final itemDto = RoutineItemDto.fromTable(
             itemTable,
-            ExerciseV2Dto.fromTable(exercise, exercise.imageUrl, img),
+            ExerciseDto.fromTable(exercise, exercise.imageUrl, img),
             itemSets,
           );
 

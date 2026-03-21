@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/account_models/account_model.dart';
 import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart';
@@ -7,6 +6,7 @@ import 'package:uniceps/app/data/sources/remote/dal_auth/auth_contracts.dart';
 import 'package:uniceps/app/data/sources/services/token/token_service_simple.dart';
 import 'package:uniceps/app/domain/classes/account_entities/account.dart';
 import 'package:uniceps/app/domain/contracts/auth/i_auth_contracts.dart';
+import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class EmailAuthRepo implements IOTPAuthRepo {
@@ -28,7 +28,7 @@ class EmailAuthRepo implements IOTPAuthRepo {
   final IAccountLocalSource accountLocalSource;
 
   /// connection is typeof [InternetConnectionChecker]
-  final InternetConnectionChecker connection;
+  final NetworkInfo connection;
 
   final Logger _logger;
 

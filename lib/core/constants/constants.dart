@@ -5,7 +5,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 
 ///
 ///   A P P   C O N S T A N T S
@@ -60,16 +59,16 @@ enum ThemeType { light, dark }
 
 // const DATE_PATTERN = "dd/MM/yyyy";
 
-final trSections = [
-  const MuscleGroup(apiId: 4, muscleGroupTranslations: {Lang.en: "Legs", Lang.ar: "أرجل"}),
-  const MuscleGroup(apiId: 7, muscleGroupTranslations: {Lang.en: "Calves", Lang.ar: "بطة الرجل"}),
-  const MuscleGroup(apiId: 1, muscleGroupTranslations: {Lang.en: "Chest", Lang.ar: "صدر"}),
-  const MuscleGroup(apiId: 3, muscleGroupTranslations: {Lang.en: "Back", Lang.ar: "ظهر"}),
-  const MuscleGroup(apiId: 2, muscleGroupTranslations: {Lang.en: "Shoulder", Lang.ar: "أكتاف"}),
-  const MuscleGroup(apiId: 5, muscleGroupTranslations: {Lang.en: "Biceps", Lang.ar: "باي"}),
-  const MuscleGroup(apiId: 6, muscleGroupTranslations: {Lang.en: "Triceps", Lang.ar: "تراي"}),
-  const MuscleGroup(apiId: 8, muscleGroupTranslations: {Lang.en: "Abs", Lang.ar: "معدة"}),
-];
+// final trSections = [
+//   const MuscleGroup(apiId: 4, muscleGroupTranslations: {Lang.en: "Legs", Lang.ar: "أرجل"}),
+//   const MuscleGroup(apiId: 7, muscleGroupTranslations: {Lang.en: "Calves", Lang.ar: "بطة الرجل"}),
+//   const MuscleGroup(apiId: 1, muscleGroupTranslations: {Lang.en: "Chest", Lang.ar: "صدر"}),
+//   const MuscleGroup(apiId: 3, muscleGroupTranslations: {Lang.en: "Back", Lang.ar: "ظهر"}),
+//   const MuscleGroup(apiId: 2, muscleGroupTranslations: {Lang.en: "Shoulder", Lang.ar: "أكتاف"}),
+//   const MuscleGroup(apiId: 5, muscleGroupTranslations: {Lang.en: "Biceps", Lang.ar: "باي"}),
+//   const MuscleGroup(apiId: 6, muscleGroupTranslations: {Lang.en: "Triceps", Lang.ar: "تراي"}),
+//   const MuscleGroup(apiId: 8, muscleGroupTranslations: {Lang.en: "Abs", Lang.ar: "معدة"}),
+// ];
 
 // final arTrSections = [
 //   const MuscleGroup(arGroupName: "أرجل", id: 4),

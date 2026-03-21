@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
@@ -8,22 +7,23 @@ import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_lo
 import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/data/stores/routine/routine_management_repo.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
+import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 import 'routine_management_repo_test.mocks.dart';
 
-@GenerateMocks([IRoutineManagementLocalSourceContract, InternetConnectionChecker, ClientHelper])
+@GenerateMocks([IRoutineManagementLocalSourceContract, NetworkInfo, ClientHelper])
 void main() {
   late RoutineManagementRepo repo;
   late MockIRoutineManagementLocalSourceContract mockLocalSource;
-  late MockInternetConnectionChecker mockInternet;
+  late MockNetworkInfo mockInternet;
   late MockClientHelper mockClientHelper;
   late Routine tRoutine;
   late RoutineDto tRoutineDto;
 
   setUp(() {
     mockLocalSource = MockIRoutineManagementLocalSourceContract();
-    mockInternet = MockInternetConnectionChecker();
+    mockInternet = MockNetworkInfo();
     mockClientHelper = MockClientHelper();
     repo = RoutineManagementRepo(localSource: mockLocalSource, internet: mockInternet, clientHelper: mockClientHelper);
     repo.routines.clear();

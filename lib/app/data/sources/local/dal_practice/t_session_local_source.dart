@@ -5,7 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/practice_models/routine_table_parser.dart';
 import 'package:uniceps/app/data/models/practice_models/t_log_model.dart';
 import 'package:uniceps/app/data/models/practice_models/t_session_model.dart';
-import 'package:uniceps/app/data/models/routine_models/exercise_v2_dto.dart';
+import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_day_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart';
@@ -36,9 +36,9 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     required db.AppDatabase database,
     required Box<Uint8List> imagesCache,
     required Logger logger,
-  })  : _database = database,
-        _imagesCache = imagesCache,
-        _logger = logger;
+  }) : _database = database,
+       _imagesCache = imagesCache,
+       _logger = logger;
 
   @override
   Future<Tuple2<RoutineDto?, int?>> getCurrentRoutine() async {
@@ -156,7 +156,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     // ------ ------
 
     // Reduce logs table algorithm
-    final logsByEx = <int, List<db.TLog>>{};
+    final logsByEx = <String, List<db.TLog>>{};
     for (final i in logs) {
       if (logsByEx.containsKey(i.exerciseId)) continue;
       logsByEx.addAll({i.exerciseId: logs.where((log) => log.exerciseId == i.exerciseId).toList()});
@@ -200,8 +200,11 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       final exercise = exercises.firstWhere((e) => e.apiId == itemTable.exerciseId);
       final img = _imagesCache.get(exercise.imageUrl);
       // final group = groups.firstWhere((g) => g.apiId == exercise.muscleGroup);
-      final itemDto =
-          RoutineItemDto.fromTable(itemTable, ExerciseV2Dto.fromTable(exercise, exercise.imageUrl, img), itemSets);
+      final itemDto = RoutineItemDto.fromTable(
+        itemTable,
+        ExerciseDto.fromTable(exercise, exercise.imageUrl, img),
+        itemSets,
+      );
 
       dayItems.add(itemDto);
     }
@@ -212,8 +215,9 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
 
   @override
   Future<TSessionModel?> getPreviousSession() async {
-    final oldSession =
-        await (_database.select(_database.tSessions)..where((f) => f.finishedAt.isNull())).getSingleOrNull();
+    final oldSession = await (_database.select(
+      _database.tSessions,
+    )..where((f) => f.finishedAt.isNull())).getSingleOrNull();
 
     if (oldSession == null) return null;
 
@@ -235,29 +239,36 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
   Future<TLogModel> logSet(TLogModel log, double progress) async {
     if (log.id == null) {
       // Create new [TLog].
-      final newLog = await _database.into(_database.tLogs).insertReturning(db.TLogsCompanion.insert(
-            sessionId: log.sessionId,
-            exerciseId: log.exerciseId,
-            exerciseIndex: log.exerciseIndex,
-            setIndex: log.setIndex,
-            reps: log.reps,
-            weight: log.weight,
-            completedAt: log.completedAt,
-          ));
+      final newLog = await _database
+          .into(_database.tLogs)
+          .insertReturning(
+            db.TLogsCompanion.insert(
+              sessionId: log.sessionId,
+              exerciseId: log.exerciseId,
+              exerciseIndex: log.exerciseIndex,
+              setIndex: log.setIndex,
+              reps: log.reps,
+              weight: log.weight,
+              completedAt: log.completedAt,
+            ),
+          );
 
       // Then Update session progress.
-      await (_database.update(_database.tSessions)..where((f) => f.tsId.equals(log.sessionId)))
-          .write(db.TSessionsCompanion.custom(progress: Variable(progress)));
+      await (_database.update(
+        _database.tSessions,
+      )..where((f) => f.tsId.equals(log.sessionId))).write(db.TSessionsCompanion.custom(progress: Variable(progress)));
 
       return TLogModel.fromTable(newLog);
     } else {
       // Update previous [TLog]
       final updatedLog = await (_database.update(_database.tLogs)..where((f) => f.logId.equals(log.id!)))
-          .writeReturning(db.TLogsCompanion.custom(
-        weight: Variable(log.weight),
-        version: Variable(log.version + 1),
-        isSynced: const Variable(false),
-      ));
+          .writeReturning(
+            db.TLogsCompanion.custom(
+              weight: Variable(log.weight),
+              version: Variable(log.version + 1),
+              isSynced: const Variable(false),
+            ),
+          );
       return TLogModel.fromTable(updatedLog.first);
     }
   }
@@ -315,8 +326,9 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
 
       final items = await (_database.select(_database.routineItems)..where((f) => f.dayId.equals(day.id))).get();
       for (final item in items) {
-        final sets =
-            await (_database.select(_database.routineSets)..where((f) => f.routineItemId.equals(item.id))).get();
+        final sets = await (_database.select(
+          _database.routineSets,
+        )..where((f) => f.routineItemId.equals(item.id))).get();
         sc += sets.length;
       }
       ic += items.length;
@@ -348,9 +360,9 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
     if (days.isEmpty) throw EmptyCacheExeption();
     final List<TSessionModel> sessions = [];
     for (final day in days) {
-      final res = await (_database.select(_database.tSessions)
-            ..where((f) => f.dayId.equals(day.id) & f.finishedAt.isNotNull()))
-          .get();
+      final res = await (_database.select(
+        _database.tSessions,
+      )..where((f) => f.dayId.equals(day.id) & f.finishedAt.isNotNull())).get();
       for (final s in res) {
         final logs = await (_database.select(_database.tLogs)..where((f) => f.sessionId.equals(s.tsId))).get();
         sessions.add(TSessionModel.fromTable(s, logs));
