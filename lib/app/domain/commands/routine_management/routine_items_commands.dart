@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/domain/commands/i_command.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_items_contract.dart';
@@ -13,7 +13,7 @@ class RoutineItemsCommands implements ICommand {
     return await _repo.getItemsUnderDay(dayId);
   }
 
-  Future<Either<Failure, List<RoutineItem>>> addItems(int dayId, List<ExerciseV2> items) async {
+  Future<Either<Failure, List<RoutineItem>>> addItems(int dayId, List<Exercise> items) async {
     return await _repo.addItems(dayId, items);
   }
 

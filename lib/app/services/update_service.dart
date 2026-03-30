@@ -3,25 +3,24 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/app/services/version.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UpdateService {
-  final InternetConnectionChecker connectionChecker;
+  final NetworkInfo connectionChecker;
   final Client client;
-  UpdateService({
-    required this.connectionChecker,
-    required this.client,
-  });
+  UpdateService({required this.connectionChecker, required this.client});
   Version? updateAvailable;
   Future<bool> isUpdateAvailable() async {
     if (await connectionChecker.hasConnection) {
       try {
         final res = await client.get(
-          Uri.parse("https://trio-verse.com/app/mobile/updates"
-              "/${Platform.isAndroid ? "A" : "I"}"),
+          Uri.parse(
+            "https://trio-verse.com/app/mobile/updates"
+            "/${Platform.isAndroid ? "A" : "I"}",
+          ),
         );
 
         debugPrint("update service ${res.statusCode}");
@@ -39,7 +38,7 @@ class UpdateService {
     return false;
   }
 
-  Future<bool> updatefromApi() async {
+  Future<bool> updateFromApi() async {
     if (updateAvailable != null && await connectionChecker.hasConnection) {
       try {
         // final directory = Directory('/storage/emulated/0/Download');

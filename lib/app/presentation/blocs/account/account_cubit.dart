@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:uniceps/app/data/sources/services/sync/sync_contract.dart';
+import 'package:uniceps/app/data/services/sync/sync_contract.dart';
 import 'package:uniceps/app/domain/classes/account_entities/account.dart';
 import 'package:uniceps/app/domain/commands/account_usecases/account_usecases.dart';
 import 'package:uniceps/app/services/device_info_sync_service.dart';

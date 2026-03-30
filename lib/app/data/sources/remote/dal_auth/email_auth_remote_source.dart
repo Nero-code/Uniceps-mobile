@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/auth_contracts.dart';
 import 'package:uniceps/app/domain/classes/account_entities/account.dart';
+import 'package:uniceps/core/constants/api_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
@@ -20,7 +21,7 @@ class OTPAuthSource implements IOTPAuthSource {
     logger.d("START FUNC: verifyEmail()");
 
     final res = await client.post(
-      Uri.https(API_V2, HTTP_REGISTER),
+      Uri.https(ApiRoutes.domain, ApiRoutes.register),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode({"email": credential}),
     );
@@ -43,7 +44,7 @@ class OTPAuthSource implements IOTPAuthSource {
     final androidInfo = await DeviceInfoPlugin().androidInfo;
     final notifyToken = await FirebaseMessaging.instance.getToken();
     final res = await client.post(
-      Uri.https(API_V2, HTTP_VERIFY_CODE),
+      Uri.https(ApiRoutes.domain, ApiRoutes.verifyCode),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode({
         "otp": otp,

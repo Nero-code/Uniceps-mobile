@@ -5,8 +5,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
-import 'package:uniceps/app/data/sources/services/token/token_contract.dart';
-import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/app/data/services/token/token_contract.dart';
+import 'package:uniceps/core/constants/api_routes.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
 class SimpleTokenService implements TokenContract {
@@ -45,6 +45,7 @@ class SimpleTokenService implements TokenContract {
     final expirationDate = DateTime.parse(expirationDateString);
     if (expirationDate.difference(DateTime.now()).inDays < 0) {
       _logger.i('Found token but it has expired');
+      await deleteAccessToken();
       return false;
     }
     if (expirationDate.difference(DateTime.now()).inDays < 6) {
@@ -57,7 +58,7 @@ class SimpleTokenService implements TokenContract {
     final notify = await FirebaseMessaging.instance.getToken();
     final info = await DeviceInfoPlugin().androidInfo;
     final res = await _client.get(
-      Uri.https(API_V2, HTTP_REFRESH_TOKEN, {'notify': notify ?? '', 'deviceId': info.id}),
+      Uri.https(ApiRoutes.domain, ApiRoutes.refreshToken, {'notify': notify ?? '', 'deviceId': info.id}),
       headers: {
         'Authorization': "Bearer $oldToken",
         'content-type': 'application/json;charset=utf-8',

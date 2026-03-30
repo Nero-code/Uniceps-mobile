@@ -5,12 +5,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart';
+import 'package:uniceps/app/data/services/media_helper.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_items_local_source.dart';
-import 'package:uniceps/app/data/sources/services/media_helper.dart';
 import 'package:uniceps/app/data/stores/routine/routine_items_repo.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 import 'routine_items_repo_test.mocks.dart';
@@ -29,12 +28,23 @@ void main() {
     repo.loadedDays.clear();
   });
 
-  final tExercise = ExerciseV2(
-    apiId: 1,
+  final tExercise = Exercise(
+    apiId: '1',
     name: 'Test Exercise',
-    muscleGroupTranslations: const {Lang.en: 'Chest'},
-    imageUrl: 'test_url',
+    muscleGroupName: 'Chest',
+    imagePath: 'test_url',
     imageBitMap: Uint8List(0),
+    muscleGroupCode: '',
+    muscleHeadName: '',
+    muscleHeadCode: '',
+    auxMuscle1: '',
+    auxMuscle2: '',
+    auxMuscle3: '',
+    laterals: '',
+    description: '',
+    toolName: '',
+    toolCode: '',
+    timestamp: DateTime.now(),
   );
 
   final tRoutineItem = RoutineItem(

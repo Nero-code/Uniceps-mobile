@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:uniceps/core/constants/api_routes.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -20,32 +21,16 @@ class AboutScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    APP_NAME,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  const Text(APP_NAME, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 5.0),
-                  const Text(
-                    APP_VERSION,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  const Text(APP_VERSION, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 15.0),
-                  const Image(
-                    width: 150,
-                    height: 150,
-                    image: AssetImage("images/logo/Logo.png"),
-                  ),
+                  const Image(width: 150, height: 150, image: AssetImage("images/logo/Logo.png")),
                   const SizedBox(height: 15.0),
                   ElevatedButton(
                     onPressed: () async {
-                      if (await canLaunchUrl(Uri.parse(URL))) {
-                        launchUrl(Uri.parse(URL));
+                      if (await canLaunchUrl(Uri.parse(ApiRoutes.URL))) {
+                        launchUrl(Uri.parse(ApiRoutes.URL));
                       }
                     },
                     child: Row(
@@ -65,10 +50,7 @@ class AboutScreen extends StatelessWidget {
               top: 0.0,
               left: isRtl ? null : 0.0,
               right: isRtl ? 0.0 : null,
-              child: IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back),
-              ),
+              child: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.arrow_back)),
             ),
           ],
         ),

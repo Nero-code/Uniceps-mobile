@@ -1,29 +1,29 @@
 import 'package:dartz/dartz.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/account_models/payment_response.dart';
 import 'package:uniceps/app/data/models/account_models/plan_item_model.dart';
+import 'package:uniceps/app/data/services/token/token_service_simple.dart';
 import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_source.dart';
-import 'package:uniceps/app/data/sources/services/token/token_service_simple.dart';
 import 'package:uniceps/app/domain/classes/account_entities/account.dart';
 import 'package:uniceps/app/domain/classes/account_entities/membership.dart';
 import 'package:uniceps/app/domain/classes/account_entities/plan.dart';
 import 'package:uniceps/app/domain/classes/account_entities/plan_item.dart';
 import 'package:uniceps/app/domain/contracts/account/i_account_service.dart';
+import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class AccountRepo implements IAccountService {
   final IAccountLocalSource _localSource;
   final IAccountRemoteSource _remoteSource;
-  final InternetConnectionChecker _checker;
+  final NetworkInfo _checker;
   final SimpleTokenService _tokenService;
   final Logger _logger;
 
   const AccountRepo({
     required IAccountLocalSource localSource,
     required IAccountRemoteSource remoteSource,
-    required InternetConnectionChecker checker,
+    required NetworkInfo checker,
     required SimpleTokenService tokenService,
     required Logger logger,
   }) : _localSource = localSource,
@@ -46,6 +46,13 @@ class AccountRepo implements IAccountService {
 
   @override
   Future<Either<MembershipFailure, Membership>> getUserMembership() async {
+    try {
+      final membership = await _localSource.getCurrentPlan();
+      _logger.t('Got Membership: ${membership.toJson()}');
+      return Right(membership.toEntity());
+    } catch (e) {
+      _logger.t('No Membership: $e');
+    }
     if (await _checker.hasConnection) {
       try {
         final subscriptionPlan = await _remoteSource.getUserMembership();
@@ -55,13 +62,8 @@ class AccountRepo implements IAccountService {
         _localSource.clearMemberships();
         return const Left(MembershipFailure.cantGetPlan());
       }
-    } else {
-      try {
-        return Right((await _localSource.getCurrentPlan()).toEntity());
-      } catch (e) {
-        return const Left(MembershipFailure.mmOffline());
-      }
     }
+    return const Left(MembershipFailure.mmOffline());
   }
 
   @override

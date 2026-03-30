@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/app/presentation/auth/screens/email_auth_screen.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/exercise_lib/lib_sync_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
@@ -32,10 +33,6 @@ import 'core/constants/app_routes.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
-
-class NavigatorKey {
-  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,20 +67,23 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => LocaleCubit()..getSavedLanguageCode()),
-        BlocProvider(create: (context) => AccountCubit(di.sl(), di.sl(), di.sl())..getUserAccount()),
-        BlocProvider(create: (context) => MembershipBloc(di.sl())..add(const MembershipEvent.getCurrentPlan())),
+        BlocProvider(create: (context) => LocaleCubit()..getSavedLanguageCode(), lazy: false),
+        BlocProvider(create: (context) => AccountCubit(di.sl(), di.sl(), di.sl())..getUserAccount(), lazy: false),
+        BlocProvider(
+          create: (context) => MembershipBloc(di.sl())..add(const MembershipEvent.getCurrentPlan()),
+          lazy: false,
+        ),
         BlocProvider(create: (context) => CurrentRoutineCubit(commands: di.sl())..getCurrentRoutine(), lazy: false),
         BlocProvider(
           create: (context) => SessionBloc(commands: di.sl())..add(const SessionEvent.getLastActiveSession()),
         ),
         BlocProvider(create: (context) => DailyQuoteCubit(di.sl())..getQuote()),
+        BlocProvider(create: (context) => LibSyncCubit(di.sl())),
       ],
       child: BlocBuilder<LocaleCubit, ChangedLangState>(
         builder: (context, state) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            navigatorKey: NavigatorKey.navigatorKey,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             locale: state.locale,

@@ -54,7 +54,7 @@ void main() {
   final tLog = TLog(
     id: 1,
     sessionId: 1,
-    exerciseId: 1,
+    exerciseId: '1',
     exerciseIndex: 0,
     setIndex: 0,
     reps: 10,

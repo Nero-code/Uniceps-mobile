@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/data/models/routine_models/extensions.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart';
+import 'package:uniceps/app/data/services/media_helper.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_items_local_source.dart';
-import 'package:uniceps/app/data/sources/services/media_helper.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_items_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
@@ -33,7 +33,7 @@ class RoutineItemsRepo implements IRoutineItemsContract {
   }
 
   @override
-  Future<Either<Failure, List<RoutineItem>>> addItems(int dayId, List<ExerciseV2> items) async {
+  Future<Either<Failure, List<RoutineItem>>> addItems(int dayId, List<Exercise> items) async {
     try {
       final previouslyAddedItems = itemsBuffer.where((i) => i.dayId == dayId).length;
 

@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/gym.dart';
+import 'package:uniceps/core/constants/constants.dart';
 
 class GymLogoWidget extends StatelessWidget {
   const GymLogoWidget({super.key, required this.gym, required this.onPressed});
@@ -37,7 +37,11 @@ class GymLogoWidget extends StatelessWidget {
                 child: CachedNetworkImage(
                   width: 80,
                   height: 80,
-                  imageUrl: "$API_V2" "$HTTP_GYMS" "$HTTP_GYM_LOGO" "/${gym.id}",
+                  imageUrl:
+                      "API_V2"
+                      "HTTP_GYMS"
+                      "HTTP_GYM_LOGO"
+                      "/${gym.id}",
                   imageBuilder: (context, imageProvider) {
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(25),
@@ -46,16 +50,12 @@ class GymLogoWidget extends StatelessWidget {
                   },
                   errorWidget: (_, _, _) => const Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Image(
-                      image: AssetImage(APP_LOGO_DARK),
-                    ),
+                    child: Image(image: AssetImage(APP_LOGO_DARK)),
                   ),
                   placeholder: (context, url) => Material(
                     // color: Colors.white,
                     borderRadius: BorderRadius.circular(25),
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: const Center(child: CircularProgressIndicator()),
                   ),
                 ),
               ),
@@ -65,11 +65,7 @@ class GymLogoWidget extends StatelessWidget {
           Text(
             gym.name,
             overflow: TextOverflow.fade,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(color: Colors.white70, fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ],
       ),

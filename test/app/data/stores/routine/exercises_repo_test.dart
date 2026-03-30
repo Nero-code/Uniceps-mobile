@@ -1,44 +1,62 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:uniceps/app/data/models/routine_models/exercise_v2_dto.dart';
+import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart';
+import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
 import 'package:uniceps/app/data/stores/routine/exercises_repo.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
-import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 import 'exercises_repo_test.mocks.dart';
 
-@GenerateMocks([IExercisesRemoteSourceContract, InternetConnectionChecker])
+@GenerateMocks([IExercisesRemoteSourceContract, IExercisesLocalSourceContract, NetworkInfo])
 void main() {
   late ExercisesRepo repo;
   late MockIExercisesRemoteSourceContract mockRemoteSource;
-  late MockInternetConnectionChecker mockInternet;
+  late MockIExercisesLocalSourceContract mockLocalSource;
+  late MockNetworkInfo mockInternet;
   final logger = Logger();
 
   setUp(() {
     mockRemoteSource = MockIExercisesRemoteSourceContract();
-    mockInternet = MockInternetConnectionChecker();
-    repo = ExercisesRepo(remoteSource: mockRemoteSource, internet: mockInternet, logger: logger);
+    mockLocalSource = MockIExercisesLocalSourceContract();
+    mockInternet = MockNetworkInfo();
+    repo = ExercisesRepo(
+      remoteSource: mockRemoteSource,
+      localSource: mockLocalSource,
+      internet: mockInternet,
+      logger: logger,
+    );
   });
 
-  final tMuscleGroup = const MuscleGroup(apiId: 1, muscleGroupTranslations: {Lang.en: 'Chest'});
+  final tMuscleGroup = const MuscleGroup(muscleGroupCode: '1', muscleGroupName: 'Chest');
   final tMuscleGroupDto = MuscleGroupDto.fromEntity(tMuscleGroup);
-  final tExercise = ExerciseV2(
-    apiId: 1,
+  final tExercise = Exercise(
+    apiId: '1',
     name: 'Push-up',
-    imageUrl: 'url',
+    imagePath: 'url',
     imageBitMap: Uint8List(0),
-    muscleGroupTranslations: const {Lang.en: 'Chest'},
+    muscleGroupName: 'Chest',
+    muscleGroupCode: '',
+    muscleHeadName: '',
+    muscleHeadCode: '',
+    auxMuscle1: '',
+    auxMuscle2: '',
+    auxMuscle3: '',
+    laterals: '',
+    description: '',
+    toolName: '',
+    toolCode: '',
+    timestamp: DateTime.now(),
   );
-  final tExerciseDto = ExerciseV2Dto.fromEntity(tExercise);
+  final tExerciseDto = ExerciseDto.fromEntity(tExercise);
 
   group('getExerciseGroups', () {
     test('should return muscle groups when online', () async {
@@ -77,7 +95,7 @@ void main() {
       when(mockInternet.hasConnection).thenAnswer((_) async => true);
       when(mockRemoteSource.getAllExercises()).thenAnswer((_) async => [tExerciseDto]);
       // act
-      final result = await repo.getExercises();
+      final result = await repo.getExercisesLib();
       // assert
       expect(result.isRight(), isTrue);
     });
@@ -86,28 +104,7 @@ void main() {
       // arrange
       when(mockInternet.hasConnection).thenAnswer((_) async => false);
       // act
-      final result = await repo.getExercises();
-      // assert
-      expect(result.isLeft(), true);
-    });
-  });
-
-  group('getExercisesByFilter', () {
-    test('should return filtered exercises when online', () async {
-      // arrange
-      when(mockInternet.hasConnection).thenAnswer((_) async => true);
-      when(mockRemoteSource.getExercisesByFilter(any)).thenAnswer((_) async => [tExerciseDto]);
-      // act
-      final result = await repo.getExercisesByFilter('push');
-      // assert
-      expect(result.isRight(), isTrue);
-    });
-
-    test('should return OfflineFailure when offline', () async {
-      // arrange
-      when(mockInternet.hasConnection).thenAnswer((_) async => false);
-      // act
-      final result = await repo.getExercisesByFilter('push');
+      final result = await repo.getExercisesLib();
       // assert
       expect(result.isLeft(), true);
     });
@@ -121,7 +118,7 @@ void main() {
       // act
       final result = await repo.getExercisesByGroup(tMuscleGroup);
       // assert
-      expect(result, isA<Right<Failure, List<ExerciseV2>>>());
+      expect(result, isA<Right<Failure, List<Exercise>>>());
     });
 
     test('should return OfflineFailure when offline', () async {

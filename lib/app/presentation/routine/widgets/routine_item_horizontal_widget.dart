@@ -5,7 +5,6 @@ import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/sets_edit/sets_edit_bloc.dart';
 import 'package:uniceps/app/presentation/routine/screens/routine_edit_sets_screen.dart';
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/box_botton.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/l10n/app_localizations.dart';
@@ -27,7 +26,8 @@ class _RoutineItemHorizontalWidgetState extends State<RoutineItemHorizontalWidge
     final screenSize = MediaQuery.sizeOf(context);
     final locale = AppLocalizations.of(context)!;
     final rtl = context.read<LocaleCubit>().state.isRtl();
-    final group = widget.item.exercise.muscleGroupTranslations[rtl ? Lang.ar : Lang.en];
+    // final group = widget.item.exercise.muscleGroupTranslations[rtl ? Lang.ar : Lang.en];
+    final group = widget.item.exercise.muscleGroupName;
 
     return BlocProvider(
       create: (context) => SetsEditBloc(commands: di.sl())..add(GetSetsforRoutineItemEvent(itemId: widget.item.id!)),
@@ -72,7 +72,7 @@ class _RoutineItemHorizontalWidgetState extends State<RoutineItemHorizontalWidge
                           child: Column(
                             children: [
                               Text(widget.item.exercise.name, maxLines: 2, style: TextStyle(fontWeight: .bold)),
-                              Text(locale.muscleGroup(group ?? ''), style: TextStyle(fontSize: 12)),
+                              Text(locale.muscleGroup(group), style: TextStyle(fontSize: 12)),
                               const SizedBox(height: 5),
                               Text('${locale.setsAndRounds}:', style: TextStyle(fontSize: 10)),
                               BlocBuilder<SetsEditBloc, SetsEditState>(

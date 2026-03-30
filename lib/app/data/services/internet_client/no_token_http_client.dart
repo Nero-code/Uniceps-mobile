@@ -5,7 +5,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
-import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
+import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
 
 class NoTokenHttpClientHelper implements ClientHelper {
   const NoTokenHttpClientHelper({required Client client}) : _client = client;
@@ -17,8 +17,13 @@ class NoTokenHttpClientHelper implements ClientHelper {
   Client get client => _client;
 
   @override
-  Future<T> getHandler<T>(String api, String urlPart, T Function(Map<String, dynamic> json) fromJson,
-      {bool needsHeader = true, Map<String, String>? queryParams}) async {
+  Future<T> getHandler<T>(
+    String api,
+    String urlPart,
+    T Function(Map<String, dynamic> json) fromJson, {
+    bool needsHeader = true,
+    Map<String, String>? queryParams,
+  }) async {
     final res = await _client.get(Uri.https(api, urlPart, queryParams));
 
     print("getHandler code: ${res.statusCode}");
@@ -30,8 +35,13 @@ class NoTokenHttpClientHelper implements ClientHelper {
   }
 
   @override
-  Future<List<T>> getListHandler<T>(String api, String urlPart, T Function(Map<String, dynamic>) fromJson,
-      {bool needsHeader = true, Map<String, String>? queryParams}) async {
+  Future<List<T>> getListHandler<T>(
+    String api,
+    String urlPart,
+    T Function(Map<String, dynamic>) fromJson, {
+    bool needsHeader = true,
+    Map<String, String>? queryParams,
+  }) async {
     print("getListHandler: ${api + urlPart}");
     final res = await _client.get(Uri.https(api, urlPart, queryParams));
 
@@ -60,7 +70,10 @@ class NoTokenHttpClientHelper implements ClientHelper {
     if (kDebugMode) print(api + urlPart);
 
     final res = await _client.post(
-      Uri.https("$api" "$urlPart"),
+      Uri.https(
+        "$api"
+        "$urlPart",
+      ),
       body: jsonEncode(body),
     );
 
@@ -86,7 +99,10 @@ class NoTokenHttpClientHelper implements ClientHelper {
   @override
   Future<void> putHandler(String api, String urlPart, Map<String, dynamic> body, {bool needsHeader = true}) async {
     final res = await _client.put(
-      Uri.https("$api" "$urlPart"),
+      Uri.https(
+        "$api"
+        "$urlPart",
+      ),
       body: body,
     );
     handleHttpStatus(res);
@@ -97,7 +113,13 @@ class NoTokenHttpClientHelper implements ClientHelper {
 
   @override
   Future<void> deleteHandler(String api, String urlPart, Map<String, dynamic> body, {bool needsHeader = true}) async {
-    final res = await _client.delete(Uri.https("$api" "$urlPart"), body: body);
+    final res = await _client.delete(
+      Uri.https(
+        "$api"
+        "$urlPart",
+      ),
+      body: body,
+    );
 
     if (kDebugMode) {
       print("deleteHandler code: ${res.statusCode}");

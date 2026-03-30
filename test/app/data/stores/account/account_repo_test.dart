@@ -1,32 +1,32 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:uniceps/app/data/models/account_models/account_model.dart';
 import 'package:uniceps/app/data/models/account_models/membership_model.dart';
+import 'package:uniceps/app/data/services/token/token_service_simple.dart';
 import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_source.dart';
-import 'package:uniceps/app/data/sources/services/token/token_service_simple.dart';
 import 'package:uniceps/app/data/stores/account/account_repo.dart';
 import 'package:uniceps/app/domain/classes/account_entities/account.dart';
+import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 import 'account_repo_test.mocks.dart';
 
-@GenerateMocks([IAccountLocalSource, IAccountRemoteSource, InternetConnectionChecker, SimpleTokenService, Logger])
+@GenerateMocks([IAccountLocalSource, IAccountRemoteSource, NetworkInfo, SimpleTokenService, Logger])
 void main() {
   late AccountRepo repo;
   late MockIAccountLocalSource mockLocalSource;
   late MockIAccountRemoteSource mockRemoteSource;
-  late MockInternetConnectionChecker mockConnection;
+  late MockNetworkInfo mockConnection;
   late MockSimpleTokenService mockTokenService;
   late MockLogger mockLogger;
 
   setUp(() {
     mockLocalSource = MockIAccountLocalSource();
     mockRemoteSource = MockIAccountRemoteSource();
-    mockConnection = MockInternetConnectionChecker();
+    mockConnection = MockNetworkInfo();
     mockTokenService = MockSimpleTokenService();
     mockLogger = MockLogger();
     repo = AccountRepo(

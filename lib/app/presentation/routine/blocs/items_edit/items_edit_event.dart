@@ -14,7 +14,7 @@ class GetRoutineDayItemsEvent extends ItemsEditEvent {
 
 class AddRoutineItemsEvent extends ItemsEditEvent {
   final int dayId;
-  final List<ExerciseV2> items;
+  final List<Exercise> items;
   const AddRoutineItemsEvent({required this.dayId, required this.items});
 }
 
