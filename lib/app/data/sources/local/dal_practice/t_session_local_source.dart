@@ -198,11 +198,11 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       // itemSets.toSet().toList();
 
       final exercise = exercises.firstWhere((e) => e.apiId == itemTable.exerciseId);
-      final img = _imagesCache.get(exercise.imageUrl);
+      final img = _imagesCache.get(exercise.apiId);
       // final group = groups.firstWhere((g) => g.apiId == exercise.muscleGroup);
       final itemDto = RoutineItemDto.fromTable(
         itemTable,
-        ExerciseDto.fromTable(exercise, exercise.imageUrl, img),
+        ExerciseDto.fromTable(exercise, exercise.apiId, img),
         itemSets,
       );
 

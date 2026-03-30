@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/data/models/routine_models/extensions.dart';
+import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart';
-import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_management_contract.dart';
 import 'package:uniceps/app/services/network_info.dart';

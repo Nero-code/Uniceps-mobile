@@ -27,7 +27,7 @@ class _RoutineItemHorizontalWidgetState extends State<RoutineItemHorizontalWidge
     final locale = AppLocalizations.of(context)!;
     final rtl = context.read<LocaleCubit>().state.isRtl();
     // final group = widget.item.exercise.muscleGroupTranslations[rtl ? Lang.ar : Lang.en];
-    final group = widget.item.exercise.muscleGroup;
+    final group = widget.item.exercise.muscleGroupName;
 
     return BlocProvider(
       create: (context) => SetsEditBloc(commands: di.sl())..add(GetSetsforRoutineItemEvent(itemId: widget.item.id!)),

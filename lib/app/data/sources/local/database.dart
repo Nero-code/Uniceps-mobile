@@ -71,52 +71,31 @@ extension Migrations on GeneratedDatabase {
       // 1. DISABLE foreign keys for the duration of this step
       await m.database.customStatement('PRAGMA foreign_keys = OFF;');
 
-      await m.alterTable(
-        TableMigration(
-          schema.exercises,
-          columnTransformer: {
-            schema.exercises.apiId: const CustomExpression<String>('CAST(api_id AS TEXT)'),
-            schema.exercises.muscleGroupName: CustomExpression<String>(
-              "COALESCE(json_extract(muscle_group_translations, '\$.ar'), '')",
-            ), // Extracting 'ar' key from JSON
-            schema.exercises.muscleGroupCode: const Constant(''),
-            schema.exercises.muscleHeadCode: const Constant(''),
-            schema.exercises.muscleHeadName: const Constant(''),
-            schema.exercises.auxMuscle1: const Constant(null),
-            schema.exercises.auxMuscle2: const Constant(null),
-            schema.exercises.auxMuscle3: const Constant(null),
-            schema.exercises.laterals: const Constant(''),
-            schema.exercises.description: const Constant(null),
-            schema.exercises.toolCode: const Constant(''),
-            schema.exercises.toolName: const Constant(''),
-            schema.exercises.timestamp: Constant(DateTime(2000).toIso8601String()),
-          },
-        ),
-      );
+      // 2. Clear tables (Drop and Recreate)
+      // Drop in reverse order of dependencies
+      await m.drop(schema.routineSets);
+      await m.drop(schema.routineItems);
+      await m.drop(schema.daysGroup);
+      await m.drop(schema.routines);
+      await m.drop(schema.exercises);
+      await m.drop(schema.tLogs);
+      await m.drop(schema.tSessions);
 
-      await m.alterTable(
-        TableMigration(
-          schema.routineItems,
-          columnTransformer: {
-            schema.routineItems.exerciseId: const CustomExpression<String>('CAST(exercise_id AS TEXT)'),
-          },
-        ),
-      );
+      // Recreate with new schema
+      await m.createTable(schema.tSessions);
+      await m.createTable(schema.tLogs);
+      await m.createTable(schema.routines);
+      await m.createTable(schema.exercises);
+      await m.createTable(schema.daysGroup);
+      await m.createTable(schema.routineItems);
+      await m.createTable(schema.routineSets);
 
-      await m.alterTable(
-        TableMigration(
-          schema.tLogs,
-          columnTransformer: {schema.tLogs.exerciseId: const CustomExpression<String>('CAST(exercise_id AS TEXT)')},
-        ),
-      );
+      // 3. Migrate tables to preserve (using alterTable to sync schema/defaults)
 
-      await m.alterTable(TableMigration(schema.routines));
       await m.alterTable(TableMigration(schema.accounts));
-      await m.alterTable(TableMigration(schema.daysGroup));
-      await m.alterTable(TableMigration(schema.tSessions));
       await m.alterTable(TableMigration(schema.measurements));
 
-      // 3. RE-ENABLE foreign keys
+      // 4. RE-ENABLE foreign keys
       await m.database.customStatement('PRAGMA foreign_keys = ON;');
     },
   );

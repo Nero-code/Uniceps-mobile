@@ -1,8 +1,9 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
+import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/services/network_info.dart';
+import 'package:uniceps/core/constants/api_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
 
 class DeviceInfoSyncService {
@@ -47,7 +48,7 @@ class DeviceInfoSyncService {
 
     try {
       _logger.i('Syncing device info');
-      await _client.postHandler(API_V2, HTTP_DEVICE_INFO, {
+      await _client.postHandler(ApiRoutes.domain, ApiRoutes.deviceInfo, {
         "deviceToken": androidInfo.device,
         "deviceId": androidInfo.id,
         "platform": platform,

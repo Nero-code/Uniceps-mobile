@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
-import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
-import 'package:uniceps/app/data/sources/services/token/token_service_simple.dart';
+import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
+import 'package:uniceps/app/data/services/token/token_service_simple.dart';
 
 class HttpClientHelper implements ClientHelper {
   const HttpClientHelper({required Client client, required SimpleTokenService tokenService, required Logger logger})
@@ -16,9 +16,8 @@ class HttpClientHelper implements ClientHelper {
   final Client _client;
   final SimpleTokenService _tokenService;
   final Logger _logger;
-  // final dataNodeInResponse = 'data';
 
-  ///  For more custom behaivuar
+  ///  For more custom behaviour
   Client get client => _client;
   SimpleTokenService get tokenService => _tokenService;
 

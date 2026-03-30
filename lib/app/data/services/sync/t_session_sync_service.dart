@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:drift/drift.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/practice_models/t_session_model.dart';
+import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
+import 'package:uniceps/app/data/services/sync/sync_contract.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
-import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
-import 'package:uniceps/app/data/sources/services/sync/sync_contract.dart';
 import 'package:uniceps/app/services/network_info.dart';
-import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/core/constants/api_routes.dart';
 
 class TSessionSyncService implements TSessionSyncContract {
   final AppDatabase _database;
@@ -91,8 +91,8 @@ class TSessionSyncService implements TSessionSyncContract {
 
     try {
       final apiId = await _client.postHandler(
-        API_V2,
-        HTTP_SESSION_SYNC,
+        ApiRoutes.domain,
+        ApiRoutes.sessionSync,
         model.toJson(),
         fromJson: (json) => json['id'] as int,
       );

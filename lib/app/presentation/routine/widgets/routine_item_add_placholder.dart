@@ -1,6 +1,6 @@
 // import 'package:flutter/material.dart';
 // import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
-// import 'package:uniceps/app/presentation/routine/screens/exercises_selection_screen.dart';
+// import 'package:uniceps/app/presentation/routine/screens/exercises_viewer_screen.dart';
 
 // class RoutineItemAddPlacholder extends StatelessWidget {
 //   const RoutineItemAddPlacholder({super.key, required this.onAdd});

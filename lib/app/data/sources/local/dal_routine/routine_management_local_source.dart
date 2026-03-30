@@ -160,9 +160,16 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
                 ExercisesCompanion.insert(
                   apiId: i.exerciseDto.apiId,
                   name: i.exerciseDto.name,
-                  imageUrl: i.exerciseDto.imageUrl,
+                  imageName: Value(i.exerciseDto.imageUrl),
                   // muscleGroupTranslations: encodeTranslations(i.exerciseDto.muscleGroupTranslations),
-                  muscleGroup: i.exerciseDto.muscleGroup,
+                  muscleGroupName: i.exerciseDto.muscleGroupName,
+                  muscleGroupCode: i.exerciseDto.muscleGroupName,
+                  laterals: i.exerciseDto.laterals,
+                  muscleHeadCode: i.exerciseDto.muscleHeadCode,
+                  muscleHeadName: i.exerciseDto.muscleHeadName,
+                  toolCode: i.exerciseDto.toolCode,
+                  toolName: i.exerciseDto.toolName,
+                  timestamp: Value(DateTime.now()),
                 ),
               );
         }
@@ -200,7 +207,7 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
         iTems.add(
           RoutineItemDto.fromTable(
             i,
-            ExerciseDto.fromTable(ex, ex.imageUrl, null),
+            ExerciseDto.fromTable(ex, ex.imageName, null),
             sets.map((e) => RoutineSetDto.fromTable(e)).toList(),
           ),
         );

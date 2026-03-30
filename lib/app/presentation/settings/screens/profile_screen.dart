@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
 import 'package:uniceps/app/presentation/settings/cubits/profile/profile_cubit.dart';
+import 'package:uniceps/core/constants/api_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/gender_selection_widget.dart';
@@ -147,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 20),
                     ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
-                      onPressed: () => launchUrl(Uri.parse(DELETE_ACCOUNT)),
+                      onPressed: () => launchUrl(Uri.parse(ApiRoutes.deleteAccount)),
                       label: Text(locale.deleteBtn),
                       icon: Icon(Icons.delete_forever),
                     ),

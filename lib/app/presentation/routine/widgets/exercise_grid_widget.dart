@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
 
@@ -15,7 +14,6 @@ class ExerciseGridWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
-        // color: isSelected ? Colors.green :
         color: Colors.white,
         border: Border.all(width: 2, color: isSelected ? Colors.cyan.shade200 : Colors.white),
       ),
@@ -24,38 +22,18 @@ class ExerciseGridWidget extends StatelessWidget {
         children: [
           Expanded(
             flex: 3,
-            child: CachedNetworkImage(
-              imageUrl: exercise.imagePath,
-              progressIndicatorBuilder: (context, url, progress) =>
-                  Center(child: CircularProgressIndicator(value: progress.progress)),
-              errorWidget: (context, url, error) =>
-                  Center(child: Icon(Icons.broken_image_rounded, size: 40, color: Colors.red.shade300)),
-            ),
-
-            // Image.network(
-            //   imgUrlParser(exercise.muscleGroup.id, exercise.imageUrl),
-            //   frameBuilder: (context, child, frame, wasSynchronouslyLoaded) =>
-            //       Center(child: child),
-            //   loadingBuilder: (context, child, loadingProgress) =>
-            //       loadingProgress != null
-            //           ? Center(
-            //               child: CircularProgressIndicator(
-            //                 value: loadingProgress.cumulativeBytesLoaded /
-            //                     loadingProgress.expectedTotalBytes!,
-            //               ),
-            //             )
-            //           : child,
-            //   errorBuilder: (context, error, stackTrace) => Icon(
-            //     Icons.error,
-            //     color: Colors.red,
-            //   ),
+            // child: CachedNetworkImage(
+            //   imageUrl: exercise.imagePath ?? '',
+            //   progressIndicatorBuilder: (context, url, progress) =>
+            //       Center(child: CircularProgressIndicator(value: progress.progress)),
+            //   errorWidget: (context, url, error) =>
+            //       Center(child: Icon(Icons.broken_image_rounded, size: 60, color: Colors.grey.shade300)),
             // ),
+            child: exercise.imageBitMap != null
+                ? Image.memory(exercise.imageBitMap!)
+                : Icon(Icons.broken_image_rounded, size: 60, color: Colors.grey.shade300),
           ),
 
-          // const FlutterLogo(size: 100),
-          // Image.network(
-          //   imgUrlParser(exercise.muscleGroup, exercise.imageUrl),
-          // ),
           Divider(color: Colors.grey.shade100),
           Expanded(
             child: Center(

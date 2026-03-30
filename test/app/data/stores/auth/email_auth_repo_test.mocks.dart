@@ -12,14 +12,13 @@ import 'package:uniceps/app/data/models/account_models/account_model.dart'
     as _i4;
 import 'package:uniceps/app/data/models/account_models/membership_model.dart'
     as _i5;
+import 'package:uniceps/app/data/services/token/token_contract.dart' as _i3;
+import 'package:uniceps/app/data/services/token/token_service_simple.dart'
+    as _i9;
 import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart'
     as _i10;
 import 'package:uniceps/app/data/sources/remote/dal_auth/auth_contracts.dart'
     as _i6;
-import 'package:uniceps/app/data/sources/services/token/token_contract.dart'
-    as _i3;
-import 'package:uniceps/app/data/sources/services/token/token_service_simple.dart'
-    as _i9;
 import 'package:uniceps/app/domain/classes/account_entities/account.dart'
     as _i7;
 import 'package:uniceps/app/services/network_info.dart' as _i11;

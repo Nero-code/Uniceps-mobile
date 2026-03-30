@@ -4,6 +4,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
+import 'dart:typed_data' as _i6;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart'
@@ -11,10 +12,10 @@ import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart'
 import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart'
     as _i4;
 import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart'
-    as _i6;
+    as _i7;
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart'
     as _i2;
-import 'package:uniceps/app/services/network_info.dart' as _i7;
+import 'package:uniceps/app/services/network_info.dart' as _i8;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -51,9 +52,9 @@ class MockIExercisesRemoteSourceContract extends _i1.Mock
           as _i3.Future<List<_i4.MuscleGroupDto>>);
 
   @override
-  _i3.Future<List<_i5.ExerciseDto>> getAllExercises() =>
+  _i3.Future<List<_i5.ExerciseDto>> getAllExercises([DateTime? timestamp]) =>
       (super.noSuchMethod(
-            Invocation.method(#getAllExercises, []),
+            Invocation.method(#getAllExercises, [timestamp]),
             returnValue: _i3.Future<List<_i5.ExerciseDto>>.value(
               <_i5.ExerciseDto>[],
             ),
@@ -71,13 +72,21 @@ class MockIExercisesRemoteSourceContract extends _i1.Mock
             ),
           )
           as _i3.Future<List<_i5.ExerciseDto>>);
+
+  @override
+  _i3.Future<_i6.Uint8List> getExerciseImage(String? imageUrl) =>
+      (super.noSuchMethod(
+            Invocation.method(#getExerciseImage, [imageUrl]),
+            returnValue: _i3.Future<_i6.Uint8List>.value(_i6.Uint8List(0)),
+          )
+          as _i3.Future<_i6.Uint8List>);
 }
 
 /// A class which mocks [IExercisesLocalSourceContract].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockIExercisesLocalSourceContract extends _i1.Mock
-    implements _i6.IExercisesLocalSourceContract {
+    implements _i7.IExercisesLocalSourceContract {
   MockIExercisesLocalSourceContract() {
     _i1.throwOnMissingStub(this);
   }
@@ -103,9 +112,18 @@ class MockIExercisesLocalSourceContract extends _i1.Mock
           as _i3.Future<List<_i5.ExerciseDto>>);
 
   @override
-  _i3.Future<void> saveExercise(_i5.ExerciseDto? exercise) =>
+  _i3.Future<void> saveExerciseImage(String? exId, _i6.Uint8List? bitmap) =>
       (super.noSuchMethod(
-            Invocation.method(#saveExercise, [exercise]),
+            Invocation.method(#saveExerciseImage, [exId, bitmap]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> writeExercise(_i5.ExerciseDto? e) =>
+      (super.noSuchMethod(
+            Invocation.method(#writeExercise, [e]),
             returnValue: _i3.Future<void>.value(),
             returnValueForMissingStub: _i3.Future<void>.value(),
           )
@@ -115,7 +133,7 @@ class MockIExercisesLocalSourceContract extends _i1.Mock
 /// A class which mocks [NetworkInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNetworkInfo extends _i1.Mock implements _i7.NetworkInfo {
+class MockNetworkInfo extends _i1.Mock implements _i8.NetworkInfo {
   MockNetworkInfo() {
     _i1.throwOnMissingStub(this);
   }

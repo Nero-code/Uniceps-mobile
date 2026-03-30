@@ -4,7 +4,7 @@ import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/exercises_v2_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/muscle_group_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
-import 'package:uniceps/app/presentation/routine/screens/exercises_selection_screen.dart';
+import 'package:uniceps/app/presentation/routine/screens/exercises_viewer_screen.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_item_horizontal_widget.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
@@ -64,7 +64,7 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab> with AutomaticK
                                   BlocProvider(create: (context) => ExercisesV2Bloc(commands: di.sl())),
                                   BlocProvider.value(value: context.read<ItemsEditBloc>()),
                                 ],
-                                child: ExercisesSelectionScreen(
+                                child: ExercisesViewerScreen(
                                   dayId: widget.dayId,
                                   dayName: widget.dayName,
                                   presentExerciseIds: presentItems,

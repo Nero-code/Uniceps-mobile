@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/account_models/account_model.dart';
+import 'package:uniceps/app/data/services/token/token_service_simple.dart';
 import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/auth_contracts.dart';
-import 'package:uniceps/app/data/sources/services/token/token_service_simple.dart';
 import 'package:uniceps/app/domain/classes/account_entities/account.dart';
 import 'package:uniceps/app/domain/contracts/auth/i_auth_contracts.dart';
 import 'package:uniceps/app/services/network_info.dart';

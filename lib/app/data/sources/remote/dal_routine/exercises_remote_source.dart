@@ -1,54 +1,61 @@
+import 'dart:typed_data';
+
+import 'package:http/http.dart' as http;
 import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart';
-import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
-import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
+import 'package:uniceps/core/constants/api_routes.dart';
 
 abstract class IExercisesRemoteSourceContract {
   Future<List<MuscleGroupDto>> getExerciseGroups();
-  Future<List<ExerciseDto>> getAllExercises();
-  // Future<List<ExerciseV2Dto>> getExercisesByFilter(String filter);
+  Future<List<ExerciseDto>> getAllExercises([DateTime? timestamp]);
   Future<List<ExerciseDto>> getExercisesByGroup(MuscleGroupDto group);
+
+  Future<Uint8List> getExerciseImage(String imageUrl);
 }
 
 class ExercisesRemoteSourceImpl implements IExercisesRemoteSourceContract {
   final ClientHelper _clientHelper;
+  final http.Client _client;
 
-  const ExercisesRemoteSourceImpl({required ClientHelper clientHelper}) : _clientHelper = clientHelper;
+  const ExercisesRemoteSourceImpl({required ClientHelper clientHelper, required http.Client client})
+    : _clientHelper = clientHelper,
+      _client = client;
 
   @override
   Future<List<MuscleGroupDto>> getExerciseGroups() async {
     return await _clientHelper.getListHandler<MuscleGroupDto>(
-      API_V2,
-      HTTP_MUSCLE_GROUPS,
+      ApiRoutes.domain,
+      ApiRoutes.muscleGroups,
       MuscleGroupDto.fromJson,
       needsHeader: false,
     );
   }
 
   @override
-  Future<List<ExerciseDto>> getAllExercises() async {
+  Future<List<ExerciseDto>> getAllExercises([DateTime? timestamp]) async {
     return await _clientHelper.getListHandler<ExerciseDto>(
-      API_V2,
-      HTTP_EXERCISES,
+      ApiRoutes.domain,
+      ApiRoutes.exercises,
       ExerciseDto.fromJson,
       needsHeader: false,
     );
   }
 
-  // @override
-  // Future<List<ExerciseV2Dto>> getExercisesByFilter(String filter) async {
-  //   return await _clientHelper.getListHandler<ExerciseV2Dto>(API_V2, HTTP_EXERCISES, ExerciseV2Dto.fromJson,
-  //       needsHeader: false);
-  // }
-
   @override
   Future<List<ExerciseDto>> getExercisesByGroup(MuscleGroupDto group) async {
     return await _clientHelper.getListHandler(
-      API_V2,
-      HTTP_EXERCISES,
+      ApiRoutes.domain,
+      ApiRoutes.exercises,
       ExerciseDto.fromJson,
       needsHeader: false,
-      queryParams: {'id': "${group.apiId}"},
+      queryParams: {'MuscleGroupCode': group.muscleGroupCode},
     );
+  }
+
+  @override
+  Future<Uint8List> getExerciseImage(String exerciseId) async {
+    final res = await _client.get(Uri.https(ApiRoutes.domain, ApiRoutes.exerciseImage(exerciseId)));
+    return res.bodyBytes;
   }
 }

@@ -37,6 +37,14 @@ class FileParseFailure with _$FileParseFailure {
   const factory FileParseFailure.parserMismatch() = _ParserMismatch;
   const factory FileParseFailure.corruptedFile() = _CorruptedFile;
 }
+
+@freezed
+class LibSyncFailure with _$LibSyncFailure {
+  const factory LibSyncFailure.libOffline() = _LibOffline;
+  const factory LibSyncFailure.libNotFound() = _LibNotFound;
+  const factory LibSyncFailure.libUnknown() = _LibUnknown;
+}
+
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------

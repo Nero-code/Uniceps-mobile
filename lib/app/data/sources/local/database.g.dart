@@ -1346,38 +1346,93 @@ class $ExercisesTable extends Exercises
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _imageUrlMeta = const VerificationMeta(
-    'imageUrl',
+  static const VerificationMeta _imageNameMeta = const VerificationMeta(
+    'imageName',
   );
   @override
-  late final GeneratedColumn<String> imageUrl = GeneratedColumn<String>(
-    'image_url',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _muscleGroupMeta = const VerificationMeta(
-    'muscleGroup',
-  );
-  @override
-  late final GeneratedColumn<String> muscleGroup = GeneratedColumn<String>(
-    'muscle_group',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _muscleHeadMeta = const VerificationMeta(
-    'muscleHead',
-  );
-  @override
-  late final GeneratedColumn<String> muscleHead = GeneratedColumn<String>(
-    'muscle_head',
+  late final GeneratedColumn<String> imageName = GeneratedColumn<String>(
+    'image_name',
     aliasedName,
     true,
     type: DriftSqlType.string,
     requiredDuringInsert: false,
+  );
+  static const VerificationMeta _muscleGroupCodeMeta = const VerificationMeta(
+    'muscleGroupCode',
+  );
+  @override
+  late final GeneratedColumn<String> muscleGroupCode = GeneratedColumn<String>(
+    'muscle_group_code',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _muscleGroupNameMeta = const VerificationMeta(
+    'muscleGroupName',
+  );
+  @override
+  late final GeneratedColumn<String> muscleGroupName = GeneratedColumn<String>(
+    'muscle_group_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _muscleHeadCodeMeta = const VerificationMeta(
+    'muscleHeadCode',
+  );
+  @override
+  late final GeneratedColumn<String> muscleHeadCode = GeneratedColumn<String>(
+    'muscle_head_code',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _muscleHeadNameMeta = const VerificationMeta(
+    'muscleHeadName',
+  );
+  @override
+  late final GeneratedColumn<String> muscleHeadName = GeneratedColumn<String>(
+    'muscle_head_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _lateralsMeta = const VerificationMeta(
+    'laterals',
+  );
+  @override
+  late final GeneratedColumn<String> laterals = GeneratedColumn<String>(
+    'laterals',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _toolCodeMeta = const VerificationMeta(
+    'toolCode',
+  );
+  @override
+  late final GeneratedColumn<String> toolCode = GeneratedColumn<String>(
+    'tool_code',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _toolNameMeta = const VerificationMeta(
+    'toolName',
+  );
+  @override
+  late final GeneratedColumn<String> toolName = GeneratedColumn<String>(
+    'tool_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _auxMuscle1Meta = const VerificationMeta(
     'auxMuscle1',
@@ -1423,65 +1478,35 @@ class $ExercisesTable extends Exercises
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _lateralsMeta = const VerificationMeta(
-    'laterals',
+  static const VerificationMeta _timestampMeta = const VerificationMeta(
+    'timestamp',
   );
   @override
-  late final GeneratedColumn<String> laterals = GeneratedColumn<String>(
-    'laterals',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _toolMeta = const VerificationMeta('tool');
-  @override
-  late final GeneratedColumn<String> tool = GeneratedColumn<String>(
-    'tool',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _versionMeta = const VerificationMeta(
-    'version',
-  );
-  @override
-  late final GeneratedColumn<int> version = GeneratedColumn<int>(
-    'version',
+  late final GeneratedColumn<DateTime> timestamp = GeneratedColumn<DateTime>(
+    'timestamp',
     aliasedName,
     false,
-    type: DriftSqlType.int,
+    type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
-    defaultValue: const Constant(1),
-  );
-  static const VerificationMeta _mediaVersionMeta = const VerificationMeta(
-    'mediaVersion',
-  );
-  @override
-  late final GeneratedColumn<int> mediaVersion = GeneratedColumn<int>(
-    'media_version',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(1),
+    clientDefault: () => DateTime.now(),
   );
   @override
   List<GeneratedColumn> get $columns => [
     apiId,
     name,
-    imageUrl,
-    muscleGroup,
-    muscleHead,
+    imageName,
+    muscleGroupCode,
+    muscleGroupName,
+    muscleHeadCode,
+    muscleHeadName,
+    laterals,
+    toolCode,
+    toolName,
     auxMuscle1,
     auxMuscle2,
     auxMuscle3,
     description,
-    laterals,
-    tool,
-    version,
-    mediaVersion,
+    timestamp,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1511,30 +1536,79 @@ class $ExercisesTable extends Exercises
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (data.containsKey('image_url')) {
+    if (data.containsKey('image_name')) {
       context.handle(
-        _imageUrlMeta,
-        imageUrl.isAcceptableOrUnknown(data['image_url']!, _imageUrlMeta),
+        _imageNameMeta,
+        imageName.isAcceptableOrUnknown(data['image_name']!, _imageNameMeta),
       );
-    } else if (isInserting) {
-      context.missing(_imageUrlMeta);
     }
-    if (data.containsKey('muscle_group')) {
+    if (data.containsKey('muscle_group_code')) {
       context.handle(
-        _muscleGroupMeta,
-        muscleGroup.isAcceptableOrUnknown(
-          data['muscle_group']!,
-          _muscleGroupMeta,
+        _muscleGroupCodeMeta,
+        muscleGroupCode.isAcceptableOrUnknown(
+          data['muscle_group_code']!,
+          _muscleGroupCodeMeta,
         ),
       );
     } else if (isInserting) {
-      context.missing(_muscleGroupMeta);
+      context.missing(_muscleGroupCodeMeta);
     }
-    if (data.containsKey('muscle_head')) {
+    if (data.containsKey('muscle_group_name')) {
       context.handle(
-        _muscleHeadMeta,
-        muscleHead.isAcceptableOrUnknown(data['muscle_head']!, _muscleHeadMeta),
+        _muscleGroupNameMeta,
+        muscleGroupName.isAcceptableOrUnknown(
+          data['muscle_group_name']!,
+          _muscleGroupNameMeta,
+        ),
       );
+    } else if (isInserting) {
+      context.missing(_muscleGroupNameMeta);
+    }
+    if (data.containsKey('muscle_head_code')) {
+      context.handle(
+        _muscleHeadCodeMeta,
+        muscleHeadCode.isAcceptableOrUnknown(
+          data['muscle_head_code']!,
+          _muscleHeadCodeMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_muscleHeadCodeMeta);
+    }
+    if (data.containsKey('muscle_head_name')) {
+      context.handle(
+        _muscleHeadNameMeta,
+        muscleHeadName.isAcceptableOrUnknown(
+          data['muscle_head_name']!,
+          _muscleHeadNameMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_muscleHeadNameMeta);
+    }
+    if (data.containsKey('laterals')) {
+      context.handle(
+        _lateralsMeta,
+        laterals.isAcceptableOrUnknown(data['laterals']!, _lateralsMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_lateralsMeta);
+    }
+    if (data.containsKey('tool_code')) {
+      context.handle(
+        _toolCodeMeta,
+        toolCode.isAcceptableOrUnknown(data['tool_code']!, _toolCodeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_toolCodeMeta);
+    }
+    if (data.containsKey('tool_name')) {
+      context.handle(
+        _toolNameMeta,
+        toolName.isAcceptableOrUnknown(data['tool_name']!, _toolNameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_toolNameMeta);
     }
     if (data.containsKey('aux_muscle1')) {
       context.handle(
@@ -1563,31 +1637,10 @@ class $ExercisesTable extends Exercises
         ),
       );
     }
-    if (data.containsKey('laterals')) {
+    if (data.containsKey('timestamp')) {
       context.handle(
-        _lateralsMeta,
-        laterals.isAcceptableOrUnknown(data['laterals']!, _lateralsMeta),
-      );
-    }
-    if (data.containsKey('tool')) {
-      context.handle(
-        _toolMeta,
-        tool.isAcceptableOrUnknown(data['tool']!, _toolMeta),
-      );
-    }
-    if (data.containsKey('version')) {
-      context.handle(
-        _versionMeta,
-        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
-      );
-    }
-    if (data.containsKey('media_version')) {
-      context.handle(
-        _mediaVersionMeta,
-        mediaVersion.isAcceptableOrUnknown(
-          data['media_version']!,
-          _mediaVersionMeta,
-        ),
+        _timestampMeta,
+        timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta),
       );
     }
     return context;
@@ -1607,18 +1660,38 @@ class $ExercisesTable extends Exercises
         DriftSqlType.string,
         data['${effectivePrefix}name'],
       )!,
-      imageUrl: attachedDatabase.typeMapping.read(
+      imageName: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}image_url'],
-      )!,
-      muscleGroup: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}muscle_group'],
-      )!,
-      muscleHead: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}muscle_head'],
+        data['${effectivePrefix}image_name'],
       ),
+      muscleGroupCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}muscle_group_code'],
+      )!,
+      muscleGroupName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}muscle_group_name'],
+      )!,
+      muscleHeadCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}muscle_head_code'],
+      )!,
+      muscleHeadName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}muscle_head_name'],
+      )!,
+      laterals: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}laterals'],
+      )!,
+      toolCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}tool_code'],
+      )!,
+      toolName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}tool_name'],
+      )!,
       auxMuscle1: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}aux_muscle1'],
@@ -1635,21 +1708,9 @@ class $ExercisesTable extends Exercises
         DriftSqlType.string,
         data['${effectivePrefix}description'],
       ),
-      laterals: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}laterals'],
-      ),
-      tool: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}tool'],
-      ),
-      version: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}version'],
-      )!,
-      mediaVersion: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}media_version'],
+      timestamp: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}timestamp'],
       )!,
     );
   }
@@ -1663,42 +1724,51 @@ class $ExercisesTable extends Exercises
 class Exercise extends DataClass implements Insertable<Exercise> {
   final String apiId;
   final String name;
-  final String imageUrl;
-  final String muscleGroup;
-  final String? muscleHead;
+  final String? imageName;
+  final String muscleGroupCode;
+  final String muscleGroupName;
+  final String muscleHeadCode;
+  final String muscleHeadName;
+  final String laterals;
+  final String toolCode;
+  final String toolName;
   final String? auxMuscle1;
   final String? auxMuscle2;
   final String? auxMuscle3;
   final String? description;
-  final String? laterals;
-  final String? tool;
-  final int version;
-  final int mediaVersion;
+  final DateTime timestamp;
   const Exercise({
     required this.apiId,
     required this.name,
-    required this.imageUrl,
-    required this.muscleGroup,
-    this.muscleHead,
+    this.imageName,
+    required this.muscleGroupCode,
+    required this.muscleGroupName,
+    required this.muscleHeadCode,
+    required this.muscleHeadName,
+    required this.laterals,
+    required this.toolCode,
+    required this.toolName,
     this.auxMuscle1,
     this.auxMuscle2,
     this.auxMuscle3,
     this.description,
-    this.laterals,
-    this.tool,
-    required this.version,
-    required this.mediaVersion,
+    required this.timestamp,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['api_id'] = Variable<String>(apiId);
     map['name'] = Variable<String>(name);
-    map['image_url'] = Variable<String>(imageUrl);
-    map['muscle_group'] = Variable<String>(muscleGroup);
-    if (!nullToAbsent || muscleHead != null) {
-      map['muscle_head'] = Variable<String>(muscleHead);
+    if (!nullToAbsent || imageName != null) {
+      map['image_name'] = Variable<String>(imageName);
     }
+    map['muscle_group_code'] = Variable<String>(muscleGroupCode);
+    map['muscle_group_name'] = Variable<String>(muscleGroupName);
+    map['muscle_head_code'] = Variable<String>(muscleHeadCode);
+    map['muscle_head_name'] = Variable<String>(muscleHeadName);
+    map['laterals'] = Variable<String>(laterals);
+    map['tool_code'] = Variable<String>(toolCode);
+    map['tool_name'] = Variable<String>(toolName);
     if (!nullToAbsent || auxMuscle1 != null) {
       map['aux_muscle1'] = Variable<String>(auxMuscle1);
     }
@@ -1711,14 +1781,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
     }
-    if (!nullToAbsent || laterals != null) {
-      map['laterals'] = Variable<String>(laterals);
-    }
-    if (!nullToAbsent || tool != null) {
-      map['tool'] = Variable<String>(tool);
-    }
-    map['version'] = Variable<int>(version);
-    map['media_version'] = Variable<int>(mediaVersion);
+    map['timestamp'] = Variable<DateTime>(timestamp);
     return map;
   }
 
@@ -1726,11 +1789,16 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     return ExercisesCompanion(
       apiId: Value(apiId),
       name: Value(name),
-      imageUrl: Value(imageUrl),
-      muscleGroup: Value(muscleGroup),
-      muscleHead: muscleHead == null && nullToAbsent
+      imageName: imageName == null && nullToAbsent
           ? const Value.absent()
-          : Value(muscleHead),
+          : Value(imageName),
+      muscleGroupCode: Value(muscleGroupCode),
+      muscleGroupName: Value(muscleGroupName),
+      muscleHeadCode: Value(muscleHeadCode),
+      muscleHeadName: Value(muscleHeadName),
+      laterals: Value(laterals),
+      toolCode: Value(toolCode),
+      toolName: Value(toolName),
       auxMuscle1: auxMuscle1 == null && nullToAbsent
           ? const Value.absent()
           : Value(auxMuscle1),
@@ -1743,12 +1811,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
-      laterals: laterals == null && nullToAbsent
-          ? const Value.absent()
-          : Value(laterals),
-      tool: tool == null && nullToAbsent ? const Value.absent() : Value(tool),
-      version: Value(version),
-      mediaVersion: Value(mediaVersion),
+      timestamp: Value(timestamp),
     );
   }
 
@@ -1760,17 +1823,19 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     return Exercise(
       apiId: serializer.fromJson<String>(json['apiId']),
       name: serializer.fromJson<String>(json['name']),
-      imageUrl: serializer.fromJson<String>(json['imageUrl']),
-      muscleGroup: serializer.fromJson<String>(json['muscleGroup']),
-      muscleHead: serializer.fromJson<String?>(json['muscleHead']),
+      imageName: serializer.fromJson<String?>(json['imageName']),
+      muscleGroupCode: serializer.fromJson<String>(json['muscleGroupCode']),
+      muscleGroupName: serializer.fromJson<String>(json['muscleGroupName']),
+      muscleHeadCode: serializer.fromJson<String>(json['muscleHeadCode']),
+      muscleHeadName: serializer.fromJson<String>(json['muscleHeadName']),
+      laterals: serializer.fromJson<String>(json['laterals']),
+      toolCode: serializer.fromJson<String>(json['toolCode']),
+      toolName: serializer.fromJson<String>(json['toolName']),
       auxMuscle1: serializer.fromJson<String?>(json['auxMuscle1']),
       auxMuscle2: serializer.fromJson<String?>(json['auxMuscle2']),
       auxMuscle3: serializer.fromJson<String?>(json['auxMuscle3']),
       description: serializer.fromJson<String?>(json['description']),
-      laterals: serializer.fromJson<String?>(json['laterals']),
-      tool: serializer.fromJson<String?>(json['tool']),
-      version: serializer.fromJson<int>(json['version']),
-      mediaVersion: serializer.fromJson<int>(json['mediaVersion']),
+      timestamp: serializer.fromJson<DateTime>(json['timestamp']),
     );
   }
   @override
@@ -1779,60 +1844,75 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     return <String, dynamic>{
       'apiId': serializer.toJson<String>(apiId),
       'name': serializer.toJson<String>(name),
-      'imageUrl': serializer.toJson<String>(imageUrl),
-      'muscleGroup': serializer.toJson<String>(muscleGroup),
-      'muscleHead': serializer.toJson<String?>(muscleHead),
+      'imageName': serializer.toJson<String?>(imageName),
+      'muscleGroupCode': serializer.toJson<String>(muscleGroupCode),
+      'muscleGroupName': serializer.toJson<String>(muscleGroupName),
+      'muscleHeadCode': serializer.toJson<String>(muscleHeadCode),
+      'muscleHeadName': serializer.toJson<String>(muscleHeadName),
+      'laterals': serializer.toJson<String>(laterals),
+      'toolCode': serializer.toJson<String>(toolCode),
+      'toolName': serializer.toJson<String>(toolName),
       'auxMuscle1': serializer.toJson<String?>(auxMuscle1),
       'auxMuscle2': serializer.toJson<String?>(auxMuscle2),
       'auxMuscle3': serializer.toJson<String?>(auxMuscle3),
       'description': serializer.toJson<String?>(description),
-      'laterals': serializer.toJson<String?>(laterals),
-      'tool': serializer.toJson<String?>(tool),
-      'version': serializer.toJson<int>(version),
-      'mediaVersion': serializer.toJson<int>(mediaVersion),
+      'timestamp': serializer.toJson<DateTime>(timestamp),
     };
   }
 
   Exercise copyWith({
     String? apiId,
     String? name,
-    String? imageUrl,
-    String? muscleGroup,
-    Value<String?> muscleHead = const Value.absent(),
+    Value<String?> imageName = const Value.absent(),
+    String? muscleGroupCode,
+    String? muscleGroupName,
+    String? muscleHeadCode,
+    String? muscleHeadName,
+    String? laterals,
+    String? toolCode,
+    String? toolName,
     Value<String?> auxMuscle1 = const Value.absent(),
     Value<String?> auxMuscle2 = const Value.absent(),
     Value<String?> auxMuscle3 = const Value.absent(),
     Value<String?> description = const Value.absent(),
-    Value<String?> laterals = const Value.absent(),
-    Value<String?> tool = const Value.absent(),
-    int? version,
-    int? mediaVersion,
+    DateTime? timestamp,
   }) => Exercise(
     apiId: apiId ?? this.apiId,
     name: name ?? this.name,
-    imageUrl: imageUrl ?? this.imageUrl,
-    muscleGroup: muscleGroup ?? this.muscleGroup,
-    muscleHead: muscleHead.present ? muscleHead.value : this.muscleHead,
+    imageName: imageName.present ? imageName.value : this.imageName,
+    muscleGroupCode: muscleGroupCode ?? this.muscleGroupCode,
+    muscleGroupName: muscleGroupName ?? this.muscleGroupName,
+    muscleHeadCode: muscleHeadCode ?? this.muscleHeadCode,
+    muscleHeadName: muscleHeadName ?? this.muscleHeadName,
+    laterals: laterals ?? this.laterals,
+    toolCode: toolCode ?? this.toolCode,
+    toolName: toolName ?? this.toolName,
     auxMuscle1: auxMuscle1.present ? auxMuscle1.value : this.auxMuscle1,
     auxMuscle2: auxMuscle2.present ? auxMuscle2.value : this.auxMuscle2,
     auxMuscle3: auxMuscle3.present ? auxMuscle3.value : this.auxMuscle3,
     description: description.present ? description.value : this.description,
-    laterals: laterals.present ? laterals.value : this.laterals,
-    tool: tool.present ? tool.value : this.tool,
-    version: version ?? this.version,
-    mediaVersion: mediaVersion ?? this.mediaVersion,
+    timestamp: timestamp ?? this.timestamp,
   );
   Exercise copyWithCompanion(ExercisesCompanion data) {
     return Exercise(
       apiId: data.apiId.present ? data.apiId.value : this.apiId,
       name: data.name.present ? data.name.value : this.name,
-      imageUrl: data.imageUrl.present ? data.imageUrl.value : this.imageUrl,
-      muscleGroup: data.muscleGroup.present
-          ? data.muscleGroup.value
-          : this.muscleGroup,
-      muscleHead: data.muscleHead.present
-          ? data.muscleHead.value
-          : this.muscleHead,
+      imageName: data.imageName.present ? data.imageName.value : this.imageName,
+      muscleGroupCode: data.muscleGroupCode.present
+          ? data.muscleGroupCode.value
+          : this.muscleGroupCode,
+      muscleGroupName: data.muscleGroupName.present
+          ? data.muscleGroupName.value
+          : this.muscleGroupName,
+      muscleHeadCode: data.muscleHeadCode.present
+          ? data.muscleHeadCode.value
+          : this.muscleHeadCode,
+      muscleHeadName: data.muscleHeadName.present
+          ? data.muscleHeadName.value
+          : this.muscleHeadName,
+      laterals: data.laterals.present ? data.laterals.value : this.laterals,
+      toolCode: data.toolCode.present ? data.toolCode.value : this.toolCode,
+      toolName: data.toolName.present ? data.toolName.value : this.toolName,
       auxMuscle1: data.auxMuscle1.present
           ? data.auxMuscle1.value
           : this.auxMuscle1,
@@ -1845,12 +1925,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       description: data.description.present
           ? data.description.value
           : this.description,
-      laterals: data.laterals.present ? data.laterals.value : this.laterals,
-      tool: data.tool.present ? data.tool.value : this.tool,
-      version: data.version.present ? data.version.value : this.version,
-      mediaVersion: data.mediaVersion.present
-          ? data.mediaVersion.value
-          : this.mediaVersion,
+      timestamp: data.timestamp.present ? data.timestamp.value : this.timestamp,
     );
   }
 
@@ -1859,17 +1934,19 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     return (StringBuffer('Exercise(')
           ..write('apiId: $apiId, ')
           ..write('name: $name, ')
-          ..write('imageUrl: $imageUrl, ')
-          ..write('muscleGroup: $muscleGroup, ')
-          ..write('muscleHead: $muscleHead, ')
+          ..write('imageName: $imageName, ')
+          ..write('muscleGroupCode: $muscleGroupCode, ')
+          ..write('muscleGroupName: $muscleGroupName, ')
+          ..write('muscleHeadCode: $muscleHeadCode, ')
+          ..write('muscleHeadName: $muscleHeadName, ')
+          ..write('laterals: $laterals, ')
+          ..write('toolCode: $toolCode, ')
+          ..write('toolName: $toolName, ')
           ..write('auxMuscle1: $auxMuscle1, ')
           ..write('auxMuscle2: $auxMuscle2, ')
           ..write('auxMuscle3: $auxMuscle3, ')
           ..write('description: $description, ')
-          ..write('laterals: $laterals, ')
-          ..write('tool: $tool, ')
-          ..write('version: $version, ')
-          ..write('mediaVersion: $mediaVersion')
+          ..write('timestamp: $timestamp')
           ..write(')'))
         .toString();
   }
@@ -1878,17 +1955,19 @@ class Exercise extends DataClass implements Insertable<Exercise> {
   int get hashCode => Object.hash(
     apiId,
     name,
-    imageUrl,
-    muscleGroup,
-    muscleHead,
+    imageName,
+    muscleGroupCode,
+    muscleGroupName,
+    muscleHeadCode,
+    muscleHeadName,
+    laterals,
+    toolCode,
+    toolName,
     auxMuscle1,
     auxMuscle2,
     auxMuscle3,
     description,
-    laterals,
-    tool,
-    version,
-    mediaVersion,
+    timestamp,
   );
   @override
   bool operator ==(Object other) =>
@@ -1896,99 +1975,116 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       (other is Exercise &&
           other.apiId == this.apiId &&
           other.name == this.name &&
-          other.imageUrl == this.imageUrl &&
-          other.muscleGroup == this.muscleGroup &&
-          other.muscleHead == this.muscleHead &&
+          other.imageName == this.imageName &&
+          other.muscleGroupCode == this.muscleGroupCode &&
+          other.muscleGroupName == this.muscleGroupName &&
+          other.muscleHeadCode == this.muscleHeadCode &&
+          other.muscleHeadName == this.muscleHeadName &&
+          other.laterals == this.laterals &&
+          other.toolCode == this.toolCode &&
+          other.toolName == this.toolName &&
           other.auxMuscle1 == this.auxMuscle1 &&
           other.auxMuscle2 == this.auxMuscle2 &&
           other.auxMuscle3 == this.auxMuscle3 &&
           other.description == this.description &&
-          other.laterals == this.laterals &&
-          other.tool == this.tool &&
-          other.version == this.version &&
-          other.mediaVersion == this.mediaVersion);
+          other.timestamp == this.timestamp);
 }
 
 class ExercisesCompanion extends UpdateCompanion<Exercise> {
   final Value<String> apiId;
   final Value<String> name;
-  final Value<String> imageUrl;
-  final Value<String> muscleGroup;
-  final Value<String?> muscleHead;
+  final Value<String?> imageName;
+  final Value<String> muscleGroupCode;
+  final Value<String> muscleGroupName;
+  final Value<String> muscleHeadCode;
+  final Value<String> muscleHeadName;
+  final Value<String> laterals;
+  final Value<String> toolCode;
+  final Value<String> toolName;
   final Value<String?> auxMuscle1;
   final Value<String?> auxMuscle2;
   final Value<String?> auxMuscle3;
   final Value<String?> description;
-  final Value<String?> laterals;
-  final Value<String?> tool;
-  final Value<int> version;
-  final Value<int> mediaVersion;
+  final Value<DateTime> timestamp;
   final Value<int> rowid;
   const ExercisesCompanion({
     this.apiId = const Value.absent(),
     this.name = const Value.absent(),
-    this.imageUrl = const Value.absent(),
-    this.muscleGroup = const Value.absent(),
-    this.muscleHead = const Value.absent(),
+    this.imageName = const Value.absent(),
+    this.muscleGroupCode = const Value.absent(),
+    this.muscleGroupName = const Value.absent(),
+    this.muscleHeadCode = const Value.absent(),
+    this.muscleHeadName = const Value.absent(),
+    this.laterals = const Value.absent(),
+    this.toolCode = const Value.absent(),
+    this.toolName = const Value.absent(),
     this.auxMuscle1 = const Value.absent(),
     this.auxMuscle2 = const Value.absent(),
     this.auxMuscle3 = const Value.absent(),
     this.description = const Value.absent(),
-    this.laterals = const Value.absent(),
-    this.tool = const Value.absent(),
-    this.version = const Value.absent(),
-    this.mediaVersion = const Value.absent(),
+    this.timestamp = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ExercisesCompanion.insert({
     required String apiId,
     required String name,
-    required String imageUrl,
-    required String muscleGroup,
-    this.muscleHead = const Value.absent(),
+    this.imageName = const Value.absent(),
+    required String muscleGroupCode,
+    required String muscleGroupName,
+    required String muscleHeadCode,
+    required String muscleHeadName,
+    required String laterals,
+    required String toolCode,
+    required String toolName,
     this.auxMuscle1 = const Value.absent(),
     this.auxMuscle2 = const Value.absent(),
     this.auxMuscle3 = const Value.absent(),
     this.description = const Value.absent(),
-    this.laterals = const Value.absent(),
-    this.tool = const Value.absent(),
-    this.version = const Value.absent(),
-    this.mediaVersion = const Value.absent(),
+    this.timestamp = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : apiId = Value(apiId),
        name = Value(name),
-       imageUrl = Value(imageUrl),
-       muscleGroup = Value(muscleGroup);
+       muscleGroupCode = Value(muscleGroupCode),
+       muscleGroupName = Value(muscleGroupName),
+       muscleHeadCode = Value(muscleHeadCode),
+       muscleHeadName = Value(muscleHeadName),
+       laterals = Value(laterals),
+       toolCode = Value(toolCode),
+       toolName = Value(toolName);
   static Insertable<Exercise> custom({
     Expression<String>? apiId,
     Expression<String>? name,
-    Expression<String>? imageUrl,
-    Expression<String>? muscleGroup,
-    Expression<String>? muscleHead,
+    Expression<String>? imageName,
+    Expression<String>? muscleGroupCode,
+    Expression<String>? muscleGroupName,
+    Expression<String>? muscleHeadCode,
+    Expression<String>? muscleHeadName,
+    Expression<String>? laterals,
+    Expression<String>? toolCode,
+    Expression<String>? toolName,
     Expression<String>? auxMuscle1,
     Expression<String>? auxMuscle2,
     Expression<String>? auxMuscle3,
     Expression<String>? description,
-    Expression<String>? laterals,
-    Expression<String>? tool,
-    Expression<int>? version,
-    Expression<int>? mediaVersion,
+    Expression<DateTime>? timestamp,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (apiId != null) 'api_id': apiId,
       if (name != null) 'name': name,
-      if (imageUrl != null) 'image_url': imageUrl,
-      if (muscleGroup != null) 'muscle_group': muscleGroup,
-      if (muscleHead != null) 'muscle_head': muscleHead,
+      if (imageName != null) 'image_name': imageName,
+      if (muscleGroupCode != null) 'muscle_group_code': muscleGroupCode,
+      if (muscleGroupName != null) 'muscle_group_name': muscleGroupName,
+      if (muscleHeadCode != null) 'muscle_head_code': muscleHeadCode,
+      if (muscleHeadName != null) 'muscle_head_name': muscleHeadName,
+      if (laterals != null) 'laterals': laterals,
+      if (toolCode != null) 'tool_code': toolCode,
+      if (toolName != null) 'tool_name': toolName,
       if (auxMuscle1 != null) 'aux_muscle1': auxMuscle1,
       if (auxMuscle2 != null) 'aux_muscle2': auxMuscle2,
       if (auxMuscle3 != null) 'aux_muscle3': auxMuscle3,
       if (description != null) 'description': description,
-      if (laterals != null) 'laterals': laterals,
-      if (tool != null) 'tool': tool,
-      if (version != null) 'version': version,
-      if (mediaVersion != null) 'media_version': mediaVersion,
+      if (timestamp != null) 'timestamp': timestamp,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1996,33 +2092,37 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
   ExercisesCompanion copyWith({
     Value<String>? apiId,
     Value<String>? name,
-    Value<String>? imageUrl,
-    Value<String>? muscleGroup,
-    Value<String?>? muscleHead,
+    Value<String?>? imageName,
+    Value<String>? muscleGroupCode,
+    Value<String>? muscleGroupName,
+    Value<String>? muscleHeadCode,
+    Value<String>? muscleHeadName,
+    Value<String>? laterals,
+    Value<String>? toolCode,
+    Value<String>? toolName,
     Value<String?>? auxMuscle1,
     Value<String?>? auxMuscle2,
     Value<String?>? auxMuscle3,
     Value<String?>? description,
-    Value<String?>? laterals,
-    Value<String?>? tool,
-    Value<int>? version,
-    Value<int>? mediaVersion,
+    Value<DateTime>? timestamp,
     Value<int>? rowid,
   }) {
     return ExercisesCompanion(
       apiId: apiId ?? this.apiId,
       name: name ?? this.name,
-      imageUrl: imageUrl ?? this.imageUrl,
-      muscleGroup: muscleGroup ?? this.muscleGroup,
-      muscleHead: muscleHead ?? this.muscleHead,
+      imageName: imageName ?? this.imageName,
+      muscleGroupCode: muscleGroupCode ?? this.muscleGroupCode,
+      muscleGroupName: muscleGroupName ?? this.muscleGroupName,
+      muscleHeadCode: muscleHeadCode ?? this.muscleHeadCode,
+      muscleHeadName: muscleHeadName ?? this.muscleHeadName,
+      laterals: laterals ?? this.laterals,
+      toolCode: toolCode ?? this.toolCode,
+      toolName: toolName ?? this.toolName,
       auxMuscle1: auxMuscle1 ?? this.auxMuscle1,
       auxMuscle2: auxMuscle2 ?? this.auxMuscle2,
       auxMuscle3: auxMuscle3 ?? this.auxMuscle3,
       description: description ?? this.description,
-      laterals: laterals ?? this.laterals,
-      tool: tool ?? this.tool,
-      version: version ?? this.version,
-      mediaVersion: mediaVersion ?? this.mediaVersion,
+      timestamp: timestamp ?? this.timestamp,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2036,14 +2136,29 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
-    if (imageUrl.present) {
-      map['image_url'] = Variable<String>(imageUrl.value);
+    if (imageName.present) {
+      map['image_name'] = Variable<String>(imageName.value);
     }
-    if (muscleGroup.present) {
-      map['muscle_group'] = Variable<String>(muscleGroup.value);
+    if (muscleGroupCode.present) {
+      map['muscle_group_code'] = Variable<String>(muscleGroupCode.value);
     }
-    if (muscleHead.present) {
-      map['muscle_head'] = Variable<String>(muscleHead.value);
+    if (muscleGroupName.present) {
+      map['muscle_group_name'] = Variable<String>(muscleGroupName.value);
+    }
+    if (muscleHeadCode.present) {
+      map['muscle_head_code'] = Variable<String>(muscleHeadCode.value);
+    }
+    if (muscleHeadName.present) {
+      map['muscle_head_name'] = Variable<String>(muscleHeadName.value);
+    }
+    if (laterals.present) {
+      map['laterals'] = Variable<String>(laterals.value);
+    }
+    if (toolCode.present) {
+      map['tool_code'] = Variable<String>(toolCode.value);
+    }
+    if (toolName.present) {
+      map['tool_name'] = Variable<String>(toolName.value);
     }
     if (auxMuscle1.present) {
       map['aux_muscle1'] = Variable<String>(auxMuscle1.value);
@@ -2057,17 +2172,8 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     if (description.present) {
       map['description'] = Variable<String>(description.value);
     }
-    if (laterals.present) {
-      map['laterals'] = Variable<String>(laterals.value);
-    }
-    if (tool.present) {
-      map['tool'] = Variable<String>(tool.value);
-    }
-    if (version.present) {
-      map['version'] = Variable<int>(version.value);
-    }
-    if (mediaVersion.present) {
-      map['media_version'] = Variable<int>(mediaVersion.value);
+    if (timestamp.present) {
+      map['timestamp'] = Variable<DateTime>(timestamp.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -2080,17 +2186,19 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     return (StringBuffer('ExercisesCompanion(')
           ..write('apiId: $apiId, ')
           ..write('name: $name, ')
-          ..write('imageUrl: $imageUrl, ')
-          ..write('muscleGroup: $muscleGroup, ')
-          ..write('muscleHead: $muscleHead, ')
+          ..write('imageName: $imageName, ')
+          ..write('muscleGroupCode: $muscleGroupCode, ')
+          ..write('muscleGroupName: $muscleGroupName, ')
+          ..write('muscleHeadCode: $muscleHeadCode, ')
+          ..write('muscleHeadName: $muscleHeadName, ')
+          ..write('laterals: $laterals, ')
+          ..write('toolCode: $toolCode, ')
+          ..write('toolName: $toolName, ')
           ..write('auxMuscle1: $auxMuscle1, ')
           ..write('auxMuscle2: $auxMuscle2, ')
           ..write('auxMuscle3: $auxMuscle3, ')
           ..write('description: $description, ')
-          ..write('laterals: $laterals, ')
-          ..write('tool: $tool, ')
-          ..write('version: $version, ')
-          ..write('mediaVersion: $mediaVersion, ')
+          ..write('timestamp: $timestamp, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -6422,34 +6530,38 @@ typedef $$ExercisesTableCreateCompanionBuilder =
     ExercisesCompanion Function({
       required String apiId,
       required String name,
-      required String imageUrl,
-      required String muscleGroup,
-      Value<String?> muscleHead,
+      Value<String?> imageName,
+      required String muscleGroupCode,
+      required String muscleGroupName,
+      required String muscleHeadCode,
+      required String muscleHeadName,
+      required String laterals,
+      required String toolCode,
+      required String toolName,
       Value<String?> auxMuscle1,
       Value<String?> auxMuscle2,
       Value<String?> auxMuscle3,
       Value<String?> description,
-      Value<String?> laterals,
-      Value<String?> tool,
-      Value<int> version,
-      Value<int> mediaVersion,
+      Value<DateTime> timestamp,
       Value<int> rowid,
     });
 typedef $$ExercisesTableUpdateCompanionBuilder =
     ExercisesCompanion Function({
       Value<String> apiId,
       Value<String> name,
-      Value<String> imageUrl,
-      Value<String> muscleGroup,
-      Value<String?> muscleHead,
+      Value<String?> imageName,
+      Value<String> muscleGroupCode,
+      Value<String> muscleGroupName,
+      Value<String> muscleHeadCode,
+      Value<String> muscleHeadName,
+      Value<String> laterals,
+      Value<String> toolCode,
+      Value<String> toolName,
       Value<String?> auxMuscle1,
       Value<String?> auxMuscle2,
       Value<String?> auxMuscle3,
       Value<String?> description,
-      Value<String?> laterals,
-      Value<String?> tool,
-      Value<int> version,
-      Value<int> mediaVersion,
+      Value<DateTime> timestamp,
       Value<int> rowid,
     });
 
@@ -6498,18 +6610,43 @@ class $$ExercisesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get imageUrl => $composableBuilder(
-    column: $table.imageUrl,
+  ColumnFilters<String> get imageName => $composableBuilder(
+    column: $table.imageName,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get muscleGroup => $composableBuilder(
-    column: $table.muscleGroup,
+  ColumnFilters<String> get muscleGroupCode => $composableBuilder(
+    column: $table.muscleGroupCode,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get muscleHead => $composableBuilder(
-    column: $table.muscleHead,
+  ColumnFilters<String> get muscleGroupName => $composableBuilder(
+    column: $table.muscleGroupName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get muscleHeadCode => $composableBuilder(
+    column: $table.muscleHeadCode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get muscleHeadName => $composableBuilder(
+    column: $table.muscleHeadName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get laterals => $composableBuilder(
+    column: $table.laterals,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get toolCode => $composableBuilder(
+    column: $table.toolCode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get toolName => $composableBuilder(
+    column: $table.toolName,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -6533,23 +6670,8 @@ class $$ExercisesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get laterals => $composableBuilder(
-    column: $table.laterals,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get tool => $composableBuilder(
-    column: $table.tool,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get version => $composableBuilder(
-    column: $table.version,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get mediaVersion => $composableBuilder(
-    column: $table.mediaVersion,
+  ColumnFilters<DateTime> get timestamp => $composableBuilder(
+    column: $table.timestamp,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -6598,18 +6720,43 @@ class $$ExercisesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get imageUrl => $composableBuilder(
-    column: $table.imageUrl,
+  ColumnOrderings<String> get imageName => $composableBuilder(
+    column: $table.imageName,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get muscleGroup => $composableBuilder(
-    column: $table.muscleGroup,
+  ColumnOrderings<String> get muscleGroupCode => $composableBuilder(
+    column: $table.muscleGroupCode,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get muscleHead => $composableBuilder(
-    column: $table.muscleHead,
+  ColumnOrderings<String> get muscleGroupName => $composableBuilder(
+    column: $table.muscleGroupName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get muscleHeadCode => $composableBuilder(
+    column: $table.muscleHeadCode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get muscleHeadName => $composableBuilder(
+    column: $table.muscleHeadName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get laterals => $composableBuilder(
+    column: $table.laterals,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get toolCode => $composableBuilder(
+    column: $table.toolCode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get toolName => $composableBuilder(
+    column: $table.toolName,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -6633,23 +6780,8 @@ class $$ExercisesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get laterals => $composableBuilder(
-    column: $table.laterals,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get tool => $composableBuilder(
-    column: $table.tool,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get version => $composableBuilder(
-    column: $table.version,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get mediaVersion => $composableBuilder(
-    column: $table.mediaVersion,
+  ColumnOrderings<DateTime> get timestamp => $composableBuilder(
+    column: $table.timestamp,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -6669,18 +6801,37 @@ class $$ExercisesTableAnnotationComposer
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
 
-  GeneratedColumn<String> get imageUrl =>
-      $composableBuilder(column: $table.imageUrl, builder: (column) => column);
+  GeneratedColumn<String> get imageName =>
+      $composableBuilder(column: $table.imageName, builder: (column) => column);
 
-  GeneratedColumn<String> get muscleGroup => $composableBuilder(
-    column: $table.muscleGroup,
+  GeneratedColumn<String> get muscleGroupCode => $composableBuilder(
+    column: $table.muscleGroupCode,
     builder: (column) => column,
   );
 
-  GeneratedColumn<String> get muscleHead => $composableBuilder(
-    column: $table.muscleHead,
+  GeneratedColumn<String> get muscleGroupName => $composableBuilder(
+    column: $table.muscleGroupName,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get muscleHeadCode => $composableBuilder(
+    column: $table.muscleHeadCode,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get muscleHeadName => $composableBuilder(
+    column: $table.muscleHeadName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get laterals =>
+      $composableBuilder(column: $table.laterals, builder: (column) => column);
+
+  GeneratedColumn<String> get toolCode =>
+      $composableBuilder(column: $table.toolCode, builder: (column) => column);
+
+  GeneratedColumn<String> get toolName =>
+      $composableBuilder(column: $table.toolName, builder: (column) => column);
 
   GeneratedColumn<String> get auxMuscle1 => $composableBuilder(
     column: $table.auxMuscle1,
@@ -6702,19 +6853,8 @@ class $$ExercisesTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<String> get laterals =>
-      $composableBuilder(column: $table.laterals, builder: (column) => column);
-
-  GeneratedColumn<String> get tool =>
-      $composableBuilder(column: $table.tool, builder: (column) => column);
-
-  GeneratedColumn<int> get version =>
-      $composableBuilder(column: $table.version, builder: (column) => column);
-
-  GeneratedColumn<int> get mediaVersion => $composableBuilder(
-    column: $table.mediaVersion,
-    builder: (column) => column,
-  );
+  GeneratedColumn<DateTime> get timestamp =>
+      $composableBuilder(column: $table.timestamp, builder: (column) => column);
 
   Expression<T> routineItemsRefs<T extends Object>(
     Expression<T> Function($$RoutineItemsTableAnnotationComposer a) f,
@@ -6772,64 +6912,72 @@ class $$ExercisesTableTableManager
               ({
                 Value<String> apiId = const Value.absent(),
                 Value<String> name = const Value.absent(),
-                Value<String> imageUrl = const Value.absent(),
-                Value<String> muscleGroup = const Value.absent(),
-                Value<String?> muscleHead = const Value.absent(),
+                Value<String?> imageName = const Value.absent(),
+                Value<String> muscleGroupCode = const Value.absent(),
+                Value<String> muscleGroupName = const Value.absent(),
+                Value<String> muscleHeadCode = const Value.absent(),
+                Value<String> muscleHeadName = const Value.absent(),
+                Value<String> laterals = const Value.absent(),
+                Value<String> toolCode = const Value.absent(),
+                Value<String> toolName = const Value.absent(),
                 Value<String?> auxMuscle1 = const Value.absent(),
                 Value<String?> auxMuscle2 = const Value.absent(),
                 Value<String?> auxMuscle3 = const Value.absent(),
                 Value<String?> description = const Value.absent(),
-                Value<String?> laterals = const Value.absent(),
-                Value<String?> tool = const Value.absent(),
-                Value<int> version = const Value.absent(),
-                Value<int> mediaVersion = const Value.absent(),
+                Value<DateTime> timestamp = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ExercisesCompanion(
                 apiId: apiId,
                 name: name,
-                imageUrl: imageUrl,
-                muscleGroup: muscleGroup,
-                muscleHead: muscleHead,
+                imageName: imageName,
+                muscleGroupCode: muscleGroupCode,
+                muscleGroupName: muscleGroupName,
+                muscleHeadCode: muscleHeadCode,
+                muscleHeadName: muscleHeadName,
+                laterals: laterals,
+                toolCode: toolCode,
+                toolName: toolName,
                 auxMuscle1: auxMuscle1,
                 auxMuscle2: auxMuscle2,
                 auxMuscle3: auxMuscle3,
                 description: description,
-                laterals: laterals,
-                tool: tool,
-                version: version,
-                mediaVersion: mediaVersion,
+                timestamp: timestamp,
                 rowid: rowid,
               ),
           createCompanionCallback:
               ({
                 required String apiId,
                 required String name,
-                required String imageUrl,
-                required String muscleGroup,
-                Value<String?> muscleHead = const Value.absent(),
+                Value<String?> imageName = const Value.absent(),
+                required String muscleGroupCode,
+                required String muscleGroupName,
+                required String muscleHeadCode,
+                required String muscleHeadName,
+                required String laterals,
+                required String toolCode,
+                required String toolName,
                 Value<String?> auxMuscle1 = const Value.absent(),
                 Value<String?> auxMuscle2 = const Value.absent(),
                 Value<String?> auxMuscle3 = const Value.absent(),
                 Value<String?> description = const Value.absent(),
-                Value<String?> laterals = const Value.absent(),
-                Value<String?> tool = const Value.absent(),
-                Value<int> version = const Value.absent(),
-                Value<int> mediaVersion = const Value.absent(),
+                Value<DateTime> timestamp = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ExercisesCompanion.insert(
                 apiId: apiId,
                 name: name,
-                imageUrl: imageUrl,
-                muscleGroup: muscleGroup,
-                muscleHead: muscleHead,
+                imageName: imageName,
+                muscleGroupCode: muscleGroupCode,
+                muscleGroupName: muscleGroupName,
+                muscleHeadCode: muscleHeadCode,
+                muscleHeadName: muscleHeadName,
+                laterals: laterals,
+                toolCode: toolCode,
+                toolName: toolName,
                 auxMuscle1: auxMuscle1,
                 auxMuscle2: auxMuscle2,
                 auxMuscle3: auxMuscle3,
                 description: description,
-                laterals: laterals,
-                tool: tool,
-                version: version,
-                mediaVersion: mediaVersion,
+                timestamp: timestamp,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

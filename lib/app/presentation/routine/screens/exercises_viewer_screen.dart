@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/muscle_group_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2_selection/exercises_v2_selection_cubit.dart';
 import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
 import 'package:uniceps/app/presentation/routine/pages/exercises_list_tab.dart';
-import 'package:uniceps/app/presentation/routine/widgets/progress_widget.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
-// import 'package:uniceps/l10n/app_localizations.dart';
 
-class ExercisesSelectionScreen extends StatefulWidget {
-  const ExercisesSelectionScreen({
+class ExercisesViewerScreen extends StatefulWidget {
+  const ExercisesViewerScreen({
     super.key,
     required this.presentExerciseIds,
     required this.dayName,
@@ -23,16 +20,15 @@ class ExercisesSelectionScreen extends StatefulWidget {
   final int dayId;
 
   @override
-  State<ExercisesSelectionScreen> createState() => _ExercisesSelectionScreenState();
+  State<ExercisesViewerScreen> createState() => _ExercisesViewerScreenState();
 }
 
-class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen> with TickerProviderStateMixin {
+class _ExercisesViewerScreenState extends State<ExercisesViewerScreen> with TickerProviderStateMixin {
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    // groups = trSections;
     _tabController = TabController(length: 0, vsync: this);
   }
 
@@ -45,9 +41,9 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen> wit
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    final lang = BlocProvider.of<LocaleCubit>(context).state.isRtl();
+
     return BlocListener<ItemsEditBloc, ItemsEditState>(
-      listenWhen: (previous, current) => previous is ItemsDownloadingState && current is ItemsEditLoadedState,
+      listenWhen: (previous, current) => /*previous is ItemsDownloadingState &&*/ current is ItemsEditLoadedState,
       listener: (context, state) => Navigator.pop(context),
       child: BlocBuilder<MuscleGroupBloc, MuscleGroupState>(
         builder: (context, state) {
@@ -75,27 +71,25 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen> wit
                             context.read<ItemsEditBloc>().add(
                               AddRoutineItemsEvent(dayId: widget.dayId, items: state.selected),
                             );
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (_) => BlocProvider.value(
-                                value: context.read<ItemsEditBloc>(),
-                                child: AlertDialog(
-                                  content: BlocConsumer<ItemsEditBloc, ItemsEditState>(
-                                    listenWhen: (previous, current) =>
-                                        previous is ItemsDownloadingState && current is ItemsEditLoadedState,
-                                    listener: (context, state) => Navigator.pop(context),
-                                    builder: (context, state) {
-                                      return ProgressWidget(
-                                        percent: state is ItemsDownloadingState ? state.progress : 0,
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            );
-                            // Navigator.pop(context,
-                            //   state.selected.isEmpty ? null : state.selected);
+                            // showDialog(
+                            //   context: context,
+                            //   barrierDismissible: false,
+                            //   builder: (_) => BlocProvider.value(
+                            //     value: context.read<ItemsEditBloc>(),
+                            //     child: AlertDialog(
+                            //       content: BlocConsumer<ItemsEditBloc, ItemsEditState>(
+                            //         listenWhen: (previous, current) =>
+                            //             previous is ItemsDownloadingState && current is ItemsEditLoadedState,
+                            //         listener: (context, state) => Navigator.pop(context),
+                            //         builder: (context, state) {
+                            //           return ProgressWidget(
+                            //             percent: state is ItemsDownloadingState ? state.progress : 0,
+                            //           );
+                            //         },
+                            //       ),
+                            //     ),
+                            //   ),
+                            // );
                           },
                           icon: Icon(Icons.done_all_rounded),
                           color: Theme.of(context).colorScheme.primary,
@@ -107,47 +101,9 @@ class _ExercisesSelectionScreenState extends State<ExercisesSelectionScreen> wit
                     tabAlignment: TabAlignment.start,
                     controller: _tabController,
                     isScrollable: true,
-                    tabs: [
-                      ...state.groups.map(
-                        // (group) => Tab(text: group.muscleGroupTranslations[lang ? Lang.ar : Lang.en]),
-                        (group) => Tab(text: group.muscleGroup),
-                      ),
-                    ],
+                    tabs: [...state.groups.map((group) => Tab(text: group.muscleGroupName))],
                   ),
                 ),
-                // floatingActionButton: BlocBuilder<ExercisesV2SelectionCubit, ExercisesV2SelectionState>(
-                //   builder: (context, state) {
-                //     return FloatingActionButton(
-                //       backgroundColor: Theme.of(context).colorScheme.primary,
-                //       foregroundColor: Colors.white,
-                //       heroTag: "exercises FAB",
-                //       onPressed: () async {
-                //         context
-                //             .read<ItemsEditBloc>()
-                //             .add(AddRoutineItemsEvent(dayId: widget.dayId, items: state.selected));
-                //         showDialog(
-                //             context: context,
-                //             builder: (_) => BlocProvider.value(
-                //                   value: context.read<ItemsEditBloc>(),
-                //                   child: AlertDialog(
-                //                     content: BlocConsumer<ItemsEditBloc, ItemsEditState>(
-                //                       listenWhen: (previous, current) =>
-                //                           previous is ItemsDownloadingState && current is ItemsEditLoadedState,
-                //                       listener: (context, state) => Navigator.pop(context),
-                //                       builder: (context, state) {
-                //                         return ProgressWidget(
-                //                             percent: state is ItemsDownloadingState ? state.progress : 0);
-                //                       },
-                //                     ),
-                //                   ),
-                //                 ));
-                //         // Navigator.pop(context,
-                //         //   state.selected.isEmpty ? null : state.selected);
-                //       },
-                //       child: const Icon(Icons.done),
-                //     );
-                //   },
-                // ),
                 body: TabBarView(
                   controller: _tabController,
                   children: state.groups

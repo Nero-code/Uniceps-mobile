@@ -52,14 +52,14 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
       // trying to get routine image, there's a problem if the image is not
       // found for some reason, that's why we throw a database exception in
       // this circumstance...
-      if (!_imagesCache.containsKey(ex.imageUrl)) throw DataBaseException();
-      final img = _imagesCache.get(ex.imageUrl)!;
+      if (!_imagesCache.containsKey(ex.apiId)) throw DataBaseException();
+      final img = _imagesCache.get(ex.apiId)!;
       // ------------------------------------------------------------------
       // @UPDATE:
       // SQL has a way to get data from multiple tables called `JOIN`.
       // Its main functionality is to group rows based on a specific condition,
       // like a shared id or foreign key...
-      result.add(RoutineItemDto.fromTable(items[i], ExerciseDto.fromTable(ex, ex.imageUrl, img), sets));
+      result.add(RoutineItemDto.fromTable(items[i], ExerciseDto.fromTable(ex, ex.apiId, img), sets));
     }
     return result;
   }
@@ -69,61 +69,12 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
     final result = <RoutineItemDto>[];
 
     for (final i in list) {
-      // ------------------------------------------------------------------
-      // Inserting muscle group into database and updating old if exists
-      // final mg = await _database.into(_database.exerciseGroups).insertReturning(
-      //     ExerciseGroupsCompanion.insert(
-      //         apiId: i.exerciseV2Dto.muscleGroup.apiId,
-      //         arName: i.exerciseV2Dto.muscleGroup.arGroupName,
-      //         enName: i.exerciseV2Dto.muscleGroup.enGroupName),
-      //     onConflict: DoUpdate((update) => ExerciseGroupsCompanion.custom(
-      //         arName: update.arName, enName: update.enName)));
-      // -----------------------------------------------------------------
-      // Inserting Exercise into database after muscle-group because of
-      // foreign key constraints
-
-      late final Exercise ex;
-      final oldEx = await (_database.select(
+      final ex = await (_database.select(
         _database.exercises,
-      )..where((f) => f.apiId.equals(i.exerciseDto.apiId))).get();
+      )..where((f) => f.apiId.equals(i.exerciseDto.apiId))).getSingle();
 
-      if (oldEx.isEmpty) {
-        ex = await _database
-            .into(_database.exercises)
-            .insertReturning(
-              ExercisesCompanion.insert(
-                apiId: i.exerciseDto.apiId,
-                name: i.exerciseDto.name,
-                imageUrl: i.exerciseDto.imageUrl,
-                // muscleGroupTranslations: encodeTranslations(i.exerciseV2Dto.muscleGroupTranslations),
-                muscleGroup: i.exerciseDto.muscleGroup,
-              ),
-            );
-      } else {
-        ex =
-            (await (_database.update(
-                  _database.exercises,
-                )..where((f) => f.apiId.equals(i.exerciseDto.apiId))).writeReturning(
-                  ExercisesCompanion.custom(
-                    name: Constant(i.exerciseDto.name),
-                    imageUrl: Constant(i.exerciseDto.imageUrl),
-                    // muscleGroupTranslations: Constant(encodeTranslations(i.exerciseDto.muscleGroupTranslations)),
-                    muscleGroup: Constant(i.exerciseDto.muscleGroup),
-                  ),
-                ))
-                .single;
-      }
+      final img = _imagesCache.get(ex.apiId);
 
-      // -----------------------------------------------------------------
-      // Getting image bitmap from cache for item update.
-      final img = _imagesCache.get(ex.imageUrl);
-
-      // -----------------------------------------------------------------
-      // Finally, Inserting RoutineItem into database, but not getting neither
-      // exercise Dto nor musclegroup Dto,
-      //
-      // Also another assumption to bear in mind that the item image is stored
-      // in the repo layer before these insertions.
       final itemId = await _database
           .into(_database.routineItems)
           .insert(RoutineItemsCompanion.insert(index: i.index, exerciseId: ex.apiId, dayId: i.dayId));

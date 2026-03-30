@@ -1389,4 +1389,272 @@ String toString() {
 
 
 
+/// @nodoc
+mixin _$LibSyncFailure {
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LibSyncFailure);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'LibSyncFailure()';
+}
+
+
+}
+
+/// @nodoc
+class $LibSyncFailureCopyWith<$Res>  {
+$LibSyncFailureCopyWith(LibSyncFailure _, $Res Function(LibSyncFailure) __);
+}
+
+
+/// Adds pattern-matching-related methods to [LibSyncFailure].
+extension LibSyncFailurePatterns on LibSyncFailure {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _LibOffline value)?  libOffline,TResult Function( _LibNotFound value)?  libNotFound,TResult Function( _LibUnknown value)?  libUnknown,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _LibOffline() when libOffline != null:
+return libOffline(_that);case _LibNotFound() when libNotFound != null:
+return libNotFound(_that);case _LibUnknown() when libUnknown != null:
+return libUnknown(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _LibOffline value)  libOffline,required TResult Function( _LibNotFound value)  libNotFound,required TResult Function( _LibUnknown value)  libUnknown,}){
+final _that = this;
+switch (_that) {
+case _LibOffline():
+return libOffline(_that);case _LibNotFound():
+return libNotFound(_that);case _LibUnknown():
+return libUnknown(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _LibOffline value)?  libOffline,TResult? Function( _LibNotFound value)?  libNotFound,TResult? Function( _LibUnknown value)?  libUnknown,}){
+final _that = this;
+switch (_that) {
+case _LibOffline() when libOffline != null:
+return libOffline(_that);case _LibNotFound() when libNotFound != null:
+return libNotFound(_that);case _LibUnknown() when libUnknown != null:
+return libUnknown(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  libOffline,TResult Function()?  libNotFound,TResult Function()?  libUnknown,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _LibOffline() when libOffline != null:
+return libOffline();case _LibNotFound() when libNotFound != null:
+return libNotFound();case _LibUnknown() when libUnknown != null:
+return libUnknown();case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  libOffline,required TResult Function()  libNotFound,required TResult Function()  libUnknown,}) {final _that = this;
+switch (_that) {
+case _LibOffline():
+return libOffline();case _LibNotFound():
+return libNotFound();case _LibUnknown():
+return libUnknown();case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  libOffline,TResult? Function()?  libNotFound,TResult? Function()?  libUnknown,}) {final _that = this;
+switch (_that) {
+case _LibOffline() when libOffline != null:
+return libOffline();case _LibNotFound() when libNotFound != null:
+return libNotFound();case _LibUnknown() when libUnknown != null:
+return libUnknown();case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _LibOffline implements LibSyncFailure {
+  const _LibOffline();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LibOffline);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'LibSyncFailure.libOffline()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _LibNotFound implements LibSyncFailure {
+  const _LibNotFound();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LibNotFound);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'LibSyncFailure.libNotFound()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _LibUnknown implements LibSyncFailure {
+  const _LibUnknown();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LibUnknown);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'LibSyncFailure.libUnknown()';
+}
+
+
+}
+
+
+
+
 // dart format on

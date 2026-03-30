@@ -1,7 +1,5 @@
 class MuscleGroup {
-  final int? id;
-  final int apiId;
-  final String muscleGroup;
-
-  const MuscleGroup({this.id, required this.apiId, required this.muscleGroup});
+  final String muscleGroupName;
+  final String muscleGroupCode;
+  const MuscleGroup({required this.muscleGroupName, required this.muscleGroupCode});
 }

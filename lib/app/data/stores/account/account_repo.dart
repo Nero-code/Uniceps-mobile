@@ -2,9 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/account_models/payment_response.dart';
 import 'package:uniceps/app/data/models/account_models/plan_item_model.dart';
+import 'package:uniceps/app/data/services/token/token_service_simple.dart';
 import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_source.dart';
-import 'package:uniceps/app/data/sources/services/token/token_service_simple.dart';
 import 'package:uniceps/app/domain/classes/account_entities/account.dart';
 import 'package:uniceps/app/domain/classes/account_entities/membership.dart';
 import 'package:uniceps/app/domain/classes/account_entities/plan.dart';
@@ -46,6 +46,13 @@ class AccountRepo implements IAccountService {
 
   @override
   Future<Either<MembershipFailure, Membership>> getUserMembership() async {
+    try {
+      final membership = await _localSource.getCurrentPlan();
+      _logger.t('Got Membership: ${membership.toJson()}');
+      return Right(membership.toEntity());
+    } catch (e) {
+      _logger.t('No Membership: $e');
+    }
     if (await _checker.hasConnection) {
       try {
         final subscriptionPlan = await _remoteSource.getUserMembership();
@@ -55,13 +62,8 @@ class AccountRepo implements IAccountService {
         _localSource.clearMemberships();
         return const Left(MembershipFailure.cantGetPlan());
       }
-    } else {
-      try {
-        return Right((await _localSource.getCurrentPlan()).toEntity());
-      } catch (e) {
-        return const Left(MembershipFailure.mmOffline());
-      }
     }
+    return const Left(MembershipFailure.mmOffline());
   }
 
   @override

@@ -16,14 +16,13 @@ import 'package:uniceps/app/data/models/account_models/payment_response.dart'
 import 'package:uniceps/app/data/models/account_models/plan_item_model.dart'
     as _i10;
 import 'package:uniceps/app/data/models/account_models/plan_model.dart' as _i4;
+import 'package:uniceps/app/data/services/token/token_contract.dart' as _i6;
+import 'package:uniceps/app/data/services/token/token_service_simple.dart'
+    as _i12;
 import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart'
     as _i7;
 import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_source.dart'
     as _i9;
-import 'package:uniceps/app/data/sources/services/token/token_contract.dart'
-    as _i6;
-import 'package:uniceps/app/data/sources/services/token/token_service_simple.dart'
-    as _i12;
 import 'package:uniceps/app/services/network_info.dart' as _i11;
 
 // ignore_for_file: type=lint

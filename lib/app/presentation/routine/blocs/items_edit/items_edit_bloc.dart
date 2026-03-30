@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/data/sources/services/media_helper.dart';
+import 'package:uniceps/app/data/services/media_helper.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_items_commands.dart';
@@ -10,7 +10,6 @@ part 'items_edit_event.dart';
 part 'items_edit_state.dart';
 
 class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
-  // List<RoutineItem> allItems = [];
   final MediaHelper _mediaHelper;
   final RoutineItemsCommands _commands;
   ItemsEditBloc({required RoutineItemsCommands commands, required MediaHelper mediaHelper})
@@ -18,9 +17,6 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
       _mediaHelper = mediaHelper,
       super(ItemsEditInitial()) {
     on<GetRoutineDayItemsEvent>((event, emit) async {
-      // if(state is ItemsEditLoadedState){
-      //   if(state.)
-      // }
       emit(ItemsEditLoadingState());
 
       final either = await _commands.getItemsUnderDay(event.dayId);
@@ -29,12 +25,12 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
 
     on<AddRoutineItemsEvent>((event, emit) async {
       emit(ItemsEditLoadingState());
-      final imgStream = _mediaHelper.saveImages(event.items.map((i) => i.imagePath).toList());
-      double sum = 0.0;
-      await for (var i in imgStream) {
-        sum += i;
-        emit(ItemsDownloadingState(progress: sum));
-      }
+      // final imgStream = _mediaHelper.saveImages(event.items.map((i) => i.apiId).toList());
+      // double sum = 0.0;
+      // await for (var i in imgStream) {
+      //   sum += i;
+      //   emit(ItemsDownloadingState(progress: sum));
+      // }
 
       final either = await _commands.addItems(event.dayId, event.items);
       either.fold((l) => emit(ItemsEditErrorState(failure: l)), (r) => emit(ItemsEditLoadedState(items: r)));

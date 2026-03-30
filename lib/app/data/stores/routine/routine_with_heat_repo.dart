@@ -3,10 +3,10 @@ import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/routine_models/extensions.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
 import 'package:uniceps/app/data/models/routine_result.dart';
+import 'package:uniceps/app/data/services/import/file_parse_service.dart';
+import 'package:uniceps/app/data/services/import/unifile.dart';
+import 'package:uniceps/app/data/services/media_helper.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart';
-import 'package:uniceps/app/data/sources/services/import/file_parse_service.dart';
-import 'package:uniceps/app/data/sources/services/import/unifile.dart';
-import 'package:uniceps/app/data/sources/services/media_helper.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_with_heat_contract.dart';
@@ -127,7 +127,7 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
       double sum = 0;
 
       yield const RoutineResult(progress: 0, stage: Stage.start);
-      await for (final _ in _mediaHelper.saveImages(imgs)) {
+      await for (final _ in _mediaHelper.saveImages(imgs.map((e) => e ?? '').toList())) {
         sum += 1 / totalProgress;
         yield RoutineResult(progress: sum, stage: Stage.images);
       }
@@ -152,7 +152,7 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
     } on NoFileSelectedException {
       _logger.d('NoFileSelectedException');
       yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.noFileSelected());
-    } on UnsupportedException {
+    } on UnsupportedVersionException {
       _logger.d('UnsupportedException');
       yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.unsupportedVersion());
     } catch (e) {

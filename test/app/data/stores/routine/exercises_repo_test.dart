@@ -36,16 +36,25 @@ void main() {
     );
   });
 
-  final tMuscleGroup = const MuscleGroup(apiId: 1, muscleGroup: 'Chest');
+  final tMuscleGroup = const MuscleGroup(muscleGroupCode: '1', muscleGroupName: 'Chest');
   final tMuscleGroupDto = MuscleGroupDto.fromEntity(tMuscleGroup);
   final tExercise = Exercise(
     apiId: '1',
     name: 'Push-up',
     imagePath: 'url',
     imageBitMap: Uint8List(0),
-    muscleGroup: 'Chest',
-    version: 1,
-    mediaVersion: 1,
+    muscleGroupName: 'Chest',
+    muscleGroupCode: '',
+    muscleHeadName: '',
+    muscleHeadCode: '',
+    auxMuscle1: '',
+    auxMuscle2: '',
+    auxMuscle3: '',
+    laterals: '',
+    description: '',
+    toolName: '',
+    toolCode: '',
+    timestamp: DateTime.now(),
   );
   final tExerciseDto = ExerciseDto.fromEntity(tExercise);
 
@@ -86,7 +95,7 @@ void main() {
       when(mockInternet.hasConnection).thenAnswer((_) async => true);
       when(mockRemoteSource.getAllExercises()).thenAnswer((_) async => [tExerciseDto]);
       // act
-      final result = await repo.getExercises();
+      final result = await repo.getExercisesLib();
       // assert
       expect(result.isRight(), isTrue);
     });
@@ -95,7 +104,7 @@ void main() {
       // arrange
       when(mockInternet.hasConnection).thenAnswer((_) async => false);
       // act
-      final result = await repo.getExercises();
+      final result = await repo.getExercisesLib();
       // assert
       expect(result.isLeft(), true);
     });

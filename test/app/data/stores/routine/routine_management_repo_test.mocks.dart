@@ -9,10 +9,10 @@ import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i9;
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart' as _i2;
 import 'package:uniceps/app/data/models/routine_result.dart' as _i6;
+import 'package:uniceps/app/data/services/internet_client/client_helper.dart'
+    as _i8;
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart'
     as _i4;
-import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart'
-    as _i8;
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart'
     as _i5;
 import 'package:uniceps/app/services/network_info.dart' as _i7;

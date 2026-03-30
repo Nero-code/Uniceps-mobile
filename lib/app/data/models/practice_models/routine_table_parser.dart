@@ -49,11 +49,11 @@ class RoutineTableParser {
           }
 
           final exercise = exercises.firstWhere((e) => e.apiId == itemTable.exerciseId);
-          final img = imagesCache.get(exercise.imageUrl);
+          final img = imagesCache.get(exercise.imageName);
 
           final itemDto = RoutineItemDto.fromTable(
             itemTable,
-            ExerciseDto.fromTable(exercise, exercise.imageUrl, img),
+            ExerciseDto.fromTable(exercise, exercise.imageName, img),
             itemSets,
           );
 
