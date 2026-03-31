@@ -28,8 +28,9 @@ class HttpClientHelper implements ClientHelper {
     T Function(Map<String, dynamic> json) fromJson, {
     bool needsHeader = true,
     Map<String, String>? queryParams,
+    Map<String, String>? headers,
   }) async {
-    final res = await _client.get(Uri.https(api, urlPart, queryParams), headers: await getHeader(needsHeader));
+    final res = await _client.get(Uri.https(api, urlPart, queryParams), headers: await getHeader(needsHeader, headers));
 
     if (kDebugMode) {
       print(
@@ -50,8 +51,9 @@ class HttpClientHelper implements ClientHelper {
     T Function(Map<String, dynamic>) fromJson, {
     bool needsHeader = true,
     Map<String, String>? queryParams,
+    Map<String, String>? headers,
   }) async {
-    final res = await _client.get(Uri.https(api, urlPart, queryParams), headers: await getHeader(needsHeader));
+    final res = await _client.get(Uri.https(api, urlPart, queryParams), headers: await getHeader(needsHeader, headers));
 
     if (kDebugMode) {
       print(
@@ -78,12 +80,13 @@ class HttpClientHelper implements ClientHelper {
     T Function(Map<String, dynamic> json)? fromJson,
     void Function(Map<String, dynamic> body)? orElse,
     bool needsHeader = true,
+    Map<String, String>? headers,
   }) async {
     if (kDebugMode) print(api + urlPart);
 
     final res = await _client.post(
       Uri.https(api, urlPart),
-      headers: await getHeader(needsHeader),
+      headers: await getHeader(needsHeader, headers),
       body: jsonEncode(body),
     );
 
@@ -111,13 +114,19 @@ class HttpClientHelper implements ClientHelper {
   }
 
   @override
-  Future<void> putHandler(String api, String urlPart, Map<String, dynamic> body, {bool needsHeader = true}) async {
+  Future<void> putHandler(
+    String api,
+    String urlPart,
+    Map<String, dynamic> body, {
+    bool needsHeader = true,
+    Map<String, String>? headers,
+  }) async {
     final res = await _client.put(
       Uri.https(
         "$api"
         "$urlPart",
       ),
-      headers: await getHeader(needsHeader),
+      headers: await getHeader(needsHeader, headers),
       body: body,
     );
     handleHttpStatus(res);
@@ -129,13 +138,19 @@ class HttpClientHelper implements ClientHelper {
   }
 
   @override
-  Future<void> deleteHandler(String api, String urlPart, Map<String, dynamic> body, {bool needsHeader = true}) async {
+  Future<void> deleteHandler(
+    String api,
+    String urlPart,
+    Map<String, dynamic> body, {
+    bool needsHeader = true,
+    Map<String, String>? headers,
+  }) async {
     final res = await _client.delete(
       Uri.https(
         "$api"
         "$urlPart",
       ),
-      headers: await getHeader(needsHeader),
+      headers: await getHeader(needsHeader, headers),
       body: body,
     );
 
@@ -145,7 +160,7 @@ class HttpClientHelper implements ClientHelper {
     }
   }
 
-  Future<Map<String, String>> getHeader(bool needToken) async {
+  Future<Map<String, String>> getHeader(bool needToken, Map<String, String>? headers) async {
     // final session = await _tokenService.session;
     // return {'Authorization': "Bearer ${session!.accessToken}"};
     // final a = await _tokenService.getAccessToken();
@@ -153,6 +168,7 @@ class HttpClientHelper implements ClientHelper {
       if (needToken) 'Authorization': "Bearer ${await _tokenService.getAccessToken()}",
       'content-type': 'application/json;charset=utf-8',
       'accept': 'application/json',
+      ...?headers,
     };
   }
 }

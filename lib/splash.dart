@@ -91,6 +91,7 @@ class SplashScreen extends StatelessWidget {
                             borderRadius: .circular(15),
                             backgroundColor: Colors.grey.shade100,
                           ),
+                          if (state.status == .downloading) Center(child: Text('Downloading Exercises...')),
                           if (state.status == .failure)
                             Row(
                               mainAxisAlignment: .center,

@@ -133,13 +133,20 @@ class ExercisesRepo implements IExercisesContract {
       for (final id in ids) {
         final img = await _remoteSource.getExerciseImage(id);
         await _localSource.saveExerciseImage(id, img);
-        yield Result(data: (ids.indexOf(id) + 1) / ids.length, error: null);
+
+        // 0 -> length =============== 0% -> 50%
+        final progress = (ids.indexOf(id) + 1) / (2 * ids.length);
+        yield Result(data: progress, error: null);
       }
       // When complete save exercises in database.
       for (final e in exercisesLib) {
         await _localSource.writeExercise(ExerciseDto.fromEntity(e));
+
+        // length -> 2 * length  ===== 50% -> 100%
+        final progress = (exercisesLib.indexOf(e) + 1 + exercisesLib.length) / (2 * exercisesLib.length);
+        yield Result(data: progress, error: null);
       }
-      yield Result(data: 1, error: null);
+      // yield Result(data: 1, error: null); // 100%
     } catch (e) {
       yield Result(data: 0, error: NoInternetConnectionFailure(errMsg: ''));
     }

@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart' as f;
 import 'package:file_saver/file_saver.dart';
 import 'package:logger/logger.dart';
-import 'package:uniceps/app/data/services/import/unifile.dart';
+import 'package:uniceps/app/data/services/unifile/unifile.dart';
 
 class UniFileManager {
   static const supportedVersion = 2;

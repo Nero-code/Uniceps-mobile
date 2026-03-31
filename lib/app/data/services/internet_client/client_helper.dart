@@ -1,23 +1,46 @@
 abstract class ClientHelper {
-  Future<T> getHandler<T>(String api, String urlPart,
-      T Function(Map<String, dynamic> json) fromJson,
-      {bool needsHeader = true, Map<String, String>? queryParams});
+  Future<T> getHandler<T>(
+    String api,
+    String urlPart,
+    T Function(Map<String, dynamic> json) fromJson, {
+    bool needsHeader = true,
+    Map<String, String>? queryParams,
+    Map<String, String>? headers,
+  });
 
   Future<List<T>> getListHandler<T>(
-      String api, String urlPart, T Function(Map<String, dynamic>) fromJson,
-      {bool needsHeader = true, Map<String, String>? queryParams});
+    String api,
+    String urlPart,
+    T Function(Map<String, dynamic>) fromJson, {
+    bool needsHeader = true,
+    Map<String, String>? queryParams,
+    Map<String, String>? headers,
+  });
 
   Future<T?> postHandler<T>(
-      String api, String urlPart, Map<String, dynamic> body,
-      {T Function(Map<String, dynamic> json)? fromJson,
-      void Function(Map<String, dynamic> body)? orElse,
-      bool needsHeader = true});
+    String api,
+    String urlPart,
+    Map<String, dynamic> body, {
+    T Function(Map<String, dynamic> json)? fromJson,
+    void Function(Map<String, dynamic> body)? orElse,
+    bool needsHeader = true,
+    Map<String, String>? headers,
+  });
 
-  Future<void> putHandler(String api, String urlPart, Map<String, dynamic> body,
-      {bool needsHeader = true});
+  Future<void> putHandler(
+    String api,
+    String urlPart,
+    Map<String, dynamic> body, {
+    bool needsHeader = true,
+    Map<String, String>? headers,
+  });
   Future<void> deleteHandler(
-      String api, String urlPart, Map<String, dynamic> body,
-      {bool needsHeader = true});
+    String api,
+    String urlPart,
+    Map<String, dynamic> body, {
+    bool needsHeader = true,
+    Map<String, String>? headers,
+  });
 }
 
 // //////////////////////////////////////// //
