@@ -50,6 +50,7 @@ class ExercisesLocalSource implements IExercisesLocalSourceContract {
           ExercisesCompanion.insert(
             apiId: e.apiId,
             name: e.name,
+            imageName: Value(e.imageUrl),
             muscleGroupCode: e.muscleGroupCode,
             muscleGroupName: e.muscleGroupName,
             muscleHeadCode: e.muscleHeadCode,

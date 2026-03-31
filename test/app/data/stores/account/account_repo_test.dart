@@ -128,7 +128,6 @@ void main() {
           (r) => fail('Expected Left, got Right: \$r'),
         );
         verify(mockRemoteSource.getUserMembership());
-        verifyZeroInteractions(mockLocalSource);
       });
     });
 

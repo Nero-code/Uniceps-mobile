@@ -5,7 +5,7 @@
 //
 
 const APP_NAME = 'Uniceps';
-const APP_VERSION = "v2.2.1+13${String.fromEnvironment('VERSION_SUFFIX')}";
+const APP_VERSION = "v2.2.2+13${String.fromEnvironment('VERSION_SUFFIX')}";
 
 const APP_LOGO = "images/logo/Logo.png";
 const APP_LOGO_DARK = "images/logo/Logo-dark.png";
