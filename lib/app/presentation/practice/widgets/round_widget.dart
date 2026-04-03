@@ -45,14 +45,6 @@ class _RoundWidgetState extends State<RoundWidget> {
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: Row(
           children: [
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: Text("${widget.set.index + 1}",
-            //       style: TextStyle(
-            //         fontWeight: FontWeight.normal,
-            //         color: isComplete ? Theme.of(context).colorScheme.primary : Colors.black,
-            //       )),
-            // ),
             Expanded(
               flex: 1,
               child: ColoredBox(
@@ -60,11 +52,6 @@ class _RoundWidgetState extends State<RoundWidget> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // const Icon(
-                    //   Icons.numbers_rounded,
-                    //   size: 15,
-                    //   color: Colors.grey,
-                    // ),
                     Text(
                       "${widget.set.reps}",
                       style: TextStyle(
@@ -110,7 +97,7 @@ class _RoundWidgetState extends State<RoundWidget> {
                       ],
                       style: TextStyle(color: Theme.of(context).colorScheme.primary),
                       decoration: InputDecoration(
-                        hintText: "0.0",
+                        hintText: weight != null ? NumberFormat.decimalPattern().format(weight) : "0.0",
                         hintStyle: TextStyle(color: Colors.grey.shade300),
                         isDense: true,
                         contentPadding: const EdgeInsets.symmetric(vertical: 5),
@@ -141,7 +128,7 @@ class _RoundWidgetState extends State<RoundWidget> {
                       exerciseIndex: widget.exIndex,
                       setIndex: widget.set.index,
                       reps: widget.set.reps,
-                      weight: double.tryParse(weightCtl.text) ?? 0.0,
+                      weight: double.tryParse(weightCtl.text) ?? weight ?? 0.0,
                     );
 
                 context.read<SessionBloc>().add(
