@@ -71,25 +71,6 @@ class _ExercisesViewerScreenState extends State<ExercisesViewerScreen> with Tick
                             context.read<ItemsEditBloc>().add(
                               AddRoutineItemsEvent(dayId: widget.dayId, items: state.selected),
                             );
-                            // showDialog(
-                            //   context: context,
-                            //   barrierDismissible: false,
-                            //   builder: (_) => BlocProvider.value(
-                            //     value: context.read<ItemsEditBloc>(),
-                            //     child: AlertDialog(
-                            //       content: BlocConsumer<ItemsEditBloc, ItemsEditState>(
-                            //         listenWhen: (previous, current) =>
-                            //             previous is ItemsDownloadingState && current is ItemsEditLoadedState,
-                            //         listener: (context, state) => Navigator.pop(context),
-                            //         builder: (context, state) {
-                            //           return ProgressWidget(
-                            //             percent: state is ItemsDownloadingState ? state.progress : 0,
-                            //           );
-                            //         },
-                            //       ),
-                            //     ),
-                            //   ),
-                            // );
                           },
                           icon: Icon(Icons.done_all_rounded),
                           color: Theme.of(context).colorScheme.primary,

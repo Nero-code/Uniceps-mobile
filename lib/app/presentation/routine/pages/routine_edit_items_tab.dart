@@ -107,40 +107,6 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab> with AutomaticK
                       )
                       .toList(),
                 ),
-                // Positioned.directional(
-                //   bottom: 20.0,
-                //   end: 20.0,
-                //   textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
-                //   child: FloatingActionButton(
-                //     backgroundColor: Theme.of(context).colorScheme.primary,
-                //     foregroundColor: Colors.white,
-                //     heroTag: "${widget.dayId}",
-                //     child: const Icon(Icons.add),
-                //     onPressed: () {
-                //       final presentItems = items.map((i) => i.exercise.apiId!).toList();
-                //       Navigator.push<List<ExerciseV2>>(
-                //           context,
-                //           MaterialPageRoute(
-                //             builder: (c) => MultiBlocProvider(
-                //               providers: [
-                //                 BlocProvider(
-                //                   create: (context) => MuscleGroupBloc(commands: di.sl())..add(GetMuscleGroupsEvent()),
-                //                 ),
-                //                 BlocProvider(
-                //                   create: (context) => ExercisesV2Bloc(commands: di.sl()),
-                //                 ),
-                //                 BlocProvider.value(value: context.read<ItemsEditBloc>()),
-                //               ],
-                //               child: ExercisesSelectionScreen(
-                //                 dayId: widget.dayId,
-                //                 dayName: widget.dayName,
-                //                 presentExerciseIds: presentItems,
-                //               ),
-                //             ),
-                //           ));
-                //     },
-                //   ),
-                // ),
               ],
             );
           } else if (state is ItemsEditErrorState) {
