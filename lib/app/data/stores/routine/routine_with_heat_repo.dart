@@ -114,12 +114,11 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
       final file = await _unifileManager.importFile();
       if (file.meta.fileType != FileType.routine) throw ParserMismatchException();
       final routine = RoutineDto.fromJson(file.data);
-      // final routine = await _fileParseService.extract<RoutineDto>(file, RoutineDto.fromJson);
 
       final dl = routine.daysDto.length;
       final il = routine.daysDto.map((a) => a.items.length).fold(0, (a, b) => a + b);
       final sl = routine.daysDto.expand((d) => d.items.map((i) => i.setsDto.length)).fold(0, (a, b) => a + b);
-      final imgs = routine.daysDto.expand((day) => day.items.map((e) => e.exerciseDto.imageUrl)).toList();
+      final imgs = routine.daysDto.expand((day) => day.items.map((e) => e.exerciseDto.apiId)).toList();
 
       final tempProgress = dl + il + sl + imgs.length;
       final totalProgress = (tempProgress == 0) ? 1 : tempProgress;
@@ -127,7 +126,7 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
       double sum = 0;
 
       yield const RoutineResult(progress: 0, stage: Stage.start);
-      await for (final _ in _mediaHelper.saveImages(imgs.map((e) => e ?? '').toList())) {
+      await for (final _ in _mediaHelper.saveImages(imgs)) {
         sum += 1 / totalProgress;
         yield RoutineResult(progress: sum, stage: Stage.images);
       }
