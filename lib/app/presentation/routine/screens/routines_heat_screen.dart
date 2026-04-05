@@ -201,14 +201,14 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                                               }
                                               break;
                                             case Option.export:
-                                              // if (canExport) {
-                                              _exportRoutineAlert(
-                                                context.read<RoutinesWithHeatBloc>(),
-                                                locale.exportRoutine,
-                                                '${locale.exportRoutineAlertContent} ${e.routine.name}',
-                                                e.routine.id!,
-                                              );
-                                              // }
+                                              if (context.mounted) {
+                                                _exportRoutineAlert(
+                                                  context.read<RoutinesWithHeatBloc>(),
+                                                  locale.exportRoutine,
+                                                  '${locale.exportRoutineAlertContent} ${e.routine.name}',
+                                                  e.routine.id!,
+                                                );
+                                              }
                                               break;
                                             case Option.setCurrent:
                                               _setCurrentRoutine(() async {

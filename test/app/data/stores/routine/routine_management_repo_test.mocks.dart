@@ -9,9 +9,12 @@ import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i9;
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart' as _i2;
 import 'package:uniceps/app/data/models/routine_result.dart' as _i6;
-import 'package:uniceps/app/data/services/internet_client/client_helper.dart' as _i8;
-import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart' as _i4;
-import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart' as _i5;
+import 'package:uniceps/app/data/services/internet_client/client_helper.dart'
+    as _i8;
+import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart'
+    as _i4;
+import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart'
+    as _i5;
 import 'package:uniceps/app/services/network_info.dart' as _i7;
 
 // ignore_for_file: type=lint
@@ -30,17 +33,20 @@ import 'package:uniceps/app/services/network_info.dart' as _i7;
 // ignore_for_file: invalid_use_of_internal_member
 
 class _FakeRoutineDto_0 extends _i1.SmartFake implements _i2.RoutineDto {
-  _FakeRoutineDto_0(Object parent, Invocation parentInvocation) : super(parent, parentInvocation);
+  _FakeRoutineDto_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeFuture_1<T1> extends _i1.SmartFake implements _i3.Future<T1> {
-  _FakeFuture_1(Object parent, Invocation parentInvocation) : super(parent, parentInvocation);
+  _FakeFuture_1(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 /// A class which mocks [IRoutineManagementLocalSourceContract].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockIRoutineManagementLocalSourceContract extends _i1.Mock implements _i4.IRoutineManagementLocalSourceContract {
+class MockIRoutineManagementLocalSourceContract extends _i1.Mock
+    implements _i4.IRoutineManagementLocalSourceContract {
   MockIRoutineManagementLocalSourceContract() {
     _i1.throwOnMissingStub(this);
   }
@@ -49,26 +55,35 @@ class MockIRoutineManagementLocalSourceContract extends _i1.Mock implements _i4.
   _i3.Future<List<_i2.RoutineDto>> getAllRoutines() =>
       (super.noSuchMethod(
             Invocation.method(#getAllRoutines, []),
-            returnValue: _i3.Future<List<_i2.RoutineDto>>.value(<_i2.RoutineDto>[]),
+            returnValue: _i3.Future<List<_i2.RoutineDto>>.value(
+              <_i2.RoutineDto>[],
+            ),
           )
           as _i3.Future<List<_i2.RoutineDto>>);
 
   @override
-  _i3.Future<List<({_i5.RoutineHeat heat, _i2.RoutineDto routine})>> getAllRoutinesWithHeat() =>
+  _i3.Future<List<({_i5.RoutineHeat heat, _i2.RoutineDto routine})>>
+  getAllRoutinesWithHeat() =>
       (super.noSuchMethod(
             Invocation.method(#getAllRoutinesWithHeat, []),
-            returnValue: _i3.Future<List<({_i5.RoutineHeat heat, _i2.RoutineDto routine})>>.value(
-              <({_i5.RoutineHeat heat, _i2.RoutineDto routine})>[],
-            ),
+            returnValue:
+                _i3.Future<
+                  List<({_i5.RoutineHeat heat, _i2.RoutineDto routine})>
+                >.value(<({_i5.RoutineHeat heat, _i2.RoutineDto routine})>[]),
           )
-          as _i3.Future<List<({_i5.RoutineHeat heat, _i2.RoutineDto routine})>>);
+          as _i3.Future<
+            List<({_i5.RoutineHeat heat, _i2.RoutineDto routine})>
+          >);
 
   @override
   _i3.Future<_i2.RoutineDto> createRoutine(String? routineName) =>
       (super.noSuchMethod(
             Invocation.method(#createRoutine, [routineName]),
             returnValue: _i3.Future<_i2.RoutineDto>.value(
-              _FakeRoutineDto_0(this, Invocation.method(#createRoutine, [routineName])),
+              _FakeRoutineDto_0(
+                this,
+                Invocation.method(#createRoutine, [routineName]),
+              ),
             ),
           )
           as _i3.Future<_i2.RoutineDto>);
@@ -103,7 +118,10 @@ class MockIRoutineManagementLocalSourceContract extends _i1.Mock implements _i4.
 
   @override
   _i3.Stream<_i6.Stage> insertFullRoutine(_i2.RoutineDto? dto) =>
-      (super.noSuchMethod(Invocation.method(#insertFullRoutine, [dto]), returnValue: _i3.Stream<_i6.Stage>.empty())
+      (super.noSuchMethod(
+            Invocation.method(#insertFullRoutine, [dto]),
+            returnValue: _i3.Stream<_i6.Stage>.empty(),
+          )
           as _i3.Stream<_i6.Stage>);
 
   @override
@@ -111,7 +129,10 @@ class MockIRoutineManagementLocalSourceContract extends _i1.Mock implements _i4.
       (super.noSuchMethod(
             Invocation.method(#getFullRoutine, [routineId]),
             returnValue: _i3.Future<_i2.RoutineDto>.value(
-              _FakeRoutineDto_0(this, Invocation.method(#getFullRoutine, [routineId])),
+              _FakeRoutineDto_0(
+                this,
+                Invocation.method(#getFullRoutine, [routineId]),
+              ),
             ),
           )
           as _i3.Future<_i2.RoutineDto>);
@@ -127,7 +148,10 @@ class MockNetworkInfo extends _i1.Mock implements _i7.NetworkInfo {
 
   @override
   _i3.Future<bool> get hasConnection =>
-      (super.noSuchMethod(Invocation.getter(#hasConnection), returnValue: _i3.Future<bool>.value(false))
+      (super.noSuchMethod(
+            Invocation.getter(#hasConnection),
+            returnValue: _i3.Future<bool>.value(false),
+          )
           as _i3.Future<bool>);
 }
 
@@ -152,7 +176,11 @@ class MockClientHelper extends _i1.Mock implements _i8.ClientHelper {
             Invocation.method(
               #getHandler,
               [api, urlPart, fromJson],
-              {#needsHeader: needsHeader, #queryParams: queryParams},
+              {
+                #needsHeader: needsHeader,
+                #queryParams: queryParams,
+                #headers: headers,
+              },
             ),
             returnValue:
                 _i9.ifNotNull(
@@ -161,7 +189,11 @@ class MockClientHelper extends _i1.Mock implements _i8.ClientHelper {
                     Invocation.method(
                       #getHandler,
                       [api, urlPart, fromJson],
-                      {#needsHeader: needsHeader, #queryParams: queryParams},
+                      {
+                        #needsHeader: needsHeader,
+                        #queryParams: queryParams,
+                        #headers: headers,
+                      },
                     ),
                   ),
                   (T v) => _i3.Future<T>.value(v),
@@ -171,7 +203,11 @@ class MockClientHelper extends _i1.Mock implements _i8.ClientHelper {
                   Invocation.method(
                     #getHandler,
                     [api, urlPart, fromJson],
-                    {#needsHeader: needsHeader, #queryParams: queryParams},
+                    {
+                      #needsHeader: needsHeader,
+                      #queryParams: queryParams,
+                      #headers: headers,
+                    },
                   ),
                 ),
           )
@@ -190,7 +226,11 @@ class MockClientHelper extends _i1.Mock implements _i8.ClientHelper {
             Invocation.method(
               #getListHandler,
               [api, urlPart, fromJson],
-              {#needsHeader: needsHeader, #queryParams: queryParams},
+              {
+                #needsHeader: needsHeader,
+                #queryParams: queryParams,
+                #headers: headers,
+              },
             ),
             returnValue: _i3.Future<List<T>>.value(<T>[]),
           )
@@ -210,7 +250,12 @@ class MockClientHelper extends _i1.Mock implements _i8.ClientHelper {
             Invocation.method(
               #postHandler,
               [api, urlPart, body],
-              {#fromJson: fromJson, #orElse: orElse, #needsHeader: needsHeader},
+              {
+                #fromJson: fromJson,
+                #orElse: orElse,
+                #needsHeader: needsHeader,
+                #headers: headers,
+              },
             ),
             returnValue: _i3.Future<T?>.value(),
           )
@@ -225,7 +270,11 @@ class MockClientHelper extends _i1.Mock implements _i8.ClientHelper {
     Map<String, String>? headers,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#putHandler, [api, urlPart, body], {#needsHeader: needsHeader}),
+            Invocation.method(
+              #putHandler,
+              [api, urlPart, body],
+              {#needsHeader: needsHeader, #headers: headers},
+            ),
             returnValue: _i3.Future<void>.value(),
             returnValueForMissingStub: _i3.Future<void>.value(),
           )
@@ -240,7 +289,11 @@ class MockClientHelper extends _i1.Mock implements _i8.ClientHelper {
     Map<String, String>? headers,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#deleteHandler, [api, urlPart, body], {#needsHeader: needsHeader}),
+            Invocation.method(
+              #deleteHandler,
+              [api, urlPart, body],
+              {#needsHeader: needsHeader, #headers: headers},
+            ),
             returnValue: _i3.Future<void>.value(),
             returnValueForMissingStub: _i3.Future<void>.value(),
           )

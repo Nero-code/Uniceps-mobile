@@ -28,8 +28,7 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab> with AutomaticK
     // final isRtl = context.read<LocaleCubit>().state.isRtl();
 
     return BlocProvider(
-      create: (context) =>
-          ItemsEditBloc(commands: di.sl(), mediaHelper: di.sl())..add(GetRoutineDayItemsEvent(dayId: widget.dayId)),
+      create: (context) => ItemsEditBloc(commands: di.sl())..add(GetRoutineDayItemsEvent(dayId: widget.dayId)),
       child: BlocBuilder<ItemsEditBloc, ItemsEditState>(
         buildWhen: (previous, current) => current is! ItemsDownloadingState || current is! ItemsEditLoadingState,
         builder: (context, state) {

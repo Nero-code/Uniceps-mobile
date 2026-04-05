@@ -119,8 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ),
                                 // ignore: avoid_print
-                                error: (e) =>
-                                    () => print(e.getErrorMessage()),
+                                error: (e) => () {},
                                 orElse: () => () {},
                               ),
                               onMeasurement: () => Navigator.pushNamed(context, AppRoutes.measurements),

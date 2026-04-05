@@ -43,7 +43,6 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final locale = AppLocalizations.of(context)!;
-    print('AppLifeCycle: $state');
     if (state == AppLifecycleState.paused) {
       context.read<StopwatchCubit>().resetStopwatch();
       NotificationService.showNotification(

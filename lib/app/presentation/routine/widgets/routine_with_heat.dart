@@ -106,7 +106,7 @@ class RoutineWithHeat extends StatelessWidget {
                             Ink(
                               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
                               decoration: BoxDecoration(
-                                color: Colors.green.withOpacity(0.1),
+                                color: Colors.green.withAlpha(25),
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: Text(
@@ -126,7 +126,7 @@ class RoutineWithHeat extends StatelessWidget {
                       value: heat.value.clamp(0, 1),
                       size: 50,
                       width: 1,
-                      fillColor: Colors.blue.withOpacity(0.75),
+                      fillColor: Colors.blue.withAlpha(191),
                       borderColor: Colors.grey.shade300,
                       backgroundColor: Colors.grey.shade100,
                     ),
