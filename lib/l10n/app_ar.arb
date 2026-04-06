@@ -51,6 +51,8 @@
   "record": "سجل",
   "before": "قبل",
   "after": "بعد",
+  "duration": "المدة",
+  "exercises": "التمارين",
   "applyToAll": "تطبيق للكل",
   "dayLimitAlert": "سجل دخولك لتحصل على 3 ايام مجانية",
   "routineLimitAlert": "سجل دخولك لتتمكن من تصنيع البرامج",

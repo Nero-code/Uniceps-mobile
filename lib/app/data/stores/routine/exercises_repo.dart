@@ -69,9 +69,7 @@ class ExercisesRepo implements IExercisesContract {
     if (await _internet.hasConnection) {
       try {
         final res = await _remoteSource.getAllExercises();
-        print('------------------------------------------');
-        print(res.firstOrNull?.apiId);
-        print('------------------------------------------');
+
         exercisesLib.clear();
         exercisesLib.addAll(res.map((e) => e.toEntity()));
         return Right(exercisesLib);

@@ -398,6 +398,18 @@ abstract class AppLocalizations {
   /// **'After'**
   String get after;
 
+  /// No description provided for @duration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get duration;
+
+  /// No description provided for @exercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercises'**
+  String get exercises;
+
   /// No description provided for @applyToAll.
   ///
   /// In en, this message translates to:

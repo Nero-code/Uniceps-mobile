@@ -57,9 +57,6 @@ class PerformanceRepo implements IPerformanceContract {
       totalDuration += sDuration;
       progressRate += s.logs.length;
     }
-    print('------------------');
-    print('maxD: $maxDuration, minD: $minDuration');
-    print('------------------');
     final avgSeconds = (maxDuration + (minDuration ?? maxDuration)).inSeconds / 2;
     avgDuration = Duration(seconds: avgSeconds.round());
     if (totalDuration.inMinutes != 0) {

@@ -47,7 +47,6 @@ class ExerciseLibUpdateDialog extends StatelessWidget {
                 },
               );
             } else if (asyncSnapshot.hasError) {
-              print(asyncSnapshot.error);
               return Center(child: Icon(Icons.error, size: 50, color: Colors.red));
             }
             return LinearProgressIndicator();

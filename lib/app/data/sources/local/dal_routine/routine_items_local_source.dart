@@ -82,7 +82,7 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
       result.add(
         i.copyWith(
           id: itemId,
-          exerciseV2Dto: i.exerciseDto.copyWith(apiId: ex.apiId, imageBitMap: img),
+          exerciseDto: i.exerciseDto.copyWith(apiId: ex.apiId, imageBitMap: img),
         ),
       );
     }
