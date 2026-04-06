@@ -7,7 +7,7 @@ import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/stopwatch/stopwatch_cubit.dart';
 import 'package:uniceps/app/presentation/practice/blocs/practice/practice_cubit.dart';
 import 'package:uniceps/app/presentation/practice/dialogs/confirmation_dialog.dart';
-import 'package:uniceps/app/presentation/practice/dialogs/session_complete_dialog.dart';
+import 'package:uniceps/app/presentation/practice/dialogs/session_results_dialog.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_body.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_header.dart';
 import 'package:uniceps/app/services/notification_service.dart';
@@ -24,10 +24,8 @@ class PracticeScreen extends StatefulWidget {
 }
 
 class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObserver {
-  int? expandedId, totalProgress;
-
-  // Timer? timer;
-  // Duration seconds = Duration.zero;
+  int? expandedId, totalProgress, totalSets;
+  TSession? currentSession;
   @override
   initState() {
     super.initState();
@@ -88,10 +86,18 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
         // --------------------------------------------------------
         // Closing-Session State
         // When: (previous, current) => current is NoActiveSessionState,
-        listenWhen: (previous, current) => current.maybeWhen(orElse: () => false, noActiveSession: () => true),
+        listenWhen: (previous, current) => current.maybeWhen(orElse: () => false, noActiveSession: (_, _) => true),
         listener: (context, state) {
           NotificationService.closeAll();
-          showDialog(context: context, builder: (context) => const SessionCompleteDialog());
+          // showDialog(context: context, builder: (context) => const SessionCompleteDialog());
+          final session = state.whenOrNull(noActiveSession: (s, f) => s)!;
+          showDialog(
+            context: context,
+            builder: (context) => SessionResultsDialog(
+              session: session,
+              progress: totalProgress != null ? (session.logs.length / totalProgress!) : 0,
+            ),
+          );
         },
         // --------------------------------------------------------
         buildWhen: (previous, current) => current.maybeWhen(orElse: () => false, loaded: (session) => true),
@@ -159,7 +165,7 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
                         buildWhen: (previous, current) => current is PracticeLoadedState,
                         builder: (context, state) {
                           if (state is PracticeLoadedState) {
-                            if (state.day.exercises.isNotEmpty) {
+                            if (state.day.exercises.isNotEmpty && totalProgress == null) {
                               totalProgress = state.day.exercises.map((e) => e.sets.length).reduce((a, b) => a + b);
                             }
 

@@ -163,7 +163,7 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                                         onMenu: () async {
                                           final canDelete = context.read<SessionBloc>().state.maybeWhen(
                                             orElse: () => false,
-                                            noActiveSession: () => true,
+                                            noActiveSession: (_, _) => true,
                                           );
 
                                           final res = await showDialog<Option>(

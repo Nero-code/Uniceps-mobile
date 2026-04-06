@@ -545,12 +545,12 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  noActiveSession,TResult Function( TSession session)?  loaded,TResult Function( Failure failure)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( TSession? lastSession,  bool? isFullSession)?  noActiveSession,TResult Function( TSession session)?  loaded,TResult Function( Failure failure)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _NoActiveSession() when noActiveSession != null:
-return noActiveSession();case _Loaded() when loaded != null:
+return noActiveSession(_that.lastSession,_that.isFullSession);case _Loaded() when loaded != null:
 return loaded(_that.session);case _Error() when error != null:
 return error(_that.failure);case _:
   return orElse();
@@ -570,12 +570,12 @@ return error(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  noActiveSession,required TResult Function( TSession session)  loaded,required TResult Function( Failure failure)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( TSession? lastSession,  bool? isFullSession)  noActiveSession,required TResult Function( TSession session)  loaded,required TResult Function( Failure failure)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _NoActiveSession():
-return noActiveSession();case _Loaded():
+return noActiveSession(_that.lastSession,_that.isFullSession);case _Loaded():
 return loaded(_that.session);case _Error():
 return error(_that.failure);case _:
   throw StateError('Unexpected subclass');
@@ -594,12 +594,12 @@ return error(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  noActiveSession,TResult? Function( TSession session)?  loaded,TResult? Function( Failure failure)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( TSession? lastSession,  bool? isFullSession)?  noActiveSession,TResult? Function( TSession session)?  loaded,TResult? Function( Failure failure)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _NoActiveSession() when noActiveSession != null:
-return noActiveSession();case _Loaded() when loaded != null:
+return noActiveSession(_that.lastSession,_that.isFullSession);case _Loaded() when loaded != null:
 return loaded(_that.session);case _Error() when error != null:
 return error(_that.failure);case _:
   return null;
@@ -677,33 +677,69 @@ String toString() {
 
 
 class _NoActiveSession implements SessionState {
-  const _NoActiveSession();
+  const _NoActiveSession({this.lastSession, this.isFullSession});
   
 
+ final  TSession? lastSession;
+ final  bool? isFullSession;
 
-
+/// Create a copy of SessionState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$NoActiveSessionCopyWith<_NoActiveSession> get copyWith => __$NoActiveSessionCopyWithImpl<_NoActiveSession>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoActiveSession);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoActiveSession&&(identical(other.lastSession, lastSession) || other.lastSession == lastSession)&&(identical(other.isFullSession, isFullSession) || other.isFullSession == isFullSession));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,lastSession,isFullSession);
 
 @override
 String toString() {
-  return 'SessionState.noActiveSession()';
+  return 'SessionState.noActiveSession(lastSession: $lastSession, isFullSession: $isFullSession)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class _$NoActiveSessionCopyWith<$Res> implements $SessionStateCopyWith<$Res> {
+  factory _$NoActiveSessionCopyWith(_NoActiveSession value, $Res Function(_NoActiveSession) _then) = __$NoActiveSessionCopyWithImpl;
+@useResult
+$Res call({
+ TSession? lastSession, bool? isFullSession
+});
 
 
+
+
+}
+/// @nodoc
+class __$NoActiveSessionCopyWithImpl<$Res>
+    implements _$NoActiveSessionCopyWith<$Res> {
+  __$NoActiveSessionCopyWithImpl(this._self, this._then);
+
+  final _NoActiveSession _self;
+  final $Res Function(_NoActiveSession) _then;
+
+/// Create a copy of SessionState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? lastSession = freezed,Object? isFullSession = freezed,}) {
+  return _then(_NoActiveSession(
+lastSession: freezed == lastSession ? _self.lastSession : lastSession // ignore: cast_nullable_to_non_nullable
+as TSession?,isFullSession: freezed == isFullSession ? _self.isFullSession : isFullSession // ignore: cast_nullable_to_non_nullable
+as bool?,
+  ));
+}
+
+
+}
 
 /// @nodoc
 

@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder: (context, state) {
                             return PracticePanel(
                               onPractice: state.maybeWhen(
-                                noActiveSession: () => panelController.open,
+                                noActiveSession: (_, _) => panelController.open,
                                 loaded: (s) =>
                                     () => Navigator.push(
                                       context,
@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               onAnalytics: () => Navigator.pushNamed(context, AppRoutes.performance),
                               mainIcon: state.maybeWhen(
                                 loading: () => const LoadingIndicator(),
-                                noActiveSession: () =>
+                                noActiveSession: (_, _) =>
                                     Icon(Icons.rocket, size: 50, color: Theme.of(context).colorScheme.primary),
                                 loaded: (s) => const Icon(Icons.rocket_launch, size: 50, color: Colors.green),
                                 error: (f) => const Icon(Icons.refresh, color: Colors.red, size: 50),
