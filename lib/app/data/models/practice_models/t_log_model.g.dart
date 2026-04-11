@@ -9,7 +9,7 @@ part of 't_log_model.dart';
 TLogModel _$TLogModelFromJson(Map<String, dynamic> json) => TLogModel(
   id: (json['id'] as num?)?.toInt(),
   sessionId: (json['sessionId'] as num).toInt(),
-  exerciseId: (json['exerciseId'] as num).toInt(),
+  exerciseId: json['exerciseId'] as String,
   exerciseIndex: (json['exerciseIndex'] as num).toInt(),
   setIndex: (json['setIndex'] as num).toInt(),
   reps: (json['reps'] as num).toInt(),

@@ -10,12 +10,12 @@ import 'package:logger/logger.dart' as _i11;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart' as _i2;
 import 'package:uniceps/app/data/models/routine_result.dart' as _i7;
+import 'package:uniceps/app/data/services/media_helper.dart' as _i9;
+import 'package:uniceps/app/data/services/unifile/file_parse_service.dart'
+    as _i8;
+import 'package:uniceps/app/data/services/unifile/unifile.dart' as _i3;
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart'
     as _i4;
-import 'package:uniceps/app/data/sources/services/import/file_parse_service.dart'
-    as _i8;
-import 'package:uniceps/app/data/sources/services/import/unifile.dart' as _i3;
-import 'package:uniceps/app/data/sources/services/media_helper.dart' as _i9;
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart'
     as _i6;
 
@@ -183,6 +183,14 @@ class MockMediaHelper extends _i1.Mock implements _i9.MediaHelper {
   }
 
   @override
+  _i5.Stream<double> saveImages(List<String>? imageUrls) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveImages, [imageUrls]),
+            returnValue: _i5.Stream<double>.empty(),
+          )
+          as _i5.Stream<double>);
+
+  @override
   _i5.Future<_i10.Uint8List?> getImage(String? imageUrl) =>
       (super.noSuchMethod(
             Invocation.method(#getImage, [imageUrl]),
@@ -191,12 +199,13 @@ class MockMediaHelper extends _i1.Mock implements _i9.MediaHelper {
           as _i5.Future<_i10.Uint8List?>);
 
   @override
-  _i5.Stream<double> saveImages(List<String>? imageUrls) =>
+  _i5.Future<void> addImage(String? imageKey, _i10.Uint8List? bitmap) =>
       (super.noSuchMethod(
-            Invocation.method(#saveImages, [imageUrls]),
-            returnValue: _i5.Stream<double>.empty(),
+            Invocation.method(#addImage, [imageKey, bitmap]),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
           )
-          as _i5.Stream<double>);
+          as _i5.Future<void>);
 }
 
 /// A class which mocks [Logger].

@@ -19,7 +19,7 @@ class RoundWidget extends StatefulWidget {
     this.log,
   });
   final int sessionId;
-  final int exId;
+  final String exId;
   final int exIndex;
   final RoutineSet set;
   final TLog? log;
@@ -45,14 +45,6 @@ class _RoundWidgetState extends State<RoundWidget> {
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: Row(
           children: [
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: Text("${widget.set.index + 1}",
-            //       style: TextStyle(
-            //         fontWeight: FontWeight.normal,
-            //         color: isComplete ? Theme.of(context).colorScheme.primary : Colors.black,
-            //       )),
-            // ),
             Expanded(
               flex: 1,
               child: ColoredBox(
@@ -60,11 +52,6 @@ class _RoundWidgetState extends State<RoundWidget> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // const Icon(
-                    //   Icons.numbers_rounded,
-                    //   size: 15,
-                    //   color: Colors.grey,
-                    // ),
                     Text(
                       "${widget.set.reps}",
                       style: TextStyle(
@@ -81,15 +68,13 @@ class _RoundWidgetState extends State<RoundWidget> {
               child: Center(
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
+                  decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(5)),
                   child: Text(
                     "${weight != null ? NumberFormat.decimalPattern().format(weight) : "---"} Kg",
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: isComplete ? Theme.of(context).colorScheme.primary : Colors.grey.shade700),
+                      fontWeight: FontWeight.bold,
+                      color: isComplete ? Theme.of(context).colorScheme.primary : Colors.grey.shade700,
+                    ),
                   ),
                 ),
               ),
@@ -112,13 +97,14 @@ class _RoundWidgetState extends State<RoundWidget> {
                       ],
                       style: TextStyle(color: Theme.of(context).colorScheme.primary),
                       decoration: InputDecoration(
-                        hintText: "0.0",
+                        hintText: weight != null ? NumberFormat.decimalPattern().format(weight) : "0.0",
                         hintStyle: TextStyle(color: Colors.grey.shade300),
                         isDense: true,
                         contentPadding: const EdgeInsets.symmetric(vertical: 5),
                         enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: isComplete ? Colors.white : Colors.grey),
-                            borderRadius: BorderRadius.circular(7)),
+                          borderSide: BorderSide(color: isComplete ? Colors.white : Colors.grey),
+                          borderRadius: BorderRadius.circular(7),
+                        ),
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(7)),
                       ),
                     ),
@@ -131,7 +117,8 @@ class _RoundWidgetState extends State<RoundWidget> {
               borderRadius: 10,
               padding: const EdgeInsets.all(3.0),
               onTap: () {
-                final log = widget.log?.copywith(weight: double.tryParse(weightCtl.text) ?? 0.0) ??
+                final log =
+                    widget.log?.copywith(weight: double.tryParse(weightCtl.text) ?? 0.0) ??
                     TLog(
                       id: null,
                       completedAt: DateTime.now(),
@@ -141,12 +128,12 @@ class _RoundWidgetState extends State<RoundWidget> {
                       exerciseIndex: widget.exIndex,
                       setIndex: widget.set.index,
                       reps: widget.set.reps,
-                      weight: double.tryParse(weightCtl.text) ?? 0.0,
+                      weight: double.tryParse(weightCtl.text) ?? weight ?? 0.0,
                     );
 
-                context
-                    .read<SessionBloc>()
-                    .add(SessionEvent.logSet(log, widget.totalProgress != 0 ? 1 / widget.totalProgress : 0));
+                context.read<SessionBloc>().add(
+                  SessionEvent.logSet(log, widget.totalProgress != 0 ? 1 / widget.totalProgress : 0),
+                );
               },
               child: Text(
                 " ${String.fromCharCode(Icons.done.codePoint)} ",

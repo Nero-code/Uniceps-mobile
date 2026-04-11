@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
 
 class ExerciseListWidget extends StatelessWidget {
   const ExerciseListWidget({super.key, required this.exercise, this.isSelected = false});
 
-  final ExerciseV2 exercise;
+  final Exercise exercise;
   final bool isSelected;
 
   @override
@@ -30,12 +30,7 @@ class ExerciseListWidget extends StatelessWidget {
           //   imgUrlParser(exercise.muscleGroup, exercise.imageUrl),
           // ),
           const SizedBox(height: 8.0),
-          Text(
-            exercise.name,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
+          Text(exercise.name, textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis),
         ],
       ),
     );

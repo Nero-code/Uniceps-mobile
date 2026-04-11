@@ -9,9 +9,9 @@ import 'dart:typed_data' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart'
     as _i4;
+import 'package:uniceps/app/data/services/media_helper.dart' as _i5;
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_items_local_source.dart'
     as _i2;
-import 'package:uniceps/app/data/sources/services/media_helper.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -99,6 +99,14 @@ class MockMediaHelper extends _i1.Mock implements _i5.MediaHelper {
   }
 
   @override
+  _i3.Stream<double> saveImages(List<String>? imageUrls) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveImages, [imageUrls]),
+            returnValue: _i3.Stream<double>.empty(),
+          )
+          as _i3.Stream<double>);
+
+  @override
   _i3.Future<_i6.Uint8List?> getImage(String? imageUrl) =>
       (super.noSuchMethod(
             Invocation.method(#getImage, [imageUrl]),
@@ -107,10 +115,11 @@ class MockMediaHelper extends _i1.Mock implements _i5.MediaHelper {
           as _i3.Future<_i6.Uint8List?>);
 
   @override
-  _i3.Stream<double> saveImages(List<String>? imageUrls) =>
+  _i3.Future<void> addImage(String? imageKey, _i6.Uint8List? bitmap) =>
       (super.noSuchMethod(
-            Invocation.method(#saveImages, [imageUrls]),
-            returnValue: _i3.Stream<double>.empty(),
+            Invocation.method(#addImage, [imageKey, bitmap]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
           )
-          as _i3.Stream<double>);
+          as _i3.Future<void>);
 }

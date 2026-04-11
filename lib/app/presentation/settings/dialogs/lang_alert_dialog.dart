@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/l10n/app_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class LangAlertDialog extends StatelessWidget {
   const LangAlertDialog({super.key});
@@ -13,19 +13,18 @@ class LangAlertDialog extends StatelessWidget {
     final languageCode = context.read<LocaleCubit>().state.locale.languageCode;
     return AlertDialog(
       title: Text(locale.chooseLang),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (var i in Lang.values)
-            RadioListTile(
-                title: Text(i == Lang.en ? "English" : "العربية"),
-                value: languageCode == i.name,
-                groupValue: true,
-                onChanged: (newVal) {
-                  context.read<LocaleCubit>().changeLanguage(i.name == "en" ? "en" : "ar");
-                  Navigator.pop(context);
-                }),
-        ],
+      content: RadioGroup(
+        groupValue: languageCode,
+        onChanged: (newVal) {
+          context.read<LocaleCubit>().changeLanguage(newVal == "en" ? "en" : "ar");
+          Navigator.pop(context);
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var i in Lang.values) RadioListTile(title: Text(i == Lang.en ? "English" : "العربية"), value: i.name),
+          ],
+        ),
       ),
     ).build(context);
   }

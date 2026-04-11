@@ -14,10 +14,9 @@ class GetExercisesByFilterEvent extends ExercisesV2Event {
 }
 
 class AddOrRemoveExerciseEvent extends ExercisesV2Event {
-  final ExerciseV2 exerciseV2;
+  final Exercise exerciseV2;
   final bool isAdd;
-  final List<ExerciseV2> all;
+  final List<Exercise> all;
 
-  const AddOrRemoveExerciseEvent(
-      {required this.exerciseV2, required this.isAdd, required this.all});
+  const AddOrRemoveExerciseEvent({required this.exerciseV2, required this.isAdd, required this.all});
 }

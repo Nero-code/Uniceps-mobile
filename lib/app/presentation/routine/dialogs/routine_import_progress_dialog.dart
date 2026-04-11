@@ -23,6 +23,7 @@ class RoutineImportProgressDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ProgressWidget(
+                  title: Text(locale.gettingRoutine),
                   percent: result.progress,
                   progressBackground: result.stage == Stage.error ? Colors.red.shade200 : Colors.white,
                 ),

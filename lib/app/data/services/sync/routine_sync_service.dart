@@ -1,4 +1,4 @@
-import 'package:uniceps/app/data/sources/services/sync/sync_contract.dart';
+import 'package:uniceps/app/data/services/sync/sync_contract.dart';
 
 class RoutineSyncService implements RoutineSyncContract {
   @override

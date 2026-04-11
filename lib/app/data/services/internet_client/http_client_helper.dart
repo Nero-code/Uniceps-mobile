@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
-import 'package:uniceps/app/data/sources/services/internet_client/client_helper.dart';
-import 'package:uniceps/app/data/sources/services/token/token_service_simple.dart';
+import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
+import 'package:uniceps/app/data/services/token/token_service_simple.dart';
 
 class HttpClientHelper implements ClientHelper {
   const HttpClientHelper({required Client client, required SimpleTokenService tokenService, required Logger logger})
@@ -16,9 +16,8 @@ class HttpClientHelper implements ClientHelper {
   final Client _client;
   final SimpleTokenService _tokenService;
   final Logger _logger;
-  // final dataNodeInResponse = 'data';
 
-  ///  For more custom behaivuar
+  ///  For more custom behaviour
   Client get client => _client;
   SimpleTokenService get tokenService => _tokenService;
 
@@ -29,8 +28,9 @@ class HttpClientHelper implements ClientHelper {
     T Function(Map<String, dynamic> json) fromJson, {
     bool needsHeader = true,
     Map<String, String>? queryParams,
+    Map<String, String>? headers,
   }) async {
-    final res = await _client.get(Uri.https(api, urlPart, queryParams), headers: await getHeader(needsHeader));
+    final res = await _client.get(Uri.https(api, urlPart, queryParams), headers: await getHeader(needsHeader, headers));
 
     if (kDebugMode) {
       print(
@@ -51,8 +51,9 @@ class HttpClientHelper implements ClientHelper {
     T Function(Map<String, dynamic>) fromJson, {
     bool needsHeader = true,
     Map<String, String>? queryParams,
+    Map<String, String>? headers,
   }) async {
-    final res = await _client.get(Uri.https(api, urlPart, queryParams), headers: await getHeader(needsHeader));
+    final res = await _client.get(Uri.https(api, urlPart, queryParams), headers: await getHeader(needsHeader, headers));
 
     if (kDebugMode) {
       print(
@@ -79,12 +80,13 @@ class HttpClientHelper implements ClientHelper {
     T Function(Map<String, dynamic> json)? fromJson,
     void Function(Map<String, dynamic> body)? orElse,
     bool needsHeader = true,
+    Map<String, String>? headers,
   }) async {
     if (kDebugMode) print(api + urlPart);
 
     final res = await _client.post(
       Uri.https(api, urlPart),
-      headers: await getHeader(needsHeader),
+      headers: await getHeader(needsHeader, headers),
       body: jsonEncode(body),
     );
 
@@ -112,13 +114,19 @@ class HttpClientHelper implements ClientHelper {
   }
 
   @override
-  Future<void> putHandler(String api, String urlPart, Map<String, dynamic> body, {bool needsHeader = true}) async {
+  Future<void> putHandler(
+    String api,
+    String urlPart,
+    Map<String, dynamic> body, {
+    bool needsHeader = true,
+    Map<String, String>? headers,
+  }) async {
     final res = await _client.put(
       Uri.https(
         "$api"
         "$urlPart",
       ),
-      headers: await getHeader(needsHeader),
+      headers: await getHeader(needsHeader, headers),
       body: body,
     );
     handleHttpStatus(res);
@@ -130,13 +138,19 @@ class HttpClientHelper implements ClientHelper {
   }
 
   @override
-  Future<void> deleteHandler(String api, String urlPart, Map<String, dynamic> body, {bool needsHeader = true}) async {
+  Future<void> deleteHandler(
+    String api,
+    String urlPart,
+    Map<String, dynamic> body, {
+    bool needsHeader = true,
+    Map<String, String>? headers,
+  }) async {
     final res = await _client.delete(
       Uri.https(
         "$api"
         "$urlPart",
       ),
-      headers: await getHeader(needsHeader),
+      headers: await getHeader(needsHeader, headers),
       body: body,
     );
 
@@ -146,7 +160,7 @@ class HttpClientHelper implements ClientHelper {
     }
   }
 
-  Future<Map<String, String>> getHeader(bool needToken) async {
+  Future<Map<String, String>> getHeader(bool needToken, Map<String, String>? headers) async {
     // final session = await _tokenService.session;
     // return {'Authorization': "Bearer ${session!.accessToken}"};
     // final a = await _tokenService.getAccessToken();
@@ -154,6 +168,7 @@ class HttpClientHelper implements ClientHelper {
       if (needToken) 'Authorization': "Bearer ${await _tokenService.getAccessToken()}",
       'content-type': 'application/json;charset=utf-8',
       'accept': 'application/json',
+      ...?headers,
     };
   }
 }

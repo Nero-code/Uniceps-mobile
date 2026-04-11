@@ -162,6 +162,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get after => 'بعد';
 
   @override
+  String get duration => 'المدة';
+
+  @override
+  String get exercises => 'التمارين';
+
+  @override
   String get applyToAll => 'تطبيق للكل';
 
   @override

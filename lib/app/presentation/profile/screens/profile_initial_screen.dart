@@ -49,20 +49,24 @@ class _ProfileInitialScreenState extends State<ProfileInitialScreen> {
                             final languageCode = context.read<LocaleCubit>().state.locale.languageCode;
                             return AlertDialog(
                               title: Text(locale.chooseLang),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  for (var i in Lang.values)
-                                    RadioListTile(
-                                      title: Text(i == Lang.en ? "English" : "العربية"),
-                                      value: languageCode == i.name,
-                                      groupValue: true,
-                                      onChanged: (newVal) {
-                                        context.read<LocaleCubit>().changeLanguage(i.name == "en" ? "en" : "ar");
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                ],
+                              content: RadioGroup<String>(
+                                groupValue: languageCode,
+                                onChanged: (newVal) {
+                                  if (newVal != null) {
+                                    context.read<LocaleCubit>().changeLanguage(newVal == "en" ? "en" : "ar");
+                                    Navigator.pop(context);
+                                  }
+                                },
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    for (var i in Lang.values)
+                                      RadioListTile<String>(
+                                        title: Text(i == Lang.en ? "English" : "العربية"),
+                                        value: i.name,
+                                      ),
+                                  ],
+                                ),
                               ),
                             ).build(context);
                           },

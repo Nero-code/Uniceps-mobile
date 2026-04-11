@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:uniceps/app/domain/classes/profile_classes/gym.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/app/domain/classes/profile_classes/gym.dart';
 
 class MyGymWidget extends StatelessWidget {
   const MyGymWidget({
@@ -29,8 +29,8 @@ class MyGymWidget extends StatelessWidget {
             color: isSelected
                 ? secondaryLight
                 : isCurrent
-                    ? Theme.of(context).colorScheme.primary
-                    : Colors.grey.shade200,
+                ? Theme.of(context).colorScheme.primary
+                : Colors.grey.shade200,
             width: 2.0,
           ),
           borderRadius: BorderRadius.circular(15),
@@ -45,7 +45,11 @@ class MyGymWidget extends StatelessWidget {
               children: [
                 CachedNetworkImage(
                   width: MediaQuery.of(context).size.width * 0.15,
-                  imageUrl: "$API" "$HTTP_GYMS" "$HTTP_GYM_LOGO" "/${myGym.id}",
+                  imageUrl:
+                      "API"
+                      "HTTP_GYMS"
+                      "HTTP_GYM_LOGO"
+                      "/${myGym.id}",
                   imageBuilder: (context, imageProvider) => ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image(image: imageProvider),
@@ -56,13 +60,7 @@ class MyGymWidget extends StatelessWidget {
                     height: MediaQuery.of(context).size.width * 0.1,
                   ),
                 ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(myGym.name),
-                    Text(myGym.ownerName),
-                  ],
-                ),
+                Column(mainAxisSize: MainAxisSize.min, children: [Text(myGym.name), Text(myGym.ownerName)]),
                 const SizedBox(),
               ],
             ),

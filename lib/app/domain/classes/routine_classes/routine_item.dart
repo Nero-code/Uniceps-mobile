@@ -1,10 +1,10 @@
-import 'package:uniceps/app/domain/classes/routine_classes/exercise_v2.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
 
 class RoutineItem {
   final int? id, apiId;
   final int dayId, index, version;
-  final ExerciseV2 exercise;
+  final Exercise exercise;
   final List<RoutineSet> sets;
   final bool isSynced;
 
@@ -25,18 +25,17 @@ class RoutineItem {
     int? dayId,
     int? index,
     int? version,
-    ExerciseV2? exercise,
+    Exercise? exercise,
     List<RoutineSet>? sets,
     bool? isSynced,
-  }) =>
-      RoutineItem(
-        id: id ?? this.id,
-        apiId: apiId ?? this.apiId,
-        dayId: dayId ?? this.dayId,
-        index: index ?? this.index,
-        version: version ?? this.version,
-        exercise: exercise ?? this.exercise,
-        sets: sets ?? this.sets,
-        isSynced: isSynced ?? this.isSynced,
-      );
+  }) => RoutineItem(
+    id: id ?? this.id,
+    apiId: apiId ?? this.apiId,
+    dayId: dayId ?? this.dayId,
+    index: index ?? this.index,
+    version: version ?? this.version,
+    exercise: exercise ?? this.exercise,
+    sets: sets ?? this.sets,
+    isSynced: isSynced ?? this.isSynced,
+  );
 }

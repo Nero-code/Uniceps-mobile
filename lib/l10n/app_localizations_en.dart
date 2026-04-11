@@ -162,6 +162,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get after => 'After';
 
   @override
+  String get duration => 'Duration';
+
+  @override
+  String get exercises => 'Exercises';
+
+  @override
   String get applyToAll => 'Apply to all';
 
   @override

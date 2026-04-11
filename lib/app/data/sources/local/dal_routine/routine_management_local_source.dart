@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:logger/logger.dart';
-import 'package:uniceps/app/data/models/routine_models/exercise_v2_dto.dart';
+import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_day_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_item_dto.dart';
@@ -8,7 +8,6 @@ import 'package:uniceps/app/data/models/routine_models/routine_set_dto.dart';
 import 'package:uniceps/app/data/models/routine_result.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
-import 'package:uniceps/core/constants/constants.dart';
 
 abstract class IRoutineManagementLocalSourceContract {
   Future<List<RoutineDto>> getAllRoutines();
@@ -153,22 +152,30 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
       for (final i in d.items) {
         var ex = await (_database.select(
           _database.exercises,
-        )..where((f) => f.apiId.equals(i.exerciseV2Dto.apiId))).getSingleOrNull();
+        )..where((f) => f.apiId.equals(i.exerciseDto.apiId))).getSingleOrNull();
         if (ex == null) {
           await _database
               .into(_database.exercises)
               .insert(
                 ExercisesCompanion.insert(
-                  apiId: Value(i.exerciseV2Dto.apiId),
-                  name: i.exerciseV2Dto.name,
-                  imageUrl: i.exerciseV2Dto.imageUrl,
-                  muscleGroupTranslations: encodeTranslations(i.exerciseV2Dto.muscleGroupTranslations),
+                  apiId: i.exerciseDto.apiId,
+                  name: i.exerciseDto.name,
+                  imageName: Value(i.exerciseDto.imageUrl),
+                  // muscleGroupTranslations: encodeTranslations(i.exerciseDto.muscleGroupTranslations),
+                  muscleGroupName: i.exerciseDto.muscleGroupName,
+                  muscleGroupCode: i.exerciseDto.muscleGroupName,
+                  laterals: i.exerciseDto.laterals,
+                  muscleHeadCode: i.exerciseDto.muscleHeadCode,
+                  muscleHeadName: i.exerciseDto.muscleHeadName,
+                  toolCode: i.exerciseDto.toolCode,
+                  toolName: i.exerciseDto.toolName,
+                  timestamp: Value(DateTime.now()),
                 ),
               );
         }
         final itemId = await _database
             .into(_database.routineItems)
-            .insert(RoutineItemsCompanion.insert(index: i.index, exerciseId: i.exerciseV2Dto.apiId, dayId: dayId));
+            .insert(RoutineItemsCompanion.insert(index: i.index, exerciseId: i.exerciseDto.apiId, dayId: dayId));
         yield Stage.items; // move one step for Item
         // Create Sets
         for (final s in i.setsDto) {
@@ -200,7 +207,7 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
         iTems.add(
           RoutineItemDto.fromTable(
             i,
-            ExerciseV2Dto.fromTable(ex, ex.imageUrl, null),
+            ExerciseDto.fromTable(ex, ex.imageName, null),
             sets.map((e) => RoutineSetDto.fromTable(e)).toList(),
           ),
         );
