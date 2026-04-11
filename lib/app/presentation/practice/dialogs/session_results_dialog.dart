@@ -68,9 +68,9 @@ class SessionResultsDialog extends StatelessWidget {
                           dimension: 100,
                           strokeWidth: 15,
                           // color: theme.colorScheme.primary,
-                          color: session.progress == 1
+                          color: progress == 1
                               ? Colors.green.shade300
-                              : session.progress >= .5
+                              : progress >= .5
                               ? Colors.amber.shade300
                               : Colors.red.shade300,
                           progressBackground: theme.colorScheme.surface.withAlpha(100),
@@ -230,12 +230,5 @@ class SessionResultsDialog extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitMinutes = twoDigits(duration.inMinutes);
-
-    return twoDigitMinutes;
   }
 }
