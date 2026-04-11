@@ -129,6 +129,7 @@ class ExercisesRepo implements IExercisesContract {
     try {
       // Get all images from api.
       for (final id in ids) {
+        if (await _localSource.containsImage(id)) continue;
         final img = await _remoteSource.getExerciseImage(id);
         await _localSource.saveExerciseImage(id, img);
 

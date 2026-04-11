@@ -93,6 +93,10 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
           final session = state.whenOrNull(noActiveSession: (s, f) => s)!;
           showDialog(
             context: context,
+            useSafeArea:false,
+
+
+            
             builder: (context) => SessionResultsDialog(
               session: session,
               progress: totalProgress != null ? (session.logs.length / totalProgress!) : 0,
