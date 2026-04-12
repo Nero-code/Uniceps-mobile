@@ -9,6 +9,8 @@ abstract class IExercisesLocalSourceContract {
   Future<void> saveExerciseImage(String exId, Uint8List bitmap);
 
   Future<void> writeExercise(ExerciseDto e);
+
+  Future<bool> containsImage(String id);
 }
 
 class ExercisesLocalSource implements IExercisesLocalSourceContract {
@@ -66,4 +68,7 @@ class ExercisesLocalSource implements IExercisesLocalSourceContract {
           ),
         );
   }
+
+  @override
+  Future<bool> containsImage(String id) async => _mediaHelper.containsImage(id);
 }
