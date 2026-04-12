@@ -149,33 +149,17 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
           .insert(DaysGroupCompanion.insert(index: d.index, dayName: d.name, routineId: routineId));
       yield Stage.days; // move one step for Day
       // Create Items
-      for (final i in d.items) {
+      for (int j = 0; j < d.items.length; j++) {
+        final i = d.items[j];
         var ex = await (_database.select(
           _database.exercises,
         )..where((f) => f.apiId.equals(i.exerciseDto.apiId))).getSingleOrNull();
-        if (ex == null) {
-          await _database
-              .into(_database.exercises)
-              .insert(
-                ExercisesCompanion.insert(
-                  apiId: i.exerciseDto.apiId,
-                  name: i.exerciseDto.name,
-                  imageName: Value(i.exerciseDto.imageUrl),
-                  // muscleGroupTranslations: encodeTranslations(i.exerciseDto.muscleGroupTranslations),
-                  muscleGroupName: i.exerciseDto.muscleGroupName,
-                  muscleGroupCode: i.exerciseDto.muscleGroupName,
-                  laterals: i.exerciseDto.laterals,
-                  muscleHeadCode: i.exerciseDto.muscleHeadCode,
-                  muscleHeadName: i.exerciseDto.muscleHeadName,
-                  toolCode: i.exerciseDto.toolCode,
-                  toolName: i.exerciseDto.toolName,
-                  timestamp: Value(DateTime.now()),
-                ),
-              );
-        }
+
+        if (ex == null) throw Exception("Exercise not found");
+
         final itemId = await _database
             .into(_database.routineItems)
-            .insert(RoutineItemsCompanion.insert(index: i.index, exerciseId: i.exerciseDto.apiId, dayId: dayId));
+            .insert(RoutineItemsCompanion.insert(index: j, exerciseId: i.exerciseDto.apiId, dayId: dayId));
         yield Stage.items; // move one step for Item
         // Create Sets
         for (final s in i.setsDto) {
