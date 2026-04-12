@@ -44,42 +44,44 @@ class RoutineDto {
   });
 
   factory RoutineDto.fromEntity(r.Routine e) => RoutineDto(
-      id: e.id,
-      apiId: e.apiId,
-      version: e.version,
-      name: e.name,
-      description: e.description,
-      isCurrent: e.isCurrent,
-      createdAt: e.createdAt,
-      updatedAt: e.updatedAt,
-      daysDto: e.trainingDays.map(RoutineDayDto.fromEntity).toList(),
-      isSynced: e.isSynced);
+    id: e.id,
+    apiId: e.apiId,
+    version: e.version,
+    name: e.name,
+    description: e.description,
+    isCurrent: e.isCurrent,
+    createdAt: e.createdAt,
+    updatedAt: e.updatedAt,
+    daysDto: e.trainingDays.map(RoutineDayDto.fromEntity).toList(),
+    isSynced: e.isSynced,
+  );
   r.Routine toEntity() => r.Routine(
-      id: id,
-      apiId: apiId,
-      version: version,
-      name: name,
-      description: description,
-      createdAt: createdAt ?? DateTime.now(),
-      updatedAt: updatedAt ?? DateTime.now(),
-      trainingDays: daysDto.map((d) => d.toEntity()).toList(),
-      isCurrent: isCurrent,
-      isSynced: isSynced);
+    id: id,
+    apiId: apiId,
+    version: version,
+    name: name,
+    description: description,
+    createdAt: createdAt ?? DateTime.now(),
+    updatedAt: updatedAt ?? DateTime.now(),
+    trainingDays: daysDto.map((d) => d.toEntity()).toList(),
+    isCurrent: isCurrent,
+    isSynced: isSynced,
+  );
 
   factory RoutineDto.fromJson(Map<String, dynamic> json) => _$RoutineDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$RoutineDtoToJson(this);
 
   factory RoutineDto.fromTable(db.Routine r, [List<RoutineDayDto> days = const []]) => RoutineDto(
-        id: r.id,
-        apiId: r.apiId,
-        version: r.version,
-        name: r.name,
-        description: r.description,
-        createdAt: r.createdAt,
-        updatedAt: r.updatedAt,
-        daysDto: days,
-        isCurrent: r.isCurrent,
-        isSynced: r.isSynced,
-      );
+    id: r.id,
+    apiId: r.apiId,
+    version: r.version,
+    name: r.name,
+    description: r.description,
+    createdAt: r.createdAt,
+    updatedAt: r.updatedAt,
+    daysDto: days,
+    isCurrent: r.isCurrent,
+    isSynced: r.isSynced,
+  );
 }
