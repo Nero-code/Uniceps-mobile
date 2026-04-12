@@ -59,7 +59,7 @@ class SessionResultsDialog extends StatelessWidget {
                         Expanded(child: Image.asset(CaptainImages.motive, height: 160, fit: BoxFit.contain)),
                         Expanded(
                           child: ProgressWidget(
-                            percent: progress + .75,
+                            percent: progress,
                             title: Text(
                               locale.progressRate,
                               style: theme.textTheme.titleSmall?.copyWith(color: Colors.white),
