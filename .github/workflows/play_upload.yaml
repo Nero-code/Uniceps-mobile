@@ -46,7 +46,7 @@ jobs:
         run: |
           flutter build appbundle --release \
             --flavor prod \
-            --dart-define-from-file=config_prod.json \
+            --dart-define-from-file=assets/config/config_prod.json \
             --build-number=$(( ${{ github.run_number }} ))
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
