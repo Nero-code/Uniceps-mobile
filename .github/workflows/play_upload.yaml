@@ -27,7 +27,15 @@ jobs:
 
       - name: Get Dependencies
         run: flutter pub get
-
+      
+      # 2. Create Config Files from Repository Secrets
+      - name: Create Config Files
+        run: |
+          mkdir -p android/app/src/staging/
+          mkdir -p assets/config/
+          echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > android/app/src/prod/google-services.json
+          echo '${{ secrets.ENV_CONFIG_JSON }}' > assets/config/config_prod.json
+          
       # Decodes the keystore from secrets into a temporary file for the build
       - name: Decode Keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
