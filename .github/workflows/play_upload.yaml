@@ -52,7 +52,7 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          KEYSTORE_FILE_PATH: upload-keystore.jks
+          PROPERTIES_KEYSTORE_FILE: "upload-keystore.jks"
 
       - name: Upload to Play Store
         uses: r0adkll/upload-google-play@v1
