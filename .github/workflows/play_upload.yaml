@@ -1,5 +1,6 @@
 name: Flutter Prod Bundle Upload
-
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 on:
   push:
     branches: [ "main" ]
@@ -38,7 +39,7 @@ jobs:
           flutter build appbundle --release \
             --flavor prod \
             --dart-define-from-file=config_prod.json \
-            --build-number=$(( ${{ github.run_number }} + 2 ))
+            --build-number=$(( ${{ github.run_number }} ))
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
