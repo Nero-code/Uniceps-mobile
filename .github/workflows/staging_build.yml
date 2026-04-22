@@ -36,7 +36,7 @@ jobs:
           mkdir -p android/app/src/staging/
           mkdir -p assets/config/
           echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > android/app/src/staging/google-services.json
-          echo '${{ secrets.STAGING_CONFIG_JSON }}' > assets/config/config_staging.json
+          echo '${{ secrets.ENV_CONFIG_JSON }}' > assets/config/config_staging.json
 
       - name: Install Dependencies
         run: flutter pub get
