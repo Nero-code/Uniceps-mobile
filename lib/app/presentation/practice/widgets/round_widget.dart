@@ -40,6 +40,7 @@ class _RoundWidgetState extends State<RoundWidget> {
   Widget build(BuildContext context) {
     final weight = widget.log?.weight ?? widget.set.weight;
     final finishedReps = widget.log?.finishedReps ?? widget.set.reps;
+    final latestReps = widget.log?.finishedReps ?? widget.set.lastReps;
     final isComplete = widget.log != null;
     return Ink(
       color: widget.log != null ? const Color.fromARGB(255, 224, 240, 242) : null,
@@ -61,9 +62,9 @@ class _RoundWidgetState extends State<RoundWidget> {
                         color: isComplete ? Theme.of(context).colorScheme.primary : Colors.black,
                       ),
                     ),
-                    if (widget.set.lastReps != null)
+                    if (latestReps != null)
                       Text(
-                        "(${widget.set.lastReps})",
+                        "($latestReps)",
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 10,
