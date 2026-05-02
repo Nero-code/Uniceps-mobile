@@ -1465,6 +1465,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Weak internet connection'**
   String get msgSlowConnection;
+
+  /// No description provided for @reset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get reset;
+
+  /// No description provided for @start.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get start;
 }
 
 class _AppLocalizationsDelegate

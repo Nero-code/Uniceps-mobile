@@ -252,7 +252,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       // Then Update session progress.
       await (_database.update(
         _database.tSessions,
-      )..where((f) => f.tsId.equals(log.sessionId))).write(db.TSessionsCompanion.custom(progress: Variable(progress)));
+      )..where((f) => f.tsId.equals(log.sessionId))).write(db.TSessionsCompanion.custom(progress: Constant(progress)));
 
       return TLogModel.fromTable(newLog);
     } else {
@@ -260,9 +260,10 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       final updatedLog = await (_database.update(_database.tLogs)..where((f) => f.logId.equals(log.id!)))
           .writeReturning(
             db.TLogsCompanion.custom(
-              weight: Variable(log.weight),
-              version: Variable(log.version + 1),
-              isSynced: const Variable(false),
+              weight: Constant(log.weight),
+              finishedReps: Constant(log.finishedReps),
+              version: Constant(log.version + 1),
+              isSynced: const Constant(false),
             ),
           );
       return TLogModel.fromTable(updatedLog.first);

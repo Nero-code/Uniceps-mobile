@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LanguageCacheHelper {
@@ -12,7 +14,11 @@ class LanguageCacheHelper {
     if (cachedLanguageCode != null) {
       return cachedLanguageCode;
     } else {
-      return "ar";
+      final sysLang = PlatformDispatcher.instance.locale.languageCode;
+      if (['ar', 'en'].contains(sysLang)) {
+        return sysLang;
+      }
+      return 'en';
     }
   }
 }

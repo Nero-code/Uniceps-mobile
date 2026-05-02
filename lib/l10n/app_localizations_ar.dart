@@ -716,4 +716,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get msgSlowConnection => 'الاتصال بالانترنت ضعيف';
+
+  @override
+  String get reset => 'إعادة تعيين';
+
+  @override
+  String get start => 'بدء';
 }

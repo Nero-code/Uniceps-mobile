@@ -719,4 +719,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get msgSlowConnection => 'Weak internet connection';
+
+  @override
+  String get reset => 'Reset';
+
+  @override
+  String get start => 'Start';
 }

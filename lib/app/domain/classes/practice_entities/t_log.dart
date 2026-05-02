@@ -1,4 +1,6 @@
-class TLog {
+import 'package:equatable/equatable.dart';
+
+class TLog extends Equatable {
   final int? id;
   final int sessionId;
   // Exercise Data
@@ -46,4 +48,23 @@ class TLog {
     version: version,
     isSynced: isSynced,
   );
+
+  @override
+  List<Object?> get props => [
+    id,
+    sessionId,
+    // Exercise Data
+    exerciseId,
+    exerciseIndex,
+
+    // Set Data
+    setIndex,
+    reps,
+    finishedReps,
+    weight,
+    completedAt,
+
+    // For Syncing purposes
+    apiId, version, isSynced,
+  ];
 }
