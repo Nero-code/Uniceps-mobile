@@ -57,6 +57,7 @@ void main() {
         exerciseIndex: 0,
         setIndex: 0,
         reps: 5,
+        finishedReps: 5,
         weight: 5,
         completedAt: DateTime.now(),
       ),

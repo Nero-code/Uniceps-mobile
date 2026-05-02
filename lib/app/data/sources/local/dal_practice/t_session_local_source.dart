@@ -177,21 +177,16 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
           //
           // * Then we filter those logs by the setIndex... Why?
           //   to filter out-of-range sets of old sessions.
-          final weights = logsByEx[itemTable.exerciseId]?.where((log) => log.setIndex == setTable.roundIndex).toList();
+          final latestTLog = logsByEx[itemTable.exerciseId]
+              ?.where((log) => log.setIndex == setTable.roundIndex)
+              .toList();
+
           // * Then we sort in a descending order, so that the first item is the last.
-          weights?.sort((a, b) => b.completedAt.compareTo(a.completedAt));
+          latestTLog?.sort((a, b) => b.completedAt.compareTo(a.completedAt));
 
-          // for (final w in weights) {
-          //   _logger.t("""
-          //     logid:     ${w.logId}
-          //     exId:      ${w.exerciseId}
-          //     setIndex:  ${w.setIndex}
-          //     weights:    ${w.weights}
-          //     completed: ${w.completedAt}
-          // """);
-          // }
-
-          itemSets.add(RoutineSetDto.fromTable(setTable, weights?.firstOrNull?.weight));
+          itemSets.add(
+            RoutineSetDto.fromTable(setTable, latestTLog?.firstOrNull?.weight, latestTLog?.firstOrNull?.finishedReps),
+          );
         }
       }
 
@@ -248,6 +243,7 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
               exerciseIndex: log.exerciseIndex,
               setIndex: log.setIndex,
               reps: log.reps,
+              finishedReps: log.finishedReps,
               weight: log.weight,
               completedAt: log.completedAt,
             ),

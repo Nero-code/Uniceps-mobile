@@ -5,11 +5,12 @@ class TLogs extends Table {
   late final logId = integer().autoIncrement()();
 
   // late final exerciseId = integer()();
-  late final exerciseId = text()(); // TODO: migrate
+  late final exerciseId = text()(); // SCH-2 Change-type
   late final exerciseIndex = integer()();
 
   late final setIndex = integer()();
   late final reps = integer()();
+  late final finishedReps = integer()(); // SCH-3 Added
   late final weight = real()();
   late final completedAt = dateTime()();
 

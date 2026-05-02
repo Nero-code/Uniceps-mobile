@@ -8,6 +8,7 @@ class TLog {
   // Set Data
   final int setIndex;
   final int reps;
+  final int finishedReps;
   final double weight;
   final DateTime completedAt;
 
@@ -23,6 +24,7 @@ class TLog {
     required this.exerciseIndex,
     required this.setIndex,
     required this.reps,
+    required this.finishedReps,
     required this.weight,
     required this.completedAt,
     required this.apiId,
@@ -30,13 +32,14 @@ class TLog {
     this.isSynced = false,
   });
 
-  TLog copywith({double? weight, DateTime? completedAt}) => TLog(
+  TLog copyWith({double? weight, int? finishedReps, DateTime? completedAt}) => TLog(
     id: id,
     sessionId: sessionId,
     exerciseId: exerciseId,
     exerciseIndex: exerciseIndex,
     setIndex: setIndex,
     reps: reps,
+    finishedReps: finishedReps ?? this.finishedReps,
     weight: weight ?? this.weight,
     completedAt: completedAt ?? this.completedAt,
     apiId: apiId ?? apiId,

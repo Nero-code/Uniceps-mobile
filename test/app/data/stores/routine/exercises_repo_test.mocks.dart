@@ -128,6 +128,14 @@ class MockIExercisesLocalSourceContract extends _i1.Mock
             returnValueForMissingStub: _i3.Future<void>.value(),
           )
           as _i3.Future<void>);
+
+  @override
+  _i3.Future<bool> containsImage(String? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#containsImage, [id]),
+            returnValue: _i3.Future<bool>.value(false),
+          )
+          as _i3.Future<bool>);
 }
 
 /// A class which mocks [NetworkInfo].

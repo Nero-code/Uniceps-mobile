@@ -58,6 +58,7 @@ void main() {
     exerciseIndex: 0,
     setIndex: 0,
     reps: 10,
+    finishedReps: 10,
     weight: 100,
     completedAt: DateTime.now(),
     apiId: 1,

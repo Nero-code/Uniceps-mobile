@@ -33,6 +33,7 @@ void main() {
     version: 1,
     apiId: 1,
     weight: 10.0,
+    lastReps: 10,
   );
   final tRoutineSetDto = RoutineSetDto.fromEntity(tRoutineSet);
   const tItemId = 1;

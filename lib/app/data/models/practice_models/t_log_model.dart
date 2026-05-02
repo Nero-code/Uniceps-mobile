@@ -13,6 +13,7 @@ class TLogModel extends TLog {
     required super.exerciseIndex,
     required super.setIndex,
     required super.reps,
+    required super.finishedReps,
     required super.weight,
     required super.completedAt,
     super.apiId,
@@ -27,6 +28,7 @@ class TLogModel extends TLog {
     exerciseIndex: table.exerciseIndex,
     setIndex: table.setIndex,
     reps: table.reps,
+    finishedReps: table.finishedReps,
     weight: table.weight,
     completedAt: table.completedAt,
   );

@@ -8,11 +8,9 @@ import 'package:uniceps/app/domain/contracts/routine/i_routine_sets_contract.dar
 import 'package:uniceps/core/errors/failure.dart';
 
 class RoutineSetsRepo implements IRoutineSetsContract {
-  RoutineSetsRepo({
-    required IRoutineSetsLocalSourceContract localSource,
-    required Logger logger,
-  })  : _localSource = localSource,
-        _logger = logger;
+  RoutineSetsRepo({required IRoutineSetsLocalSourceContract localSource, required Logger logger})
+    : _localSource = localSource,
+      _logger = logger;
 
   final IRoutineSetsLocalSourceContract _localSource;
   final Logger _logger;
@@ -34,14 +32,16 @@ class RoutineSetsRepo implements IRoutineSetsContract {
   @override
   Future<Either<Failure, List<RoutineSet>>> addItemSets(int itemId) async {
     final newSet = RoutineSetDto(
-        id: null,
-        apiId: null,
-        routineItemId: itemId,
-        version: 0,
-        index: lazyItemSetsBuffer[itemId]?.length ?? 0,
-        reps: 0,
-        weight: null,
-        isSynced: false);
+      id: null,
+      apiId: null,
+      routineItemId: itemId,
+      version: 0,
+      index: lazyItemSetsBuffer[itemId]?.length ?? 0,
+      reps: 0,
+      lastReps: null,
+      weight: null,
+      isSynced: false,
+    );
     try {
       final setWithId = (await _localSource.addSets([newSet])).first;
 

@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:uniceps/app/data/models/practice_models/extensions.dart';
 import 'package:uniceps/app/data/models/practice_models/t_log_model.dart';
 import 'package:uniceps/app/data/sources/local/database.dart' as db;
 import 'package:uniceps/app/domain/classes/practice_entities/t_session.dart';
@@ -55,7 +54,7 @@ class TSessionModel {
     id: e.id,
     dayId: e.dayId,
     dayName: e.dayName,
-    logs: e.logs.map((l) => l.toDto()).toList(),
+    logs: e.logs.map((l) => l as TLogModel).toList(),
     createdAt: e.createdAt,
     finishedAt: e.finishedAt,
     progress: e.progress,
