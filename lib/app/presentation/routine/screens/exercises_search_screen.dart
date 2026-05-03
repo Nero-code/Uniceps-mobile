@@ -6,6 +6,7 @@ import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/exercise_filter_cubit.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/exercises_v2_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
+import 'package:uniceps/app/presentation/routine/screens/exercise_details_screen.dart';
 import 'package:uniceps/app/presentation/routine/widgets/exercise_grid_widget.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
@@ -227,6 +228,20 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
                           right: 10.0,
                           child: Icon(Icons.done, size: 20, color: Theme.of(context).colorScheme.secondary),
                         ),
+                      Positioned(
+                        top: 0.0,
+                        left: 0.0,
+                        child: IconButton(
+                          iconSize: 20,
+
+                          icon: Icon(Icons.info_outline),
+                          color: Theme.of(context).colorScheme.primary,
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ExerciseDetailsScreen(exercise: state.list[index])),
+                          ),
+                        ),
+                      ),
                     ],
                   );
                 },

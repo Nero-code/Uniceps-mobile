@@ -734,4 +734,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectFilter => 'Select Filter';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get equipment => 'Equipment';
+
+  @override
+  String get muscleHead => 'Muscle Head';
+
+  @override
+  String get laterals => 'Laterals';
+
+  @override
+  String get secondaryMuscles => 'Secondary Muscles';
+
+  @override
+  String get muscleGroupLabel => 'Muscle Group';
 }

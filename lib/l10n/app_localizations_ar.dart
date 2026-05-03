@@ -731,4 +731,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get selectFilter => 'اختر الفلتر';
+
+  @override
+  String get description => 'الوصف';
+
+  @override
+  String get equipment => 'المعدات';
+
+  @override
+  String get muscleHead => 'رأس العضلة';
+
+  @override
+  String get laterals => 'الجانبيات';
+
+  @override
+  String get secondaryMuscles => 'عضلات ثانوية';
+
+  @override
+  String get muscleGroupLabel => 'المجموعة العضلية';
 }

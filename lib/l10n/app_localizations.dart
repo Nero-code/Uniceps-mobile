@@ -1495,6 +1495,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select Filter'**
   String get selectFilter;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// No description provided for @equipment.
+  ///
+  /// In en, this message translates to:
+  /// **'Equipment'**
+  String get equipment;
+
+  /// No description provided for @muscleHead.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscle Head'**
+  String get muscleHead;
+
+  /// No description provided for @laterals.
+  ///
+  /// In en, this message translates to:
+  /// **'Laterals'**
+  String get laterals;
+
+  /// No description provided for @secondaryMuscles.
+  ///
+  /// In en, this message translates to:
+  /// **'Secondary Muscles'**
+  String get secondaryMuscles;
+
+  /// No description provided for @muscleGroupLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscle Group'**
+  String get muscleGroupLabel;
 }
 
 class _AppLocalizationsDelegate

@@ -309,5 +309,11 @@
   "reset": "Reset",
   "start": "Start",
   "changeExercisesLang": "Change Exercises Language",
-  "selectFilter": "Select Filter"
+  "selectFilter": "Select Filter",
+  "description": "Description",
+  "equipment": "Equipment",
+  "muscleHead": "Muscle Head",
+  "laterals": "Laterals",
+  "secondaryMuscles": "Secondary Muscles",
+  "muscleGroupLabel": "Muscle Group"
 }

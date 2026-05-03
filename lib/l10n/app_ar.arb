@@ -308,5 +308,11 @@
   "reset": "إعادة تعيين",
   "start": "بدء",
   "changeExercisesLang": "تغيير لغة التمارين",
-  "selectFilter": "اختر الفلتر"
+  "selectFilter": "اختر الفلتر",
+  "description": "الوصف",
+  "equipment": "المعدات",
+  "muscleHead": "رأس العضلة",
+  "laterals": "الجانبيات",
+  "secondaryMuscles": "عضلات ثانوية",
+  "muscleGroupLabel": "المجموعة العضلية"
 }
