@@ -725,4 +725,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get start => 'Start';
+
+  @override
+  String get changeExercisesLang => 'Change Exercises Language';
+
+  @override
+  String get selectFilter => 'Select Filter';
 }

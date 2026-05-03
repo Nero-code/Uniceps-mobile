@@ -3,8 +3,10 @@ import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
+import 'package:uniceps/app/services/language_cache_helper.dart';
 import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/injection_dependency.dart';
 
 class ExerciseLibSyncService {
   final IExercisesLocalSourceContract _exercisesLocalSource;
@@ -34,7 +36,10 @@ class ExerciseLibSyncService {
 
     if (await _networkInfo.hasConnection) {
       try {
-        final lib = await _exercisesRemoteSource.getAllExercises(latest);
+        final lib = await _exercisesRemoteSource.getAllExercises(
+          timestamp: latest,
+          language: sl<LanguageCacheHelper>().getExercisesLibContentLanguage(),
+        );
         for (final e in lib) {
           final img = await _exercisesRemoteSource.getExerciseImage(e.apiId);
           await _exercisesLocalSource.saveExerciseImage(e.apiId, img);

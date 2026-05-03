@@ -7,14 +7,10 @@ import 'dart:async' as _i3;
 import 'dart:typed_data' as _i6;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart'
-    as _i5;
-import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart'
-    as _i4;
-import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart'
-    as _i7;
-import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart'
-    as _i2;
+import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart' as _i5;
+import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart' as _i4;
+import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart' as _i7;
+import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart' as _i2;
 import 'package:uniceps/app/services/network_info.dart' as _i8;
 
 // ignore_for_file: type=lint
@@ -35,8 +31,7 @@ import 'package:uniceps/app/services/network_info.dart' as _i8;
 /// A class which mocks [IExercisesRemoteSourceContract].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockIExercisesRemoteSourceContract extends _i1.Mock
-    implements _i2.IExercisesRemoteSourceContract {
+class MockIExercisesRemoteSourceContract extends _i1.Mock implements _i2.IExercisesRemoteSourceContract {
   MockIExercisesRemoteSourceContract() {
     _i1.throwOnMissingStub(this);
   }
@@ -45,31 +40,23 @@ class MockIExercisesRemoteSourceContract extends _i1.Mock
   _i3.Future<List<_i4.MuscleGroupDto>> getExerciseGroups() =>
       (super.noSuchMethod(
             Invocation.method(#getExerciseGroups, []),
-            returnValue: _i3.Future<List<_i4.MuscleGroupDto>>.value(
-              <_i4.MuscleGroupDto>[],
-            ),
+            returnValue: _i3.Future<List<_i4.MuscleGroupDto>>.value(<_i4.MuscleGroupDto>[]),
           )
           as _i3.Future<List<_i4.MuscleGroupDto>>);
 
   @override
-  _i3.Future<List<_i5.ExerciseDto>> getAllExercises([DateTime? timestamp]) =>
+  _i3.Future<List<_i5.ExerciseDto>> getAllExercises({DateTime? timestamp, String? language}) =>
       (super.noSuchMethod(
             Invocation.method(#getAllExercises, [timestamp]),
-            returnValue: _i3.Future<List<_i5.ExerciseDto>>.value(
-              <_i5.ExerciseDto>[],
-            ),
+            returnValue: _i3.Future<List<_i5.ExerciseDto>>.value(<_i5.ExerciseDto>[]),
           )
           as _i3.Future<List<_i5.ExerciseDto>>);
 
   @override
-  _i3.Future<List<_i5.ExerciseDto>> getExercisesByGroup(
-    _i4.MuscleGroupDto? group,
-  ) =>
+  _i3.Future<List<_i5.ExerciseDto>> getExercisesByGroup(_i4.MuscleGroupDto? group) =>
       (super.noSuchMethod(
             Invocation.method(#getExercisesByGroup, [group]),
-            returnValue: _i3.Future<List<_i5.ExerciseDto>>.value(
-              <_i5.ExerciseDto>[],
-            ),
+            returnValue: _i3.Future<List<_i5.ExerciseDto>>.value(<_i5.ExerciseDto>[]),
           )
           as _i3.Future<List<_i5.ExerciseDto>>);
 
@@ -85,8 +72,7 @@ class MockIExercisesRemoteSourceContract extends _i1.Mock
 /// A class which mocks [IExercisesLocalSourceContract].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockIExercisesLocalSourceContract extends _i1.Mock
-    implements _i7.IExercisesLocalSourceContract {
+class MockIExercisesLocalSourceContract extends _i1.Mock implements _i7.IExercisesLocalSourceContract {
   MockIExercisesLocalSourceContract() {
     _i1.throwOnMissingStub(this);
   }
@@ -95,9 +81,7 @@ class MockIExercisesLocalSourceContract extends _i1.Mock
   _i3.Future<List<_i5.ExerciseDto>> getExercises() =>
       (super.noSuchMethod(
             Invocation.method(#getExercises, []),
-            returnValue: _i3.Future<List<_i5.ExerciseDto>>.value(
-              <_i5.ExerciseDto>[],
-            ),
+            returnValue: _i3.Future<List<_i5.ExerciseDto>>.value(<_i5.ExerciseDto>[]),
           )
           as _i3.Future<List<_i5.ExerciseDto>>);
 
@@ -105,9 +89,7 @@ class MockIExercisesLocalSourceContract extends _i1.Mock
   _i3.Future<List<_i5.ExerciseDto>> getExercisesByGroup(String? groupId) =>
       (super.noSuchMethod(
             Invocation.method(#getExercisesByGroup, [groupId]),
-            returnValue: _i3.Future<List<_i5.ExerciseDto>>.value(
-              <_i5.ExerciseDto>[],
-            ),
+            returnValue: _i3.Future<List<_i5.ExerciseDto>>.value(<_i5.ExerciseDto>[]),
           )
           as _i3.Future<List<_i5.ExerciseDto>>);
 
@@ -131,10 +113,7 @@ class MockIExercisesLocalSourceContract extends _i1.Mock
 
   @override
   _i3.Future<bool> containsImage(String? id) =>
-      (super.noSuchMethod(
-            Invocation.method(#containsImage, [id]),
-            returnValue: _i3.Future<bool>.value(false),
-          )
+      (super.noSuchMethod(Invocation.method(#containsImage, [id]), returnValue: _i3.Future<bool>.value(false))
           as _i3.Future<bool>);
 }
 
@@ -148,9 +127,6 @@ class MockNetworkInfo extends _i1.Mock implements _i8.NetworkInfo {
 
   @override
   _i3.Future<bool> get hasConnection =>
-      (super.noSuchMethod(
-            Invocation.getter(#hasConnection),
-            returnValue: _i3.Future<bool>.value(false),
-          )
+      (super.noSuchMethod(Invocation.getter(#hasConnection), returnValue: _i3.Future<bool>.value(false))
           as _i3.Future<bool>);
 }

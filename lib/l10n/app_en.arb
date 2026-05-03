@@ -306,6 +306,7 @@
 
   "msgSlowConnection": "Weak internet connection",
   "reset": "Reset",
-  "start": "Start"
-
+  "start": "Start",
+  "changeExercisesLang": "Change Exercises Language",
+  "selectFilter": "Select Filter"
 }

@@ -305,5 +305,7 @@
 
   "msgSlowConnection": "الاتصال بالانترنت ضعيف",
   "reset": "إعادة تعيين",
-  "start": "بدء"
+  "start": "بدء",
+  "changeExercisesLang": "تغيير لغة التمارين",
+  "selectFilter": "اختر الفلتر"
 }

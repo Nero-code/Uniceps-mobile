@@ -1477,6 +1477,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start'**
   String get start;
+
+  /// No description provided for @changeExercisesLang.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Exercises Language'**
+  String get changeExercisesLang;
+
+  /// No description provided for @selectFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Filter'**
+  String get selectFilter;
 }
 
 class _AppLocalizationsDelegate

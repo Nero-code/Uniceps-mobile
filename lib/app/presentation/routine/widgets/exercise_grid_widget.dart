@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:uniceps/app/data/services/media_helper.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
+import 'package:uniceps/injection_dependency.dart';
 
 class ExerciseGridWidget extends StatelessWidget {
   const ExerciseGridWidget({super.key, required this.exercise, this.index = 0, this.isSelected = false});
@@ -29,9 +32,18 @@ class ExerciseGridWidget extends StatelessWidget {
             //   errorWidget: (context, url, error) =>
             //       Center(child: Icon(Icons.broken_image_rounded, size: 60, color: Colors.grey.shade300)),
             // ),
-            child: exercise.imageBitMap != null
-                ? Image.memory(exercise.imageBitMap!)
-                : Icon(Icons.broken_image_rounded, size: 60, color: Colors.grey.shade300),
+            child: FutureBuilder(
+              future: sl<MediaHelper>().getImage(exercise.apiId),
+              builder: (context, asyncSnapshot) {
+                if (asyncSnapshot.connectionState == .done) {
+                  if (asyncSnapshot.data != null) {
+                    return Image.memory(asyncSnapshot.data!);
+                  }
+                  return Icon(Icons.broken_image_rounded, size: 60, color: Colors.grey.shade300);
+                }
+                return LoadingIndicator(elevated: false, backgroundColor: Colors.transparent);
+              },
+            ),
           ),
 
           Divider(color: Colors.grey.shade100),

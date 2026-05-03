@@ -722,4 +722,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get start => 'بدء';
+
+  @override
+  String get changeExercisesLang => 'تغيير لغة التمارين';
+
+  @override
+  String get selectFilter => 'اختر الفلتر';
 }
