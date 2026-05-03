@@ -57,6 +57,17 @@ class RoutineSetsRepo implements IRoutineSetsContract {
   }
 
   @override
+  Future<Either<Failure, List<RoutineSet>>> saveAllSets(List<RoutineSet> allSets) async {
+    try {
+      final res = await _localSource.saveAllSets(allSets.map((s) => s.toDto()).toList());
+      return Right(res.map((s) => s.toEntity()).toList());
+    } catch (e, s) {
+      _logger.e("Error: updateSet", error: e, stackTrace: s);
+      return Left(DatabaseFailure(errorMsg: e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<RoutineSet>>> updateSet(RoutineSet updated) async {
     try {
       await _localSource.updateSet(updated.toDto());

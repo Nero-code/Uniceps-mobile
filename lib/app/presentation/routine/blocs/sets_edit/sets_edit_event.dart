@@ -28,17 +28,12 @@ class UpdateSetEvent extends SetsEditEvent {
   const UpdateSetEvent({required this.set});
 }
 
-class ReorderSetsEvent extends SetsEditEvent {
-  final List<RoutineSet> sets;
-  const ReorderSetsEvent({required this.sets});
-}
-
 class RemoveSetEvent extends SetsEditEvent {
   final RoutineSet set;
   const RemoveSetEvent({required this.set});
 }
 
-// class SaveSetsEvent extends SetsEditEvent {
-//   final List<RoutineSet> sets;
-//   const SaveSetsEvent({required super.itemId, required this.sets});
-// }
+class SaveSetsEvent extends SetsEditEvent {
+  final List<RoutineSet> sets;
+  const SaveSetsEvent({required this.sets});
+}

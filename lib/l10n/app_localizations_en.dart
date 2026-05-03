@@ -60,6 +60,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileTitle => 'Tell us about yourself';
 
   @override
+  String get setRepsError => 'Enter a valid number!';
+
+  @override
   String get ok => 'OK';
 
   @override

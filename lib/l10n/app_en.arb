@@ -17,6 +17,7 @@
   "gymBoxTitle": "Please type in the code the Gym Gave you",
   "authBoxTitle": "Please enter your email",
   "profileTitle": "Tell us about yourself",
+  "setRepsError": "Enter a valid number!",
   
   "ok": "OK",
   "no": "No",

@@ -60,6 +60,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileTitle => 'اخبرنا عن نفسك';
 
   @override
+  String get setRepsError => 'الرجاء ادخال قيمة صحيحة!';
+
+  @override
   String get ok => 'موافق';
 
   @override

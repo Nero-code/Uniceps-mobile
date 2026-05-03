@@ -200,6 +200,12 @@ abstract class AppLocalizations {
   /// **'Tell us about yourself'**
   String get profileTitle;
 
+  /// No description provided for @setRepsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid number!'**
+  String get setRepsError;
+
   /// No description provided for @ok.
   ///
   /// In en, this message translates to:
