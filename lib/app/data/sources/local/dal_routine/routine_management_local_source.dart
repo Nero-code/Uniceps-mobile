@@ -148,9 +148,12 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
           .into(_database.daysGroup)
           .insert(DaysGroupCompanion.insert(index: d.index, dayName: d.name, routineId: routineId));
       yield Stage.days; // move one step for Day
+      final sortedRoutineItems = d.items;
+      sortedRoutineItems.sort((a, b) => a.index.compareTo(b.index));
       // Create Items
       for (int j = 0; j < d.items.length; j++) {
-        final i = d.items[j];
+        final i = sortedRoutineItems[j];
+
         var ex = await (_database.select(
           _database.exercises,
         )..where((f) => f.apiId.equals(i.exerciseDto.apiId))).getSingleOrNull();
@@ -196,8 +199,10 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
           ),
         );
       }
+      iTems.sort((a, b) => a.index.compareTo(b.index));
       days.add(RoutineDayDto.fromTable(d, iTems));
     }
+    days.sort((a, b) => a.index.compareTo(b.index));
     return RoutineDto.fromTable(routine, days);
   }
 }

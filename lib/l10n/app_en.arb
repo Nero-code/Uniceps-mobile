@@ -169,6 +169,9 @@
   "emptyDays": "No days, press + to add a day!",
   "emptyRoutines": "Lets build a special workout to achieve your goals!",
 
+  "noValues": "No Values",
+  "invalidValues": "Invalid Values",
+
   "sessionsReportNoValues": "No sessions found for this routine, Try practicing!",
   "sessionsReportInvalidValues": "Malformed sessions values!",
   "logsReportNoValues": "No Logs found for this routine",
@@ -315,5 +318,20 @@
   "muscleHead": "Muscle Head",
   "laterals": "Laterals",
   "secondaryMuscles": "Secondary Muscles",
-  "muscleGroupLabel": "Muscle Group"
+  "muscleGroupLabel": "Muscle Group",
+  "summary": "Summary",
+  "muscles": "Muscles",
+  "tools": "Tools",
+  "loading": "Loading...",
+  "totalAccumulation": "Total Accumulation",
+  "currentStreak": "Current Streak",
+  "longestStreak": "Longest Streak",
+  "totalSessions": "Total Sessions",
+  "totalWeightLabel": "Total Weight",
+  "totalDuration": "Total Duration",
+  "completionRate": "Completion Rate",
+  "efficiencyLabel": "Efficiency",
+  "kg": "Kg",
+  "min": "min",
+  "kgPerMin": "Kg/min"
 }

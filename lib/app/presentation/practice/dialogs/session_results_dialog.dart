@@ -48,7 +48,7 @@ class SessionResultsDialog extends StatelessWidget {
                         // borderRadius: BorderRadius.vertical(top: Radius.circular(radius)),
                       ),
                     ),
-                    Positioned(
+                    const Positioned(
                       bottom: -130.0,
                       right: -100.0,
                       child: Icon(Icons.star_rate_rounded, size: 400, color: Colors.white10),
@@ -64,7 +64,7 @@ class SessionResultsDialog extends StatelessWidget {
                               locale.progressRate,
                               style: theme.textTheme.titleSmall?.copyWith(color: Colors.white),
                             ),
-                            textStyle: TextStyle(fontSize: 20, color: Colors.white, fontWeight: .bold),
+                            textStyle: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: .bold),
                             dimension: 100,
                             strokeWidth: 10,
                             color: Colors.white.withAlpha(200),
@@ -85,7 +85,7 @@ class SessionResultsDialog extends StatelessWidget {
                   child: Row(
                     spacing: 5,
                     children: [
-                      Expanded(child: Divider(endIndent: 5)),
+                      const Expanded(child: Divider(endIndent: 5)),
                       Column(
                         children: [
                           Text(
@@ -99,7 +99,7 @@ class SessionResultsDialog extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Expanded(child: Divider(indent: 5)),
+                      const Expanded(child: Divider(indent: 5)),
                     ],
                   ),
                 ),
@@ -183,7 +183,7 @@ class SessionResultsDialog extends StatelessWidget {
       decoration: BoxDecoration(
         // color: theme.colorScheme.surface,
         // color: Colors.transparent,
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [Color(0x00FFFFFF), Colors.white, Color(0x00FFFFFF)],
           stops: [0.01, 0.2, 0.4],
           begin: .topLeft,

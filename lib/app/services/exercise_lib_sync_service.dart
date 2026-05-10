@@ -49,15 +49,15 @@ class ExerciseLibSyncService {
         return const Right(unit);
       } catch (e, s) {
         _logger.e('something went wrong!!', error: e, stackTrace: s);
-        return Left(.libUnknown());
+        return const Left(.libUnknown());
       }
     } else {
       if (localLib.isEmpty) {
         _logger.i('Exercises Table is Empty');
-        return Left(.libNotFound());
+        return const Left(.libNotFound());
       }
     }
     _logger.i('No Internet Connection');
-    return Left(.libOffline());
+    return const Left(.libOffline());
   }
 }

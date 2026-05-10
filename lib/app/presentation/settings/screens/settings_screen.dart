@@ -109,7 +109,7 @@ class SettingsScreen extends StatelessWidget {
                                     if (!asyncSnapshot.data!) return Text(locale.errNoInternet);
                                     Navigator.pop(context);
                                   }
-                                  return SizedBox.square(
+                                  return const SizedBox.square(
                                     dimension: 50,
                                     child: Center(
                                       child: LoadingIndicator(

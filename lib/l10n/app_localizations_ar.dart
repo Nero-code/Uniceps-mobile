@@ -474,6 +474,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get emptyRoutines => 'هيا لنبني برنامج تدريبي مميز يحقق اهدافنا!';
 
   @override
+  String get noValues => 'لا يوجد معطيات';
+
+  @override
+  String get invalidValues => 'يوجد مشكلة بالقيم';
+
+  @override
   String get sessionsReportNoValues =>
       'لا يوجد جلسات لهذا البرنامج, عد بعد التمرين!';
 
@@ -749,4 +755,49 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get muscleGroupLabel => 'المجموعة العضلية';
+
+  @override
+  String get summary => 'الملخص';
+
+  @override
+  String get muscles => 'العضلات';
+
+  @override
+  String get tools => 'الأدوات';
+
+  @override
+  String get loading => 'جاري التحميل...';
+
+  @override
+  String get totalAccumulation => 'الإجمالي';
+
+  @override
+  String get currentStreak => 'التتابع الحالي';
+
+  @override
+  String get longestStreak => 'أطول تتابع';
+
+  @override
+  String get totalSessions => 'إجمالي الجلسات';
+
+  @override
+  String get totalWeightLabel => 'إجمالي الوزن';
+
+  @override
+  String get totalDuration => 'إجمالي المدة';
+
+  @override
+  String get completionRate => 'معدل الإكمال';
+
+  @override
+  String get efficiencyLabel => 'الكفاءة';
+
+  @override
+  String get kg => 'كغ';
+
+  @override
+  String get min => 'دقيقة';
+
+  @override
+  String get kgPerMin => 'كغ/دقيقة';
 }

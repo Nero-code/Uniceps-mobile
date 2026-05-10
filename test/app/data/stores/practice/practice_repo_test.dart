@@ -39,7 +39,7 @@ void main() {
     isSynced: false,
   );
   final tRoutineDto = RoutineDto.fromEntity(tRoutine);
-  final tRoutineDay = RoutineDay(id: 1, routineId: 1, name: 'Day 1', index: 0, exercises: []);
+  const tRoutineDay = RoutineDay(id: 1, routineId: 1, name: 'Day 1', index: 0, exercises: []);
   final tRoutineDayDto = RoutineDayDto.fromEntity(tRoutineDay);
   final tSession = TSession(
     id: 1,

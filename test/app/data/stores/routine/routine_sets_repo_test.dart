@@ -24,7 +24,7 @@ void main() {
     repo.lazyItemSetsBuffer.clear();
   });
 
-  final tRoutineSet = const RoutineSet(
+  const tRoutineSet = RoutineSet(
     id: 1,
     routineItemId: 1,
     index: 0,

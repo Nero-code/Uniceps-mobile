@@ -121,7 +121,7 @@ class ExercisesRepo implements IExercisesContract {
       for (final e in lib) {
         await _localSource.writeExercise(ExerciseDto.fromEntity(e));
       }
-      return Right(unit);
+      return const Right(unit);
     } catch (e, s) {
       _logger.e('Error in saving exercises lib!', error: e, stackTrace: s);
       return Left(DatabaseFailure(errorMsg: e.toString()));

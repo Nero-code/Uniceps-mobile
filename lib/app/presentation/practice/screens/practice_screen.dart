@@ -140,9 +140,9 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
                   actions: [
                     IconButton(
                       onPressed: () {
-                        showDialog(context: context, builder: (context) => RestTimerDialog());
+                        showDialog(context: context, builder: (context) => const RestTimerDialog());
                       },
-                      icon: Icon(Icons.timer_outlined),
+                      icon: const Icon(Icons.timer_outlined),
                     ),
                   ],
                 ),

@@ -97,7 +97,7 @@ class _RoutineEditSetsScreenState extends State<RoutineEditSetsScreen> {
                                   );
                                 }
                               },
-                              icon: Icon(Icons.done),
+                              icon: const Icon(Icons.done),
                             ),
                           ],
                         ),

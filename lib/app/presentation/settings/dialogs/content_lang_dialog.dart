@@ -14,7 +14,7 @@ class ContentLangDialog extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final contentLanguage = sl<LanguageCacheHelper>().getExercisesLibContentLanguage();
     return AlertDialog(
-      title: Text('Changing Content Language'),
+      title: const Text('Changing Content Language'),
       content: RadioGroup(
         groupValue: contentLanguage,
         onChanged: (value) async {

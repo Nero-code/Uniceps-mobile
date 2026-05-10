@@ -41,7 +41,7 @@ class ExerciseGridWidget extends StatelessWidget {
                   }
                   return Icon(Icons.broken_image_rounded, size: 60, color: Colors.grey.shade300);
                 }
-                return LoadingIndicator(elevated: false, backgroundColor: Colors.transparent);
+                return const LoadingIndicator(elevated: false, backgroundColor: Colors.transparent);
               },
             ),
           ),

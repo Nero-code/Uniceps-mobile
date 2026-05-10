@@ -9,6 +9,7 @@ import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
 import 'package:uniceps/app/data/sources/local/dal_measurements/measurements_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_practice/t_session_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_profile/profile_local_source.dart';
+import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart';
 import 'package:uniceps/app/data/stores/performance/performance_repo.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/logs_report.dart';
@@ -17,13 +18,15 @@ import 'package:uniceps/app/domain/classes/performance_entities/sessions_report.
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
-import 'performance_repo_test.mocks.dart';
+import '../routine/exercises_repo_test.mocks.dart';
+import 'performance_repo_test.mocks.dart' hide MockIExercisesLocalSourceContract;
 
 @GenerateMocks([
   IProfileLocalSource,
   IRoutineManagementLocalSourceContract,
   ITSessionLocalSourceContract,
   IMeasurementsLocalSource,
+  IExercisesLocalSourceContract,
 ])
 void main() {
   late PerformanceRepo repo;
@@ -31,17 +34,20 @@ void main() {
   late MockIRoutineManagementLocalSourceContract mockRoutineSource;
   late MockITSessionLocalSourceContract mockSessionSource;
   late MockIMeasurementsLocalSource mockMeasurementSource;
+  late MockIExercisesLocalSourceContract mockIExercisesSource;
 
   setUp(() {
     mockProfileSource = MockIProfileLocalSource();
     mockRoutineSource = MockIRoutineManagementLocalSourceContract();
     mockSessionSource = MockITSessionLocalSourceContract();
     mockMeasurementSource = MockIMeasurementsLocalSource();
+    mockIExercisesSource = MockIExercisesLocalSourceContract();
     repo = PerformanceRepo(
       profileLocalSource: mockProfileSource,
       routineLocalSource: mockRoutineSource,
       tSessionsLocalSource: mockSessionSource,
       measurementsLocalSource: mockMeasurementSource,
+      exercisesLocalSource: mockIExercisesSource,
     );
   });
 

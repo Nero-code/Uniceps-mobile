@@ -53,7 +53,7 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
           title: Text("${widget.dayName}: ${selectedIds.length + widget.presentExerciseIds.length}"),
           actions: [
             IconButton(
-              icon: Icon(Icons.done_all_rounded),
+              icon: const Icon(Icons.done_all_rounded),
               color: Theme.of(context).colorScheme.primary,
               onPressed: () {
                 final list = context.read<ExercisesV2Bloc>().selectedExercises;
@@ -62,7 +62,7 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
             ),
             Builder(
               builder: (context) =>
-                  IconButton(onPressed: Scaffold.of(context).openEndDrawer, icon: Icon(Icons.filter_alt_rounded)),
+                  IconButton(onPressed: Scaffold.of(context).openEndDrawer, icon: const Icon(Icons.filter_alt_rounded)),
             ),
           ],
         ),
@@ -92,7 +92,7 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
                               setState(() {});
                             },
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                         ],
                       ],
                     ),
@@ -109,11 +109,11 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
                               setState(() {});
                             },
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                         ],
                       ],
                     ),
-                    Divider(),
+                    const Divider(),
                     Row(
                       spacing: 5,
                       mainAxisAlignment: .spaceEvenly,
@@ -234,7 +234,7 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
                         child: IconButton(
                           iconSize: 20,
 
-                          icon: Icon(Icons.info_outline),
+                          icon: const Icon(Icons.info_outline),
                           color: Theme.of(context).colorScheme.primary,
                           onPressed: () => Navigator.push(
                             context,

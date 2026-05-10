@@ -22,7 +22,7 @@ class PlanWidget extends StatelessWidget {
         ],
       ),
       child: Badge(
-        label: Icon(Icons.card_giftcard_rounded, color: Colors.amber),
+        label: const Icon(Icons.card_giftcard_rounded, color: Colors.amber),
         alignment: AlignmentDirectional.lerp(AlignmentDirectional.topStart, AlignmentDirectional.topCenter, 0.3),
         isLabelVisible: item.isFree,
         backgroundColor: Colors.transparent,

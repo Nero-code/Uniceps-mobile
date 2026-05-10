@@ -20,6 +20,7 @@ abstract class ITSessionLocalSourceContract {
   Future<RoutineDayDto> getPracticeDay(int dayId);
 
   Future<List<TSessionModel>> getSessionsByRoutine(int routineId);
+  Future<List<TSessionModel>> getAllSessions();
 
   Future<TSessionModel?> getPreviousSession();
   Future<TSessionModel> startTrainingSession(int dayId, String dayName);
@@ -368,5 +369,18 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
 
     if (sessions.isEmpty) throw EmptyCacheExeption();
     return sessions;
+  }
+
+  @override
+  Future<List<TSessionModel>> getAllSessions() async {
+    final sessions = await (_database.select(_database.tSessions)..where((tbl) => tbl.finishedAt.isNotNull())).get();
+    final logs = await _database.select(_database.tLogs).get();
+
+    final List<TSessionModel> res = [];
+    for (final s in sessions) {
+      final tLogs = logs.where((log) => log.sessionId == s.tsId).toList();
+      res.add(TSessionModel.fromTable(s, tLogs));
+    }
+    return res;
   }
 }

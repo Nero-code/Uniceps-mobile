@@ -1010,6 +1010,18 @@ abstract class AppLocalizations {
   /// **'Lets build a special workout to achieve your goals!'**
   String get emptyRoutines;
 
+  /// No description provided for @noValues.
+  ///
+  /// In en, this message translates to:
+  /// **'No Values'**
+  String get noValues;
+
+  /// No description provided for @invalidValues.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid Values'**
+  String get invalidValues;
+
   /// No description provided for @sessionsReportNoValues.
   ///
   /// In en, this message translates to:
@@ -1531,6 +1543,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Muscle Group'**
   String get muscleGroupLabel;
+
+  /// No description provided for @summary.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get summary;
+
+  /// No description provided for @muscles.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscles'**
+  String get muscles;
+
+  /// No description provided for @tools.
+  ///
+  /// In en, this message translates to:
+  /// **'Tools'**
+  String get tools;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loading;
+
+  /// No description provided for @totalAccumulation.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Accumulation'**
+  String get totalAccumulation;
+
+  /// No description provided for @currentStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Streak'**
+  String get currentStreak;
+
+  /// No description provided for @longestStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Longest Streak'**
+  String get longestStreak;
+
+  /// No description provided for @totalSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Sessions'**
+  String get totalSessions;
+
+  /// No description provided for @totalWeightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Weight'**
+  String get totalWeightLabel;
+
+  /// No description provided for @totalDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Duration'**
+  String get totalDuration;
+
+  /// No description provided for @completionRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Completion Rate'**
+  String get completionRate;
+
+  /// No description provided for @efficiencyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Efficiency'**
+  String get efficiencyLabel;
+
+  /// No description provided for @kg.
+  ///
+  /// In en, this message translates to:
+  /// **'Kg'**
+  String get kg;
+
+  /// No description provided for @min.
+  ///
+  /// In en, this message translates to:
+  /// **'min'**
+  String get min;
+
+  /// No description provided for @kgPerMin.
+  ///
+  /// In en, this message translates to:
+  /// **'Kg/min'**
+  String get kgPerMin;
 }
 
 class _AppLocalizationsDelegate

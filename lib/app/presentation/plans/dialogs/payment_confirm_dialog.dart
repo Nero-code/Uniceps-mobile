@@ -15,7 +15,7 @@ class PaymentConfirmationDialog extends StatelessWidget {
         mainAxisSize: .min,
         children: [
           Text(locale.buyPlancontent(planName)),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             children: [
               Expanded(
@@ -25,7 +25,7 @@ class PaymentConfirmationDialog extends StatelessWidget {
                   onPressed: () => Navigator.pop(context, false),
                 ),
               ),
-              SizedBox(width: 5),
+              const SizedBox(width: 5),
               Expanded(
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.amber, foregroundColor: Colors.white),

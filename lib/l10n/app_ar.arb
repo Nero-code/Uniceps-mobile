@@ -168,6 +168,9 @@
   "emptyDays": "لا يوجد ايام, اضغط على + لاضافة يوم!",
   "emptyRoutines": "هيا لنبني برنامج تدريبي مميز يحقق اهدافنا!",
 
+  "noValues": "لا يوجد معطيات",
+  "invalidValues": "يوجد مشكلة بالقيم",
+
   "sessionsReportNoValues": "لا يوجد جلسات لهذا البرنامج, عد بعد التمرين!",
   "sessionsReportInvalidValues": "قيم الجلسة غير صحيحة!",
   "logsReportNoValues": "لا يوجد تقرير اداء لهذا البرنامج",
@@ -314,5 +317,20 @@
   "muscleHead": "رأس العضلة",
   "laterals": "الجانبيات",
   "secondaryMuscles": "عضلات ثانوية",
-  "muscleGroupLabel": "المجموعة العضلية"
+  "muscleGroupLabel": "المجموعة العضلية",
+  "summary": "الملخص",
+  "muscles": "العضلات",
+  "tools": "الأدوات",
+  "loading": "جاري التحميل...",
+  "totalAccumulation": "الإجمالي",
+  "currentStreak": "التتابع الحالي",
+  "longestStreak": "أطول تتابع",
+  "totalSessions": "إجمالي الجلسات",
+  "totalWeightLabel": "إجمالي الوزن",
+  "totalDuration": "إجمالي المدة",
+  "completionRate": "معدل الإكمال",
+  "efficiencyLabel": "الكفاءة",
+  "kg": "كغ",
+  "min": "دقيقة",
+  "kgPerMin": "كغ/دقيقة"
 }

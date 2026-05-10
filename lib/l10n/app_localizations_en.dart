@@ -474,6 +474,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Lets build a special workout to achieve your goals!';
 
   @override
+  String get noValues => 'No Values';
+
+  @override
+  String get invalidValues => 'Invalid Values';
+
+  @override
   String get sessionsReportNoValues =>
       'No sessions found for this routine, Try practicing!';
 
@@ -752,4 +758,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get muscleGroupLabel => 'Muscle Group';
+
+  @override
+  String get summary => 'Summary';
+
+  @override
+  String get muscles => 'Muscles';
+
+  @override
+  String get tools => 'Tools';
+
+  @override
+  String get loading => 'Loading...';
+
+  @override
+  String get totalAccumulation => 'Total Accumulation';
+
+  @override
+  String get currentStreak => 'Current Streak';
+
+  @override
+  String get longestStreak => 'Longest Streak';
+
+  @override
+  String get totalSessions => 'Total Sessions';
+
+  @override
+  String get totalWeightLabel => 'Total Weight';
+
+  @override
+  String get totalDuration => 'Total Duration';
+
+  @override
+  String get completionRate => 'Completion Rate';
+
+  @override
+  String get efficiencyLabel => 'Efficiency';
+
+  @override
+  String get kg => 'Kg';
+
+  @override
+  String get min => 'min';
+
+  @override
+  String get kgPerMin => 'Kg/min';
 }

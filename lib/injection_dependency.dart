@@ -224,6 +224,7 @@ Future<void> init() async {
       routineLocalSource: sl(),
       tSessionsLocalSource: sl(),
       measurementsLocalSource: sl(),
+      exercisesLocalSource: sl(),
     ),
   );
 

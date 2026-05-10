@@ -66,7 +66,7 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab> with AutomaticK
                                   ),
                                   BlocProvider(
                                     create: (context) =>
-                                        ExercisesV2Bloc(commands: di.sl())..add(GetAllExercisesEvent()),
+                                        ExercisesV2Bloc(commands: di.sl())..add(const GetAllExercisesEvent()),
                                   ),
                                   BlocProvider.value(value: context.read<ItemsEditBloc>()),
                                 ],

@@ -301,7 +301,7 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                                         children: [
                                           canCreate
                                               ? const Icon(Icons.add, color: Colors.white)
-                                              : Image(
+                                              : const Image(
                                                   image: AssetImage(IMG_PREMIUM),
                                                   color: Colors.amber,
                                                   width: 20,

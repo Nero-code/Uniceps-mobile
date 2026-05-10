@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_filter.dart';
 import 'package:uniceps/app/domain/commands/routine_management/exercises_commands.dart';
 

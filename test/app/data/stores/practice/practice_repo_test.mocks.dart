@@ -116,6 +116,16 @@ class MockITSessionLocalSourceContract extends _i1.Mock
           as _i7.Future<List<_i4.TSessionModel>>);
 
   @override
+  _i7.Future<List<_i4.TSessionModel>> getAllSessions() =>
+      (super.noSuchMethod(
+            Invocation.method(#getAllSessions, []),
+            returnValue: _i7.Future<List<_i4.TSessionModel>>.value(
+              <_i4.TSessionModel>[],
+            ),
+          )
+          as _i7.Future<List<_i4.TSessionModel>>);
+
+  @override
   _i7.Future<_i4.TSessionModel?> getPreviousSession() =>
       (super.noSuchMethod(
             Invocation.method(#getPreviousSession, []),

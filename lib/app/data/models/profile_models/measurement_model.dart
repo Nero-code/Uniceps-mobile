@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/app/data/sources/local/database.dart' as db;
+import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 
 part 'measurement_model.g.dart';
 
@@ -28,6 +28,8 @@ class MeasurementModel {
 
   final int version;
   final bool isSynced;
+
+  static int get propsNumbers => 15;
 
   const MeasurementModel({
     required this.id,
@@ -56,94 +58,128 @@ class MeasurementModel {
   Map<String, dynamic> toJson() => _$MeasurementModelToJson(this);
 
   factory MeasurementModel.fromEntity(Measurement m) => MeasurementModel(
-        id: m.id,
-        apiId: m.apiId,
-        height: m.height,
-        weight: m.weight,
-        lArm: m.lArm,
-        rArm: m.rArm,
-        lHumerus: m.lHumerus,
-        rHumerus: m.rHumerus,
-        lLeg: m.lLeg,
-        rLeg: m.rLeg,
-        lThigh: m.lThigh,
-        rThigh: m.rThigh,
-        neck: m.neck,
-        shoulders: m.shoulders,
-        waist: m.waist,
-        chest: m.chest,
-        hips: m.hips,
-        checkDate: m.checkDate,
-        version: m.version,
-        isSynced: m.isSynced,
-      );
+    id: m.id,
+    apiId: m.apiId,
+    height: m.height,
+    weight: m.weight,
+    lArm: m.lArm,
+    rArm: m.rArm,
+    lHumerus: m.lHumerus,
+    rHumerus: m.rHumerus,
+    lLeg: m.lLeg,
+    rLeg: m.rLeg,
+    lThigh: m.lThigh,
+    rThigh: m.rThigh,
+    neck: m.neck,
+    shoulders: m.shoulders,
+    waist: m.waist,
+    chest: m.chest,
+    hips: m.hips,
+    checkDate: m.checkDate,
+    version: m.version,
+    isSynced: m.isSynced,
+  );
 
   Measurement toEntity() => Measurement(
-        id: id,
-        apiId: apiId,
-        height: height,
-        weight: weight,
-        lArm: lArm,
-        rArm: rArm,
-        lHumerus: lHumerus,
-        rHumerus: rHumerus,
-        lLeg: lLeg,
-        rLeg: rLeg,
-        lThigh: lThigh,
-        rThigh: rThigh,
-        neck: neck,
-        shoulders: shoulders,
-        waist: waist,
-        chest: chest,
-        hips: hips,
-        checkDate: checkDate,
-        version: version,
-        isSynced: isSynced,
-      );
+    id: id,
+    apiId: apiId,
+    height: height,
+    weight: weight,
+    lArm: lArm,
+    rArm: rArm,
+    lHumerus: lHumerus,
+    rHumerus: rHumerus,
+    lLeg: lLeg,
+    rLeg: rLeg,
+    lThigh: lThigh,
+    rThigh: rThigh,
+    neck: neck,
+    shoulders: shoulders,
+    waist: waist,
+    chest: chest,
+    hips: hips,
+    checkDate: checkDate,
+    version: version,
+    isSynced: isSynced,
+  );
 
   factory MeasurementModel.fromTable(db.Measurement m) => MeasurementModel(
-      id: m.id,
-      apiId: m.apiId,
-      height: m.height,
-      weight: m.weight,
-      lArm: m.lArm,
-      rArm: m.rArm,
-      lHumerus: m.lHumerus,
-      rHumerus: m.rHumerus,
-      lLeg: m.lLeg,
-      rLeg: m.rLeg,
-      lThigh: m.lThigh,
-      rThigh: m.rThigh,
-      neck: m.neck,
-      shoulders: m.shoulders,
-      waist: m.waist,
-      chest: m.chest,
-      hips: m.hips,
-      checkDate: m.checkDate,
-      version: m.version,
-      isSynced: m.isSynced);
+    id: m.id,
+    apiId: m.apiId,
+    height: m.height,
+    weight: m.weight,
+    lArm: m.lArm,
+    rArm: m.rArm,
+    lHumerus: m.lHumerus,
+    rHumerus: m.rHumerus,
+    lLeg: m.lLeg,
+    rLeg: m.rLeg,
+    lThigh: m.lThigh,
+    rThigh: m.rThigh,
+    neck: m.neck,
+    shoulders: m.shoulders,
+    waist: m.waist,
+    chest: m.chest,
+    hips: m.hips,
+    checkDate: m.checkDate,
+    version: m.version,
+    isSynced: m.isSynced,
+  );
 
   /// Dummy constructor for fake data generation.
   factory MeasurementModel.skank() => MeasurementModel(
-        id: null,
-        apiId: null,
-        height: 0,
-        weight: 0,
-        lArm: 0,
-        rArm: 0,
-        lHumerus: 0,
-        rHumerus: 0,
-        lLeg: 0,
-        rLeg: 0,
-        lThigh: 0,
-        rThigh: 0,
-        neck: 0,
-        shoulders: 0,
-        waist: 0,
-        chest: 0,
-        hips: 0,
-        checkDate: DateTime(Random().nextInt(25) + 2000),
-        version: 0,
-        isSynced: false,
-      );
+    id: null,
+    apiId: null,
+    height: 0,
+    weight: 0,
+    lArm: 0,
+    rArm: 0,
+    lHumerus: 0,
+    rHumerus: 0,
+    lLeg: 0,
+    rLeg: 0,
+    lThigh: 0,
+    rThigh: 0,
+    neck: 0,
+    shoulders: 0,
+    waist: 0,
+    chest: 0,
+    hips: 0,
+    checkDate: DateTime(Random().nextInt(25) + 2000),
+    version: 0,
+    isSynced: false,
+  );
+
+  double getByIndex(int index) {
+    switch (index) {
+      case 0:
+        return height;
+      case 1:
+        return weight;
+      case 2:
+        return neck;
+      case 3:
+        return shoulders;
+      case 4:
+        return chest;
+      case 5:
+        return waist;
+      case 6:
+        return lArm;
+      case 7:
+        return rArm;
+      case 8:
+        return lThigh;
+      case 9:
+        return rThigh;
+      case 10:
+        return lLeg;
+      case 11:
+        return rLeg;
+      case 12:
+        return hips;
+      default:
+        return 0.0;
+    }
+  }
 }
