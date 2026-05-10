@@ -31,7 +31,7 @@ jobs:
       # 2. Create Config Files from Repository Secrets
       - name: Create Config Files
         run: |
-          mkdir -p android/app/src/staging/
+          mkdir -p android/app/src/prod/
           mkdir -p assets/config/
           echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > android/app/src/prod/google-services.json
           echo '${{ secrets.ENV_CONFIG_JSON }}' > assets/config/config_prod.json
