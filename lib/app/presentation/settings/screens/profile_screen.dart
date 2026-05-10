@@ -150,7 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
                       onPressed: () => launchUrl(Uri.parse(ApiRoutes.deleteAccount)),
                       label: Text(locale.deleteBtn),
-                      icon: Icon(Icons.delete_forever),
+                      icon: const Icon(Icons.delete_forever),
                     ),
                   ],
                 );

@@ -17,7 +17,7 @@ class ExerciseLibUpdateDialog extends StatelessWidget {
       create: (context) => MediaDownloaderCubit(sl()),
       lazy: false,
       child: AlertDialog(
-        icon: Icon(Icons.downloading, size: 50, color: Colors.green),
+        icon: const Icon(Icons.downloading, size: 50, color: Colors.green),
         content: FutureBuilder(
           future: client.getListHandler(
             ApiRoutes.domain,
@@ -47,9 +47,9 @@ class ExerciseLibUpdateDialog extends StatelessWidget {
                 },
               );
             } else if (asyncSnapshot.hasError) {
-              return Center(child: Icon(Icons.error, size: 50, color: Colors.red));
+              return const Center(child: Icon(Icons.error, size: 50, color: Colors.red));
             }
-            return LinearProgressIndicator();
+            return const LinearProgressIndicator();
           },
         ),
       ),

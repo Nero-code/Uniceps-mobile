@@ -13,4 +13,9 @@ class ExerciseLibCubit extends Cubit<ExerciseLibState> {
     final either = await _commands.checkExercises();
     either.fold((l) => emit(const .needsUpdate()), (r) => emit(r ? const .statusGood() : const .needsUpdate()));
   }
+
+  Future<bool> changeLibLanguage(String language) async {
+    final either = await _commands.changeLibLanguage(language);
+    return either.fold((l) => false, (r) => true);
+  }
 }

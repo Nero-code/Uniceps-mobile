@@ -29,7 +29,7 @@ class DeviceInfoSyncService {
       return;
     }
 
-    final platform = 'Android';
+    const platform = 'Android';
     final androidInfo = await DeviceInfoPlugin().androidInfo;
 
     // ----------------

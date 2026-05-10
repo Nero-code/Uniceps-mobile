@@ -42,7 +42,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
           listener: (context, state) => state.whenOrNull(
             authenticated: () {
               context.read<AccountCubit>().getUserAccount();
-              context.read<MembershipBloc>().add(MembershipEvent.getCurrentPlan());
+              context.read<MembershipBloc>().add(const MembershipEvent.getCurrentPlan());
               Navigator.pop(context);
               return null;
             },

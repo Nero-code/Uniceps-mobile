@@ -23,7 +23,7 @@ void main() {
     repo = RoutineDaysRepo(localSource: mockLocalSource, logger: mockLogger);
   });
 
-  final tRoutineDay = RoutineDay(id: 1, routineId: 1, name: 'Day 1', index: 0, exercises: []);
+  const tRoutineDay = RoutineDay(id: 1, routineId: 1, name: 'Day 1', index: 0, exercises: []);
   final tRoutineDayDto = RoutineDayDto.fromEntity(tRoutineDay);
 
   group('getDaysUnderRoutine', () {

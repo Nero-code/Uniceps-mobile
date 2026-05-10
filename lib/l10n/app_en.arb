@@ -17,6 +17,7 @@
   "gymBoxTitle": "Please type in the code the Gym Gave you",
   "authBoxTitle": "Please enter your email",
   "profileTitle": "Tell us about yourself",
+  "setRepsError": "Enter a valid number!",
   
   "ok": "OK",
   "no": "No",
@@ -168,6 +169,9 @@
   "emptyDays": "No days, press + to add a day!",
   "emptyRoutines": "Lets build a special workout to achieve your goals!",
 
+  "noValues": "No Values",
+  "invalidValues": "Invalid Values",
+
   "sessionsReportNoValues": "No sessions found for this routine, Try practicing!",
   "sessionsReportInvalidValues": "Malformed sessions values!",
   "logsReportNoValues": "No Logs found for this routine",
@@ -304,6 +308,30 @@
   
   "captainUniAboutContent": "Hello, I’m Captain Uni.\nI’m the virtual guide who will accompany you inside the Uniceps app, and my job is to make every step easy and your experience smooth and clear.\nMy main role is to introduce you to the app and show you how to use each section without any confusion.\nI also help you choose the workout program that fits you best, so you can start your journey the right way.\nWith every workout you complete, I collect your stats and show you your results, so you can see your progress day by day.\nI can’t promise to change your life overnight… but I can promise to stay by your side at every stage.\nI’m here to guide you, explain things, and encourage you, so you can get the most out of the app.\nAnd in the end… consider me a friend and an experienced companion walking with you step by step, happy to see you improving.",
 
-  "msgSlowConnection": "Weak internet connection"
-
+  "msgSlowConnection": "Weak internet connection",
+  "reset": "Reset",
+  "start": "Start",
+  "changeExercisesLang": "Change Exercises Language",
+  "selectFilter": "Select Filter",
+  "description": "Description",
+  "equipment": "Equipment",
+  "muscleHead": "Muscle Head",
+  "laterals": "Laterals",
+  "secondaryMuscles": "Secondary Muscles",
+  "muscleGroupLabel": "Muscle Group",
+  "summary": "Summary",
+  "muscles": "Muscles",
+  "tools": "Tools",
+  "loading": "Loading...",
+  "totalAccumulation": "Total Accumulation",
+  "currentStreak": "Current Streak",
+  "longestStreak": "Longest Streak",
+  "totalSessions": "Total Sessions",
+  "totalWeightLabel": "Total Weight",
+  "totalDuration": "Total Duration",
+  "completionRate": "Completion Rate",
+  "efficiencyLabel": "Efficiency",
+  "kg": "Kg",
+  "min": "min",
+  "kgPerMin": "Kg/min"
 }

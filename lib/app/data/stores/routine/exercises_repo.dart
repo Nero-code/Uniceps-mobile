@@ -3,9 +3,10 @@ import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
-// import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/exercise_filter.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/exercise_tool.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_exercises_contract.dart';
 import 'package:uniceps/app/domain/helpers/result.dart';
@@ -22,6 +23,7 @@ class ExercisesRepo implements IExercisesContract {
 
   final List<Exercise> exercisesLib = [];
   final List<MuscleGroup> allGroups = [];
+  final List<ExerciseTool> allTools = [];
 
   ExercisesRepo({
     required IExercisesLocalSourceContract localSource,
@@ -40,11 +42,32 @@ class ExercisesRepo implements IExercisesContract {
       if (res.isNotEmpty) {
         exercisesLib.clear();
         exercisesLib.addAll(res.map((e) => e.toEntity()).toList());
-        extractGroups();
+        extractFilters();
       }
       return Right(res.isNotEmpty);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> changeLibLanguage(String language) async {
+    if (await _internet.hasConnection) {
+      try {
+        final res = await _remoteSource.getAllExercises(language: language);
+        await for (final _ in downloadImages(res.map((e) => e.apiId).toList())) {}
+        for (var e in res) {
+          await _localSource.writeExercise(e);
+        }
+        exercisesLib.clear();
+        exercisesLib.addAll(res.map((e) => e.toEntity()));
+
+        return const Right(true);
+      } catch (e, s) {
+        return Left(NoInternetConnectionFailure(errMsg: '$e\n$s'));
+      }
+    } else {
+      return Left(NoInternetConnectionFailure(errMsg: ''));
     }
   }
 
@@ -59,6 +82,18 @@ class ExercisesRepo implements IExercisesContract {
     for (final g in allGroups) {
       final matches = exercisesLib.where((e) => e.muscleGroupCode == g.muscleGroupCode).toList();
       allExercises.addAll({g.muscleGroupCode: matches});
+    }
+  }
+
+  Future<void> extractFilters() async {
+    // Groups Extraction...
+    for (final e in exercisesLib) {
+      if (allGroups.where((g) => g.muscleGroupCode == e.muscleGroupCode).isEmpty) {
+        allGroups.add(MuscleGroup(muscleGroupCode: e.muscleGroupCode, muscleGroupName: e.muscleGroupName));
+      }
+      if (allTools.where((t) => t.toolCode == e.toolCode).isEmpty) {
+        allTools.add(ExerciseTool(toolName: e.toolName, toolCode: e.toolCode));
+      }
     }
   }
 
@@ -86,7 +121,7 @@ class ExercisesRepo implements IExercisesContract {
       for (final e in lib) {
         await _localSource.writeExercise(ExerciseDto.fromEntity(e));
       }
-      return Right(unit);
+      return const Right(unit);
     } catch (e, s) {
       _logger.e('Error in saving exercises lib!', error: e, stackTrace: s);
       return Left(DatabaseFailure(errorMsg: e.toString()));
@@ -94,18 +129,22 @@ class ExercisesRepo implements IExercisesContract {
   }
 
   @override
-  Future<Either<Failure, List<MuscleGroup>>> getExerciseGroups() async {
-    if (allGroups.isNotEmpty) return Right(allGroups);
-    if (await _internet.hasConnection) {
-      try {
-        final res = await _remoteSource.getExerciseGroups();
-        allGroups.addAll(res.map((r) => r.toEntity()));
-        return Right(allGroups);
-      } catch (e) {
-        return Left(ServerFailure(errMsg: e.toString()));
-      }
-    }
-    return Left(OfflineFailure(errorMessage: ""));
+  Future<Either<Failure, ExerciseFilter>> getExerciseFilters() async {
+    return Right(ExerciseFilter(groups: allGroups, tools: allTools));
+  }
+
+  @override
+  Future<Either<Failure, List<Exercise>>> getExercisesByFilter(ExerciseFilter filter) async {
+    final filteredList = exercisesLib.where((e) {
+      final filterGroup = filter.groups.isNotEmpty
+          ? filter.groups.where((g) => e.muscleGroupCode == g.muscleGroupCode).isNotEmpty
+          : true;
+      final filterTools = filter.tools.isNotEmpty
+          ? filter.tools.where((t) => e.toolCode == t.toolCode).isNotEmpty
+          : true;
+      return (filterGroup & filterTools);
+    }).toList();
+    return Right(filteredList);
   }
 
   @override
@@ -122,6 +161,21 @@ class ExercisesRepo implements IExercisesContract {
       }
     }
     return Left(OfflineFailure(errorMessage: "offline"));
+  }
+
+  @override
+  Future<Either<Failure, List<MuscleGroup>>> getExerciseGroups() async {
+    if (allGroups.isNotEmpty) return Right(allGroups);
+    if (await _internet.hasConnection) {
+      try {
+        final res = await _remoteSource.getExerciseGroups();
+        allGroups.addAll(res.map((r) => r.toEntity()));
+        return Right(allGroups);
+      } catch (e) {
+        return Left(ServerFailure(errMsg: e.toString()));
+      }
+    }
+    return Left(OfflineFailure(errorMessage: ""));
   }
 
   @override

@@ -102,7 +102,7 @@ class PracticePanel extends StatelessWidget {
                     onTap: hasAccount
                         ? isPremium
                               ? onAnalytics
-                              : () => showDialog(context: context, builder: (_) => PremiumAlert())
+                              : () => showDialog(context: context, builder: (_) => const PremiumAlert())
                         : () => showDialog(
                             context: context,
                             builder: (_) => AccountLimitAlert(content: locale.signinAlert),

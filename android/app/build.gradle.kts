@@ -47,16 +47,6 @@ android {
         versionName = flutter.versionName
     }
     signingConfigs {
-//        create("release") {
-//            // Note: Use '?.let { file(it) }' for 'storeFile' to handle a potentially null value
-//            // if the key.properties file is missing (e.g., during a debug build).
-//            keyAlias = keystoreProperties["keyAlias"] as String
-//            keyPassword = keystoreProperties["keyPassword"] as String
-//            storeFile = keystoreProperties["storeFile"]?.let { file(it as String) }
-//            storePassword = keystoreProperties["storePassword"] as String
-//
-//        }
-
         create("release") {
             // 1. Get Values: Check Environment (GitHub) first, then local properties
             val envAlias = System.getenv("PROPERTIES_KEY_ALIAS")

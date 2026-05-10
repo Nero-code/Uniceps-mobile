@@ -72,7 +72,7 @@ class _ExercisesViewerScreenState extends State<ExercisesViewerScreen> with Tick
                               AddRoutineItemsEvent(dayId: widget.dayId, items: state.selected),
                             );
                           },
-                          icon: Icon(Icons.done_all_rounded),
+                          icon: const Icon(Icons.done_all_rounded),
                           color: Theme.of(context).colorScheme.primary,
                         );
                       },

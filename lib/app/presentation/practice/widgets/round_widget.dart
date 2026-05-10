@@ -33,11 +33,14 @@ class RoundWidget extends StatefulWidget {
 
 class _RoundWidgetState extends State<RoundWidget> {
   final weightCtl = TextEditingController();
+  final repsCtl = TextEditingController();
 
   // ------------------------
   @override
   Widget build(BuildContext context) {
     final weight = widget.log?.weight ?? widget.set.weight;
+    final finishedReps = widget.log?.finishedReps ?? widget.set.reps;
+    final latestReps = widget.log?.finishedReps ?? widget.set.lastReps;
     final isComplete = widget.log != null;
     return Ink(
       color: widget.log != null ? const Color.fromARGB(255, 224, 240, 242) : null,
@@ -45,12 +48,11 @@ class _RoundWidgetState extends State<RoundWidget> {
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: Row(
           children: [
-            Expanded(
-              flex: 1,
-              child: ColoredBox(
-                color: Colors.transparent,
+            Center(
+              child: Directionality(
+                textDirection: .ltr,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: .end,
                   children: [
                     Text(
                       "${widget.set.reps}",
@@ -60,10 +62,58 @@ class _RoundWidgetState extends State<RoundWidget> {
                         color: isComplete ? Theme.of(context).colorScheme.primary : Colors.black,
                       ),
                     ),
+                    if (latestReps != null)
+                      Text(
+                        "($latestReps)",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 10,
+                          color: isComplete ? Theme.of(context).colorScheme.primary : Colors.black,
+                        ),
+                      ),
                   ],
                 ),
               ),
             ),
+            Expanded(
+              child: ColoredBox(
+                color: Colors.transparent,
+                child: Center(
+                  child: SizedBox(
+                    width: 60,
+                    child: TextField(
+                      controller: repsCtl,
+                      textAlign: TextAlign.center,
+                      maxLength: 5,
+                      buildCounter: (_, {required currentLength, required isFocused, required maxLength}) => null,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        // FilteringTextInputFormatter.deny(RegExp(r"[^0-9^\.]")),
+                        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
+                      ],
+                      style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                      decoration: InputDecoration(
+                        hintText: NumberFormat.decimalPattern().format(finishedReps),
+                        hintStyle: TextStyle(color: Colors.grey.shade300),
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: isComplete ? Colors.white : Colors.grey),
+                          // borderSide: BorderSide(color: Colors.transparent),
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(7)),
+                        // border: OutlineInputBorder(
+                        //   borderRadius: BorderRadius.circular(7),
+                        //   borderSide: BorderSide(color: Colors.transparent),
+                        // ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // Container(width: 1, height: 30, color: Colors.black),
             Expanded(
               child: Center(
                 child: Container(
@@ -118,7 +168,10 @@ class _RoundWidgetState extends State<RoundWidget> {
               padding: const EdgeInsets.all(3.0),
               onTap: () {
                 final log =
-                    widget.log?.copywith(weight: double.tryParse(weightCtl.text) ?? 0.0) ??
+                    widget.log?.copyWith(
+                      weight: double.tryParse(weightCtl.text) ?? weight ?? 0.0,
+                      finishedReps: int.tryParse(repsCtl.text) ?? finishedReps,
+                    ) ??
                     TLog(
                       id: null,
                       completedAt: DateTime.now(),
@@ -128,6 +181,7 @@ class _RoundWidgetState extends State<RoundWidget> {
                       exerciseIndex: widget.exIndex,
                       setIndex: widget.set.index,
                       reps: widget.set.reps,
+                      finishedReps: int.tryParse(repsCtl.text) ?? finishedReps,
                       weight: double.tryParse(weightCtl.text) ?? weight ?? 0.0,
                     );
 

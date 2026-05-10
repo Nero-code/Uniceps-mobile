@@ -58,6 +58,7 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   animated_flip_card: ^1.0.2
   flutter_local_notifications: ^19.5.0
+  fl_chart: ^1.2.0
   
   # D A T A B A S E S
   shared_preferences: ^2.5.3

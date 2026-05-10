@@ -7,10 +7,18 @@ sealed class ExercisesV2Event extends Equatable {
   List<Object> get props => [];
 }
 
-class GetExercisesByFilterEvent extends ExercisesV2Event {
-  final MuscleGroup filter;
+class GetAllExercisesEvent extends ExercisesV2Event {
+  const GetAllExercisesEvent();
+}
 
+class GetExercisesByFilterEvent extends ExercisesV2Event {
+  final ExerciseFilter filter;
   const GetExercisesByFilterEvent({required this.filter});
+}
+
+class GetExercisesByMuscleGroup extends ExercisesV2Event {
+  final MuscleGroup filter;
+  const GetExercisesByMuscleGroup({required this.filter});
 }
 
 class AddOrRemoveExerciseEvent extends ExercisesV2Event {

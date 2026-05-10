@@ -40,7 +40,7 @@ class OTPAuthSource implements IOTPAuthSource {
     required T Function(Map<String, dynamic> json) parser,
   }) async {
     logger.d("START FUNC: validateOTP()");
-    final platform = 'Android';
+    const platform = 'Android';
     final androidInfo = await DeviceInfoPlugin().androidInfo;
     final notifyToken = await FirebaseMessaging.instance.getToken();
     final res = await client.post(

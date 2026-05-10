@@ -122,4 +122,12 @@ class MockMediaHelper extends _i1.Mock implements _i5.MediaHelper {
             returnValueForMissingStub: _i3.Future<void>.value(),
           )
           as _i3.Future<void>);
+
+  @override
+  bool containsImage(String? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#containsImage, [id]),
+            returnValue: false,
+          )
+          as bool);
 }

@@ -70,7 +70,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                   childBuilder(state.list[page]);
                   return Stack(
                     children: [
-                      SizedBox.expand(),
+                      const SizedBox.expand(),
                       GestureDetector(
                         onHorizontalDragEnd: (details) async {
                           if (isLoading) return;
@@ -92,7 +92,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                         child: Padding(
                           padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + kToolbarHeight),
                           child: SingleChildScrollView(
-                            padding: EdgeInsets.only(bottom: 5),
+                            padding: const EdgeInsets.only(bottom: 5),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -257,7 +257,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                   return SizedBox.expand(
                     child: Stack(
                       children: [
-                        Positioned.directional(textDirection: isRtl ? .rtl : .ltr, child: BackButton()),
+                        Positioned.directional(textDirection: isRtl ? .rtl : .ltr, child: const BackButton()),
                         Positioned.directional(
                           end: 10.0,
                           textDirection: isRtl ? .rtl : .ltr,

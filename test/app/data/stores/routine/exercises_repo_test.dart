@@ -36,7 +36,7 @@ void main() {
     );
   });
 
-  final tMuscleGroup = const MuscleGroup(muscleGroupCode: '1', muscleGroupName: 'Chest');
+  const tMuscleGroup = MuscleGroup(muscleGroupCode: '1', muscleGroupName: 'Chest');
   final tMuscleGroupDto = MuscleGroupDto.fromEntity(tMuscleGroup);
   final tExercise = Exercise(
     apiId: '1',

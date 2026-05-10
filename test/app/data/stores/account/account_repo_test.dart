@@ -73,7 +73,7 @@ void main() {
 
     test('should return a DatabaseFailure when the call to local source is unsuccessful', () async {
       // arrange
-      final errorMessage = 'Error getting account';
+      const errorMessage = 'Error getting account';
       when(mockLocalSource.getUserAccount()).thenThrow(Exception(errorMessage));
       // act
       final result = await repo.getUserAccount();

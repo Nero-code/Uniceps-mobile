@@ -1,5 +1,5 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_sets.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_sets_commands.dart';
 import 'package:uniceps/core/errors/failure.dart';
@@ -10,20 +10,15 @@ part 'sets_edit_state.dart';
 class SetsEditBloc extends Bloc<SetsEditEvent, SetsEditState> {
   // List<RoutineSet> sets = [];
   final RoutineSetsCommands _commands;
-  SetsEditBloc({required RoutineSetsCommands commands})
-      : _commands = commands,
-        super(SetsEditInitial()) {
+  SetsEditBloc({required RoutineSetsCommands commands}) : _commands = commands, super(SetsEditInitial()) {
     on<GetSetsforRoutineItemEvent>((event, emit) async {
       emit(SetsEditLoadingState());
 
       final either = await _commands.getItemSets(event.itemId);
-      either.fold(
-        (l) => emit(SetsEditErrorState(failure: l)),
-        (r) {
-          // sets = r;
-          emit(SetsEditLoadedState(sets: r));
-        },
-      );
+      either.fold((l) => emit(SetsEditErrorState(failure: l)), (r) {
+        // sets = r;
+        emit(SetsEditLoadedState(sets: r));
+      });
     });
 
     on<AddSetEvent>((event, emit) async {
@@ -32,10 +27,14 @@ class SetsEditBloc extends Bloc<SetsEditEvent, SetsEditState> {
       // sets.add(event.rSet);
 
       final either = await _commands.addItemSets(event.itemId);
-      either.fold(
-        (l) => emit(SetsEditErrorState(failure: l)),
-        (r) => emit(SetsEditLoadedState(sets: r)),
-      );
+      either.fold((l) => emit(SetsEditErrorState(failure: l)), (r) => emit(SetsEditLoadedState(sets: r)));
+    });
+
+    on<SaveSetsEvent>((event, emit) async {
+      emit(SetsEditLoadingState());
+
+      final either = await _commands.saveAllSets(event.sets);
+      either.fold((l) => emit(SetsEditErrorState(failure: l)), (r) => emit(SetsEditLoadedState(sets: r)));
     });
 
     on<UpdateSetEvent>((event, emit) async {
