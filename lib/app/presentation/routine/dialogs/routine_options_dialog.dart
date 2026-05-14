@@ -76,7 +76,7 @@ class RoutineOptionsDialog extends StatelessWidget {
                 onTap: hasAccount
                     ? isPremium
                           ? () => Navigator.pop(context, Option.export)
-                          : () => showDialog(context: context, builder: (_) => PremiumAlert())
+                          : () => showDialog(context: context, builder: (_) => const PremiumAlert())
                     : () => AccountLimitAlert(content: locale.exportRoutineAuthAlertContent),
                 // width: 75,
                 border: Border.all(color: Colors.blue.shade300, width: 2.0),
@@ -86,7 +86,7 @@ class RoutineOptionsDialog extends StatelessWidget {
                   // mainAxisSize: MainAxisSize.min,
                   children: [
                     if (!(hasAccount && isPremium)) ...[
-                      Image(image: AssetImage(IMG_PREMIUM), width: 20, height: 20, color: Colors.amber),
+                      const Image(image: AssetImage(IMG_PREMIUM), width: 20, height: 20, color: Colors.amber),
                       const SizedBox(width: 5.0),
                     ],
 

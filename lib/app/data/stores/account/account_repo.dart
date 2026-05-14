@@ -118,7 +118,7 @@ class AccountRepo implements IAccountService {
       return Right(res.toEntity());
     } catch (e) {
       _logger.e('Error in notify Membership', error: e);
-      return Left(MembershipFailure.cantGetPlan());
+      return const Left(MembershipFailure.cantGetPlan());
     }
   }
 }

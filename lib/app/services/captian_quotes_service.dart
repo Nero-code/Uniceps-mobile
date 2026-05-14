@@ -19,12 +19,13 @@ class CaptainQuotesService {
       quotes.add(q);
     }
     final oldQuote = _prefs.getString(quotekey);
-    DailyQuote quote;
+    late DailyQuote quote;
     if (oldQuote == null) {
       final sentance = {
-        Lang.ar: 'مرحبا بك في تطبيق Uniceps الرياضي,انا الكابتن يوني هيا نبدا في استكشاف اقسام وميزات التطبيق!',
+        Lang.ar: "مرحبا بك في تطبيق Uniceps الرياضي,انا الكابتن يوني هيا نبدا في استكشاف اقسام وميزات التطبيق!",
         Lang.en:
-            'Welcome to Uniceps fitness app, my name is captain Uni, lets start discovering the app\'s sections and features!',
+            "Welcome to Uniceps fitness app, my name is captain Uni, "
+            "lets start discovering the app's sections and features!",
       };
       quote = DailyQuote(quote: sentance, date: DateTime.now());
     } else {
@@ -45,7 +46,7 @@ class CaptainQuotesService {
 /// The `DailyQuote` class for **Captain Uni** card.
 ///
 /// This class is serializable, meaning it should be stored as a hole
-/// entity in [Prefrences] just like an App config.
+/// entity in [Preferences] just like an App config.
 class DailyQuote {
   /// Holds the quote with its translations for dynamic switching.
   final Map<Lang, String> quote;
@@ -53,7 +54,7 @@ class DailyQuote {
   /// `date` to ensure a quote for an entire day.
   final DateTime date;
 
-  const DailyQuote({required this.quote, required this.date});
+  DailyQuote({required this.quote, required this.date});
 
   factory DailyQuote.fromJson(Map<String, dynamic> json) {
     final q = json['quote'] as Map;
@@ -66,7 +67,7 @@ class DailyQuote {
   }
 
   Map<String, dynamic> toJson() => {
-    'quote': quote.map((lang, sentance) => MapEntry(lang.name, sentance)),
+    'quote': quote.map((lang, sentance) => MapEntry(lang.code, sentance)),
     'date': date.toIso8601String(),
   };
 }

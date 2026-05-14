@@ -71,10 +71,10 @@ class _RoutineItemHorizontalWidgetState extends State<RoutineItemHorizontalWidge
                         Expanded(
                           child: Column(
                             children: [
-                              Text(widget.item.exercise.name, maxLines: 2, style: TextStyle(fontWeight: .bold)),
-                              Text(locale.muscleGroup(group), style: TextStyle(fontSize: 12)),
+                              Text(widget.item.exercise.name, maxLines: 2, style: const TextStyle(fontWeight: .bold)),
+                              Text(locale.muscleGroup(group), style: const TextStyle(fontSize: 12)),
                               const SizedBox(height: 5),
-                              Text('${locale.setsAndRounds}:', style: TextStyle(fontSize: 10)),
+                              Text('${locale.setsAndRounds}:', style: const TextStyle(fontSize: 10)),
                               BlocBuilder<SetsEditBloc, SetsEditState>(
                                 builder: (context, state) {
                                   if (state is SetsEditLoadedState) {

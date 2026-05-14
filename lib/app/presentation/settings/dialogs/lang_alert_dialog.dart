@@ -16,14 +16,13 @@ class LangAlertDialog extends StatelessWidget {
       content: RadioGroup(
         groupValue: languageCode,
         onChanged: (newVal) {
-          context.read<LocaleCubit>().changeLanguage(newVal == "en" ? "en" : "ar");
+          context.read<LocaleCubit>().changeLanguage(newVal!);
           Navigator.pop(context);
         },
+
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            for (var i in Lang.values) RadioListTile(title: Text(i == Lang.en ? "English" : "العربية"), value: i.name),
-          ],
+          children: [for (var i in Lang.values) RadioListTile(title: Text(i.name), value: i.code)],
         ),
       ),
     ).build(context);

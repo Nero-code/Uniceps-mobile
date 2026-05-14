@@ -1,14 +1,19 @@
 import 'package:drift/drift.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
+import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart';
 import 'package:uniceps/app/data/services/media_helper.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
 
 abstract class IExercisesLocalSourceContract {
   Future<List<ExerciseDto>> getExercises();
-  Future<List<ExerciseDto>> getExercisesByGroup(String groupId);
+  Future<List<ExerciseDto>> getExercisesByGroup(String groupCode);
   Future<void> saveExerciseImage(String exId, Uint8List bitmap);
 
   Future<void> writeExercise(ExerciseDto e);
+
+  Future<bool> containsImage(String id);
+
+  Future<List<MuscleGroupDto>> getMuscleGroups();
 }
 
 class ExercisesLocalSource implements IExercisesLocalSourceContract {
@@ -32,9 +37,11 @@ class ExercisesLocalSource implements IExercisesLocalSourceContract {
   }
 
   @override
-  Future<List<ExerciseDto>> getExercisesByGroup(String groupId) async {
-    // TODO: implement getExercisesByGroup
-    throw UnimplementedError();
+  Future<List<ExerciseDto>> getExercisesByGroup(String groupCode) async {
+    final res = await (_appDatabase.select(
+      _appDatabase.exercises,
+    )..where((tbl) => tbl.muscleGroupCode.equals(groupCode))).get();
+    return res.map((e) => ExerciseDto.fromTable(e, null, null)).toList();
   }
 
   @override
@@ -65,5 +72,20 @@ class ExercisesLocalSource implements IExercisesLocalSourceContract {
             timestamp: Value(e.timestamp),
           ),
         );
+  }
+
+  @override
+  Future<bool> containsImage(String id) async => _mediaHelper.containsImage(id);
+
+  @override
+  Future<List<MuscleGroupDto>> getMuscleGroups() async {
+    final res = await _appDatabase.select(_appDatabase.exercises).get();
+    final List<MuscleGroupDto> groups = [];
+    for (final e in res) {
+      if (groups.where((g) => g.muscleGroupCode == e.muscleGroupCode).isEmpty) {
+        groups.add(MuscleGroupDto(muscleGroupCode: e.muscleGroupCode, muscleGroupName: e.muscleGroupName));
+      }
+    }
+    return groups;
   }
 }

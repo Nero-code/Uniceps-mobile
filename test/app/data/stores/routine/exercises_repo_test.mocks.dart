@@ -52,9 +52,15 @@ class MockIExercisesRemoteSourceContract extends _i1.Mock
           as _i3.Future<List<_i4.MuscleGroupDto>>);
 
   @override
-  _i3.Future<List<_i5.ExerciseDto>> getAllExercises([DateTime? timestamp]) =>
+  _i3.Future<List<_i5.ExerciseDto>> getAllExercises({
+    DateTime? timestamp,
+    String? language,
+  }) =>
       (super.noSuchMethod(
-            Invocation.method(#getAllExercises, [timestamp]),
+            Invocation.method(#getAllExercises, [], {
+              #timestamp: timestamp,
+              #language: language,
+            }),
             returnValue: _i3.Future<List<_i5.ExerciseDto>>.value(
               <_i5.ExerciseDto>[],
             ),
@@ -102,9 +108,9 @@ class MockIExercisesLocalSourceContract extends _i1.Mock
           as _i3.Future<List<_i5.ExerciseDto>>);
 
   @override
-  _i3.Future<List<_i5.ExerciseDto>> getExercisesByGroup(String? groupId) =>
+  _i3.Future<List<_i5.ExerciseDto>> getExercisesByGroup(String? groupCode) =>
       (super.noSuchMethod(
-            Invocation.method(#getExercisesByGroup, [groupId]),
+            Invocation.method(#getExercisesByGroup, [groupCode]),
             returnValue: _i3.Future<List<_i5.ExerciseDto>>.value(
               <_i5.ExerciseDto>[],
             ),
@@ -128,6 +134,24 @@ class MockIExercisesLocalSourceContract extends _i1.Mock
             returnValueForMissingStub: _i3.Future<void>.value(),
           )
           as _i3.Future<void>);
+
+  @override
+  _i3.Future<bool> containsImage(String? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#containsImage, [id]),
+            returnValue: _i3.Future<bool>.value(false),
+          )
+          as _i3.Future<bool>);
+
+  @override
+  _i3.Future<List<_i4.MuscleGroupDto>> getMuscleGroups() =>
+      (super.noSuchMethod(
+            Invocation.method(#getMuscleGroups, []),
+            returnValue: _i3.Future<List<_i4.MuscleGroupDto>>.value(
+              <_i4.MuscleGroupDto>[],
+            ),
+          )
+          as _i3.Future<List<_i4.MuscleGroupDto>>);
 }
 
 /// A class which mocks [NetworkInfo].

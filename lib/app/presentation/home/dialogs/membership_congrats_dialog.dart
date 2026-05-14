@@ -8,7 +8,7 @@ class MembershipCongratsDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     return AlertDialog(
-      icon: Icon(Icons.celebration_rounded, color: Colors.amber, size: 60),
+      icon: const Icon(Icons.celebration_rounded, color: Colors.amber, size: 60),
       title: Text(locale.congrats),
       content: Column(
         mainAxisSize: MainAxisSize.min,

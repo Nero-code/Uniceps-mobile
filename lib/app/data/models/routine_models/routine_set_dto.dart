@@ -27,6 +27,7 @@ class RoutineSetDto {
   final bool isSynced;
 
   final double? weight;
+  final int? lastReps;
 
   const RoutineSetDto({
     required this.id,
@@ -35,6 +36,7 @@ class RoutineSetDto {
     required this.version,
     required this.index,
     required this.reps,
+    required this.lastReps,
     required this.weight,
     required this.isSynced,
   });
@@ -46,6 +48,7 @@ class RoutineSetDto {
     version: e.version,
     index: e.index,
     reps: e.reps,
+    lastReps: e.lastReps,
     weight: e.weight,
     isSynced: e.isSynced,
   );
@@ -57,6 +60,7 @@ class RoutineSetDto {
     version: version,
     index: index,
     reps: reps,
+    lastReps: lastReps,
     weight: weight,
     isSynced: isSynced,
   );
@@ -64,13 +68,14 @@ class RoutineSetDto {
   factory RoutineSetDto.fromJson(Map<String, dynamic> json) => _$RoutineSetDtoFromJson(json);
   Map<String, dynamic> toJson() => _$RoutineSetDtoToJson(this);
 
-  factory RoutineSetDto.fromTable(db.RoutineSet setItem, [double? weight]) => RoutineSetDto(
+  factory RoutineSetDto.fromTable(db.RoutineSet setItem, [double? weight, int? lastReps]) => RoutineSetDto(
     id: setItem.id,
     apiId: setItem.apiId,
     routineItemId: setItem.routineItemId,
     version: setItem.version,
     index: setItem.roundIndex,
     reps: setItem.repsCount,
+    lastReps: lastReps,
     weight: weight,
     isSynced: setItem.isSynced,
   );
@@ -81,6 +86,7 @@ class RoutineSetDto {
     int? routineItemId,
     int? index,
     int? reps,
+    int? lastReps,
     double? weight,
     int? version,
     bool? isSynced,
@@ -91,6 +97,7 @@ class RoutineSetDto {
     version: version ?? this.version,
     index: index ?? this.index,
     reps: reps ?? this.reps,
+    lastReps: lastReps ?? this.lastReps,
     weight: weight ?? this.weight,
     isSynced: isSynced ?? this.isSynced,
   );

@@ -24,15 +24,16 @@ enum Gender {
 Gender parseGender(int val) => Gender.values.firstWhere((g) => g.val == val);
 
 enum Lang {
-  en('en'),
-  ar('ar');
+  en('en', 'English'),
+  ar('ar', 'العربية');
 
-  final String val;
-  const Lang(this.val);
+  final String code;
+  final String name;
+  const Lang(this.code, this.name);
 }
 
 Lang parseLang(String lang) {
-  return Lang.values.firstWhere((l) => l.val == lang.toLowerCase());
+  return Lang.values.firstWhere((l) => l.code == lang.toLowerCase());
 }
 
 enum ThemeType { light, dark }

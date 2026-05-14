@@ -64,8 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
               listener: (context, state) => state.whenOrNull(
                 loaded: (m) {
                   if (!m.isNotified) {
-                    showDialog(context: context, builder: (_) => MembershipCongratsDialog());
-                    context.read<MembershipBloc>().add(MembershipEvent.notifyNewMembership());
+                    showDialog(context: context, builder: (_) => const MembershipCongratsDialog());
+                    context.read<MembershipBloc>().add(const MembershipEvent.notifyNewMembership());
                   }
                   return;
                 },

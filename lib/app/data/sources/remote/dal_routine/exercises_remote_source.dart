@@ -8,7 +8,7 @@ import 'package:uniceps/core/constants/api_routes.dart';
 
 abstract class IExercisesRemoteSourceContract {
   Future<List<MuscleGroupDto>> getExerciseGroups();
-  Future<List<ExerciseDto>> getAllExercises([DateTime? timestamp]);
+  Future<List<ExerciseDto>> getAllExercises({DateTime? timestamp, String? language});
   Future<List<ExerciseDto>> getExercisesByGroup(MuscleGroupDto group);
 
   Future<Uint8List> getExerciseImage(String imageUrl);
@@ -33,11 +33,12 @@ class ExercisesRemoteSourceImpl implements IExercisesRemoteSourceContract {
   }
 
   @override
-  Future<List<ExerciseDto>> getAllExercises([DateTime? timestamp]) async {
+  Future<List<ExerciseDto>> getAllExercises({DateTime? timestamp, String? language}) async {
     return await _clientHelper.getListHandler<ExerciseDto>(
       ApiRoutes.domain,
       ApiRoutes.exercises,
       ExerciseDto.fromJson,
+      headers: {if (language != null) 'Accept-Language': language},
       needsHeader: false,
     );
   }

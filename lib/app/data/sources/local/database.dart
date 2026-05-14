@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
-import 'package:uniceps/app/data/sources/local/database.steps.dart';
+import 'package:uniceps/app/data/sources/local/schema_versions.dart';
+// import 'package:uniceps/app/data/sources/local/database.steps.dart';
 import 'package:uniceps/app/data/sources/local/tables/account/account_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/measurement/measurement_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/practice/t_logs_table.dart';
@@ -59,7 +60,7 @@ class AppDatabase extends _$AppDatabase {
   );
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 }
 
 extension Migrations on GeneratedDatabase {
@@ -90,13 +91,21 @@ extension Migrations on GeneratedDatabase {
       await m.createTable(schema.routineItems);
       await m.createTable(schema.routineSets);
 
-      // 3. Migrate tables to preserve (using alterTable to sync schema/defaults)
-
-      await m.alterTable(TableMigration(schema.accounts));
-      await m.alterTable(TableMigration(schema.measurements));
-
-      // 4. RE-ENABLE foreign keys
+      // 3. RE-ENABLE foreign keys
       await m.database.customStatement('PRAGMA foreign_keys = ON;');
+    },
+    from2To3: (m, schema) async {
+      await m.alterTable(
+        TableMigration(
+          schema.tLogs,
+          columnTransformer: {
+            // Set the new column 'finishedReps' to the value of the existing 'reps'
+            schema.tLogs.finishedReps: schema.tLogs.reps,
+          },
+          // Ensure existing data is preserved
+          newColumns: [schema.tLogs.finishedReps],
+        ),
+      );
     },
   );
 }

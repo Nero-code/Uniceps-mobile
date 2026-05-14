@@ -92,10 +92,10 @@ class HttpClientHelper implements ClientHelper {
 
     if (kDebugMode) {
       print(
-        "getListHandler code: ${res.statusCode}\n"
+        "postHandler code: ${res.statusCode}\n"
         "URL: ${api + urlPart}",
       );
-      print("getListHandler body: ${res.body}");
+      print("postHandler body: ${res.body}");
     }
     _logger.t(res.body);
 

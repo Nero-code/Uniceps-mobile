@@ -3780,6 +3780,17 @@ class $TLogsTable extends TLogs with TableInfo<$TLogsTable, TLog> {
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _finishedRepsMeta = const VerificationMeta(
+    'finishedReps',
+  );
+  @override
+  late final GeneratedColumn<int> finishedReps = GeneratedColumn<int>(
+    'finished_reps',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _weightMeta = const VerificationMeta('weight');
   @override
   late final GeneratedColumn<double> weight = GeneratedColumn<double>(
@@ -3857,6 +3868,7 @@ class $TLogsTable extends TLogs with TableInfo<$TLogsTable, TLog> {
     exerciseIndex,
     setIndex,
     reps,
+    finishedReps,
     weight,
     completedAt,
     apiId,
@@ -3916,6 +3928,17 @@ class $TLogsTable extends TLogs with TableInfo<$TLogsTable, TLog> {
       );
     } else if (isInserting) {
       context.missing(_repsMeta);
+    }
+    if (data.containsKey('finished_reps')) {
+      context.handle(
+        _finishedRepsMeta,
+        finishedReps.isAcceptableOrUnknown(
+          data['finished_reps']!,
+          _finishedRepsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_finishedRepsMeta);
     }
     if (data.containsKey('weight')) {
       context.handle(
@@ -3991,6 +4014,10 @@ class $TLogsTable extends TLogs with TableInfo<$TLogsTable, TLog> {
         DriftSqlType.int,
         data['${effectivePrefix}reps'],
       )!,
+      finishedReps: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}finished_reps'],
+      )!,
       weight: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}weight'],
@@ -4030,6 +4057,7 @@ class TLog extends DataClass implements Insertable<TLog> {
   final int exerciseIndex;
   final int setIndex;
   final int reps;
+  final int finishedReps;
   final double weight;
   final DateTime completedAt;
   final int? apiId;
@@ -4042,6 +4070,7 @@ class TLog extends DataClass implements Insertable<TLog> {
     required this.exerciseIndex,
     required this.setIndex,
     required this.reps,
+    required this.finishedReps,
     required this.weight,
     required this.completedAt,
     this.apiId,
@@ -4057,6 +4086,7 @@ class TLog extends DataClass implements Insertable<TLog> {
     map['exercise_index'] = Variable<int>(exerciseIndex);
     map['set_index'] = Variable<int>(setIndex);
     map['reps'] = Variable<int>(reps);
+    map['finished_reps'] = Variable<int>(finishedReps);
     map['weight'] = Variable<double>(weight);
     map['completed_at'] = Variable<DateTime>(completedAt);
     if (!nullToAbsent || apiId != null) {
@@ -4075,6 +4105,7 @@ class TLog extends DataClass implements Insertable<TLog> {
       exerciseIndex: Value(exerciseIndex),
       setIndex: Value(setIndex),
       reps: Value(reps),
+      finishedReps: Value(finishedReps),
       weight: Value(weight),
       completedAt: Value(completedAt),
       apiId: apiId == null && nullToAbsent
@@ -4097,6 +4128,7 @@ class TLog extends DataClass implements Insertable<TLog> {
       exerciseIndex: serializer.fromJson<int>(json['exerciseIndex']),
       setIndex: serializer.fromJson<int>(json['setIndex']),
       reps: serializer.fromJson<int>(json['reps']),
+      finishedReps: serializer.fromJson<int>(json['finishedReps']),
       weight: serializer.fromJson<double>(json['weight']),
       completedAt: serializer.fromJson<DateTime>(json['completedAt']),
       apiId: serializer.fromJson<int?>(json['apiId']),
@@ -4114,6 +4146,7 @@ class TLog extends DataClass implements Insertable<TLog> {
       'exerciseIndex': serializer.toJson<int>(exerciseIndex),
       'setIndex': serializer.toJson<int>(setIndex),
       'reps': serializer.toJson<int>(reps),
+      'finishedReps': serializer.toJson<int>(finishedReps),
       'weight': serializer.toJson<double>(weight),
       'completedAt': serializer.toJson<DateTime>(completedAt),
       'apiId': serializer.toJson<int?>(apiId),
@@ -4129,6 +4162,7 @@ class TLog extends DataClass implements Insertable<TLog> {
     int? exerciseIndex,
     int? setIndex,
     int? reps,
+    int? finishedReps,
     double? weight,
     DateTime? completedAt,
     Value<int?> apiId = const Value.absent(),
@@ -4141,6 +4175,7 @@ class TLog extends DataClass implements Insertable<TLog> {
     exerciseIndex: exerciseIndex ?? this.exerciseIndex,
     setIndex: setIndex ?? this.setIndex,
     reps: reps ?? this.reps,
+    finishedReps: finishedReps ?? this.finishedReps,
     weight: weight ?? this.weight,
     completedAt: completedAt ?? this.completedAt,
     apiId: apiId.present ? apiId.value : this.apiId,
@@ -4159,6 +4194,9 @@ class TLog extends DataClass implements Insertable<TLog> {
           : this.exerciseIndex,
       setIndex: data.setIndex.present ? data.setIndex.value : this.setIndex,
       reps: data.reps.present ? data.reps.value : this.reps,
+      finishedReps: data.finishedReps.present
+          ? data.finishedReps.value
+          : this.finishedReps,
       weight: data.weight.present ? data.weight.value : this.weight,
       completedAt: data.completedAt.present
           ? data.completedAt.value
@@ -4178,6 +4216,7 @@ class TLog extends DataClass implements Insertable<TLog> {
           ..write('exerciseIndex: $exerciseIndex, ')
           ..write('setIndex: $setIndex, ')
           ..write('reps: $reps, ')
+          ..write('finishedReps: $finishedReps, ')
           ..write('weight: $weight, ')
           ..write('completedAt: $completedAt, ')
           ..write('apiId: $apiId, ')
@@ -4195,6 +4234,7 @@ class TLog extends DataClass implements Insertable<TLog> {
     exerciseIndex,
     setIndex,
     reps,
+    finishedReps,
     weight,
     completedAt,
     apiId,
@@ -4211,6 +4251,7 @@ class TLog extends DataClass implements Insertable<TLog> {
           other.exerciseIndex == this.exerciseIndex &&
           other.setIndex == this.setIndex &&
           other.reps == this.reps &&
+          other.finishedReps == this.finishedReps &&
           other.weight == this.weight &&
           other.completedAt == this.completedAt &&
           other.apiId == this.apiId &&
@@ -4225,6 +4266,7 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
   final Value<int> exerciseIndex;
   final Value<int> setIndex;
   final Value<int> reps;
+  final Value<int> finishedReps;
   final Value<double> weight;
   final Value<DateTime> completedAt;
   final Value<int?> apiId;
@@ -4237,6 +4279,7 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
     this.exerciseIndex = const Value.absent(),
     this.setIndex = const Value.absent(),
     this.reps = const Value.absent(),
+    this.finishedReps = const Value.absent(),
     this.weight = const Value.absent(),
     this.completedAt = const Value.absent(),
     this.apiId = const Value.absent(),
@@ -4250,6 +4293,7 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
     required int exerciseIndex,
     required int setIndex,
     required int reps,
+    required int finishedReps,
     required double weight,
     required DateTime completedAt,
     this.apiId = const Value.absent(),
@@ -4260,6 +4304,7 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
        exerciseIndex = Value(exerciseIndex),
        setIndex = Value(setIndex),
        reps = Value(reps),
+       finishedReps = Value(finishedReps),
        weight = Value(weight),
        completedAt = Value(completedAt),
        sessionId = Value(sessionId);
@@ -4269,6 +4314,7 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
     Expression<int>? exerciseIndex,
     Expression<int>? setIndex,
     Expression<int>? reps,
+    Expression<int>? finishedReps,
     Expression<double>? weight,
     Expression<DateTime>? completedAt,
     Expression<int>? apiId,
@@ -4282,6 +4328,7 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
       if (exerciseIndex != null) 'exercise_index': exerciseIndex,
       if (setIndex != null) 'set_index': setIndex,
       if (reps != null) 'reps': reps,
+      if (finishedReps != null) 'finished_reps': finishedReps,
       if (weight != null) 'weight': weight,
       if (completedAt != null) 'completed_at': completedAt,
       if (apiId != null) 'api_id': apiId,
@@ -4297,6 +4344,7 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
     Value<int>? exerciseIndex,
     Value<int>? setIndex,
     Value<int>? reps,
+    Value<int>? finishedReps,
     Value<double>? weight,
     Value<DateTime>? completedAt,
     Value<int?>? apiId,
@@ -4310,6 +4358,7 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
       exerciseIndex: exerciseIndex ?? this.exerciseIndex,
       setIndex: setIndex ?? this.setIndex,
       reps: reps ?? this.reps,
+      finishedReps: finishedReps ?? this.finishedReps,
       weight: weight ?? this.weight,
       completedAt: completedAt ?? this.completedAt,
       apiId: apiId ?? this.apiId,
@@ -4336,6 +4385,9 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
     }
     if (reps.present) {
       map['reps'] = Variable<int>(reps.value);
+    }
+    if (finishedReps.present) {
+      map['finished_reps'] = Variable<int>(finishedReps.value);
     }
     if (weight.present) {
       map['weight'] = Variable<double>(weight.value);
@@ -4366,6 +4418,7 @@ class TLogsCompanion extends UpdateCompanion<TLog> {
           ..write('exerciseIndex: $exerciseIndex, ')
           ..write('setIndex: $setIndex, ')
           ..write('reps: $reps, ')
+          ..write('finishedReps: $finishedReps, ')
           ..write('weight: $weight, ')
           ..write('completedAt: $completedAt, ')
           ..write('apiId: $apiId, ')
@@ -8332,6 +8385,7 @@ typedef $$TLogsTableCreateCompanionBuilder =
       required int exerciseIndex,
       required int setIndex,
       required int reps,
+      required int finishedReps,
       required double weight,
       required DateTime completedAt,
       Value<int?> apiId,
@@ -8346,6 +8400,7 @@ typedef $$TLogsTableUpdateCompanionBuilder =
       Value<int> exerciseIndex,
       Value<int> setIndex,
       Value<int> reps,
+      Value<int> finishedReps,
       Value<double> weight,
       Value<DateTime> completedAt,
       Value<int?> apiId,
@@ -8406,6 +8461,11 @@ class $$TLogsTableFilterComposer extends Composer<_$AppDatabase, $TLogsTable> {
 
   ColumnFilters<int> get reps => $composableBuilder(
     column: $table.reps,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get finishedReps => $composableBuilder(
+    column: $table.finishedReps,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -8492,6 +8552,11 @@ class $$TLogsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get finishedReps => $composableBuilder(
+    column: $table.finishedReps,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<double> get weight => $composableBuilder(
     column: $table.weight,
     builder: (column) => ColumnOrderings(column),
@@ -8569,6 +8634,11 @@ class $$TLogsTableAnnotationComposer
   GeneratedColumn<int> get reps =>
       $composableBuilder(column: $table.reps, builder: (column) => column);
 
+  GeneratedColumn<int> get finishedReps => $composableBuilder(
+    column: $table.finishedReps,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<double> get weight =>
       $composableBuilder(column: $table.weight, builder: (column) => column);
 
@@ -8643,6 +8713,7 @@ class $$TLogsTableTableManager
                 Value<int> exerciseIndex = const Value.absent(),
                 Value<int> setIndex = const Value.absent(),
                 Value<int> reps = const Value.absent(),
+                Value<int> finishedReps = const Value.absent(),
                 Value<double> weight = const Value.absent(),
                 Value<DateTime> completedAt = const Value.absent(),
                 Value<int?> apiId = const Value.absent(),
@@ -8655,6 +8726,7 @@ class $$TLogsTableTableManager
                 exerciseIndex: exerciseIndex,
                 setIndex: setIndex,
                 reps: reps,
+                finishedReps: finishedReps,
                 weight: weight,
                 completedAt: completedAt,
                 apiId: apiId,
@@ -8669,6 +8741,7 @@ class $$TLogsTableTableManager
                 required int exerciseIndex,
                 required int setIndex,
                 required int reps,
+                required int finishedReps,
                 required double weight,
                 required DateTime completedAt,
                 Value<int?> apiId = const Value.absent(),
@@ -8681,6 +8754,7 @@ class $$TLogsTableTableManager
                 exerciseIndex: exerciseIndex,
                 setIndex: setIndex,
                 reps: reps,
+                finishedReps: finishedReps,
                 weight: weight,
                 completedAt: completedAt,
                 apiId: apiId,

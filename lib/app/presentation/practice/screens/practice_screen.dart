@@ -7,6 +7,7 @@ import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/stopwatch/stopwatch_cubit.dart';
 import 'package:uniceps/app/presentation/practice/blocs/practice/practice_cubit.dart';
 import 'package:uniceps/app/presentation/practice/dialogs/confirmation_dialog.dart';
+import 'package:uniceps/app/presentation/practice/dialogs/rest_timer_dialog.dart';
 import 'package:uniceps/app/presentation/practice/dialogs/session_results_dialog.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_body.dart';
 import 'package:uniceps/app/presentation/practice/widgets/practice_header.dart';
@@ -93,6 +94,8 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
           final session = state.whenOrNull(noActiveSession: (s, f) => s)!;
           showDialog(
             context: context,
+            useSafeArea: false,
+
             builder: (context) => SessionResultsDialog(
               session: session,
               progress: totalProgress != null ? (session.logs.length / totalProgress!) : 0,
@@ -129,32 +132,19 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
                       ),
                     ),
                   ),
+
                   title: BlocSelector<PracticeCubit, PracticeState, String>(
                     selector: (state) => (state is PracticeLoadedState) ? state.day.name : "",
                     builder: (context, dayName) => Text(dayName, style: TextStyle(color: Colors.grey.shade700)),
                   ),
-                  // title: Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     Expanded(
-                  //       child: BlocSelector<PracticeCubit, PracticeState, String>(
-                  //         selector: (state) => (state is PracticeLoadedState) ? state.day.name : "",
-                  //         builder: (context, dayName) => Text(dayName),
-                  //       ),
-                  //     ),
-                  //     const SizedBox(width: 5),
-                  //     BlocBuilder<StopwatchCubit, StopwatchState>(
-                  //       builder: (context, state) => Text(
-                  //         state.time,
-                  //         style: TextStyle(
-                  //           fontWeight: FontWeight.w100,
-                  //           color: Colors.grey.shade700,
-                  //           fontSize: 26,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        showDialog(context: context, builder: (context) => const RestTimerDialog());
+                      },
+                      icon: const Icon(Icons.timer_outlined),
+                    ),
+                  ],
                 ),
                 body: SafeArea(
                   top: false,

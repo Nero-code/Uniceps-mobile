@@ -12,9 +12,11 @@ class ProgressWidget extends StatelessWidget {
     this.progressBackground = Colors.transparent,
     this.dimension = 70.0,
     this.strokeWidth = 7.0,
+    this.radius,
+    this.padding,
   });
 
-  final double? percent;
+  final double? percent, radius, padding;
   final Color color, backgroundColor, progressBackground;
   final double dimension, strokeWidth;
   final TextStyle? textStyle;
@@ -23,10 +25,10 @@ class ProgressWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      borderRadius: BorderRadius.circular(15.0),
+      borderRadius: BorderRadius.circular(radius ?? 15.0),
       color: backgroundColor,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(padding ?? 8.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

@@ -48,6 +48,7 @@ class UnicepsPremium extends StatelessWidget {
             ),
             const SizedBox(width: 20),
             Expanded(
+              flex: 6,
               child: Column(
                 children: [
                   const Text(
@@ -88,8 +89,8 @@ class UnicepsPremium extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: 20),
             Expanded(
+              flex: 4,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -109,7 +110,7 @@ class UnicepsPremium extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           locale.active,
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
+                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ),
                     ),

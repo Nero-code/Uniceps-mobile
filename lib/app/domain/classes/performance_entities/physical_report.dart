@@ -15,10 +15,7 @@ class PhysicalReport {
   final double bodyFatPercentage;
 
   final Gender gender;
-  const PhysicalReport({
-    required this.bmi,
-    required this.bmr,
-    required this.gender,
-    required this.bodyFatPercentage,
-  });
+  const PhysicalReport({required this.bmi, required this.bmr, required this.gender, required this.bodyFatPercentage});
+
+  factory PhysicalReport.empty() => const PhysicalReport(bmi: 0, bmr: 0, gender: Gender.male, bodyFatPercentage: 0);
 }

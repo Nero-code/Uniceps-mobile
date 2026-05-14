@@ -35,7 +35,7 @@ class _ExercisesListTabState extends State<ExercisesListTab> with AutomaticKeepA
     final locale = AppLocalizations.of(context)!;
     return BlocProvider(
       create: (context) =>
-          ExercisesV2Bloc(commands: di.sl())..add(GetExercisesByFilterEvent(filter: widget.muscleGroup)),
+          ExercisesV2Bloc(commands: di.sl())..add(GetExercisesByMuscleGroup(filter: widget.muscleGroup)),
       lazy: false,
       child: BlocBuilder<ExercisesV2Bloc, ExercisesV2State>(
         builder: (context, state) {

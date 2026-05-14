@@ -82,7 +82,7 @@ class SplashScreen extends StatelessWidget {
                                 : state.status == .success
                                 ? '100%'
                                 : '',
-                            style: TextStyle(fontSize: 12, fontWeight: .bold),
+                            style: const TextStyle(fontSize: 12, fontWeight: .bold),
                           ),
                           LinearProgressIndicator(
                             value: state.status == .initial ? null : state.progress,
@@ -91,17 +91,17 @@ class SplashScreen extends StatelessWidget {
                             borderRadius: .circular(15),
                             backgroundColor: Colors.grey.shade100,
                           ),
-                          if (state.status == .downloading) Center(child: Text('Downloading Exercises...')),
+                          if (state.status == .downloading) const Center(child: Text('Downloading Exercises...')),
                           if (state.status == .failure)
                             Row(
                               mainAxisAlignment: .center,
                               spacing: 5,
                               children: [
                                 Icon(Icons.wifi_off, size: 20, color: Colors.grey.shade700),
-                                Text(l10n.errNoInternet, style: TextStyle(fontSize: 12)),
+                                Text(l10n.errNoInternet, style: const TextStyle(fontSize: 12)),
                                 IconButton(
                                   onPressed: () => context.read<MediaDownloaderCubit>().startLibDownload(),
-                                  icon: Icon(Icons.refresh),
+                                  icon: const Icon(Icons.refresh),
                                   iconSize: 20,
                                   color: Colors.blue,
                                 ),
