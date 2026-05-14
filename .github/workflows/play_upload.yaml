@@ -47,7 +47,7 @@ jobs:
           flutter build appbundle --release \
             --flavor prod \
             --dart-define-from-file=assets/config/config_prod.json \
-            --build-number=$(( ${{ github.run_number }} ))
+            --build-number=$(( ${{ github.run_number }} + 4 ))
         env:
           PROPERTIES_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           PROPERTIES_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
@@ -61,5 +61,5 @@ jobs:
           packageName: com.trioverse.uniceps # Ensure this matches your prod flavor ID
           # Path changes when using flavors: build/app/outputs/bundle/<flavor>Release/
           releaseFiles: build/app/outputs/bundle/prodRelease/app-prod-release.aab
-          track: internal
+          tracks: internal
           status: completed
