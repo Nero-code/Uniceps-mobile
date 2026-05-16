@@ -110,9 +110,11 @@ class _PerformancePageState extends State<PerformancePage> {
                           for (int i = 0; i < r.length; i++)
                             InkWell(
                               onTap: () {
+                                final chart = r[i];
+                                chart.points.removeWhere((element) => element.y == 0);
                                 showDialog(
                                   context: context,
-                                  builder: (context) => MuscleGrowthChartDialog(title: r[i].title, chart: r[i]),
+                                  builder: (context) => MuscleGrowthChartDialog(title: chart.title, chart: chart),
                                 );
                               },
                               child: Container(

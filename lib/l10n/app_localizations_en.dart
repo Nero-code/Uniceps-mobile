@@ -656,7 +656,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sortDays => 'Sort Days';
 
   @override
-  String get commingSoon => 'Comming Soon!';
+  String get hour => 'Hour';
 
   @override
   String get captainUni => 'Captain Uni';

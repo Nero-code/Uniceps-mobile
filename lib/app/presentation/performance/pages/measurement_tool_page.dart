@@ -151,7 +151,7 @@ class _MeasurementToolPageState extends State<MeasurementToolPage> {
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+                  padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 20),
                   child: const SizedBox(),
                 ),
               ),
