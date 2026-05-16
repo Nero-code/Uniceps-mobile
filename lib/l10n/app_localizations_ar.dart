@@ -654,7 +654,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get sortDays => 'ترتيب الايام';
 
   @override
-  String get commingSoon => 'قريبا!';
+  String get hour => 'ساعة';
 
   @override
   String get captainUni => 'كابتن يوني';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:uniceps/app/domain/classes/practice_entities/t_session.dart';
@@ -6,6 +7,7 @@ import 'package:uniceps/app/presentation/home/blocs/current_routine/current_rout
 import 'package:uniceps/app/presentation/routine/widgets/progress_widget.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
 class SessionResultsDialog extends StatelessWidget {
@@ -27,143 +29,174 @@ class SessionResultsDialog extends StatelessWidget {
     final totalWeight = session.logs.fold(0.0, (sum, log) => sum + log.weight);
     final duration = DateTime.now().difference(session.createdAt);
 
-    return Material(
-      child: SizedBox(
-        height: MediaQuery.sizeOf(context).height,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Header Image with Background
-              SizedBox(
-                height: MediaQuery.of(context).viewPadding.top + 170,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).viewPadding.top + 180,
-                      decoration: BoxDecoration(
-                        // color: theme.colorScheme.primaryContainer.withOpacity(0.3),
-                        // color: Color(0x7084B6E3),
-                        gradient: LinearGradient(colors: [Colors.purple.shade300, Colors.blue.shade300]),
-                        // borderRadius: BorderRadius.vertical(top: Radius.circular(radius)),
-                      ),
-                    ),
-                    const Positioned(
-                      bottom: -130.0,
-                      right: -100.0,
-                      child: Icon(Icons.star_rate_rounded, size: 400, color: Colors.white10),
-                    ),
-                    Row(
-                      crossAxisAlignment: .end,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      // Force dark status bar text/icons (for light backgrounds)
+      value: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent, // Keeps status bar background transparent
+      ),
+      child: PopScope(
+        canPop: false,
+        child: Material(
+          child: SizedBox(
+            height: MediaQuery.sizeOf(context).height,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  // Header Image with Background
+                  SizedBox(
+                    height: MediaQuery.of(context).viewPadding.top + 170,
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
                       children: [
-                        Expanded(child: Image.asset(CaptainImages.motive, height: 160, fit: BoxFit.contain)),
-                        Expanded(
-                          child: ProgressWidget(
-                            percent: progress,
-                            title: Text(
-                              locale.progressRate,
-                              style: theme.textTheme.titleSmall?.copyWith(color: Colors.white),
-                            ),
-                            textStyle: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: .bold),
-                            dimension: 100,
-                            strokeWidth: 10,
-                            color: Colors.white.withAlpha(200),
-                            // color: theme.colorScheme.surface,
-                            progressBackground: theme.colorScheme.surface.withAlpha(50),
+                        Container(
+                          height: MediaQuery.of(context).viewPadding.top + 180,
+                          decoration: BoxDecoration(
+                            // color: theme.colorScheme.primaryContainer.withOpacity(0.3),
+                            // color: Color(0x7084B6E3),
+                            gradient: LinearGradient(colors: [Colors.purple.shade300, Colors.blue.shade300]),
+                            // borderRadius: BorderRadius.vertical(top: Radius.circular(radius)),
                           ),
+                        ),
+                        const Positioned(
+                          bottom: -50.0,
+                          right: -50.0,
+                          // child: Icon(Icons.star_rate_rounded, size: 400, color: Colors.white10),
+                          child: Image(image: AssetImage(APP_LOGO_WHITE), width: 300, color: Color(0x22FFFFFF)),
+                        ),
+                        Row(
+                          crossAxisAlignment: .end,
+                          children: [
+                            Expanded(child: Image.asset(CaptainImages.membership, height: 160, fit: BoxFit.contain)),
+                            Expanded(
+                              child: ProgressWidget(
+                                percent: progress,
+                                title: Text(
+                                  locale.progressRate,
+                                  style: theme.textTheme.titleSmall?.copyWith(color: Colors.white),
+                                ),
+                                textStyle: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: .bold),
+                                dimension: 100,
+                                strokeWidth: 10,
+                                color: Colors.white.withAlpha(200),
+                                // color: theme.colorScheme.surface,
+                                progressBackground: theme.colorScheme.surface.withAlpha(50),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-              // DateTime Row
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-                child: Directionality(
-                  textDirection: .ltr,
-                  child: Row(
-                    spacing: 5,
-                    children: [
-                      const Expanded(child: Divider(endIndent: 5)),
-                      Column(
+                  ),
+                  // DateTime Row
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+                    child: Directionality(
+                      textDirection: .ltr,
+                      child: Row(
+                        spacing: 5,
                         children: [
-                          Text(
-                            DateFormat.yMMMMd().format(session.createdAt),
-                            style: theme.textTheme.titleLarge?.copyWith(fontWeight: .bold, color: Colors.black45),
+                          const Expanded(child: Divider(endIndent: 5)),
+                          Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: .circular(15)),
+                                padding: const .symmetric(horizontal: 5.0),
+                                child: const Row(
+                                  textDirection: .ltr,
+                                  mainAxisSize: .min,
+                                  children: [
+                                    Icon(Icons.local_fire_department, color: Colors.orange),
+                                    Text('+1', style: TextStyle(fontSize: 12, fontWeight: .w300)),
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                DateFormat.yMMMMd().format(session.createdAt),
+                                style: theme.textTheme.titleLarge?.copyWith(fontWeight: .bold, color: Colors.black45),
+                              ),
+                              Text(
+                                DateFormat(DateFormat.HOUR_MINUTE).format(DateTime.now()),
+                                textDirection: .ltr,
+                                style: theme.textTheme.titleMedium?.copyWith(fontWeight: .w300, color: Colors.black),
+                              ),
+                            ],
                           ),
-                          Text(
-                            DateFormat(DateFormat.HOUR_MINUTE).format(DateTime.now()),
-                            textDirection: .ltr,
-                            style: theme.textTheme.titleMedium?.copyWith(fontWeight: .w300, color: Colors.black),
-                          ),
+                          const Expanded(child: Divider(indent: 5)),
                         ],
                       ),
-                      const Expanded(child: Divider(indent: 5)),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  children: [
-                    // Stats Grid
-                    GridView.count(
-                      padding: EdgeInsets.zero,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 16,
-                      crossAxisSpacing: 16,
-                      childAspectRatio: 1,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Column(
                       children: [
-                        _buildStatCard(
-                          context,
-                          icon: Icons.fitness_center,
-                          label: locale.exercises,
-                          value: '$totalExercises',
+                        // Stats Grid
+                        GridView.count(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 16,
+                          crossAxisSpacing: 16,
+                          childAspectRatio: 1,
+                          children: [
+                            _buildStatCard(
+                              context,
+                              icon: Icons.fitness_center,
+                              label: locale.exercises,
+                              value: '$totalExercises',
+                            ),
+                            _buildStatCard(
+                              context,
+                              icon: Icons.sports,
+                              label: locale.setsAndRounds,
+                              value: '$totalSets',
+                            ),
+                            _buildStatCard(
+                              context,
+                              icon: Icons.monitor_weight_outlined,
+                              label: locale.exerciseVolume,
+                              value: NumberFormat.decimalPattern().format(totalWeight),
+                              unit: 'Kg',
+                            ),
+                            _buildStatCard(
+                              context,
+                              icon: Icons.timer_outlined,
+                              label: locale.duration,
+                              value: '${duration.inMinutes}',
+                              unit: 'min',
+                            ),
+                          ],
                         ),
-                        _buildStatCard(context, icon: Icons.sports, label: locale.setsAndRounds, value: '$totalSets'),
-                        _buildStatCard(
-                          context,
-                          icon: Icons.monitor_weight_outlined,
-                          label: locale.exerciseVolume,
-                          value: NumberFormat.decimalPattern().format(totalWeight),
-                          unit: 'Kg',
+                        const SizedBox(height: 16),
+
+                        // Action Button
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 3),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            ),
+                            onPressed: () {
+                              context.read<CurrentRoutineCubit>().getCurrentRoutine();
+                              Navigator.popUntil(context, (route) => route.settings.name == AppRoutes.home);
+                            },
+                            child: Text(locale.finish, style: const TextStyle(fontWeight: FontWeight.bold)),
+                          ),
                         ),
-                        _buildStatCard(
-                          context,
-                          icon: Icons.timer_outlined,
-                          label: locale.duration,
-                          value: '${duration.inMinutes}',
-                          unit: 'min',
+                        Text(
+                          APP_NAME,
+                          style: TextStyle(fontFamily: 'Playwrite', color: Theme.of(context).colorScheme.primary),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 32),
+                  ),
 
-                    // Action Button
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                        onPressed: () {
-                          context.read<CurrentRoutineCubit>().getCurrentRoutine();
-                          Navigator.popUntil(context, (route) => route.settings.name == AppRoutes.home);
-                        },
-                        child: Text(locale.finish, style: const TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                  ],
-                ),
+                  SizedBox(height: MediaQuery.of(context).padding.bottom + 20),
+                ],
               ),
-
-              SizedBox(height: MediaQuery.of(context).padding.bottom + 20),
-            ],
+            ),
           ),
         ),
       ),

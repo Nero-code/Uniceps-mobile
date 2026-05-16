@@ -7,6 +7,7 @@ import 'package:uniceps/app/presentation/performance/widgets/physical_report_car
 import 'package:uniceps/app/presentation/performance/widgets/total_accumulation_card.dart';
 import 'package:uniceps/app/presentation/routine/widgets/progress_widget.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/helpers/compact_weight.dart';
 import 'package:uniceps/injection_dependency.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
@@ -169,19 +170,25 @@ class _UnicepsSummaryPageState extends State<UnicepsSummaryPage> {
                 spacing: 10,
                 children: [
                   Expanded(
-                    child: TotalAccumulationCard(
-                      title: l10n.totalWeightLabel,
-                      icon: const Icon(Icons.fitness_center, size: 50, color: Colors.amber),
-                      value: widget.summery.totalWeight.toString(),
-                      unit: 'Kg',
+                    child: Builder(
+                      builder: (context) {
+                        final compactWeight = formatMassiveWeight(widget.summery.totalWeight.toDouble());
+                        return TotalAccumulationCard(
+                          title: l10n.totalWeightLabel,
+                          icon: const Icon(Icons.fitness_center, size: 50, color: Colors.amber),
+                          value: compactWeight.value,
+                          unit: compactWeight.unit,
+                        );
+                      },
                     ),
                   ),
                   Expanded(
                     child: TotalAccumulationCard(
                       title: l10n.totalDuration,
                       icon: const Icon(Icons.timer_outlined, size: 50, color: Colors.green),
-                      value: widget.summery.totalDurationInMinutes.toString(),
-                      unit: 'min',
+                      value: (widget.summery.totalDurationInMinutes ~/ 60).toString(),
+                      textDirection: Directionality.of(context),
+                      unit: l10n.hour,
                     ),
                   ),
                 ],

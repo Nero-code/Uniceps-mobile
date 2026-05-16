@@ -1364,11 +1364,11 @@ abstract class AppLocalizations {
   /// **'Sort Days'**
   String get sortDays;
 
-  /// No description provided for @commingSoon.
+  /// No description provided for @hour.
   ///
   /// In en, this message translates to:
-  /// **'Comming Soon!'**
-  String get commingSoon;
+  /// **'Hour'**
+  String get hour;
 
   /// No description provided for @captainUni.
   ///

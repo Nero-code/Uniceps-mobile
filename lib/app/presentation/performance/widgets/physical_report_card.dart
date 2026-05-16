@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:uniceps/app/domain/classes/performance_entities/physical_report.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
@@ -74,7 +75,7 @@ class PhysicalReportCard extends StatelessWidget {
                         child: CircularProgressIndicator(
                           color: const Color.fromARGB(255, 153, 63, 31).withValues(alpha: 0.5),
                           backgroundColor: Colors.grey.shade200,
-                          value: report.bodyFatPercentage,
+                          value: report.bodyFatPercentage / 100,
                           strokeWidth: 10,
                           strokeAlign: 1,
                           strokeCap: StrokeCap.round,
@@ -84,7 +85,8 @@ class PhysicalReportCard extends StatelessWidget {
                         children: [
                           const Text('BF%', textDirection: TextDirection.ltr, style: TextStyle(fontSize: 10)),
                           Text(
-                            '${report.bodyFatPercentage.toStringAsFixed(1)}%',
+                            // '${report.bodyFatPercentage.toStringAsFixed(1)}%',
+                            '${intl.NumberFormat.decimalPattern().format(report.bodyFatPercentage)}%',
                             textDirection: TextDirection.ltr,
                             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           ),
