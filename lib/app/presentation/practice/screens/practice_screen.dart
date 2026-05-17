@@ -98,7 +98,7 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
 
             builder: (context) => SessionResultsDialog(
               session: session,
-              progress: totalProgress != null ? (session.logs.length / totalProgress!) : 0,
+              progress: (totalProgress != null && totalProgress != 0) ? (session.logs.length / totalProgress!) : 0,
             ),
           );
         },

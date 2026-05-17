@@ -10,7 +10,7 @@ class CompactWeight {
 
 CompactWeight formatMassiveWeight(double kg) {
   // Base unit is kg
-  final units = ['kg', 't', 'Kt', 'Mt'];
+  final units = ['kg', 'T', 'kT', 'MT'];
   int unitIndex = 0;
   double scaled = kg;
 

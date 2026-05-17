@@ -132,15 +132,60 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 return snapshot.data!.fold(
-                                  (l) => Center(
+                                  (l) => Container(
+                                    width: screen.width,
+                                    height: screen.width * .7,
+                                    padding: const .all(8.0),
+                                    margin: const .all(16.0),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(colors: [Colors.white, Colors.grey.shade200]),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          offset: const Offset(0, 0),
+                                          color: Colors.white.withAlpha(100),
+                                          blurRadius: 5,
+                                          spreadRadius: 3,
+                                        ),
+                                      ],
+                                      borderRadius: .circular(25),
+                                    ),
+                                    alignment: .center,
                                     child: Text(
-                                      l.when(noValues: () => l10n.noValues, invalidValues: () => l10n.invalidValues),
+                                      l.when(
+                                        noValues: () => l10n.noValuesPositiveStatement,
+                                        invalidValues: () => l10n.invalidValues,
+                                      ),
+                                      style: const TextStyle(fontSize: 20, fontWeight: .bold, color: Colors.grey),
                                     ),
                                   ),
                                   (r) => MuscleFocusChart(chartData: r),
                                 );
                               }
-                              return const LoadingIndicator();
+                              return Container(
+                                width: screen.width,
+                                height: screen.width * .7,
+                                padding: const .all(8.0),
+                                margin: const .all(16.0),
+                                decoration: BoxDecoration(
+                                  // color: Colors.white,
+                                  gradient: LinearGradient(colors: [Colors.white, Colors.grey.shade200]),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      offset: const Offset(0, 0),
+                                      color: Colors.white.withAlpha(100),
+                                      blurRadius: 5,
+                                      spreadRadius: 3,
+                                    ),
+                                  ],
+                                  borderRadius: .circular(25),
+                                ),
+                                alignment: .center,
+                                child: const LoadingIndicator(
+                                  backgroundColor: Colors.transparent,
+                                  elevated: false,
+                                  size: Size(50, 50),
+                                ),
+                              );
                             },
                           ),
                           const PerformancePage(),
