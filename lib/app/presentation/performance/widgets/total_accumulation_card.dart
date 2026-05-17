@@ -8,6 +8,7 @@ class TotalAccumulationCard extends StatelessWidget {
     this.value,
     this.unit,
     this.unitStyle,
+    this.textDirection = .ltr,
   });
 
   // final UnicepsSummery summery;
@@ -15,6 +16,7 @@ class TotalAccumulationCard extends StatelessWidget {
   final String title;
   final String? value, unit;
   final TextStyle? unitStyle;
+  final TextDirection textDirection;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class TotalAccumulationCard extends StatelessWidget {
           icon,
           Row(
             mainAxisSize: .min,
-            textDirection: .ltr,
+            textDirection: textDirection,
             spacing: 5,
             children: [
               if (value != null)

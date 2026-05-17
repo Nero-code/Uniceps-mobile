@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart' show Either;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/muscle_focus.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/uniceps_summery.dart';
@@ -55,142 +56,154 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     final l10n = AppLocalizations.of(context)!;
     final screen = MediaQuery.sizeOf(context);
     final theme = Theme.of(context).colorScheme;
-    return BlocProvider(
-      create: (context) => UniSummaryCubit(commands: sl())..getSummary(),
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Container(
-              width: screen.width,
-              height: screen.height,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [theme.primary, theme.secondary],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: const [.3, .7],
-                ),
-              ),
-            ),
-            const Positioned(top: -200, left: -200, child: Icon(Icons.close_rounded, size: 500, color: Colors.white10)),
-            const Positioned(
-              top: -100,
-              right: -200,
-              child: Icon(Icons.local_fire_department, size: 500, color: Colors.white10),
-            ),
-            const Positioned(
-              bottom: -100,
-              left: -200,
-              child: Icon(Icons.local_fire_department, size: 500, color: Colors.white10),
-            ),
-            const Positioned(
-              bottom: -200,
-              right: -200,
-              child: Icon(Icons.close_rounded, size: 500, color: Colors.white10),
-            ),
-            PageView(
-              controller: _pageController,
-              children: [
-                _KeepAliveWrapper(
-                  child: FutureBuilder<Either<PerformanceFailure, UnicepsSummery>>(
-                    future: _summeryFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return snapshot.data!.fold(
-                          (l) => Center(
-                            child: Text(l.when(noValues: () => l10n.noValues, invalidValues: () => l10n.invalidValues)),
-                          ),
-                          (r) => UnicepsSummaryPage(summery: r),
-                        );
-                      }
-                      return const LoadingIndicator();
-                    },
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      // Force dark status bar text/icons (for light backgrounds)
+      value: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent, // Keeps status bar background transparent
+      ),
+      child: BlocProvider(
+        create: (context) => UniSummaryCubit(commands: sl())..getSummary(),
+        child: Scaffold(
+          body: Stack(
+            children: [
+              Container(
+                width: screen.width,
+                height: screen.height,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [theme.primary, theme.secondary],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    stops: const [.3, .7],
                   ),
                 ),
-                _KeepAliveWrapper(
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.only(
-                      top: MediaQuery.paddingOf(context).top + 50,
-                      bottom: MediaQuery.paddingOf(context).bottom + 50,
+              ),
+              const Positioned(
+                top: -200,
+                left: -200,
+                child: Icon(Icons.close_rounded, size: 500, color: Colors.white10),
+              ),
+              const Positioned(
+                top: -100,
+                right: -200,
+                child: Icon(Icons.local_fire_department, size: 500, color: Colors.white10),
+              ),
+              const Positioned(
+                bottom: -100,
+                left: -200,
+                child: Icon(Icons.local_fire_department, size: 500, color: Colors.white10),
+              ),
+              const Positioned(
+                bottom: -200,
+                right: -200,
+                child: Icon(Icons.close_rounded, size: 500, color: Colors.white10),
+              ),
+              PageView(
+                controller: _pageController,
+                children: [
+                  _KeepAliveWrapper(
+                    child: FutureBuilder<Either<PerformanceFailure, UnicepsSummery>>(
+                      future: _summeryFuture,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return snapshot.data!.fold(
+                            (l) => Center(
+                              child: Text(
+                                l.when(noValues: () => l10n.noValues, invalidValues: () => l10n.invalidValues),
+                              ),
+                            ),
+                            (r) => UnicepsSummaryPage(summery: r),
+                          );
+                        }
+                        return const LoadingIndicator();
+                      },
                     ),
-                    child: Column(
-                      children: [
-                        FutureBuilder<Either<PerformanceFailure, List<MuscleFocus>>>(
-                          future: _muscleFocusFuture,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return snapshot.data!.fold(
-                                (l) => Center(
-                                  child: Text(
-                                    l.when(noValues: () => l10n.noValues, invalidValues: () => l10n.invalidValues),
+                  ),
+                  _KeepAliveWrapper(
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.paddingOf(context).top + 50,
+                        bottom: MediaQuery.paddingOf(context).bottom + 50,
+                      ),
+                      child: Column(
+                        children: [
+                          FutureBuilder<Either<PerformanceFailure, List<MuscleFocus>>>(
+                            future: _muscleFocusFuture,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return snapshot.data!.fold(
+                                  (l) => Center(
+                                    child: Text(
+                                      l.when(noValues: () => l10n.noValues, invalidValues: () => l10n.invalidValues),
+                                    ),
                                   ),
-                                ),
-                                (r) => MuscleFocusChart(chartData: r),
-                              );
-                            }
-                            return const LoadingIndicator();
-                          },
-                        ),
-                        const PerformancePage(),
-                      ],
-                    ),
-                  ),
-                ),
-                _KeepAliveWrapper(child: MeasurementToolPage(commands: sl())),
-              ],
-            ),
-            Positioned(
-              top: MediaQuery.paddingOf(context).top,
-              width: screen.width,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  width: screen.width,
-                  child: Center(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        boxShadow: const [
-                          BoxShadow(offset: Offset(0, 3), color: Colors.black12, blurRadius: 3, spreadRadius: 0),
+                                  (r) => MuscleFocusChart(chartData: r),
+                                );
+                              }
+                              return const LoadingIndicator();
+                            },
+                          ),
+                          const PerformancePage(),
                         ],
                       ),
-                      child: SegmentedButton<int>(
-                        segments: [
-                          ButtonSegment(value: 0, icon: const Icon(Icons.analytics), label: Text(l10n.summary)),
-                          ButtonSegment(value: 1, icon: const Icon(Icons.fitness_center), label: Text(l10n.muscles)),
-                          ButtonSegment(value: 2, icon: const Icon(Icons.straighten), label: Text(l10n.tools)),
-                        ],
-                        selected: {_currentPageIndex},
-                        onSelectionChanged: (Set<int> newSelection) {
-                          setState(() {
-                            _currentPageIndex = newSelection.first;
-                            _pageController.animateToPage(
-                              _currentPageIndex,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          });
-                        },
-                        style: ButtonStyle(
-                          side: WidgetStateProperty.resolveWith<BorderSide?>((Set<WidgetState> states) {
-                            return BorderSide.none;
-                          }),
-                          backgroundColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
-                            if (states.contains(WidgetState.selected)) return theme.secondary;
-                            return Colors.white;
-                          }),
-                          foregroundColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
-                            if (states.contains(WidgetState.selected)) return Colors.white;
-                            return Colors.black;
-                          }),
+                    ),
+                  ),
+                  _KeepAliveWrapper(child: MeasurementToolPage(commands: sl())),
+                ],
+              ),
+              Positioned(
+                top: MediaQuery.paddingOf(context).top,
+                width: screen.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SizedBox(
+                    width: screen.width,
+                    child: Center(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          boxShadow: const [
+                            BoxShadow(offset: Offset(0, 3), color: Colors.black12, blurRadius: 3, spreadRadius: 0),
+                          ],
+                        ),
+                        child: SegmentedButton<int>(
+                          segments: [
+                            ButtonSegment(value: 0, icon: const Icon(Icons.analytics), label: Text(l10n.summary)),
+                            ButtonSegment(value: 1, icon: const Icon(Icons.fitness_center), label: Text(l10n.muscles)),
+                            ButtonSegment(value: 2, icon: const Icon(Icons.straighten), label: Text(l10n.tools)),
+                          ],
+                          selected: {_currentPageIndex},
+                          onSelectionChanged: (Set<int> newSelection) {
+                            setState(() {
+                              _currentPageIndex = newSelection.first;
+                              _pageController.animateToPage(
+                                _currentPageIndex,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                            });
+                          },
+                          style: ButtonStyle(
+                            side: WidgetStateProperty.resolveWith<BorderSide?>((Set<WidgetState> states) {
+                              return BorderSide.none;
+                            }),
+                            backgroundColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+                              if (states.contains(WidgetState.selected)) return theme.secondary;
+                              return Colors.white;
+                            }),
+                            foregroundColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+                              if (states.contains(WidgetState.selected)) return Colors.white;
+                              return Colors.black;
+                            }),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -191,8 +191,8 @@ class PerformanceRepo implements IPerformanceContract {
       if (sessions.isNotEmpty) {
         var tempSession = sessions.first;
         for (final s in sessions) {
-          totalWeight = s.logs.map((l) => l.weight).fold(0.0, (sum, weight) => sum + weight).toInt();
-          totalReps = s.logs.map((l) => l.reps).fold(0, (sum, reps) => sum + reps);
+          totalWeight += s.logs.map((l) => l.weight).fold(0.0, (sum, weight) => sum + weight).toInt();
+          totalReps += s.logs.map((l) => l.reps).fold(0, (sum, reps) => sum + reps);
           totalDuration += s.finishedAt!.difference(s.createdAt);
           totalCompletionRate += s.progress;
 
@@ -281,8 +281,9 @@ class PerformanceRepo implements IPerformanceContract {
           final groupVol = s.logs
               .where((l) => exercises.where((e) => e.apiId == l.exerciseId).isNotEmpty)
               .fold(0.0, (previousValue, element) => previousValue + (element.weight * element.reps));
-          // groupToVolumeMap.addAll({g: groupVol});
-          list[i].points.add(Point(x: s.createdAt, y: groupVol));
+          if (groupVol != 0) {
+            list[i].points.add(Point(x: s.createdAt, y: groupVol));
+          }
         }
       }
       return Right(list);
