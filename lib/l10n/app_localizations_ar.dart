@@ -480,6 +480,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get invalidValues => 'يوجد مشكلة بالقيم';
 
   @override
+  String get noValuesPositiveStatement => 'تمرن لكي تستعرض نتيجة ادائك';
+
+  @override
   String get sessionsReportNoValues =>
       'لا يوجد جلسات لهذا البرنامج, عد بعد التمرين!';
 

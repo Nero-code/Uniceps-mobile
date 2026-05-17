@@ -480,6 +480,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidValues => 'Invalid Values';
 
   @override
+  String get noValuesPositiveStatement => 'Do a workout to reveal your stats';
+
+  @override
   String get sessionsReportNoValues =>
       'No sessions found for this routine, Try practicing!';
 

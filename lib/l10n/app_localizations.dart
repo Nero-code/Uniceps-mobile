@@ -1022,6 +1022,12 @@ abstract class AppLocalizations {
   /// **'Invalid Values'**
   String get invalidValues;
 
+  /// No description provided for @noValuesPositiveStatement.
+  ///
+  /// In en, this message translates to:
+  /// **'Do a workout to reveal your stats'**
+  String get noValuesPositiveStatement;
+
   /// No description provided for @sessionsReportNoValues.
   ///
   /// In en, this message translates to:
