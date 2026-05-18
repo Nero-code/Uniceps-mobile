@@ -171,6 +171,7 @@
 
   "noValues": "No Values",
   "invalidValues": "Invalid Values",
+  "noValuesPositiveStatement": "Do a workout to reveal your stats",
 
   "sessionsReportNoValues": "No sessions found for this routine, Try practicing!",
   "sessionsReportInvalidValues": "Malformed sessions values!",

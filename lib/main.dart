@@ -18,7 +18,7 @@ import 'package:uniceps/app/presentation/performance/screens/analytics_screen.da
 import 'package:uniceps/app/presentation/plans/screens/plans_screen.dart';
 import 'package:uniceps/app/presentation/profile/screens/profile_initial_screen.dart';
 import 'package:uniceps/app/presentation/routine/screens/routines_heat_screen.dart';
-import 'package:uniceps/app/presentation/screens/about_screen.dart';
+import 'package:uniceps/app/presentation/settings/screens/about_screen.dart';
 import 'package:uniceps/app/presentation/settings/screens/profile_screen.dart';
 import 'package:uniceps/app/presentation/settings/screens/settings_screen.dart';
 import 'package:uniceps/app/services/notification_service.dart';

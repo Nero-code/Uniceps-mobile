@@ -6,7 +6,6 @@ import 'package:uniceps/app/domain/commands/performance_usecases/performance_com
 import 'package:uniceps/app/presentation/performance/dialogs/muscle_growth_chart_dialog.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/injection_dependency.dart';
-import 'package:uniceps/l10n/app_localizations.dart';
 
 class PerformancePage extends StatefulWidget {
   const PerformancePage({super.key});
@@ -48,10 +47,17 @@ class _PerformancePageState extends State<PerformancePage> {
     return calender;
   }
 
+  int calcProgressPercentage(Chart<DateTime, double> chart) {
+    if (chart.points.isEmpty) return 0;
+    final first = chart.points.first;
+    final last = chart.points.last;
+    if (first.y == 0) return last.y == 0 ? 0 : 100;
+    return (((last.y - first.y) / first.y) * 100).toInt();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.sizeOf(context);
-    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         FutureBuilder(
@@ -90,7 +96,7 @@ class _PerformancePageState extends State<PerformancePage> {
                 ),
               );
             } else {
-              return Text(l10n.loading);
+              return SizedBox(height: screen.width * .25);
             }
           },
         ),
@@ -136,13 +142,8 @@ class _PerformancePageState extends State<PerformancePage> {
                                   children: [
                                     Text(r[i].title, style: const TextStyle(fontSize: 12)),
                                     Text(
-                                      '${() {
-                                        if (r[i].points.isEmpty) return 0;
-                                        final first = r[i].points.first;
-                                        final last = r[i].points.last;
-                                        if (first.y == 0) return last.y == 0 ? 0 : 100;
-                                        return (((last.y - first.y) / first.y) * 100).toInt();
-                                      }()}%',
+                                      '${calcProgressPercentage(r[i])}%',
+                                      textDirection: .ltr,
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,

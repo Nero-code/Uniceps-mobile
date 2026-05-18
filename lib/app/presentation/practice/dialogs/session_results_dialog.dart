@@ -66,7 +66,17 @@ class SessionResultsDialog extends StatelessWidget {
                         Row(
                           crossAxisAlignment: .end,
                           children: [
-                            Expanded(child: Image.asset(CaptainImages.membership, height: 160, fit: BoxFit.contain)),
+                            Expanded(
+                              child: Column(
+                                mainAxisSize: .min,
+                                children: [
+                                  Transform.flip(
+                                    flipX: Directionality.of(context) == .rtl,
+                                    child: Image.asset(CaptainImages.membership, height: 140, fit: BoxFit.contain),
+                                  ),
+                                ],
+                              ),
+                            ),
                             Expanded(
                               child: ProgressWidget(
                                 percent: progress,
@@ -83,6 +93,21 @@ class SessionResultsDialog extends StatelessWidget {
                               ),
                             ),
                           ],
+                        ),
+                        Positioned(
+                          top: MediaQuery.of(context).viewPadding.top + 5,
+                          width: MediaQuery.sizeOf(context).width,
+                          child: Center(
+                            child: Container(
+                              padding: .symmetric(vertical: 5, horizontal: 8),
+                              decoration: BoxDecoration(color: Colors.white30, borderRadius: .circular(15)),
+                              child: Text(
+                                session.dayName,
+                                maxLines: 1,
+                                style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: .bold),
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),

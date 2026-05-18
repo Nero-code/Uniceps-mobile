@@ -170,6 +170,7 @@
 
   "noValues": "لا يوجد معطيات",
   "invalidValues": "يوجد مشكلة بالقيم",
+  "noValuesPositiveStatement": "تمرن لكي تستعرض نتيجة ادائك",
 
   "sessionsReportNoValues": "لا يوجد جلسات لهذا البرنامج, عد بعد التمرين!",
   "sessionsReportInvalidValues": "قيم الجلسة غير صحيحة!",
