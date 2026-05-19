@@ -49,7 +49,8 @@ class SplashScreen extends StatelessWidget {
               },
               found: () {
                 logger.i('ProfileCubit: found');
-                return Navigator.pushReplacementNamed(context, AppRoutes.home);
+                // return Navigator.pushReplacementNamed(context, AppRoutes.home);
+                return Navigator.pushReplacementNamed(context, AppRoutes.profileInitial);
               },
             ),
           ),

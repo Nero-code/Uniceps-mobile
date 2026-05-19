@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/app/presentation/auth/screens/email_auth_screen.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/exercise_lib/lib_sync_cubit.dart';
-import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
@@ -66,10 +66,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => LocaleCubit(languageCacheHelper: di.sl())..getSavedLanguageCode(),
-          lazy: false,
-        ),
+        BlocProvider(create: (context) => AppConfigCubit(appConfigsService: di.sl())..loadConfigs(), lazy: false),
         BlocProvider(create: (context) => AccountCubit(di.sl(), di.sl(), di.sl())..getUserAccount(), lazy: false),
         BlocProvider(
           create: (context) => MembershipBloc(di.sl())..add(const MembershipEvent.getCurrentPlan()),
@@ -82,13 +79,13 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => DailyQuoteCubit(di.sl())..getQuote()),
         BlocProvider(create: (context) => LibSyncCubit(di.sl())),
       ],
-      child: BlocBuilder<LocaleCubit, ChangedLangState>(
+      child: BlocBuilder<AppConfigCubit, AppConfigState>(
         builder: (context, state) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            locale: state.locale,
+            locale: state.config.appLanguage,
             restorationScopeId: "root",
             title: 'Uniceps',
             theme: lightTheme,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/app/services/language_cache_helper.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/injection_dependency.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
 class ContentLangDialog extends StatelessWidget {
@@ -12,9 +12,11 @@ class ContentLangDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final contentLanguage = sl<LanguageCacheHelper>().getExercisesLibContentLanguage();
+    // final contentLanguage = sl<LanguageCacheHelper>().getExercisesLibContentLanguage();
+    final contentLanguage = context.read<AppConfigCubit>().state.config.exerciseLibLanguage.languageCode;
+
     return AlertDialog(
-      title: const Text('Changing Content Language'),
+      title: Text(l10n.changeExercisesLang),
       content: RadioGroup(
         groupValue: contentLanguage,
         onChanged: (value) async {

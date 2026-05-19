@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/core/constants/api_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
@@ -11,7 +9,8 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isRtl = context.read<LocaleCubit>().state.isRtl();
+    // final isRtl = context.read<LocaleCubit>().state.isRtl();
+    final isRtl = Directionality.of(context) == .rtl;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

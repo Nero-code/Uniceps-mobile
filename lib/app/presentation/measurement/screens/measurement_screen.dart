@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
-import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/measurement/blocs/measurement/measurment_bloc.dart';
 import 'package:uniceps/app/presentation/measurement/dialogs/delete_dialog.dart';
 import 'package:uniceps/app/presentation/measurement/screens/add_edit_measurement_screen.dart';
@@ -50,7 +49,9 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
   Widget build(BuildContext context) {
     final screen = MediaQuery.sizeOf(context);
     final locale = AppLocalizations.of(context)!;
-    final isRtl = context.read<LocaleCubit>().state.isRtl();
+    // final isRtl = context.read<LocaleCubit>().state.isRtl();
+    final isRtl = Directionality.of(context) == .rtl;
+
     return BlocProvider(
       create: (context) => MeasurementBloc(di.sl())..add(const MeasurementEvent.getMeasurements()),
       lazy: false,

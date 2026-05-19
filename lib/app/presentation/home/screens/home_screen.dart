@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
-import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
@@ -43,7 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
     final locale = AppLocalizations.of(context)!;
-    final lang = context.read<LocaleCubit>().state.locale.languageCode;
+    // final lang = context.read<LocaleCubit>().state.locale.languageCode;
+    final lang = context.read<AppConfigCubit>().state.config.appLanguage.languageCode;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/exercise_lib/exercise_lib_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/widgets/alert_bar.dart';
@@ -10,7 +11,6 @@ import 'package:uniceps/app/presentation/settings/dialogs/logout_alert_dialog.da
 import 'package:uniceps/app/presentation/settings/widgets/premium_banner.dart';
 import 'package:uniceps/app/presentation/settings/widgets/settings_tile.dart';
 import 'package:uniceps/app/presentation/settings/widgets/uniceps_premium.dart';
-import 'package:uniceps/app/services/language_cache_helper.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart';
@@ -99,8 +99,8 @@ class SettingsScreen extends StatelessWidget {
                               content: FutureBuilder(
                                 future: () async {
                                   final res = await context.read<ExerciseLibCubit>().changeLibLanguage(code);
-                                  if (res) {
-                                    await sl<LanguageCacheHelper>().saveExercisesLibContentLanguage(code);
+                                  if (res && context.mounted) {
+                                    await context.read<AppConfigCubit>().changeExercisesLanguageTo(code);
                                   }
                                   return res;
                                 }(),

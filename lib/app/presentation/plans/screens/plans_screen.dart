@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:uniceps/app/domain/classes/account_entities/plan_item.dart';
-import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/widgets/alert_bar.dart';
 import 'package:uniceps/app/presentation/home/widgets/captain_uni_card.dart';
@@ -29,7 +28,8 @@ class _PlansScreenState extends State<PlansScreen> {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    final ltr = context.read<LocaleCubit>().state.locale.languageCode == 'en';
+    // final ltr = context.read<LocaleCubit>().state.locale.languageCode == 'en';
+    final ltr = Directionality.of(context) == .ltr;
     final screen = MediaQuery.sizeOf(context);
     return BlocProvider(
       create: (context) => PlansBloc(di.sl())..add(const PlansEvent.getPlan()),
