@@ -40,6 +40,7 @@ dependencies:
   flutter_bloc: ^9.1.1
   get_it: ^9.2.0
   intl: ^0.20.2
+  path: ^1.9.1
 
   # I N T E R N E T
   http: ^1.6.0

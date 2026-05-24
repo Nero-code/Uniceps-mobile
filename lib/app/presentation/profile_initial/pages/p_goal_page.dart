@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/app/presentation/profile/widgets/selection_tile.dart';
+import 'package:uniceps/app/presentation/profile_initial/widgets/selection_tile.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 

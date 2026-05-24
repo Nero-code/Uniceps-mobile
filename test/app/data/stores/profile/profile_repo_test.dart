@@ -1,32 +1,32 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:logger/logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:uniceps/app/data/models/auth_models/player_model.dart';
+import 'package:uniceps/app/data/models/auth_models/profile_model.dart';
 import 'package:uniceps/app/data/sources/local/dal_profile/profile_local_source.dart';
+import 'package:uniceps/app/data/sources/remote/dal_profile/profile_remote_source.dart';
 import 'package:uniceps/app/data/stores/profile/profile_repo.dart';
-import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
+import 'package:uniceps/app/domain/classes/auth_entities/profile.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 import 'profile_repo_test.mocks.dart';
 
-@GenerateMocks([IProfileLocalSource, Logger])
+@GenerateMocks([IProfileLocalSource, IProfileRemoteSource])
 void main() {
   late ProfileRepo repo;
   late MockIProfileLocalSource mockLocalSource;
-  late MockLogger mockLogger;
-  late Player tPlayer;
-  late PlayerModel tPlayerModel;
+  late MockIProfileRemoteSource mockRemoteSource;
+  late Profile tPlayer;
+  late ProfileModel tPlayerModel;
 
   setUp(() {
     mockLocalSource = MockIProfileLocalSource();
-    mockLogger = MockLogger();
-    repo = ProfileRepo(localSource: mockLocalSource, logger: mockLogger);
+    mockRemoteSource = MockIProfileRemoteSource();
+    repo = ProfileRepo(localSource: mockLocalSource, remoteSource: mockRemoteSource);
 
-    tPlayer = Player(name: 'Test Player', gender: Gender.male, birthDate: DateTime.now());
-    tPlayerModel = PlayerModel.fromEntity(tPlayer);
+    tPlayer = Profile(name: 'Test Player', gender: Gender.male, birthDate: DateTime.now());
+    tPlayerModel = ProfileModel.fromEntity(tPlayer);
   });
 
   group('getProfile', () {

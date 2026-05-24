@@ -530,7 +530,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get birthDateError => 'الرجاء ادخال سنة الميلاد';
 
   @override
-  String get gender => 'الجنس:';
+  String get gender => 'الجنس';
 
   @override
   String get genderError => 'الرجاء اختيار الجنس';
@@ -600,6 +600,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get extraActive => 'نشاط عالي جداً (عمل بدني شاق)';
+
+  @override
+  String get pGoalError => 'الرجاء اختيار هدفك';
+
+  @override
+  String get pActivityLevelError => 'الرجاء اختيار مستوى نشاطك';
 
   @override
   String get male => 'ذكر';
@@ -869,4 +875,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get kgPerMin => 'كغ/دقيقة';
+
+  @override
+  String get downloadingExercises => 'جاري تحميل التمارين';
 }

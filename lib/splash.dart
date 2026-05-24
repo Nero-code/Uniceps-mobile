@@ -4,7 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:uniceps/app/presentation/blocs/exercise_lib/exercise_lib_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/exercise_lib/lib_sync_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/exercise_lib/media_downloader_cubit.dart';
-import 'package:uniceps/app/presentation/profile/cubit/profile_cubit.dart';
+import 'package:uniceps/app/presentation/profile_initial/cubit/profile_cubit.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/injection_dependency.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
@@ -49,8 +49,8 @@ class SplashScreen extends StatelessWidget {
               },
               found: () {
                 logger.i('ProfileCubit: found');
-                // return Navigator.pushReplacementNamed(context, AppRoutes.home);
-                return Navigator.pushReplacementNamed(context, AppRoutes.profileInitial);
+                return Navigator.pushReplacementNamed(context, AppRoutes.home);
+                // return Navigator.pushReplacementNamed(context, AppRoutes.profileInitial);
               },
             ),
           ),
@@ -92,7 +92,7 @@ class SplashScreen extends StatelessWidget {
                             borderRadius: .circular(15),
                             backgroundColor: Colors.grey.shade100,
                           ),
-                          if (state.status == .downloading) const Center(child: Text('Downloading Exercises...')),
+                          if (state.status == .downloading) Center(child: Text(l10n.downloadingExercises)),
                           if (state.status == .failure)
                             Row(
                               mainAxisAlignment: .center,

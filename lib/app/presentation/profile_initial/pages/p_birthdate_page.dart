@@ -40,6 +40,29 @@ class PBirthDatePage extends StatelessWidget {
                   initialDate: birthDate ?? DateTime(2000),
                   firstDate: DateTime(1900),
                   lastDate: DateTime.now(),
+                  builder: (context, child) {
+                    return Theme(
+                      data: Theme.of(context).copyWith(
+                        // 1. Change the main color scheme (Header, Selection circle, etc.)
+                        colorScheme: ColorScheme.light(
+                          primary: Theme.of(context).colorScheme.primary, // Header & Selected day circle
+                          onPrimary: Colors.white, // Header text color
+                          onSurface: Colors.black, // Body text color (days)
+                        ),
+                        // // 2. Change the "OK" and "CANCEL" button colors
+                        // textButtonTheme: TextButtonThemeData(
+                        //   style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.secondary),
+                        // ),
+                        // // 3. More specific tweaks via DatePickerTheme
+                        // datePickerTheme: DatePickerThemeData(
+                        //   headerBackgroundColor: Theme.of(context).secondaryHeaderColor,
+                        //   backgroundColor: Colors.white, // Dialog background
+                        //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        // ),
+                      ),
+                      child: child!,
+                    );
+                  },
                 );
                 if (res != null) onDateSelected(res);
               },

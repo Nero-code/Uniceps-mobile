@@ -603,6 +603,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get extraActive => 'Extra Active';
 
   @override
+  String get pGoalError => 'Please select your goal';
+
+  @override
+  String get pActivityLevelError => 'Please select your activity level';
+
+  @override
   String get male => 'Male';
 
   @override
@@ -872,4 +878,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get kgPerMin => 'Kg/min';
+
+  @override
+  String get downloadingExercises => 'Downloading Exercises';
 }

@@ -26,6 +26,7 @@ import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/auth_contracts.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/email_auth_remote_source.dart';
+import 'package:uniceps/app/data/sources/remote/dal_profile/profile_remote_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
 import 'package:uniceps/app/data/stores/account/account_repo.dart';
 import 'package:uniceps/app/data/stores/auth/email_auth_repo.dart';
@@ -115,6 +116,8 @@ Future<void> init() async {
   final appDataBase = AppDatabase();
 
   sl.registerLazySingleton<SharedPreferences>(() => prefs);
+  // sl.registerLazySingleton(() => ReactivePreferencesService(sl()), dispose: (ins) => ins.dispose());
+
   sl.registerLazySingleton<AppDatabase>(() => appDataBase);
   sl.registerLazySingleton<FlutterSecureStorage>(() => const FlutterSecureStorage());
 
@@ -134,7 +137,7 @@ Future<void> init() async {
   ///
   //
 
-  sl.registerLazySingleton<IProfileLocalSource>(() => ProfileLocalSource(prefs: prefs, logger: sl()));
+  sl.registerLazySingleton<IProfileLocalSource>(() => ProfileLocalSource(prefs: sl(), logger: sl()));
 
   sl.registerLazySingleton<ITSessionLocalSourceContract>(
     () => TSessionLocalSource(database: sl(), imagesCache: imagesCache, logger: sl()),
@@ -172,6 +175,7 @@ Future<void> init() async {
   //
 
   sl.registerLazySingleton<IAccountRemoteSource>(() => AccountRemoteSource(clientHelper: sl()));
+  sl.registerLazySingleton<IProfileRemoteSource>(() => ProfileRemoteSource(client: sl()));
 
   sl.registerLazySingleton<IExercisesRemoteSourceContract>(
     () => ExercisesRemoteSourceImpl(clientHelper: sl(), client: sl()),
@@ -186,7 +190,7 @@ Future<void> init() async {
   ///
   //
 
-  sl.registerLazySingleton<IProfileService>(() => ProfileRepo(localSource: sl(), logger: sl()));
+  sl.registerLazySingleton<IProfileService>(() => ProfileRepo(localSource: sl(), remoteSource: sl()));
 
   sl.registerLazySingleton<IPracticeContract>(() => PracticeRepo(localSource: sl()));
   sl.registerLazySingleton<IRoutineManagementContract>(

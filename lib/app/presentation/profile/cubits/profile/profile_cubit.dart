@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:uniceps/app/domain/classes/auth_enitites/player.dart';
+import 'package:uniceps/app/domain/classes/auth_entities/profile.dart';
 import 'package:uniceps/app/domain/commands/profile_usecases/profile_usecases.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
-part 'profile_state.dart';
 part 'profile_cubit.freezed.dart';
+part 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
   final ProfileUsecases _commands;
@@ -14,18 +14,12 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(const ProfileState.loading());
 
     final either = await _commands.getProfile();
-    either.fold(
-      (l) => emit(ProfileState.error(l)),
-      (r) => emit(ProfileState.loaded(r)),
-    );
+    either.fold((l) => emit(ProfileState.error(l)), (r) => emit(ProfileState.loaded(r)));
   }
 
-  Future<void> saveProfile(Player p) async {
+  Future<void> saveProfile(Profile p) async {
     emit(const ProfileState.loading());
     final either = await _commands.submitProfileData(p);
-    either.fold(
-      (l) => emit(ProfileState.error(l)),
-      (r) => emit(ProfileState.loaded(p)),
-    );
+    either.fold((l) => emit(ProfileState.error(l)), (r) => emit(ProfileState.loaded(p)));
   }
 }

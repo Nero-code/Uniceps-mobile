@@ -9,8 +9,8 @@ import 'package:uniceps/app/presentation/plans/blocs/plans_bloc.dart';
 import 'package:uniceps/app/presentation/plans/dialogs/payment_confirm_dialog.dart';
 import 'package:uniceps/app/presentation/plans/dialogs/payment_method_dialog.dart';
 import 'package:uniceps/app/presentation/plans/widgets/plan_widget.dart';
-import 'package:uniceps/app/presentation/screens/error_page.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
+import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/l10n/app_localizations.dart';
@@ -95,7 +95,7 @@ class _PlansScreenState extends State<PlansScreen> {
                         buyPlanAndReset: (i) {
                           return const SizedBox();
                         },
-                        error: (f) => ErrorPage(message: f.getErrorMessage()),
+                        error: (f) => ErrorScreenWidget(f: f),
                       ),
                     ),
                     DataTable(

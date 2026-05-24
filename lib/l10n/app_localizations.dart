@@ -1250,6 +1250,18 @@ abstract class AppLocalizations {
   /// **'Extra Active'**
   String get extraActive;
 
+  /// No description provided for @pGoalError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your goal'**
+  String get pGoalError;
+
+  /// No description provided for @pActivityLevelError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your activity level'**
+  String get pActivityLevelError;
+
   /// No description provided for @male.
   ///
   /// In en, this message translates to:
@@ -1759,6 +1771,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Kg/min'**
   String get kgPerMin;
+
+  /// No description provided for @downloadingExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading Exercises'**
+  String get downloadingExercises;
 }
 
 class _AppLocalizationsDelegate

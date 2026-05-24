@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:uniceps/app/data/models/auth_models/player_model.dart';
+import 'package:uniceps/app/domain/classes/auth_entities/profile.dart';
 import 'package:uniceps/app/domain/commands/profile_usecases/profile_usecases.dart';
 
-part 'profile_state.dart';
 part 'profile_cubit.freezed.dart';
+part 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
   final ProfileUsecases _commands;
@@ -12,17 +12,11 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> getProfile() async {
     final either = await _commands.getProfile();
-    either.fold(
-      (l) => emit(const ProfileState.notFound()),
-      (r) => emit(const ProfileState.found()),
-    );
+    either.fold((l) => emit(const ProfileState.notFound()), (r) => emit(const ProfileState.found()));
   }
 
-  Future<void> saveProfile(PlayerModel m) async {
+  Future<void> saveProfile(Profile m) async {
     final either = await _commands.submitProfileData(m);
-    either.fold(
-      (l) => emit(const ProfileState.notFound()),
-      (r) => emit(const ProfileState.found()),
-    );
+    either.fold((l) => emit(const ProfileState.notFound()), (r) => emit(const ProfileState.found()));
   }
 }

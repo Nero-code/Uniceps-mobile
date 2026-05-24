@@ -1,15 +1,13 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/data/models/auth_models/player_model.dart';
+import 'package:uniceps/app/domain/classes/auth_entities/profile.dart';
 import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
-import 'package:uniceps/app/presentation/profile/cubit/profile_cubit.dart';
-import 'package:uniceps/app/presentation/profile/pages/p_activity_level_page.dart';
-import 'package:uniceps/app/presentation/profile/pages/p_birthdate_page.dart';
-import 'package:uniceps/app/presentation/profile/pages/p_gender_page.dart';
-import 'package:uniceps/app/presentation/profile/pages/p_goal_page.dart';
-import 'package:uniceps/app/presentation/profile/pages/p_name_page.dart';
-import 'package:uniceps/app/presentation/profile/pages/p_photo_page.dart';
+import 'package:uniceps/app/presentation/profile_initial/cubit/profile_cubit.dart';
+import 'package:uniceps/app/presentation/profile_initial/pages/p_activity_level_page.dart';
+import 'package:uniceps/app/presentation/profile_initial/pages/p_birthdate_page.dart';
+import 'package:uniceps/app/presentation/profile_initial/pages/p_gender_page.dart';
+import 'package:uniceps/app/presentation/profile_initial/pages/p_goal_page.dart';
+import 'package:uniceps/app/presentation/profile_initial/pages/p_name_page.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/injection_dependency.dart';
@@ -51,21 +49,6 @@ class _ProfileInitialScreenState extends State<ProfileInitialScreen> {
     }
   }
 
-  Future<void> _pickImage() async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.image);
-    if (result != null && result.files.single.path != null) {
-      setState(() {
-        photoPath = result.files.single.path;
-      });
-    }
-  }
-
-  void _removeImage() {
-    setState(() {
-      photoPath = null;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
@@ -105,8 +88,6 @@ class _ProfileInitialScreenState extends State<ProfileInitialScreen> {
                       PGenderPage(selectedGender: gender, onGenderSelected: (g) => setState(() => gender = g)),
                       // _buildBirthDatePage(locale, theme),
                       PBirthDatePage(birthDate: birthDate, onDateSelected: (bd) => setState(() => birthDate = bd)),
-                      // _buildPhotoPage(locale, theme),
-                      PPhotoPage(photoPath: photoPath, onPickImage: _pickImage, onRemoveImage: _removeImage),
                       // _buildGoalPage(locale, theme),
                       PGoalPage(selectedGoal: goal, onGoalSelected: (g) => setState(() => goal = g)),
                       // _buildActivityLevelPage(locale, theme),
@@ -130,7 +111,7 @@ class _ProfileInitialScreenState extends State<ProfileInitialScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Row(
-        children: List.generate(6, (index) {
+        children: List.generate(5, (index) {
           return Expanded(
             child: Container(
               height: 4,
@@ -165,7 +146,7 @@ class _ProfileInitialScreenState extends State<ProfileInitialScreen> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 ),
                 onPressed: () {
-                  if (_currentPage < 5) {
+                  if (_currentPage < 4) {
                     // Validate current step
                     if (_currentPage == 0 && nameCtl.text.trim().isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(locale.pNameError)));
@@ -180,26 +161,24 @@ class _ProfileInitialScreenState extends State<ProfileInitialScreen> {
                       return;
                     }
                     if (_currentPage == 3 && goal == null) {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(const SnackBar(content: Text("Please select your goal")));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(locale.pGoalError)));
                       return;
                     }
                     if (_currentPage == 4 && activityLevel == null) {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(const SnackBar(content: Text("Please select your activity level")));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(locale.pActivityLevelError)));
                       return;
                     }
                     _nextPage();
                   } else {
                     // Final save
                     context.read<ProfileCubit>().saveProfile(
-                      PlayerModel(name: nameCtl.text.trim(), birthDate: birthDate!, gender: gender!, photo: photoPath),
+                      Profile(name: nameCtl.text.trim(), birthDate: birthDate!, gender: gender!, photo: photoPath),
                     );
+                    context.read<AppConfigCubit>().changeGoalTo(goal!);
+                    context.read<AppConfigCubit>().changeActivityLevelTo(activityLevel!);
                   }
                 },
-                child: Text(_currentPage == 5 ? locale.save : locale.next),
+                child: Text(_currentPage == 4 ? locale.save : locale.next),
               );
             },
           ),
