@@ -5,8 +5,10 @@
 //
 
 const APP_NAME = 'Uniceps';
-const APP_VERSION = "v3.1.7+16${String.fromEnvironment('VERSION_SUFFIX')}";
+const APP_VERSION = "v3.2.0+17${String.fromEnvironment('VERSION_SUFFIX')}";
 
+///   A P P   I M A G E S
+const IMG_PREMIUM = "images/photos/premium.png";
 const APP_LOGO = "images/logo/Logo.png";
 const APP_LOGO_DARK = "images/logo/Logo-dark.png";
 const APP_LOGO_LIGHT = "images/logo/Logo-light.png";
@@ -62,23 +64,3 @@ Lang parseLang(String lang) {
 }
 
 enum ThemeType { light, dark }
-
-///   A P P   I M A G E S
-
-// const IMG_BACK = "images/photos/back.png";
-// const IMG_BLANK = "images/photos/blank.png";
-// const IMG_CONTROL_PANAL = "images/photos/control_panal.png";
-// const IMG_DEPARTING = "images/photos/departing.png";
-// const IMG_DESKTOP = "images/photos/desktop.png";
-// const IMG_EMPTY = "images/photos/empty.png";
-// const IMG_EMPTY_2 = "images/photos/empty_2.png";
-// const IMG_MEMORY = "images/photos/memory.png";
-// const IMG_NO_INTERNET = "images/photos/noInternet.png";
-// const IMG_SERVER_ERROR = "images/photos/server_error.png";
-// const IMG_SERVER_DOWN = "images/photos/server_down.png";
-// const IMG_VOID = "images/photos/void.png";
-// const IMG_WARNING = "images/photos/warning.png";
-// const IMG_NO_PROGRAM = "images/photos/no_program.png";
-// const IMG_NO_ATTENDENCE = "images/photos/attendence_err.png";
-// const IMG_NO_MEASUREMENTS = "images/photos/measurements_err.png";
-const IMG_PREMIUM = "images/photos/premium.png";
