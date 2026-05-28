@@ -175,6 +175,8 @@
   "pGenderDescription": "Knowing your gender helps us provide more accurate physiological reports, such as BMR and Body Fat calculations.",
   "pBirthDateDescription": "Your age is a key factor in many fitness calculations. Please provide your date of birth so we can calculate your stats accurately.",
   "profilePhoto": "Profile Photo",
+  "removePhotoTitle": "Remove Photo",
+  "removePhotoContent": "Are you sure you want to remove your profile photo?",
   "pPhotoDescription": "A profile picture makes your account feel like home. You can upload one now or skip this step if you prefer.",
   "changePhoto": "Change Photo",
   "next": "Next",

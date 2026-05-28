@@ -121,14 +121,7 @@ class HttpClientHelper implements ClientHelper {
     bool needsHeader = true,
     Map<String, String>? headers,
   }) async {
-    final res = await _client.put(
-      Uri.https(
-        "$api"
-        "$urlPart",
-      ),
-      headers: await getHeader(needsHeader, headers),
-      body: body,
-    );
+    final res = await _client.put(Uri.https(api, urlPart), headers: await getHeader(needsHeader, headers), body: body);
     handleHttpStatus(res);
 
     if (kDebugMode) {
@@ -146,10 +139,7 @@ class HttpClientHelper implements ClientHelper {
     Map<String, String>? headers,
   }) async {
     final res = await _client.delete(
-      Uri.https(
-        "$api"
-        "$urlPart",
-      ),
+      Uri.https(api, urlPart),
       headers: await getHeader(needsHeader, headers),
       body: body,
     );
@@ -158,6 +148,25 @@ class HttpClientHelper implements ClientHelper {
       print("deleteHandler code: ${res.statusCode}");
       print("deleteHandler body: ${res.body}");
     }
+  }
+
+  Future<ByteStream> uploadPhoto(
+    String key,
+    Uint8List image,
+    String api,
+    String urlPart,
+    Map<String, dynamic> body, {
+    bool needsToken = true,
+    Map<String, String>? headers,
+  }) async {
+    final request = MultipartRequest('POST', Uri.https(api, urlPart));
+    final multipartFile = MultipartFile.fromBytes(key, image);
+
+    request.files.add(multipartFile);
+    request.headers.addAll(await getHeader(needsToken, headers));
+
+    final streamedRes = await request.send();
+    return streamedRes.stream;
   }
 
   Future<Map<String, String>> getHeader(bool needToken, Map<String, String>? headers) async {
@@ -179,21 +188,21 @@ String handleHttpStatus(Response res) {
       return 'OK';
     case 201:
       return 'Created';
-    case 204:
-      throw NoContentException();
-    case 400:
-      throw BadRequestException();
-    case 401:
-      throw UnauthorizedException();
-    case 403:
-      throw ForbiddenException();
-    case 404:
-      throw NotFoundException();
-    case 500:
-      throw ServerErrorException();
-    case 503:
-      throw ServiceUnavailableException();
+    // case 204:
+    //   throw NoContentException();
+    // case 400:
+    //   throw BadRequestException();
+    // case 401:
+    //   throw UnauthorizedException();
+    // case 403:
+    //   throw ForbiddenException();
+    // case 404:
+    //   throw NotFoundException();
+    // case 500:
+    //   throw ServerErrorException();
+    // case 503:
+    //   throw ServiceUnavailableException();
     default:
-      throw Exception('Unhandled status code: ${res.statusCode}');
+      throw ClientException('Unhandled status code: ${res.statusCode}');
   }
 }

@@ -108,7 +108,7 @@ class _AppDialogState extends State<AppDialog> {
     }
 
     return AlertDialog(
-      icon: Icon(widget.icon ?? defaultIcon, color: actionColor),
+      icon: Icon(widget.icon ?? defaultIcon, color: actionColor, size: 50),
       title: widget.title != null ? Text(widget.title!) : null,
       content: Column(
         mainAxisSize: MainAxisSize.min,

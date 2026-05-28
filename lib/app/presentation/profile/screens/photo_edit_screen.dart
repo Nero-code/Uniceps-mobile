@@ -5,7 +5,10 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:uniceps/core/helpers/file_helper.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/profile/profile_cubit.dart';
+import 'package:uniceps/core/constants/app_routes.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 import 'package:vector_math/vector_math_64.dart' as vector_math;
 
@@ -33,6 +36,9 @@ class _PhotoEditScreenState extends State<PhotoEditScreen> {
   ui.Image? _uiImage;
   bool _isImageLoaded = false;
   bool _isMatrixInitialized = false;
+
+  bool loadingDialogActive = false;
+  bool _isPopping = false;
 
   @override
   void initState() {
@@ -171,96 +177,141 @@ class _PhotoEditScreenState extends State<PhotoEditScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: const Text('Edit Photo', style: TextStyle(color: Colors.white)),
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          _isPopping = true;
+          context.read<ProfileCubit>().getProfile();
+        }
+      },
+      child: Scaffold(
         backgroundColor: Colors.black,
-        iconTheme: const IconThemeData(color: Colors.white),
-        actions: [
-          Builder(
-            builder: (innerContext) {
-              return TextButton(
-                onPressed: () async {
-                  final RenderBox? box = context.findRenderObject() as RenderBox?;
-                  if (box != null) {
-                    final Size widgetSize = Size(box.size.width, box.size.height);
-
-                    // Captures exactly what is being painted within the boundary
-                    final Uint8List? croppedBytes = await _prepareCroppedImage(widgetSize);
-
-                    if (croppedBytes != null && mounted) {
-                      // ScaffoldMessenger.of(context).showSnackBar(
-                      //   const SnackBar(
-                      //     content: Text('Perfect crop saved! Ready for storage.'),
-                      //     backgroundColor: Colors.green,
-                      //   ),
-                      // );
-                      final res = await FileHelper.saveToInternalStorage(croppedBytes);
-                      Navigator.pop(context, res);
-                    }
-                  }
+        appBar: AppBar(
+          title: const Text('Edit Photo', style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.black,
+          iconTheme: const IconThemeData(color: Colors.white),
+          actions: [
+            BlocConsumer<ProfileCubit, ProfileState>(
+              listener: (context, state) => state.when(
+                initial: () {
+                  return null;
                 },
-                child: Text(
-                  l10n.save,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: !_isImageLoaded
-          ? const Center(child: CircularProgressIndicator(color: Colors.white))
-          : LayoutBuilder(
-              builder: (context, constraints) {
-                final Size screenSize = Size(constraints.maxWidth, constraints.maxHeight);
+                loading: () {
+                  if (loadingDialogActive || _isPopping) return null;
 
-                if (!_isMatrixInitialized) {
-                  final double cropLeft = (screenSize.width - _cropBoxSize) / 2;
-                  final double cropTop = (screenSize.height - _cropBoxSize) / 2;
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => const LoadingIndicator(elevated: false),
+                  );
+                  loadingDialogActive = true;
+                  return null;
+                },
+                loaded: (_) {
+                  if (_isPopping) return null;
+                  _isPopping = true;
+                  Navigator.popUntil(context, (route) => route.settings.name == AppRoutes.profile);
+                  return null;
+                },
+                error: (e) {
+                  if (loadingDialogActive) {
+                    Navigator.pop(context);
+                    loadingDialogActive = false;
+                  }
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(l10n.errNoInternet), backgroundColor: Colors.red));
+                  return null;
+                },
+              ),
+              buildWhen: (_, current) => current.maybeWhen(orElse: () => false, loaded: (_) => true),
+              builder: (innerContext, state) {
+                final p = state.whenOrNull(loaded: (p) => p);
+                return TextButton(
+                  onPressed: () async {
+                    final RenderBox? box = context.findRenderObject() as RenderBox?;
+                    if (box != null) {
+                      final Size widgetSize = Size(box.size.width, box.size.height);
 
-                  final double initScaleX = _cropBoxSize / _uiImage!.width.toDouble();
-                  final double initScaleY = _cropBoxSize / _uiImage!.height.toDouble();
-                  final double initScale = math.max(initScaleX, initScaleY);
+                      // Captures exactly what is being painted within the boundary
+                      final Uint8List? croppedBytes = await _prepareCroppedImage(widgetSize);
 
-                  final Matrix4 initMatrix = Matrix4.identity();
-                  initMatrix.translateByVector3(vector_math.Vector3(cropLeft, cropTop, 0.0));
-                  initMatrix.scaleByVector3(vector_math.Vector3(initScale, initScale, 1.0));
+                      if (croppedBytes != null && context.mounted) {
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //   const SnackBar(
+                        //     content: Text('Perfect crop saved! Ready for storage.'),
+                        //     backgroundColor: Colors.green,
+                        //   ),
+                        // );
+                        // final res = await FileHelper.saveToInternalStorage(croppedBytes);
 
-                  _currentScale = initScale;
-                  _matrixNotifier.value = initMatrix;
-                  _isMatrixInitialized = true;
-                }
-
-                return GestureDetector(
-                  onScaleStart: _handleScaleStart,
-                  onScaleUpdate: (details) => _handleScaleUpdate(details, screenSize),
-                  child: Stack(
-                    children: [
-                      // CRITICAL: RepaintBoundary holds the key that reads painted raster pixels
-                      RepaintBoundary(
-                        key: _boundaryKey,
-                        child: ValueListenableBuilder<Matrix4>(
-                          valueListenable: _matrixNotifier,
-                          builder: (context, currentMatrix, _) {
-                            return CustomPaint(
-                              size: Size.infinite,
-                              painter: ImageCanvasPainter(image: _uiImage!, transformMatrix: currentMatrix),
-                            );
-                          },
-                        ),
-                      ),
-                      Positioned.fill(
-                        child: const IgnorePointer(
-                          child: RepaintBoundary(child: StaticCropOverlay(cropBoxSize: 300.0)),
-                        ),
-                      ),
-                    ],
+                        // Navigator.pop(context, croppedBytes);
+                        if (p != null) {
+                          context.read<ProfileCubit>().uploadProfilePic(p, croppedBytes);
+                        }
+                      }
+                    }
+                  },
+                  child: Text(
+                    l10n.save,
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 );
               },
             ),
+          ],
+        ),
+        body: !_isImageLoaded
+            ? const Center(child: CircularProgressIndicator(color: Colors.white))
+            : LayoutBuilder(
+                builder: (context, constraints) {
+                  final Size screenSize = Size(constraints.maxWidth, constraints.maxHeight);
+
+                  if (!_isMatrixInitialized) {
+                    final double cropLeft = (screenSize.width - _cropBoxSize) / 2;
+                    final double cropTop = (screenSize.height - _cropBoxSize) / 2;
+
+                    final double initScaleX = _cropBoxSize / _uiImage!.width.toDouble();
+                    final double initScaleY = _cropBoxSize / _uiImage!.height.toDouble();
+                    final double initScale = math.max(initScaleX, initScaleY);
+
+                    final Matrix4 initMatrix = Matrix4.identity();
+                    initMatrix.translateByVector3(vector_math.Vector3(cropLeft, cropTop, 0.0));
+                    initMatrix.scaleByVector3(vector_math.Vector3(initScale, initScale, 1.0));
+
+                    _currentScale = initScale;
+                    _matrixNotifier.value = initMatrix;
+                    _isMatrixInitialized = true;
+                  }
+
+                  return GestureDetector(
+                    onScaleStart: _handleScaleStart,
+                    onScaleUpdate: (details) => _handleScaleUpdate(details, screenSize),
+                    child: Stack(
+                      children: [
+                        // CRITICAL: RepaintBoundary holds the key that reads painted raster pixels
+                        RepaintBoundary(
+                          key: _boundaryKey,
+                          child: ValueListenableBuilder<Matrix4>(
+                            valueListenable: _matrixNotifier,
+                            builder: (context, currentMatrix, _) {
+                              return CustomPaint(
+                                size: Size.infinite,
+                                painter: ImageCanvasPainter(image: _uiImage!, transformMatrix: currentMatrix),
+                              );
+                            },
+                          ),
+                        ),
+                        const Positioned.fill(
+                          child: IgnorePointer(child: RepaintBoundary(child: StaticCropOverlay(cropBoxSize: 300.0))),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+      ),
     );
   }
 }

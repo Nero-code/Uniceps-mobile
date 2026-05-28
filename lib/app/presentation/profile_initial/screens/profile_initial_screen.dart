@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/auth_entities/profile.dart';
 import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
-import 'package:uniceps/app/presentation/profile_initial/cubit/profile_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/profile/profile_cubit.dart';
 import 'package:uniceps/app/presentation/profile_initial/pages/p_activity_level_page.dart';
 import 'package:uniceps/app/presentation/profile_initial/pages/p_birthdate_page.dart';
 import 'package:uniceps/app/presentation/profile_initial/pages/p_gender_page.dart';
@@ -10,7 +10,6 @@ import 'package:uniceps/app/presentation/profile_initial/pages/p_goal_page.dart'
 import 'package:uniceps/app/presentation/profile_initial/pages/p_name_page.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
-import 'package:uniceps/injection_dependency.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
 class ProfileInitialScreen extends StatefulWidget {
@@ -53,54 +52,49 @@ class _ProfileInitialScreenState extends State<ProfileInitialScreen> {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
 
-    return BlocProvider(
-      create: (context) => ProfileCubit(sl())..getProfile(),
-      lazy: false,
-      child: BlocListener<ProfileCubit, ProfileState>(
-        listenWhen: (p, c) =>
-            p.maybeWhen(notFound: () => true, orElse: () => false) &&
-            c.maybeWhen(found: () => true, orElse: () => false),
-        listener: (context, state) => Navigator.pushReplacementNamed(context, AppRoutes.home),
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            actions: [
-              IconButton(
-                onPressed: () => _showLanguageDialog(context, locale),
-                icon: const Icon(Icons.language, color: Colors.grey),
-              ),
-            ],
-          ),
-          body: SafeArea(
-            child: Column(
-              children: [
-                _buildProgressBar(),
-                Expanded(
-                  child: PageView(
-                    controller: _pageController,
-                    onPageChanged: (index) => setState(() => _currentPage = index),
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      // _buildNamePage(locale, theme),
-                      PNamePage(controller: nameCtl),
-                      // _buildGenderPage(locale, theme),
-                      PGenderPage(selectedGender: gender, onGenderSelected: (g) => setState(() => gender = g)),
-                      // _buildBirthDatePage(locale, theme),
-                      PBirthDatePage(birthDate: birthDate, onDateSelected: (bd) => setState(() => birthDate = bd)),
-                      // _buildGoalPage(locale, theme),
-                      PGoalPage(selectedGoal: goal, onGoalSelected: (g) => setState(() => goal = g)),
-                      // _buildActivityLevelPage(locale, theme),
-                      PActivityLevelPage(
-                        selectedLevel: activityLevel,
-                        onLevelChanged: (l) => setState(() => activityLevel = l),
-                      ),
-                    ],
-                  ),
-                ),
-                _buildNavigationButtons(locale),
-              ],
+    return BlocListener<ProfileCubit, ProfileState>(
+      listenWhen: (p, c) =>
+          p.maybeWhen(error: (_) => true, orElse: () => false) && c.maybeWhen(loaded: (_) => true, orElse: () => false),
+      listener: (context, state) => Navigator.pushReplacementNamed(context, AppRoutes.home),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: [
+            IconButton(
+              onPressed: () => _showLanguageDialog(context, locale),
+              icon: const Icon(Icons.language, color: Colors.grey),
             ),
+          ],
+        ),
+        body: SafeArea(
+          child: Column(
+            children: [
+              _buildProgressBar(),
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (index) => setState(() => _currentPage = index),
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    // _buildNamePage(locale, theme),
+                    PNamePage(controller: nameCtl),
+                    // _buildGenderPage(locale, theme),
+                    PGenderPage(selectedGender: gender, onGenderSelected: (g) => setState(() => gender = g)),
+                    // _buildBirthDatePage(locale, theme),
+                    PBirthDatePage(birthDate: birthDate, onDateSelected: (bd) => setState(() => birthDate = bd)),
+                    // _buildGoalPage(locale, theme),
+                    PGoalPage(selectedGoal: goal, onGoalSelected: (g) => setState(() => goal = g)),
+                    // _buildActivityLevelPage(locale, theme),
+                    PActivityLevelPage(
+                      selectedLevel: activityLevel,
+                      onLevelChanged: (l) => setState(() => activityLevel = l),
+                    ),
+                  ],
+                ),
+              ),
+              _buildNavigationButtons(locale),
+            ],
           ),
         ),
       ),
@@ -171,8 +165,8 @@ class _ProfileInitialScreenState extends State<ProfileInitialScreen> {
                     _nextPage();
                   } else {
                     // Final save
-                    context.read<ProfileCubit>().saveProfile(
-                      Profile(name: nameCtl.text.trim(), birthDate: birthDate!, gender: gender!, photo: photoPath),
+                    context.read<ProfileCubit>().initializeProfile(
+                      Profile(name: nameCtl.text.trim(), birthDate: birthDate!, gender: gender!),
                     );
                     context.read<AppConfigCubit>().changeGoalTo(goal!);
                     context.read<AppConfigCubit>().changeActivityLevelTo(activityLevel!);

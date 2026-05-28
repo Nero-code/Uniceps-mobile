@@ -4,6 +4,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
+import 'dart:typed_data';
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:uniceps/app/data/models/auth_models/profile_model.dart' as _i2;
@@ -71,7 +72,7 @@ class MockIProfileRemoteSource extends _i1.Mock implements _i5.IProfileRemoteSou
           as _i4.Future<bool>);
 
   @override
-  _i4.Future<bool> uploadPhoto(String? path) =>
+  _i4.Future<bool> uploadPhoto(Uint8List? path) =>
       (super.noSuchMethod(Invocation.method(#uploadPhoto, [path]), returnValue: _i4.Future<bool>.value(false))
           as _i4.Future<bool>);
 }

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/profile/profile_cubit.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/l10n/app_localizations.dart';
 
@@ -43,6 +44,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
             authenticated: () {
               context.read<AccountCubit>().getUserAccount();
               context.read<MembershipBloc>().add(const MembershipEvent.getCurrentPlan());
+              context.read<ProfileCubit>().syncProfile();
               Navigator.pop(context);
               return null;
             },

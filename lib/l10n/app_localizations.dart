@@ -1154,6 +1154,18 @@ abstract class AppLocalizations {
   /// **'Profile Photo'**
   String get profilePhoto;
 
+  /// No description provided for @removePhotoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Photo'**
+  String get removePhotoTitle;
+
+  /// No description provided for @removePhotoContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove your profile photo?'**
+  String get removePhotoContent;
+
   /// No description provided for @pPhotoDescription.
   ///
   /// In en, this message translates to:

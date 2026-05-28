@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:uniceps/app/data/models/auth_models/profile_model.dart';
@@ -7,6 +8,7 @@ import 'package:uniceps/app/data/sources/local/dal_profile/profile_local_source.
 import 'package:uniceps/app/data/sources/remote/dal_profile/profile_remote_source.dart';
 import 'package:uniceps/app/data/stores/profile/profile_repo.dart';
 import 'package:uniceps/app/domain/classes/auth_entities/profile.dart';
+import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
@@ -23,7 +25,11 @@ void main() {
   setUp(() {
     mockLocalSource = MockIProfileLocalSource();
     mockRemoteSource = MockIProfileRemoteSource();
-    repo = ProfileRepo(localSource: mockLocalSource, remoteSource: mockRemoteSource);
+    repo = ProfileRepo(
+      localSource: mockLocalSource,
+      remoteSource: mockRemoteSource,
+      networkInfo: NetworkInfo(internetConnection: InternetConnection.createInstance()),
+    );
 
     tPlayer = Profile(name: 'Test Player', gender: Gender.male, birthDate: DateTime.now());
     tPlayerModel = ProfileModel.fromEntity(tPlayer);

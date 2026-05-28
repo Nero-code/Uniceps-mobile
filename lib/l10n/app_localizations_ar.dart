@@ -551,6 +551,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profilePhoto => 'الصورة الشخصية';
 
   @override
+  String get removePhotoTitle => 'حذف الصورة';
+
+  @override
+  String get removePhotoContent =>
+      'هل أنت متأكد من رغبتك في حذف صورة ملفك الشخصي؟';
+
+  @override
   String get pPhotoDescription =>
       'الصورة الشخصية تجعل حسابك يبدو مألوفاً أكثر. يمكنك رفع واحدة الآن أو تخطي هذه الخطوة إذا كنت تفضل ذلك.';
 

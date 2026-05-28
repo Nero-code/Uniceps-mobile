@@ -79,7 +79,9 @@ Future<void> init() async {
   sl.registerLazySingleton<http.Client>(() => client);
   // sl.registerLazySingleton<ClientHelper>(
   //     () => NoTokenHttpClientHelper(client: sl()));
-  sl.registerLazySingleton<ClientHelper>(() => HttpClientHelper(client: sl(), tokenService: sl(), logger: sl()));
+
+  sl.registerLazySingleton(() => HttpClientHelper(client: sl(), tokenService: sl(), logger: sl()));
+  sl.registerFactory<ClientHelper>(() => sl<HttpClientHelper>());
 
   sl.registerLazySingleton(() => NetworkInfo(internetConnection: InternetConnection.createInstance()));
 
@@ -190,7 +192,9 @@ Future<void> init() async {
   ///
   //
 
-  sl.registerLazySingleton<IProfileService>(() => ProfileRepo(localSource: sl(), remoteSource: sl()));
+  sl.registerLazySingleton<IProfileService>(
+    () => ProfileRepo(localSource: sl(), remoteSource: sl(), networkInfo: sl()),
+  );
 
   sl.registerLazySingleton<IPracticeContract>(() => PracticeRepo(localSource: sl()));
   sl.registerLazySingleton<IRoutineManagementContract>(

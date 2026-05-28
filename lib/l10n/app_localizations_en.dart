@@ -552,6 +552,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profilePhoto => 'Profile Photo';
 
   @override
+  String get removePhotoTitle => 'Remove Photo';
+
+  @override
+  String get removePhotoContent =>
+      'Are you sure you want to remove your profile photo?';
+
+  @override
   String get pPhotoDescription =>
       'A profile picture makes your account feel like home. You can upload one now or skip this step if you prefer.';
 

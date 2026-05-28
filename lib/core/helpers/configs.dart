@@ -1,14 +1,15 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:uniceps/core/constants/constants.dart';
 
-class Configs {
-  Locale appLanguage;
-  Locale exerciseLibLanguage;
-  ThemeMode mode;
-  Goal? goal;
-  ActivityLevel? activityLevel;
+class Configs extends Equatable {
+  final Locale appLanguage;
+  final Locale exerciseLibLanguage;
+  final ThemeMode mode;
+  final Goal? goal;
+  final ActivityLevel? activityLevel;
 
-  Configs({
+  const Configs({
     required this.appLanguage,
     required this.exerciseLibLanguage,
     required this.mode,
@@ -53,4 +54,14 @@ class Configs {
     goal: goal ?? this.goal,
     activityLevel: activityLevel ?? this.activityLevel,
   );
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+    appLanguage.languageCode,
+    exerciseLibLanguage.languageCode,
+    mode.name,
+    goal?.name,
+    activityLevel?.name,
+  ];
 }
