@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:uniceps/app/domain/classes/account_entities/plan_item.dart';
-import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/widgets/alert_bar.dart';
 import 'package:uniceps/app/presentation/home/widgets/captain_uni_card.dart';
@@ -10,8 +9,8 @@ import 'package:uniceps/app/presentation/plans/blocs/plans_bloc.dart';
 import 'package:uniceps/app/presentation/plans/dialogs/payment_confirm_dialog.dart';
 import 'package:uniceps/app/presentation/plans/dialogs/payment_method_dialog.dart';
 import 'package:uniceps/app/presentation/plans/widgets/plan_widget.dart';
-import 'package:uniceps/app/presentation/screens/error_page.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
+import 'package:uniceps/core/widgets/error_widget.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/l10n/app_localizations.dart';
@@ -29,7 +28,8 @@ class _PlansScreenState extends State<PlansScreen> {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    final ltr = context.read<LocaleCubit>().state.locale.languageCode == 'en';
+    // final ltr = context.read<LocaleCubit>().state.locale.languageCode == 'en';
+    final ltr = Directionality.of(context) == .ltr;
     final screen = MediaQuery.sizeOf(context);
     return BlocProvider(
       create: (context) => PlansBloc(di.sl())..add(const PlansEvent.getPlan()),
@@ -95,7 +95,7 @@ class _PlansScreenState extends State<PlansScreen> {
                         buyPlanAndReset: (i) {
                           return const SizedBox();
                         },
-                        error: (f) => ErrorPage(message: f.getErrorMessage()),
+                        error: (f) => ErrorScreenWidget(f: f),
                       ),
                     ),
                     DataTable(

@@ -12,6 +12,8 @@ abstract class ApiRoutes {
   static const register = "/api/Authentication";
   static const verifyCode = "/api/Authentication/VerifyOtp";
   static const refreshToken = '/api/Authentication/RefreshToken';
+  static const profile = '/api/Profile';
+  static const profilePicture = '/api/ProfilePicture';
 
   static const deviceInfo = "/api/UserDevice";
   static const sessionSync = '/api/Workout';

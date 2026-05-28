@@ -5,9 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/app/presentation/auth/screens/email_auth_screen.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/exercise_lib/lib_sync_cubit.dart';
-import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/profile/profile_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
@@ -16,10 +17,10 @@ import 'package:uniceps/app/presentation/home/screens/home_screen.dart';
 import 'package:uniceps/app/presentation/measurement/screens/measurement_screen.dart';
 import 'package:uniceps/app/presentation/performance/screens/analytics_screen.dart';
 import 'package:uniceps/app/presentation/plans/screens/plans_screen.dart';
-import 'package:uniceps/app/presentation/profile/screens/profile_initial_screen.dart';
+import 'package:uniceps/app/presentation/profile/profile_screen.dart';
+import 'package:uniceps/app/presentation/profile_initial/screens/profile_initial_screen.dart';
 import 'package:uniceps/app/presentation/routine/screens/routines_heat_screen.dart';
 import 'package:uniceps/app/presentation/settings/screens/about_screen.dart';
-import 'package:uniceps/app/presentation/settings/screens/profile_screen.dart';
 import 'package:uniceps/app/presentation/settings/screens/settings_screen.dart';
 import 'package:uniceps/app/services/notification_service.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
@@ -66,11 +67,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => LocaleCubit(languageCacheHelper: di.sl())..getSavedLanguageCode(),
-          lazy: false,
-        ),
+        BlocProvider(create: (context) => AppConfigCubit(appConfigsService: di.sl())..loadConfigs(), lazy: false),
         BlocProvider(create: (context) => AccountCubit(di.sl(), di.sl(), di.sl())..getUserAccount(), lazy: false),
+        BlocProvider(create: (context) => ProfileCubit(di.sl())..getProfile(), lazy: false),
         BlocProvider(
           create: (context) => MembershipBloc(di.sl())..add(const MembershipEvent.getCurrentPlan()),
           lazy: false,
@@ -82,13 +81,13 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => DailyQuoteCubit(di.sl())..getQuote()),
         BlocProvider(create: (context) => LibSyncCubit(di.sl())),
       ],
-      child: BlocBuilder<LocaleCubit, ChangedLangState>(
+      child: BlocBuilder<AppConfigCubit, AppConfigState>(
         builder: (context, state) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            locale: state.locale,
+            locale: state.config.appLanguage,
             restorationScopeId: "root",
             title: 'Uniceps',
             theme: lightTheme,

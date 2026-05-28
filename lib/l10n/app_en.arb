@@ -1,6 +1,5 @@
 {
   "hello": "Hi, ",
-  
   "welcome": "Welcome",
   "signin": "Sign in",
   "login": "Login",
@@ -18,7 +17,6 @@
   "authBoxTitle": "Please enter your email",
   "profileTitle": "Tell us about yourself",
   "setRepsError": "Enter a valid number!",
-  
   "ok": "OK",
   "no": "No",
   "or": "OR",
@@ -32,14 +30,14 @@
   "newVersion": "New Version Available",
   "save": "Save",
   "level": "Level:",
-  "apply" : "Apply",
+  "apply": "Apply",
   "search": "Search",
   "active": "Active",
   "nothingChanged": "Nothing Changed",
   "logout": "Logout",
   "logoutAlert": "Logout?",
   "logoutAlertContents": "You are about to Logout of the app some of your data may be lost, Are you sure?",
-  "download":"Download",
+  "download": "Download",
   "rename": "Rename",
   "setCurrent": "Set Current",
   "remove": "Remove",
@@ -66,7 +64,6 @@
   "exportRoutineDone": "Exported!, your file is ready",
   "congrats": "Congratulations",
   "congratsContent": "Hurray!, Premium Plan activated, all app features are now unlocked, have fun!",
-  
   "sessions": "Sessions",
   "sessionsReport": "Sessions Report",
   "weightsReport": "Weights Report",
@@ -75,10 +72,8 @@
   "exerciseVolume": "Exercise Volume",
   "physicalReport": "Physical Report",
   "progressRate": "Preogress Rate",
-  
-  
   "price": "Price",
-  "discount":"Discount",
+  "discount": "Discount",
   "status": "Status",
   "address": "Address",
   "owner": "owner",
@@ -89,54 +84,45 @@
   "sport": "Sport",
   "measurements": "Measurements",
   "language": "Language",
-  "calender":"Calender",
-  "list":"List",
-  "attendenceLog":"Attendence Log",
+  "calender": "Calender",
+  "list": "List",
+  "attendenceLog": "Attendence Log",
   "addExercise": "Add Exercise",
   "addRoutine": "Add Routine",
-
   "scrTitleMyRoutines": "My Routines",
   "scrTitleProfile": "Profile",
   "scrTitleSettings": "Settings",
   "scrTitlePerformance": "Performance",
   "scrTitleCompareTool": "Compare Tool",
-  "setsAndRounds":"Sets & Rounds",
-
+  "setsAndRounds": "Sets & Rounds",
   "noFileSelected": "No file selected",
   "unsupportedVersion": "Unsupported version of selected file",
   "parserMismatch": "Unexpected file content",
   "corruptedFile": "Cannot open, the file is Corrupted",
-
   "startingImport": "Openning File...",
   "gettingImagesImport": "Getting Images...",
   "addingDaysImport": "Adding Days...",
   "addingItemsImport": "Adding Exercises...",
   "addingSetsImport": "Adding Sets...",
   "done": "Import Successful",
-
   "chooseLang": "Choose Language:",
   "about": "About",
   "gyms": "Gyms",
   "trainer": "Trainer",
-
   "height": "Height",
   "heightError": "Please put a valid Height",
   "weight": "Weight",
   "weightError": "Please put a valid Weight",
   "lastWeight": "Last Weight",
-
   "arms": "Arms",
   "lArm": "Left Arm",
   "rArm": "Right Arm",
-
   "humerus": "Humerus",
   "lHumerus": "Left Humerus",
   "rHumerus": "Right Humerus",
-  
   "legs": "Legs",
   "lLeg": "Left Leg",
   "rLeg": "Right Leg",
-
   "thighs": "Thighs",
   "lThigh": "Left Thigh",
   "rThigh": "Right Thigh",
@@ -146,13 +132,10 @@
   "chest": "Chest",
   "hips": "Hips",
   "checkDate": "Check Date",
-
   "enteredAt": "Entered At",
   "exitedAt": "Exited At",
   "codeNum": "Code Number",
-
   "reps": "Reps",
-
   "empty": "No Records to show",
   "emptySubs": "No Subscriptions",
   "emptyMeasure": "No Measurements to compare, insert you body measurements to see the results",
@@ -168,11 +151,9 @@
   "emptyRoutineItems": "No items, try the (+) button",
   "emptyDays": "No days, press + to add a day!",
   "emptyRoutines": "Lets build a special workout to achieve your goals!",
-
   "noValues": "No Values",
   "invalidValues": "Invalid Values",
   "noValuesPositiveStatement": "Do a workout to reveal your stats",
-
   "sessionsReportNoValues": "No sessions found for this routine, Try practicing!",
   "sessionsReportInvalidValues": "Malformed sessions values!",
   "logsReportNoValues": "No Logs found for this routine",
@@ -180,10 +161,8 @@
   "physicalReportNoValues": "No measurements found, Try measuring yourself!",
   "physicalReportInvalidValues": "Malformed Measurements!",
   "physicalReportDisclaimer": "Note: these values are not completely accurate, medical information should come from professionals",
-  
   "error": "something went wrong",
   "profile": "Profile",
-
   "pName": "Name",
   "pNameError": "Please Enter your Full name",
   "phoneNum": "Phone Number",
@@ -192,123 +171,134 @@
   "birthDateError": "Please Enter your Year of Birth",
   "gender": "Gender",
   "genderError": "Please choose your Gender",
-
+  "pNameDescription": "Welcome to Uniceps! Let's get to know you. What should we call you? Your name will be used to personalize your experience.",
+  "pGenderDescription": "Knowing your gender helps us provide more accurate physiological reports, such as BMR and Body Fat calculations.",
+  "pBirthDateDescription": "Your age is a key factor in many fitness calculations. Please provide your date of birth so we can calculate your stats accurately.",
+  "profilePhoto": "Profile Photo",
+  "removePhotoTitle": "Remove Photo",
+  "removePhotoContent": "Are you sure you want to remove your profile photo?",
+  "pPhotoDescription": "A profile picture makes your account feel like home. You can upload one now or skip this step if you prefer.",
+  "changePhoto": "Change Photo",
+  "next": "Next",
+  "selectDate": "Select Date",
+  "pGoal": "Goal",
+  "pGoalDescription": "What is your primary fitness goal? This helps us tailor your experience.",
+  "bulking": "Bulking",
+  "losingWeight": "Losing Weight",
+  "maintenance": "Maintenance",
+  "pActivityLevel": "Activity Level",
+  "pActivityLevelDescription": "How active is your daily life (outside of the gym)?",
+  "sedentary": "Sedentary",
+  "lightlyActive": "Lightly Active",
+  "moderatelyActive": "Moderately Active",
+  "veryActive": "Very Active",
+  "extraActive": "Extra Active",
+  "pGoalError": "Please select your goal",
+  "pActivityLevelError": "Please select your activity level",
   "male": "Male",
   "female": "Female",
-
   "payment": "Payment",
   "paid": "Paid",
   "notPaid": "Not Paid",
   "remaining": "Remainder",
-
   "versionInfo": "Version Info",
   "version": "Version",
   "versionDate": "Release Date",
-  "developers" : "Developers",
-  
+  "developers": "Developers",
   "support": "Support",
   "supportPage": "Our Page",
   "faqs": "FAQs",
-  
   "privacy": "Privacy",
   "privacyPolicy": "Privacy Policy",
   "userAgreement": "User Agreement",
   "termsOfUse": "Terms of use",
-
   "noGymSpecified": "you're not a member of any gym",
   "noTrainingProgram": "you don't have a training program",
-
-  "errNoInternet":"No Internet Available",
-  "errServerException":"An error occurred from our side, try again later",
-  "errUnknown":"Unknown error occurred",
+  "errNoInternet": "No Internet Available",
+  "errServerException": "An error occurred from our side, try again later",
+  "errUnknown": "Unknown error occurred",
   "errOpenSessionDelete": "you can't delete with an open session!",
   "errExportRoutine": "Failed!, Could not export routine",
-
   "endOfSubDate": "End of subscription Date",
   "dayQuete": "what're you going to train today?",
   "letsStart": "Let's Start...",
-
-  "day":"Day",
-  "date":"Date",
+  "day": "Day",
+  "date": "Date",
   "map": "Daily Routine",
   "availableGyms": "Available Gyms",
-  
   "deleteBtn": "Delete Account",
   "deleteAccount": "Delete Account?",
   "deleteAccountContent": "you are about to delete your account within Uniceps System, Are you sure?",
-
   "chackForUpdate": "Checking for updates...",
   "gettingRoutine": "Getting Routine...",
-
   "guestMode": "Guest Mode",
   "guestModeEditErr": "Guest mode not allowed to edit",
-  
-
   "newRoutine": "New Routine",
   "sortDays": "Sort Days",
-
   "hour": "Hour",
-
   "captainUni": "Captain Uni",
-
   "buyNow": "Buy Now",
   "paymentDone": "Plan Bought Successfuly",
-
   "paymentDialogContent": "Choose your preffered payment method",
   "cash": "Cash",
   "card": "Card",
-
   "buyPlanQuestion": "Buy Plan?",
   "buyPlancontent": "Are you sure you want to buy {planName}! the durations will accumilate if previous plan is present",
   "@buyPlanContent": {
     "placeHolders": {
-      "planName": { "type": "string" }
+      "planName": {
+        "type": "string"
+      }
     }
   },
-
   "memberDurationAlart": "you still have {count}! day(s) till {date}!",
   "@memberDurationAlart": {
     "placeHolders": {
-      "count": { "type": "num" },
-      "date": { "type": "string" }
+      "count": {
+        "type": "num"
+      },
+      "date": {
+        "type": "string"
+      }
     }
   },
-
   "muscleGroup": "Muscle Group: {group}",
   "@muscleGroup": {
     "placeHolders": {
-      "group": { "type": "String" }
+      "group": {
+        "type": "String"
+      }
     }
   },
-
   "deleteAlertContent": "Are you sure you want to delete {item}? all related items will also be deleted.",
   "@deleteAlertContent": {
     "placeHolders": {
-      "item": { "type": "string" }
+      "item": {
+        "type": "string"
+      }
     }
   },
-
   "setCurrentAlertContent": "Set {item} as your current Routine?",
   "@setCurrentAlertContent": {
     "placeHolders": {
-      "item": { "type": "string" }
+      "item": {
+        "type": "string"
+      }
     }
   },
-
   "premiumReminder": "Your Subscription will end after {days} day(s), renew now!",
   "@premiumReminder": {
     "placeHolders": {
-      "days": { "type": "int" }
+      "days": {
+        "type": "int"
+      }
     }
   },
-
   "signinAlert": "Sign in to see all features",
   "upgrade": "Upgrade",
   "upgradeAlert": "Become a Premium Member to unlock your FULL potential",
   "premiumAlertContent": "Unlock ALL content with Premium",
-  
   "captainUniAboutContent": "Hello, I’m Captain Uni.\nI’m the virtual guide who will accompany you inside the Uniceps app, and my job is to make every step easy and your experience smooth and clear.\nMy main role is to introduce you to the app and show you how to use each section without any confusion.\nI also help you choose the workout program that fits you best, so you can start your journey the right way.\nWith every workout you complete, I collect your stats and show you your results, so you can see your progress day by day.\nI can’t promise to change your life overnight… but I can promise to stay by your side at every stage.\nI’m here to guide you, explain things, and encourage you, so you can get the most out of the app.\nAnd in the end… consider me a friend and an experienced companion walking with you step by step, happy to see you improving.",
-
   "msgSlowConnection": "Weak internet connection",
   "reset": "Reset",
   "start": "Start",
@@ -334,5 +324,6 @@
   "efficiencyLabel": "Efficiency",
   "kg": "Kg",
   "min": "min",
-  "kgPerMin": "Kg/min"
+  "kgPerMin": "Kg/min",
+  "downloadingExercises": "Downloading Exercises"
 }

@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:dartz/dartz.dart';
-import 'package:uniceps/app/data/models/auth_models/player_model.dart';
+import 'package:uniceps/app/data/models/auth_models/profile_model.dart';
 import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
 import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart';
 import 'package:uniceps/app/data/sources/local/dal_measurements/measurements_local_source.dart';
@@ -143,7 +143,7 @@ class PerformanceRepo implements IPerformanceContract {
 
   @override
   Future<Either<PerformanceFailure, PhysicalReport>> getPhysicalReport() async {
-    PlayerModel profile;
+    ProfileModel profile;
     List<MeasurementModel> measures;
     MeasurementModel m;
     try {

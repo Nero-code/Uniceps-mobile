@@ -13,22 +13,14 @@ class RoutineSkeleton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Ink(
-          // borderRadius: BorderRadius.circular(15.0),
-
-          // shape: const OutlineInputBorder(
-          //   borderRadius: BorderRadius.all(Radius.circular(15)),
-          //   borderSide: BorderSide(color: Colors.grey, width: 0.5),
-          // ),
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color.fromARGB(29, 96, 125, 139),
-          ),
-          // elevation: 1,
+          decoration: const BoxDecoration(shape: BoxShape.circle, color: Color.fromARGB(29, 96, 125, 139)),
           child: InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(100)),
             onTap: onTap,
             child: Center(
-              child: onTap != null ? const Icon(Icons.add, size: 50, color: Colors.grey) : const LoadingIndicator(),
+              child: onTap != null
+                  ? const Icon(Icons.add, size: 50, color: Colors.grey)
+                  : const LoadingIndicator(elevated: false, backgroundColor: Colors.transparent),
             ),
           ),
         ),

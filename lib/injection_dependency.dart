@@ -26,6 +26,7 @@ import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/auth_contracts.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/email_auth_remote_source.dart';
+import 'package:uniceps/app/data/sources/remote/dal_profile/profile_remote_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
 import 'package:uniceps/app/data/stores/account/account_repo.dart';
 import 'package:uniceps/app/data/stores/auth/email_auth_repo.dart';
@@ -63,10 +64,10 @@ import 'package:uniceps/app/domain/contracts/routine/i_routine_items_contract.da
 import 'package:uniceps/app/domain/contracts/routine/i_routine_management_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_sets_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_with_heat_contract.dart';
+import 'package:uniceps/app/services/app_configs_service.dart';
 import 'package:uniceps/app/services/captian_quotes_service.dart';
 import 'package:uniceps/app/services/device_info_sync_service.dart';
 import 'package:uniceps/app/services/exercise_lib_sync_service.dart';
-import 'package:uniceps/app/services/language_cache_helper.dart';
 import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/app/services/update_service.dart';
 
@@ -78,7 +79,9 @@ Future<void> init() async {
   sl.registerLazySingleton<http.Client>(() => client);
   // sl.registerLazySingleton<ClientHelper>(
   //     () => NoTokenHttpClientHelper(client: sl()));
-  sl.registerLazySingleton<ClientHelper>(() => HttpClientHelper(client: sl(), tokenService: sl(), logger: sl()));
+
+  sl.registerLazySingleton(() => HttpClientHelper(client: sl(), tokenService: sl(), logger: sl()));
+  sl.registerFactory<ClientHelper>(() => sl<HttpClientHelper>());
 
   sl.registerLazySingleton(() => NetworkInfo(internetConnection: InternetConnection.createInstance()));
 
@@ -115,6 +118,8 @@ Future<void> init() async {
   final appDataBase = AppDatabase();
 
   sl.registerLazySingleton<SharedPreferences>(() => prefs);
+  // sl.registerLazySingleton(() => ReactivePreferencesService(sl()), dispose: (ins) => ins.dispose());
+
   sl.registerLazySingleton<AppDatabase>(() => appDataBase);
   sl.registerLazySingleton<FlutterSecureStorage>(() => const FlutterSecureStorage());
 
@@ -134,7 +139,7 @@ Future<void> init() async {
   ///
   //
 
-  sl.registerLazySingleton<IProfileLocalSource>(() => ProfileLocalSource(prefs: prefs, logger: sl()));
+  sl.registerLazySingleton<IProfileLocalSource>(() => ProfileLocalSource(prefs: sl(), logger: sl()));
 
   sl.registerLazySingleton<ITSessionLocalSourceContract>(
     () => TSessionLocalSource(database: sl(), imagesCache: imagesCache, logger: sl()),
@@ -172,6 +177,7 @@ Future<void> init() async {
   //
 
   sl.registerLazySingleton<IAccountRemoteSource>(() => AccountRemoteSource(clientHelper: sl()));
+  sl.registerLazySingleton<IProfileRemoteSource>(() => ProfileRemoteSource(client: sl()));
 
   sl.registerLazySingleton<IExercisesRemoteSourceContract>(
     () => ExercisesRemoteSourceImpl(clientHelper: sl(), client: sl()),
@@ -186,7 +192,9 @@ Future<void> init() async {
   ///
   //
 
-  sl.registerLazySingleton<IProfileService>(() => ProfileRepo(localSource: sl(), logger: sl()));
+  sl.registerLazySingleton<IProfileService>(
+    () => ProfileRepo(localSource: sl(), remoteSource: sl(), networkInfo: sl()),
+  );
 
   sl.registerLazySingleton<IPracticeContract>(() => PracticeRepo(localSource: sl()));
   sl.registerLazySingleton<IRoutineManagementContract>(
@@ -279,7 +287,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => CaptainQuotesService(prefs: sl()));
 
-  sl.registerLazySingleton(() => LanguageCacheHelper(sharedPreferences: sl()));
+  sl.registerLazySingleton(() => AppConfigsService(prefs: sl()));
+
+  // sl.registerLazySingleton(() => LanguageCacheHelper(sharedPreferences: sl()));
 
   // final notificationService =  NotificationService();
   // notificationService.ini

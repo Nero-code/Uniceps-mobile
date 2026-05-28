@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';import 'package:uniceps/l10n/app_localizations.dart';
-import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class CaptainUniCard extends StatelessWidget {
   const CaptainUniCard({
@@ -24,7 +23,7 @@ class CaptainUniCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     final screenSize = MediaQuery.sizeOf(context);
-    final isRtl = context.read<LocaleCubit>().state.isRtl();
+    final isRtl = Directionality.of(context) == .rtl;
     return Stack(
       children: [
         Padding(
@@ -35,11 +34,7 @@ class CaptainUniCard extends StatelessWidget {
             child: Ink(
               padding: const EdgeInsets.all(8.0),
               width: screenSize.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: background,
-                gradient: gradient,
-              ),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: background, gradient: gradient),
               child: Row(
                 children: [
                   SizedBox(width: screenSize.width * .31, height: 75),
@@ -52,11 +47,7 @@ class CaptainUniCard extends StatelessWidget {
                           style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 10),
-                        Text(
-                          content,
-                          softWrap: true,
-                          style: const TextStyle(color: Colors.white, fontSize: 14),
-                        ),
+                        Text(content, softWrap: true, style: const TextStyle(color: Colors.white, fontSize: 14)),
                       ],
                     ),
                   ),
@@ -71,11 +62,7 @@ class CaptainUniCard extends StatelessWidget {
           textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
           child: Transform.flip(
             flipX: isRtl ? needsFlip : !needsFlip,
-            child: Image(
-              image: AssetImage(imagePath),
-              width: screenSize.width * 0.50,
-              height: screenSize.width * 0.50,
-            ),
+            child: Image(image: AssetImage(imagePath), width: screenSize.width * 0.50, height: screenSize.width * 0.50),
           ),
         ),
       ],

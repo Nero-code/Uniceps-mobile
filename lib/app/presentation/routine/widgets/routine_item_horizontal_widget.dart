@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
-import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/sets_edit/sets_edit_bloc.dart';
 import 'package:uniceps/app/presentation/routine/screens/routine_edit_sets_screen.dart';
@@ -25,7 +24,8 @@ class _RoutineItemHorizontalWidgetState extends State<RoutineItemHorizontalWidge
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
     final locale = AppLocalizations.of(context)!;
-    final rtl = context.read<LocaleCubit>().state.isRtl();
+    // final rtl = context.read<LocaleCubit>().state.isRtl();
+    final rtl = Directionality.of(context) == .rtl;
     // final group = widget.item.exercise.muscleGroupTranslations[rtl ? Lang.ar : Lang.en];
     final group = widget.item.exercise.muscleGroupName;
 

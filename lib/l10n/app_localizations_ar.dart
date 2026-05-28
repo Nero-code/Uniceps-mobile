@@ -530,10 +530,89 @@ class AppLocalizationsAr extends AppLocalizations {
   String get birthDateError => 'الرجاء ادخال سنة الميلاد';
 
   @override
-  String get gender => 'الجنس:';
+  String get gender => 'الجنس';
 
   @override
   String get genderError => 'الرجاء اختيار الجنس';
+
+  @override
+  String get pNameDescription =>
+      'أهلاً بك في يوني سيبس! دعنا نتعرف عليك. كيف تود أن نناديك؟ سيتم استخدام اسمك لتخصيص تجربتك.';
+
+  @override
+  String get pGenderDescription =>
+      'معرفة جنسك تساعدنا في تقديم تقارير فسيولوجية أكثر دقة، مثل حسابات معدل الأيض الأساسي ونسبة الدهون في الجسم.';
+
+  @override
+  String get pBirthDateDescription =>
+      'عمرك هو عامل رئيسي في العديد من الحسابات الرياضية. يرجى تقديم تاريخ ميلادك حتى نتمكن من حساب إحصائياتك بدقة.';
+
+  @override
+  String get profilePhoto => 'الصورة الشخصية';
+
+  @override
+  String get removePhotoTitle => 'حذف الصورة';
+
+  @override
+  String get removePhotoContent =>
+      'هل أنت متأكد من رغبتك في حذف صورة ملفك الشخصي؟';
+
+  @override
+  String get pPhotoDescription =>
+      'الصورة الشخصية تجعل حسابك يبدو مألوفاً أكثر. يمكنك رفع واحدة الآن أو تخطي هذه الخطوة إذا كنت تفضل ذلك.';
+
+  @override
+  String get changePhoto => 'تغيير الصورة';
+
+  @override
+  String get next => 'التالي';
+
+  @override
+  String get selectDate => 'اختر التاريخ';
+
+  @override
+  String get pGoal => 'الهدف';
+
+  @override
+  String get pGoalDescription =>
+      'ما هو هدفك الأساسي؟ هذا يساعدنا في تخصيص تجربتك.';
+
+  @override
+  String get bulking => 'تضخيم';
+
+  @override
+  String get losingWeight => 'تنشيف / خسارة وزن';
+
+  @override
+  String get maintenance => 'محافظة';
+
+  @override
+  String get pActivityLevel => 'مستوى النشاط اليومي';
+
+  @override
+  String get pActivityLevelDescription =>
+      'كيف تصف نشاطك البدني خلال اليوم (بعيداً عن النادي)؟';
+
+  @override
+  String get sedentary => 'خامل (عمل مكتبي)';
+
+  @override
+  String get lightlyActive => 'نشاط خفيف';
+
+  @override
+  String get moderatelyActive => 'نشاط متوسط';
+
+  @override
+  String get veryActive => 'نشاط عالي';
+
+  @override
+  String get extraActive => 'نشاط عالي جداً (عمل بدني شاق)';
+
+  @override
+  String get pGoalError => 'الرجاء اختيار هدفك';
+
+  @override
+  String get pActivityLevelError => 'الرجاء اختيار مستوى نشاطك';
 
   @override
   String get male => 'ذكر';
@@ -803,4 +882,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get kgPerMin => 'كغ/دقيقة';
+
+  @override
+  String get downloadingExercises => 'جاري تحميل التمارين';
 }

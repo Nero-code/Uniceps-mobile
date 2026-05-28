@@ -8,7 +8,9 @@ import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/exercises_v2
 import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
 import 'package:uniceps/app/presentation/routine/screens/exercise_details_screen.dart';
 import 'package:uniceps/app/presentation/routine/widgets/exercise_grid_widget.dart';
+import 'package:uniceps/app/services/exercise_lib_sync_service.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
+import 'package:uniceps/injection_dependency.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
 class ExercisesSearchScreen extends StatefulWidget {
@@ -65,6 +67,30 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
                   IconButton(onPressed: Scaffold.of(context).openEndDrawer, icon: const Icon(Icons.filter_alt_rounded)),
             ),
           ],
+          bottom: PreferredSize(
+            preferredSize: Size(screen.width, 15),
+            child: FutureBuilder(
+              future: sl<ExerciseLibSyncService>().isSynced?.future,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == .waiting) {
+                  return const CircularProgressIndicator(strokeWidth: 1);
+                }
+                return Row(
+                  spacing: 5,
+                  children: [
+                    if (snapshot.hasData) ...[
+                      Text(snapshot.data.toString(), style: const TextStyle(fontSize: 10)),
+                      const Icon(Icons.done, color: Colors.green, size: 15),
+                    ],
+                    if (snapshot.hasError) ...[
+                      Text(snapshot.data.toString(), style: const TextStyle(fontSize: 10)),
+                      const Icon(Icons.close, color: Colors.red, size: 15),
+                    ],
+                  ],
+                );
+              },
+            ),
+          ),
         ),
         endDrawer: Drawer(
           child: BlocBuilder<ExerciseFilterCubit, ExerciseFilterState>(
