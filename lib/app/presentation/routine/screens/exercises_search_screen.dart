@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_filter.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_tool.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
+import 'package:uniceps/app/presentation/blocs/exercise_lib/lib_sync_cubit.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/exercise_filter_cubit.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/exercises_v2_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
 import 'package:uniceps/app/presentation/routine/screens/exercise_details_screen.dart';
 import 'package:uniceps/app/presentation/routine/widgets/exercise_grid_widget.dart';
-import 'package:uniceps/app/services/exercise_lib_sync_service.dart';
+import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
-import 'package:uniceps/injection_dependency.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
 class ExercisesSearchScreen extends StatefulWidget {
@@ -69,26 +69,61 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
           ],
           bottom: PreferredSize(
             preferredSize: Size(screen.width, 15),
-            child: FutureBuilder(
-              future: sl<ExerciseLibSyncService>().isSynced?.future,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == .waiting) {
-                  return const CircularProgressIndicator(strokeWidth: 1);
-                }
-                return Row(
+            // child: FutureBuilder(
+            //   future: sl<ExerciseLibSyncService>().isSynced?.future,
+            //   builder: (context, snapshot) {
+            //     if (snapshot.connectionState == .waiting) {
+            //       return const CircularProgressIndicator(strokeWidth: 1);
+            //     }
+            //     return Row(
+            //       spacing: 5,
+            //       mainAxisAlignment: .center,
+            //       children: [
+            //         if (snapshot.hasData) ...[
+            //           Text(snapshot.data.toString(), style: const TextStyle(fontSize: 10)),
+            //           const Icon(Icons.done, color: Colors.green, size: 15),
+            //         ],
+            //         if (snapshot.hasError) ...[
+            //           Text(snapshot.error.toString(), style: const TextStyle(fontSize: 10)),
+            //           const Icon(Icons.close, color: Colors.red, size: 15),
+            //         ],
+            //       ],
+            //     );
+            //   },
+            // ),
+            child: BlocBuilder<LibSyncCubit, LibSyncState>(
+              builder: (context, state) => state.when(
+                initial: () => const SizedBox(),
+                syncing: () => const CircularProgressIndicator(strokeWidth: 1, strokeCap: .round),
+                success: (total) => Row(
                   spacing: 5,
+                  mainAxisAlignment: .center,
                   children: [
-                    if (snapshot.hasData) ...[
-                      Text(snapshot.data.toString(), style: const TextStyle(fontSize: 10)),
-                      const Icon(Icons.done, color: Colors.green, size: 15),
-                    ],
-                    if (snapshot.hasError) ...[
-                      Text(snapshot.data.toString(), style: const TextStyle(fontSize: 10)),
-                      const Icon(Icons.close, color: Colors.red, size: 15),
-                    ],
+                    Text(total.toString(), style: const TextStyle(fontSize: 10)),
+                    const Icon(Icons.done, color: Colors.green, size: 15),
                   ],
-                );
-              },
+                ),
+                failure: (failure) => Row(
+                  spacing: 5,
+                  mainAxisAlignment: .center,
+                  children: [
+                    ...failure.when(
+                      libOffline: (currentTotalCount) => [
+                        Text(currentTotalCount.toString(), style: const TextStyle(fontSize: 10)),
+                        const Icon(Icons.wifi_off_rounded, color: Colors.blue, size: 15),
+                      ],
+                      libNotFound: (currentTotalCount) => [
+                        const Text('0', style: TextStyle(fontSize: 10)),
+                        const Icon(Icons.question_mark_rounded, color: Colors.amber, size: 15),
+                      ],
+                      libUnknown: (currentTotalCount) => [
+                        Text(currentTotalCount.toString(), style: const TextStyle(fontSize: 10)),
+                        const Icon(Icons.close, color: Colors.red, size: 15),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),

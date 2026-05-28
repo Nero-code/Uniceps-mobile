@@ -28,7 +28,7 @@ class ExerciseLibSyncService {
 
   Completer<int?>? isSynced;
 
-  Future<Either<LibSyncFailure, Unit>> syncExercises() async {
+  Future<Either<LibSyncFailure, int>> syncExercises() async {
     isSynced = null;
     isSynced = Completer();
     List<ExerciseDto> localLib = [];
@@ -54,24 +54,24 @@ class ExerciseLibSyncService {
         _logger.i('library update Done!');
 
         isSynced?.complete(localLib.length);
-        return const Right(unit);
+        return Right(localLib.length);
       } catch (e, s) {
         _logger.e('something went wrong!!', error: e, stackTrace: s);
 
         isSynced?.completeError(localLib.length);
-        return const Left(.libUnknown());
-      }
-    } else {
-      if (localLib.isEmpty) {
-        _logger.i('Exercises Table is Empty');
-
-        isSynced?.completeError(localLib.length);
-        return const Left(.libNotFound());
+        return Left(.libUnknown(currentTotalCount: localLib.length));
       }
     }
-    _logger.i('No Internet Connection');
+    // This condition is useless because this state will trigger libDownload event on App-Startup
+    // so it's kind of impossible to meet.
+    if (localLib.isEmpty) {
+      _logger.i('Exercises Table is Empty');
+      isSynced?.completeError(localLib.length);
+      return Left(.libNotFound(currentTotalCount: localLib.length));
+    }
 
-    isSynced?.completeError(localLib.length);
-    return const Left(.libOffline());
+    _logger.i('No Internet Connection');
+    isSynced?.complete(localLib.length);
+    return Left(.libOffline(currentTotalCount: localLib.length));
   }
 }

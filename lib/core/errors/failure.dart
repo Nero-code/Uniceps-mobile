@@ -39,10 +39,10 @@ class FileParseFailure with _$FileParseFailure {
 }
 
 @freezed
-class LibSyncFailure with _$LibSyncFailure {
-  const factory LibSyncFailure.libOffline() = _LibOffline;
-  const factory LibSyncFailure.libNotFound() = _LibNotFound;
-  const factory LibSyncFailure.libUnknown() = _LibUnknown;
+abstract class LibSyncFailure with _$LibSyncFailure {
+  const factory LibSyncFailure.libOffline({required int currentTotalCount}) = _LibOffline;
+  const factory LibSyncFailure.libNotFound({required int currentTotalCount}) = _LibNotFound;
+  const factory LibSyncFailure.libUnknown({required int currentTotalCount}) = _LibUnknown;
 }
 
 // ----------------------------------------------------------------------
