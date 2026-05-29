@@ -6,6 +6,7 @@ import 'package:uniceps/app/domain/commands/i_command.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_exercises_contract.dart';
 import 'package:uniceps/app/domain/helpers/result.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/helpers/exercise_details_result.dart';
 
 class ExercisesCommands implements ICommand {
   final IExercisesContract _repo;
@@ -25,4 +26,6 @@ class ExercisesCommands implements ICommand {
       _repo.getExercisesByFilter(filter);
 
   Stream<Result<double, Failure>> downloadImages(List<String> urls) => _repo.downloadImages(urls);
+
+  Future<Either<Failure, ExerciseDetailsResult>> getExerciseDetails(String id) => _repo.getExerciseDetails(id);
 }

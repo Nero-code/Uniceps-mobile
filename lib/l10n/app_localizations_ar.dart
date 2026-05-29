@@ -171,6 +171,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exercises => 'التمارين';
 
   @override
+  String get similarExercises => 'تمارين مشابهة';
+
+  @override
   String get applyToAll => 'تطبيق للكل';
 
   @override

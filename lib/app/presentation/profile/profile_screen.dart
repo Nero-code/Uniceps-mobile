@@ -245,10 +245,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor.withAlpha(50),
+                                  color: Theme.of(context).primaryColor,
                                   shape: BoxShape.circle,
                                 ),
-                                child: Icon(Icons.camera_alt, color: Theme.of(context).primaryColor, size: 20),
+                                child: const Icon(Icons.camera_alt, color: Colors.white, size: 20),
                               ),
                             ),
                           ),
@@ -260,8 +260,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 onTap: () => _removeImage(locale),
                                 child: Container(
                                   padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(color: Colors.red.withAlpha(50), shape: BoxShape.circle),
-                                  child: const Icon(Icons.delete, color: Colors.red, size: 20),
+                                  decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                                  child: const Icon(Icons.delete, color: Colors.white, size: 20),
                                 ),
                               ),
                             ),

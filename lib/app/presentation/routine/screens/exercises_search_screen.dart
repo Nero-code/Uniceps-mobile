@@ -69,32 +69,17 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
           ],
           bottom: PreferredSize(
             preferredSize: Size(screen.width, 15),
-            // child: FutureBuilder(
-            //   future: sl<ExerciseLibSyncService>().isSynced?.future,
-            //   builder: (context, snapshot) {
-            //     if (snapshot.connectionState == .waiting) {
-            //       return const CircularProgressIndicator(strokeWidth: 1);
-            //     }
-            //     return Row(
-            //       spacing: 5,
-            //       mainAxisAlignment: .center,
-            //       children: [
-            //         if (snapshot.hasData) ...[
-            //           Text(snapshot.data.toString(), style: const TextStyle(fontSize: 10)),
-            //           const Icon(Icons.done, color: Colors.green, size: 15),
-            //         ],
-            //         if (snapshot.hasError) ...[
-            //           Text(snapshot.error.toString(), style: const TextStyle(fontSize: 10)),
-            //           const Icon(Icons.close, color: Colors.red, size: 15),
-            //         ],
-            //       ],
-            //     );
-            //   },
-            // ),
             child: BlocBuilder<LibSyncCubit, LibSyncState>(
               builder: (context, state) => state.when(
                 initial: () => const SizedBox(),
-                syncing: () => const CircularProgressIndicator(strokeWidth: 1, strokeCap: .round),
+                syncing: () => const LoadingIndicator(
+                  size: Size(15, 15),
+                  padding: 0,
+                  backgroundColor: Colors.transparent,
+                  elevated: false,
+                  strokeWidth: 1,
+                  strokeCap: .round,
+                ),
                 success: (total) => Row(
                   spacing: 5,
                   mainAxisAlignment: .center,
@@ -294,12 +279,13 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
                         left: 0.0,
                         child: IconButton(
                           iconSize: 20,
-
                           icon: const Icon(Icons.info_outline),
                           color: Theme.of(context).colorScheme.primary,
                           onPressed: () => Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ExerciseDetailsScreen(exercise: state.list[index])),
+                            MaterialPageRoute(
+                              builder: (context) => ExerciseDetailsScreen(exerciseId: state.list[index].apiId),
+                            ),
                           ),
                         ),
                       ),
