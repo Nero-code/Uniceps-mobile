@@ -64,25 +64,25 @@ void main() {
   group('saveProfile', () {
     test('should return Right(unit) when the call to local source is successful', () async {
       // arrange
-      when(mockLocalSource.savePlayerData(any)).thenAnswer((_) async => unit);
+      when(mockLocalSource.saveProfileData(any)).thenAnswer((_) async => unit);
       // act
       final result = await repo.saveProfile(tPlayer);
       // assert
       expect(result.isRight(), isTrue);
       result.fold((l) => fail('Expected Right, got Left: \$l'), (r) => expect(r, unit));
-      verify(mockLocalSource.savePlayerData(any));
+      verify(mockLocalSource.saveProfileData(any));
       verifyNoMoreInteractions(mockLocalSource);
     });
 
     test('should return a DatabaseFailure when the call to local source is unsuccessful', () async {
       // arrange
-      when(mockLocalSource.savePlayerData(any)).thenThrow(Exception());
+      when(mockLocalSource.saveProfileData(any)).thenThrow(Exception());
       // act
       final result = await repo.saveProfile(tPlayer);
       // assert
       expect(result.isLeft(), isTrue);
       result.fold((l) => expect(l, isA<DatabaseFailure>()), (r) => fail('Expected Left, got Right: \$r'));
-      verify(mockLocalSource.savePlayerData(any));
+      verify(mockLocalSource.saveProfileData(any));
       verifyNoMoreInteractions(mockLocalSource);
     });
   });

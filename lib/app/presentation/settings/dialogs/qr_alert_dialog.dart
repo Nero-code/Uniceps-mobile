@@ -40,9 +40,7 @@ class _QrAlertDialogState extends State<QrAlertDialog> {
                       QrImageView(
                         data: s.qr,
                         size: 200,
-                        errorStateBuilder: (context, error) => Center(
-                          child: Text(locale.codeError),
-                        ),
+                        errorStateBuilder: (context, error) => Center(child: Text(locale.codeError)),
                       ),
                     const SizedBox(height: 10),
                     SizedBox(
@@ -66,12 +64,23 @@ class _QrAlertDialogState extends State<QrAlertDialog> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    SizedBox(
-                      width: screenSize.width * .5,
-                      child: ElevatedButton(
-                        onPressed: () => context.read<GymQrCubit>().saveQr(controller.text),
-                        child: Text(locale.save),
-                      ),
+                    Row(
+                      spacing: 10,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => context.read<GymQrCubit>().saveQr(controller.text),
+                            child: Text(locale.save),
+                          ),
+                        ),
+                        if (controller.text.isNotEmpty)
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () => context.read<GymQrCubit>().removeQr(),
+                              child: Text(locale.remove),
+                            ),
+                          ),
+                      ],
                     ),
                   ],
                 );

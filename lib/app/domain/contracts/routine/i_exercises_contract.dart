@@ -4,6 +4,7 @@ import 'package:uniceps/app/domain/classes/routine_classes/exercise_filter.dart'
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 import 'package:uniceps/app/domain/helpers/result.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/helpers/exercise_details_result.dart';
 
 abstract class IExercisesContract {
   Future<Either<Failure, bool>> checkExercises();
@@ -22,4 +23,6 @@ abstract class IExercisesContract {
   Future<Either<Failure, List<Exercise>>> getExercisesByFilter(ExerciseFilter filter);
 
   Stream<Result<double, Failure>> downloadImages(List<String> ids);
+
+  Future<Either<Failure, ExerciseDetailsResult>> getExerciseDetails(String id);
 }

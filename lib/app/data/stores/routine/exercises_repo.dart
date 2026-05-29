@@ -12,6 +12,8 @@ import 'package:uniceps/app/domain/contracts/routine/i_exercises_contract.dart';
 import 'package:uniceps/app/domain/helpers/result.dart';
 import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/helpers/exercise_details_result.dart';
+import 'package:uniceps/core/logging/app_logger.dart';
 
 class ExercisesRepo implements IExercisesContract {
   final IExercisesLocalSourceContract _localSource;
@@ -204,5 +206,17 @@ class ExercisesRepo implements IExercisesContract {
       yield Result(data: 0, error: NoInternetConnectionFailure(errMsg: ''));
     }
     return;
+  }
+
+  @override
+  Future<Either<Failure, ExerciseDetailsResult>> getExerciseDetails(String id) async {
+    try {
+      final ex = exercisesLib.firstWhere((e) => e.apiId == id);
+      final similars = exercisesLib.where((e) => e.muscleHeadCode == ex.muscleHeadCode && e.apiId != ex.apiId).toList();
+      return Right(ExerciseDetailsResult(exercise: ex, similars: similars));
+    } catch (e, s) {
+      logger.e('getExerciseDetails: $id', error: e, stackTrace: s);
+      return Left(DatabaseFailure(errorMsg: ''));
+    }
   }
 }

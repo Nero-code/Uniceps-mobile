@@ -416,6 +416,12 @@ abstract class AppLocalizations {
   /// **'Exercises'**
   String get exercises;
 
+  /// No description provided for @similarExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Similar Exercises'**
+  String get similarExercises;
+
   /// No description provided for @applyToAll.
   ///
   /// In en, this message translates to:

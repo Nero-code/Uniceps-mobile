@@ -171,6 +171,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exercises => 'Exercises';
 
   @override
+  String get similarExercises => 'Similar Exercises';
+
+  @override
   String get applyToAll => 'Apply to all';
 
   @override
