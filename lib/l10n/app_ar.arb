@@ -326,5 +326,11 @@
   "kg": "كغ",
   "min": "دقيقة",
   "kgPerMin": "كغ/دقيقة",
-  "downloadingExercises": "جاري تحميل التمارين"
+  "downloadingExercises": "جاري تحميل التمارين",
+  "fileName": "اسم الملف",
+  "source": "المصدر",
+  "fileType": "نوع الملف",
+  "schemaVersion": "إصدار المخطط",
+  "errUnsupportedFileType": "نوع ملف غير مدعوم",
+  "errFileParse": "فشل في تحليل الملف"
 }

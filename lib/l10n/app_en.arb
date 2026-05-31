@@ -326,5 +326,11 @@
   "kg": "Kg",
   "min": "min",
   "kgPerMin": "Kg/min",
-  "downloadingExercises": "Downloading Exercises"
+  "downloadingExercises": "Downloading Exercises",
+  "fileName": "File Name",
+  "source": "Source",
+  "fileType": "File Type",
+  "schemaVersion": "Schema Version",
+  "errUnsupportedFileType": "Unsupported file type",
+  "errFileParse": "Failed to parse file"
 }

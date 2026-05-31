@@ -1795,6 +1795,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Downloading Exercises'**
   String get downloadingExercises;
+
+  /// No description provided for @fileName.
+  ///
+  /// In en, this message translates to:
+  /// **'File Name'**
+  String get fileName;
+
+  /// No description provided for @source.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get source;
+
+  /// No description provided for @fileType.
+  ///
+  /// In en, this message translates to:
+  /// **'File Type'**
+  String get fileType;
+
+  /// No description provided for @schemaVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Schema Version'**
+  String get schemaVersion;
+
+  /// No description provided for @errUnsupportedFileType.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported file type'**
+  String get errUnsupportedFileType;
+
+  /// No description provided for @errFileParse.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to parse file'**
+  String get errFileParse;
 }
 
 class _AppLocalizationsDelegate

@@ -49,8 +49,8 @@ class ExerciseLibSyncService {
         for (final e in lib) {
           final img = await _exercisesRemoteSource.getExerciseImage(e.apiId);
           await _exercisesLocalSource.saveExerciseImage(e.apiId, img);
-          await _exercisesLocalSource.writeExercise(e);
         }
+        await _exercisesLocalSource.writeExercises(lib);
         _logger.i('library update Done!');
 
         isSynced?.complete(localLib.length);

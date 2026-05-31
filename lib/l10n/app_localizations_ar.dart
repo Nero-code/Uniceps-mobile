@@ -888,4 +888,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get downloadingExercises => 'جاري تحميل التمارين';
+
+  @override
+  String get fileName => 'اسم الملف';
+
+  @override
+  String get source => 'المصدر';
+
+  @override
+  String get fileType => 'نوع الملف';
+
+  @override
+  String get schemaVersion => 'إصدار المخطط';
+
+  @override
+  String get errUnsupportedFileType => 'نوع ملف غير مدعوم';
+
+  @override
+  String get errFileParse => 'فشل في تحليل الملف';
 }

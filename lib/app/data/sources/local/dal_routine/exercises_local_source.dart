@@ -10,6 +10,7 @@ abstract class IExercisesLocalSourceContract {
   Future<void> saveExerciseImage(String exId, Uint8List bitmap);
 
   Future<void> writeExercise(ExerciseDto e);
+  Future<void> writeExercises(List<ExerciseDto> exercises);
 
   Future<bool> containsImage(String id);
 
@@ -51,10 +52,16 @@ class ExercisesLocalSource implements IExercisesLocalSourceContract {
 
   @override
   Future<void> writeExercise(ExerciseDto e) async {
-    await _appDatabase
-        .into(_appDatabase.exercises)
-        .insertOnConflictUpdate(
-          ExercisesCompanion.insert(
+    await writeExercises([e]);
+  }
+
+  @override
+  Future<void> writeExercises(List<ExerciseDto> exercises) async {
+    await _appDatabase.batch((batch) {
+      batch.insertAllOnConflictUpdate(
+        _appDatabase.exercises,
+        exercises.map(
+          (e) => ExercisesCompanion.insert(
             apiId: e.apiId,
             name: e.name,
             imageName: Value(e.imageUrl),
@@ -71,7 +78,9 @@ class ExercisesLocalSource implements IExercisesLocalSourceContract {
             auxMuscle2: Value(e.auxMuscle2),
             timestamp: Value(e.timestamp),
           ),
-        );
+        ),
+      );
+    });
   }
 
   @override

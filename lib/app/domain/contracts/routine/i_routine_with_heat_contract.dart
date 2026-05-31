@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/data/models/routine_result.dart';
+import 'package:uniceps/app/data/services/unifile/unifile.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
 import 'package:uniceps/core/errors/failure.dart';
@@ -13,5 +14,6 @@ abstract class IRoutineWithHeatContract {
   Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> setCurrentRoutine(Routine routine);
 
   Stream<RoutineResult> importRoutineFromFile();
+  Stream<RoutineResult> importRoutine(UniFile file);
   Future<bool> exportRoutineToFile(int routineId);
 }

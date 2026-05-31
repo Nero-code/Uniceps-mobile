@@ -41,6 +41,7 @@ dependencies:
   get_it: ^9.2.0
   intl: ^0.20.2
   path: ^1.9.1
+  app_links: ^7.0.0
 
   # I N T E R N E T
   http: ^1.6.0

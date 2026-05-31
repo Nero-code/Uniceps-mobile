@@ -891,4 +891,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get downloadingExercises => 'Downloading Exercises';
+
+  @override
+  String get fileName => 'File Name';
+
+  @override
+  String get source => 'Source';
+
+  @override
+  String get fileType => 'File Type';
+
+  @override
+  String get schemaVersion => 'Schema Version';
+
+  @override
+  String get errUnsupportedFileType => 'Unsupported file type';
+
+  @override
+  String get errFileParse => 'Failed to parse file';
 }

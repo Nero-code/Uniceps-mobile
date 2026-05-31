@@ -31,4 +31,5 @@ abstract class AppRoutes {
 
   static const about = "/profile/about";
   static const capAbout = "/profile/cap_about";
+  static const fileImport = "/file_import";
 }

@@ -22,6 +22,7 @@ import 'package:uniceps/app/presentation/profile_initial/screens/profile_initial
 import 'package:uniceps/app/presentation/routine/screens/routines_heat_screen.dart';
 import 'package:uniceps/app/presentation/settings/screens/about_screen.dart';
 import 'package:uniceps/app/presentation/settings/screens/settings_screen.dart';
+import 'package:uniceps/app/services/file_handler_service.dart';
 import 'package:uniceps/app/services/notification_service.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/firebase_options.dart';
@@ -54,6 +55,8 @@ void main() async {
 
   await NotificationService.init();
 
+  FileHandlerService().init();
+
   debugPrint('User granted permission: ${settings.authorizationStatus}');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -84,6 +87,7 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<AppConfigCubit, AppConfigState>(
         builder: (context, state) {
           return MaterialApp(
+            navigatorKey: FileHandlerService().navigatorKey,
             debugShowCheckedModeBanner: false,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
