@@ -115,6 +115,7 @@ flutter:
     - images/muscle-groups/
     - images/cap_uni/
     - assets/captain_quotes.json
+    - assets/inge.json
     - assets/cap_motive.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see

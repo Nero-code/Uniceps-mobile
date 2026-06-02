@@ -89,11 +89,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontFamily: 'Playwrite', color: Theme.of(context).colorScheme.primary),
                 ),
                 leading: IconButton(
-                  onPressed: () => showDialog(context: context, builder: (_) => const QrAlertDialog()),
-                  icon: const Icon(Icons.qr_code_2_outlined),
+                  onPressed: () => Navigator.pushNamed(context, AppRoutes.dietPlans),
+                  icon: const Icon(Icons.restaurant_menu_outlined),
                   color: Colors.blueGrey,
                 ),
                 actions: [
+                  IconButton(
+                    onPressed: () => showDialog(context: context, builder: (_) => const QrAlertDialog()),
+                    icon: const Icon(Icons.qr_code_2_outlined),
+                    color: Colors.blueGrey,
+                  ),
                   IconButton(
                     iconSize: 25,
                     onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
@@ -170,7 +175,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                         ),
-                        const SizedBox(),
                         BlocBuilder<DailyQuoteCubit, DailyQuoteState>(
                           builder: (context, state) => state.map(
                             initial: (_) => const LoadingIndicator(),

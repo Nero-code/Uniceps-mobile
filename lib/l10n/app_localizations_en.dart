@@ -909,4 +909,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errFileParse => 'Failed to parse file';
+
+  @override
+  String get dietPlans => 'Diet Plans';
+
+  @override
+  String get addPlan => 'Add Plan';
+
+  @override
+  String get renamePlan => 'Rename Plan';
+
+  @override
+  String get deletePlan => 'Delete Plan';
+
+  @override
+  String get myDietPlans => 'My Diet Plans';
+
+  @override
+  String get createFirstPlan => 'Create First Plan';
+
+  @override
+  String get createdOn => 'Created on';
+
+  @override
+  String get noDaysInPlan => 'No days in this plan';
+
+  @override
+  String get addMeal => 'Add Meal';
+
+  @override
+  String get deleteMeal => 'Delete Meal';
+
+  @override
+  String get ingredients => 'Ingredients';
+
+  @override
+  String get addIngredient => 'Add Ingredient';
+
+  @override
+  String get all => 'All';
+
+  @override
+  String get enterAmountGrams => 'Enter amount (grams)';
+
+  @override
+  String get caloriesPer100g => 'per 100g';
 }

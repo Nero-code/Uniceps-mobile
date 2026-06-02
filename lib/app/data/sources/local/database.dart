@@ -3,6 +3,11 @@ import 'package:drift_flutter/drift_flutter.dart';
 import 'package:uniceps/app/data/sources/local/schema_versions.dart';
 // import 'package:uniceps/app/data/sources/local/database.steps.dart';
 import 'package:uniceps/app/data/sources/local/tables/account/account_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/diet/diet_days_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/diet/diet_meal_ingredients_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/diet/diet_meals_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/diet/diet_plans_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/diet/ingredients_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/measurement/measurement_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/practice/t_logs_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/practice/t_sessions_table.dart';
@@ -30,6 +35,12 @@ part 'database.g.dart';
     TLogs,
     // - Measurements
     Measurements,
+    // - Diet
+    Ingredients,
+    DietPlans,
+    DietDays,
+    DietMeals,
+    DietMealIngredients,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -60,7 +71,7 @@ class AppDatabase extends _$AppDatabase {
   );
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 }
 
 extension Migrations on GeneratedDatabase {
@@ -106,6 +117,14 @@ extension Migrations on GeneratedDatabase {
           newColumns: [schema.tLogs.finishedReps],
         ),
       );
+    },
+    from3To4: (m, schema) async {
+      await m.createTable(schema.ingredients);
+
+      await m.createTable(schema.dietPlans);
+      await m.createTable(schema.dietDays);
+      await m.createTable(schema.dietMeals);
+      await m.createTable(schema.dietMealIngredients);
     },
   );
 }

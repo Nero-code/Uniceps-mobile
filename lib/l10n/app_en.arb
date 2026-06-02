@@ -332,5 +332,21 @@
   "fileType": "File Type",
   "schemaVersion": "Schema Version",
   "errUnsupportedFileType": "Unsupported file type",
-  "errFileParse": "Failed to parse file"
+  "errFileParse": "Failed to parse file",
+  "dietPlans": "Diet Plans",
+  "addPlan": "Add Plan",
+  "renamePlan": "Rename Plan",
+  "deletePlan": "Delete Plan",
+  "description": "Description",
+  "myDietPlans": "My Diet Plans",
+  "createFirstPlan": "Create First Plan",
+  "createdOn": "Created on",
+  "noDaysInPlan": "No days in this plan",
+  "addMeal": "Add Meal",
+  "deleteMeal": "Delete Meal",
+  "ingredients": "Ingredients",
+  "addIngredient": "Add Ingredient",
+  "all": "All",
+  "enterAmountGrams": "Enter amount (grams)",
+  "caloriesPer100g": "per 100g"
 }

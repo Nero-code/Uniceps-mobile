@@ -9,7 +9,7 @@ class ProfileUsecases {
   final IProfileService repo;
   ProfileUsecases({required this.repo});
 
-  Future<Either<Failure, Unit>> initializeProfileData(Profile player) => repo.saveProfile(player);
+  Future<Either<Failure, Unit>> initializeProfileData(Profile player) => repo.initializeProfile(player);
   Future<Either<Failure, Profile>> getProfile() => repo.getProfile();
   Future<Either<Failure, Unit>> submitProfileData(Profile player) => repo.saveProfile(player);
 

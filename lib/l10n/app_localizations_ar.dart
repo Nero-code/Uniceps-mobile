@@ -906,4 +906,49 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get errFileParse => 'فشل في تحليل الملف';
+
+  @override
+  String get dietPlans => 'البرامج الغذائية';
+
+  @override
+  String get addPlan => 'إضافة برنامج';
+
+  @override
+  String get renamePlan => 'تغيير اسم البرنامج';
+
+  @override
+  String get deletePlan => 'حذف البرنامج الغذائي';
+
+  @override
+  String get myDietPlans => 'برامجي الغذائية';
+
+  @override
+  String get createFirstPlan => 'أنشئ برنامجك الأول';
+
+  @override
+  String get createdOn => 'أنشئ في';
+
+  @override
+  String get noDaysInPlan => 'لا يوجد أيام في هذا البرنامج';
+
+  @override
+  String get addMeal => 'إضافة وجبة';
+
+  @override
+  String get deleteMeal => 'حذف الوجبة';
+
+  @override
+  String get ingredients => 'المكونات';
+
+  @override
+  String get addIngredient => 'إضافة مكون';
+
+  @override
+  String get all => 'الكل';
+
+  @override
+  String get enterAmountGrams => 'أدخل الكمية (بالغرام)';
+
+  @override
+  String get caloriesPer100g => 'لكل 100 غرام';
 }

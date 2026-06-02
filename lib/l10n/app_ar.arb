@@ -332,5 +332,21 @@
   "fileType": "نوع الملف",
   "schemaVersion": "إصدار المخطط",
   "errUnsupportedFileType": "نوع ملف غير مدعوم",
-  "errFileParse": "فشل في تحليل الملف"
+  "errFileParse": "فشل في تحليل الملف",
+  "dietPlans": "البرامج الغذائية",
+  "addPlan": "إضافة برنامج",
+  "renamePlan": "تغيير اسم البرنامج",
+  "deletePlan": "حذف البرنامج الغذائي",
+  "description": "الوصف",
+  "myDietPlans": "برامجي الغذائية",
+  "createFirstPlan": "أنشئ برنامجك الأول",
+  "createdOn": "أنشئ في",
+  "noDaysInPlan": "لا يوجد أيام في هذا البرنامج",
+  "addMeal": "إضافة وجبة",
+  "deleteMeal": "حذف الوجبة",
+  "ingredients": "المكونات",
+  "addIngredient": "إضافة مكون",
+  "all": "الكل",
+  "enterAmountGrams": "أدخل الكمية (بالغرام)",
+  "caloriesPer100g": "لكل 100 غرام"
 }
