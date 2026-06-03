@@ -89,21 +89,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontFamily: 'Playwrite', color: Theme.of(context).colorScheme.primary),
                 ),
                 leading: IconButton(
-                  onPressed: () => Navigator.pushNamed(context, AppRoutes.dietPlans),
-                  icon: const Icon(Icons.restaurant_menu_outlined),
+                  onPressed: () => showDialog(context: context, builder: (_) => const QrAlertDialog()),
+                  icon: const Icon(Icons.qr_code_2_outlined),
                   color: Colors.blueGrey,
                 ),
                 actions: [
-                  IconButton(
-                    onPressed: () => showDialog(context: context, builder: (_) => const QrAlertDialog()),
-                    icon: const Icon(Icons.qr_code_2_outlined),
-                    color: Colors.blueGrey,
-                  ),
                   IconButton(
                     iconSize: 25,
                     onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
                     icon: const Icon(Icons.settings, color: Colors.blueGrey),
                   ),
+                  // IconButton(
+                  //   onPressed: () => Navigator.pushNamed(context, AppRoutes.dietPlans),
+                  //   icon: const Icon(Icons.restaurant_menu_outlined),
+                  //   color: Colors.blueGrey,
+                  // ),
                 ],
               ),
               body: Stack(
