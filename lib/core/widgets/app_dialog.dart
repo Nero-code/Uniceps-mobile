@@ -5,7 +5,7 @@ enum DialogActionType { add, edit, delete, confirm }
 
 class AppDialog extends StatefulWidget {
   final String? title;
-  final String? message;
+  final Widget? message;
   final String? initialText;
   final String? hintText;
   final IconData? icon;
@@ -30,7 +30,7 @@ class AppDialog extends StatefulWidget {
   static Future<void> show({
     required BuildContext context,
     String? title,
-    String? message,
+    Widget? message,
     String? initialText,
     String? hintText,
     IconData? icon,
@@ -113,11 +113,7 @@ class _AppDialogState extends State<AppDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (widget.message != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 15),
-              child: Text(widget.message!, textAlign: TextAlign.center),
-            ),
+          if (widget.message != null) Padding(padding: const EdgeInsets.only(bottom: 15), child: widget.message!),
           if (widget.isTextField)
             TextField(
               focusNode: _node,

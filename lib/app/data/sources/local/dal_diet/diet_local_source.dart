@@ -201,6 +201,7 @@ class DietLocalSource implements IDietLocalSource {
         nameAr: companion.nameAr,
         nameEn: companion.nameEn,
         category: companion.category,
+        description: companion.description,
         servingSizeInGrams: companion.servingSizeInGrams,
         calories: companion.calories,
         protein: companion.protein,

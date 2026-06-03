@@ -1516,7 +1516,7 @@ final class Schema4 extends i0.VersionedSchema {
       withoutRowId: false,
       isStrict: false,
       tableConstraints: [],
-      columns: [_column_4, _column_7, _column_13, _column_77],
+      columns: [_column_4, _column_7, _column_13, _column_8, _column_77],
       attachedDatabase: database,
     ),
     alias: null,
@@ -1531,6 +1531,7 @@ final class Schema4 extends i0.VersionedSchema {
         _column_4,
         _column_78,
         _column_13,
+        _column_8,
         _column_66,
         _column_67,
         _column_68,
@@ -1696,6 +1697,8 @@ class Shape14 extends i0.VersionedTable {
       columnsByName['name']! as i1.GeneratedColumn<String>;
   i1.GeneratedColumn<int> get index =>
       columnsByName['index']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get description =>
+      columnsByName['description']! as i1.GeneratedColumn<String>;
   i1.GeneratedColumn<int> get dietDayId =>
       columnsByName['diet_day_id']! as i1.GeneratedColumn<int>;
 }
@@ -1717,6 +1720,8 @@ class Shape15 extends i0.VersionedTable {
       columnsByName['amount']! as i1.GeneratedColumn<double>;
   i1.GeneratedColumn<int> get index =>
       columnsByName['index']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get description =>
+      columnsByName['description']! as i1.GeneratedColumn<String>;
   i1.GeneratedColumn<String> get code =>
       columnsByName['code']! as i1.GeneratedColumn<String>;
   i1.GeneratedColumn<String> get nameAr =>

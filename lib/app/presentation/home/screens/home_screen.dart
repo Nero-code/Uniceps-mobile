@@ -99,11 +99,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
                     icon: const Icon(Icons.settings, color: Colors.blueGrey),
                   ),
-                  // IconButton(
-                  //   onPressed: () => Navigator.pushNamed(context, AppRoutes.dietPlans),
-                  //   icon: const Icon(Icons.restaurant_menu_outlined),
-                  //   color: Colors.blueGrey,
-                  // ),
+                  IconButton(
+                    onPressed: () => Navigator.pushNamed(context, AppRoutes.dietPlans),
+                    icon: const Icon(Icons.restaurant_menu_outlined),
+                    color: Colors.blueGrey,
+                  ),
                 ],
               ),
               body: Stack(

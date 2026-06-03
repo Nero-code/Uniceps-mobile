@@ -1540,6 +1540,16 @@
             "dsl_features": []
           },
           {
+            "name": "description",
+            "getter_name": "description",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
             "name": "diet_day_id",
             "getter_name": "dietDayId",
             "moor_type": "int",
@@ -1612,6 +1622,16 @@
             "getter_name": "index",
             "moor_type": "int",
             "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "description",
+            "getter_name": "description",
+            "moor_type": "string",
+            "nullable": true,
             "customConstraints": null,
             "default_dart": null,
             "default_client_dart": null,
@@ -1854,7 +1874,7 @@
       "sql": [
         {
           "dialect": "sqlite",
-          "sql": "CREATE TABLE IF NOT EXISTS \"diet_meals\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"name\" TEXT NOT NULL, \"index\" INTEGER NOT NULL, \"diet_day_id\" INTEGER NOT NULL REFERENCES diet_days (id) ON DELETE CASCADE);"
+          "sql": "CREATE TABLE IF NOT EXISTS \"diet_meals\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"name\" TEXT NOT NULL, \"index\" INTEGER NOT NULL, \"description\" TEXT NULL, \"diet_day_id\" INTEGER NOT NULL REFERENCES diet_days (id) ON DELETE CASCADE);"
         }
       ]
     },
@@ -1863,7 +1883,7 @@
       "sql": [
         {
           "dialect": "sqlite",
-          "sql": "CREATE TABLE IF NOT EXISTS \"diet_meal_ingredients\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"amount\" REAL NOT NULL, \"index\" INTEGER NOT NULL, \"code\" TEXT NOT NULL, \"name_ar\" TEXT NOT NULL, \"name_en\" TEXT NOT NULL, \"category\" TEXT NOT NULL, \"serving_size_in_grams\" REAL NOT NULL, \"calories\" REAL NOT NULL, \"protein\" REAL NOT NULL, \"carbs\" REAL NOT NULL, \"fats\" REAL NOT NULL, \"diet_meal_id\" INTEGER NOT NULL REFERENCES diet_meals (id) ON DELETE CASCADE);"
+          "sql": "CREATE TABLE IF NOT EXISTS \"diet_meal_ingredients\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"amount\" REAL NOT NULL, \"index\" INTEGER NOT NULL, \"description\" TEXT NULL, \"code\" TEXT NOT NULL, \"name_ar\" TEXT NOT NULL, \"name_en\" TEXT NOT NULL, \"category\" TEXT NOT NULL, \"serving_size_in_grams\" REAL NOT NULL, \"calories\" REAL NOT NULL, \"protein\" REAL NOT NULL, \"carbs\" REAL NOT NULL, \"fats\" REAL NOT NULL, \"diet_meal_id\" INTEGER NOT NULL REFERENCES diet_meals (id) ON DELETE CASCADE);"
         }
       ]
     }

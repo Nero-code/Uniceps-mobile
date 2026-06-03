@@ -6737,6 +6737,17 @@ class $DietMealsTable extends DietMeals
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _dietDayIdMeta = const VerificationMeta(
     'dietDayId',
   );
@@ -6752,7 +6763,13 @@ class $DietMealsTable extends DietMeals
     ),
   );
   @override
-  List<GeneratedColumn> get $columns => [id, name, index, dietDayId];
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    index,
+    description,
+    dietDayId,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -6784,6 +6801,15 @@ class $DietMealsTable extends DietMeals
     } else if (isInserting) {
       context.missing(_indexMeta);
     }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    }
     if (data.containsKey('diet_day_id')) {
       context.handle(
         _dietDayIdMeta,
@@ -6813,6 +6839,10 @@ class $DietMealsTable extends DietMeals
         DriftSqlType.int,
         data['${effectivePrefix}index'],
       )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
       dietDayId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}diet_day_id'],
@@ -6830,11 +6860,13 @@ class DietMealData extends DataClass implements Insertable<DietMealData> {
   final int id;
   final String name;
   final int index;
+  final String? description;
   final int dietDayId;
   const DietMealData({
     required this.id,
     required this.name,
     required this.index,
+    this.description,
     required this.dietDayId,
   });
   @override
@@ -6843,6 +6875,9 @@ class DietMealData extends DataClass implements Insertable<DietMealData> {
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
     map['index'] = Variable<int>(index);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
     map['diet_day_id'] = Variable<int>(dietDayId);
     return map;
   }
@@ -6852,6 +6887,9 @@ class DietMealData extends DataClass implements Insertable<DietMealData> {
       id: Value(id),
       name: Value(name),
       index: Value(index),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
       dietDayId: Value(dietDayId),
     );
   }
@@ -6865,6 +6903,7 @@ class DietMealData extends DataClass implements Insertable<DietMealData> {
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       index: serializer.fromJson<int>(json['index']),
+      description: serializer.fromJson<String?>(json['description']),
       dietDayId: serializer.fromJson<int>(json['dietDayId']),
     );
   }
@@ -6875,22 +6914,32 @@ class DietMealData extends DataClass implements Insertable<DietMealData> {
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'index': serializer.toJson<int>(index),
+      'description': serializer.toJson<String?>(description),
       'dietDayId': serializer.toJson<int>(dietDayId),
     };
   }
 
-  DietMealData copyWith({int? id, String? name, int? index, int? dietDayId}) =>
-      DietMealData(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        index: index ?? this.index,
-        dietDayId: dietDayId ?? this.dietDayId,
-      );
+  DietMealData copyWith({
+    int? id,
+    String? name,
+    int? index,
+    Value<String?> description = const Value.absent(),
+    int? dietDayId,
+  }) => DietMealData(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    index: index ?? this.index,
+    description: description.present ? description.value : this.description,
+    dietDayId: dietDayId ?? this.dietDayId,
+  );
   DietMealData copyWithCompanion(DietMealsCompanion data) {
     return DietMealData(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
       index: data.index.present ? data.index.value : this.index,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
       dietDayId: data.dietDayId.present ? data.dietDayId.value : this.dietDayId,
     );
   }
@@ -6901,13 +6950,14 @@ class DietMealData extends DataClass implements Insertable<DietMealData> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('index: $index, ')
+          ..write('description: $description, ')
           ..write('dietDayId: $dietDayId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, index, dietDayId);
+  int get hashCode => Object.hash(id, name, index, description, dietDayId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -6915,6 +6965,7 @@ class DietMealData extends DataClass implements Insertable<DietMealData> {
           other.id == this.id &&
           other.name == this.name &&
           other.index == this.index &&
+          other.description == this.description &&
           other.dietDayId == this.dietDayId);
 }
 
@@ -6922,17 +6973,20 @@ class DietMealsCompanion extends UpdateCompanion<DietMealData> {
   final Value<int> id;
   final Value<String> name;
   final Value<int> index;
+  final Value<String?> description;
   final Value<int> dietDayId;
   const DietMealsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.index = const Value.absent(),
+    this.description = const Value.absent(),
     this.dietDayId = const Value.absent(),
   });
   DietMealsCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required int index,
+    this.description = const Value.absent(),
     required int dietDayId,
   }) : name = Value(name),
        index = Value(index),
@@ -6941,12 +6995,14 @@ class DietMealsCompanion extends UpdateCompanion<DietMealData> {
     Expression<int>? id,
     Expression<String>? name,
     Expression<int>? index,
+    Expression<String>? description,
     Expression<int>? dietDayId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (index != null) 'index': index,
+      if (description != null) 'description': description,
       if (dietDayId != null) 'diet_day_id': dietDayId,
     });
   }
@@ -6955,12 +7011,14 @@ class DietMealsCompanion extends UpdateCompanion<DietMealData> {
     Value<int>? id,
     Value<String>? name,
     Value<int>? index,
+    Value<String?>? description,
     Value<int>? dietDayId,
   }) {
     return DietMealsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       index: index ?? this.index,
+      description: description ?? this.description,
       dietDayId: dietDayId ?? this.dietDayId,
     );
   }
@@ -6977,6 +7035,9 @@ class DietMealsCompanion extends UpdateCompanion<DietMealData> {
     if (index.present) {
       map['index'] = Variable<int>(index.value);
     }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
     if (dietDayId.present) {
       map['diet_day_id'] = Variable<int>(dietDayId.value);
     }
@@ -6989,6 +7050,7 @@ class DietMealsCompanion extends UpdateCompanion<DietMealData> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('index: $index, ')
+          ..write('description: $description, ')
           ..write('dietDayId: $dietDayId')
           ..write(')'))
         .toString();
@@ -7031,6 +7093,17 @@ class $DietMealIngredientsTable extends DietMealIngredients
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _codeMeta = const VerificationMeta('code');
   @override
@@ -7140,6 +7213,7 @@ class $DietMealIngredientsTable extends DietMealIngredients
     id,
     amount,
     index,
+    description,
     code,
     nameAr,
     nameEn,
@@ -7181,6 +7255,15 @@ class $DietMealIngredientsTable extends DietMealIngredients
       );
     } else if (isInserting) {
       context.missing(_indexMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
     }
     if (data.containsKey('code')) {
       context.handle(
@@ -7289,6 +7372,10 @@ class $DietMealIngredientsTable extends DietMealIngredients
         DriftSqlType.int,
         data['${effectivePrefix}index'],
       )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
       code: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}code'],
@@ -7343,6 +7430,7 @@ class DietMealIngredientData extends DataClass
   final int id;
   final double amount;
   final int index;
+  final String? description;
   final String code;
   final String nameAr;
   final String nameEn;
@@ -7357,6 +7445,7 @@ class DietMealIngredientData extends DataClass
     required this.id,
     required this.amount,
     required this.index,
+    this.description,
     required this.code,
     required this.nameAr,
     required this.nameEn,
@@ -7374,6 +7463,9 @@ class DietMealIngredientData extends DataClass
     map['id'] = Variable<int>(id);
     map['amount'] = Variable<double>(amount);
     map['index'] = Variable<int>(index);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
     map['code'] = Variable<String>(code);
     map['name_ar'] = Variable<String>(nameAr);
     map['name_en'] = Variable<String>(nameEn);
@@ -7392,6 +7484,9 @@ class DietMealIngredientData extends DataClass
       id: Value(id),
       amount: Value(amount),
       index: Value(index),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
       code: Value(code),
       nameAr: Value(nameAr),
       nameEn: Value(nameEn),
@@ -7414,6 +7509,7 @@ class DietMealIngredientData extends DataClass
       id: serializer.fromJson<int>(json['id']),
       amount: serializer.fromJson<double>(json['amount']),
       index: serializer.fromJson<int>(json['index']),
+      description: serializer.fromJson<String?>(json['description']),
       code: serializer.fromJson<String>(json['code']),
       nameAr: serializer.fromJson<String>(json['nameAr']),
       nameEn: serializer.fromJson<String>(json['nameEn']),
@@ -7435,6 +7531,7 @@ class DietMealIngredientData extends DataClass
       'id': serializer.toJson<int>(id),
       'amount': serializer.toJson<double>(amount),
       'index': serializer.toJson<int>(index),
+      'description': serializer.toJson<String?>(description),
       'code': serializer.toJson<String>(code),
       'nameAr': serializer.toJson<String>(nameAr),
       'nameEn': serializer.toJson<String>(nameEn),
@@ -7452,6 +7549,7 @@ class DietMealIngredientData extends DataClass
     int? id,
     double? amount,
     int? index,
+    Value<String?> description = const Value.absent(),
     String? code,
     String? nameAr,
     String? nameEn,
@@ -7466,6 +7564,7 @@ class DietMealIngredientData extends DataClass
     id: id ?? this.id,
     amount: amount ?? this.amount,
     index: index ?? this.index,
+    description: description.present ? description.value : this.description,
     code: code ?? this.code,
     nameAr: nameAr ?? this.nameAr,
     nameEn: nameEn ?? this.nameEn,
@@ -7482,6 +7581,9 @@ class DietMealIngredientData extends DataClass
       id: data.id.present ? data.id.value : this.id,
       amount: data.amount.present ? data.amount.value : this.amount,
       index: data.index.present ? data.index.value : this.index,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
       code: data.code.present ? data.code.value : this.code,
       nameAr: data.nameAr.present ? data.nameAr.value : this.nameAr,
       nameEn: data.nameEn.present ? data.nameEn.value : this.nameEn,
@@ -7505,6 +7607,7 @@ class DietMealIngredientData extends DataClass
           ..write('id: $id, ')
           ..write('amount: $amount, ')
           ..write('index: $index, ')
+          ..write('description: $description, ')
           ..write('code: $code, ')
           ..write('nameAr: $nameAr, ')
           ..write('nameEn: $nameEn, ')
@@ -7524,6 +7627,7 @@ class DietMealIngredientData extends DataClass
     id,
     amount,
     index,
+    description,
     code,
     nameAr,
     nameEn,
@@ -7542,6 +7646,7 @@ class DietMealIngredientData extends DataClass
           other.id == this.id &&
           other.amount == this.amount &&
           other.index == this.index &&
+          other.description == this.description &&
           other.code == this.code &&
           other.nameAr == this.nameAr &&
           other.nameEn == this.nameEn &&
@@ -7559,6 +7664,7 @@ class DietMealIngredientsCompanion
   final Value<int> id;
   final Value<double> amount;
   final Value<int> index;
+  final Value<String?> description;
   final Value<String> code;
   final Value<String> nameAr;
   final Value<String> nameEn;
@@ -7573,6 +7679,7 @@ class DietMealIngredientsCompanion
     this.id = const Value.absent(),
     this.amount = const Value.absent(),
     this.index = const Value.absent(),
+    this.description = const Value.absent(),
     this.code = const Value.absent(),
     this.nameAr = const Value.absent(),
     this.nameEn = const Value.absent(),
@@ -7588,6 +7695,7 @@ class DietMealIngredientsCompanion
     this.id = const Value.absent(),
     required double amount,
     required int index,
+    this.description = const Value.absent(),
     required String code,
     required String nameAr,
     required String nameEn,
@@ -7614,6 +7722,7 @@ class DietMealIngredientsCompanion
     Expression<int>? id,
     Expression<double>? amount,
     Expression<int>? index,
+    Expression<String>? description,
     Expression<String>? code,
     Expression<String>? nameAr,
     Expression<String>? nameEn,
@@ -7629,6 +7738,7 @@ class DietMealIngredientsCompanion
       if (id != null) 'id': id,
       if (amount != null) 'amount': amount,
       if (index != null) 'index': index,
+      if (description != null) 'description': description,
       if (code != null) 'code': code,
       if (nameAr != null) 'name_ar': nameAr,
       if (nameEn != null) 'name_en': nameEn,
@@ -7647,6 +7757,7 @@ class DietMealIngredientsCompanion
     Value<int>? id,
     Value<double>? amount,
     Value<int>? index,
+    Value<String?>? description,
     Value<String>? code,
     Value<String>? nameAr,
     Value<String>? nameEn,
@@ -7662,6 +7773,7 @@ class DietMealIngredientsCompanion
       id: id ?? this.id,
       amount: amount ?? this.amount,
       index: index ?? this.index,
+      description: description ?? this.description,
       code: code ?? this.code,
       nameAr: nameAr ?? this.nameAr,
       nameEn: nameEn ?? this.nameEn,
@@ -7686,6 +7798,9 @@ class DietMealIngredientsCompanion
     }
     if (index.present) {
       map['index'] = Variable<int>(index.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
     }
     if (code.present) {
       map['code'] = Variable<String>(code.value);
@@ -7726,6 +7841,7 @@ class DietMealIngredientsCompanion
           ..write('id: $id, ')
           ..write('amount: $amount, ')
           ..write('index: $index, ')
+          ..write('description: $description, ')
           ..write('code: $code, ')
           ..write('nameAr: $nameAr, ')
           ..write('nameEn: $nameEn, ')
@@ -12558,6 +12674,7 @@ typedef $$DietMealsTableCreateCompanionBuilder =
       Value<int> id,
       required String name,
       required int index,
+      Value<String?> description,
       required int dietDayId,
     });
 typedef $$DietMealsTableUpdateCompanionBuilder =
@@ -12565,6 +12682,7 @@ typedef $$DietMealsTableUpdateCompanionBuilder =
       Value<int> id,
       Value<String> name,
       Value<int> index,
+      Value<String?> description,
       Value<int> dietDayId,
     });
 
@@ -12643,6 +12761,11 @@ class $$DietMealsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
   $$DietDaysTableFilterComposer get dietDayId {
     final $$DietDaysTableFilterComposer composer = $composerBuilder(
       composer: this,
@@ -12716,6 +12839,11 @@ class $$DietMealsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$DietDaysTableOrderingComposer get dietDayId {
     final $$DietDaysTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -12757,6 +12885,11 @@ class $$DietMealsTableAnnotationComposer
 
   GeneratedColumn<int> get index =>
       $composableBuilder(column: $table.index, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
 
   $$DietDaysTableAnnotationComposer get dietDayId {
     final $$DietDaysTableAnnotationComposer composer = $composerBuilder(
@@ -12839,11 +12972,13 @@ class $$DietMealsTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<int> index = const Value.absent(),
+                Value<String?> description = const Value.absent(),
                 Value<int> dietDayId = const Value.absent(),
               }) => DietMealsCompanion(
                 id: id,
                 name: name,
                 index: index,
+                description: description,
                 dietDayId: dietDayId,
               ),
           createCompanionCallback:
@@ -12851,11 +12986,13 @@ class $$DietMealsTableTableManager
                 Value<int> id = const Value.absent(),
                 required String name,
                 required int index,
+                Value<String?> description = const Value.absent(),
                 required int dietDayId,
               }) => DietMealsCompanion.insert(
                 id: id,
                 name: name,
                 index: index,
+                description: description,
                 dietDayId: dietDayId,
               ),
           withReferenceMapper: (p0) => p0
@@ -12955,6 +13092,7 @@ typedef $$DietMealIngredientsTableCreateCompanionBuilder =
       Value<int> id,
       required double amount,
       required int index,
+      Value<String?> description,
       required String code,
       required String nameAr,
       required String nameEn,
@@ -12971,6 +13109,7 @@ typedef $$DietMealIngredientsTableUpdateCompanionBuilder =
       Value<int> id,
       Value<double> amount,
       Value<int> index,
+      Value<String?> description,
       Value<String> code,
       Value<String> nameAr,
       Value<String> nameEn,
@@ -13040,6 +13179,11 @@ class $$DietMealIngredientsTableFilterComposer
 
   ColumnFilters<int> get index => $composableBuilder(
     column: $table.index,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -13136,6 +13280,11 @@ class $$DietMealIngredientsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get code => $composableBuilder(
     column: $table.code,
     builder: (column) => ColumnOrderings(column),
@@ -13222,6 +13371,11 @@ class $$DietMealIngredientsTableAnnotationComposer
 
   GeneratedColumn<int> get index =>
       $composableBuilder(column: $table.index, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get code =>
       $composableBuilder(column: $table.code, builder: (column) => column);
@@ -13315,6 +13469,7 @@ class $$DietMealIngredientsTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<double> amount = const Value.absent(),
                 Value<int> index = const Value.absent(),
+                Value<String?> description = const Value.absent(),
                 Value<String> code = const Value.absent(),
                 Value<String> nameAr = const Value.absent(),
                 Value<String> nameEn = const Value.absent(),
@@ -13329,6 +13484,7 @@ class $$DietMealIngredientsTableTableManager
                 id: id,
                 amount: amount,
                 index: index,
+                description: description,
                 code: code,
                 nameAr: nameAr,
                 nameEn: nameEn,
@@ -13345,6 +13501,7 @@ class $$DietMealIngredientsTableTableManager
                 Value<int> id = const Value.absent(),
                 required double amount,
                 required int index,
+                Value<String?> description = const Value.absent(),
                 required String code,
                 required String nameAr,
                 required String nameEn,
@@ -13359,6 +13516,7 @@ class $$DietMealIngredientsTableTableManager
                 id: id,
                 amount: amount,
                 index: index,
+                description: description,
                 code: code,
                 nameAr: nameAr,
                 nameEn: nameEn,

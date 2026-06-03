@@ -9,6 +9,7 @@ class DietMealIngredient {
   final String nameAr;
   final String nameEn;
   final String category;
+  final String? description;
   final double servingSizeInGrams;
   final double calories;
   final double protein;
@@ -23,6 +24,7 @@ class DietMealIngredient {
     required this.nameAr,
     required this.nameEn,
     required this.category,
+    required this.description,
     required this.servingSizeInGrams,
     required this.calories,
     required this.protein,
@@ -44,6 +46,7 @@ class DietMealIngredient {
     String? nameAr,
     String? nameEn,
     String? category,
+    String? description,
     double? servingSizeInGrams,
     double? calories,
     double? protein,
@@ -57,6 +60,7 @@ class DietMealIngredient {
     nameAr: nameAr ?? this.nameAr,
     nameEn: nameEn ?? this.nameEn,
     category: category ?? this.category,
+    description: description ?? this.description,
     servingSizeInGrams: servingSizeInGrams ?? this.servingSizeInGrams,
     calories: calories ?? this.calories,
     protein: protein ?? this.protein,

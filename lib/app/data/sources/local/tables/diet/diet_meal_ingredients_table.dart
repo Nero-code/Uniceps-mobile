@@ -6,6 +6,7 @@ class DietMealIngredients extends Table {
   IntColumn get id => integer().autoIncrement()();
   RealColumn get amount => real()();
   IntColumn get index => integer()();
+  TextColumn get description => text().nullable()();
 
   TextColumn get code => text()();
   TextColumn get nameAr => text()();

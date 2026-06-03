@@ -299,7 +299,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => CaptainQuotesService(prefs: sl()));
 
-  sl.registerLazySingleton(() => AppConfigsService(prefs: sl()));
+  final appConfigs = AppConfigsService(prefs: sl());
+  await appConfigs.getAppConfigs();
+  sl.registerLazySingleton(() => appConfigs);
 
   sl.registerLazySingleton(() => DietService(sl(), sl()));
 

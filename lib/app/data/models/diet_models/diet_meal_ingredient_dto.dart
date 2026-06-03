@@ -17,6 +17,7 @@ class DietMealIngredientDto {
   @js.JsonKey(name: 'name_en')
   final String nameEn;
   final String category;
+  final String? description;
   @js.JsonKey(name: 'serving_size_g')
   final double servingSizeInGrams;
   final double calories;
@@ -32,6 +33,7 @@ class DietMealIngredientDto {
     required this.nameAr,
     required this.nameEn,
     required this.category,
+    required this.description,
     required this.servingSizeInGrams,
     required this.calories,
     required this.protein,
@@ -50,6 +52,7 @@ class DietMealIngredientDto {
     nameAr: nameAr,
     nameEn: nameEn,
     category: category,
+    description: description,
     servingSizeInGrams: servingSizeInGrams,
     calories: calories,
     protein: protein,
@@ -65,6 +68,7 @@ class DietMealIngredientDto {
     nameAr: entity.nameAr,
     nameEn: entity.nameEn,
     category: entity.category,
+    description: entity.description,
     servingSizeInGrams: entity.servingSizeInGrams,
     calories: entity.calories,
     protein: entity.protein,
@@ -81,6 +85,7 @@ class DietMealIngredientDto {
     nameAr: Value(nameAr),
     nameEn: Value(nameEn),
     category: Value(category),
+    description: Value(description),
     servingSizeInGrams: Value(servingSizeInGrams),
     calories: Value(calories),
     protein: Value(protein),
@@ -96,6 +101,7 @@ class DietMealIngredientDto {
     nameAr: data.nameAr,
     nameEn: data.nameEn,
     category: data.category,
+    description: data.description,
     servingSizeInGrams: data.servingSizeInGrams,
     calories: data.calories,
     protein: data.protein,

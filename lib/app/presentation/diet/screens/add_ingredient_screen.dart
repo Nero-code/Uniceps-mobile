@@ -10,8 +10,9 @@ import 'package:uniceps/l10n/app_localizations.dart';
 
 class AddIngredientScreen extends StatefulWidget {
   final int mealId;
+  final DietMealIngredientBloc mealIngredientBloc;
 
-  const AddIngredientScreen({super.key, required this.mealId});
+  const AddIngredientScreen({super.key, required this.mealId, required this.mealIngredientBloc});
 
   @override
   State<AddIngredientScreen> createState() => _AddIngredientScreenState();
@@ -26,7 +27,7 @@ class _AddIngredientScreenState extends State<AddIngredientScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return BlocProvider(
-      create: (context) => IngredientBloc(sl())..add(const .getIngredients()),
+      create: (context) => IngredientBloc(sl())..add(const IngredientEvent.getIngredients()),
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.addIngredient),
@@ -44,6 +45,7 @@ class _AddIngredientScreenState extends State<AddIngredientScreen> {
                           nameAr: ing.nameAr,
                           nameEn: ing.nameEn,
                           category: ing.category,
+                          description: null,
                           servingSizeInGrams: ing.servingSizeInGrams,
                           calories: ing.calories,
                           protein: ing.protein,
@@ -52,9 +54,7 @@ class _AddIngredientScreenState extends State<AddIngredientScreen> {
                         ),
                       )
                       .toList();
-                  context.read<DietMealIngredientBloc>().add(
-                    DietMealIngredientEvent.addIngredients(widget.mealId, items),
-                  );
+                  widget.mealIngredientBloc.add(DietMealIngredientEvent.addIngredients(widget.mealId, items));
                   Navigator.pop(context);
                 },
                 child: Text(l10n.save, style: const TextStyle(fontWeight: FontWeight.bold)),

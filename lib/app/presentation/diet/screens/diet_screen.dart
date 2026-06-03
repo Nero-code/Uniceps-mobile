@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/domain/classes/diet_classes/diet_day.dart';
-import 'package:uniceps/app/domain/classes/diet_classes/diet_meal.dart';
 import 'package:uniceps/app/domain/classes/diet_classes/diet_plan.dart';
 import 'package:uniceps/app/presentation/diet/blocs/diet_day/diet_day_bloc.dart';
 import 'package:uniceps/app/presentation/diet/blocs/diet_meal/diet_meal_bloc.dart';
+import 'package:uniceps/app/presentation/diet/dialogs/delete_diet_day_dialog.dart';
+import 'package:uniceps/app/presentation/diet/dialogs/delete_diet_meal_dialog.dart';
+import 'package:uniceps/app/presentation/diet/dialogs/diet_day_add_edit_dialog.dart';
+import 'package:uniceps/app/presentation/diet/dialogs/diet_meal_add_edit_dialog.dart';
 import 'package:uniceps/app/presentation/diet/screens/meal_details_screen.dart';
 import 'package:uniceps/app/presentation/diet/widgets/diet_macro_summary.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
@@ -24,123 +26,6 @@ class DietScreen extends StatefulWidget {
 class _DietScreenState extends State<DietScreen> {
   int _selectedDayIndex = 0;
 
-  void _showDayDialog(BuildContext context, {DietDay? day}) {
-    final l10n = AppLocalizations.of(context)!;
-    final controller = TextEditingController(text: day?.name ?? '');
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(day == null ? '${l10n.add} ${l10n.day}' : l10n.rename),
-        content: TextField(
-          controller: controller,
-          decoration: InputDecoration(hintText: l10n.pName),
-          autofocus: true,
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
-          ElevatedButton(
-            onPressed: () {
-              final name = controller.text.trim();
-              if (name.isNotEmpty) {
-                if (day == null) {
-                  context.read<DietDayBloc>().add(
-                    DietDayEvent.addDay(widget.plan.id!, DietDay(name: name, index: 0, meals: [])),
-                  );
-                } else {
-                  context.read<DietDayBloc>().add(DietDayEvent.updateDay(widget.plan.id!, day.copyWith(name: name)));
-                }
-                Navigator.pop(ctx);
-              }
-            },
-            child: Text(l10n.save),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showDeleteDayDialog(BuildContext context, DietDay day) {
-    final l10n = AppLocalizations.of(context)!;
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text('${l10n.delete} ${l10n.day}?'),
-        content: Text(l10n.deleteAlertContent(day.name)),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
-          ElevatedButton(
-            onPressed: () {
-              context.read<DietDayBloc>().add(DietDayEvent.deleteDay(widget.plan.id!, day.id!));
-              Navigator.pop(ctx);
-              if (_selectedDayIndex > 0) {
-                setState(() => _selectedDayIndex--);
-              }
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
-            child: Text(l10n.delete),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showMealDialog(BuildContext context, int dayId, {DietMeal? meal}) {
-    final l10n = AppLocalizations.of(context)!;
-    final controller = TextEditingController(text: meal?.name ?? '');
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(meal == null ? l10n.addMeal : l10n.rename),
-        content: TextField(
-          controller: controller,
-          decoration: InputDecoration(hintText: l10n.pName),
-          autofocus: true,
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
-          ElevatedButton(
-            onPressed: () {
-              final name = controller.text.trim();
-              if (name.isNotEmpty) {
-                if (meal == null) {
-                  context.read<DietMealBloc>().add(
-                    DietMealEvent.addMeal(dayId, DietMeal(name: name, index: 0, ingredients: [])),
-                  );
-                } else {
-                  context.read<DietMealBloc>().add(DietMealEvent.updateMeal(dayId, meal.copyWith(name: name)));
-                }
-                Navigator.pop(ctx);
-              }
-            },
-            child: Text(l10n.save),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showDeleteMealDialog(BuildContext context, int dayId, DietMeal meal) {
-    final l10n = AppLocalizations.of(context)!;
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text('${l10n.deleteMeal}?'),
-        content: Text(l10n.deleteAlertContent(meal.name)),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
-          ElevatedButton(
-            onPressed: () {
-              context.read<DietMealBloc>().add(DietMealEvent.deleteMeal(dayId, meal.id!));
-              Navigator.pop(ctx);
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
-            child: Text(l10n.delete),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -153,9 +38,19 @@ class _DietScreenState extends State<DietScreen> {
         appBar: AppBar(
           title: Text(widget.plan.name),
           actions: [
-            Builder(
-              builder: (context) {
-                return IconButton(icon: const Icon(Icons.add), onPressed: () => _showDayDialog(context));
+            BlocBuilder<DietDayBloc, DietDayState>(
+              builder: (context, state) {
+                final dayCount = state.maybeWhen(loaded: (days) => days.length, orElse: () => 0);
+                return IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (_) => BlocProvider.value(
+                      value: context.read<DietDayBloc>(),
+                      child: DietDayAddEditDialog(planId: widget.plan.id!, defaultName: '${l10n.day} #${dayCount + 1}'),
+                    ),
+                  ),
+                );
               },
             ),
           ],
@@ -186,7 +81,13 @@ class _DietScreenState extends State<DietScreen> {
                           Text(l10n.noDaysInPlan),
                           const SizedBox(height: 16),
                           ElevatedButton(
-                            onPressed: () => _showDayDialog(context),
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (_) => BlocProvider.value(
+                                value: context.read<DietDayBloc>(),
+                                child: DietDayAddEditDialog(planId: widget.plan.id!, defaultName: '${l10n.day} #1'),
+                              ),
+                            ),
                             child: Text('${l10n.add} ${l10n.day}'),
                           ),
                         ],
@@ -215,9 +116,63 @@ class _DietScreenState extends State<DietScreen> {
                             return Padding(
                               padding: const EdgeInsets.only(right: 8.0),
                               child: GestureDetector(
-                                onLongPress: () => _showDeleteDayDialog(context, day),
+                                onLongPress: () => showDialog(
+                                  context: context,
+                                  builder: (optionsContext) => SimpleDialog(
+                                    title: Text(day.name),
+                                    children: [
+                                      SimpleDialogOption(
+                                        onPressed: () {
+                                          Navigator.pop(optionsContext);
+                                          showDialog(
+                                            context: context,
+                                            builder: (_) => BlocProvider.value(
+                                              value: context.read<DietDayBloc>(),
+                                              child: DietDayAddEditDialog(planId: widget.plan.id!, day: day),
+                                            ),
+                                          );
+                                        },
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.edit_outlined, size: 20),
+                                            const SizedBox(width: 12),
+                                            Text(l10n.rename),
+                                          ],
+                                        ),
+                                      ),
+                                      SimpleDialogOption(
+                                        onPressed: () {
+                                          Navigator.pop(optionsContext);
+                                          showDialog(
+                                            context: context,
+                                            builder: (_) => BlocProvider.value(
+                                              value: context.read<DietDayBloc>(),
+                                              child: DeleteDietDayDialog(
+                                                planId: widget.plan.id!,
+                                                day: day,
+                                                onDelete: () {
+                                                  if (_selectedDayIndex > 0) {
+                                                    setState(() => _selectedDayIndex--);
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.delete_outline, color: Colors.red, size: 20),
+                                            const SizedBox(width: 12),
+                                            Text(l10n.delete, style: const TextStyle(color: Colors.red)),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                                 child: ChoiceChip(
                                   label: Text(day.name),
+                                  selectedColor: Colors.blue.shade100,
                                   selected: isSelected,
                                   onSelected: (selected) {
                                     if (selected) setState(() => _selectedDayIndex = index);
@@ -240,6 +195,18 @@ class _DietScreenState extends State<DietScreen> {
                         ),
                       ),
 
+                      if (widget.plan.description != null && widget.plan.description!.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              widget.plan.description!,
+                              style: const TextStyle(fontSize: 12, fontStyle: FontStyle.italic, color: Colors.grey),
+                            ),
+                          ),
+                        ),
+
                       // Meals List
                       Expanded(
                         child: ListView.builder(
@@ -250,7 +217,16 @@ class _DietScreenState extends State<DietScreen> {
                               return ListTile(
                                 leading: const Icon(Icons.add),
                                 title: Text(l10n.addMeal),
-                                onTap: () => _showMealDialog(context, currentDay.id!),
+                                onTap: () => showDialog(
+                                  context: context,
+                                  builder: (_) => BlocProvider.value(
+                                    value: context.read<DietMealBloc>(),
+                                    child: DietMealAddEditDialog(
+                                      dayId: currentDay.id!,
+                                      defaultName: 'Meal #${currentDay.meals.length + 1}',
+                                    ),
+                                  ),
+                                ),
                               );
                             }
                             final meal = currentDay.meals[index];
@@ -263,6 +239,16 @@ class _DietScreenState extends State<DietScreen> {
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    if (meal.description != null && meal.description!.isNotEmpty)
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom: 4.0),
+                                        child: Text(
+                                          meal.description!,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(fontSize: 12, color: Colors.blueGrey),
+                                        ),
+                                      ),
                                     Text('${meal.calories.toStringAsFixed(0)} kcal'),
                                     DietMacroSummary(
                                       calories: meal.calories,
@@ -275,7 +261,13 @@ class _DietScreenState extends State<DietScreen> {
                                 ),
                                 trailing: IconButton(
                                   icon: const Icon(Icons.edit_outlined),
-                                  onPressed: () => _showMealDialog(context, currentDay.id!, meal: meal),
+                                  onPressed: () => showDialog(
+                                    context: context,
+                                    builder: (_) => BlocProvider.value(
+                                      value: context.read<DietMealBloc>(),
+                                      child: DietMealAddEditDialog(dayId: currentDay.id!, meal: meal),
+                                    ),
+                                  ),
                                 ),
                                 onTap: () {
                                   Navigator.push(
@@ -283,7 +275,13 @@ class _DietScreenState extends State<DietScreen> {
                                     MaterialPageRoute(builder: (context) => MealDetailsScreen(meal: meal)),
                                   );
                                 },
-                                onLongPress: () => _showDeleteMealDialog(context, currentDay.id!, meal),
+                                onLongPress: () => showDialog(
+                                  context: context,
+                                  builder: (_) => BlocProvider.value(
+                                    value: context.read<DietMealBloc>(),
+                                    child: DeleteDietMealDialog(dayId: currentDay.id!, meal: meal),
+                                  ),
+                                ),
                               ),
                             );
                           },

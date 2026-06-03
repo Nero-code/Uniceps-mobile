@@ -29,8 +29,8 @@ class Configs extends Equatable {
     appLanguage: Locale(json['appLanguage'] ?? 'en'),
     exerciseLibLanguage: Locale(json['exerciseLibLanguage']),
     mode: ThemeMode.values.firstWhere((mode) => mode.name == json['themeMode'], orElse: () => .light),
-    goal: Goal.values.firstWhere((goal) => goal.name == json['goal']),
-    activityLevel: ActivityLevel.values.firstWhere((al) => al.name == json['activityLevel']),
+    goal: Goal.values.where((goal) => goal.name == json['goal']).firstOrNull,
+    activityLevel: ActivityLevel.values.where((al) => al.name == json['activityLevel']).firstOrNull,
   );
 
   Map<String, dynamic> toJson() => {

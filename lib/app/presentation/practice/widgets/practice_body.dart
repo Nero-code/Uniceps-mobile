@@ -12,6 +12,7 @@ class PracticeBody extends StatelessWidget {
     required this.sets,
     required this.logs,
     required this.totalProgress,
+    required this.description,
   });
   final int sessionId;
   final String exId;
@@ -19,6 +20,7 @@ class PracticeBody extends StatelessWidget {
   final List<RoutineSet> sets;
   final List<TLog> logs;
   final int totalProgress;
+  final String? description;
 
   @override
   Widget build(BuildContext context) {
