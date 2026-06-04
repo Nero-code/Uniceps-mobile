@@ -9,23 +9,16 @@ class RoutineItemsCommands implements ICommand {
   final IRoutineItemsContract _repo;
 
   const RoutineItemsCommands({required IRoutineItemsContract repo}) : _repo = repo;
-  Future<Either<Failure, List<RoutineItem>>> getItemsUnderDay(int dayId) async {
-    return await _repo.getItemsUnderDay(dayId);
-  }
+  Future<Either<Failure, List<RoutineItem>>> getItemsUnderDay(int dayId) => _repo.getItemsUnderDay(dayId);
 
-  Future<Either<Failure, List<RoutineItem>>> addItems(int dayId, List<Exercise> items) async {
-    return await _repo.addItems(dayId, items);
-  }
+  Future<Either<Failure, List<RoutineItem>>> addItems(int dayId, List<Exercise> items) => _repo.addItems(dayId, items);
 
-  Future<Either<Failure, List<RoutineItem>>> removeItem(RoutineItem item) async {
-    return await _repo.removeItem(item);
-  }
+  Future<Either<Failure, List<RoutineItem>>> removeItem(RoutineItem item) => _repo.removeItem(item);
 
-  Future<Either<Failure, List<RoutineItem>>> reorderItems(List<RoutineItem> items) async {
-    return await _repo.reorderItems(items);
-  }
+  Future<Either<Failure, List<RoutineItem>>> reorderItems(List<RoutineItem> items) => _repo.reorderItems(items);
 
-  Future<Either<Failure, Unit>> copySetsToAll(int dayId, int itemId) async {
-    return await _repo.copySetsToAll(dayId, itemId);
-  }
+  Future<Either<Failure, Unit>> copySetsToAll(int dayId, int itemId) => _repo.copySetsToAll(dayId, itemId);
+
+  Future<Either<Failure, Unit>> updateItemDescription(int itemId, String? description) =>
+      _repo.updateItemDescription(itemId, description);
 }

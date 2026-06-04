@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:dartz/dartz.dart';
+import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
+import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
 import 'package:uniceps/app/services/app_configs_service.dart';
@@ -40,38 +42,32 @@ class ExerciseLibSyncService {
       latest = null;
     }
 
-    if (await _networkInfo.hasConnection) {
-      try {
-        final lib = await _exercisesRemoteSource.getAllExercises(
-          timestamp: latest,
-          language: sl<AppConfigsService>().configs.exerciseLibLanguage.languageCode,
-        );
-        for (final e in lib) {
-          final img = await _exercisesRemoteSource.getExerciseImage(e.apiId);
-          await _exercisesLocalSource.saveExerciseImage(e.apiId, img);
-          await _exercisesLocalSource.writeExercise(e);
-        }
-        _logger.i('library update Done!');
-
-        isSynced?.complete(localLib.length);
-        return Right(localLib.length);
-      } catch (e, s) {
-        _logger.e('something went wrong!!', error: e, stackTrace: s);
-
-        isSynced?.completeError(localLib.length);
-        return Left(.libUnknown(currentTotalCount: localLib.length));
+    try {
+      final lib = await _exercisesRemoteSource.getAllExercises(
+        timestamp: latest,
+        language: sl<AppConfigsService>().configs.exerciseLibLanguage.languageCode,
+      );
+      for (final e in lib) {
+        final img = await _exercisesRemoteSource.getExerciseImage(e.apiId);
+        await _exercisesLocalSource.saveExerciseImage(e.apiId, img);
       }
-    }
-    // This condition is useless because this state will trigger libDownload event on App-Startup
-    // so it's kind of impossible to meet.
-    if (localLib.isEmpty) {
-      _logger.i('Exercises Table is Empty');
-      isSynced?.completeError(localLib.length);
-      return Left(.libNotFound(currentTotalCount: localLib.length));
-    }
+      await _exercisesLocalSource.writeExercises(lib);
+      _logger.i('library update Done!');
 
-    _logger.i('No Internet Connection');
-    isSynced?.complete(localLib.length);
-    return Left(.libOffline(currentTotalCount: localLib.length));
+      isSynced?.complete(localLib.length);
+      return Right(localLib.length);
+    } on ClientException {
+      _logger.i('No Internet Connection');
+      isSynced?.complete(localLib.length);
+      return Left(.libOffline(currentTotalCount: localLib.length));
+    } on NoContentException {
+      isSynced?.complete(localLib.length);
+      return Right(localLib.length);
+    } catch (e, s) {
+      _logger.e('something went wrong!!', error: e, stackTrace: s);
+
+      isSynced?.completeError(localLib.length);
+      return Left(.libUnknown(currentTotalCount: localLib.length));
+    }
   }
 }

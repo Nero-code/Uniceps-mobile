@@ -18,6 +18,14 @@ class AddRoutineItemsEvent extends ItemsEditEvent {
   const AddRoutineItemsEvent({required this.dayId, required this.items});
 }
 
+class UpdateRoutineItemDescription extends ItemsEditEvent {
+  final int dayId;
+  final int itemId;
+  final String? description;
+
+  const UpdateRoutineItemDescription({required this.dayId, required this.itemId, required this.description});
+}
+
 class RemoveRoutineItemEvent extends ItemsEditEvent {
   final RoutineItem exercise;
   const RemoveRoutineItemEvent({required this.exercise});

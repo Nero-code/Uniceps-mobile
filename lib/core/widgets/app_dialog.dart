@@ -5,7 +5,7 @@ enum DialogActionType { add, edit, delete, confirm }
 
 class AppDialog extends StatefulWidget {
   final String? title;
-  final String? message;
+  final Widget? message;
   final String? initialText;
   final String? hintText;
   final IconData? icon;
@@ -13,6 +13,7 @@ class AppDialog extends StatefulWidget {
   final void Function(String)? onConfirmText;
   final VoidCallback? onConfirm;
   final bool isTextField;
+  final int maxLines;
 
   const AppDialog({
     super.key,
@@ -25,12 +26,13 @@ class AppDialog extends StatefulWidget {
     this.onConfirmText,
     this.onConfirm,
     this.isTextField = false,
+    this.maxLines = 1,
   });
 
   static Future<void> show({
     required BuildContext context,
     String? title,
-    String? message,
+    Widget? message,
     String? initialText,
     String? hintText,
     IconData? icon,
@@ -38,6 +40,7 @@ class AppDialog extends StatefulWidget {
     void Function(String)? onConfirmText,
     VoidCallback? onConfirm,
     bool isTextField = false,
+    int maxLines = 1,
   }) {
     return showDialog(
       context: context,
@@ -51,6 +54,7 @@ class AppDialog extends StatefulWidget {
         onConfirmText: onConfirmText,
         onConfirm: onConfirm,
         isTextField: isTextField,
+        maxLines: maxLines,
       ),
     );
   }
@@ -113,15 +117,12 @@ class _AppDialogState extends State<AppDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (widget.message != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 15),
-              child: Text(widget.message!, textAlign: TextAlign.center),
-            ),
+          if (widget.message != null) Padding(padding: const EdgeInsets.only(bottom: 15), child: widget.message!),
           if (widget.isTextField)
             TextField(
               focusNode: _node,
               controller: _controller,
+              minLines: 1,
               decoration: InputDecoration(
                 hintText: widget.hintText,
                 enabledBorder: OutlineInputBorder(

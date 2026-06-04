@@ -18,6 +18,7 @@ import 'package:uniceps/app/presentation/home/widgets/routine_skeleton.dart';
 import 'package:uniceps/app/presentation/practice/screens/practice_screen.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_with_heat.dart';
 import 'package:uniceps/app/presentation/settings/dialogs/qr_alert_dialog.dart';
+import 'package:uniceps/app/services/file_handler_service.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/constants/constants.dart';
@@ -38,6 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
   final panelController = PanelController();
 
   bool notifyUpgrade = true;
+
+  @override
+  void initState() {
+    super.initState();
+    FileHandlerService().setAppReady();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +99,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
                     icon: const Icon(Icons.settings, color: Colors.blueGrey),
                   ),
+                  if (const String.fromEnvironment('VERSION_SUFFIX').isNotEmpty)
+                    IconButton(
+                      onPressed: () => Navigator.pushNamed(context, AppRoutes.dietPlans),
+                      icon: const Icon(Icons.restaurant_menu_outlined),
+                      color: Colors.blueGrey,
+                    ),
                 ],
               ),
               body: Stack(
@@ -163,7 +176,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                         ),
-                        const SizedBox(),
                         BlocBuilder<DailyQuoteCubit, DailyQuoteState>(
                           builder: (context, state) => state.map(
                             initial: (_) => const LoadingIndicator(),

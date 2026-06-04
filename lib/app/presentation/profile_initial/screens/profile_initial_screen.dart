@@ -170,6 +170,7 @@ class _ProfileInitialScreenState extends State<ProfileInitialScreen> {
                     );
                     context.read<AppConfigCubit>().changeGoalTo(goal!);
                     context.read<AppConfigCubit>().changeActivityLevelTo(activityLevel!);
+                    Navigator.pushReplacementNamed(context, AppRoutes.home);
                   }
                 },
                 child: Text(_currentPage == 4 ? locale.save : locale.next),

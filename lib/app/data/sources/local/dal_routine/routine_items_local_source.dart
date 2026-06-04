@@ -12,6 +12,8 @@ abstract class IRoutineItemsLocalSourceContract {
   Future<List<RoutineItemDto>> getItemsByDay(int dayId);
   Future<List<RoutineItemDto>> addItems(List<RoutineItemDto> list);
   Future<List<RoutineItemDto>> reorderItems(List<RoutineItemDto> list);
+
+  Future<void> addDescriptionToItem(int itemId, String? description);
   Future<void> removeItem(RoutineItemDto item);
 
   Future<void> copySetsToAll(int dayId, int itemId);
@@ -87,6 +89,13 @@ class RoutineItemsLocalSourceImpl implements IRoutineItemsLocalSourceContract {
       );
     }
     return result;
+  }
+
+  @override
+  Future<void> addDescriptionToItem(int itemId, String? description) async {
+    await (_database.update(
+      _database.routineItems,
+    )..where((tbl) => tbl.id.equals(itemId))).write(RoutineItemsCompanion(notes: Value(description)));
   }
 
   @override

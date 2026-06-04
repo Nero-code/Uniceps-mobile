@@ -286,6 +286,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addExercise => 'اضافة تمرين';
 
   @override
+  String get addExerciseDescription => 'ضع ملاحظات على التمرين';
+
+  @override
   String get addRoutine => 'اضافة برنامج';
 
   @override
@@ -888,4 +891,67 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get downloadingExercises => 'جاري تحميل التمارين';
+
+  @override
+  String get fileName => 'اسم الملف';
+
+  @override
+  String get source => 'المصدر';
+
+  @override
+  String get fileType => 'نوع الملف';
+
+  @override
+  String get schemaVersion => 'إصدار المخطط';
+
+  @override
+  String get errUnsupportedFileType => 'نوع ملف غير مدعوم';
+
+  @override
+  String get errFileParse => 'فشل في تحليل الملف';
+
+  @override
+  String get dietPlans => 'البرامج الغذائية';
+
+  @override
+  String get addPlan => 'إضافة برنامج';
+
+  @override
+  String get renamePlan => 'تغيير اسم البرنامج';
+
+  @override
+  String get deletePlan => 'حذف البرنامج الغذائي';
+
+  @override
+  String get myDietPlans => 'برامجي الغذائية';
+
+  @override
+  String get createFirstPlan => 'أنشئ برنامجك الأول';
+
+  @override
+  String get createdOn => 'أنشئ في';
+
+  @override
+  String get noDaysInPlan => 'لا يوجد أيام في هذا البرنامج';
+
+  @override
+  String get addMeal => 'إضافة وجبة';
+
+  @override
+  String get deleteMeal => 'حذف الوجبة';
+
+  @override
+  String get ingredients => 'المكونات';
+
+  @override
+  String get addIngredient => 'إضافة مكون';
+
+  @override
+  String get all => 'الكل';
+
+  @override
+  String get enterAmountGrams => 'أدخل الكمية (بالغرام)';
+
+  @override
+  String get caloriesPer100g => 'لكل 100 غرام';
 }

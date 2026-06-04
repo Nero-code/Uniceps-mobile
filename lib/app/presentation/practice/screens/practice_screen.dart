@@ -26,7 +26,9 @@ class PracticeScreen extends StatefulWidget {
 
 class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObserver {
   int? expandedId, totalProgress, totalSets;
+  int defaultTotalSets = 0;
   TSession? currentSession;
+  double oldTotalWeights = 0.0;
   @override
   initState() {
     super.initState();
@@ -99,6 +101,8 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
             builder: (context) => SessionResultsDialog(
               session: session,
               progress: (totalProgress != null && totalProgress != 0) ? (session.logs.length / totalProgress!) : 0,
+              oldTotalWeights: oldTotalWeights,
+              defaultTotalSets: defaultTotalSets,
             ),
           );
         },
@@ -157,6 +161,12 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
                           if (state is PracticeLoadedState) {
                             if (state.day.exercises.isNotEmpty && totalProgress == null) {
                               totalProgress = state.day.exercises.map((e) => e.sets.length).reduce((a, b) => a + b);
+                              defaultTotalSets = state.day.exercises
+                                  .expand((e) => e.sets.map((s) => s.reps))
+                                  .fold(0, (sum, reps) => sum + reps);
+                              oldTotalWeights = state.day.exercises
+                                  .expand((e) => e.sets.map((s) => s.weight ?? 0.0))
+                                  .fold(0.0, (sum, weight) => sum + weight);
                             }
 
                             return SingleChildScrollView(
@@ -178,6 +188,7 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
                                           exIndex: i.index,
                                           sets: i.sets,
                                           totalProgress: totalProgress ?? 0,
+                                          description: i.description,
                                           logs: sessionState.session.logs
                                               .where((log) => log.exerciseId == i.exercise.apiId)
                                               .toList(),

@@ -55,12 +55,13 @@ extension RoutinesWithHeatEventPatterns on RoutinesWithHeatEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _GetRoutines value)?  getRoutines,TResult Function( _Import value)?  import,TResult Function( _Export value)?  export,TResult Function( _Create value)?  create,TResult Function( _Update value)?  update,TResult Function( _Delete value)?  delete,TResult Function( _SetCurrent value)?  setCurrent,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _GetRoutines value)?  getRoutines,TResult Function( _Import value)?  import,TResult Function( _ImportUniFile value)?  importUniFile,TResult Function( _Export value)?  export,TResult Function( _Create value)?  create,TResult Function( _Update value)?  update,TResult Function( _Delete value)?  delete,TResult Function( _SetCurrent value)?  setCurrent,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _GetRoutines() when getRoutines != null:
 return getRoutines(_that);case _Import() when import != null:
-return import(_that);case _Export() when export != null:
+return import(_that);case _ImportUniFile() when importUniFile != null:
+return importUniFile(_that);case _Export() when export != null:
 return export(_that);case _Create() when create != null:
 return create(_that);case _Update() when update != null:
 return update(_that);case _Delete() when delete != null:
@@ -83,12 +84,13 @@ return setCurrent(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _GetRoutines value)  getRoutines,required TResult Function( _Import value)  import,required TResult Function( _Export value)  export,required TResult Function( _Create value)  create,required TResult Function( _Update value)  update,required TResult Function( _Delete value)  delete,required TResult Function( _SetCurrent value)  setCurrent,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _GetRoutines value)  getRoutines,required TResult Function( _Import value)  import,required TResult Function( _ImportUniFile value)  importUniFile,required TResult Function( _Export value)  export,required TResult Function( _Create value)  create,required TResult Function( _Update value)  update,required TResult Function( _Delete value)  delete,required TResult Function( _SetCurrent value)  setCurrent,}){
 final _that = this;
 switch (_that) {
 case _GetRoutines():
 return getRoutines(_that);case _Import():
-return import(_that);case _Export():
+return import(_that);case _ImportUniFile():
+return importUniFile(_that);case _Export():
 return export(_that);case _Create():
 return create(_that);case _Update():
 return update(_that);case _Delete():
@@ -110,12 +112,13 @@ return setCurrent(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _GetRoutines value)?  getRoutines,TResult? Function( _Import value)?  import,TResult? Function( _Export value)?  export,TResult? Function( _Create value)?  create,TResult? Function( _Update value)?  update,TResult? Function( _Delete value)?  delete,TResult? Function( _SetCurrent value)?  setCurrent,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _GetRoutines value)?  getRoutines,TResult? Function( _Import value)?  import,TResult? Function( _ImportUniFile value)?  importUniFile,TResult? Function( _Export value)?  export,TResult? Function( _Create value)?  create,TResult? Function( _Update value)?  update,TResult? Function( _Delete value)?  delete,TResult? Function( _SetCurrent value)?  setCurrent,}){
 final _that = this;
 switch (_that) {
 case _GetRoutines() when getRoutines != null:
 return getRoutines(_that);case _Import() when import != null:
-return import(_that);case _Export() when export != null:
+return import(_that);case _ImportUniFile() when importUniFile != null:
+return importUniFile(_that);case _Export() when export != null:
 return export(_that);case _Create() when create != null:
 return create(_that);case _Update() when update != null:
 return update(_that);case _Delete() when delete != null:
@@ -137,11 +140,12 @@ return setCurrent(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  getRoutines,TResult Function()?  import,TResult Function( int routineId)?  export,TResult Function( String name)?  create,TResult Function( Routine update)?  update,TResult Function( Routine delete)?  delete,TResult Function( Routine update)?  setCurrent,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  getRoutines,TResult Function()?  import,TResult Function( UniFile file)?  importUniFile,TResult Function( int routineId)?  export,TResult Function( String name)?  create,TResult Function( Routine update)?  update,TResult Function( Routine delete)?  delete,TResult Function( Routine update)?  setCurrent,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GetRoutines() when getRoutines != null:
 return getRoutines();case _Import() when import != null:
-return import();case _Export() when export != null:
+return import();case _ImportUniFile() when importUniFile != null:
+return importUniFile(_that.file);case _Export() when export != null:
 return export(_that.routineId);case _Create() when create != null:
 return create(_that.name);case _Update() when update != null:
 return update(_that.update);case _Delete() when delete != null:
@@ -164,11 +168,12 @@ return setCurrent(_that.update);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  getRoutines,required TResult Function()  import,required TResult Function( int routineId)  export,required TResult Function( String name)  create,required TResult Function( Routine update)  update,required TResult Function( Routine delete)  delete,required TResult Function( Routine update)  setCurrent,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  getRoutines,required TResult Function()  import,required TResult Function( UniFile file)  importUniFile,required TResult Function( int routineId)  export,required TResult Function( String name)  create,required TResult Function( Routine update)  update,required TResult Function( Routine delete)  delete,required TResult Function( Routine update)  setCurrent,}) {final _that = this;
 switch (_that) {
 case _GetRoutines():
 return getRoutines();case _Import():
-return import();case _Export():
+return import();case _ImportUniFile():
+return importUniFile(_that.file);case _Export():
 return export(_that.routineId);case _Create():
 return create(_that.name);case _Update():
 return update(_that.update);case _Delete():
@@ -190,11 +195,12 @@ return setCurrent(_that.update);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  getRoutines,TResult? Function()?  import,TResult? Function( int routineId)?  export,TResult? Function( String name)?  create,TResult? Function( Routine update)?  update,TResult? Function( Routine delete)?  delete,TResult? Function( Routine update)?  setCurrent,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  getRoutines,TResult? Function()?  import,TResult? Function( UniFile file)?  importUniFile,TResult? Function( int routineId)?  export,TResult? Function( String name)?  create,TResult? Function( Routine update)?  update,TResult? Function( Routine delete)?  delete,TResult? Function( Routine update)?  setCurrent,}) {final _that = this;
 switch (_that) {
 case _GetRoutines() when getRoutines != null:
 return getRoutines();case _Import() when import != null:
-return import();case _Export() when export != null:
+return import();case _ImportUniFile() when importUniFile != null:
+return importUniFile(_that.file);case _Export() when export != null:
 return export(_that.routineId);case _Create() when create != null:
 return create(_that.name);case _Update() when update != null:
 return update(_that.update);case _Delete() when delete != null:
@@ -270,6 +276,72 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class _ImportUniFile implements RoutinesWithHeatEvent {
+  const _ImportUniFile(this.file);
+  
+
+ final  UniFile file;
+
+/// Create a copy of RoutinesWithHeatEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ImportUniFileCopyWith<_ImportUniFile> get copyWith => __$ImportUniFileCopyWithImpl<_ImportUniFile>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ImportUniFile&&(identical(other.file, file) || other.file == file));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,file);
+
+@override
+String toString() {
+  return 'RoutinesWithHeatEvent.importUniFile(file: $file)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ImportUniFileCopyWith<$Res> implements $RoutinesWithHeatEventCopyWith<$Res> {
+  factory _$ImportUniFileCopyWith(_ImportUniFile value, $Res Function(_ImportUniFile) _then) = __$ImportUniFileCopyWithImpl;
+@useResult
+$Res call({
+ UniFile file
+});
+
+
+
+
+}
+/// @nodoc
+class __$ImportUniFileCopyWithImpl<$Res>
+    implements _$ImportUniFileCopyWith<$Res> {
+  __$ImportUniFileCopyWithImpl(this._self, this._then);
+
+  final _ImportUniFile _self;
+  final $Res Function(_ImportUniFile) _then;
+
+/// Create a copy of RoutinesWithHeatEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? file = null,}) {
+  return _then(_ImportUniFile(
+null == file ? _self.file : file // ignore: cast_nullable_to_non_nullable
+as UniFile,
+  ));
+}
+
+
+}
 
 /// @nodoc
 

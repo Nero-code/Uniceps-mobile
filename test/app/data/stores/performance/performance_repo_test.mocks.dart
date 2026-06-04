@@ -444,6 +444,15 @@ class MockIExercisesLocalSourceContract extends _i1.Mock
           as _i9.Future<void>);
 
   @override
+  _i9.Future<void> writeExercises(List<_i18.ExerciseDto>? exercises) =>
+      (super.noSuchMethod(
+            Invocation.method(#writeExercises, [exercises]),
+            returnValue: _i9.Future<void>.value(),
+            returnValueForMissingStub: _i9.Future<void>.value(),
+          )
+          as _i9.Future<void>);
+
+  @override
   _i9.Future<bool> containsImage(String? id) =>
       (super.noSuchMethod(
             Invocation.method(#containsImage, [id]),

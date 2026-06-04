@@ -4,6 +4,7 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/sets_edit/sets_edit_bloc.dart';
 import 'package:uniceps/app/presentation/routine/screens/routine_edit_sets_screen.dart';
+import 'package:uniceps/core/widgets/app_dialog.dart';
 import 'package:uniceps/core/widgets/box_botton.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/l10n/app_localizations.dart';
@@ -41,13 +42,16 @@ class _RoutineItemHorizontalWidgetState extends State<RoutineItemHorizontalWidge
                     await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (c) => BlocProvider.value(
-                          value: context.read<SetsEditBloc>(),
-                          child: RoutineEditSetsScreen(item: widget.item),
+                        builder: (c) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(value: context.read<SetsEditBloc>()),
+                            BlocProvider.value(value: context.read<ItemsEditBloc>()),
+                          ],
+                          child: RoutineEditSetsScreen(itemId: widget.item.id!),
                         ),
                       ),
                     );
-                    setState(() {});
+                    // setState(() {});
                   },
                   child: Container(
                     decoration: const BoxDecoration(
@@ -101,7 +105,26 @@ class _RoutineItemHorizontalWidgetState extends State<RoutineItemHorizontalWidge
                                 background: Colors.transparent,
                                 borderRadius: 50,
                                 padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
-                                onTap: () => widget.copyToAll(widget.item.id!),
+                                onTap: () {
+                                  final state = context.read<SetsEditBloc>().state;
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => AppDialog(
+                                      type: .confirm,
+                                      title: locale.applyToAll,
+                                      message: state is SetsEditLoadedState
+                                          ? Text(
+                                              state.sets.map((s) => "${s.reps}").join(" x "),
+                                              textDirection: .ltr,
+                                              style: const TextStyle(fontWeight: .bold, fontSize: 20),
+                                            )
+                                          : null,
+
+                                      onConfirm: () => widget.copyToAll(widget.item.id!),
+                                    ),
+                                  );
+                                  ;
+                                },
                                 child: Text(
                                   locale.applyToAll,
                                   style: TextStyle(fontSize: 10, color: Theme.of(context).colorScheme.primary),

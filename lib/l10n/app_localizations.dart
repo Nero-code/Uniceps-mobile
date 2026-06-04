@@ -638,6 +638,12 @@ abstract class AppLocalizations {
   /// **'Add Exercise'**
   String get addExercise;
 
+  /// No description provided for @addExerciseDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add description to exercise'**
+  String get addExerciseDescription;
+
   /// No description provided for @addRoutine.
   ///
   /// In en, this message translates to:
@@ -1795,6 +1801,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Downloading Exercises'**
   String get downloadingExercises;
+
+  /// No description provided for @fileName.
+  ///
+  /// In en, this message translates to:
+  /// **'File Name'**
+  String get fileName;
+
+  /// No description provided for @source.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get source;
+
+  /// No description provided for @fileType.
+  ///
+  /// In en, this message translates to:
+  /// **'File Type'**
+  String get fileType;
+
+  /// No description provided for @schemaVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Schema Version'**
+  String get schemaVersion;
+
+  /// No description provided for @errUnsupportedFileType.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported file type'**
+  String get errUnsupportedFileType;
+
+  /// No description provided for @errFileParse.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to parse file'**
+  String get errFileParse;
+
+  /// No description provided for @dietPlans.
+  ///
+  /// In en, this message translates to:
+  /// **'Diet Plans'**
+  String get dietPlans;
+
+  /// No description provided for @addPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Plan'**
+  String get addPlan;
+
+  /// No description provided for @renamePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename Plan'**
+  String get renamePlan;
+
+  /// No description provided for @deletePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Plan'**
+  String get deletePlan;
+
+  /// No description provided for @myDietPlans.
+  ///
+  /// In en, this message translates to:
+  /// **'My Diet Plans'**
+  String get myDietPlans;
+
+  /// No description provided for @createFirstPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Create First Plan'**
+  String get createFirstPlan;
+
+  /// No description provided for @createdOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Created on'**
+  String get createdOn;
+
+  /// No description provided for @noDaysInPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'No days in this plan'**
+  String get noDaysInPlan;
+
+  /// No description provided for @addMeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Meal'**
+  String get addMeal;
+
+  /// No description provided for @deleteMeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Meal'**
+  String get deleteMeal;
+
+  /// No description provided for @ingredients.
+  ///
+  /// In en, this message translates to:
+  /// **'Ingredients'**
+  String get ingredients;
+
+  /// No description provided for @addIngredient.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Ingredient'**
+  String get addIngredient;
+
+  /// No description provided for @all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
+  /// No description provided for @enterAmountGrams.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter amount (grams)'**
+  String get enterAmountGrams;
+
+  /// No description provided for @caloriesPer100g.
+  ///
+  /// In en, this message translates to:
+  /// **'per 100g'**
+  String get caloriesPer100g;
 }
 
 class _AppLocalizationsDelegate

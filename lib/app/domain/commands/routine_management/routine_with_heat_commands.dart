@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/data/models/routine_result.dart';
+import 'package:uniceps/app/data/services/unifile/unifile.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_with_heat_contract.dart';
@@ -22,5 +23,6 @@ class RoutineWithHeatCommands {
       _repo.setCurrentRoutine(routine);
 
   Stream<RoutineResult> importRoutine() => _repo.importRoutineFromFile();
+  Stream<RoutineResult> importUniFile(UniFile file) => _repo.importRoutine(file);
   Future<bool> exportRoutineToFile(int routineId) => _repo.exportRoutineToFile(routineId);
 }
