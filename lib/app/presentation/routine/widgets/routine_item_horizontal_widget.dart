@@ -42,13 +42,16 @@ class _RoutineItemHorizontalWidgetState extends State<RoutineItemHorizontalWidge
                     await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (c) => BlocProvider.value(
-                          value: context.read<SetsEditBloc>(),
-                          child: RoutineEditSetsScreen(item: widget.item),
+                        builder: (c) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(value: context.read<SetsEditBloc>()),
+                            BlocProvider.value(value: context.read<ItemsEditBloc>()),
+                          ],
+                          child: RoutineEditSetsScreen(itemId: widget.item.id!),
                         ),
                       ),
                     );
-                    setState(() {});
+                    // setState(() {});
                   },
                   child: Container(
                     decoration: const BoxDecoration(

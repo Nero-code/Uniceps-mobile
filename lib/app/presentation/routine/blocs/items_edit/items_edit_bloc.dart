@@ -24,6 +24,16 @@ class ItemsEditBloc extends Bloc<ItemsEditEvent, ItemsEditState> {
       final either = await _commands.addItems(event.dayId, event.items);
       either.fold((l) => emit(ItemsEditErrorState(failure: l)), (r) => emit(ItemsEditLoadedState(items: r)));
     });
+    on<UpdateRoutineItemDescription>((event, emit) async {
+      emit(ItemsEditLoadingState());
+
+      final either = await _commands.updateItemDescription(event.itemId, event.description);
+      // either.fold((l) => emit(ItemsEditErrorState(failure: l)), (r) => emit(ItemsEditLoadedState(items: r)));
+      either.fold(
+        (l) => emit(ItemsEditErrorState(failure: l)),
+        (r) => add(GetRoutineDayItemsEvent(dayId: event.dayId)),
+      );
+    });
 
     on<RemoveRoutineItemEvent>((event, emit) async {
       emit(ItemsEditLoadingState());

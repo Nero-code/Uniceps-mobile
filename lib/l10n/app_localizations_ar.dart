@@ -286,6 +286,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addExercise => 'اضافة تمرين';
 
   @override
+  String get addExerciseDescription => 'ضع ملاحظات على التمرين';
+
+  @override
   String get addRoutine => 'اضافة برنامج';
 
   @override

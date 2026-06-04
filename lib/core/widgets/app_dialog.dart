@@ -13,6 +13,7 @@ class AppDialog extends StatefulWidget {
   final void Function(String)? onConfirmText;
   final VoidCallback? onConfirm;
   final bool isTextField;
+  final int maxLines;
 
   const AppDialog({
     super.key,
@@ -25,6 +26,7 @@ class AppDialog extends StatefulWidget {
     this.onConfirmText,
     this.onConfirm,
     this.isTextField = false,
+    this.maxLines = 1,
   });
 
   static Future<void> show({
@@ -38,6 +40,7 @@ class AppDialog extends StatefulWidget {
     void Function(String)? onConfirmText,
     VoidCallback? onConfirm,
     bool isTextField = false,
+    int maxLines = 1,
   }) {
     return showDialog(
       context: context,
@@ -51,6 +54,7 @@ class AppDialog extends StatefulWidget {
         onConfirmText: onConfirmText,
         onConfirm: onConfirm,
         isTextField: isTextField,
+        maxLines: maxLines,
       ),
     );
   }
@@ -118,6 +122,7 @@ class _AppDialogState extends State<AppDialog> {
             TextField(
               focusNode: _node,
               controller: _controller,
+              minLines: 1,
               decoration: InputDecoration(
                 hintText: widget.hintText,
                 enabledBorder: OutlineInputBorder(

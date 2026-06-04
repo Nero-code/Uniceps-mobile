@@ -27,6 +27,8 @@ class PracticeBody extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (description != null)
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0), child: Text(description!)),
         for (int i = 0; i < sets.length; i++) ...[
           RoundWidget(
             // onLog: () {},

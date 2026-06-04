@@ -29,6 +29,7 @@ class RoutineItem {
     Exercise? exercise,
     List<RoutineSet>? sets,
     String? description,
+    bool removeDescription = false,
     int? version,
     bool? isSynced,
   }) => RoutineItem(
@@ -38,7 +39,7 @@ class RoutineItem {
     index: index ?? this.index,
     exercise: exercise ?? this.exercise,
     sets: sets ?? this.sets,
-    description: description ?? this.description,
+    description: removeDescription ? null : description ?? this.description,
     version: version ?? this.version,
     isSynced: isSynced ?? this.isSynced,
   );

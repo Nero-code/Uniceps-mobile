@@ -79,13 +79,14 @@ class SessionResultsDialog extends StatelessWidget {
                         ),
                         Row(
                           crossAxisAlignment: .end,
+                          textDirection: .rtl,
                           children: [
                             Expanded(
                               child: Column(
                                 mainAxisSize: .min,
                                 children: [
                                   Transform.flip(
-                                    flipX: Directionality.of(context) == .rtl,
+                                    flipX: true,
                                     child: Image.asset(CaptainImages.membership, height: 140, fit: BoxFit.contain),
                                   ),
                                 ],

@@ -89,6 +89,7 @@
   "list": "List",
   "attendenceLog": "Attendence Log",
   "addExercise": "Add Exercise",
+  "addExerciseDescription": "Add description to exercise",
   "addRoutine": "Add Routine",
   "scrTitleMyRoutines": "My Routines",
   "scrTitleProfile": "Profile",
