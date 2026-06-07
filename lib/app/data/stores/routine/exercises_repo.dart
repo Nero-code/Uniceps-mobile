@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart';
@@ -102,18 +103,17 @@ class ExercisesRepo implements IExercisesContract {
   Future<Either<Failure, List<Exercise>>> getExercisesLib() async {
     if (exercisesLib.isNotEmpty) return Right(exercisesLib);
 
-    if (await _internet.hasConnection) {
-      try {
-        final res = await _remoteSource.getAllExercises();
+    try {
+      final res = await _remoteSource.getAllExercises();
 
-        exercisesLib.clear();
-        exercisesLib.addAll(res.map((e) => e.toEntity()));
-        return Right(exercisesLib);
-      } catch (e) {
-        return Left(ServerFailure(errMsg: e.toString()));
-      }
+      exercisesLib.clear();
+      exercisesLib.addAll(res.map((e) => e.toEntity()));
+      return Right(exercisesLib);
+    } on ClientException {
+      return Left(OfflineFailure(errorMessage: ""));
+    } catch (e) {
+      return Left(ServerFailure(errMsg: e.toString()));
     }
-    return Left(OfflineFailure(errorMessage: ""));
   }
 
   @override

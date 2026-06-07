@@ -43,4 +43,21 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     final config = await _appConfigsService.changeAppConfigs(activityLevel: level);
     emit(.appConfig(config: config));
   }
+
+  Future<void> copyWith({
+    String? appLanguage,
+    String? exerciseLibLanguage,
+    ThemeMode? mode,
+    Goal? goal,
+    ActivityLevel? level,
+  }) async {
+    final config = await _appConfigsService.changeAppConfigs(
+      appLanguage: appLanguage != null ? Locale(appLanguage) : null,
+      exerciseLibLanguage: exerciseLibLanguage != null ? Locale(exerciseLibLanguage) : null,
+      mode: mode,
+      goal: goal,
+      activityLevel: level,
+    );
+    emit(.appConfig(config: config));
+  }
 }
