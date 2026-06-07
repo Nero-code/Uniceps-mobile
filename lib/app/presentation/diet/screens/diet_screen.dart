@@ -102,192 +102,185 @@ class _DietScreenState extends State<DietScreen> {
 
                   final currentDay = days[_selectedDayIndex];
 
-                  return Column(
-                    children: [
-                      // Day Selector
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Row(
-                          children: days.asMap().entries.map((entry) {
-                            final index = entry.key;
-                            final day = entry.value;
-                            final isSelected = index == _selectedDayIndex;
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: GestureDetector(
-                                onLongPress: () => showDialog(
-                                  context: context,
-                                  builder: (optionsContext) => SimpleDialog(
-                                    title: Text(day.name),
-                                    children: [
-                                      SimpleDialogOption(
-                                        onPressed: () {
-                                          Navigator.pop(optionsContext);
-                                          showDialog(
-                                            context: context,
-                                            builder: (_) => BlocProvider.value(
-                                              value: context.read<DietDayBloc>(),
-                                              child: DietDayAddEditDialog(planId: widget.plan.id!, day: day),
-                                            ),
-                                          );
-                                        },
-                                        child: Row(
-                                          children: [
-                                            const Icon(Icons.edit_outlined, size: 20),
-                                            const SizedBox(width: 12),
-                                            Text(l10n.rename),
-                                          ],
-                                        ),
-                                      ),
-                                      SimpleDialogOption(
-                                        onPressed: () {
-                                          Navigator.pop(optionsContext);
-                                          showDialog(
-                                            context: context,
-                                            builder: (_) => BlocProvider.value(
-                                              value: context.read<DietDayBloc>(),
-                                              child: DeleteDietDayDialog(
-                                                planId: widget.plan.id!,
-                                                day: day,
-                                                onDelete: () {
-                                                  if (_selectedDayIndex > 0) {
-                                                    setState(() => _selectedDayIndex--);
-                                                  }
-                                                },
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        // Day Selector
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Row(
+                            children: days.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final day = entry.value;
+                              final isSelected = index == _selectedDayIndex;
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: GestureDetector(
+                                  onLongPress: () => showDialog(
+                                    context: context,
+                                    builder: (optionsContext) => SimpleDialog(
+                                      title: Text(day.name),
+                                      children: [
+                                        SimpleDialogOption(
+                                          onPressed: () {
+                                            Navigator.pop(optionsContext);
+                                            showDialog(
+                                              context: context,
+                                              builder: (_) => BlocProvider.value(
+                                                value: context.read<DietDayBloc>(),
+                                                child: DietDayAddEditDialog(planId: widget.plan.id!, day: day),
                                               ),
-                                            ),
-                                          );
-                                        },
-                                        child: Row(
-                                          children: [
-                                            const Icon(Icons.delete_outline, color: Colors.red, size: 20),
-                                            const SizedBox(width: 12),
-                                            Text(l10n.delete, style: const TextStyle(color: Colors.red)),
-                                          ],
+                                            );
+                                          },
+                                          child: Row(
+                                            children: [
+                                              const Icon(Icons.edit_outlined, size: 20),
+                                              const SizedBox(width: 12),
+                                              Text(l10n.rename),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                child: ChoiceChip(
-                                  label: Text(day.name),
-                                  selectedColor: Colors.blue.shade100,
-                                  selected: isSelected,
-                                  onSelected: (selected) {
-                                    if (selected) setState(() => _selectedDayIndex = index);
-                                  },
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-
-                      // Day Summary
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: DietMacroSummary(
-                          calories: currentDay.calories,
-                          protein: currentDay.protein,
-                          carbs: currentDay.carbs,
-                          fats: currentDay.fats,
-                        ),
-                      ),
-
-                      if (widget.plan.description != null && widget.plan.description!.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              widget.plan.description!,
-                              style: const TextStyle(fontSize: 12, fontStyle: FontStyle.italic, color: Colors.grey),
-                            ),
-                          ),
-                        ),
-
-                      // Meals List
-                      Expanded(
-                        child: ListView.builder(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          itemCount: currentDay.meals.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index == currentDay.meals.length) {
-                              return ListTile(
-                                leading: const Icon(Icons.add),
-                                title: Text(l10n.addMeal),
-                                onTap: () => showDialog(
-                                  context: context,
-                                  builder: (_) => BlocProvider.value(
-                                    value: context.read<DietMealBloc>(),
-                                    child: DietMealAddEditDialog(
-                                      dayId: currentDay.id!,
-                                      defaultName: 'Meal #${currentDay.meals.length + 1}',
+                                        SimpleDialogOption(
+                                          onPressed: () {
+                                            Navigator.pop(optionsContext);
+                                            showDialog(
+                                              context: context,
+                                              builder: (_) => BlocProvider.value(
+                                                value: context.read<DietDayBloc>(),
+                                                child: DeleteDietDayDialog(
+                                                  planId: widget.plan.id!,
+                                                  day: day,
+                                                  onDelete: () {
+                                                    if (_selectedDayIndex > 0) {
+                                                      setState(() => _selectedDayIndex--);
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Row(
+                                            children: [
+                                              const Icon(Icons.delete_outline, color: Colors.red, size: 20),
+                                              const SizedBox(width: 12),
+                                              Text(l10n.delete, style: const TextStyle(color: Colors.red)),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
+                                  ),
+                                  child: ChoiceChip(
+                                    label: Text(day.name),
+                                    selectedColor: Colors.blue.shade100,
+                                    selected: isSelected,
+                                    onSelected: (selected) {
+                                      if (selected) setState(() => _selectedDayIndex = index);
+                                    },
                                   ),
                                 ),
                               );
-                            }
-                            final meal = currentDay.meals[index];
-                            return Card(
-                              elevation: 0,
-                              color: Colors.white,
-                              margin: const EdgeInsets.only(bottom: 12),
-                              child: ListTile(
-                                title: Text(meal.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    if (meal.description != null && meal.description!.isNotEmpty)
-                                      Padding(
-                                        padding: const EdgeInsets.only(bottom: 4.0),
-                                        child: Text(
-                                          meal.description!,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(fontSize: 12, color: Colors.blueGrey),
-                                        ),
+                            }).toList(),
+                          ),
+                        ),
+
+                        // Day Summary
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: DietMacroSummary(
+                            calories: currentDay.calories,
+                            protein: currentDay.protein,
+                            carbs: currentDay.carbs,
+                            fats: currentDay.fats,
+                          ),
+                        ),
+
+                        if (widget.plan.description != null && widget.plan.description!.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                widget.plan.description!,
+                                style: const TextStyle(fontSize: 12, fontStyle: FontStyle.italic, color: Colors.grey),
+                              ),
+                            ),
+                          ),
+
+                        // Meals List
+                        ...currentDay.meals.map(
+                          (meal) => Card(
+                            elevation: 0,
+                            color: Colors.white,
+                            margin: const EdgeInsets.only(bottom: 12),
+                            child: ListTile(
+                              title: Text(meal.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (meal.description != null && meal.description!.isNotEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 4.0),
+                                      child: Text(
+                                        meal.description!,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 12, color: Colors.blueGrey),
                                       ),
-                                    Text('${meal.calories.toStringAsFixed(0)} kcal'),
-                                    DietMacroSummary(
-                                      calories: meal.calories,
-                                      protein: meal.protein,
-                                      carbs: meal.carbs,
-                                      fats: meal.fats,
-                                      compact: true,
                                     ),
-                                  ],
-                                ),
-                                trailing: IconButton(
-                                  icon: const Icon(Icons.edit_outlined),
-                                  onPressed: () => showDialog(
-                                    context: context,
-                                    builder: (_) => BlocProvider.value(
-                                      value: context.read<DietMealBloc>(),
-                                      child: DietMealAddEditDialog(dayId: currentDay.id!, meal: meal),
-                                    ),
+                                  Text('${meal.calories.toStringAsFixed(0)} kcal'),
+                                  DietMacroSummary(
+                                    calories: meal.calories,
+                                    protein: meal.protein,
+                                    carbs: meal.carbs,
+                                    fats: meal.fats,
+                                    compact: true,
                                   ),
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => MealDetailsScreen(meal: meal)),
-                                  );
-                                },
-                                onLongPress: () => showDialog(
+                                ],
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.edit_outlined),
+                                onPressed: () => showDialog(
                                   context: context,
                                   builder: (_) => BlocProvider.value(
                                     value: context.read<DietMealBloc>(),
-                                    child: DeleteDietMealDialog(dayId: currentDay.id!, meal: meal),
+                                    child: DietMealAddEditDialog(dayId: currentDay.id!, meal: meal),
                                   ),
                                 ),
                               ),
-                            );
-                          },
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => MealDetailsScreen(meal: meal)),
+                                );
+                              },
+                              onLongPress: () => showDialog(
+                                context: context,
+                                builder: (_) => BlocProvider.value(
+                                  value: context.read<DietMealBloc>(),
+                                  child: DeleteDietMealDialog(dayId: currentDay.id!, meal: meal),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                        ListTile(
+                          leading: const Icon(Icons.add),
+                          title: Text(l10n.addMeal),
+                          onTap: () => showDialog(
+                            context: context,
+                            builder: (_) => BlocProvider.value(
+                              value: context.read<DietMealBloc>(),
+                              child: DietMealAddEditDialog(
+                                dayId: currentDay.id!,
+                                defaultName: 'Meal #${currentDay.meals.length + 1}',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 },
                 orElse: () => const SizedBox(),

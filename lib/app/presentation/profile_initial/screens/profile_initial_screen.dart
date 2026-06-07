@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/auth_entities/profile.dart';
@@ -165,11 +167,14 @@ class _ProfileInitialScreenState extends State<ProfileInitialScreen> {
                     _nextPage();
                   } else {
                     // Final save
-                    context.read<ProfileCubit>().initializeProfile(
-                      Profile(name: nameCtl.text.trim(), birthDate: birthDate!, gender: gender!),
+                    unawaited(
+                      context.read<ProfileCubit>().initializeProfile(
+                        Profile(name: nameCtl.text.trim(), birthDate: birthDate!, gender: gender!),
+                      ),
                     );
-                    context.read<AppConfigCubit>().changeGoalTo(goal!);
-                    context.read<AppConfigCubit>().changeActivityLevelTo(activityLevel!);
+                    // context.read<AppConfigCubit>().changeGoalTo(goal!);
+                    // context.read<AppConfigCubit>().changeActivityLevelTo(activityLevel!);
+                    unawaited(context.read<AppConfigCubit>().copyWith(goal: goal, level: activityLevel));
                     Navigator.pushReplacementNamed(context, AppRoutes.home);
                   }
                 },
