@@ -32,8 +32,10 @@ class ProfileRepo implements IProfileService {
   Future<Either<Failure, Unit>> syncProfile() async {
     try {
       final profile = await localSource.getProfileData();
-      await remoteSource.uploadProfile(profile);
-      await localSource.saveProfileData(profile.copyWith(isSynced: true));
+      if (!profile.isSynced) {
+        await remoteSource.uploadProfile(profile);
+        await localSource.saveProfileData(profile.copyWith(isSynced: true));
+      }
       return const Right(unit);
     } on ClientException {
       return Left(NoInternetConnectionFailure(errMsg: ''));
@@ -48,18 +50,11 @@ class ProfileRepo implements IProfileService {
     try {
       final res = await localSource.getProfileData();
 
-      if (!res.isSynced) {
-        if (await networkInfo.hasConnection) {
-          await remoteSource.uploadProfile(res);
-          final syncedRes = res.copyWith(isSynced: true);
-          await localSource.saveProfileData(syncedRes);
+      if (!res.isSynced) syncProfile();
 
-          return Right(syncedRes.toEntity());
-        }
-      }
       return Right(res.toEntity());
-    } catch (e,s) {
-      logger.e('Error getProfile',error: e,stackTrace: s);
+    } catch (e, s) {
+      logger.e('Error getProfile', error: e, stackTrace: s);
       return const Left(EmptyCacheFailure(errorMessage: ""));
     }
   }
