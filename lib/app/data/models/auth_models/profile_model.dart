@@ -70,13 +70,14 @@ class ProfileModel {
     Gender? gender,
     Uint8List? photo,
     bool deletePhoto = false,
+    int? version,
     bool? isSynced,
   }) => ProfileModel(
     name: name ?? this.name,
     birthDate: birthDate ?? this.birthDate,
     gender: gender ?? this.gender,
     photo: deletePhoto ? null : photo ?? this.photo,
-    version: version,
+    version: version ?? this.version,
     isSynced: isSynced ?? this.isSynced,
   );
 }

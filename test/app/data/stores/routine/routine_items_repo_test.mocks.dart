@@ -72,6 +72,15 @@ class MockIRoutineItemsLocalSourceContract extends _i1.Mock
           as _i3.Future<List<_i4.RoutineItemDto>>);
 
   @override
+  _i3.Future<void> addDescriptionToItem(int? itemId, String? description) =>
+      (super.noSuchMethod(
+            Invocation.method(#addDescriptionToItem, [itemId, description]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
   _i3.Future<void> removeItem(_i4.RoutineItemDto? item) =>
       (super.noSuchMethod(
             Invocation.method(#removeItem, [item]),
