@@ -5,9 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uniceps/app/presentation/auth/screens/email_auth_screen.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/exercise_lib/lib_sync_cubit.dart';
-import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/profile/profile_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
@@ -16,11 +17,12 @@ import 'package:uniceps/app/presentation/home/screens/home_screen.dart';
 import 'package:uniceps/app/presentation/measurement/screens/measurement_screen.dart';
 import 'package:uniceps/app/presentation/performance/screens/analytics_screen.dart';
 import 'package:uniceps/app/presentation/plans/screens/plans_screen.dart';
-import 'package:uniceps/app/presentation/profile/screens/profile_initial_screen.dart';
+import 'package:uniceps/app/presentation/profile/profile_screen.dart';
+import 'package:uniceps/app/presentation/profile_initial/screens/profile_initial_screen.dart';
 import 'package:uniceps/app/presentation/routine/screens/routines_heat_screen.dart';
 import 'package:uniceps/app/presentation/settings/screens/about_screen.dart';
-import 'package:uniceps/app/presentation/settings/screens/profile_screen.dart';
 import 'package:uniceps/app/presentation/settings/screens/settings_screen.dart';
+import 'package:uniceps/app/services/file_handler_service.dart';
 import 'package:uniceps/app/services/notification_service.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/firebase_options.dart';
@@ -28,6 +30,7 @@ import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/l10n/app_localizations.dart';
 import 'package:uniceps/splash.dart';
 
+import 'app/services/diet_service.dart';
 import 'core/constants/app_routes.dart';
 
 @pragma('vm:entry-point')
@@ -53,6 +56,10 @@ void main() async {
 
   await NotificationService.init();
 
+  FileHandlerService().init();
+
+  di.sl<DietService>().syncIngredients();
+
   debugPrint('User granted permission: ${settings.authorizationStatus}');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -66,29 +73,26 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => LocaleCubit(languageCacheHelper: di.sl())..getSavedLanguageCode(),
-          lazy: false,
-        ),
         BlocProvider(create: (context) => AccountCubit(di.sl(), di.sl(), di.sl())..getUserAccount(), lazy: false),
-        BlocProvider(
-          create: (context) => MembershipBloc(di.sl())..add(const MembershipEvent.getCurrentPlan()),
-          lazy: false,
-        ),
+        BlocProvider(create: (context) => ProfileCubit(di.sl())..getProfile(), lazy: false),
+        BlocProvider(create: (context) => MembershipBloc(di.sl())..add(const .getCurrentPlan()), lazy: false),
+
         BlocProvider(create: (context) => CurrentRoutineCubit(commands: di.sl())..getCurrentRoutine(), lazy: false),
-        BlocProvider(
-          create: (context) => SessionBloc(commands: di.sl())..add(const SessionEvent.getLastActiveSession()),
-        ),
+        BlocProvider(create: (context) => SessionBloc(commands: di.sl())..add(const .getLastActiveSession())),
+
+        // BlocProvider(create: (context) => DietPlanBloc(di.sl())..add(const .getPlans())),
+        BlocProvider(create: (context) => AppConfigCubit(appConfigsService: di.sl())..loadConfigs(), lazy: false),
         BlocProvider(create: (context) => DailyQuoteCubit(di.sl())..getQuote()),
         BlocProvider(create: (context) => LibSyncCubit(di.sl())),
       ],
-      child: BlocBuilder<LocaleCubit, ChangedLangState>(
+      child: BlocBuilder<AppConfigCubit, AppConfigState>(
         builder: (context, state) {
           return MaterialApp(
+            navigatorKey: FileHandlerService().navigatorKey,
             debugShowCheckedModeBanner: false,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            locale: state.locale,
+            locale: state.config.appLanguage,
             restorationScopeId: "root",
             title: 'Uniceps',
             theme: lightTheme,
@@ -101,8 +105,6 @@ class MyApp extends StatelessWidget {
               AppRoutes.home: (_) => const HomeScreen(),
 
               // ROUTINE
-              // AppRoutes.routineManager: (_) =>
-              //     const RoutineManagementScreen(),
               AppRoutes.routineManager: (_) => const RoutinesHeatScreen(),
 
               //  AUTH
@@ -113,6 +115,10 @@ class MyApp extends StatelessWidget {
               AppRoutes.measurements: (_) => const MeasurementScreen(),
               AppRoutes.performance: (_) => const AnalyticsScreen(),
               AppRoutes.plans: (_) => const PlansScreen(),
+
+              // DIET
+              // AppRoutes.dietPlans: (_) => const DietPlansScreen(),
+              // AppRoutes.dietLogger: (_) => const DietLoggerScreen(dietDay: dietDay),
 
               //  AUX
               AppRoutes.about: (_) => const AboutScreen(),

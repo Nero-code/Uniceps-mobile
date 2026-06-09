@@ -11,12 +11,26 @@ import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
 class SessionResultsDialog extends StatelessWidget {
-  const SessionResultsDialog({super.key, required this.session, required this.progress});
+  const SessionResultsDialog({
+    super.key,
+    required this.session,
+    required this.progress,
+    required this.oldTotalWeights,
+    required this.defaultTotalSets,
+  });
 
   final TSession session;
   final double progress;
 
+  final double oldTotalWeights;
+  final int defaultTotalSets;
+
   final double radius = 24.0;
+
+  String? formatProgression(num first, num second) {
+    if (first == second) return null;
+    return '${(first > second) ? '+' : ''}${NumberFormat.decimalPattern().format(first - second)}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +39,7 @@ class SessionResultsDialog extends StatelessWidget {
 
     // Calculate stats from session
     final totalExercises = session.logs.map((l) => l.exerciseId).toSet().length;
-    final totalSets = session.logs.fold(0, (sum, log) => sum + log.reps);
+    final totalSets = session.logs.fold(0, (sum, log) => sum + log.finishedReps);
     final totalWeight = session.logs.fold(0.0, (sum, log) => sum + log.weight);
     final duration = DateTime.now().difference(session.createdAt);
 
@@ -65,13 +79,14 @@ class SessionResultsDialog extends StatelessWidget {
                         ),
                         Row(
                           crossAxisAlignment: .end,
+                          textDirection: .rtl,
                           children: [
                             Expanded(
                               child: Column(
                                 mainAxisSize: .min,
                                 children: [
                                   Transform.flip(
-                                    flipX: Directionality.of(context) == .rtl,
+                                    flipX: true,
                                     child: Image.asset(CaptainImages.membership, height: 140, fit: BoxFit.contain),
                                   ),
                                 ],
@@ -99,12 +114,12 @@ class SessionResultsDialog extends StatelessWidget {
                           width: MediaQuery.sizeOf(context).width,
                           child: Center(
                             child: Container(
-                              padding: .symmetric(vertical: 5, horizontal: 8),
+                              padding: const .symmetric(vertical: 5, horizontal: 8),
                               decoration: BoxDecoration(color: Colors.white30, borderRadius: .circular(15)),
                               child: Text(
                                 session.dayName,
                                 maxLines: 1,
-                                style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: .bold),
+                                style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: .bold),
                               ),
                             ),
                           ),
@@ -176,12 +191,20 @@ class SessionResultsDialog extends StatelessWidget {
                               icon: Icons.sports,
                               label: locale.setsAndRounds,
                               value: '$totalSets',
+                              progression: formatProgression(totalSets, defaultTotalSets),
+                              isIncrementProgression: totalSets != defaultTotalSets
+                                  ? totalSets > defaultTotalSets
+                                  : null,
                             ),
                             _buildStatCard(
                               context,
                               icon: Icons.monitor_weight_outlined,
                               label: locale.exerciseVolume,
                               value: NumberFormat.decimalPattern().format(totalWeight),
+                              progression: formatProgression(totalWeight, oldTotalWeights),
+                              isIncrementProgression: totalWeight != oldTotalWeights
+                                  ? totalWeight > oldTotalWeights
+                                  : null,
                               unit: 'Kg',
                             ),
                             _buildStatCard(
@@ -233,6 +256,8 @@ class SessionResultsDialog extends StatelessWidget {
     required IconData icon,
     required String label,
     required String value,
+    String? progression,
+    bool? isIncrementProgression,
     String? unit,
   }) {
     final theme = Theme.of(context);
@@ -278,6 +303,20 @@ class SessionResultsDialog extends StatelessWidget {
                 ),
             ],
           ),
+          if (progression != null)
+            Text(
+              '$progression ${unit ?? ''}',
+              style: theme.textTheme.titleMedium?.copyWith(
+                // fontWeight: FontWeight.w400,
+                fontSize: 14,
+                color: isIncrementProgression == null
+                    ? Colors.black54
+                    : isIncrementProgression
+                    ? Colors.green.shade300
+                    : Colors.red.shade300,
+              ),
+              textDirection: .ltr,
+            ),
           Text(
             label,
             style: theme.textTheme.labelSmall?.copyWith(color: Colors.grey),

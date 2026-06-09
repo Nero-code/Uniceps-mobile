@@ -38,8 +38,9 @@ class ExercisesRemoteSourceImpl implements IExercisesRemoteSourceContract {
       ApiRoutes.domain,
       ApiRoutes.exercises,
       ExerciseDto.fromJson,
-      headers: {if (language != null) 'Accept-Language': language},
       needsHeader: false,
+      queryParams: {if (timestamp != null) 'lastSync': timestamp.toIso8601String()},
+      headers: {if (language != null) 'Accept-Language': language},
     );
   }
 

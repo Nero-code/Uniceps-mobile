@@ -416,6 +416,12 @@ abstract class AppLocalizations {
   /// **'Exercises'**
   String get exercises;
 
+  /// No description provided for @similarExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Similar Exercises'**
+  String get similarExercises;
+
   /// No description provided for @applyToAll.
   ///
   /// In en, this message translates to:
@@ -631,6 +637,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add Exercise'**
   String get addExercise;
+
+  /// No description provided for @addExerciseDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add description to exercise'**
+  String get addExerciseDescription;
 
   /// No description provided for @addRoutine.
   ///
@@ -1129,6 +1141,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please choose your Gender'**
   String get genderError;
+
+  /// No description provided for @pNameDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Uniceps! Let\'s get to know you. What should we call you? Your name will be used to personalize your experience.'**
+  String get pNameDescription;
+
+  /// No description provided for @pGenderDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Knowing your gender helps us provide more accurate physiological reports, such as BMR and Body Fat calculations.'**
+  String get pGenderDescription;
+
+  /// No description provided for @pBirthDateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your age is a key factor in many fitness calculations. Please provide your date of birth so we can calculate your stats accurately.'**
+  String get pBirthDateDescription;
+
+  /// No description provided for @profilePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Photo'**
+  String get profilePhoto;
+
+  /// No description provided for @removePhotoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Photo'**
+  String get removePhotoTitle;
+
+  /// No description provided for @removePhotoContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove your profile photo?'**
+  String get removePhotoContent;
+
+  /// No description provided for @pPhotoDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A profile picture makes your account feel like home. You can upload one now or skip this step if you prefer.'**
+  String get pPhotoDescription;
+
+  /// No description provided for @changePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Photo'**
+  String get changePhoto;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @selectDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Date'**
+  String get selectDate;
+
+  /// No description provided for @pGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal'**
+  String get pGoal;
+
+  /// No description provided for @pGoalDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'What is your primary fitness goal? This helps us tailor your experience.'**
+  String get pGoalDescription;
+
+  /// No description provided for @bulking.
+  ///
+  /// In en, this message translates to:
+  /// **'Bulking'**
+  String get bulking;
+
+  /// No description provided for @losingWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Losing Weight'**
+  String get losingWeight;
+
+  /// No description provided for @maintenance.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintenance'**
+  String get maintenance;
+
+  /// No description provided for @pActivityLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity Level'**
+  String get pActivityLevel;
+
+  /// No description provided for @pActivityLevelDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'How active is your daily life (outside of the gym)?'**
+  String get pActivityLevelDescription;
+
+  /// No description provided for @sedentary.
+  ///
+  /// In en, this message translates to:
+  /// **'Sedentary'**
+  String get sedentary;
+
+  /// No description provided for @lightlyActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Lightly Active'**
+  String get lightlyActive;
+
+  /// No description provided for @moderatelyActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Moderately Active'**
+  String get moderatelyActive;
+
+  /// No description provided for @veryActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Very Active'**
+  String get veryActive;
+
+  /// No description provided for @extraActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra Active'**
+  String get extraActive;
+
+  /// No description provided for @pGoalError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your goal'**
+  String get pGoalError;
+
+  /// No description provided for @pActivityLevelError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your activity level'**
+  String get pActivityLevelError;
 
   /// No description provided for @male.
   ///
@@ -1639,6 +1795,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Kg/min'**
   String get kgPerMin;
+
+  /// No description provided for @downloadingExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading Exercises'**
+  String get downloadingExercises;
+
+  /// No description provided for @fileName.
+  ///
+  /// In en, this message translates to:
+  /// **'File Name'**
+  String get fileName;
+
+  /// No description provided for @source.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get source;
+
+  /// No description provided for @fileType.
+  ///
+  /// In en, this message translates to:
+  /// **'File Type'**
+  String get fileType;
+
+  /// No description provided for @schemaVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Schema Version'**
+  String get schemaVersion;
+
+  /// No description provided for @errUnsupportedFileType.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported file type'**
+  String get errUnsupportedFileType;
+
+  /// No description provided for @errFileParse.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to parse file'**
+  String get errFileParse;
+
+  /// No description provided for @dietPlans.
+  ///
+  /// In en, this message translates to:
+  /// **'Diet Plans'**
+  String get dietPlans;
+
+  /// No description provided for @addPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Plan'**
+  String get addPlan;
+
+  /// No description provided for @renamePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename Plan'**
+  String get renamePlan;
+
+  /// No description provided for @deletePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Plan'**
+  String get deletePlan;
+
+  /// No description provided for @myDietPlans.
+  ///
+  /// In en, this message translates to:
+  /// **'My Diet Plans'**
+  String get myDietPlans;
+
+  /// No description provided for @createFirstPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Create First Plan'**
+  String get createFirstPlan;
+
+  /// No description provided for @createdOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Created on'**
+  String get createdOn;
+
+  /// No description provided for @noDaysInPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'No days in this plan'**
+  String get noDaysInPlan;
+
+  /// No description provided for @addMeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Meal'**
+  String get addMeal;
+
+  /// No description provided for @deleteMeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Meal'**
+  String get deleteMeal;
+
+  /// No description provided for @ingredients.
+  ///
+  /// In en, this message translates to:
+  /// **'Ingredients'**
+  String get ingredients;
+
+  /// No description provided for @addIngredient.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Ingredient'**
+  String get addIngredient;
+
+  /// No description provided for @all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
+  /// No description provided for @enterAmountGrams.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter amount (grams)'**
+  String get enterAmountGrams;
+
+  /// No description provided for @caloriesPer100g.
+  ///
+  /// In en, this message translates to:
+  /// **'per 100g'**
+  String get caloriesPer100g;
 }
 
 class _AppLocalizationsDelegate

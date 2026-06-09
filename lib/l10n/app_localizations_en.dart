@@ -171,6 +171,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exercises => 'Exercises';
 
   @override
+  String get similarExercises => 'Similar Exercises';
+
+  @override
   String get applyToAll => 'Apply to all';
 
   @override
@@ -281,6 +284,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addExercise => 'Add Exercise';
+
+  @override
+  String get addExerciseDescription => 'Add description to exercise';
 
   @override
   String get addRoutine => 'Add Routine';
@@ -535,6 +541,85 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get genderError => 'Please choose your Gender';
+
+  @override
+  String get pNameDescription =>
+      'Welcome to Uniceps! Let\'s get to know you. What should we call you? Your name will be used to personalize your experience.';
+
+  @override
+  String get pGenderDescription =>
+      'Knowing your gender helps us provide more accurate physiological reports, such as BMR and Body Fat calculations.';
+
+  @override
+  String get pBirthDateDescription =>
+      'Your age is a key factor in many fitness calculations. Please provide your date of birth so we can calculate your stats accurately.';
+
+  @override
+  String get profilePhoto => 'Profile Photo';
+
+  @override
+  String get removePhotoTitle => 'Remove Photo';
+
+  @override
+  String get removePhotoContent =>
+      'Are you sure you want to remove your profile photo?';
+
+  @override
+  String get pPhotoDescription =>
+      'A profile picture makes your account feel like home. You can upload one now or skip this step if you prefer.';
+
+  @override
+  String get changePhoto => 'Change Photo';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get selectDate => 'Select Date';
+
+  @override
+  String get pGoal => 'Goal';
+
+  @override
+  String get pGoalDescription =>
+      'What is your primary fitness goal? This helps us tailor your experience.';
+
+  @override
+  String get bulking => 'Bulking';
+
+  @override
+  String get losingWeight => 'Losing Weight';
+
+  @override
+  String get maintenance => 'Maintenance';
+
+  @override
+  String get pActivityLevel => 'Activity Level';
+
+  @override
+  String get pActivityLevelDescription =>
+      'How active is your daily life (outside of the gym)?';
+
+  @override
+  String get sedentary => 'Sedentary';
+
+  @override
+  String get lightlyActive => 'Lightly Active';
+
+  @override
+  String get moderatelyActive => 'Moderately Active';
+
+  @override
+  String get veryActive => 'Very Active';
+
+  @override
+  String get extraActive => 'Extra Active';
+
+  @override
+  String get pGoalError => 'Please select your goal';
+
+  @override
+  String get pActivityLevelError => 'Please select your activity level';
 
   @override
   String get male => 'Male';
@@ -806,4 +891,70 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get kgPerMin => 'Kg/min';
+
+  @override
+  String get downloadingExercises => 'Downloading Exercises';
+
+  @override
+  String get fileName => 'File Name';
+
+  @override
+  String get source => 'Source';
+
+  @override
+  String get fileType => 'File Type';
+
+  @override
+  String get schemaVersion => 'Schema Version';
+
+  @override
+  String get errUnsupportedFileType => 'Unsupported file type';
+
+  @override
+  String get errFileParse => 'Failed to parse file';
+
+  @override
+  String get dietPlans => 'Diet Plans';
+
+  @override
+  String get addPlan => 'Add Plan';
+
+  @override
+  String get renamePlan => 'Rename Plan';
+
+  @override
+  String get deletePlan => 'Delete Plan';
+
+  @override
+  String get myDietPlans => 'My Diet Plans';
+
+  @override
+  String get createFirstPlan => 'Create First Plan';
+
+  @override
+  String get createdOn => 'Created on';
+
+  @override
+  String get noDaysInPlan => 'No days in this plan';
+
+  @override
+  String get addMeal => 'Add Meal';
+
+  @override
+  String get deleteMeal => 'Delete Meal';
+
+  @override
+  String get ingredients => 'Ingredients';
+
+  @override
+  String get addIngredient => 'Add Ingredient';
+
+  @override
+  String get all => 'All';
+
+  @override
+  String get enterAmountGrams => 'Enter amount (grams)';
+
+  @override
+  String get caloriesPer100g => 'per 100g';
 }

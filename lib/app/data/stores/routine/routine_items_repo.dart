@@ -7,6 +7,7 @@ import 'package:uniceps/app/domain/classes/routine_classes/exercise.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_items_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/logging/app_logger.dart';
 
 class RoutineItemsRepo implements IRoutineItemsContract {
   RoutineItemsRepo({required IRoutineItemsLocalSourceContract localSource, required MediaHelper mediaHelper})
@@ -47,6 +48,22 @@ class RoutineItemsRepo implements IRoutineItemsContract {
 
       return Right(itemsBuffer);
     } catch (e) {
+      return Left(DatabaseFailure(errorMsg: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> updateItemDescription(int itemId, String? description) async {
+    try {
+      await _localSource.addDescriptionToItem(itemId, description);
+      for (int i = 0; i < itemsBuffer.length; i++) {
+        if (itemsBuffer[i].id == itemId) {
+          itemsBuffer[i] = itemsBuffer[i].copyWith(description: description, removeDescription: description == null);
+        }
+      }
+      return const Right(unit);
+    } catch (e, s) {
+      logger.e('Error in updateItemDescription!', error: e, stackTrace: s);
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
   }

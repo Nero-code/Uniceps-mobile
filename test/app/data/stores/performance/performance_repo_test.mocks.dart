@@ -4,37 +4,37 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i9;
-import 'dart:typed_data' as _i18;
+import 'dart:typed_data' as _i10;
 
 import 'package:dartz/dartz.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:uniceps/app/data/models/auth_models/player_model.dart' as _i2;
+import 'package:uniceps/app/data/models/auth_models/profile_model.dart' as _i2;
 import 'package:uniceps/app/data/models/practice_models/t_log_model.dart'
     as _i7;
 import 'package:uniceps/app/data/models/practice_models/t_session_model.dart'
     as _i6;
 import 'package:uniceps/app/data/models/profile_models/measurement_model.dart'
-    as _i15;
+    as _i16;
 import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart'
-    as _i17;
+    as _i18;
 import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart'
     as _i19;
 import 'package:uniceps/app/data/models/routine_models/routine_day_dto.dart'
     as _i5;
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart' as _i3;
-import 'package:uniceps/app/data/models/routine_result.dart' as _i12;
+import 'package:uniceps/app/data/models/routine_result.dart' as _i13;
 import 'package:uniceps/app/data/sources/local/dal_measurements/measurements_local_source.dart'
-    as _i14;
+    as _i15;
 import 'package:uniceps/app/data/sources/local/dal_practice/t_session_local_source.dart'
-    as _i13;
+    as _i14;
 import 'package:uniceps/app/data/sources/local/dal_profile/profile_local_source.dart'
     as _i8;
 import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart'
-    as _i16;
+    as _i17;
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart'
-    as _i10;
-import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart'
     as _i11;
+import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart'
+    as _i12;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -51,8 +51,8 @@ import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart'
 // ignore_for_file: subtype_of_sealed_class
 // ignore_for_file: invalid_use_of_internal_member
 
-class _FakePlayerModel_0 extends _i1.SmartFake implements _i2.PlayerModel {
-  _FakePlayerModel_0(Object parent, Invocation parentInvocation)
+class _FakeProfileModel_0 extends _i1.SmartFake implements _i2.ProfileModel {
+  _FakeProfileModel_0(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -92,19 +92,46 @@ class MockIProfileLocalSource extends _i1.Mock
   }
 
   @override
-  _i9.Future<_i2.PlayerModel> getProfileData() =>
+  _i9.Future<_i2.ProfileModel> getProfileData() =>
       (super.noSuchMethod(
             Invocation.method(#getProfileData, []),
-            returnValue: _i9.Future<_i2.PlayerModel>.value(
-              _FakePlayerModel_0(this, Invocation.method(#getProfileData, [])),
+            returnValue: _i9.Future<_i2.ProfileModel>.value(
+              _FakeProfileModel_0(this, Invocation.method(#getProfileData, [])),
             ),
           )
-          as _i9.Future<_i2.PlayerModel>);
+          as _i9.Future<_i2.ProfileModel>);
 
   @override
-  _i9.Future<void> savePlayerData(_i2.PlayerModel? model) =>
+  _i9.Future<void> saveProfileData(_i2.ProfileModel? model) =>
       (super.noSuchMethod(
-            Invocation.method(#savePlayerData, [model]),
+            Invocation.method(#saveProfileData, [model]),
+            returnValue: _i9.Future<void>.value(),
+            returnValueForMissingStub: _i9.Future<void>.value(),
+          )
+          as _i9.Future<void>);
+
+  @override
+  _i9.Future<void> deleteProfileData() =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteProfileData, []),
+            returnValue: _i9.Future<void>.value(),
+            returnValueForMissingStub: _i9.Future<void>.value(),
+          )
+          as _i9.Future<void>);
+
+  @override
+  _i9.Future<void> changeProfilePic(_i10.Uint8List? image) =>
+      (super.noSuchMethod(
+            Invocation.method(#changeProfilePic, [image]),
+            returnValue: _i9.Future<void>.value(),
+            returnValueForMissingStub: _i9.Future<void>.value(),
+          )
+          as _i9.Future<void>);
+
+  @override
+  _i9.Future<void> deleteProfilePic() =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteProfilePic, []),
             returnValue: _i9.Future<void>.value(),
             returnValueForMissingStub: _i9.Future<void>.value(),
           )
@@ -115,7 +142,7 @@ class MockIProfileLocalSource extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockIRoutineManagementLocalSourceContract extends _i1.Mock
-    implements _i10.IRoutineManagementLocalSourceContract {
+    implements _i11.IRoutineManagementLocalSourceContract {
   MockIRoutineManagementLocalSourceContract() {
     _i1.throwOnMissingStub(this);
   }
@@ -131,17 +158,17 @@ class MockIRoutineManagementLocalSourceContract extends _i1.Mock
           as _i9.Future<List<_i3.RoutineDto>>);
 
   @override
-  _i9.Future<List<({_i11.RoutineHeat heat, _i3.RoutineDto routine})>>
+  _i9.Future<List<({_i12.RoutineHeat heat, _i3.RoutineDto routine})>>
   getAllRoutinesWithHeat() =>
       (super.noSuchMethod(
             Invocation.method(#getAllRoutinesWithHeat, []),
             returnValue:
                 _i9.Future<
-                  List<({_i11.RoutineHeat heat, _i3.RoutineDto routine})>
-                >.value(<({_i11.RoutineHeat heat, _i3.RoutineDto routine})>[]),
+                  List<({_i12.RoutineHeat heat, _i3.RoutineDto routine})>
+                >.value(<({_i12.RoutineHeat heat, _i3.RoutineDto routine})>[]),
           )
           as _i9.Future<
-            List<({_i11.RoutineHeat heat, _i3.RoutineDto routine})>
+            List<({_i12.RoutineHeat heat, _i3.RoutineDto routine})>
           >);
 
   @override
@@ -186,12 +213,12 @@ class MockIRoutineManagementLocalSourceContract extends _i1.Mock
           as _i9.Future<void>);
 
   @override
-  _i9.Stream<_i12.Stage> insertFullRoutine(_i3.RoutineDto? dto) =>
+  _i9.Stream<_i13.Stage> insertFullRoutine(_i3.RoutineDto? dto) =>
       (super.noSuchMethod(
             Invocation.method(#insertFullRoutine, [dto]),
-            returnValue: _i9.Stream<_i12.Stage>.empty(),
+            returnValue: _i9.Stream<_i13.Stage>.empty(),
           )
-          as _i9.Stream<_i12.Stage>);
+          as _i9.Stream<_i13.Stage>);
 
   @override
   _i9.Future<_i3.RoutineDto> getFullRoutine(int? routineId) =>
@@ -211,7 +238,7 @@ class MockIRoutineManagementLocalSourceContract extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockITSessionLocalSourceContract extends _i1.Mock
-    implements _i13.ITSessionLocalSourceContract {
+    implements _i14.ITSessionLocalSourceContract {
   MockITSessionLocalSourceContract() {
     _i1.throwOnMissingStub(this);
   }
@@ -230,21 +257,21 @@ class MockITSessionLocalSourceContract extends _i1.Mock
           as _i9.Future<_i4.Tuple2<_i3.RoutineDto?, int?>>);
 
   @override
-  _i9.Future<_i4.Tuple2<_i3.RoutineDto?, _i11.RoutineHeat?>>
+  _i9.Future<_i4.Tuple2<_i3.RoutineDto?, _i12.RoutineHeat?>>
   getCurrentRoutineWithHeat() =>
       (super.noSuchMethod(
             Invocation.method(#getCurrentRoutineWithHeat, []),
             returnValue:
                 _i9.Future<
-                  _i4.Tuple2<_i3.RoutineDto?, _i11.RoutineHeat?>
+                  _i4.Tuple2<_i3.RoutineDto?, _i12.RoutineHeat?>
                 >.value(
-                  _FakeTuple2_2<_i3.RoutineDto?, _i11.RoutineHeat?>(
+                  _FakeTuple2_2<_i3.RoutineDto?, _i12.RoutineHeat?>(
                     this,
                     Invocation.method(#getCurrentRoutineWithHeat, []),
                   ),
                 ),
           )
-          as _i9.Future<_i4.Tuple2<_i3.RoutineDto?, _i11.RoutineHeat?>>);
+          as _i9.Future<_i4.Tuple2<_i3.RoutineDto?, _i12.RoutineHeat?>>);
 
   @override
   _i9.Future<_i5.RoutineDayDto> getPracticeDay(int? dayId) =>
@@ -336,23 +363,23 @@ class MockITSessionLocalSourceContract extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockIMeasurementsLocalSource extends _i1.Mock
-    implements _i14.IMeasurementsLocalSource {
+    implements _i15.IMeasurementsLocalSource {
   MockIMeasurementsLocalSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i9.Future<List<_i15.MeasurementModel>> getMeasurements() =>
+  _i9.Future<List<_i16.MeasurementModel>> getMeasurements() =>
       (super.noSuchMethod(
             Invocation.method(#getMeasurements, []),
-            returnValue: _i9.Future<List<_i15.MeasurementModel>>.value(
-              <_i15.MeasurementModel>[],
+            returnValue: _i9.Future<List<_i16.MeasurementModel>>.value(
+              <_i16.MeasurementModel>[],
             ),
           )
-          as _i9.Future<List<_i15.MeasurementModel>>);
+          as _i9.Future<List<_i16.MeasurementModel>>);
 
   @override
-  _i9.Future<int> saveMeasurement(_i15.MeasurementModel? m) =>
+  _i9.Future<int> saveMeasurement(_i16.MeasurementModel? m) =>
       (super.noSuchMethod(
             Invocation.method(#saveMeasurement, [m]),
             returnValue: _i9.Future<int>.value(0),
@@ -360,7 +387,7 @@ class MockIMeasurementsLocalSource extends _i1.Mock
           as _i9.Future<int>);
 
   @override
-  _i9.Future<void> deleteMeasurement(_i15.MeasurementModel? m) =>
+  _i9.Future<void> deleteMeasurement(_i16.MeasurementModel? m) =>
       (super.noSuchMethod(
             Invocation.method(#deleteMeasurement, [m]),
             returnValue: _i9.Future<void>.value(),
@@ -373,33 +400,33 @@ class MockIMeasurementsLocalSource extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockIExercisesLocalSourceContract extends _i1.Mock
-    implements _i16.IExercisesLocalSourceContract {
+    implements _i17.IExercisesLocalSourceContract {
   MockIExercisesLocalSourceContract() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i9.Future<List<_i17.ExerciseDto>> getExercises() =>
+  _i9.Future<List<_i18.ExerciseDto>> getExercises() =>
       (super.noSuchMethod(
             Invocation.method(#getExercises, []),
-            returnValue: _i9.Future<List<_i17.ExerciseDto>>.value(
-              <_i17.ExerciseDto>[],
+            returnValue: _i9.Future<List<_i18.ExerciseDto>>.value(
+              <_i18.ExerciseDto>[],
             ),
           )
-          as _i9.Future<List<_i17.ExerciseDto>>);
+          as _i9.Future<List<_i18.ExerciseDto>>);
 
   @override
-  _i9.Future<List<_i17.ExerciseDto>> getExercisesByGroup(String? groupCode) =>
+  _i9.Future<List<_i18.ExerciseDto>> getExercisesByGroup(String? groupCode) =>
       (super.noSuchMethod(
             Invocation.method(#getExercisesByGroup, [groupCode]),
-            returnValue: _i9.Future<List<_i17.ExerciseDto>>.value(
-              <_i17.ExerciseDto>[],
+            returnValue: _i9.Future<List<_i18.ExerciseDto>>.value(
+              <_i18.ExerciseDto>[],
             ),
           )
-          as _i9.Future<List<_i17.ExerciseDto>>);
+          as _i9.Future<List<_i18.ExerciseDto>>);
 
   @override
-  _i9.Future<void> saveExerciseImage(String? exId, _i18.Uint8List? bitmap) =>
+  _i9.Future<void> saveExerciseImage(String? exId, _i10.Uint8List? bitmap) =>
       (super.noSuchMethod(
             Invocation.method(#saveExerciseImage, [exId, bitmap]),
             returnValue: _i9.Future<void>.value(),
@@ -408,9 +435,18 @@ class MockIExercisesLocalSourceContract extends _i1.Mock
           as _i9.Future<void>);
 
   @override
-  _i9.Future<void> writeExercise(_i17.ExerciseDto? e) =>
+  _i9.Future<void> writeExercise(_i18.ExerciseDto? e) =>
       (super.noSuchMethod(
             Invocation.method(#writeExercise, [e]),
+            returnValue: _i9.Future<void>.value(),
+            returnValueForMissingStub: _i9.Future<void>.value(),
+          )
+          as _i9.Future<void>);
+
+  @override
+  _i9.Future<void> writeExercises(List<_i18.ExerciseDto>? exercises) =>
+      (super.noSuchMethod(
+            Invocation.method(#writeExercises, [exercises]),
             returnValue: _i9.Future<void>.value(),
             returnValueForMissingStub: _i9.Future<void>.value(),
           )

@@ -4,12 +4,14 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
+import 'dart:typed_data' as _i5;
 
-import 'package:logger/logger.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:uniceps/app/data/models/auth_models/player_model.dart' as _i2;
+import 'package:uniceps/app/data/models/auth_models/profile_model.dart' as _i2;
 import 'package:uniceps/app/data/sources/local/dal_profile/profile_local_source.dart'
     as _i3;
+import 'package:uniceps/app/data/sources/remote/dal_profile/profile_remote_source.dart'
+    as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -26,8 +28,8 @@ import 'package:uniceps/app/data/sources/local/dal_profile/profile_local_source.
 // ignore_for_file: subtype_of_sealed_class
 // ignore_for_file: invalid_use_of_internal_member
 
-class _FakePlayerModel_0 extends _i1.SmartFake implements _i2.PlayerModel {
-  _FakePlayerModel_0(Object parent, Invocation parentInvocation)
+class _FakeProfileModel_0 extends _i1.SmartFake implements _i2.ProfileModel {
+  _FakeProfileModel_0(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -41,188 +43,82 @@ class MockIProfileLocalSource extends _i1.Mock
   }
 
   @override
-  _i4.Future<_i2.PlayerModel> getProfileData() =>
+  _i4.Future<_i2.ProfileModel> getProfileData() =>
       (super.noSuchMethod(
             Invocation.method(#getProfileData, []),
-            returnValue: _i4.Future<_i2.PlayerModel>.value(
-              _FakePlayerModel_0(this, Invocation.method(#getProfileData, [])),
+            returnValue: _i4.Future<_i2.ProfileModel>.value(
+              _FakeProfileModel_0(this, Invocation.method(#getProfileData, [])),
             ),
           )
-          as _i4.Future<_i2.PlayerModel>);
+          as _i4.Future<_i2.ProfileModel>);
 
   @override
-  _i4.Future<void> savePlayerData(_i2.PlayerModel? model) =>
+  _i4.Future<void> saveProfileData(_i2.ProfileModel? model) =>
       (super.noSuchMethod(
-            Invocation.method(#savePlayerData, [model]),
+            Invocation.method(#saveProfileData, [model]),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> deleteProfileData() =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteProfileData, []),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> changeProfilePic(_i5.Uint8List? image) =>
+      (super.noSuchMethod(
+            Invocation.method(#changeProfilePic, [image]),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> deleteProfilePic() =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteProfilePic, []),
             returnValue: _i4.Future<void>.value(),
             returnValueForMissingStub: _i4.Future<void>.value(),
           )
           as _i4.Future<void>);
 }
 
-/// A class which mocks [Logger].
+/// A class which mocks [IProfileRemoteSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLogger extends _i1.Mock implements _i5.Logger {
-  MockLogger() {
+class MockIProfileRemoteSource extends _i1.Mock
+    implements _i6.IProfileRemoteSource {
+  MockIProfileRemoteSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<void> get init =>
+  _i4.Future<bool> uploadProfile(_i2.ProfileModel? profile) =>
       (super.noSuchMethod(
-            Invocation.getter(#init),
-            returnValue: _i4.Future<void>.value(),
+            Invocation.method(#uploadProfile, [profile]),
+            returnValue: _i4.Future<bool>.value(false),
           )
-          as _i4.Future<void>);
+          as _i4.Future<bool>);
 
   @override
-  void v(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #v,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void t(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #t,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void d(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #d,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void i(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #i,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void w(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #w,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void e(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #e,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void wtf(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #wtf,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void f(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #f,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void log(
-    _i5.Level? level,
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #log,
-      [level, message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  bool isClosed() =>
-      (super.noSuchMethod(Invocation.method(#isClosed, []), returnValue: false)
-          as bool);
-
-  @override
-  _i4.Future<void> close() =>
+  _i4.Future<bool> uploadPhoto(_i5.Uint8List? image) =>
       (super.noSuchMethod(
-            Invocation.method(#close, []),
-            returnValue: _i4.Future<void>.value(),
-            returnValueForMissingStub: _i4.Future<void>.value(),
+            Invocation.method(#uploadPhoto, [image]),
+            returnValue: _i4.Future<bool>.value(false),
           )
-          as _i4.Future<void>);
+          as _i4.Future<bool>);
+
+  @override
+  _i4.Future<bool> deletePhoto() =>
+      (super.noSuchMethod(
+            Invocation.method(#deletePhoto, []),
+            returnValue: _i4.Future<bool>.value(false),
+          )
+          as _i4.Future<bool>);
 }

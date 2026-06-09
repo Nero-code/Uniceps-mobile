@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
+import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
+import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
-import 'package:uniceps/app/services/language_cache_helper.dart';
+import 'package:uniceps/app/services/app_configs_service.dart';
 import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/injection_dependency.dart';
@@ -14,7 +18,7 @@ class ExerciseLibSyncService {
   final NetworkInfo _networkInfo;
   final Logger _logger;
 
-  const ExerciseLibSyncService({
+  ExerciseLibSyncService({
     required IExercisesLocalSourceContract exercisesLocalSource,
     required IExercisesRemoteSourceContract exercisesRemoteSource,
     required NetworkInfo networkInfo,
@@ -24,7 +28,11 @@ class ExerciseLibSyncService {
        _networkInfo = networkInfo,
        _logger = logger;
 
-  Future<Either<LibSyncFailure, Unit>> syncExercises() async {
+  Completer<int?>? isSynced;
+
+  Future<Either<LibSyncFailure, int>> syncExercises() async {
+    isSynced = null;
+    isSynced = Completer();
     List<ExerciseDto> localLib = [];
     DateTime? latest;
     try {
@@ -34,30 +42,32 @@ class ExerciseLibSyncService {
       latest = null;
     }
 
-    if (await _networkInfo.hasConnection) {
-      try {
-        final lib = await _exercisesRemoteSource.getAllExercises(
-          timestamp: latest,
-          language: sl<LanguageCacheHelper>().getExercisesLibContentLanguage(),
-        );
-        for (final e in lib) {
-          final img = await _exercisesRemoteSource.getExerciseImage(e.apiId);
-          await _exercisesLocalSource.saveExerciseImage(e.apiId, img);
-          await _exercisesLocalSource.writeExercise(e);
-        }
-        _logger.i('library update Done!');
-        return const Right(unit);
-      } catch (e, s) {
-        _logger.e('something went wrong!!', error: e, stackTrace: s);
-        return const Left(.libUnknown());
+    try {
+      final lib = await _exercisesRemoteSource.getAllExercises(
+        timestamp: latest,
+        language: sl<AppConfigsService>().configs.exerciseLibLanguage.languageCode,
+      );
+      for (final e in lib) {
+        final img = await _exercisesRemoteSource.getExerciseImage(e.apiId);
+        await _exercisesLocalSource.saveExerciseImage(e.apiId, img);
       }
-    } else {
-      if (localLib.isEmpty) {
-        _logger.i('Exercises Table is Empty');
-        return const Left(.libNotFound());
-      }
+      await _exercisesLocalSource.writeExercises(lib);
+      _logger.i('library update Done!');
+
+      isSynced?.complete(localLib.length);
+      return Right(localLib.length);
+    } on ClientException {
+      _logger.i('No Internet Connection');
+      isSynced?.complete(localLib.length);
+      return Left(.libOffline(currentTotalCount: localLib.length));
+    } on NoContentException {
+      isSynced?.complete(localLib.length);
+      return Right(localLib.length);
+    } catch (e, s) {
+      _logger.e('something went wrong!!', error: e, stackTrace: s);
+
+      isSynced?.completeError(localLib.length);
+      return Left(.libUnknown(currentTotalCount: localLib.length));
     }
-    _logger.i('No Internet Connection');
-    return const Left(.libOffline());
   }
 }

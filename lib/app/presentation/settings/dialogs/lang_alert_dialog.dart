@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
@@ -10,13 +10,14 @@ class LangAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    final languageCode = context.read<LocaleCubit>().state.locale.languageCode;
+    final languageCode = context.read<AppConfigCubit>().state.config.appLanguage.languageCode;
+
     return AlertDialog(
       title: Text(locale.chooseLang),
       content: RadioGroup(
         groupValue: languageCode,
         onChanged: (newVal) {
-          context.read<LocaleCubit>().changeLanguage(newVal!);
+          context.read<AppConfigCubit>().changeAppLanguageTo(newVal!);
           Navigator.pop(context);
         },
 

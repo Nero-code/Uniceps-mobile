@@ -7,6 +7,7 @@ class RoutineItem {
   final Exercise exercise;
   final List<RoutineSet> sets;
   final bool isSynced;
+  final String? description;
 
   const RoutineItem({
     required this.id,
@@ -17,6 +18,7 @@ class RoutineItem {
     required this.exercise,
     required this.sets,
     required this.isSynced,
+    required this.description,
   });
 
   RoutineItem copyWith({
@@ -24,18 +26,21 @@ class RoutineItem {
     int? apiId,
     int? dayId,
     int? index,
-    int? version,
     Exercise? exercise,
     List<RoutineSet>? sets,
+    String? description,
+    bool removeDescription = false,
+    int? version,
     bool? isSynced,
   }) => RoutineItem(
     id: id ?? this.id,
     apiId: apiId ?? this.apiId,
     dayId: dayId ?? this.dayId,
     index: index ?? this.index,
-    version: version ?? this.version,
     exercise: exercise ?? this.exercise,
     sets: sets ?? this.sets,
+    description: removeDescription ? null : description ?? this.description,
+    version: version ?? this.version,
     isSynced: isSynced ?? this.isSynced,
   );
 }

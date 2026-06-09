@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
-import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
@@ -18,6 +18,7 @@ import 'package:uniceps/app/presentation/home/widgets/routine_skeleton.dart';
 import 'package:uniceps/app/presentation/practice/screens/practice_screen.dart';
 import 'package:uniceps/app/presentation/routine/widgets/routine_with_heat.dart';
 import 'package:uniceps/app/presentation/settings/dialogs/qr_alert_dialog.dart';
+import 'package:uniceps/app/services/file_handler_service.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/constants/constants.dart';
@@ -40,10 +41,17 @@ class _HomeScreenState extends State<HomeScreen> {
   bool notifyUpgrade = true;
 
   @override
+  void initState() {
+    super.initState();
+    FileHandlerService().setAppReady();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
     final locale = AppLocalizations.of(context)!;
-    final lang = context.read<LocaleCubit>().state.locale.languageCode;
+    // final lang = context.read<LocaleCubit>().state.locale.languageCode;
+    final lang = context.read<AppConfigCubit>().state.config.appLanguage.languageCode;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
@@ -91,6 +99,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
                     icon: const Icon(Icons.settings, color: Colors.blueGrey),
                   ),
+                  if (const String.fromEnvironment('VERSION_SUFFIX').isNotEmpty)
+                    IconButton(
+                      onPressed: () => Navigator.pushNamed(context, AppRoutes.dietPlans),
+                      icon: const Icon(Icons.restaurant_menu_outlined),
+                      color: Colors.blueGrey,
+                    ),
                 ],
               ),
               body: Stack(
@@ -135,6 +149,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                         ),
+
+                        // BoxButton(
+                        //   isCircle: true,
+                        //   width: 70,
+                        //   height: 70,
+                        //   background: const Color.fromARGB(29, 154, 178, 190),
+                        //   // background: const Color.fromARGB(255, 226, 237, 243),
+                        //   border: Border.all(width: 0.5, color: Colors.grey),
+                        //   onTap: () => Navigator.pushNamed(context, AppRoutes.dietLogger),
+                        //   child: const Icon(Icons.set_meal),
+                        // ),
                         BlocBuilder<CurrentRoutineCubit, CurrentRoutineState>(
                           builder: (context, state) {
                             return state.map(
@@ -162,7 +187,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                         ),
-                        const SizedBox(),
                         BlocBuilder<DailyQuoteCubit, DailyQuoteState>(
                           builder: (context, state) => state.map(
                             initial: (_) => const LoadingIndicator(),

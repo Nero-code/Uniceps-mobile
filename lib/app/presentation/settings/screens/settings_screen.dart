@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/exercise_lib/exercise_lib_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/profile/profile_cubit.dart';
 import 'package:uniceps/app/presentation/home/widgets/alert_bar.dart';
 import 'package:uniceps/app/presentation/settings/dialogs/content_lang_dialog.dart';
 import 'package:uniceps/app/presentation/settings/dialogs/lang_alert_dialog.dart';
@@ -10,8 +12,8 @@ import 'package:uniceps/app/presentation/settings/dialogs/logout_alert_dialog.da
 import 'package:uniceps/app/presentation/settings/widgets/premium_banner.dart';
 import 'package:uniceps/app/presentation/settings/widgets/settings_tile.dart';
 import 'package:uniceps/app/presentation/settings/widgets/uniceps_premium.dart';
-import 'package:uniceps/app/services/language_cache_helper.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
+import 'package:uniceps/core/widgets/account_limit_alert.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
@@ -61,20 +63,22 @@ class SettingsScreen extends StatelessWidget {
               icon: Icons.account_circle,
               iconsColor: Colors.deepOrange,
               title: locale.profile,
-              onPressed: () => Navigator.pushNamed(context, AppRoutes.profile),
+              onPressed: () {
+                final hasAcc = context.read<AccountCubit>().state.maybeWhen(
+                  orElse: () => false,
+                  hasAccount: (_) => true,
+                );
+                if (hasAcc) {
+                  context.read<ProfileCubit>().getProfile();
+                  Navigator.pushNamed(context, AppRoutes.profile);
+                  return;
+                }
+                showDialog(
+                  context: context,
+                  builder: (context) => AccountLimitAlert(content: locale.signinAlert),
+                );
+              },
             ),
-            // SettingsTile(
-            //   icon: Icons.fitness_center_rounded,
-            //   iconsColor: Colors.blue,
-            //   title: locale.gyms,
-            //   onPressed: null,
-            // ),
-            // SettingsTile(
-            //   icon: Icons.straighten_rounded,
-            //   iconsColor: Colors.green,
-            //   title: locale.measurements,
-            //   onPressed: () => Navigator.pushNamed(context, AppRoutes.measurements),
-            // ),
             SettingsTile(
               icon: Icons.language,
               iconsColor: Colors.blue,
@@ -99,8 +103,8 @@ class SettingsScreen extends StatelessWidget {
                               content: FutureBuilder(
                                 future: () async {
                                   final res = await context.read<ExerciseLibCubit>().changeLibLanguage(code);
-                                  if (res) {
-                                    await sl<LanguageCacheHelper>().saveExercisesLibContentLanguage(code);
+                                  if (res && context.mounted) {
+                                    await context.read<AppConfigCubit>().changeExercisesLanguageTo(code);
                                   }
                                   return res;
                                 }(),

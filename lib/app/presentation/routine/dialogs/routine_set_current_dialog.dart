@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
-import 'package:uniceps/app/presentation/blocs/locale/locale_cubit.dart';
 
 class RoutineSetCurrentDialog extends StatelessWidget {
-  const RoutineSetCurrentDialog({
-    super.key,
-    required this.routineName,
-    required this.onConfirm,
-  });
+  const RoutineSetCurrentDialog({super.key, required this.routineName, required this.onConfirm});
 
   final String routineName;
   final void Function() onConfirm;
@@ -16,7 +10,8 @@ class RoutineSetCurrentDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    final ar = context.read<LocaleCubit>().state.isRtl();
+    // final ar = context.read<LocaleCubit>().state.isRtl();
+    final ar = Directionality.of(context) == .rtl;
 
     return AlertDialog(
       icon: const Icon(Icons.flag, size: 40),
@@ -29,22 +24,20 @@ class RoutineSetCurrentDialog extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: OutlinedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(locale.cancel),
-                ),
+                child: OutlinedButton(onPressed: () => Navigator.pop(context), child: Text(locale.cancel)),
               ),
               const SizedBox(width: 10),
               Expanded(
                 child: ElevatedButton(
-                    onPressed: () {
-                      onConfirm();
-                      Navigator.pop(context);
-                    },
-                    child: Text(locale.confirm)),
+                  onPressed: () {
+                    onConfirm();
+                    Navigator.pop(context);
+                  },
+                  child: Text(locale.confirm),
+                ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

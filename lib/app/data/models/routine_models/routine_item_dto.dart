@@ -21,6 +21,8 @@ class RoutineItemDto {
   final bool isSynced;
   final ExerciseDto exerciseDto;
   final List<RoutineSetDto> setsDto;
+  final String? description;
+
   const RoutineItemDto({
     required this.id,
     required this.apiId,
@@ -30,6 +32,7 @@ class RoutineItemDto {
     required this.exerciseDto,
     required this.setsDto,
     required this.isSynced,
+    this.description,
   });
   factory RoutineItemDto.create(int dayId, int index, ExerciseDto exercise) => RoutineItemDto(
     id: null,
@@ -47,9 +50,10 @@ class RoutineItemDto {
     apiId: entity.apiId,
     dayId: entity.dayId,
     index: entity.index,
-    version: entity.version,
     exerciseDto: ExerciseDto.fromEntity(entity.exercise),
     setsDto: entity.sets.map(RoutineSetDto.fromEntity).toList(),
+    description: entity.description,
+    version: entity.version,
     isSynced: entity.isSynced,
   );
   ri.RoutineItem toEntity() => ri.RoutineItem(
@@ -57,9 +61,10 @@ class RoutineItemDto {
     apiId: apiId,
     dayId: dayId,
     index: index,
-    version: version,
     exercise: exerciseDto.toEntity(),
     sets: setsDto.map((e) => e.toEntity()).toList(),
+    description: description,
+    version: version,
     isSynced: isSynced,
   );
 
@@ -71,9 +76,10 @@ class RoutineItemDto {
     apiId: (json['apiId'] as num?)?.toInt(),
     dayId: (json['dayId'] as num?)?.toInt() ?? 0,
     index: (json['Order'] as num).toInt(),
-    version: (json['version'] as num?)?.toInt() ?? 0,
     exerciseDto: ExerciseDto.fromFile(json), // Flat Exercise
     setsDto: (json['Sets'] as List<dynamic>).map((e) => RoutineSetDto.fromJson(e as Map<String, dynamic>)).toList(),
+    description: json['description'] as String?,
+    version: (json['version'] as num?)?.toInt() ?? 0,
     isSynced: json['isSynced'] as bool? ?? false,
   );
 
@@ -82,10 +88,11 @@ class RoutineItemDto {
     'apiId': apiId,
     'dayId': dayId,
     'Order': index,
-    'version': version,
-    'isSynced': isSynced,
     ...exerciseDto.toFile(),
     'Sets': setsDto.map((e) => e.toJson()).toList(),
+    'description': description,
+    'version': version,
+    'isSynced': isSynced,
   };
 
   //
@@ -97,9 +104,10 @@ class RoutineItemDto {
         apiId: item.apiId,
         dayId: item.dayId,
         index: item.index,
-        version: item.version,
         exerciseDto: exercise,
         setsDto: sets,
+        description: item.notes,
+        version: item.version,
         isSynced: item.isSynced,
       );
 
@@ -108,29 +116,20 @@ class RoutineItemDto {
     int? apiId,
     int? dayId,
     int? index,
-    int? version,
     ExerciseDto? exerciseDto,
     List<RoutineSetDto>? setsDto,
+    String? description,
+    int? version,
     bool? isSynced,
   }) => RoutineItemDto(
     id: id ?? this.id,
     apiId: apiId ?? this.apiId,
     dayId: dayId ?? this.dayId,
     index: index ?? this.index,
-    version: version ?? this.version,
     exerciseDto: exerciseDto ?? this.exerciseDto,
     setsDto: setsDto ?? this.setsDto,
+    description: description ?? this.description,
+    version: version ?? this.version,
     isSynced: isSynced ?? this.isSynced,
   );
-
-  // Map<String, dynamic> _$RoutineItemDtoToJson(RoutineItemDto instance) => <String, dynamic>{
-  //   'id': instance.id,
-  //   'apiId': instance.apiId,
-  //   'dayId': instance.dayId,
-  //   'index': instance.index,
-  //   'version': instance.version,
-  //   'isSynced': instance.isSynced,
-  //   ...instance.exerciseDto.toFile(),
-  //   'setsDto': instance.setsDto.map((e) => e.toJson()).toList(),
-  // };
 }

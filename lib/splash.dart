@@ -4,7 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:uniceps/app/presentation/blocs/exercise_lib/exercise_lib_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/exercise_lib/lib_sync_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/exercise_lib/media_downloader_cubit.dart';
-import 'package:uniceps/app/presentation/profile/cubit/profile_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/profile/profile_cubit.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/injection_dependency.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
@@ -19,7 +19,7 @@ class SplashScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => ExerciseLibCubit(sl())..checkExercises()),
-        BlocProvider(create: (context) => ProfileCubit(sl())),
+        // BlocProvider(create: (context) => ProfileCubit(sl())),
         BlocProvider(create: (context) => MediaDownloaderCubit(sl())),
       ],
       child: MultiBlocListener(
@@ -43,13 +43,15 @@ class SplashScreen extends StatelessWidget {
           BlocListener<ProfileCubit, ProfileState>(
             listener: (context, state) => state.when(
               initial: () => logger.i('ProfileCubit: initial'),
-              notFound: () {
+              loading: () => logger.i('ProfileCubit: loading'),
+              error: (_) {
                 logger.i('ProfileCubit: notFound');
                 return Navigator.pushReplacementNamed(context, AppRoutes.profileInitial);
               },
-              found: () {
+              loaded: (_) {
                 logger.i('ProfileCubit: found');
                 return Navigator.pushReplacementNamed(context, AppRoutes.home);
+                // return Navigator.pushReplacementNamed(context, AppRoutes.profileInitial);
               },
             ),
           ),
@@ -91,7 +93,7 @@ class SplashScreen extends StatelessWidget {
                             borderRadius: .circular(15),
                             backgroundColor: Colors.grey.shade100,
                           ),
-                          if (state.status == .downloading) const Center(child: Text('Downloading Exercises...')),
+                          if (state.status == .downloading) Center(child: Text(l10n.downloadingExercises)),
                           if (state.status == .failure)
                             Row(
                               mainAxisAlignment: .center,

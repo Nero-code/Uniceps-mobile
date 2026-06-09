@@ -52,9 +52,10 @@ void main() {
     apiId: 1,
     dayId: 1,
     index: 0,
-    version: 1,
     exercise: tExercise,
     sets: const [],
+    description: 'description',
+    version: 1,
     isSynced: false,
   );
 

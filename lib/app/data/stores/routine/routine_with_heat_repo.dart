@@ -112,6 +112,34 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
   Stream<RoutineResult> importRoutineFromFile() async* {
     try {
       final file = await _unifileManager.importFile();
+      yield* importRoutine(file);
+    } on NoInternetException {
+      _logger.d('NoInternetException');
+      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.fOffline());
+    } on OfflineFailure {
+      _logger.d('OfflineFailure');
+      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.fOffline());
+    } on ParserMismatchException {
+      _logger.d('ParserMismatchException');
+      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.parserMismatch());
+    } on CorruptedFileException {
+      _logger.d('CorruptedFileException');
+      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.corruptedFile());
+    } on NoFileSelectedException {
+      _logger.d('NoFileSelectedException');
+      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.noFileSelected());
+    } on UnsupportedVersionException {
+      _logger.d('UnsupportedException');
+      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.unsupportedVersion());
+    } catch (e) {
+      _logger.e('Error in importRoutineFromFile', error: e);
+      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.fOffline());
+    }
+  }
+
+  @override
+  Stream<RoutineResult> importRoutine(UniFile file) async* {
+    try {
       if (file.meta.fileType != FileType.routine) throw ParserMismatchException();
       final routine = RoutineDto.fromJson(file.data);
 
@@ -136,26 +164,11 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
       }
       yield const RoutineResult(progress: 1, stage: Stage.done);
       return;
-    } on NoInternetException {
-      _logger.d('NoInternetException');
-      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.fOffline());
-    } on OfflineFailure {
-      _logger.d('OfflineFailure');
-      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.fOffline());
     } on ParserMismatchException {
       _logger.d('ParserMismatchException');
       yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.parserMismatch());
-    } on CorruptedFileException {
-      _logger.d('CorruptedFileException');
-      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.corruptedFile());
-    } on NoFileSelectedException {
-      _logger.d('NoFileSelectedException');
-      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.noFileSelected());
-    } on UnsupportedVersionException {
-      _logger.d('UnsupportedException');
-      yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.unsupportedVersion());
     } catch (e) {
-      _logger.e('Error in importRoutineFromFile', error: e);
+      _logger.e('Error in importRoutine', error: e);
       yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.fOffline());
     }
   }

@@ -11,5 +11,7 @@ abstract class IRoutineItemsContract {
   Future<Either<Failure, List<RoutineItem>>> removeItem(RoutineItem item);
   Future<Either<Failure, Unit>> removeDayItems(int dayId);
 
+  Future<Either<Failure, Unit>> updateItemDescription(int itemId, String? description);
+
   Future<Either<Failure, Unit>> copySetsToAll(int dayId, int itemId);
 }

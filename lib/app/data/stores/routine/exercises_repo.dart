@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart';
@@ -12,6 +13,8 @@ import 'package:uniceps/app/domain/contracts/routine/i_exercises_contract.dart';
 import 'package:uniceps/app/domain/helpers/result.dart';
 import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/helpers/exercise_details_result.dart';
+import 'package:uniceps/core/logging/app_logger.dart';
 
 class ExercisesRepo implements IExercisesContract {
   final IExercisesLocalSourceContract _localSource;
@@ -55,10 +58,9 @@ class ExercisesRepo implements IExercisesContract {
     if (await _internet.hasConnection) {
       try {
         final res = await _remoteSource.getAllExercises(language: language);
-        await for (final _ in downloadImages(res.map((e) => e.apiId).toList())) {}
-        for (var e in res) {
-          await _localSource.writeExercise(e);
-        }
+        await downloadImages(res.map((e) => e.apiId).toList()).drain();
+
+        await _localSource.writeExercises(res);
         exercisesLib.clear();
         exercisesLib.addAll(res.map((e) => e.toEntity()));
 
@@ -101,18 +103,17 @@ class ExercisesRepo implements IExercisesContract {
   Future<Either<Failure, List<Exercise>>> getExercisesLib() async {
     if (exercisesLib.isNotEmpty) return Right(exercisesLib);
 
-    if (await _internet.hasConnection) {
-      try {
-        final res = await _remoteSource.getAllExercises();
+    try {
+      final res = await _remoteSource.getAllExercises();
 
-        exercisesLib.clear();
-        exercisesLib.addAll(res.map((e) => e.toEntity()));
-        return Right(exercisesLib);
-      } catch (e) {
-        return Left(ServerFailure(errMsg: e.toString()));
-      }
+      exercisesLib.clear();
+      exercisesLib.addAll(res.map((e) => e.toEntity()));
+      return Right(exercisesLib);
+    } on ClientException {
+      return Left(OfflineFailure(errorMessage: ""));
+    } catch (e) {
+      return Left(ServerFailure(errMsg: e.toString()));
     }
-    return Left(OfflineFailure(errorMessage: ""));
   }
 
   @override
@@ -204,5 +205,17 @@ class ExercisesRepo implements IExercisesContract {
       yield Result(data: 0, error: NoInternetConnectionFailure(errMsg: ''));
     }
     return;
+  }
+
+  @override
+  Future<Either<Failure, ExerciseDetailsResult>> getExerciseDetails(String id) async {
+    try {
+      final ex = exercisesLib.firstWhere((e) => e.apiId == id);
+      final similars = exercisesLib.where((e) => e.muscleHeadCode == ex.muscleHeadCode && e.apiId != ex.apiId).toList();
+      return Right(ExerciseDetailsResult(exercise: ex, similars: similars));
+    } catch (e, s) {
+      logger.e('getExerciseDetails: $id', error: e, stackTrace: s);
+      return Left(DatabaseFailure(errorMsg: ''));
+    }
   }
 }

@@ -128,13 +128,13 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  syncing,TResult Function()?  success,TResult Function()?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  syncing,TResult Function( int total)?  success,TResult Function( LibSyncFailure failure)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Syncing() when syncing != null:
 return syncing();case _Success() when success != null:
-return success();case _Failure() when failure != null:
-return failure();case _:
+return success(_that.total);case _Failure() when failure != null:
+return failure(_that.failure);case _:
   return orElse();
 
 }
@@ -152,13 +152,13 @@ return failure();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  syncing,required TResult Function()  success,required TResult Function()  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  syncing,required TResult Function( int total)  success,required TResult Function( LibSyncFailure failure)  failure,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Syncing():
 return syncing();case _Success():
-return success();case _Failure():
-return failure();case _:
+return success(_that.total);case _Failure():
+return failure(_that.failure);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -175,13 +175,13 @@ return failure();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  syncing,TResult? Function()?  success,TResult? Function()?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  syncing,TResult? Function( int total)?  success,TResult? Function( LibSyncFailure failure)?  failure,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Syncing() when syncing != null:
 return syncing();case _Success() when success != null:
-return success();case _Failure() when failure != null:
-return failure();case _:
+return success(_that.total);case _Failure() when failure != null:
+return failure(_that.failure);case _:
   return null;
 
 }
@@ -257,64 +257,141 @@ String toString() {
 
 
 class _Success implements LibSyncState {
-  const _Success();
+  const _Success({required this.total});
   
 
+ final  int total;
 
-
+/// Create a copy of LibSyncState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SuccessCopyWith<_Success> get copyWith => __$SuccessCopyWithImpl<_Success>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&(identical(other.total, total) || other.total == total));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,total);
 
 @override
 String toString() {
-  return 'LibSyncState.success()';
+  return 'LibSyncState.success(total: $total)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class _$SuccessCopyWith<$Res> implements $LibSyncStateCopyWith<$Res> {
+  factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) = __$SuccessCopyWithImpl;
+@useResult
+$Res call({
+ int total
+});
 
 
+
+
+}
+/// @nodoc
+class __$SuccessCopyWithImpl<$Res>
+    implements _$SuccessCopyWith<$Res> {
+  __$SuccessCopyWithImpl(this._self, this._then);
+
+  final _Success _self;
+  final $Res Function(_Success) _then;
+
+/// Create a copy of LibSyncState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? total = null,}) {
+  return _then(_Success(
+total: null == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
 
 /// @nodoc
 
 
 class _Failure implements LibSyncState {
-  const _Failure();
+  const _Failure({required this.failure});
   
 
+ final  LibSyncFailure failure;
 
-
+/// Create a copy of LibSyncState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$FailureCopyWith<_Failure> get copyWith => __$FailureCopyWithImpl<_Failure>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Failure);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Failure&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,failure);
 
 @override
 String toString() {
-  return 'LibSyncState.failure()';
+  return 'LibSyncState.failure(failure: $failure)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class _$FailureCopyWith<$Res> implements $LibSyncStateCopyWith<$Res> {
+  factory _$FailureCopyWith(_Failure value, $Res Function(_Failure) _then) = __$FailureCopyWithImpl;
+@useResult
+$Res call({
+ LibSyncFailure failure
+});
 
 
+$LibSyncFailureCopyWith<$Res> get failure;
+
+}
+/// @nodoc
+class __$FailureCopyWithImpl<$Res>
+    implements _$FailureCopyWith<$Res> {
+  __$FailureCopyWithImpl(this._self, this._then);
+
+  final _Failure _self;
+  final $Res Function(_Failure) _then;
+
+/// Create a copy of LibSyncState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
+  return _then(_Failure(
+failure: null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as LibSyncFailure,
+  ));
+}
+
+/// Create a copy of LibSyncState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$LibSyncFailureCopyWith<$Res> get failure {
+  
+  return $LibSyncFailureCopyWith<$Res>(_self.failure, (value) {
+    return _then(_self.copyWith(failure: value));
+  });
+}
+}
 
 // dart format on

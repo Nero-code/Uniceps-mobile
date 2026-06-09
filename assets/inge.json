@@ -1,0 +1,222 @@
+[
+  {
+    "code": "ING-001",
+    "name_ar": "صدر دجاج (نيء)",
+    "name_en": "Chicken Breast (Raw)",
+    "category": "Protein",
+    "serving_size_g": 100,
+    "calories": 120,
+    "protein": 22.5,
+    "carbs": 0.0,
+    "fats": 2.6
+  },
+  {
+    "code": "ING-002",
+    "name_ar": "صدر دجاج (مشوي)",
+    "name_en": "Chicken Breast (Grilled)",
+    "category": "Protein",
+    "serving_size_g": 100,
+    "calories": 165,
+    "protein": 31.0,
+    "carbs": 0.0,
+    "fats": 3.6
+  },
+  {
+    "code": "ING-003",
+    "name_ar": "أرز أبيض قصير الحبة (غير مطبوخ)",
+    "name_en": "White Rice Short Grain (Raw)",
+    "category": "Carbs",
+    "serving_size_g": 100,
+    "calories": 358,
+    "protein": 6.5,
+    "carbs": 79.2,
+    "fats": 0.5
+  },
+  {
+    "code": "ING-004",
+    "name_ar": "أرز أبيض قصير الحبة (مطبوخ بماء وملح)",
+    "name_en": "White Rice Short Grain (Cooked)",
+    "category": "Carbs",
+    "serving_size_g": 100,
+    "calories": 130,
+    "protein": 2.4,
+    "carbs": 28.0,
+    "fats": 0.2
+  },
+  {
+    "code": "ING-005",
+    "name_ar": "لحم بقر مفروم (قليل الدهون - نيء)",
+    "name_en": "Lean Ground Beef (Raw)",
+    "category": "Protein",
+    "serving_size_g": 100,
+    "calories": 137,
+    "protein": 21.4,
+    "carbs": 0.0,
+    "fats": 5.0
+  },
+  {
+    "code": "ING-006",
+    "name_ar": "لحم بقر مفروم (مطبوخ)",
+    "name_en": "Lean Ground Beef (Cooked)",
+    "category": "Protein",
+    "serving_size_g": 100,
+    "calories": 218,
+    "protein": 26.0,
+    "carbs": 0.0,
+    "fats": 12.0
+  },
+  {
+    "code": "ING-007",
+    "name_ar": "بطاطا حلوة (نيئة)",
+    "name_en": "Sweet Potato (Raw)",
+    "category": "Carbs",
+    "serving_size_g": 100,
+    "calories": 86,
+    "protein": 1.6,
+    "carbs": 20.1,
+    "fats": 0.1
+  },
+  {
+    "code": "ING-008",
+    "name_ar": "بطاطا حلوة (مشوية)",
+    "name_en": "Sweet Potato (Baked)",
+    "category": "Carbs",
+    "serving_size_g": 100,
+    "calories": 90,
+    "protein": 2.0,
+    "carbs": 20.7,
+    "fats": 0.2
+  },
+  {
+    "code": "ING-009",
+    "name_ar": "بيض كامل (مسلوق)",
+    "name_en": "Whole Egg (Boiled)",
+    "category": "Protein",
+    "serving_size_g": 100,
+    "calories": 155,
+    "protein": 12.6,
+    "carbs": 1.1,
+    "fats": 10.6
+  },
+  {
+    "code": "ING-010",
+    "name_ar": "بياض البيض",
+    "name_en": "Egg Whites",
+    "category": "Protein",
+    "serving_size_g": 100,
+    "calories": 52,
+    "protein": 10.9,
+    "carbs": 0.7,
+    "fats": 0.2
+  },
+  {
+    "code": "ING-011",
+    "name_ar": "شوفان كامل الحبة",
+    "name_en": "Whole Oats",
+    "category": "Carbs",
+    "serving_size_g": 100,
+    "calories": 389,
+    "protein": 16.9,
+    "carbs": 66.3,
+    "fats": 6.9
+  },
+  {
+    "code": "ING-012",
+    "name_ar": "زيت زيتون بكر ممتاز",
+    "name_en": "Extra Virgin Olive Oil",
+    "category": "Fats",
+    "serving_size_g": 100,
+    "calories": 884,
+    "protein": 0.0,
+    "carbs": 0.0,
+    "fats": 100.0
+  },
+  {
+    "code": "ING-013",
+    "name_ar": "لوز نيء",
+    "name_en": "Raw Almonds",
+    "category": "Fats",
+    "serving_size_g": 100,
+    "calories": 579,
+    "protein": 21.2,
+    "carbs": 21.6,
+    "fats": 49.9
+  },
+  {
+    "code": "ING-014",
+    "name_ar": "سمك سالمون (نيء)",
+    "name_en": "Salmon Fillet (Raw)",
+    "category": "Protein",
+    "serving_size_g": 100,
+    "calories": 208,
+    "protein": 20.0,
+    "carbs": 0.0,
+    "fats": 13.0
+  },
+  {
+    "code": "ING-015",
+    "name_ar": "بروكلي (طازج)",
+    "name_en": "Broccoli (Raw)",
+    "category": "Vegetables",
+    "serving_size_g": 100,
+    "calories": 34,
+    "protein": 2.8,
+    "carbs": 6.6,
+    "fats": 0.4
+  },
+  {
+    "code": "ING-016",
+    "name_ar": "علبة تونة بالماء (مصفاة)",
+    "name_en": "Canned Tuna in Water (Drained)",
+    "category": "Protein",
+    "serving_size_g": 100,
+    "calories": 116,
+    "protein": 26.0,
+    "carbs": 0.0,
+    "fats": 1.0
+  },
+  {
+    "code": "ING-017",
+    "name_ar": "جبنة قريش",
+    "name_en": "Cottage Cheese",
+    "category": "Protein",
+    "serving_size_g": 100,
+    "calories": 98,
+    "protein": 11.0,
+    "carbs": 3.4,
+    "fats": 4.3
+  },
+  {
+    "code": "ING-018",
+    "name_ar": "أفوكادو",
+    "name_en": "Avocado",
+    "category": "Fats",
+    "serving_size_g": 100,
+    "calories": 160,
+    "protein": 2.0,
+    "carbs": 8.5,
+    "fats": 14.7
+  },
+  {
+    "code": "ING-019",
+    "name_ar": "موز",
+    "name_en": "Banana",
+    "category": "Fruits",
+    "serving_size_g": 100,
+    "calories": 89,
+    "protein": 1.1,
+    "carbs": 22.8,
+    "fats": 0.3
+  },
+  {
+    "code": "ING-020",
+    "name_ar": "تفاح (بقشره)",
+    "name_en": "Apple (With Skin)",
+    "category": "Fruits",
+    "serving_size_g": 100,
+    "calories": 52,
+    "protein": 0.3,
+    "carbs": 13.8,
+    "fats": 0.2
+  }
+]

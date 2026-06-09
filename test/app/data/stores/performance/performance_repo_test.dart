@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:uniceps/app/data/models/auth_models/player_model.dart';
+import 'package:uniceps/app/data/models/auth_models/profile_model.dart';
 import 'package:uniceps/app/data/models/practice_models/t_log_model.dart';
 import 'package:uniceps/app/data/models/practice_models/t_session_model.dart';
 import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
@@ -114,9 +114,16 @@ void main() {
   group('getPhysicalReport', () {
     test('should return a PhysicalReport', () async {
       // arrange
-      when(
-        mockProfileSource.getProfileData(),
-      ).thenAnswer((_) async => PlayerModel(name: '', birthDate: DateTime.now(), gender: Gender.male));
+      when(mockProfileSource.getProfileData()).thenAnswer(
+        (_) async => ProfileModel(
+          name: '',
+          birthDate: DateTime.now(),
+          gender: Gender.male,
+          photo: null,
+          version: 0,
+          isSynced: false,
+        ),
+      );
       when(mockMeasurementSource.getMeasurements()).thenAnswer(
         (_) async => [
           MeasurementModel(
@@ -152,9 +159,16 @@ void main() {
 
     test('should return noValues failure when measurements are empty', () async {
       // arrange
-      when(
-        mockProfileSource.getProfileData(),
-      ).thenAnswer((_) async => PlayerModel(name: '', birthDate: DateTime.now(), gender: Gender.male));
+      when(mockProfileSource.getProfileData()).thenAnswer(
+        (_) async => ProfileModel(
+          name: '',
+          birthDate: DateTime.now(),
+          gender: Gender.male,
+          photo: null,
+          version: 0,
+          isSynced: false,
+        ),
+      );
       when(mockMeasurementSource.getMeasurements()).thenAnswer((_) async => []);
       // act
       final result = await repo.getPhysicalReport();

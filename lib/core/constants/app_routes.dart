@@ -31,4 +31,11 @@ abstract class AppRoutes {
 
   static const about = "/profile/about";
   static const capAbout = "/profile/cap_about";
+  static const fileImport = "/file_import";
+  // static const diet = "/diet";
+  static const dietPlans = "/diet/plans";
+
+  static const dietLogger = 'diet/logger';
+  // static const mealDetails = "/diet/meal";
+  // static const addIngredient = "/diet/meal/add_ingredient";
 }

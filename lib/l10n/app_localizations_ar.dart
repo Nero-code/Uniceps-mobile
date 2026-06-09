@@ -171,6 +171,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exercises => 'التمارين';
 
   @override
+  String get similarExercises => 'تمارين مشابهة';
+
+  @override
   String get applyToAll => 'تطبيق للكل';
 
   @override
@@ -281,6 +284,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get addExercise => 'اضافة تمرين';
+
+  @override
+  String get addExerciseDescription => 'ضع ملاحظات على التمرين';
 
   @override
   String get addRoutine => 'اضافة برنامج';
@@ -530,10 +536,89 @@ class AppLocalizationsAr extends AppLocalizations {
   String get birthDateError => 'الرجاء ادخال سنة الميلاد';
 
   @override
-  String get gender => 'الجنس:';
+  String get gender => 'الجنس';
 
   @override
   String get genderError => 'الرجاء اختيار الجنس';
+
+  @override
+  String get pNameDescription =>
+      'أهلاً بك في يوني سيبس! دعنا نتعرف عليك. كيف تود أن نناديك؟ سيتم استخدام اسمك لتخصيص تجربتك.';
+
+  @override
+  String get pGenderDescription =>
+      'معرفة جنسك تساعدنا في تقديم تقارير فسيولوجية أكثر دقة، مثل حسابات معدل الأيض الأساسي ونسبة الدهون في الجسم.';
+
+  @override
+  String get pBirthDateDescription =>
+      'عمرك هو عامل رئيسي في العديد من الحسابات الرياضية. يرجى تقديم تاريخ ميلادك حتى نتمكن من حساب إحصائياتك بدقة.';
+
+  @override
+  String get profilePhoto => 'الصورة الشخصية';
+
+  @override
+  String get removePhotoTitle => 'حذف الصورة';
+
+  @override
+  String get removePhotoContent =>
+      'هل أنت متأكد من رغبتك في حذف صورة ملفك الشخصي؟';
+
+  @override
+  String get pPhotoDescription =>
+      'الصورة الشخصية تجعل حسابك يبدو مألوفاً أكثر. يمكنك رفع واحدة الآن أو تخطي هذه الخطوة إذا كنت تفضل ذلك.';
+
+  @override
+  String get changePhoto => 'تغيير الصورة';
+
+  @override
+  String get next => 'التالي';
+
+  @override
+  String get selectDate => 'اختر التاريخ';
+
+  @override
+  String get pGoal => 'الهدف';
+
+  @override
+  String get pGoalDescription =>
+      'ما هو هدفك الأساسي؟ هذا يساعدنا في تخصيص تجربتك.';
+
+  @override
+  String get bulking => 'تضخيم';
+
+  @override
+  String get losingWeight => 'تنشيف / خسارة وزن';
+
+  @override
+  String get maintenance => 'محافظة';
+
+  @override
+  String get pActivityLevel => 'مستوى النشاط اليومي';
+
+  @override
+  String get pActivityLevelDescription =>
+      'كيف تصف نشاطك البدني خلال اليوم (بعيداً عن النادي)؟';
+
+  @override
+  String get sedentary => 'خامل (عمل مكتبي)';
+
+  @override
+  String get lightlyActive => 'نشاط خفيف';
+
+  @override
+  String get moderatelyActive => 'نشاط متوسط';
+
+  @override
+  String get veryActive => 'نشاط عالي';
+
+  @override
+  String get extraActive => 'نشاط عالي جداً (عمل بدني شاق)';
+
+  @override
+  String get pGoalError => 'الرجاء اختيار هدفك';
+
+  @override
+  String get pActivityLevelError => 'الرجاء اختيار مستوى نشاطك';
 
   @override
   String get male => 'ذكر';
@@ -803,4 +888,70 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get kgPerMin => 'كغ/دقيقة';
+
+  @override
+  String get downloadingExercises => 'جاري تحميل التمارين';
+
+  @override
+  String get fileName => 'اسم الملف';
+
+  @override
+  String get source => 'المصدر';
+
+  @override
+  String get fileType => 'نوع الملف';
+
+  @override
+  String get schemaVersion => 'إصدار المخطط';
+
+  @override
+  String get errUnsupportedFileType => 'نوع ملف غير مدعوم';
+
+  @override
+  String get errFileParse => 'فشل في تحليل الملف';
+
+  @override
+  String get dietPlans => 'البرامج الغذائية';
+
+  @override
+  String get addPlan => 'إضافة برنامج';
+
+  @override
+  String get renamePlan => 'تغيير اسم البرنامج';
+
+  @override
+  String get deletePlan => 'حذف البرنامج الغذائي';
+
+  @override
+  String get myDietPlans => 'برامجي الغذائية';
+
+  @override
+  String get createFirstPlan => 'أنشئ برنامجك الأول';
+
+  @override
+  String get createdOn => 'أنشئ في';
+
+  @override
+  String get noDaysInPlan => 'لا يوجد أيام في هذا البرنامج';
+
+  @override
+  String get addMeal => 'إضافة وجبة';
+
+  @override
+  String get deleteMeal => 'حذف الوجبة';
+
+  @override
+  String get ingredients => 'المكونات';
+
+  @override
+  String get addIngredient => 'إضافة مكون';
+
+  @override
+  String get all => 'الكل';
+
+  @override
+  String get enterAmountGrams => 'أدخل الكمية (بالغرام)';
+
+  @override
+  String get caloriesPer100g => 'لكل 100 غرام';
 }
