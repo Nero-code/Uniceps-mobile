@@ -149,6 +149,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                         ),
+
+                        // BoxButton(
+                        //   isCircle: true,
+                        //   width: 70,
+                        //   height: 70,
+                        //   background: const Color.fromARGB(29, 154, 178, 190),
+                        //   // background: const Color.fromARGB(255, 226, 237, 243),
+                        //   border: Border.all(width: 0.5, color: Colors.grey),
+                        //   onTap: () => Navigator.pushNamed(context, AppRoutes.dietLogger),
+                        //   child: const Icon(Icons.set_meal),
+                        // ),
                         BlocBuilder<CurrentRoutineCubit, CurrentRoutineState>(
                           builder: (context, state) {
                             return state.map(

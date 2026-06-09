@@ -1,0 +1,120 @@
+import 'package:uniceps/app/domain/classes/diet_classes/diet_day.dart';
+import 'package:uniceps/app/domain/classes/diet_classes/diet_meal.dart';
+import 'package:uniceps/app/domain/classes/diet_classes/diet_meal_ingredient.dart';
+
+const dietDay = DietDay(
+  name: 'Diet Day 1',
+  index: 0,
+  meals: [
+    DietMeal(
+      name: 'meal 1',
+      index: 0,
+      ingredients: [
+        DietMealIngredient(
+          id: null,
+          amount: 150,
+          index: 0,
+          code: 'code',
+          nameAr: 'nameAr',
+          nameEn: 'nameEn',
+          category: 'category',
+          description: 'description',
+          servingSizeInGrams: 100,
+          calories: 25,
+          protein: 30,
+          carbs: 35,
+          fats: 40,
+        ),
+        DietMealIngredient(
+          id: null,
+          amount: 150,
+          index: 0,
+          code: 'code',
+          nameAr: 'nameAr',
+          nameEn: 'nameEn',
+          category: 'category',
+          description: 'description',
+          servingSizeInGrams: 100,
+          calories: 25,
+          protein: 30,
+          carbs: 35,
+          fats: 40,
+        ),
+      ],
+    ),
+    DietMeal(
+      name: 'meal 1',
+      index: 0,
+      ingredients: [
+        DietMealIngredient(
+          id: null,
+          amount: 150,
+          index: 0,
+          code: 'code',
+          nameAr: 'nameAr',
+          nameEn: 'nameEn',
+          category: 'category',
+          description: 'description',
+          servingSizeInGrams: 100,
+          calories: 25,
+          protein: 30,
+          carbs: 35,
+          fats: 40,
+        ),
+      ],
+    ),
+  ],
+);
+
+const dietMeal = DietMeal(
+  name: 'meal 1',
+  index: 0,
+  ingredients: [
+    DietMealIngredient(
+      id: null,
+      amount: 150,
+      index: 0,
+      code: 'code',
+      nameAr: 'nameAr',
+      nameEn: 'nameEn',
+      category: 'category',
+      description: 'description',
+      servingSizeInGrams: 100,
+      calories: 25,
+      protein: 30,
+      carbs: 35,
+      fats: 40,
+    ),
+    DietMealIngredient(
+      id: null,
+      amount: 150,
+      index: 0,
+      code: 'code',
+      nameAr: 'nameAr',
+      nameEn: 'nameEn',
+      category: 'category',
+      description: 'description',
+      servingSizeInGrams: 100,
+      calories: 25,
+      protein: 30,
+      carbs: 35,
+      fats: 40,
+    ),
+  ],
+);
+
+const dietIngredient = DietMealIngredient(
+  id: null,
+  amount: 150,
+  index: 0,
+  code: 'code',
+  nameAr: 'nameAr',
+  nameEn: 'nameEn',
+  category: 'category',
+  description: 'description',
+  servingSizeInGrams: 100,
+  calories: 25,
+  protein: 30,
+  carbs: 35,
+  fats: 40,
+);
