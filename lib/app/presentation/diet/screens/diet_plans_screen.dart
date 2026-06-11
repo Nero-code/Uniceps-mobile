@@ -59,6 +59,7 @@ class DietPlansScreen extends StatelessWidget {
                     elevation: 0,
                     margin: const EdgeInsets.only(bottom: 12),
                     child: ListTile(
+                      visualDensity: const VisualDensity(),
                       title: Text(plan.name, style: const TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,15 +80,18 @@ class DietPlansScreen extends StatelessWidget {
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (isCurrent)
-                            Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary)
-                          else
-                            IconButton(
-                              icon: const Icon(Icons.circle_outlined),
-                              onPressed: () => context.read<DietPlanBloc>().add(DietPlanEvent.setCurrentPlan(plan.id!)),
-                            ),
+                          IconButton(
+                            icon: isCurrent
+                                ? Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary)
+                                : const Icon(Icons.circle_outlined),
+                            padding: .zero,
+                            onPressed: isCurrent
+                                ? null
+                                : () => context.read<DietPlanBloc>().add(DietPlanEvent.setCurrentPlan(plan.id!)),
+                          ),
                           IconButton(
                             icon: const Icon(Icons.edit_outlined),
+                            padding: .zero,
                             onPressed: () => showDialog(
                               context: context,
                               builder: (_) => BlocProvider.value(
@@ -98,6 +102,7 @@ class DietPlansScreen extends StatelessWidget {
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete_outline, color: Colors.red),
+                            padding: .zero,
                             onPressed: () => showDialog(
                               context: context,
                               builder: (_) => BlocProvider.value(
