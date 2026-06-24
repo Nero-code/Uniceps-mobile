@@ -93,6 +93,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reorder => 'Reorder';
 
   @override
+  String get share => 'Share';
+
+  @override
   String get newVersion => 'New Version Available';
 
   @override

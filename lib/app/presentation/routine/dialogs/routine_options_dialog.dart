@@ -93,7 +93,7 @@ class RoutineOptionsDialog extends StatelessWidget {
                     const Icon(Icons.import_export, color: Colors.blue),
                     const SizedBox(width: 5.0),
                     Text(
-                      locale.exportRoutine,
+                      locale.share,
                       style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.blue),
                     ),
                   ],
