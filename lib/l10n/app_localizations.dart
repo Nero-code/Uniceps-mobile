@@ -266,6 +266,12 @@ abstract class AppLocalizations {
   /// **'Reorder'**
   String get reorder;
 
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
   /// No description provided for @newVersion.
   ///
   /// In en, this message translates to:

@@ -9,6 +9,10 @@ import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart'
 import 'package:uniceps/app/presentation/blocs/exercise_lib/lib_sync_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/profile/profile_cubit.dart';
+import 'package:uniceps/app/presentation/diet/blocs/diet_plan/diet_plan_bloc.dart';
+import 'package:uniceps/app/presentation/diet/screens/diet_home_screen.dart';
+import 'package:uniceps/app/presentation/diet/screens/diet_plans_screen.dart';
+import 'package:uniceps/app/presentation/diet_logger/screens/diet_logger_screen.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
@@ -25,6 +29,7 @@ import 'package:uniceps/app/presentation/settings/screens/settings_screen.dart';
 import 'package:uniceps/app/services/file_handler_service.dart';
 import 'package:uniceps/app/services/notification_service.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
+import 'package:uniceps/core/fakes/diet_fakes.dart';
 import 'package:uniceps/firebase_options.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/l10n/app_localizations.dart';
@@ -80,7 +85,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => CurrentRoutineCubit(commands: di.sl())..getCurrentRoutine(), lazy: false),
         BlocProvider(create: (context) => SessionBloc(commands: di.sl())..add(const .getLastActiveSession())),
 
-        // BlocProvider(create: (context) => DietPlanBloc(di.sl())..add(const .getPlans())),
+        BlocProvider(create: (context) => DietPlanBloc(di.sl())..add(const .getPlans())),
         BlocProvider(create: (context) => AppConfigCubit(appConfigsService: di.sl())..loadConfigs(), lazy: false),
         BlocProvider(create: (context) => DailyQuoteCubit(di.sl())..getQuote()),
         BlocProvider(create: (context) => LibSyncCubit(di.sl())),
@@ -117,8 +122,9 @@ class MyApp extends StatelessWidget {
               AppRoutes.plans: (_) => const PlansScreen(),
 
               // DIET
-              // AppRoutes.dietPlans: (_) => const DietPlansScreen(),
-              // AppRoutes.dietLogger: (_) => const DietLoggerScreen(dietDay: dietDay),
+              AppRoutes.diet: (_) => const DietHomeScreen(),
+              AppRoutes.dietPlans: (_) => const DietPlansScreen(),
+              AppRoutes.dietLogger: (_) => const DietLoggerScreen(dietDay: dietDay),
 
               //  AUX
               AppRoutes.about: (_) => const AboutScreen(),

@@ -12,6 +12,7 @@ import 'package:uniceps/app/domain/classes/diet_classes/diet_plan.dart';
 import 'package:uniceps/app/domain/classes/diet_classes/ingredient.dart';
 import 'package:uniceps/app/domain/contracts/diet/i_diet_service.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/fakes/diet_fakes.dart';
 
 class DietRepo implements IDietService {
   final IDietLocalSource _localSource;
@@ -40,8 +41,10 @@ class DietRepo implements IDietService {
   @override
   Future<Either<Failure, List<DietPlan>>> getDietPlans() async {
     try {
-      final plansDto = await _localSource.getDietPlans();
-      return Right(plansDto.map((e) => e.toEntity()).toList());
+      // final plansDto = await _localSource.getDietPlans();
+      // return Right(plansDto.map((e) => e.toEntity()).toList());
+      final platsDto = dietPlan;
+      return Right([platsDto]);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
@@ -105,7 +108,8 @@ class DietRepo implements IDietService {
         }
         days.add(dayDto.toEntity().copyWith(meals: meals));
       }
-      return Right(days);
+      // return Right(days);
+      return Right([dietDay]);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }

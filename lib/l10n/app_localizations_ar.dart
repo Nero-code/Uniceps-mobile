@@ -93,6 +93,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get reorder => 'اعادة ترتيب';
 
   @override
+  String get share => 'مشاركة';
+
+  @override
   String get newVersion => 'يوجد تحديث جديد!';
 
   @override
