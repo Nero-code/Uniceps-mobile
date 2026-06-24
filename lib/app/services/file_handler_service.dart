@@ -11,6 +11,11 @@ import 'package:uniceps/app/presentation/routine/blocs/routines_with_heat/routin
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/injection_dependency.dart';
 
+/// FileHandlerService manages the lifecycle of shared files passed to the application.
+///
+/// It listens for incoming deep links and file intents using the AppLinks package.
+/// Since shared files from apps like WhatsApp or Google Drive use "content://" URIs
+/// that Dart cannot read directly, this service bridges the gap via a native MethodChannel.
 class FileHandlerService {
   static final FileHandlerService _instance = FileHandlerService._internal();
   factory FileHandlerService() => _instance;
@@ -18,33 +23,49 @@ class FileHandlerService {
 
   final _appLinks = AppLinks();
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  /// Native channel to communicate with MainActivity.kt for ContentResolver operations.
   static const _platform = MethodChannel('com.trioverse.uniceps/content_resolver');
 
+  /// Tracks if the application UI is ready to navigate to the import screen.
   bool _isAppReady = false;
-  Uri? _pendingUri;
 
+  /// Stores a URI if it arrives before the app is fully initialized (e.g., during cold start).
+  String? _pendingUriString;
+
+  /// Initializes the listeners for incoming file intents.
+  ///
+  /// Uses String-based streams instead of Uri-based streams to prevent Dart's
+  /// Uri parser from crashing on malformed percent-encodings or special Arabic characters.
   void init() {
-    _appLinks.getInitialLink().then((uri) {
-      if (uri != null) _processFile(uri);
+    // Handle the file that triggered the app launch (Cold Start)
+    _appLinks.getInitialLinkString().then((uriString) {
+      if (uriString != null) _processFile(uriString);
     });
 
-    _appLinks.uriLinkStream.listen((uri) {
-      _processFile(uri);
+    // Handle files shared while the app is already running (Warm Start)
+    _appLinks.stringLinkStream.listen((uriString) {
+      _processFile(uriString);
     });
   }
 
+  /// Notifies the service that the app UI (Navigator) is ready to handle redirections.
   void setAppReady() {
     _isAppReady = true;
-    if (_pendingUri != null) {
-      _processFile(_pendingUri!);
-      _pendingUri = null;
+    if (_pendingUriString != null) {
+      _processFile(_pendingUriString!);
+      _pendingUriString = null;
     }
   }
 
-  void _processFile(Uri uri) async {
+  /// Processes a URI string representing a shared file.
+  ///
+  /// [uriString] can be a "content://" URI (from sharing apps) or a "file://" URI.
+  void _processFile(String uriString) async {
+    // If the Navigator is not ready, store the URI for later processing.
     if (!_isAppReady) {
-      _pendingUri = uri;
-      debugPrint("App not ready, storing pending URI: $uri");
+      _pendingUriString = uriString;
+      debugPrint("App not ready, storing pending URI: $uriString");
       return;
     }
 
@@ -52,31 +73,57 @@ class FileHandlerService {
       String? content;
       String? fileName;
 
-      if (uri.scheme == 'content') {
-        // Fetch the actual display name from the native side (handles hashes from WhatsApp)
-        fileName = await _platform.invokeMethod('getFileName', {'uri': uri.toString()});
+      /**
+       * Scenario 1: Content URIs (Standard for Android File Sharing)
+       * These require native code access via the ContentResolver.
+       */
+      if (uriString.startsWith('content://')) {
+        // Fetch the filename using native code (handles Arabic/Metadata correctly)
+        fileName = await _platform.invokeMethod('getFileName', {'uri': uriString});
 
-        // Use Uri.decodeFull to handle Arabic/URL-encoded characters
-        if (fileName != null) fileName = Uri.decodeFull(fileName);
-
-        final Uint8List? bytes = await _platform.invokeMethod('readContentUri', {'uri': uri.toString()});
+        // Read the actual file bytes from the native side
+        final Uint8List? bytes = await _platform.invokeMethod('readContentUri', {'uri': uriString});
         if (bytes != null) {
+          // Decode bytes to String (Assumes UTF-8 for .unx files)
           content = utf8.decode(bytes);
         }
-      } else {
-        final String filePath = uri.toFilePath();
-        final file = File(filePath);
+      }
+      /**
+       * Scenario 2: Standard File URIs
+       * These can be read directly by Dart's IO library.
+       */
+      else {
+        String path = uriString;
+        if (path.startsWith('file://')) {
+          // toFilePath() handles the conversion of file:// scheme to local OS paths
+          path = Uri.parse(uriString).toFilePath();
+        }
+
+        final file = File(path);
         if (await file.exists()) {
-          fileName = Uri.decodeFull(p.basename(filePath));
+          fileName = p.basename(path);
           content = await file.readAsString();
         }
       }
 
-      // Fallback filename
-      fileName ??= Uri.decodeFull(p.basename(uri.path));
+      /**
+       * Final Filename Cleanup
+       * We attempt to decode the filename in case it is still percent-encoded.
+       * We wrap this in a try-catch to prevent "Illegal percent encoding" crashes
+       * if the filename contains raw '%' characters.
+       */
+      if (fileName != null) {
+        try {
+          fileName = Uri.decodeFull(fileName);
+        } catch (e) {
+          debugPrint("Filename decoding failed (probably raw %): $e");
+          // Fallback to the raw fileName from the native side
+        }
+      }
 
-      if (content != null) {
-        debugPrint("File opened successfully");
+      // If we successfully retrieved both name and content, proceed to the Import Screen
+      if (content != null && fileName != null) {
+        debugPrint("File opened successfully: $fileName");
 
         navigatorKey.currentState?.push(
           MaterialPageRoute(
