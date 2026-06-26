@@ -152,6 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ),
 
+                        if (const String.fromEnvironment('VERSION_SUFFIX').isNotEmpty)
                         BoxButton(
                           isCircle: true,
                           width: 70,
@@ -162,6 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () => Navigator.pushNamed(context, AppRoutes.dietPlans),
                           child: const Icon(Icons.set_meal),
                         ),
+
                         BlocBuilder<CurrentRoutineCubit, CurrentRoutineState>(
                           builder: (context, state) {
                             return state.map(
