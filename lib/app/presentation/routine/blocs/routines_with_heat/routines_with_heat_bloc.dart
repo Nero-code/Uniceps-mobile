@@ -55,7 +55,8 @@ class RoutinesWithHeatBloc extends Bloc<RoutinesWithHeatEvent, RoutinesWithHeatS
       either.fold((l) => emit(_Error(l)), (r) => emit(_Loaded(r)));
     });
     on<_Export>((event, emit) async {
-      await _usecases.exportRoutineToFile(event.routineId);
+      // await _usecases.exportRoutineToFile(event.routineId);
+      await _usecases.shareRoutine(event.routineId);
     });
   }
 }

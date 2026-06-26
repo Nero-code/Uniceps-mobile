@@ -16,4 +16,5 @@ abstract class IRoutineWithHeatContract {
   Stream<RoutineResult> importRoutineFromFile();
   Stream<RoutineResult> importRoutine(UniFile file);
   Future<bool> exportRoutineToFile(int routineId);
+  Future<bool> shareRoutine(int routineId);
 }

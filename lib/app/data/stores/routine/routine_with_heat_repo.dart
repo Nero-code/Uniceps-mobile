@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
+import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uniceps/app/data/models/routine_models/extensions.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
 import 'package:uniceps/app/data/models/routine_result.dart';
@@ -18,6 +22,8 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
   final UniFileManager _unifileManager;
   final MediaHelper _mediaHelper;
   final Logger _logger;
+
+  static const _platform = MethodChannel('com.trioverse.uniceps/content_resolver');
 
   final List<({Routine routine, RoutineHeat heat})> routines = [];
 
@@ -181,6 +187,37 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
       return true;
     } catch (e) {
       _logger.e('Error exporting routine', error: e);
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> shareRoutine(int routineId) async {
+    try {
+      final routineDto = await _localSource.getFullRoutine(routineId);
+
+      // 1. Create the UniFile content
+      final String fileContent = UniFile(
+        meta: const MetaPart(
+          source: 'uniceps_mobile',
+          schemaVersion: UniFileManager.supportedVersion,
+          fileType: FileType.routine,
+        ),
+        data: routineDto.toJson(),
+      ).toFile();
+
+      // 2. Save to a temporary file in the cache directory
+      final directory = await getTemporaryDirectory();
+      final String fileName = "${routineDto.name}.unx";
+      final File tempFile = File("${directory.path}/$fileName");
+      await tempFile.writeAsString(fileContent);
+
+      // 3. Invoke native sharing
+      await _platform.invokeMethod('shareFile', {'path': tempFile.path, 'title': 'Share ${routineDto.name}'});
+
+      return true;
+    } catch (e) {
+      _logger.e('Error sharing routine', error: e);
       return false;
     }
   }

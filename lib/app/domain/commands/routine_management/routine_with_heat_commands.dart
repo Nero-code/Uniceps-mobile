@@ -25,4 +25,5 @@ class RoutineWithHeatCommands {
   Stream<RoutineResult> importRoutine() => _repo.importRoutineFromFile();
   Stream<RoutineResult> importUniFile(UniFile file) => _repo.importRoutine(file);
   Future<bool> exportRoutineToFile(int routineId) => _repo.exportRoutineToFile(routineId);
+  Future<bool> shareRoutine(int routineId) => _repo.shareRoutine(routineId);
 }
