@@ -34,7 +34,7 @@ class Version {
   }
 
   Map<String, dynamic> toJson() => {
-    "version": '$currentMajor.$currentMinor.$currentPatch.$currentBuild',
+    "version": '$major.$minor.$patch.$build',
     "isUrgent": isUpdateUrgent,
     "changeLog": changeLogEn,
     "changeLogAr": changeLogAr,
@@ -64,6 +64,9 @@ class Version {
 
   @override
   int get hashCode => Object.hash(major, minor, patch, build);
+
+  @override
+  String toString() => 'v$major.$minor.$patch.$build';
 
   static String code() => '$currentMajor.$currentMinor.$currentPatch.$currentBuild';
 }

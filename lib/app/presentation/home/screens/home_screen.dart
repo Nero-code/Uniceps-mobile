@@ -5,6 +5,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/update/update_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
@@ -27,6 +28,7 @@ import 'package:uniceps/core/widgets/box_botton.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/errors/failure.dart';
 
@@ -83,12 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             Scaffold(
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  logger.t('floating action button pressed');
-                },
-                child: Text('yo'),
-              ),
               appBar: AppBar(
                 centerTitle: true,
                 backgroundColor: Theme.of(context).colorScheme.surface,
@@ -116,12 +112,67 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                 ],
               ),
+
               body: Stack(
                 fit: StackFit.expand,
                 children: [
                   SingleChildScrollView(
                     child: Column(
                       children: [
+                        BlocListener<UpdateCubit, UpdateState>(
+                          listener: (context, state) => state.whenOrNull(
+                            needsUpdate: (version) {
+                              logger.t('Version: ${version.toJson()}');
+                              return showDialog(
+                                context: context,
+                                barrierDismissible: !version.isUpdateUrgent,
+                                builder: (context) => PopScope(
+                                  canPop: !version.isUpdateUrgent,
+                                  child: AlertDialog(
+                                    scrollable: true,
+                                    icon: Icon(
+                                      version.isUpdateUrgent ? Icons.nearby_error : Icons.verified,
+                                      color: version.isUpdateUrgent ? Colors.red : null,
+                                      size: 50,
+                                    ),
+                                    title: Text(
+                                      '${locale.newVersion}'
+                                      '\n'
+                                      '${version.toString()}',
+                                    ),
+                                    content: Text(lang == 'ar' ? version.changeLogAr : version.changeLogEn),
+                                    actions: [
+                                      if (!version.isUpdateUrgent)
+                                        TextButton(onPressed: () => Navigator.pop(context), child: Text(locale.cancel)),
+                                      ElevatedButton(
+                                        style: version.isUpdateUrgent
+                                            ? ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.red,
+                                                foregroundColor: Colors.white,
+                                              )
+                                            : null,
+                                        onPressed: () {
+                                          launchUrl(
+                                            Uri.parse(
+                                              "https://play.google.com/store/apps/details?id=com.trioverse.uniceps",
+                                            ),
+                                            mode: LaunchMode.externalApplication,
+                                          );
+                                          if (!version.isUpdateUrgent) {
+                                            Navigator.pop(context);
+                                          }
+                                        },
+                                        child: Text(locale.update),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          child: const SizedBox(),
+                        ),
+
                         //
                         // Practice Panel
                         //

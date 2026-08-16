@@ -6020,6 +6020,17 @@ class $DietLogsTable extends DietLogs
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _totalGramsMeta = const VerificationMeta(
+    'totalGrams',
+  );
+  @override
+  late final GeneratedColumn<double> totalGrams = GeneratedColumn<double>(
+    'total_grams',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _caloriesMeta = const VerificationMeta(
     'calories',
   );
@@ -6064,6 +6075,7 @@ class $DietLogsTable extends DietLogs
   List<GeneratedColumn> get $columns => [
     id,
     name,
+    totalGrams,
     calories,
     protein,
     carbs,
@@ -6091,6 +6103,14 @@ class $DietLogsTable extends DietLogs
       );
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (data.containsKey('total_grams')) {
+      context.handle(
+        _totalGramsMeta,
+        totalGrams.isAcceptableOrUnknown(data['total_grams']!, _totalGramsMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_totalGramsMeta);
     }
     if (data.containsKey('calories')) {
       context.handle(
@@ -6141,6 +6161,10 @@ class $DietLogsTable extends DietLogs
         DriftSqlType.string,
         data['${effectivePrefix}name'],
       )!,
+      totalGrams: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}total_grams'],
+      )!,
       calories: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}calories'],
@@ -6169,6 +6193,7 @@ class $DietLogsTable extends DietLogs
 class DietLogData extends DataClass implements Insertable<DietLogData> {
   final int id;
   final String name;
+  final double totalGrams;
   final double calories;
   final double protein;
   final double carbs;
@@ -6176,6 +6201,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
   const DietLogData({
     required this.id,
     required this.name,
+    required this.totalGrams,
     required this.calories,
     required this.protein,
     required this.carbs,
@@ -6186,6 +6212,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
+    map['total_grams'] = Variable<double>(totalGrams);
     map['calories'] = Variable<double>(calories);
     map['protein'] = Variable<double>(protein);
     map['carbs'] = Variable<double>(carbs);
@@ -6197,6 +6224,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
     return DietLogsCompanion(
       id: Value(id),
       name: Value(name),
+      totalGrams: Value(totalGrams),
       calories: Value(calories),
       protein: Value(protein),
       carbs: Value(carbs),
@@ -6212,6 +6240,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
     return DietLogData(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
+      totalGrams: serializer.fromJson<double>(json['totalGrams']),
       calories: serializer.fromJson<double>(json['calories']),
       protein: serializer.fromJson<double>(json['protein']),
       carbs: serializer.fromJson<double>(json['carbs']),
@@ -6224,6 +6253,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
+      'totalGrams': serializer.toJson<double>(totalGrams),
       'calories': serializer.toJson<double>(calories),
       'protein': serializer.toJson<double>(protein),
       'carbs': serializer.toJson<double>(carbs),
@@ -6234,6 +6264,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
   DietLogData copyWith({
     int? id,
     String? name,
+    double? totalGrams,
     double? calories,
     double? protein,
     double? carbs,
@@ -6241,6 +6272,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
   }) => DietLogData(
     id: id ?? this.id,
     name: name ?? this.name,
+    totalGrams: totalGrams ?? this.totalGrams,
     calories: calories ?? this.calories,
     protein: protein ?? this.protein,
     carbs: carbs ?? this.carbs,
@@ -6250,6 +6282,9 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
     return DietLogData(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
+      totalGrams: data.totalGrams.present
+          ? data.totalGrams.value
+          : this.totalGrams,
       calories: data.calories.present ? data.calories.value : this.calories,
       protein: data.protein.present ? data.protein.value : this.protein,
       carbs: data.carbs.present ? data.carbs.value : this.carbs,
@@ -6262,6 +6297,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
     return (StringBuffer('DietLogData(')
           ..write('id: $id, ')
           ..write('name: $name, ')
+          ..write('totalGrams: $totalGrams, ')
           ..write('calories: $calories, ')
           ..write('protein: $protein, ')
           ..write('carbs: $carbs, ')
@@ -6271,13 +6307,15 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
   }
 
   @override
-  int get hashCode => Object.hash(id, name, calories, protein, carbs, fats);
+  int get hashCode =>
+      Object.hash(id, name, totalGrams, calories, protein, carbs, fats);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is DietLogData &&
           other.id == this.id &&
           other.name == this.name &&
+          other.totalGrams == this.totalGrams &&
           other.calories == this.calories &&
           other.protein == this.protein &&
           other.carbs == this.carbs &&
@@ -6287,6 +6325,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
 class DietLogsCompanion extends UpdateCompanion<DietLogData> {
   final Value<int> id;
   final Value<String> name;
+  final Value<double> totalGrams;
   final Value<double> calories;
   final Value<double> protein;
   final Value<double> carbs;
@@ -6294,6 +6333,7 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
   const DietLogsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
+    this.totalGrams = const Value.absent(),
     this.calories = const Value.absent(),
     this.protein = const Value.absent(),
     this.carbs = const Value.absent(),
@@ -6302,11 +6342,13 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
   DietLogsCompanion.insert({
     this.id = const Value.absent(),
     required String name,
+    required double totalGrams,
     required double calories,
     required double protein,
     required double carbs,
     required double fats,
   }) : name = Value(name),
+       totalGrams = Value(totalGrams),
        calories = Value(calories),
        protein = Value(protein),
        carbs = Value(carbs),
@@ -6314,6 +6356,7 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
   static Insertable<DietLogData> custom({
     Expression<int>? id,
     Expression<String>? name,
+    Expression<double>? totalGrams,
     Expression<double>? calories,
     Expression<double>? protein,
     Expression<double>? carbs,
@@ -6322,6 +6365,7 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
+      if (totalGrams != null) 'total_grams': totalGrams,
       if (calories != null) 'calories': calories,
       if (protein != null) 'protein': protein,
       if (carbs != null) 'carbs': carbs,
@@ -6332,6 +6376,7 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
   DietLogsCompanion copyWith({
     Value<int>? id,
     Value<String>? name,
+    Value<double>? totalGrams,
     Value<double>? calories,
     Value<double>? protein,
     Value<double>? carbs,
@@ -6340,6 +6385,7 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
     return DietLogsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
+      totalGrams: totalGrams ?? this.totalGrams,
       calories: calories ?? this.calories,
       protein: protein ?? this.protein,
       carbs: carbs ?? this.carbs,
@@ -6355,6 +6401,9 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
+    }
+    if (totalGrams.present) {
+      map['total_grams'] = Variable<double>(totalGrams.value);
     }
     if (calories.present) {
       map['calories'] = Variable<double>(calories.value);
@@ -6376,6 +6425,7 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
     return (StringBuffer('DietLogsCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
+          ..write('totalGrams: $totalGrams, ')
           ..write('calories: $calories, ')
           ..write('protein: $protein, ')
           ..write('carbs: $carbs, ')
@@ -10472,6 +10522,7 @@ typedef $$DietLogsTableCreateCompanionBuilder =
     DietLogsCompanion Function({
       Value<int> id,
       required String name,
+      required double totalGrams,
       required double calories,
       required double protein,
       required double carbs,
@@ -10481,6 +10532,7 @@ typedef $$DietLogsTableUpdateCompanionBuilder =
     DietLogsCompanion Function({
       Value<int> id,
       Value<String> name,
+      Value<double> totalGrams,
       Value<double> calories,
       Value<double> protein,
       Value<double> carbs,
@@ -10503,6 +10555,11 @@ class $$DietLogsTableFilterComposer
 
   ColumnFilters<String> get name => $composableBuilder(
     column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get totalGrams => $composableBuilder(
+    column: $table.totalGrams,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -10546,6 +10603,11 @@ class $$DietLogsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<double> get totalGrams => $composableBuilder(
+    column: $table.totalGrams,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<double> get calories => $composableBuilder(
     column: $table.calories,
     builder: (column) => ColumnOrderings(column),
@@ -10581,6 +10643,11 @@ class $$DietLogsTableAnnotationComposer
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<double> get totalGrams => $composableBuilder(
+    column: $table.totalGrams,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<double> get calories =>
       $composableBuilder(column: $table.calories, builder: (column) => column);
@@ -10628,6 +10695,7 @@ class $$DietLogsTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<String> name = const Value.absent(),
+                Value<double> totalGrams = const Value.absent(),
                 Value<double> calories = const Value.absent(),
                 Value<double> protein = const Value.absent(),
                 Value<double> carbs = const Value.absent(),
@@ -10635,6 +10703,7 @@ class $$DietLogsTableTableManager
               }) => DietLogsCompanion(
                 id: id,
                 name: name,
+                totalGrams: totalGrams,
                 calories: calories,
                 protein: protein,
                 carbs: carbs,
@@ -10644,6 +10713,7 @@ class $$DietLogsTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 required String name,
+                required double totalGrams,
                 required double calories,
                 required double protein,
                 required double carbs,
@@ -10651,6 +10721,7 @@ class $$DietLogsTableTableManager
               }) => DietLogsCompanion.insert(
                 id: id,
                 name: name,
+                totalGrams: totalGrams,
                 calories: calories,
                 protein: protein,
                 carbs: carbs,

@@ -9,6 +9,7 @@ import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart'
 import 'package:uniceps/app/presentation/blocs/exercise_lib/lib_sync_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/profile/profile_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/update/update_cubit.dart';
 import 'package:uniceps/app/presentation/diet_logger/screens/diet_logger_screen.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
@@ -83,6 +84,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => AppConfigCubit(appConfigsService: di.sl())..loadConfigs(), lazy: false),
         BlocProvider(create: (context) => DailyQuoteCubit(di.sl())..getQuote()),
         BlocProvider(create: (context) => LibSyncCubit(di.sl())),
+
+        BlocProvider(create: (context) => UpdateCubit(service: di.sl())..checkAppUpdate()),
       ],
       child: BlocBuilder<AppConfigCubit, AppConfigState>(
         builder: (context, state) {
