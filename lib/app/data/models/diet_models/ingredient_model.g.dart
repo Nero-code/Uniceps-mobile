@@ -8,10 +8,9 @@ part of 'ingredient_model.dart';
 
 IngredientModel _$IngredientModelFromJson(Map<String, dynamic> json) =>
     IngredientModel(
-      code: json['code'] as String,
-      nameAr: json['name_ar'] as String,
-      nameEn: json['name_en'] as String,
-      category: json['category'] as String,
+      id: (json['id'] as num?)?.toInt(),
+      name: json['name'] as String,
+      category: json['category'] as String?,
       servingSizeInGrams: (json['serving_size_g'] as num).toDouble(),
       calories: (json['calories'] as num).toDouble(),
       protein: (json['protein'] as num).toDouble(),
@@ -21,9 +20,8 @@ IngredientModel _$IngredientModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$IngredientModelToJson(IngredientModel instance) =>
     <String, dynamic>{
-      'code': instance.code,
-      'name_ar': instance.nameAr,
-      'name_en': instance.nameEn,
+      'id': instance.id,
+      'name': instance.name,
       'category': instance.category,
       'serving_size_g': instance.servingSizeInGrams,
       'calories': instance.calories,

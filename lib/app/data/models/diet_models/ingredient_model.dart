@@ -6,12 +6,9 @@ part 'ingredient_model.g.dart';
 
 @JsonSerializable()
 class IngredientModel {
-  final String code;
-  @JsonKey(name: 'name_ar')
-  final String nameAr;
-  @JsonKey(name: 'name_en')
-  final String nameEn;
-  final String category;
+  final int? id;
+  final String name;
+  final String? category;
   @JsonKey(name: 'serving_size_g')
   final double servingSizeInGrams;
   final double calories;
@@ -20,9 +17,8 @@ class IngredientModel {
   final double fats;
 
   const IngredientModel({
-    required this.code,
-    required this.nameAr,
-    required this.nameEn,
+    required this.id,
+    required this.name,
     required this.category,
     required this.servingSizeInGrams,
     required this.calories,
@@ -35,9 +31,8 @@ class IngredientModel {
   Map<String, dynamic> toJson() => _$IngredientModelToJson(this);
 
   entity.Ingredient toEntity() => entity.Ingredient(
-    code: code,
-    nameAr: nameAr,
-    nameEn: nameEn,
+    id: id,
+    name: name,
     category: category,
     servingSizeInGrams: servingSizeInGrams,
     calories: calories,
@@ -47,9 +42,8 @@ class IngredientModel {
   );
 
   factory IngredientModel.fromEntity(entity.Ingredient i) => IngredientModel(
-    code: i.code,
-    nameAr: i.nameAr,
-    nameEn: i.nameEn,
+    id: i.id,
+    name: i.name,
     category: i.category,
     servingSizeInGrams: i.servingSizeInGrams,
     calories: i.calories,
@@ -58,27 +52,14 @@ class IngredientModel {
     fats: i.fats,
   );
 
-  IngredientsCompanion toCompanion() => IngredientsCompanion.insert(
-    code: code,
-    nameAr: nameAr,
-    nameEn: nameEn,
-    category: category,
-    servingSizeInGrams: servingSizeInGrams.toString(),
-    calories: calories.toString(),
-    protein: protein.toString(),
-    carbs: carbs.toString(),
-    fats: fats.toString(),
-  );
-
-  factory IngredientModel.fromData(IngredientData data) => IngredientModel(
-    code: data.code,
-    nameAr: data.nameAr,
-    nameEn: data.nameEn,
-    category: data.category,
-    servingSizeInGrams: double.tryParse(data.servingSizeInGrams) ?? 0,
-    calories: double.tryParse(data.calories) ?? 0,
-    protein: double.tryParse(data.protein) ?? 0,
-    carbs: double.tryParse(data.carbs) ?? 0,
-    fats: double.tryParse(data.fats) ?? 0,
+  factory IngredientModel.fromCompanion(IngredientData data) => IngredientModel(
+    id: data.id,
+    name: data.name,
+    category: data.categoryText,
+    servingSizeInGrams: data.servingSizeInGrams,
+    calories: data.calories,
+    protein: data.protein,
+    carbs: data.carbs,
+    fats: data.fats,
   );
 }

@@ -11,6 +11,7 @@ import 'package:uniceps/app/domain/classes/account_entities/plan.dart';
 import 'package:uniceps/app/domain/classes/account_entities/plan_item.dart';
 import 'package:uniceps/app/domain/contracts/account/i_account_service.dart';
 import 'package:uniceps/app/services/network_info.dart';
+import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class AccountRepo implements IAccountService {
@@ -35,6 +36,10 @@ class AccountRepo implements IAccountService {
   @override
   Future<Either<Failure, Account>> getUserAccount() async {
     try {
+      if (!await _tokenService.isTokenValid()) {
+        await _localSource.logout();
+        throw EmptyCacheExeption();
+      }
       final account = await _localSource.getUserAccount();
       _logger.t('Got Account: ${account.toJson()}');
       return Right(account.toEntity());

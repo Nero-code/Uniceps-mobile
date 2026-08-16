@@ -44,7 +44,6 @@ import 'package:uniceps/app/data/stores/routine/routine_sets_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_with_heat_repo.dart';
 import 'package:uniceps/app/domain/commands/account_usecases/account_usecases.dart';
 import 'package:uniceps/app/domain/commands/auth_usecases/otp_usecases.dart';
-import 'package:uniceps/app/domain/commands/diet/diet_commands.dart';
 import 'package:uniceps/app/domain/commands/measurement_usecases/measurement_commands.dart';
 import 'package:uniceps/app/domain/commands/performance_usecases/performance_commands.dart';
 import 'package:uniceps/app/domain/commands/practice_usecases/practice_commands.dart';
@@ -73,9 +72,7 @@ import 'package:uniceps/app/services/captian_quotes_service.dart';
 import 'package:uniceps/app/services/device_info_sync_service.dart';
 import 'package:uniceps/app/services/exercise_lib_sync_service.dart';
 import 'package:uniceps/app/services/network_info.dart';
-import 'package:uniceps/app/services/update_service.dart';
-
-import 'app/services/diet_service.dart';
+import 'package:uniceps/core/helpers/version_service.dart';
 
 final sl = di.GetIt.instance;
 
@@ -147,7 +144,7 @@ Future<void> init() async {
 
   sl.registerLazySingleton<IProfileLocalSource>(() => ProfileLocalSource(prefs: sl(), logger: sl()));
 
-  sl.registerLazySingleton<IDietLocalSource>(() => DietLocalSource(sl()));
+  sl.registerLazySingleton<IDietLocalSource>(() => DietLocalSource(db: sl()));
 
   sl.registerLazySingleton<ITSessionLocalSourceContract>(
     () => TSessionLocalSource(database: sl(), imagesCache: imagesCache, logger: sl()),
@@ -266,7 +263,7 @@ Future<void> init() async {
   //
   sl.registerFactory(() => ProfileUsecases(repo: sl()));
 
-  sl.registerFactory(() => DietCommands(sl()));
+  // sl.registerFactory(() => DietCommands(sl()));
 
   sl.registerFactory(() => AccountUsecases(repo: sl()));
   sl.registerFactory(() => PracticeCommands(repo: sl()));
@@ -289,7 +286,7 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => UniFileManager(logger: sl()));
 
-  sl.registerLazySingleton<UpdateService>(() => UpdateService(connectionChecker: sl(), client: sl()));
+  sl.registerLazySingleton(() => VersionService(clientHelper: sl(), prefs: sl()));
 
   sl.registerLazySingleton<TSessionSyncContract>(
     () => TSessionSyncService(database: sl(), client: sl(), connectionChecker: sl(), logger: sl()),
@@ -303,10 +300,5 @@ Future<void> init() async {
   await appConfigs.getAppConfigs();
   sl.registerLazySingleton(() => appConfigs);
 
-  sl.registerLazySingleton(() => DietService(sl(), sl()));
-
-  // sl.registerLazySingleton(() => LanguageCacheHelper(sharedPreferences: sl()));
-
-  // final notificationService =  NotificationService();
-  // notificationService.ini
+  // sl.registerLazySingleton(() => DietService(sl(), sl()));
 }

@@ -203,6 +203,6 @@ String handleHttpStatus(Response res) {
     // case 503:
     //   throw ServiceUnavailableException();
     default:
-      throw ClientException('Unhandled status code: ${res.statusCode}');
+      throw ClientException('Unhandled status code: ${res.statusCode} : ${res.body}');
   }
 }

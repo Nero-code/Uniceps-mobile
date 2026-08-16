@@ -1,8 +1,7 @@
 class Ingredient {
-  final String code;
-  final String nameAr;
-  final String nameEn;
-  final String category;
+  final int? id;
+  final String name;
+  final String? category;
   final double servingSizeInGrams;
   final double calories;
   final double protein;
@@ -10,9 +9,8 @@ class Ingredient {
   final double fats;
 
   const Ingredient({
-    required this.code,
-    required this.nameAr,
-    required this.nameEn,
+    this.id,
+    required this.name,
     required this.category,
     required this.servingSizeInGrams,
     required this.calories,

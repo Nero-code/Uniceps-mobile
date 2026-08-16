@@ -24,5 +24,7 @@ abstract class ApiRoutes {
 
   static const exercises = "/api/ExerciseV2";
   static const muscleGroups = "/api/MuscleGroup";
+
+  static const version = '/api/release/app/0/latest/5';
   static String exerciseImage(String exId) => "/api/ExerciseV2/get-image/$exId";
 }

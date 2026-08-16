@@ -68,8 +68,9 @@ class SimpleTokenService implements TokenContract {
     _logger.d("Token: ${res.statusCode} : ${res.body}");
     if (res.statusCode == 200 || res.statusCode == 201) {
       final token = jsonDecode(res.body)['token'] as String;
+      final expireDate = jsonDecode(res.body)['expiresAt'] as String;
       await _storage.write(key: _accessTokenKey, value: token);
-      await _storage.write(key: _expirationDate, value: DateTime.now().toIso8601String());
+      await _storage.write(key: _expirationDate, value: expireDate);
       _logger.t('Token Refreshed Successfully! : ${res.statusCode}');
     }
   }

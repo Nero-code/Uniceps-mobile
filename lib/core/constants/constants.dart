@@ -4,8 +4,12 @@
 //   A P P   C O N S T A N T S
 //
 
+import 'package:uniceps/core/helpers/version.dart';
+
 const APP_NAME = 'Uniceps';
-const APP_VERSION = "v3.2.0+17${String.fromEnvironment('VERSION_SUFFIX')}";
+const APP_VERSION =
+    "v${Version.currentMajor}.${Version.currentMinor}.${Version.currentPatch}.${Version.currentBuild}"
+    "${String.fromEnvironment('VERSION_SUFFIX')}";
 
 ///   A P P   I M A G E S
 const IMG_PREMIUM = "images/photos/premium.png";

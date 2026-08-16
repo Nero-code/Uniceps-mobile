@@ -30,7 +30,6 @@ class TSessionSyncService implements TSessionSyncContract {
 
   @override
   void start() {
-    _logger.t('TSession SyncService Starting!');
     _init();
   }
 
@@ -46,6 +45,7 @@ class TSessionSyncService implements TSessionSyncContract {
     queue.stream.asyncMap(_syncSession).listen((_) {});
 
     final unSyncedFinishedSessions = await readAll();
+
     _onData(unSyncedFinishedSessions);
 
     _logger.t('TSession SyncService Started!');
@@ -53,9 +53,9 @@ class TSessionSyncService implements TSessionSyncContract {
 
   Future<List<TypedResult>> readAll() {
     final logA = _database.alias(_database.tLogs, 't');
-    return (_database.select(_database.tSessions)..where((f) => f.finishedAt.isNotNull() & f.apiId.isNull())).join([
-      leftOuterJoin(logA, logA.sessionId.equalsExp(_database.tSessions.tsId)),
-    ]).get();
+    return (_database.select(_database.tSessions)..where((f) => f.finishedAt.isNotNull() & f.isSynced.equals(false)))
+        .join([leftOuterJoin(logA, logA.sessionId.equalsExp(_database.tSessions.tsId))])
+        .get();
   }
 
   void _onData(List<TypedResult> rows) async {
@@ -73,6 +73,8 @@ class TSessionSyncService implements TSessionSyncContract {
       final lgs = logs.where((e) => e.sessionId == s.tsId).toList();
       if (!doneList.contains(s.tsId)) queue.add(TSessionModel.fromTable(s, lgs));
     }
+
+    _logger.t('TSession Queue: ${sessions}');
   }
 
   void _syncSession(TSessionModel model) async {
@@ -102,10 +104,8 @@ class TSessionSyncService implements TSessionSyncContract {
       );
 
       doneList.add(model.id!);
-      _logger.t('Session: ${model.toJson()}');
-      _logger.t('Session: ${model.toJson()}');
-    } catch (e) {
-      _logger.e(e.toString(), error: e);
+    } catch (e, s) {
+      _logger.e(e.toString(), error: e, stackTrace: s);
     }
   }
 }
