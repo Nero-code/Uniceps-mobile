@@ -5,23 +5,22 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i2;
 
-import 'package:logger/logger.dart' as _i12;
+import 'package:logger/logger.dart' as _i11;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i8;
+import 'package:mockito/src/dummies.dart' as _i7;
 import 'package:uniceps/app/data/models/account_models/account_model.dart'
-    as _i4;
+    as _i3;
 import 'package:uniceps/app/data/models/account_models/membership_model.dart'
-    as _i5;
-import 'package:uniceps/app/data/services/token/token_contract.dart' as _i3;
+    as _i4;
 import 'package:uniceps/app/data/services/token/token_service_simple.dart'
-    as _i9;
+    as _i8;
 import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart'
-    as _i10;
+    as _i9;
 import 'package:uniceps/app/data/sources/remote/dal_auth/auth_contracts.dart'
-    as _i6;
+    as _i5;
 import 'package:uniceps/app/domain/classes/account_entities/account.dart'
-    as _i7;
-import 'package:uniceps/app/services/network_info.dart' as _i11;
+    as _i6;
+import 'package:uniceps/app/services/network_info.dart' as _i10;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -43,26 +42,21 @@ class _FakeFuture_0<T1> extends _i1.SmartFake implements _i2.Future<T1> {
     : super(parent, parentInvocation);
 }
 
-class _FakeSession_1 extends _i1.SmartFake implements _i3.Session {
-  _FakeSession_1(Object parent, Invocation parentInvocation)
+class _FakeAccountModel_1 extends _i1.SmartFake implements _i3.AccountModel {
+  _FakeAccountModel_1(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeAccountModel_2 extends _i1.SmartFake implements _i4.AccountModel {
-  _FakeAccountModel_2(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeMembershipModel_3 extends _i1.SmartFake
-    implements _i5.MembershipModel {
-  _FakeMembershipModel_3(Object parent, Invocation parentInvocation)
+class _FakeMembershipModel_2 extends _i1.SmartFake
+    implements _i4.MembershipModel {
+  _FakeMembershipModel_2(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
 /// A class which mocks [IOTPAuthSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockIOTPAuthSource extends _i1.Mock implements _i6.IOTPAuthSource {
+class MockIOTPAuthSource extends _i1.Mock implements _i5.IOTPAuthSource {
   MockIOTPAuthSource() {
     _i1.throwOnMissingStub(this);
   }
@@ -70,7 +64,7 @@ class MockIOTPAuthSource extends _i1.Mock implements _i6.IOTPAuthSource {
   @override
   _i2.Future<bool> verifyCredential({
     required String? credential,
-    _i7.AccountType? accountType = _i7.AccountType.normal,
+    _i6.AccountType? accountType = _i6.AccountType.normal,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#verifyCredential, [], {
@@ -94,8 +88,8 @@ class MockIOTPAuthSource extends _i1.Mock implements _i6.IOTPAuthSource {
               #parser: parser,
             }),
             returnValue:
-                _i8.ifNotNull(
-                  _i8.dummyValueOrNull<T>(
+                _i7.ifNotNull(
+                  _i7.dummyValueOrNull<T>(
                     this,
                     Invocation.method(#validateOTP, [], {
                       #credential: credential,
@@ -121,7 +115,7 @@ class MockIOTPAuthSource extends _i1.Mock implements _i6.IOTPAuthSource {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSimpleTokenService extends _i1.Mock
-    implements _i9.SimpleTokenService {
+    implements _i8.SimpleTokenService {
   MockSimpleTokenService() {
     _i1.throwOnMissingStub(this);
   }
@@ -168,61 +162,42 @@ class MockSimpleTokenService extends _i1.Mock
             returnValueForMissingStub: _i2.Future<void>.value(),
           )
           as _i2.Future<void>);
-
-  @override
-  _i2.Future<_i3.Session> getSession() =>
-      (super.noSuchMethod(
-            Invocation.method(#getSession, []),
-            returnValue: _i2.Future<_i3.Session>.value(
-              _FakeSession_1(this, Invocation.method(#getSession, [])),
-            ),
-          )
-          as _i2.Future<_i3.Session>);
-
-  @override
-  _i2.Future<void> setSession(_i3.Session? s) =>
-      (super.noSuchMethod(
-            Invocation.method(#setSession, [s]),
-            returnValue: _i2.Future<void>.value(),
-            returnValueForMissingStub: _i2.Future<void>.value(),
-          )
-          as _i2.Future<void>);
 }
 
 /// A class which mocks [IAccountLocalSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockIAccountLocalSource extends _i1.Mock
-    implements _i10.IAccountLocalSource {
+    implements _i9.IAccountLocalSource {
   MockIAccountLocalSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.Future<_i4.AccountModel> getUserAccount() =>
+  _i2.Future<_i3.AccountModel> getUserAccount() =>
       (super.noSuchMethod(
             Invocation.method(#getUserAccount, []),
-            returnValue: _i2.Future<_i4.AccountModel>.value(
-              _FakeAccountModel_2(this, Invocation.method(#getUserAccount, [])),
+            returnValue: _i2.Future<_i3.AccountModel>.value(
+              _FakeAccountModel_1(this, Invocation.method(#getUserAccount, [])),
             ),
           )
-          as _i2.Future<_i4.AccountModel>);
+          as _i2.Future<_i3.AccountModel>);
 
   @override
-  _i2.Future<_i5.MembershipModel> getCurrentPlan() =>
+  _i2.Future<_i4.MembershipModel> getCurrentPlan() =>
       (super.noSuchMethod(
             Invocation.method(#getCurrentPlan, []),
-            returnValue: _i2.Future<_i5.MembershipModel>.value(
-              _FakeMembershipModel_3(
+            returnValue: _i2.Future<_i4.MembershipModel>.value(
+              _FakeMembershipModel_2(
                 this,
                 Invocation.method(#getCurrentPlan, []),
               ),
             ),
           )
-          as _i2.Future<_i5.MembershipModel>);
+          as _i2.Future<_i4.MembershipModel>);
 
   @override
-  _i2.Future<void> saveUserAccount(_i4.AccountModel? userAccount) =>
+  _i2.Future<void> saveUserAccount(_i3.AccountModel? userAccount) =>
       (super.noSuchMethod(
             Invocation.method(#saveUserAccount, [userAccount]),
             returnValue: _i2.Future<void>.value(),
@@ -231,7 +206,7 @@ class MockIAccountLocalSource extends _i1.Mock
           as _i2.Future<void>);
 
   @override
-  _i2.Future<bool> saveUserMembership(_i5.MembershipModel? subscriptionPlan) =>
+  _i2.Future<bool> saveUserMembership(_i4.MembershipModel? subscriptionPlan) =>
       (super.noSuchMethod(
             Invocation.method(#saveUserMembership, [subscriptionPlan]),
             returnValue: _i2.Future<bool>.value(false),
@@ -239,17 +214,17 @@ class MockIAccountLocalSource extends _i1.Mock
           as _i2.Future<bool>);
 
   @override
-  _i2.Future<_i5.MembershipModel> userMembershipNotified() =>
+  _i2.Future<_i4.MembershipModel> userMembershipNotified() =>
       (super.noSuchMethod(
             Invocation.method(#userMembershipNotified, []),
-            returnValue: _i2.Future<_i5.MembershipModel>.value(
-              _FakeMembershipModel_3(
+            returnValue: _i2.Future<_i4.MembershipModel>.value(
+              _FakeMembershipModel_2(
                 this,
                 Invocation.method(#userMembershipNotified, []),
               ),
             ),
           )
-          as _i2.Future<_i5.MembershipModel>);
+          as _i2.Future<_i4.MembershipModel>);
 
   @override
   _i2.Future<void> clearMemberships() =>
@@ -273,7 +248,7 @@ class MockIAccountLocalSource extends _i1.Mock
 /// A class which mocks [NetworkInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNetworkInfo extends _i1.Mock implements _i11.NetworkInfo {
+class MockNetworkInfo extends _i1.Mock implements _i10.NetworkInfo {
   MockNetworkInfo() {
     _i1.throwOnMissingStub(this);
   }
@@ -290,7 +265,7 @@ class MockNetworkInfo extends _i1.Mock implements _i11.NetworkInfo {
 /// A class which mocks [Logger].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLogger extends _i1.Mock implements _i12.Logger {
+class MockLogger extends _i1.Mock implements _i11.Logger {
   MockLogger() {
     _i1.throwOnMissingStub(this);
   }
@@ -425,7 +400,7 @@ class MockLogger extends _i1.Mock implements _i12.Logger {
 
   @override
   void log(
-    _i12.Level? level,
+    _i11.Level? level,
     dynamic message, {
     DateTime? time,
     Object? error,

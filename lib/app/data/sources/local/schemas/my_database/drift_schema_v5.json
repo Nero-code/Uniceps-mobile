@@ -1259,6 +1259,30 @@
             ]
           },
           {
+            "name": "api_id",
+            "getter_name": "apiId",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "is_user_generated",
+            "getter_name": "isUserGenerated",
+            "moor_type": "bool",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "CHECK (\"is_user_generated\" IN (0, 1))",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "CHECK (\"is_user_generated\" IN (0, 1))"
+            },
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
             "name": "name",
             "getter_name": "name",
             "moor_type": "string",
@@ -1269,10 +1293,20 @@
             "dsl_features": []
           },
           {
-            "name": "category_text",
-            "getter_name": "categoryText",
+            "name": "category_id",
+            "getter_name": "categoryId",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "category_name",
+            "getter_name": "categoryName",
             "moor_type": "string",
-            "nullable": true,
+            "nullable": false,
             "customConstraints": null,
             "default_dart": null,
             "default_client_dart": null,
@@ -1327,6 +1361,50 @@
             "default_dart": null,
             "default_client_dart": null,
             "dsl_features": []
+          },
+          {
+            "name": "version",
+            "getter_name": "version",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "is_synced",
+            "getter_name": "isSynced",
+            "moor_type": "bool",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "CHECK (\"is_synced\" IN (0, 1))",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "CHECK (\"is_synced\" IN (0, 1))"
+            },
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "updated_at",
+            "getter_name": "updatedAt",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "created_at",
+            "getter_name": "createdAt",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
           }
         ],
         "is_virtual": false,
@@ -1359,9 +1437,35 @@
             ]
           },
           {
+            "name": "api_id",
+            "getter_name": "apiId",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": null,
+            "defaultConstraints": "UNIQUE",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "UNIQUE"
+            },
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique"
+            ]
+          },
+          {
             "name": "name",
             "getter_name": "name",
             "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "total_grams",
+            "getter_name": "totalGrams",
+            "moor_type": "double",
             "nullable": false,
             "customConstraints": null,
             "default_dart": null,
@@ -1404,6 +1508,40 @@
             "moor_type": "double",
             "nullable": false,
             "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "timestamp",
+            "getter_name": "timestamp",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "version",
+            "getter_name": "version",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "is_synced",
+            "getter_name": "isSynced",
+            "moor_type": "bool",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "CHECK (\"is_synced\" IN (0, 1))",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "CHECK (\"is_synced\" IN (0, 1))"
+            },
             "default_dart": null,
             "default_client_dart": null,
             "dsl_features": []
@@ -1502,7 +1640,7 @@
       "sql": [
         {
           "dialect": "sqlite",
-          "sql": "CREATE TABLE IF NOT EXISTS \"ingredients\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"name\" TEXT NOT NULL, \"category_text\" TEXT NULL, \"serving_size_in_grams\" REAL NOT NULL, \"calories\" REAL NOT NULL, \"protein\" REAL NOT NULL, \"carbs\" REAL NOT NULL, \"fats\" REAL NOT NULL);"
+          "sql": "CREATE TABLE IF NOT EXISTS \"ingredients\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"api_id\" TEXT NULL, \"is_user_generated\" INTEGER NOT NULL CHECK (\"is_user_generated\" IN (0, 1)), \"name\" TEXT NOT NULL, \"category_id\" INTEGER NOT NULL, \"category_name\" TEXT NOT NULL, \"serving_size_in_grams\" REAL NOT NULL, \"calories\" REAL NOT NULL, \"protein\" REAL NOT NULL, \"carbs\" REAL NOT NULL, \"fats\" REAL NOT NULL, \"version\" INTEGER NOT NULL, \"is_synced\" INTEGER NOT NULL CHECK (\"is_synced\" IN (0, 1)), \"updated_at\" TEXT NOT NULL, \"created_at\" TEXT NOT NULL);"
         }
       ]
     },
@@ -1511,7 +1649,7 @@
       "sql": [
         {
           "dialect": "sqlite",
-          "sql": "CREATE TABLE IF NOT EXISTS \"diet_logs\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"name\" TEXT NOT NULL, \"calories\" REAL NOT NULL, \"protein\" REAL NOT NULL, \"carbs\" REAL NOT NULL, \"fats\" REAL NOT NULL);"
+          "sql": "CREATE TABLE IF NOT EXISTS \"diet_logs\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"api_id\" INTEGER NULL UNIQUE, \"name\" TEXT NOT NULL, \"total_grams\" REAL NOT NULL, \"calories\" REAL NOT NULL, \"protein\" REAL NOT NULL, \"carbs\" REAL NOT NULL, \"fats\" REAL NOT NULL, \"timestamp\" TEXT NOT NULL, \"version\" INTEGER NOT NULL, \"is_synced\" INTEGER NOT NULL CHECK (\"is_synced\" IN (0, 1)));"
         }
       ]
     }

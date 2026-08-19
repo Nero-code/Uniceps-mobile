@@ -10,7 +10,9 @@ import 'package:uniceps/app/presentation/blocs/exercise_lib/lib_sync_cubit.dart'
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/profile/profile_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/update/update_cubit.dart';
+import 'package:uniceps/app/presentation/diet_logger/blocs/diet_logger/diet_logger_bloc.dart';
 import 'package:uniceps/app/presentation/diet_logger/screens/diet_logger_screen.dart';
+import 'package:uniceps/app/presentation/diet_logger/screens/ingredients_screen.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
@@ -74,9 +76,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AccountCubit(di.sl(), di.sl(), di.sl())..getUserAccount(), lazy: false),
+        BlocProvider(
+          create: (context) => AccountCubit(accountUsecases: di.sl(), syncOrchestrator: di.sl())..getUserAccount(),
+          lazy: false,
+        ),
         BlocProvider(create: (context) => ProfileCubit(di.sl())..getProfile(), lazy: false),
-        BlocProvider(create: (context) => MembershipBloc(di.sl())..add(const .getCurrentPlan()), lazy: false),
+        BlocProvider(create: (context) => MembershipBloc(di.sl(), di.sl())..add(const .getCurrentPlan()), lazy: false),
 
         BlocProvider(create: (context) => CurrentRoutineCubit(commands: di.sl())..getCurrentRoutine(), lazy: false),
         BlocProvider(create: (context) => SessionBloc(commands: di.sl())..add(const .getLastActiveSession())),
@@ -86,6 +91,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => LibSyncCubit(di.sl())),
 
         BlocProvider(create: (context) => UpdateCubit(service: di.sl())..checkAppUpdate()),
+        BlocProvider(create: (context) => DietLoggerBloc(commands: di.sl())..add(const .started())),
       ],
       child: BlocBuilder<AppConfigCubit, AppConfigState>(
         builder: (context, state) {
@@ -120,6 +126,7 @@ class MyApp extends StatelessWidget {
 
               // DIET
               AppRoutes.dietLogger: (_) => const DietLoggerScreen(),
+              AppRoutes.diet: (_) => const IngredientsScreen(),
 
               //  AUX
               AppRoutes.about: (_) => const AboutScreen(),

@@ -39,7 +39,7 @@ class ExercisesRepo implements IExercisesContract {
        _internet = internet;
 
   @override
-  Future<Either<Failure, bool>> checkExercises() async {
+  Future<Either<ExerciseFailure, bool>> checkExercises() async {
     try {
       final res = await _localSource.getExercises();
       if (res.isNotEmpty) {
@@ -49,12 +49,12 @@ class ExercisesRepo implements IExercisesContract {
       }
       return Right(res.isNotEmpty);
     } catch (e) {
-      return Left(DatabaseFailure(errorMsg: e.toString()));
+      return Left(ExerciseFailure.databaseFailure(message: e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, bool>> changeLibLanguage(String language) async {
+  Future<Either<ExerciseFailure, bool>> changeLibLanguage(String language) async {
     if (await _internet.hasConnection) {
       try {
         final res = await _remoteSource.getAllExercises(language: language);
@@ -66,10 +66,10 @@ class ExercisesRepo implements IExercisesContract {
 
         return const Right(true);
       } catch (e, s) {
-        return Left(NoInternetConnectionFailure(errMsg: '$e\n$s'));
+        return Left(ExerciseFailure.serverFailure(message: '$e\n$s'));
       }
     } else {
-      return Left(NoInternetConnectionFailure(errMsg: ''));
+      return const Left(ExerciseFailure.eOffline());
     }
   }
 
@@ -100,7 +100,7 @@ class ExercisesRepo implements IExercisesContract {
   }
 
   @override
-  Future<Either<Failure, List<Exercise>>> getExercisesLib() async {
+  Future<Either<ExerciseFailure, List<Exercise>>> getExercisesLib() async {
     if (exercisesLib.isNotEmpty) return Right(exercisesLib);
 
     try {
@@ -110,14 +110,14 @@ class ExercisesRepo implements IExercisesContract {
       exercisesLib.addAll(res.map((e) => e.toEntity()));
       return Right(exercisesLib);
     } on ClientException {
-      return Left(OfflineFailure(errorMessage: ""));
+      return const Left(ExerciseFailure.eOffline());
     } catch (e) {
-      return Left(ServerFailure(errMsg: e.toString()));
+      return Left(ExerciseFailure.serverFailure(message: e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> saveExercisesLib(List<Exercise> lib) async {
+  Future<Either<ExerciseFailure, Unit>> saveExercisesLib(List<Exercise> lib) async {
     try {
       for (final e in lib) {
         await _localSource.writeExercise(ExerciseDto.fromEntity(e));
@@ -125,17 +125,17 @@ class ExercisesRepo implements IExercisesContract {
       return const Right(unit);
     } catch (e, s) {
       _logger.e('Error in saving exercises lib!', error: e, stackTrace: s);
-      return Left(DatabaseFailure(errorMsg: e.toString()));
+      return Left(ExerciseFailure.databaseFailure(message: e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, ExerciseFilter>> getExerciseFilters() async {
+  Future<Either<ExerciseFailure, ExerciseFilter>> getExerciseFilters() async {
     return Right(ExerciseFilter(groups: allGroups, tools: allTools));
   }
 
   @override
-  Future<Either<Failure, List<Exercise>>> getExercisesByFilter(ExerciseFilter filter) async {
+  Future<Either<ExerciseFailure, List<Exercise>>> getExercisesByFilter(ExerciseFilter filter) async {
     final filteredList = exercisesLib.where((e) {
       final filterGroup = filter.groups.isNotEmpty
           ? filter.groups.where((g) => e.muscleGroupCode == g.muscleGroupCode).isNotEmpty
@@ -149,7 +149,7 @@ class ExercisesRepo implements IExercisesContract {
   }
 
   @override
-  Future<Either<Failure, List<Exercise>>> getExercisesByGroup(MuscleGroup group) async {
+  Future<Either<ExerciseFailure, List<Exercise>>> getExercisesByGroup(MuscleGroup group) async {
     if (allExercises.containsKey(group.muscleGroupCode)) return Right(allExercises[group.muscleGroupCode]!);
     if (await _internet.hasConnection) {
       try {
@@ -158,14 +158,14 @@ class ExercisesRepo implements IExercisesContract {
         allExercises.addAll({group.muscleGroupCode: augRes.map((r) => r.toEntity()).toList()});
         return Right(allExercises[group.muscleGroupCode]!);
       } catch (e) {
-        return Left(ServerFailure(errMsg: e.toString()));
+        return Left(ExerciseFailure.serverFailure(message: e.toString()));
       }
     }
-    return Left(OfflineFailure(errorMessage: "offline"));
+    return const Left(ExerciseFailure.eOffline());
   }
 
   @override
-  Future<Either<Failure, List<MuscleGroup>>> getExerciseGroups() async {
+  Future<Either<ExerciseFailure, List<MuscleGroup>>> getExerciseGroups() async {
     if (allGroups.isNotEmpty) return Right(allGroups);
     if (await _internet.hasConnection) {
       try {
@@ -173,14 +173,14 @@ class ExercisesRepo implements IExercisesContract {
         allGroups.addAll(res.map((r) => r.toEntity()));
         return Right(allGroups);
       } catch (e) {
-        return Left(ServerFailure(errMsg: e.toString()));
+        return Left(ExerciseFailure.serverFailure(message: e.toString()));
       }
     }
-    return Left(OfflineFailure(errorMessage: ""));
+    return const Left(ExerciseFailure.eOffline());
   }
 
   @override
-  Stream<Result<double, Failure>> downloadImages(List<String> ids) async* {
+  Stream<Result<double, ExerciseFailure>> downloadImages(List<String> ids) async* {
     try {
       // Get all images from api.
       for (final id in ids) {
@@ -202,20 +202,20 @@ class ExercisesRepo implements IExercisesContract {
       }
       // yield Result(data: 1, error: null); // 100%
     } catch (e) {
-      yield Result(data: 0, error: NoInternetConnectionFailure(errMsg: ''));
+      yield Result(data: 0, error: const ExerciseFailure.eOffline());
     }
     return;
   }
 
   @override
-  Future<Either<Failure, ExerciseDetailsResult>> getExerciseDetails(String id) async {
+  Future<Either<ExerciseFailure, ExerciseDetailsResult>> getExerciseDetails(String id) async {
     try {
       final ex = exercisesLib.firstWhere((e) => e.apiId == id);
       final similars = exercisesLib.where((e) => e.muscleHeadCode == ex.muscleHeadCode && e.apiId != ex.apiId).toList();
       return Right(ExerciseDetailsResult(exercise: ex, similars: similars));
     } catch (e, s) {
       logger.e('getExerciseDetails: $id', error: e, stackTrace: s);
-      return Left(DatabaseFailure(errorMsg: ''));
+      return Left(ExerciseFailure.databaseFailure(message: e.toString()));
     }
   }
 }

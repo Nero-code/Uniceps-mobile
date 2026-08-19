@@ -58,6 +58,7 @@ class HttpClientHelper implements ClientHelper {
     if (kDebugMode) {
       print(
         "getListHandler code: ${res.statusCode}\n"
+        "${res.body}\n"
         "URL: ${api + urlPart}",
       );
       print("getListHandler body: ${res.body}");

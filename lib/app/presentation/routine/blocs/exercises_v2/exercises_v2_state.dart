@@ -20,7 +20,10 @@ final class ExercisesV2LoadedState extends ExercisesV2State {
 }
 
 final class ExercisesV2ErrorState extends ExercisesV2State {
-  final Failure failure;
+  final ExerciseFailure failure;
 
   const ExercisesV2ErrorState({required this.failure});
+
+  @override
+  List<Object> get props => [failure];
 }

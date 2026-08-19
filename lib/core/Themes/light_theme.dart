@@ -25,20 +25,26 @@ const secondaryLighter = Color(0xFFDBF5F6);
 const secondaryLight = Color(0xFFB5EBE9);
 
 ThemeData lightTheme = ThemeData(
-  outlinedButtonTheme:
-      OutlinedButtonThemeData(style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.grey))),
+  outlinedButtonTheme: OutlinedButtonThemeData(
+    style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.grey)),
+  ),
   elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(backgroundColor: mainBlueLight, foregroundColor: Colors.white)),
+    style: ElevatedButton.styleFrom(backgroundColor: mainBlueLight, foregroundColor: Colors.white),
+  ),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: mainBlueLight,
+    foregroundColor: back2,
+  ),
   fontFamily: 'Cairo',
   appBarTheme: const AppBarTheme().copyWith(
-      // foregroundColor: Colors.black,
-      // foregroundColor: ,
-      // backgroundColor: back2,
-      // systemOverlayStyle: const SystemUiOverlayStyle(
-      //     statusBarColor: Colors.transparent,
+    // foregroundColor: Colors.black,
+    // foregroundColor: ,
+    // backgroundColor: back2,
+    // systemOverlayStyle: const SystemUiOverlayStyle(
+    //     statusBarColor: Colors.transparent,
 
-      //     systemNavigationBarColor: Colors.transparent),
-      ),
+    //     systemNavigationBarColor: Colors.transparent),
+  ),
   colorScheme: ColorScheme.fromSeed(
     seedColor: mainBlue,
     primary: mainBlueLight,

@@ -100,6 +100,7 @@ extension Migrations on GeneratedDatabase {
     },
     from2To3: (m, schema) async {
       await m.alterTable(
+        // ignore: experimental_member_use
         TableMigration(
           schema.tLogs,
           columnTransformer: {

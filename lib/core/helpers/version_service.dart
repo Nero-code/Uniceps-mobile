@@ -17,7 +17,12 @@ class VersionService {
 
   Future<Version> checkAppUpdates() async {
     try {
-      final res = await _clientHelper.getHandler(ApiRoutes.domain, ApiRoutes.version, Version.fromJson);
+      final res = await _clientHelper.getHandler(
+        ApiRoutes.domain,
+        ApiRoutes.version,
+        Version.fromJson,
+        needsHeader: false,
+      );
       await _prefs.setString(versionFlag, jsonEncode(res.toJson()));
     } catch (e) {
       logger.t(e.toString());

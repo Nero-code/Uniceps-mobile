@@ -42,7 +42,7 @@ class EmailAuthRepo implements IOTPAuthRepo {
         // Returning [true] here is useless actually but whatever...
         return const Right(true);
       } catch (e) {
-        return const Left(AuthFailure.unautherizedFailure());
+        return const Left(AuthFailure.unauthorizedFailure());
       }
     }
     return const Left(AuthFailure.aOffline());

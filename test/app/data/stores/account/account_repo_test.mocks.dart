@@ -3,9 +3,9 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i8;
+import 'dart:async' as _i7;
 
-import 'package:logger/logger.dart' as _i13;
+import 'package:logger/logger.dart' as _i12;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:uniceps/app/data/models/account_models/account_model.dart'
     as _i2;
@@ -14,16 +14,15 @@ import 'package:uniceps/app/data/models/account_models/membership_model.dart'
 import 'package:uniceps/app/data/models/account_models/payment_response.dart'
     as _i5;
 import 'package:uniceps/app/data/models/account_models/plan_item_model.dart'
-    as _i10;
-import 'package:uniceps/app/data/models/account_models/plan_model.dart' as _i4;
-import 'package:uniceps/app/data/services/token/token_contract.dart' as _i6;
-import 'package:uniceps/app/data/services/token/token_service_simple.dart'
-    as _i12;
-import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart'
-    as _i7;
-import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_source.dart'
     as _i9;
-import 'package:uniceps/app/services/network_info.dart' as _i11;
+import 'package:uniceps/app/data/models/account_models/plan_model.dart' as _i4;
+import 'package:uniceps/app/data/services/token/token_service_simple.dart'
+    as _i11;
+import 'package:uniceps/app/data/sources/local/dal_account/account_local_source.dart'
+    as _i6;
+import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_source.dart'
+    as _i8;
+import 'package:uniceps/app/services/network_info.dart' as _i10;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -62,239 +61,215 @@ class _FakePaymentResponse_3 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
-class _FakeSession_4 extends _i1.SmartFake implements _i6.Session {
-  _FakeSession_4(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
 /// A class which mocks [IAccountLocalSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockIAccountLocalSource extends _i1.Mock
-    implements _i7.IAccountLocalSource {
+    implements _i6.IAccountLocalSource {
   MockIAccountLocalSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i8.Future<_i2.AccountModel> getUserAccount() =>
+  _i7.Future<_i2.AccountModel> getUserAccount() =>
       (super.noSuchMethod(
             Invocation.method(#getUserAccount, []),
-            returnValue: _i8.Future<_i2.AccountModel>.value(
+            returnValue: _i7.Future<_i2.AccountModel>.value(
               _FakeAccountModel_0(this, Invocation.method(#getUserAccount, [])),
             ),
           )
-          as _i8.Future<_i2.AccountModel>);
+          as _i7.Future<_i2.AccountModel>);
 
   @override
-  _i8.Future<_i3.MembershipModel> getCurrentPlan() =>
+  _i7.Future<_i3.MembershipModel> getCurrentPlan() =>
       (super.noSuchMethod(
             Invocation.method(#getCurrentPlan, []),
-            returnValue: _i8.Future<_i3.MembershipModel>.value(
+            returnValue: _i7.Future<_i3.MembershipModel>.value(
               _FakeMembershipModel_1(
                 this,
                 Invocation.method(#getCurrentPlan, []),
               ),
             ),
           )
-          as _i8.Future<_i3.MembershipModel>);
+          as _i7.Future<_i3.MembershipModel>);
 
   @override
-  _i8.Future<void> saveUserAccount(_i2.AccountModel? userAccount) =>
+  _i7.Future<void> saveUserAccount(_i2.AccountModel? userAccount) =>
       (super.noSuchMethod(
             Invocation.method(#saveUserAccount, [userAccount]),
-            returnValue: _i8.Future<void>.value(),
-            returnValueForMissingStub: _i8.Future<void>.value(),
+            returnValue: _i7.Future<void>.value(),
+            returnValueForMissingStub: _i7.Future<void>.value(),
           )
-          as _i8.Future<void>);
+          as _i7.Future<void>);
 
   @override
-  _i8.Future<bool> saveUserMembership(_i3.MembershipModel? subscriptionPlan) =>
+  _i7.Future<bool> saveUserMembership(_i3.MembershipModel? subscriptionPlan) =>
       (super.noSuchMethod(
             Invocation.method(#saveUserMembership, [subscriptionPlan]),
-            returnValue: _i8.Future<bool>.value(false),
+            returnValue: _i7.Future<bool>.value(false),
           )
-          as _i8.Future<bool>);
+          as _i7.Future<bool>);
 
   @override
-  _i8.Future<_i3.MembershipModel> userMembershipNotified() =>
+  _i7.Future<_i3.MembershipModel> userMembershipNotified() =>
       (super.noSuchMethod(
             Invocation.method(#userMembershipNotified, []),
-            returnValue: _i8.Future<_i3.MembershipModel>.value(
+            returnValue: _i7.Future<_i3.MembershipModel>.value(
               _FakeMembershipModel_1(
                 this,
                 Invocation.method(#userMembershipNotified, []),
               ),
             ),
           )
-          as _i8.Future<_i3.MembershipModel>);
+          as _i7.Future<_i3.MembershipModel>);
 
   @override
-  _i8.Future<void> clearMemberships() =>
+  _i7.Future<void> clearMemberships() =>
       (super.noSuchMethod(
             Invocation.method(#clearMemberships, []),
-            returnValue: _i8.Future<void>.value(),
-            returnValueForMissingStub: _i8.Future<void>.value(),
+            returnValue: _i7.Future<void>.value(),
+            returnValueForMissingStub: _i7.Future<void>.value(),
           )
-          as _i8.Future<void>);
+          as _i7.Future<void>);
 
   @override
-  _i8.Future<void> logout() =>
+  _i7.Future<void> logout() =>
       (super.noSuchMethod(
             Invocation.method(#logout, []),
-            returnValue: _i8.Future<void>.value(),
-            returnValueForMissingStub: _i8.Future<void>.value(),
+            returnValue: _i7.Future<void>.value(),
+            returnValueForMissingStub: _i7.Future<void>.value(),
           )
-          as _i8.Future<void>);
+          as _i7.Future<void>);
 }
 
 /// A class which mocks [IAccountRemoteSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockIAccountRemoteSource extends _i1.Mock
-    implements _i9.IAccountRemoteSource {
+    implements _i8.IAccountRemoteSource {
   MockIAccountRemoteSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i8.Future<_i3.MembershipModel> getUserMembership() =>
+  _i7.Future<_i3.MembershipModel> getUserMembership() =>
       (super.noSuchMethod(
             Invocation.method(#getUserMembership, []),
-            returnValue: _i8.Future<_i3.MembershipModel>.value(
+            returnValue: _i7.Future<_i3.MembershipModel>.value(
               _FakeMembershipModel_1(
                 this,
                 Invocation.method(#getUserMembership, []),
               ),
             ),
           )
-          as _i8.Future<_i3.MembershipModel>);
+          as _i7.Future<_i3.MembershipModel>);
 
   @override
-  _i8.Future<_i4.PlanModel> getPlans() =>
+  _i7.Future<_i4.PlanModel> getPlans() =>
       (super.noSuchMethod(
             Invocation.method(#getPlans, []),
-            returnValue: _i8.Future<_i4.PlanModel>.value(
+            returnValue: _i7.Future<_i4.PlanModel>.value(
               _FakePlanModel_2(this, Invocation.method(#getPlans, [])),
             ),
           )
-          as _i8.Future<_i4.PlanModel>);
+          as _i7.Future<_i4.PlanModel>);
 
   @override
-  _i8.Future<_i5.PaymentResponse> buyPlan(_i10.PlanItemModel? item) =>
+  _i7.Future<_i5.PaymentResponse> buyPlan(_i9.PlanItemModel? item) =>
       (super.noSuchMethod(
             Invocation.method(#buyPlan, [item]),
-            returnValue: _i8.Future<_i5.PaymentResponse>.value(
+            returnValue: _i7.Future<_i5.PaymentResponse>.value(
               _FakePaymentResponse_3(this, Invocation.method(#buyPlan, [item])),
             ),
           )
-          as _i8.Future<_i5.PaymentResponse>);
+          as _i7.Future<_i5.PaymentResponse>);
 }
 
 /// A class which mocks [NetworkInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNetworkInfo extends _i1.Mock implements _i11.NetworkInfo {
+class MockNetworkInfo extends _i1.Mock implements _i10.NetworkInfo {
   MockNetworkInfo() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i8.Future<bool> get hasConnection =>
+  _i7.Future<bool> get hasConnection =>
       (super.noSuchMethod(
             Invocation.getter(#hasConnection),
-            returnValue: _i8.Future<bool>.value(false),
+            returnValue: _i7.Future<bool>.value(false),
           )
-          as _i8.Future<bool>);
+          as _i7.Future<bool>);
 }
 
 /// A class which mocks [SimpleTokenService].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSimpleTokenService extends _i1.Mock
-    implements _i12.SimpleTokenService {
+    implements _i11.SimpleTokenService {
   MockSimpleTokenService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i8.Future<void> saveAccessToken(String? accessToken, DateTime? expireDate) =>
+  _i7.Future<void> saveAccessToken(String? accessToken, DateTime? expireDate) =>
       (super.noSuchMethod(
             Invocation.method(#saveAccessToken, [accessToken, expireDate]),
-            returnValue: _i8.Future<void>.value(),
-            returnValueForMissingStub: _i8.Future<void>.value(),
+            returnValue: _i7.Future<void>.value(),
+            returnValueForMissingStub: _i7.Future<void>.value(),
           )
-          as _i8.Future<void>);
+          as _i7.Future<void>);
 
   @override
-  _i8.Future<String?> getAccessToken() =>
+  _i7.Future<String?> getAccessToken() =>
       (super.noSuchMethod(
             Invocation.method(#getAccessToken, []),
-            returnValue: _i8.Future<String?>.value(),
+            returnValue: _i7.Future<String?>.value(),
           )
-          as _i8.Future<String?>);
+          as _i7.Future<String?>);
 
   @override
-  _i8.Future<bool> isTokenValid() =>
+  _i7.Future<bool> isTokenValid() =>
       (super.noSuchMethod(
             Invocation.method(#isTokenValid, []),
-            returnValue: _i8.Future<bool>.value(false),
+            returnValue: _i7.Future<bool>.value(false),
           )
-          as _i8.Future<bool>);
+          as _i7.Future<bool>);
 
   @override
-  _i8.Future<void> refreshToken(String? oldToken) =>
+  _i7.Future<void> refreshToken(String? oldToken) =>
       (super.noSuchMethod(
             Invocation.method(#refreshToken, [oldToken]),
-            returnValue: _i8.Future<void>.value(),
-            returnValueForMissingStub: _i8.Future<void>.value(),
+            returnValue: _i7.Future<void>.value(),
+            returnValueForMissingStub: _i7.Future<void>.value(),
           )
-          as _i8.Future<void>);
+          as _i7.Future<void>);
 
   @override
-  _i8.Future<void> deleteAccessToken() =>
+  _i7.Future<void> deleteAccessToken() =>
       (super.noSuchMethod(
             Invocation.method(#deleteAccessToken, []),
-            returnValue: _i8.Future<void>.value(),
-            returnValueForMissingStub: _i8.Future<void>.value(),
+            returnValue: _i7.Future<void>.value(),
+            returnValueForMissingStub: _i7.Future<void>.value(),
           )
-          as _i8.Future<void>);
-
-  @override
-  _i8.Future<_i6.Session> getSession() =>
-      (super.noSuchMethod(
-            Invocation.method(#getSession, []),
-            returnValue: _i8.Future<_i6.Session>.value(
-              _FakeSession_4(this, Invocation.method(#getSession, [])),
-            ),
-          )
-          as _i8.Future<_i6.Session>);
-
-  @override
-  _i8.Future<void> setSession(_i6.Session? s) =>
-      (super.noSuchMethod(
-            Invocation.method(#setSession, [s]),
-            returnValue: _i8.Future<void>.value(),
-            returnValueForMissingStub: _i8.Future<void>.value(),
-          )
-          as _i8.Future<void>);
+          as _i7.Future<void>);
 }
 
 /// A class which mocks [Logger].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLogger extends _i1.Mock implements _i13.Logger {
+class MockLogger extends _i1.Mock implements _i12.Logger {
   MockLogger() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i8.Future<void> get init =>
+  _i7.Future<void> get init =>
       (super.noSuchMethod(
             Invocation.getter(#init),
-            returnValue: _i8.Future<void>.value(),
+            returnValue: _i7.Future<void>.value(),
           )
-          as _i8.Future<void>);
+          as _i7.Future<void>);
 
   @override
   void v(
@@ -418,7 +393,7 @@ class MockLogger extends _i1.Mock implements _i13.Logger {
 
   @override
   void log(
-    _i13.Level? level,
+    _i12.Level? level,
     dynamic message, {
     DateTime? time,
     Object? error,
@@ -438,11 +413,11 @@ class MockLogger extends _i1.Mock implements _i13.Logger {
           as bool);
 
   @override
-  _i8.Future<void> close() =>
+  _i7.Future<void> close() =>
       (super.noSuchMethod(
             Invocation.method(#close, []),
-            returnValue: _i8.Future<void>.value(),
-            returnValueForMissingStub: _i8.Future<void>.value(),
+            returnValue: _i7.Future<void>.value(),
+            returnValueForMissingStub: _i7.Future<void>.value(),
           )
-          as _i8.Future<void>);
+          as _i7.Future<void>);
 }

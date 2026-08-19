@@ -4,12 +4,11 @@ import 'package:drift/drift.dart';
 import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/practice_models/t_session_model.dart';
 import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
-import 'package:uniceps/app/data/services/sync/sync_contract.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/constants/api_routes.dart';
 
-class TSessionSyncService implements TSessionSyncContract {
+class TSessionSyncService {
   final AppDatabase _database;
   final ClientHelper _client;
   final NetworkInfo _connectionChecker;
@@ -28,19 +27,13 @@ class TSessionSyncService implements TSessionSyncContract {
   final doneList = <int>[];
   var queue = StreamController<TSessionModel>();
 
-  @override
-  void start() {
-    _init();
-  }
-
-  @override
   void dispose() async {
     if (!queue.isClosed) {
       await queue.close();
     }
   }
 
-  void _init() async {
+  void init() async {
     queue = StreamController<TSessionModel>();
     queue.stream.asyncMap(_syncSession).listen((_) {});
 
@@ -74,7 +67,7 @@ class TSessionSyncService implements TSessionSyncContract {
       if (!doneList.contains(s.tsId)) queue.add(TSessionModel.fromTable(s, lgs));
     }
 
-    _logger.t('TSession Queue: ${sessions}');
+    _logger.t('TSession Queue: ${sessions.length}');
   }
 
   void _syncSession(TSessionModel model) async {
@@ -85,7 +78,7 @@ class TSessionSyncService implements TSessionSyncContract {
 
     // Retry Mechanism
     while (!await _connectionChecker.hasConnection) {
-      _logger.t('session sync: attempt $attempt, Retring...');
+      _logger.t('session sync: attempt $attempt, Retrying...');
       if (attempt >= maxAttempts) return;
       await Future.delayed(Duration(seconds: delay *= 2));
       attempt++;

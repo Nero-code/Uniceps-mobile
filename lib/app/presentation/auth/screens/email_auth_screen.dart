@@ -76,7 +76,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                         aOffline: () => true,
                         invalidEmailFailure: () => true,
                         invalidCodeFailure: () => false,
-                        unautherizedFailure: () => false,
+                        unauthorizedFailure: () => false,
                       ),
                       orElse: () => false,
                     ),
@@ -108,7 +108,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                         aOffline: () => true,
                         invalidEmailFailure: () => false,
                         invalidCodeFailure: () => true,
-                        unautherizedFailure: () => false,
+                        unauthorizedFailure: () => false,
                       ),
                       loading: () => false,
                     ),
@@ -158,7 +158,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                               ),
 
                           // UnautherizedFailure
-                          unautherizedFailure: () => null,
+                          unauthorizedFailure: () => null,
                         ),
                         authenticated: () => null,
                         loading: () => null,

@@ -392,7 +392,7 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<DietLog> logs)?  success,TResult Function( Failure failure)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<DietLog> logs)?  success,TResult Function( DietLogFailure failure)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
@@ -416,7 +416,7 @@ return failure(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<DietLog> logs)  success,required TResult Function( Failure failure)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<DietLog> logs)  success,required TResult Function( DietLogFailure failure)  failure,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
@@ -439,7 +439,7 @@ return failure(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<DietLog> logs)?  success,TResult? Function( Failure failure)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<DietLog> logs)?  success,TResult? Function( DietLogFailure failure)?  failure,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
@@ -596,7 +596,7 @@ class _Failure implements DietLoggerState {
   const _Failure({required this.failure});
   
 
- final  Failure failure;
+ final  DietLogFailure failure;
 
 /// Create a copy of DietLoggerState
 /// with the given fields replaced by the non-null parameter values.
@@ -628,11 +628,11 @@ abstract mixin class _$FailureCopyWith<$Res> implements $DietLoggerStateCopyWith
   factory _$FailureCopyWith(_Failure value, $Res Function(_Failure) _then) = __$FailureCopyWithImpl;
 @useResult
 $Res call({
- Failure failure
+ DietLogFailure failure
 });
 
 
-
+$DietLogFailureCopyWith<$Res> get failure;
 
 }
 /// @nodoc
@@ -648,11 +648,20 @@ class __$FailureCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
   return _then(_Failure(
 failure: null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
-as Failure,
+as DietLogFailure,
   ));
 }
 
-
+/// Create a copy of DietLoggerState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$DietLogFailureCopyWith<$Res> get failure {
+  
+  return $DietLogFailureCopyWith<$Res>(_self.failure, (value) {
+    return _then(_self.copyWith(failure: value));
+  });
+}
 }
 
 // dart format on

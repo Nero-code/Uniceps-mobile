@@ -5,11 +5,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
-import 'package:uniceps/app/data/services/token/token_contract.dart';
 import 'package:uniceps/core/constants/api_routes.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 
-class SimpleTokenService implements TokenContract {
+class SimpleTokenService {
   static const _accessTokenKey = 'access_token';
   static const _expirationDate = 'access_token_expiration_date';
 
@@ -37,9 +36,9 @@ class SimpleTokenService implements TokenContract {
   Future<bool> isTokenValid() async {
     final token = await _storage.read(key: _accessTokenKey);
     final expirationDateString = await _storage.read(key: _expirationDate);
-    _logger.t('token: ${token?.length},\nexpirationDate$expirationDateString)');
+    _logger.t('token: ${token?.length},\nexpirationDate: $expirationDateString)');
     if (token == null || token.isEmpty || expirationDateString == null || expirationDateString.isEmpty) {
-      _logger.i('Token either not found or has expired!');
+      _logger.i('Token not found!');
       return false;
     }
     final expirationDate = DateTime.parse(expirationDateString);
@@ -78,15 +77,5 @@ class SimpleTokenService implements TokenContract {
   Future<void> deleteAccessToken() async {
     await _storage.delete(key: _accessTokenKey);
     await _storage.delete(key: _expirationDate);
-  }
-
-  @override
-  Future<Session> getSession() {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> setSession(Session s) {
-    throw UnimplementedError();
   }
 }

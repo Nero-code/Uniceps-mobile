@@ -2019,13 +2019,20 @@ final class Schema5 extends i0.VersionedSchema {
       tableConstraints: [],
       columns: [
         _column_4,
-        _column_7,
         _column_85,
+        _column_86,
+        _column_7,
+        _column_87,
+        _column_88,
         _column_79,
         _column_80,
         _column_81,
         _column_82,
         _column_83,
+        _column_6,
+        _column_10,
+        _column_89,
+        _column_3,
       ],
       attachedDatabase: database,
     ),
@@ -2039,11 +2046,16 @@ final class Schema5 extends i0.VersionedSchema {
       tableConstraints: [],
       columns: [
         _column_4,
+        _column_90,
         _column_7,
+        _column_91,
         _column_80,
         _column_81,
         _column_82,
         _column_83,
+        _column_27,
+        _column_6,
+        _column_10,
       ],
       attachedDatabase: database,
     ),
@@ -2055,10 +2067,16 @@ class Shape16 extends i0.VersionedTable {
   Shape16({required super.source, required super.alias}) : super.aliased();
   i1.GeneratedColumn<int> get id =>
       columnsByName['id']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get apiId =>
+      columnsByName['api_id']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get isUserGenerated =>
+      columnsByName['is_user_generated']! as i1.GeneratedColumn<int>;
   i1.GeneratedColumn<String> get name =>
       columnsByName['name']! as i1.GeneratedColumn<String>;
-  i1.GeneratedColumn<String> get categoryText =>
-      columnsByName['category_text']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get categoryId =>
+      columnsByName['category_id']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get categoryName =>
+      columnsByName['category_name']! as i1.GeneratedColumn<String>;
   i1.GeneratedColumn<double> get servingSizeInGrams =>
       columnsByName['serving_size_in_grams']! as i1.GeneratedColumn<double>;
   i1.GeneratedColumn<double> get calories =>
@@ -2069,23 +2087,67 @@ class Shape16 extends i0.VersionedTable {
       columnsByName['carbs']! as i1.GeneratedColumn<double>;
   i1.GeneratedColumn<double> get fats =>
       columnsByName['fats']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<int> get version =>
+      columnsByName['version']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get isSynced =>
+      columnsByName['is_synced']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get updatedAt =>
+      columnsByName['updated_at']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get createdAt =>
+      columnsByName['created_at']! as i1.GeneratedColumn<String>;
 }
 
 i1.GeneratedColumn<String> _column_85(String aliasedName) =>
     i1.GeneratedColumn<String>(
-      'category_text',
+      'api_id',
       aliasedName,
       true,
       type: i1.DriftSqlType.string,
       $customConstraints: 'NULL',
+    );
+i1.GeneratedColumn<int> _column_86(String aliasedName) =>
+    i1.GeneratedColumn<int>(
+      'is_user_generated',
+      aliasedName,
+      false,
+      type: i1.DriftSqlType.int,
+      $customConstraints: 'NOT NULL CHECK (is_user_generated IN (0, 1))',
+    );
+i1.GeneratedColumn<int> _column_87(String aliasedName) =>
+    i1.GeneratedColumn<int>(
+      'category_id',
+      aliasedName,
+      false,
+      type: i1.DriftSqlType.int,
+      $customConstraints: 'NOT NULL',
+    );
+i1.GeneratedColumn<String> _column_88(String aliasedName) =>
+    i1.GeneratedColumn<String>(
+      'category_name',
+      aliasedName,
+      false,
+      type: i1.DriftSqlType.string,
+      $customConstraints: 'NOT NULL',
+    );
+i1.GeneratedColumn<String> _column_89(String aliasedName) =>
+    i1.GeneratedColumn<String>(
+      'updated_at',
+      aliasedName,
+      false,
+      type: i1.DriftSqlType.string,
+      $customConstraints: 'NOT NULL',
     );
 
 class Shape17 extends i0.VersionedTable {
   Shape17({required super.source, required super.alias}) : super.aliased();
   i1.GeneratedColumn<int> get id =>
       columnsByName['id']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get apiId =>
+      columnsByName['api_id']! as i1.GeneratedColumn<int>;
   i1.GeneratedColumn<String> get name =>
       columnsByName['name']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<double> get totalGrams =>
+      columnsByName['total_grams']! as i1.GeneratedColumn<double>;
   i1.GeneratedColumn<double> get calories =>
       columnsByName['calories']! as i1.GeneratedColumn<double>;
   i1.GeneratedColumn<double> get protein =>
@@ -2094,8 +2156,30 @@ class Shape17 extends i0.VersionedTable {
       columnsByName['carbs']! as i1.GeneratedColumn<double>;
   i1.GeneratedColumn<double> get fats =>
       columnsByName['fats']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<String> get timestamp =>
+      columnsByName['timestamp']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get version =>
+      columnsByName['version']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get isSynced =>
+      columnsByName['is_synced']! as i1.GeneratedColumn<int>;
 }
 
+i1.GeneratedColumn<int> _column_90(String aliasedName) =>
+    i1.GeneratedColumn<int>(
+      'api_id',
+      aliasedName,
+      true,
+      type: i1.DriftSqlType.int,
+      $customConstraints: 'NULL UNIQUE',
+    );
+i1.GeneratedColumn<double> _column_91(String aliasedName) =>
+    i1.GeneratedColumn<double>(
+      'total_grams',
+      aliasedName,
+      false,
+      type: i1.DriftSqlType.double,
+      $customConstraints: 'NOT NULL',
+    );
 i0.MigrationStepWithVersion migrationSteps({
   required Future<void> Function(i1.Migrator m, Schema2 schema) from1To2,
   required Future<void> Function(i1.Migrator m, Schema3 schema) from2To3,

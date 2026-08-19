@@ -37,6 +37,17 @@ enum Goal {
 
   final int val;
   const Goal(this.val);
+
+  double get calorieModifier {
+    switch (this) {
+      case Goal.bulking:
+        return 500.0;
+      case Goal.losingWeight:
+        return -500.0;
+      case Goal.maintenance:
+        return 0.0;
+    }
+  }
 }
 
 Goal parseGoal(int val) => Goal.values.firstWhere((g) => g.val == val);
@@ -50,6 +61,21 @@ enum ActivityLevel {
 
   final int val;
   const ActivityLevel(this.val);
+
+  double get multiplier {
+    switch (this) {
+      case ActivityLevel.sedentary:
+        return 1.2;
+      case ActivityLevel.lightlyActive:
+        return 1.375;
+      case ActivityLevel.moderatelyActive:
+        return 1.55;
+      case ActivityLevel.veryActive:
+        return 1.725;
+      case ActivityLevel.extraActive:
+        return 1.9;
+    }
+  }
 }
 
 ActivityLevel parseActivityLevel(int val) => ActivityLevel.values.firstWhere((a) => a.val == val);

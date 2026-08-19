@@ -12,20 +12,21 @@ class ExercisesCommands implements ICommand {
   final IExercisesContract _repo;
   const ExercisesCommands({required IExercisesContract repo}) : _repo = repo;
 
-  Future<Either<Failure, bool>> checkExercises() => _repo.checkExercises();
-  Future<Either<Failure, bool>> changeLibLanguage(String language) => _repo.changeLibLanguage(language);
+  Future<Either<ExerciseFailure, bool>> checkExercises() => _repo.checkExercises();
+  Future<Either<ExerciseFailure, bool>> changeLibLanguage(String language) => _repo.changeLibLanguage(language);
 
-  Future<Either<Failure, List<Exercise>>> getExercises() => _repo.getExercisesLib();
-  Future<Either<Failure, Unit>> saveExercises(List<Exercise> lib) => _repo.saveExercisesLib(lib);
+  Future<Either<ExerciseFailure, List<Exercise>>> getExercises() => _repo.getExercisesLib();
+  Future<Either<ExerciseFailure, Unit>> saveExercises(List<Exercise> lib) => _repo.saveExercisesLib(lib);
 
-  Future<Either<Failure, List<MuscleGroup>>> getExerciseGroups() => _repo.getExerciseGroups();
-  Future<Either<Failure, List<Exercise>>> getExercisesByGroup(MuscleGroup filter) => _repo.getExercisesByGroup(filter);
+  Future<Either<ExerciseFailure, List<MuscleGroup>>> getExerciseGroups() => _repo.getExerciseGroups();
+  Future<Either<ExerciseFailure, List<Exercise>>> getExercisesByGroup(MuscleGroup filter) =>
+      _repo.getExercisesByGroup(filter);
 
-  Future<Either<Failure, ExerciseFilter>> getExerciseFilters() => _repo.getExerciseFilters();
-  Future<Either<Failure, List<Exercise>>> getExercisesByFilter(ExerciseFilter filter) =>
+  Future<Either<ExerciseFailure, ExerciseFilter>> getExerciseFilters() => _repo.getExerciseFilters();
+  Future<Either<ExerciseFailure, List<Exercise>>> getExercisesByFilter(ExerciseFilter filter) =>
       _repo.getExercisesByFilter(filter);
 
-  Stream<Result<double, Failure>> downloadImages(List<String> urls) => _repo.downloadImages(urls);
+  Stream<Result<double, ExerciseFailure>> downloadImages(List<String> urls) => _repo.downloadImages(urls);
 
-  Future<Either<Failure, ExerciseDetailsResult>> getExerciseDetails(String id) => _repo.getExerciseDetails(id);
+  Future<Either<ExerciseFailure, ExerciseDetailsResult>> getExerciseDetails(String id) => _repo.getExerciseDetails(id);
 }

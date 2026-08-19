@@ -103,13 +103,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
                     icon: const Icon(Icons.settings, color: Colors.blueGrey),
                   ),
-                  if (const String.fromEnvironment('VERSION_SUFFIX').isNotEmpty)
-                    IconButton(
-                      onPressed: () => Navigator.pushNamed(context, AppRoutes.diet),
-                      // onPressed: () => Navigator.pushNamed(context, AppRoutes.dietPlans),
-                      icon: const Icon(Icons.restaurant_menu_outlined),
-                      color: Colors.blueGrey,
-                    ),
                 ],
               ),
 
@@ -210,17 +203,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ),
 
-                        if (const String.fromEnvironment('VERSION_SUFFIX').isNotEmpty)
-                          BoxButton(
-                            isCircle: true,
-                            width: 70,
-                            height: 70,
-                            background: const Color.fromARGB(29, 154, 178, 190),
-                            // background: const Color.fromARGB(255, 226, 237, 243),
-                            border: Border.all(width: 0.5, color: Colors.grey),
-                            onTap: () => Navigator.pushNamed(context, AppRoutes.dietPlans),
-                            child: const Icon(Icons.set_meal),
-                          ),
+                        BoxButton(
+                          isCircle: true,
+                          width: 70,
+                          height: 70,
+                          background: const Color.fromARGB(29, 154, 178, 190),
+                          border: Border.all(width: 0.5, color: Colors.grey),
+                          onTap: () => Navigator.pushNamed(context, AppRoutes.dietLogger),
+                          child: const Icon(Icons.restaurant,color: Colors.lightGreen),
+                        ),
 
                         BlocBuilder<CurrentRoutineCubit, CurrentRoutineState>(
                           builder: (context, state) {
