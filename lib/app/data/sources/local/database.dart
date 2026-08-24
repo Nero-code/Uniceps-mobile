@@ -1,12 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:uniceps/app/data/sources/local/schema_versions.dart';
-// import 'package:uniceps/app/data/sources/local/database.steps.dart';
 import 'package:uniceps/app/data/sources/local/tables/account/account_table.dart';
-import 'package:uniceps/app/data/sources/local/tables/diet/diet_days_table.dart';
-import 'package:uniceps/app/data/sources/local/tables/diet/diet_meal_ingredients_table.dart';
-import 'package:uniceps/app/data/sources/local/tables/diet/diet_meals_table.dart';
-import 'package:uniceps/app/data/sources/local/tables/diet/diet_plans_table.dart';
+import 'package:uniceps/app/data/sources/local/tables/diet/diet_logs_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/diet/ingredients_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/measurement/measurement_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/practice/t_logs_table.dart';
@@ -16,7 +12,8 @@ import 'package:uniceps/app/data/sources/local/tables/routine/exercises_table.da
 import 'package:uniceps/app/data/sources/local/tables/routine/routine_items_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/routine/routines_table.dart';
 import 'package:uniceps/app/data/sources/local/tables/routine/sets_table.dart';
-import 'package:uniceps/app/domain/classes/account_entities/account.dart';
+
+import '../../../domain/classes/account_entities/account.dart';
 
 part 'database.g.dart';
 
@@ -30,17 +27,13 @@ part 'database.g.dart';
     RoutineItems,
     RoutineSets,
     Exercises,
-    // ExerciseGroups,
     TSessions,
     TLogs,
     // - Measurements
     Measurements,
     // - Diet
     Ingredients,
-    DietPlans,
-    DietDays,
-    DietMeals,
-    DietMealIngredients,
+    DietLogs,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -71,7 +64,7 @@ class AppDatabase extends _$AppDatabase {
   );
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 }
 
 extension Migrations on GeneratedDatabase {
@@ -107,6 +100,7 @@ extension Migrations on GeneratedDatabase {
     },
     from2To3: (m, schema) async {
       await m.alterTable(
+        // ignore: experimental_member_use
         TableMigration(
           schema.tLogs,
           columnTransformer: {
@@ -120,11 +114,32 @@ extension Migrations on GeneratedDatabase {
     },
     from3To4: (m, schema) async {
       await m.createTable(schema.ingredients);
-
       await m.createTable(schema.dietPlans);
       await m.createTable(schema.dietDays);
       await m.createTable(schema.dietMeals);
       await m.createTable(schema.dietMealIngredients);
+    },
+    from4To5: (m, schema) async {
+      final oldSchema = Schema4(database: m.database);
+
+      // Disable foreign keys temporarily for the drop
+      await m.database.customStatement('PRAGMA foreign_keys = OFF;');
+
+      await m.drop(oldSchema.ingredients);
+      await m.drop(oldSchema.dietMealIngredients);
+      await m.drop(oldSchema.dietMeals);
+      await m.drop(oldSchema.dietDays);
+      await m.drop(oldSchema.dietPlans);
+
+      await m.createTable(schema.ingredients);
+      await m.createTable(schema.dietLogs);
+
+      await m.database.customStatement(
+        'UPDATE ${schema.tSessions.actualTableName} SET ${schema.tSessions.isSynced.name} = 0',
+      );
+
+      // Re-enable foreign keys
+      await m.database.customStatement('PRAGMA foreign_keys = ON;');
     },
   );
 }

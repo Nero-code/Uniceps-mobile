@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 
+abstract class AppColors {
+  static const lightBg = Color(0xFFF6F8FA);
+  static const cardSurface = Colors.white;
+  static const primaryDark = Color(0xFF1E293B);
+  static const primaryTeal = Color(0xFF0EA5E9);
+  static const accentMint = Color(0xFF10B981);
+  static const textSubtle = Color(0xFF64748B);
+  static const borderLight = Color(0xFFE2E8F0);
+}
+
 const color1 = Color(0xFF000814);
 const color2 = Color(0xFF001D3D);
 const color3 = Color(0xFF003566);
@@ -25,20 +35,26 @@ const secondaryLighter = Color(0xFFDBF5F6);
 const secondaryLight = Color(0xFFB5EBE9);
 
 ThemeData lightTheme = ThemeData(
-  outlinedButtonTheme:
-      OutlinedButtonThemeData(style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.grey))),
+  outlinedButtonTheme: OutlinedButtonThemeData(
+    style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.grey)),
+  ),
   elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(backgroundColor: mainBlueLight, foregroundColor: Colors.white)),
+    style: ElevatedButton.styleFrom(backgroundColor: mainBlueLight, foregroundColor: Colors.white),
+  ),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: mainBlueLight,
+    foregroundColor: back2,
+  ),
   fontFamily: 'Cairo',
   appBarTheme: const AppBarTheme().copyWith(
-      // foregroundColor: Colors.black,
-      // foregroundColor: ,
-      // backgroundColor: back2,
-      // systemOverlayStyle: const SystemUiOverlayStyle(
-      //     statusBarColor: Colors.transparent,
+    // foregroundColor: Colors.black,
+    // foregroundColor: ,
+    // backgroundColor: back2,
+    // systemOverlayStyle: const SystemUiOverlayStyle(
+    //     statusBarColor: Colors.transparent,
 
-      //     systemNavigationBarColor: Colors.transparent),
-      ),
+    //     systemNavigationBarColor: Colors.transparent),
+  ),
   colorScheme: ColorScheme.fromSeed(
     seedColor: mainBlue,
     primary: mainBlueLight,

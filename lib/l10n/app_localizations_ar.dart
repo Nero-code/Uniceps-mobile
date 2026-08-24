@@ -12,6 +12,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get hello => 'مرحبا, ';
 
   @override
+  String get dietLogger => 'متتبع الحمية';
+
+  @override
+  String get dietLoggerDescription => 'قم بتسجيل الوجبات والكالوري اليومي';
+
+  @override
   String get welcome => 'اهلا بك';
 
   @override
@@ -957,4 +963,144 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get caloriesPer100g => 'لكل 100 غرام';
+
+  @override
+  String get todaySummary => 'الملخص';
+
+  @override
+  String get caloriesGoal => 'هدف السعرات';
+
+  @override
+  String get left => 'متبقي';
+
+  @override
+  String get over => 'زائد';
+
+  @override
+  String get calories => 'سعرات';
+
+  @override
+  String get protein => 'بروتين';
+
+  @override
+  String get carbs => 'كارب';
+
+  @override
+  String get fats => 'دهون';
+
+  @override
+  String get kcal => 'سعرة';
+
+  @override
+  String get grams => 'غ';
+
+  @override
+  String get noLogsToday => 'لم تسجل شيء, قم بتسجيل ما اكلته';
+
+  @override
+  String get addDietLog => 'إضافة سجل غذائي';
+
+  @override
+  String get searchFood => 'ابحث عن طعام...';
+
+  @override
+  String get addCustomEntry => 'إضافة مدخل مخصص';
+
+  @override
+  String get manuallyEnterMacros => 'أدخل السعرات والماكروز يدوياً';
+
+  @override
+  String get typeToFindIngredients => 'اكتب للبحث عن المكونات';
+
+  @override
+  String get noResultsFound => 'لا يوجد نتائج';
+
+  @override
+  String get amountGrams => 'الكمية (غرام)';
+
+  @override
+  String get addToDailyLog => 'إضافة للسجل اليومي';
+
+  @override
+  String get customEntry => 'مدخل مخصص';
+
+  @override
+  String get entryName => 'اسم المدخل';
+
+  @override
+  String get macros => 'الماكروز';
+
+  @override
+  String get saveCustomLog => 'حفظ السجل المخصص';
+
+  @override
+  String get estimatedNutrition => 'القيمة الغذائية التقديرية';
+
+  @override
+  String get deleteIngredient => 'حذف المكون؟';
+
+  @override
+  String deleteConfirm(Object name) {
+    return 'هل أنت متأكد من رغبتك في حذف $name؟';
+  }
+
+  @override
+  String get name => 'الاسم';
+
+  @override
+  String get category => 'الفئة';
+
+  @override
+  String get servingSize => 'حجم الحصة';
+
+  @override
+  String get macrosPerServing => 'الماكروز لكل حصة';
+
+  @override
+  String get userGeneratedContent => 'محتوى من إنشاء المستخدم';
+
+  @override
+  String get nutritionPerServing => 'القيمة الغذائية (لكل حصة)';
+
+  @override
+  String get ingredientsDbInfo =>
+      'هذه قاعدة بيانات المكونات، يمكنك فقط تعديل ما أضفته شخصياً';
+
+  @override
+  String get meat => 'لحوم';
+
+  @override
+  String get dairy => 'ألبان';
+
+  @override
+  String get grains => 'حبوب';
+
+  @override
+  String get fruits => 'فواكه';
+
+  @override
+  String get vegetables => 'خضروات';
+
+  @override
+  String get noActiveRoutine => 'لا يوجد برنامج فعال';
+
+  @override
+  String get setupRoutineSub => 'اختر او انشئ برنامجا مخصصا للبدء بالتدريب';
+
+  @override
+  String get setUp => 'اعداد';
+
+  @override
+  String get currentProgram => 'البرنامج الحالي';
+
+  @override
+  String get suggestedNext => 'التالي المقترح';
+
+  @override
+  String startDay(Object dayName) {
+    return 'ابدأ $dayName';
+  }
+
+  @override
+  String get activeSessionInProgress => 'يوجد جلسة تدريب نشطة';
 }

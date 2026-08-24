@@ -1,5 +1,7 @@
 {
   "hello": "مرحبا, ",
+  "dietLogger": "متتبع الحمية",
+  "dietLoggerDescription": "قم بتسجيل الوجبات والكالوري اليومي",
   "welcome": "اهلا بك",
   "signin": "تسجيل الدخول",
   "login": "تسجيل الدخول",
@@ -350,5 +352,64 @@
   "addIngredient": "إضافة مكون",
   "all": "الكل",
   "enterAmountGrams": "أدخل الكمية (بالغرام)",
-  "caloriesPer100g": "لكل 100 غرام"
+  "caloriesPer100g": "لكل 100 غرام",
+  "todaySummary": "الملخص",
+  "caloriesGoal": "هدف السعرات",
+  "left": "متبقي",
+  "over": "زائد",
+  "calories": "سعرات",
+  "protein": "بروتين",
+  "carbs": "كارب",
+  "fats": "دهون",
+  "kcal": "سعرة",
+  "grams": "غ",
+  "noLogsToday": "لم تسجل شيء, قم بتسجيل ما اكلته",
+  "addDietLog": "إضافة سجل غذائي",
+  "searchFood": "ابحث عن طعام...",
+  "addCustomEntry": "إضافة مدخل مخصص",
+  "manuallyEnterMacros": "أدخل السعرات والماكروز يدوياً",
+  "typeToFindIngredients": "اكتب للبحث عن المكونات",
+  "noResultsFound": "لا يوجد نتائج",
+  "amountGrams": "الكمية (غرام)",
+  "addToDailyLog": "إضافة للسجل اليومي",
+  "customEntry": "مدخل مخصص",
+  "entryName": "اسم المدخل",
+  "macros": "الماكروز",
+  "saveCustomLog": "حفظ السجل المخصص",
+  "estimatedNutrition": "القيمة الغذائية التقديرية",
+  "deleteIngredient": "حذف المكون؟",
+  "deleteConfirm": "هل أنت متأكد من رغبتك في حذف {name}؟",
+  "@deleteConfirm": {
+    "placeHolders": {
+      "name": {
+        "type": "string"
+      }
+    }
+  },
+  "name": "الاسم",
+  "category": "الفئة",
+  "servingSize": "حجم الحصة",
+  "macrosPerServing": "الماكروز لكل حصة",
+  "userGeneratedContent": "محتوى من إنشاء المستخدم",
+  "nutritionPerServing": "القيمة الغذائية (لكل حصة)",
+  "ingredientsDbInfo": "هذه قاعدة بيانات المكونات، يمكنك فقط تعديل ما أضفته شخصياً",
+  "meat": "لحوم",
+  "dairy": "ألبان",
+  "grains": "حبوب",
+  "fruits": "فواكه",
+  "vegetables": "خضروات",
+  "noActiveRoutine": "لا يوجد برنامج فعال",
+  "setupRoutineSub": "اختر او انشئ برنامجا مخصصا للبدء بالتدريب",
+  "setUp": "اعداد",
+  "currentProgram": "البرنامج الحالي",
+  "suggestedNext": "التالي المقترح",
+  "startDay": "ابدأ {dayName}",
+  "@startDay": {
+    "placeHolders": {
+      "dayName": {
+        "type": "String"
+      }
+    }
+  },
+  "activeSessionInProgress": "يوجد جلسة تدريب نشطة"
 }

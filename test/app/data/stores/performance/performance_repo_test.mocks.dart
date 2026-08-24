@@ -387,6 +387,15 @@ class MockIMeasurementsLocalSource extends _i1.Mock
           as _i9.Future<int>);
 
   @override
+  _i9.Future<void> upsertMeasurement(_i16.MeasurementModel? m) =>
+      (super.noSuchMethod(
+            Invocation.method(#upsertMeasurement, [m]),
+            returnValue: _i9.Future<void>.value(),
+            returnValueForMissingStub: _i9.Future<void>.value(),
+          )
+          as _i9.Future<void>);
+
+  @override
   _i9.Future<void> deleteMeasurement(_i16.MeasurementModel? m) =>
       (super.noSuchMethod(
             Invocation.method(#deleteMeasurement, [m]),
@@ -394,6 +403,24 @@ class MockIMeasurementsLocalSource extends _i1.Mock
             returnValueForMissingStub: _i9.Future<void>.value(),
           )
           as _i9.Future<void>);
+
+  @override
+  _i9.Future<List<_i16.MeasurementModel>> getAllUnSyncedMeasurements() =>
+      (super.noSuchMethod(
+            Invocation.method(#getAllUnSyncedMeasurements, []),
+            returnValue: _i9.Future<List<_i16.MeasurementModel>>.value(
+              <_i16.MeasurementModel>[],
+            ),
+          )
+          as _i9.Future<List<_i16.MeasurementModel>>);
+
+  @override
+  _i9.Future<DateTime?> getLastMeasurementSync() =>
+      (super.noSuchMethod(
+            Invocation.method(#getLastMeasurementSync, []),
+            returnValue: _i9.Future<DateTime?>.value(),
+          )
+          as _i9.Future<DateTime?>);
 }
 
 /// A class which mocks [IExercisesLocalSourceContract].

@@ -17,6 +17,6 @@ class MuscleGroupLoadedState extends MuscleGroupState {
 }
 
 class MuscleGroupErrorState extends MuscleGroupState {
-  final Failure failure;
+  final ExerciseFailure failure;
   const MuscleGroupErrorState({required this.failure});
 }

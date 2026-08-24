@@ -80,7 +80,7 @@ void main() {
           // act
           final result = await repo.verifyCredential(credential: tCredential);
           // assert
-          expect(result, const Left(AuthFailure.unautherizedFailure()));
+          expect(result, const Left(AuthFailure.unauthorizedFailure()));
         },
       );
     });
