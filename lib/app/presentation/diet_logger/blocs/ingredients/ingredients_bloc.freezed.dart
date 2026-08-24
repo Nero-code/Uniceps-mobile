@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'diet_logger_bloc.dart';
+part of 'ingredients_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -12,7 +12,7 @@ part of 'diet_logger_bloc.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$DietLoggerEvent {
+mixin _$IngredientsEvent {
 
 
 
@@ -20,7 +20,7 @@ mixin _$DietLoggerEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DietLoggerEvent);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is IngredientsEvent);
 }
 
 
@@ -29,20 +29,20 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'DietLoggerEvent()';
+  return 'IngredientsEvent()';
 }
 
 
 }
 
 /// @nodoc
-class $DietLoggerEventCopyWith<$Res>  {
-$DietLoggerEventCopyWith(DietLoggerEvent _, $Res Function(DietLoggerEvent) __);
+class $IngredientsEventCopyWith<$Res>  {
+$IngredientsEventCopyWith(IngredientsEvent _, $Res Function(IngredientsEvent) __);
 }
 
 
-/// Adds pattern-matching-related methods to [DietLoggerEvent].
-extension DietLoggerEventPatterns on DietLoggerEvent {
+/// Adds pattern-matching-related methods to [IngredientsEvent].
+extension IngredientsEventPatterns on IngredientsEvent {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -55,13 +55,13 @@ extension DietLoggerEventPatterns on DietLoggerEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _LogServing value)?  logServing,TResult Function( _DeleteLog value)?  deleteLog,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _Filter value)?  filter,TResult Function( _CreateIngredient value)?  createIngredient,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started(_that);case _LogServing() when logServing != null:
-return logServing(_that);case _DeleteLog() when deleteLog != null:
-return deleteLog(_that);case _:
+return started(_that);case _Filter() when filter != null:
+return filter(_that);case _CreateIngredient() when createIngredient != null:
+return createIngredient(_that);case _:
   return orElse();
 
 }
@@ -79,13 +79,13 @@ return deleteLog(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _LogServing value)  logServing,required TResult Function( _DeleteLog value)  deleteLog,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _Filter value)  filter,required TResult Function( _CreateIngredient value)  createIngredient,}){
 final _that = this;
 switch (_that) {
 case _Started():
-return started(_that);case _LogServing():
-return logServing(_that);case _DeleteLog():
-return deleteLog(_that);case _:
+return started(_that);case _Filter():
+return filter(_that);case _CreateIngredient():
+return createIngredient(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -102,13 +102,13 @@ return deleteLog(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _LogServing value)?  logServing,TResult? Function( _DeleteLog value)?  deleteLog,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _Filter value)?  filter,TResult? Function( _CreateIngredient value)?  createIngredient,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started(_that);case _LogServing() when logServing != null:
-return logServing(_that);case _DeleteLog() when deleteLog != null:
-return deleteLog(_that);case _:
+return started(_that);case _Filter() when filter != null:
+return filter(_that);case _CreateIngredient() when createIngredient != null:
+return createIngredient(_that);case _:
   return null;
 
 }
@@ -125,12 +125,12 @@ return deleteLog(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( DietLog log)?  logServing,TResult Function( DietLog log)?  deleteLog,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String search,  int? catId)?  filter,TResult Function( Ingredient ingredient)?  createIngredient,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started();case _LogServing() when logServing != null:
-return logServing(_that.log);case _DeleteLog() when deleteLog != null:
-return deleteLog(_that.log);case _:
+return started();case _Filter() when filter != null:
+return filter(_that.search,_that.catId);case _CreateIngredient() when createIngredient != null:
+return createIngredient(_that.ingredient);case _:
   return orElse();
 
 }
@@ -148,12 +148,12 @@ return deleteLog(_that.log);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( DietLog log)  logServing,required TResult Function( DietLog log)  deleteLog,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String search,  int? catId)  filter,required TResult Function( Ingredient ingredient)  createIngredient,}) {final _that = this;
 switch (_that) {
 case _Started():
-return started();case _LogServing():
-return logServing(_that.log);case _DeleteLog():
-return deleteLog(_that.log);case _:
+return started();case _Filter():
+return filter(_that.search,_that.catId);case _CreateIngredient():
+return createIngredient(_that.ingredient);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -170,12 +170,12 @@ return deleteLog(_that.log);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( DietLog log)?  logServing,TResult? Function( DietLog log)?  deleteLog,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String search,  int? catId)?  filter,TResult? Function( Ingredient ingredient)?  createIngredient,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started();case _LogServing() when logServing != null:
-return logServing(_that.log);case _DeleteLog() when deleteLog != null:
-return deleteLog(_that.log);case _:
+return started();case _Filter() when filter != null:
+return filter(_that.search,_that.catId);case _CreateIngredient() when createIngredient != null:
+return createIngredient(_that.ingredient);case _:
   return null;
 
 }
@@ -186,7 +186,7 @@ return deleteLog(_that.log);case _:
 /// @nodoc
 
 
-class _Started implements DietLoggerEvent {
+class _Started implements IngredientsEvent {
   const _Started();
   
 
@@ -206,7 +206,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'DietLoggerEvent.started()';
+  return 'IngredientsEvent.started()';
 }
 
 
@@ -218,43 +218,44 @@ String toString() {
 /// @nodoc
 
 
-class _LogServing implements DietLoggerEvent {
-  const _LogServing({required this.log});
+class _Filter implements IngredientsEvent {
+  const _Filter({this.search = '', this.catId});
   
 
- final  DietLog log;
+@JsonKey() final  String search;
+ final  int? catId;
 
-/// Create a copy of DietLoggerEvent
+/// Create a copy of IngredientsEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$LogServingCopyWith<_LogServing> get copyWith => __$LogServingCopyWithImpl<_LogServing>(this, _$identity);
+_$FilterCopyWith<_Filter> get copyWith => __$FilterCopyWithImpl<_Filter>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LogServing&&(identical(other.log, log) || other.log == log));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Filter&&(identical(other.search, search) || other.search == search)&&(identical(other.catId, catId) || other.catId == catId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,log);
+int get hashCode => Object.hash(runtimeType,search,catId);
 
 @override
 String toString() {
-  return 'DietLoggerEvent.logServing(log: $log)';
+  return 'IngredientsEvent.filter(search: $search, catId: $catId)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$LogServingCopyWith<$Res> implements $DietLoggerEventCopyWith<$Res> {
-  factory _$LogServingCopyWith(_LogServing value, $Res Function(_LogServing) _then) = __$LogServingCopyWithImpl;
+abstract mixin class _$FilterCopyWith<$Res> implements $IngredientsEventCopyWith<$Res> {
+  factory _$FilterCopyWith(_Filter value, $Res Function(_Filter) _then) = __$FilterCopyWithImpl;
 @useResult
 $Res call({
- DietLog log
+ String search, int? catId
 });
 
 
@@ -262,19 +263,20 @@ $Res call({
 
 }
 /// @nodoc
-class __$LogServingCopyWithImpl<$Res>
-    implements _$LogServingCopyWith<$Res> {
-  __$LogServingCopyWithImpl(this._self, this._then);
+class __$FilterCopyWithImpl<$Res>
+    implements _$FilterCopyWith<$Res> {
+  __$FilterCopyWithImpl(this._self, this._then);
 
-  final _LogServing _self;
-  final $Res Function(_LogServing) _then;
+  final _Filter _self;
+  final $Res Function(_Filter) _then;
 
-/// Create a copy of DietLoggerEvent
+/// Create a copy of IngredientsEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? log = null,}) {
-  return _then(_LogServing(
-log: null == log ? _self.log : log // ignore: cast_nullable_to_non_nullable
-as DietLog,
+@pragma('vm:prefer-inline') $Res call({Object? search = null,Object? catId = freezed,}) {
+  return _then(_Filter(
+search: null == search ? _self.search : search // ignore: cast_nullable_to_non_nullable
+as String,catId: freezed == catId ? _self.catId : catId // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -284,43 +286,43 @@ as DietLog,
 /// @nodoc
 
 
-class _DeleteLog implements DietLoggerEvent {
-  const _DeleteLog({required this.log});
+class _CreateIngredient implements IngredientsEvent {
+  const _CreateIngredient({required this.ingredient});
   
 
- final  DietLog log;
+ final  Ingredient ingredient;
 
-/// Create a copy of DietLoggerEvent
+/// Create a copy of IngredientsEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$DeleteLogCopyWith<_DeleteLog> get copyWith => __$DeleteLogCopyWithImpl<_DeleteLog>(this, _$identity);
+_$CreateIngredientCopyWith<_CreateIngredient> get copyWith => __$CreateIngredientCopyWithImpl<_CreateIngredient>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DeleteLog&&(identical(other.log, log) || other.log == log));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateIngredient&&(identical(other.ingredient, ingredient) || other.ingredient == ingredient));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,log);
+int get hashCode => Object.hash(runtimeType,ingredient);
 
 @override
 String toString() {
-  return 'DietLoggerEvent.deleteLog(log: $log)';
+  return 'IngredientsEvent.createIngredient(ingredient: $ingredient)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$DeleteLogCopyWith<$Res> implements $DietLoggerEventCopyWith<$Res> {
-  factory _$DeleteLogCopyWith(_DeleteLog value, $Res Function(_DeleteLog) _then) = __$DeleteLogCopyWithImpl;
+abstract mixin class _$CreateIngredientCopyWith<$Res> implements $IngredientsEventCopyWith<$Res> {
+  factory _$CreateIngredientCopyWith(_CreateIngredient value, $Res Function(_CreateIngredient) _then) = __$CreateIngredientCopyWithImpl;
 @useResult
 $Res call({
- DietLog log
+ Ingredient ingredient
 });
 
 
@@ -328,19 +330,19 @@ $Res call({
 
 }
 /// @nodoc
-class __$DeleteLogCopyWithImpl<$Res>
-    implements _$DeleteLogCopyWith<$Res> {
-  __$DeleteLogCopyWithImpl(this._self, this._then);
+class __$CreateIngredientCopyWithImpl<$Res>
+    implements _$CreateIngredientCopyWith<$Res> {
+  __$CreateIngredientCopyWithImpl(this._self, this._then);
 
-  final _DeleteLog _self;
-  final $Res Function(_DeleteLog) _then;
+  final _CreateIngredient _self;
+  final $Res Function(_CreateIngredient) _then;
 
-/// Create a copy of DietLoggerEvent
+/// Create a copy of IngredientsEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? log = null,}) {
-  return _then(_DeleteLog(
-log: null == log ? _self.log : log // ignore: cast_nullable_to_non_nullable
-as DietLog,
+@pragma('vm:prefer-inline') $Res call({Object? ingredient = null,}) {
+  return _then(_CreateIngredient(
+ingredient: null == ingredient ? _self.ingredient : ingredient // ignore: cast_nullable_to_non_nullable
+as Ingredient,
   ));
 }
 
@@ -348,7 +350,7 @@ as DietLog,
 }
 
 /// @nodoc
-mixin _$DietLoggerState {
+mixin _$IngredientsState {
 
 
 
@@ -356,7 +358,7 @@ mixin _$DietLoggerState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DietLoggerState);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is IngredientsState);
 }
 
 
@@ -365,20 +367,20 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'DietLoggerState()';
+  return 'IngredientsState()';
 }
 
 
 }
 
 /// @nodoc
-class $DietLoggerStateCopyWith<$Res>  {
-$DietLoggerStateCopyWith(DietLoggerState _, $Res Function(DietLoggerState) __);
+class $IngredientsStateCopyWith<$Res>  {
+$IngredientsStateCopyWith(IngredientsState _, $Res Function(IngredientsState) __);
 }
 
 
-/// Adds pattern-matching-related methods to [DietLoggerState].
-extension DietLoggerStatePatterns on DietLoggerState {
+/// Adds pattern-matching-related methods to [IngredientsState].
+extension IngredientsStatePatterns on IngredientsState {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -464,12 +466,12 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<DietLog> logs)?  success,TResult Function( DietLogFailure failure)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<Ingredient> ingredients,  List<DietCategory> categories)?  success,TResult Function( IngredientFailure failure)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Success() when success != null:
-return success(_that.logs);case _Failure() when failure != null:
+return success(_that.ingredients,_that.categories);case _Failure() when failure != null:
 return failure(_that.failure);case _:
   return orElse();
 
@@ -488,12 +490,12 @@ return failure(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<DietLog> logs)  success,required TResult Function( DietLogFailure failure)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<Ingredient> ingredients,  List<DietCategory> categories)  success,required TResult Function( IngredientFailure failure)  failure,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _Success():
-return success(_that.logs);case _Failure():
+return success(_that.ingredients,_that.categories);case _Failure():
 return failure(_that.failure);case _:
   throw StateError('Unexpected subclass');
 
@@ -511,12 +513,12 @@ return failure(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<DietLog> logs)?  success,TResult? Function( DietLogFailure failure)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<Ingredient> ingredients,  List<DietCategory> categories)?  success,TResult? Function( IngredientFailure failure)?  failure,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Success() when success != null:
-return success(_that.logs);case _Failure() when failure != null:
+return success(_that.ingredients,_that.categories);case _Failure() when failure != null:
 return failure(_that.failure);case _:
   return null;
 
@@ -528,7 +530,7 @@ return failure(_that.failure);case _:
 /// @nodoc
 
 
-class _Initial implements DietLoggerState {
+class _Initial implements IngredientsState {
   const _Initial();
   
 
@@ -548,7 +550,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'DietLoggerState.initial()';
+  return 'IngredientsState.initial()';
 }
 
 
@@ -560,7 +562,7 @@ String toString() {
 /// @nodoc
 
 
-class _Loading implements DietLoggerState {
+class _Loading implements IngredientsState {
   const _Loading();
   
 
@@ -580,7 +582,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'DietLoggerState.loading()';
+  return 'IngredientsState.loading()';
 }
 
 
@@ -592,19 +594,26 @@ String toString() {
 /// @nodoc
 
 
-class _Success implements DietLoggerState {
-  const _Success({required final  List<DietLog> logs}): _logs = logs;
+class _Success implements IngredientsState {
+  const _Success({required final  List<Ingredient> ingredients, required final  List<DietCategory> categories}): _ingredients = ingredients,_categories = categories;
   
 
- final  List<DietLog> _logs;
- List<DietLog> get logs {
-  if (_logs is EqualUnmodifiableListView) return _logs;
+ final  List<Ingredient> _ingredients;
+ List<Ingredient> get ingredients {
+  if (_ingredients is EqualUnmodifiableListView) return _ingredients;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_logs);
+  return EqualUnmodifiableListView(_ingredients);
+}
+
+ final  List<DietCategory> _categories;
+ List<DietCategory> get categories {
+  if (_categories is EqualUnmodifiableListView) return _categories;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_categories);
 }
 
 
-/// Create a copy of DietLoggerState
+/// Create a copy of IngredientsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
@@ -614,27 +623,27 @@ _$SuccessCopyWith<_Success> get copyWith => __$SuccessCopyWithImpl<_Success>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&const DeepCollectionEquality().equals(other._logs, _logs));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&const DeepCollectionEquality().equals(other._ingredients, _ingredients)&&const DeepCollectionEquality().equals(other._categories, _categories));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_logs));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_ingredients),const DeepCollectionEquality().hash(_categories));
 
 @override
 String toString() {
-  return 'DietLoggerState.success(logs: $logs)';
+  return 'IngredientsState.success(ingredients: $ingredients, categories: $categories)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$SuccessCopyWith<$Res> implements $DietLoggerStateCopyWith<$Res> {
+abstract mixin class _$SuccessCopyWith<$Res> implements $IngredientsStateCopyWith<$Res> {
   factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) = __$SuccessCopyWithImpl;
 @useResult
 $Res call({
- List<DietLog> logs
+ List<Ingredient> ingredients, List<DietCategory> categories
 });
 
 
@@ -649,12 +658,13 @@ class __$SuccessCopyWithImpl<$Res>
   final _Success _self;
   final $Res Function(_Success) _then;
 
-/// Create a copy of DietLoggerState
+/// Create a copy of IngredientsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? logs = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? ingredients = null,Object? categories = null,}) {
   return _then(_Success(
-logs: null == logs ? _self._logs : logs // ignore: cast_nullable_to_non_nullable
-as List<DietLog>,
+ingredients: null == ingredients ? _self._ingredients : ingredients // ignore: cast_nullable_to_non_nullable
+as List<Ingredient>,categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
+as List<DietCategory>,
   ));
 }
 
@@ -664,13 +674,13 @@ as List<DietLog>,
 /// @nodoc
 
 
-class _Failure implements DietLoggerState {
+class _Failure implements IngredientsState {
   const _Failure({required this.failure});
   
 
- final  DietLogFailure failure;
+ final  IngredientFailure failure;
 
-/// Create a copy of DietLoggerState
+/// Create a copy of IngredientsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
@@ -689,22 +699,22 @@ int get hashCode => Object.hash(runtimeType,failure);
 
 @override
 String toString() {
-  return 'DietLoggerState.failure(failure: $failure)';
+  return 'IngredientsState.failure(failure: $failure)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$FailureCopyWith<$Res> implements $DietLoggerStateCopyWith<$Res> {
+abstract mixin class _$FailureCopyWith<$Res> implements $IngredientsStateCopyWith<$Res> {
   factory _$FailureCopyWith(_Failure value, $Res Function(_Failure) _then) = __$FailureCopyWithImpl;
 @useResult
 $Res call({
- DietLogFailure failure
+ IngredientFailure failure
 });
 
 
-$DietLogFailureCopyWith<$Res> get failure;
+$IngredientFailureCopyWith<$Res> get failure;
 
 }
 /// @nodoc
@@ -715,22 +725,22 @@ class __$FailureCopyWithImpl<$Res>
   final _Failure _self;
   final $Res Function(_Failure) _then;
 
-/// Create a copy of DietLoggerState
+/// Create a copy of IngredientsState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
   return _then(_Failure(
 failure: null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
-as DietLogFailure,
+as IngredientFailure,
   ));
 }
 
-/// Create a copy of DietLoggerState
+/// Create a copy of IngredientsState
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$DietLogFailureCopyWith<$Res> get failure {
+$IngredientFailureCopyWith<$Res> get failure {
   
-  return $DietLogFailureCopyWith<$Res>(_self.failure, (value) {
+  return $IngredientFailureCopyWith<$Res>(_self.failure, (value) {
     return _then(_self.copyWith(failure: value));
   });
 }

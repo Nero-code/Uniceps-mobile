@@ -60,7 +60,7 @@ abstract class DietLogFailure with _$DietLogFailure {
 }
 
 @freezed
-class ExerciseFailure with _$ExerciseFailure implements Failure {
+class ExerciseFailure with _$ExerciseFailure {
   const ExerciseFailure._();
   const factory ExerciseFailure.eOffline() = _EOffline;
   const factory ExerciseFailure.emptyExercises() = _EmptyExercises;
@@ -88,7 +88,7 @@ abstract class Failure {
 class GeneralPurposeFailure implements Failure {
   final String _errorMessage;
 
-  GeneralPurposeFailure({required String errorMessage}) : _errorMessage = errorMessage;
+  const GeneralPurposeFailure({required String errorMessage}) : _errorMessage = errorMessage;
 
   @override
   String getErrorMessage() {
@@ -130,9 +130,9 @@ class InvalidCodeFailure implements Failure {
   }
 }
 
-class AuthUnautherizedFailure implements Failure {
+class AuthUnauthorizedFailure implements Failure {
   final String errMsg;
-  const AuthUnautherizedFailure(this.errMsg);
+  const AuthUnauthorizedFailure(this.errMsg);
   @override
   String getErrorMessage() => errMsg;
 }

@@ -14,7 +14,7 @@ class DietCommands {
     String searchString = '',
     int? categoryId,
   }) => _repo.filterIngredientsBy(searchString: searchString, categoryId: categoryId);
-  Future<Either<IngredientFailure, Unit>> saveIngredient(Ingredient i) => _repo.saveIngredient(i);
+  Future<Either<IngredientFailure, Ingredient>> saveIngredient(Ingredient i) => _repo.saveIngredient(i);
   Future<Either<IngredientFailure, Unit>> bulkSaveIngredients(List<Ingredient> ingredients) =>
       _repo.bulkSaveIngredients(ingredients);
   Future<Either<IngredientFailure, Unit>> deleteIngredient(Ingredient i) => _repo.deleteIngredient(i);

@@ -1,3 +1,5 @@
+import 'package:uniceps/app/domain/classes/diet_classes/ingredient.dart';
+
 class DietLog {
   final int? id;
   final int? apiId;
@@ -24,4 +26,19 @@ class DietLog {
     this.version = 0,
     this.isSynced = false,
   });
+
+  factory DietLog.fromIngredient(Ingredient ing, double amountInGrams) {
+    final ratio = amountInGrams / ing.servingSizeInGrams;
+    return DietLog(
+      id: null,
+      apiId: null,
+      ingredientName: ing.name,
+      totalGrams: amountInGrams,
+      calories: ing.calories * ratio,
+      protein: ing.protein * ratio,
+      carbs: ing.carbs * ratio,
+      fats: ing.fats * ratio,
+      timestamp: DateTime.now(),
+    );
+  }
 }

@@ -12,6 +12,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get hello => 'مرحبا, ';
 
   @override
+  String get dietLogger => 'متتبع الحمية';
+
+  @override
+  String get dietLoggerDescription => 'قم بتسجيل الوجبات والكالوري اليومي';
+
+  @override
   String get welcome => 'اهلا بك';
 
   @override
@@ -989,6 +995,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get grams => 'غ';
 
   @override
+  String get noLogsToday => 'لم تسجل شيء, قم بتسجيل ما اكلته';
+
+  @override
   String get addDietLog => 'إضافة سجل غذائي';
 
   @override
@@ -1071,4 +1080,27 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get vegetables => 'خضروات';
+
+  @override
+  String get noActiveRoutine => 'لا يوجد برنامج فعال';
+
+  @override
+  String get setupRoutineSub => 'اختر او انشئ برنامجا مخصصا للبدء بالتدريب';
+
+  @override
+  String get setUp => 'اعداد';
+
+  @override
+  String get currentProgram => 'البرنامج الحالي';
+
+  @override
+  String get suggestedNext => 'التالي المقترح';
+
+  @override
+  String startDay(Object dayName) {
+    return 'ابدأ $dayName';
+  }
+
+  @override
+  String get activeSessionInProgress => 'يوجد جلسة تدريب نشطة';
 }

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/diet_classes/diet_log.dart';
+import 'package:uniceps/app/presentation/diet_logger/blocs/ingredients/ingredients_bloc.dart';
+import 'package:uniceps/app/presentation/diet_logger/screens/ingredients_screen.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
-import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
 class DietSummaryCard extends StatelessWidget {
   final List<DietLog> logs;
-  final double? calorieGoal;
+  final double calorieGoal;
 
-  const DietSummaryCard({super.key, required this.logs, this.calorieGoal});
+  const DietSummaryCard({super.key, required this.logs, this.calorieGoal = 0});
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +19,8 @@ class DietSummaryCard extends StatelessWidget {
     final totalCarbs = logs.fold(0.0, (sum, item) => sum + item.carbs);
     final totalFats = logs.fold(0.0, (sum, item) => sum + item.fats);
 
-    final remaining = calorieGoal != null ? calorieGoal! - totalCalories : 0.0;
-    final progress = calorieGoal != null ? (totalCalories / calorieGoal!).clamp(0.0, 1.0) : 0.0;
+    final remaining = calorieGoal != 0 ? calorieGoal - totalCalories : 0.0;
+    final progress = calorieGoal != 0 ? (totalCalories / calorieGoal).clamp(0.0, 1.0) : 0.0;
 
     final now = DateTime.now();
     final dateStr = '${now.day}/${now.month}/${now.year}';
@@ -53,7 +55,12 @@ class DietSummaryCard extends StatelessWidget {
               ),
               Text(dateStr, style: const TextStyle(color: Colors.white70, fontSize: 14)),
               InkWell(
-                onTap: () => Navigator.of(context).pushNamed(AppRoutes.diet),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        BlocProvider.value(value: context.read<IngredientsBloc>(), child: const IngredientsScreen()),
+                  ),
+                ),
                 child: const Icon(Icons.fastfood, color: Colors.white),
               ),
             ],
@@ -68,8 +75,8 @@ class DietSummaryCard extends StatelessWidget {
                   children: [
                     Text(locale.caloriesGoal, style: const TextStyle(color: Colors.white70, fontSize: 14)),
                     Text(
-                      calorieGoal != null
-                          ? '${totalCalories.toStringAsFixed(0)} / ${calorieGoal!.toStringAsFixed(0)} ${locale.kcal}'
+                      calorieGoal != 0
+                          ? '${totalCalories.toStringAsFixed(0)} / ${calorieGoal.toStringAsFixed(0)} ${locale.kcal}'
                           : '${totalCalories.toStringAsFixed(0)} ${locale.kcal}',
                       style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
                     ),
@@ -91,20 +98,22 @@ class DietSummaryCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            LinearProgressIndicator(
-              value: progress,
-              backgroundColor: Colors.white.withValues(alpha: 0.2),
-              color: remaining >= 0 ? color5 : Colors.lightGreen,
-              minHeight: 10,
-              borderRadius: BorderRadius.circular(10),
+            Builder(
+              builder: (context) {
+                return LinearProgressIndicator(
+                  value: progress,
+                  backgroundColor: Colors.white.withValues(alpha: 0.2),
+                  color: remaining >= 0 ? color5 : Colors.lightGreen,
+                  minHeight: 10,
+                  borderRadius: BorderRadius.circular(10),
+                );
+              },
             ),
             const Divider(color: Colors.white24, height: 20),
           ],
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // if (calorieGoal == null)
-              //   SummaryItem(label: locale.calories, value: totalCalories.toStringAsFixed(0), unit: locale.kcal),
               SummaryItem(label: locale.protein, value: totalProtein.toStringAsFixed(1), unit: locale.grams),
               SummaryItem(label: locale.carbs, value: totalCarbs.toStringAsFixed(1), unit: locale.grams),
               SummaryItem(label: locale.fats, value: totalFats.toStringAsFixed(1), unit: locale.grams),
@@ -120,6 +129,7 @@ class SummaryItem extends StatelessWidget {
   final String label;
   final String value;
   final String unit;
+
   const SummaryItem({super.key, required this.label, required this.value, required this.unit});
 
   @override

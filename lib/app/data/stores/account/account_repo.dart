@@ -43,6 +43,8 @@ class AccountRepo implements IAccountService {
       final account = await _localSource.getUserAccount();
       _logger.t('Got Account: ${account.toJson()}');
       return Right(account.toEntity());
+    } on EmptyCacheExeption {
+      return const Left(EmptyCacheFailure(errorMessage: ''));
     } catch (e) {
       _logger.e('Error in getAccount!', error: e);
       return Left(DatabaseFailure(errorMsg: e.toString()));

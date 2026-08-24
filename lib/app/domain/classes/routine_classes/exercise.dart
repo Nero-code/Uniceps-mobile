@@ -42,6 +42,47 @@ class Exercise {
     required this.timestamp,
   });
 
+  Exercise copyWith({
+    String? apiId,
+    String? name,
+    String? imagePath,
+    Uint8List? imageBitMap,
+
+    String? muscleGroupName,
+    String? muscleGroupCode,
+
+    String? muscleHeadName,
+    String? muscleHeadCode,
+
+    String? auxMuscle1,
+    String? auxMuscle2,
+    String? auxMuscle3,
+    String? laterals,
+    String? description,
+
+    String? toolName,
+    String? toolCode,
+
+    DateTime? timestamp,
+  }) => Exercise(
+    apiId: apiId ?? this.apiId,
+    name: name ?? this.name,
+    imagePath: imagePath ?? this.imagePath,
+    imageBitMap: imageBitMap ?? this.imageBitMap,
+    muscleGroupName: muscleGroupName ?? this.muscleGroupName,
+    muscleGroupCode: muscleGroupCode ?? this.muscleGroupCode,
+    muscleHeadName: muscleHeadName ?? this.muscleHeadName,
+    muscleHeadCode: muscleHeadCode ?? this.muscleHeadCode,
+    auxMuscle1: auxMuscle1 ?? this.auxMuscle1,
+    auxMuscle2: auxMuscle2 ?? this.auxMuscle2,
+    auxMuscle3: auxMuscle3 ?? this.auxMuscle3,
+    laterals: laterals ?? this.laterals,
+    description: description ?? this.description,
+    toolName: toolName ?? this.toolName,
+    toolCode: toolCode ?? this.toolCode,
+    timestamp: timestamp ?? this.timestamp,
+  );
+
   @override
   String toString() {
     return """{

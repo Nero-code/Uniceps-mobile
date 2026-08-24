@@ -1,28 +1,27 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:logger/logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
 import 'package:uniceps/app/data/sources/local/dal_measurements/measurements_local_source.dart';
-import 'package:uniceps/app/data/stores/profile/measurements_repo.dart';
+import 'package:uniceps/app/data/stores/measurement/measurements_repo.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
-import 'measurements_repo_test.mocks.dart';
+import '../performance/performance_repo_test.mocks.dart';
 
-@GenerateMocks([IMeasurementsLocalSource, Logger])
+@GenerateMocks([IMeasurementsLocalSource])
 void main() {
   late MeasurementsRepo repo;
+  late MockIProfileLocalSource mockIProfileLocalSource;
   late MockIMeasurementsLocalSource mockLocalSource;
-  late MockLogger mockLogger;
   late Measurement tMeasurement;
   late MeasurementModel tMeasurementModel;
 
   setUp(() {
     mockLocalSource = MockIMeasurementsLocalSource();
-    mockLogger = MockLogger();
-    repo = MeasurementsRepo(localSource: mockLocalSource, logger: mockLogger);
+    mockIProfileLocalSource = MockIProfileLocalSource();
+    repo = MeasurementsRepo(localSource: mockLocalSource, profileLocalSource: mockIProfileLocalSource);
     repo.buffer.clear();
 
     tMeasurement = Measurement(

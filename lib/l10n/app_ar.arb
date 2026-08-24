@@ -1,5 +1,7 @@
 {
   "hello": "مرحبا, ",
+  "dietLogger": "متتبع الحمية",
+  "dietLoggerDescription": "قم بتسجيل الوجبات والكالوري اليومي",
   "welcome": "اهلا بك",
   "signin": "تسجيل الدخول",
   "login": "تسجيل الدخول",
@@ -361,6 +363,7 @@
   "fats": "دهون",
   "kcal": "سعرة",
   "grams": "غ",
+  "noLogsToday": "لم تسجل شيء, قم بتسجيل ما اكلته",
   "addDietLog": "إضافة سجل غذائي",
   "searchFood": "ابحث عن طعام...",
   "addCustomEntry": "إضافة مدخل مخصص",
@@ -394,5 +397,19 @@
   "dairy": "ألبان",
   "grains": "حبوب",
   "fruits": "فواكه",
-  "vegetables": "خضروات"
+  "vegetables": "خضروات",
+  "noActiveRoutine": "لا يوجد برنامج فعال",
+  "setupRoutineSub": "اختر او انشئ برنامجا مخصصا للبدء بالتدريب",
+  "setUp": "اعداد",
+  "currentProgram": "البرنامج الحالي",
+  "suggestedNext": "التالي المقترح",
+  "startDay": "ابدأ {dayName}",
+  "@startDay": {
+    "placeHolders": {
+      "dayName": {
+        "type": "String"
+      }
+    }
+  },
+  "activeSessionInProgress": "يوجد جلسة تدريب نشطة"
 }

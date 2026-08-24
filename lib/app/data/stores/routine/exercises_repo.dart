@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
+import 'package:pool/pool.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
@@ -179,34 +180,86 @@ class ExercisesRepo implements IExercisesContract {
     return const Left(ExerciseFailure.eOffline());
   }
 
+  //   @override
+  //   Stream<Result<double, ExerciseFailure>> downloadImages(List<String> ids) async* {
+  //     try {
+  //       // Get all images from api.
+  //       for (final id in ids) {
+  //         if (await _localSource.containsImage(id)) continue;
+  //         final img = await _remoteSource.getExerciseImage(id);
+  //         await _localSource.saveExerciseImage(id, img);
+  // final pool = Pool();
+  //         // 0 -> length =============== 0% -> 50%
+  //         final progress = (ids.indexOf(id) + 1) / (2 * ids.length);
+  //         yield Result(data: progress, error: null);
+  //       }
+  //       // When complete save exercises in database.
+  //       for (final e in exercisesLib) {
+  //         await _localSource.writeExercise(ExerciseDto.fromEntity(e));
+  //
+  //         // length -> 2 * length  ===== 50% -> 100%
+  //         final progress = (exercisesLib.indexOf(e) + 1 + exercisesLib.length) / (2 * exercisesLib.length);
+  //         yield Result(data: progress, error: null);
+  //       }
+  //       // yield Result(data: 1, error: null); // 100%
+  //     } catch (e) {
+  //       yield const Result(data: 0, error: ExerciseFailure.eOffline());
+  //     }
+  //     return;
+  //   }
+
+  // region Experimental downloadImages
   @override
   Stream<Result<double, ExerciseFailure>> downloadImages(List<String> ids) async* {
     try {
-      // Get all images from api.
+      // 1. Filter out what we already have
+      final missingIds = <String>[];
       for (final id in ids) {
-        if (await _localSource.containsImage(id)) continue;
-        final img = await _remoteSource.getExerciseImage(id);
-        await _localSource.saveExerciseImage(id, img);
+        if (!(await _localSource.containsImage(id))) {
+          missingIds.add(id);
+        }
+      }
 
-        // 0 -> length =============== 0% -> 50%
-        final progress = (ids.indexOf(id) + 1) / (2 * ids.length);
+      // 2. Download concurrently using a Pool
+      final pool = Pool(10); // Adjust concurrency (e.g., 5 to 10)
+      int completedCount = 0;
+      final totalToDownload = missingIds.length;
+
+      if (totalToDownload > 0) {
+        // We map each ID to a future that runs in the pool
+        final downloadFutures = missingIds.map((id) {
+          return pool.withResource(() async {
+            final img = await _remoteSource.getExerciseImage(id);
+            await _localSource.saveExerciseImage(id, img);
+            completedCount++;
+
+            // You can't 'yield' from inside this closure, so we use a different approach
+            // for progress if we want to yield for EVERY image.
+          });
+        });
+
+        // To yield progress as each image finishes, we can use a StreamController
+        // or simply wait for the pool to finish if high-granularity progress isn't critical.
+        // However, to keep your 'async*' logic, we can do this:
+
+        await for (final _ in Stream.fromFutures(downloadFutures)) {
+          final progress = completedCount / (2 * ids.length);
+          yield Result(data: progress, error: null);
+        }
+      }
+
+      // 3. Save exercises in database
+      for (int i = 0; i < exercisesLib.length; i++) {
+        await _localSource.writeExercise(ExerciseDto.fromEntity(exercisesLib[i]));
+        final progress = (ids.length + i + 1) / (2 * ids.length);
         yield Result(data: progress, error: null);
       }
-      // When complete save exercises in database.
-      for (final e in exercisesLib) {
-        await _localSource.writeExercise(ExerciseDto.fromEntity(e));
-
-        // length -> 2 * length  ===== 50% -> 100%
-        final progress = (exercisesLib.indexOf(e) + 1 + exercisesLib.length) / (2 * exercisesLib.length);
-        yield Result(data: progress, error: null);
-      }
-      // yield Result(data: 1, error: null); // 100%
     } catch (e) {
-      yield Result(data: 0, error: const ExerciseFailure.eOffline());
+      yield const Result(data: 0, error: ExerciseFailure.eOffline());
     }
-    return;
   }
 
+  // endregion
   @override
   Future<Either<ExerciseFailure, ExerciseDetailsResult>> getExerciseDetails(String id) async {
     try {

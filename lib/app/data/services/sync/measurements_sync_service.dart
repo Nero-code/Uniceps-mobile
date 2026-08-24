@@ -1,26 +1,34 @@
 import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/data/sources/local/dal_measurements/measurements_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_profile/measurements_remote_source.dart';
 import 'package:uniceps/core/logging/app_logger.dart';
 
 class MeasurementsSyncService {
+  static const measurementsSyncFlag = 'MeasurementsSyncFlag';
+
   final IMeasurementsLocalSource _localSource;
   final IMeasurementsRemoteSource _remoteSource;
+  final SharedPreferences _preferences;
 
   MeasurementsSyncService({
     required IMeasurementsLocalSource localSource,
     required IMeasurementsRemoteSource remoteSource,
-  }) : _localSource = localSource,
+    required SharedPreferences preferences,
+  }) : _preferences = preferences,
+       _localSource = localSource,
        _remoteSource = remoteSource;
 
-  Future<void> syncMeasurements() async {
+  /// Uploads unsynced local measurements to the server.
+  Future<void> uploadMeasurements() async {
     try {
-      logger.i('Starting Measurements Sync...');
-
-      // 1. Upload Unsynced Measurements
       final unsynced = await _localSource.getAllUnSyncedMeasurements();
+      if (unsynced.isEmpty) return;
+
+      logger.d('Uploading ${unsynced.length} unsynced measurements...');
       for (final m in unsynced) {
         try {
           final apiId = await _retry(() => _remoteSource.uploadMeasurement(m));
@@ -30,22 +38,44 @@ class MeasurementsSyncService {
           logger.e('Failed to upload measurement: ${m.id}', error: e);
         }
       }
+    } on NoContentException catch (e) {
+      logger.d('MeasurementsSyncService Upload: $e');
+    } on RetryException catch (e) {
+      logger.d('MeasurementsSyncService Upload: ${e.message}');
+    } on ClientException catch (e) {
+      logger.e('Network client error during measurements upload', error: e);
+    } on SocketException catch (e) {
+      logger.w('No internet connection for measurements upload', error: e);
+    } catch (e, s) {
+      logger.e('MeasurementsSyncService Upload critical error', error: e, stackTrace: s);
+    }
+  }
 
-      // 2. Download New Measurements (Delta Sync)
-      final lastSync = await _localSource.getLastMeasurementSync();
-      final remoteMeasurements = await _retry(() => _remoteSource.getMeasurements(since: lastSync));
+  /// Downloads all measurements from the server and updates local database.
+  Future<void> downloadMeasurements() async {
+    final previousSync = _preferences.getBool(measurementsSyncFlag);
+    if (previousSync != null) return;
+
+    try {
+      logger.d('Downloading all measurements from server...');
+      final remoteMeasurements = await _retry(() => _remoteSource.getMeasurements());
 
       for (final rm in remoteMeasurements) {
         await _localSource.upsertMeasurement(rm.copyWith(isSynced: true));
       }
 
-      logger.i('Measurements Sync Completed Successfully.');
+      await _preferences.setBool(measurementsSyncFlag, true);
+      logger.d('Saved all measurements, and Set flag (true)...');
+    } on NoContentException catch (e) {
+      logger.d('MeasurementsSyncService Download: $e');
+    } on RetryException catch (e) {
+      logger.d('MeasurementsSyncService Download: ${e.message}');
     } on ClientException catch (e) {
-      logger.e('Network client error during measurements sync', error: e);
-    } on SocketException {
-      logger.w('No internet connection for measurements sync');
+      logger.d('Network client error during measurements download', error: e);
+    } on SocketException catch (e) {
+      logger.w('No internet connection for measurements download', error: e);
     } catch (e, s) {
-      logger.e('MeasurementsSyncService critical error', error: e, stackTrace: s);
+      logger.e('MeasurementsSyncService Download critical error', error: e, stackTrace: s);
     }
   }
 
@@ -64,6 +94,6 @@ class MeasurementsSyncService {
         await Future.delayed(delay);
       }
     }
-    throw Exception('Retry failed');
+    throw RetryException(attempts);
   }
 }

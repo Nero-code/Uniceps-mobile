@@ -189,8 +189,8 @@ String handleHttpStatus(Response res) {
       return 'OK';
     case 201:
       return 'Created';
-    // case 204:
-    //   throw NoContentException();
+    case 204:
+      throw NoContentException();
     // case 400:
     //   throw BadRequestException();
     // case 401:

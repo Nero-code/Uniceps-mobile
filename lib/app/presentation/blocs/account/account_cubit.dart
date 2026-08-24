@@ -20,7 +20,6 @@ class AccountCubit extends Cubit<AccountState> {
     final res = await _accountUsecases.getUserAccount();
     res.fold(
       (l) {
-        _syncOrchestrator.dispose();
         emit(const AccountState.unauthenticated());
       },
       (r) {
@@ -35,7 +34,6 @@ class AccountCubit extends Cubit<AccountState> {
   Future<void> logout() async {
     final res = await _accountUsecases.logout();
     res.fold((l) => emit(state), (r) {
-      _syncOrchestrator.dispose();
       emit(const AccountState.unauthenticated());
     });
   }

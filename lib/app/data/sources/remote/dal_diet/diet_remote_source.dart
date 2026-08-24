@@ -24,7 +24,7 @@ class DietRemoteSource implements IDietRemoteSource {
       ApiRoutes.ingredients,
       IngredientModel.fromJson,
       needsHeader: hasValidToken,
-      queryParams: lastSync != null ? {'lastSync': lastSync.toIso8601String()} : null,
+      queryParams: lastSync != null ? {'lastSync': lastSync.toString()} : null,
     );
   }
 

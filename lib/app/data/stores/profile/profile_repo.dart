@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
@@ -8,6 +9,7 @@ import 'package:uniceps/app/data/sources/remote/dal_profile/profile_remote_sourc
 import 'package:uniceps/app/domain/classes/auth_entities/profile.dart';
 import 'package:uniceps/app/domain/contracts/profile/i_profile_service.dart';
 import 'package:uniceps/app/services/network_info.dart';
+import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/logging/app_logger.dart';
 
@@ -53,9 +55,11 @@ class ProfileRepo implements IProfileService {
       if (!res.isSynced) syncProfile();
 
       return Right(res.toEntity());
+    } on EmptyCacheExeption catch (e) {
+      return const Left(EmptyCacheFailure(errorMessage: ""));
     } catch (e, s) {
       logger.e('Error getProfile', error: e, stackTrace: s);
-      return const Left(EmptyCacheFailure(errorMessage: ""));
+      return const Left(GeneralPurposeFailure(errorMessage: ''));
     }
   }
 
@@ -71,6 +75,8 @@ class ProfileRepo implements IProfileService {
       return Left(ServerFailure(errMsg: ''));
     } on ClientException {
       return Left(NoInternetConnectionFailure(errMsg: ''));
+    } on SocketException {
+      return Left(NoInternetConnectionFailure(errMsg: ''));
     } catch (e, s) {
       logger.e('Error in saveProfile', error: e, stackTrace: s);
       return Left(ServerFailure(errMsg: ''));
@@ -85,6 +91,8 @@ class ProfileRepo implements IProfileService {
       return const Right(unit);
     } on ClientException {
       return Left(NoInternetConnectionFailure(errMsg: ''));
+    } on SocketException {
+      return Left(NoInternetConnectionFailure(errMsg: ''));
     } catch (e, s) {
       logger.e('Error in changeProfilePicture', error: e, stackTrace: s);
       return Left(ServerFailure(errMsg: ''));
@@ -98,6 +106,8 @@ class ProfileRepo implements IProfileService {
       await localSource.deleteProfilePic();
       return const Right(unit);
     } on ClientException {
+      return Left(NoInternetConnectionFailure(errMsg: ''));
+    } on SocketException {
       return Left(NoInternetConnectionFailure(errMsg: ''));
     } catch (e, s) {
       logger.e('Error in deleteProfilePicture', error: e, stackTrace: s);

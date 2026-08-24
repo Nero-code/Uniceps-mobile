@@ -7,6 +7,7 @@ import 'package:uniceps/app/domain/classes/diet_classes/diet_log.dart';
 import 'package:uniceps/app/domain/classes/diet_classes/ingredient.dart';
 import 'package:uniceps/app/domain/contracts/diet/i_diet_service.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/logging/app_logger.dart';
 
 class DietRepo implements IDietService {
   final IDietLocalSource _localSource;
@@ -41,7 +42,7 @@ class DietRepo implements IDietService {
         }
       }
 
-      allIngredients = models.map((i) => i.toEntity()).toList();
+      allIngredients = (models.map((i) => i.toEntity()).toList()..sort((a, b) => a.name.compareTo(b.name)));
       return Right(allIngredients);
     } catch (e) {
       return Left(IngredientFailure.databaseFailure(message: e.toString()));
@@ -53,6 +54,7 @@ class DietRepo implements IDietService {
     String searchString = '',
     int? categoryId,
   }) async {
+    logger.d("allIngredients length: ${allIngredients.length}");
     try {
       if (searchString.isEmpty && categoryId == null) return Right(allIngredients);
 
@@ -70,7 +72,7 @@ class DietRepo implements IDietService {
   }
 
   @override
-  Future<Either<IngredientFailure, Unit>> saveIngredient(Ingredient ingredient) async {
+  Future<Either<IngredientFailure, Ingredient>> saveIngredient(Ingredient ingredient) async {
     try {
       final model = IngredientModel.fromEntity(ingredient);
       final savedModel = await _localSource.saveIngredient(model);
@@ -84,7 +86,7 @@ class DietRepo implements IDietService {
         allIngredients.add(savedEntity);
       }
 
-      return const Right(unit);
+      return Right(savedEntity);
     } catch (e) {
       return Left(IngredientFailure.databaseFailure(message: e.toString()));
     }

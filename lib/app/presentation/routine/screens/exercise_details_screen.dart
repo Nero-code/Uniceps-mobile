@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/data/services/media_helper.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercise_details/exercise_details_cubit.dart';
 import 'package:uniceps/app/presentation/routine/widgets/exercise_grid_widget.dart';
-import 'package:uniceps/core/widgets/error_widget.dart';
+import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
@@ -48,7 +48,22 @@ class ExerciseDetailsScreen extends StatelessWidget {
                     return state.when(
                       initial: () => const SizedBox(),
                       loading: () => const Center(child: LoadingIndicator()),
-                      failure: (f) => ErrorScreenWidget(f: f),
+                      failure: (f) => Center(
+                        child: Column(
+                          mainAxisSize: .min,
+                          children: [
+                            Text(
+                              f.when(
+                                eOffline: () => l10n.errNoInternet,
+                                emptyExercises: () => l10n.emptyExcercises,
+                                exerciseNotFound: () => l10n.emptyExcercises,
+                                serverFailure: (_) => l10n.errServerException,
+                                databaseFailure: (_) => l10n.errServerException,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       success: (result) => Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(

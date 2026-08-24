@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 
+abstract class AppColors {
+  static const lightBg = Color(0xFFF6F8FA);
+  static const cardSurface = Colors.white;
+  static const primaryDark = Color(0xFF1E293B);
+  static const primaryTeal = Color(0xFF0EA5E9);
+  static const accentMint = Color(0xFF10B981);
+  static const textSubtle = Color(0xFF64748B);
+  static const borderLight = Color(0xFFE2E8F0);
+}
+
 const color1 = Color(0xFF000814);
 const color2 = Color(0xFF001D3D);
 const color3 = Color(0xFF003566);

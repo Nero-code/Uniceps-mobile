@@ -104,6 +104,18 @@ abstract class AppLocalizations {
   /// **'Hi, '**
   String get hello;
 
+  /// No description provided for @dietLogger.
+  ///
+  /// In en, this message translates to:
+  /// **'Diet Logger'**
+  String get dietLogger;
+
+  /// No description provided for @dietLoggerDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Daily meals, calories & macros'**
+  String get dietLoggerDescription;
+
   /// No description provided for @welcome.
   ///
   /// In en, this message translates to:
@@ -1994,6 +2006,12 @@ abstract class AppLocalizations {
   /// **'g'**
   String get grams;
 
+  /// No description provided for @noLogsToday.
+  ///
+  /// In en, this message translates to:
+  /// **'No records, Log what you ate today'**
+  String get noLogsToday;
+
   /// No description provided for @addDietLog.
   ///
   /// In en, this message translates to:
@@ -2155,6 +2173,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Vegetables'**
   String get vegetables;
+
+  /// No description provided for @noActiveRoutine.
+  ///
+  /// In en, this message translates to:
+  /// **'No Active Routine'**
+  String get noActiveRoutine;
+
+  /// No description provided for @setupRoutineSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Select or build a custom program to start training'**
+  String get setupRoutineSub;
+
+  /// No description provided for @setUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Up'**
+  String get setUp;
+
+  /// No description provided for @currentProgram.
+  ///
+  /// In en, this message translates to:
+  /// **'CURRENT PROGRAM'**
+  String get currentProgram;
+
+  /// No description provided for @suggestedNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested Next'**
+  String get suggestedNext;
+
+  /// No description provided for @startDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Start {dayName}'**
+  String startDay(Object dayName);
+
+  /// No description provided for @activeSessionInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'ACTIVE SESSION IN PROGRESS'**
+  String get activeSessionInProgress;
 }
 
 class _AppLocalizationsDelegate

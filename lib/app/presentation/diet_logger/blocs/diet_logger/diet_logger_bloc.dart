@@ -21,5 +21,9 @@ class DietLoggerBloc extends Bloc<DietLoggerEvent, DietLoggerState> {
       final either = await _commands.logMeal(event.log);
       either.fold((l) => emit(.failure(failure: l)), (r) => add(const .started()));
     });
+    on<_DeleteLog>((event, emit) async {
+      final either = await _commands.deleteLog(event.log);
+      either.fold((l) => emit(.failure(failure: l)), (r) => add(const .started()));
+    });
   }
 }

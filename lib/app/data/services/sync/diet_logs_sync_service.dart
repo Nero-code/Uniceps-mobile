@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/data/sources/local/dal_diet/diet_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_diet/diet_remote_source.dart';
 import 'package:uniceps/core/logging/app_logger.dart';
@@ -29,7 +30,7 @@ class DietLogsSyncService {
     } on ClientException catch (e) {
       logger.e('Network client error during sync', error: e);
     } on SocketException catch (e) {
-      logger.w('No internet connection for sync');
+      logger.w('No internet connection for sync', error: e);
     } catch (e, s) {
       logger.e('DietLogsSyncService critical error', error: e, stackTrace: s);
     }
@@ -50,6 +51,6 @@ class DietLogsSyncService {
         await Future.delayed(delay);
       }
     }
-    throw Exception('Retry failed');
+    throw RetryException(attempts);
   }
 }

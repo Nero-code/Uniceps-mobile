@@ -1,7 +1,9 @@
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart';
 import 'package:uniceps/app/data/models/diet_models/diet_log_dto.dart';
 import 'package:uniceps/app/data/models/diet_models/ingredient_model.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
+import 'package:uniceps/core/logging/app_logger.dart';
 
 abstract class IDietLocalSource {
   // Ingredients
@@ -10,7 +12,7 @@ abstract class IDietLocalSource {
   Future<void> bulkSaveIngredients(List<IngredientModel> ingredients);
   Future<void> deleteIngredient(IngredientModel ingredient);
 
-  Future<DateTime> getLastLibSync();
+  Future<DateTime?> getLastLibSync();
   Future<List<IngredientModel>> getUserGeneratedContent();
 
   // Diet Logging
@@ -39,6 +41,7 @@ class DietLocalSource implements IDietLocalSource {
     if (categoryId != null) {
       query.where((tbl) => tbl.categoryId.equals(categoryId));
     }
+
     final result = await query.get();
     return result.map((e) => IngredientModel.fromCompanion(e)).toList();
   }
@@ -167,13 +170,20 @@ class DietLocalSource implements IDietLocalSource {
   }
 
   @override
-  Future<DateTime> getLastLibSync() async {
+  Future<DateTime?> getLastLibSync() async {
+    if (kDebugMode) {
+      final query2 = await _db.select(_db.ingredients).get();
+      final list = query2.map((e) => e.updatedAt).toList()..sort((a, b) => b.compareTo(a));
+      logger.d("isUtc: ${list.first.isUtc} ${list.first}");
+    }
+
     final query = _db.selectOnly(_db.ingredients)..addColumns([_db.ingredients.updatedAt.max()]);
 
     final result = await query.getSingle();
     final latestDate = result.read(_db.ingredients.updatedAt.max());
+    logger.d("isUtc: ${latestDate?.isUtc} $latestDate");
 
-    return latestDate!;
+    return latestDate?.toLocal();
   }
 
   @override

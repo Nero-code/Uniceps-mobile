@@ -12,6 +12,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hello => 'Hi, ';
 
   @override
+  String get dietLogger => 'Diet Logger';
+
+  @override
+  String get dietLoggerDescription => 'Log Daily meals, calories & macros';
+
+  @override
   String get welcome => 'Welcome';
 
   @override
@@ -992,6 +998,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get grams => 'g';
 
   @override
+  String get noLogsToday => 'No records, Log what you ate today';
+
+  @override
   String get addDietLog => 'Add Diet Log';
 
   @override
@@ -1074,4 +1083,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get vegetables => 'Vegetables';
+
+  @override
+  String get noActiveRoutine => 'No Active Routine';
+
+  @override
+  String get setupRoutineSub =>
+      'Select or build a custom program to start training';
+
+  @override
+  String get setUp => 'Set Up';
+
+  @override
+  String get currentProgram => 'CURRENT PROGRAM';
+
+  @override
+  String get suggestedNext => 'Suggested Next';
+
+  @override
+  String startDay(Object dayName) {
+    return 'Start $dayName';
+  }
+
+  @override
+  String get activeSessionInProgress => 'ACTIVE SESSION IN PROGRESS';
 }

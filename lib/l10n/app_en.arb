@@ -1,5 +1,7 @@
 {
   "hello": "Hi, ",
+  "dietLogger": "Diet Logger",
+  "dietLoggerDescription": "Log Daily meals, calories & macros",
   "welcome": "Welcome",
   "signin": "Sign in",
   "login": "Login",
@@ -361,6 +363,7 @@
   "fats": "Fats",
   "kcal": "kcal",
   "grams": "g",
+  "noLogsToday": "No records, Log what you ate today",
   "addDietLog": "Add Diet Log",
   "searchFood": "Search for food...",
   "addCustomEntry": "Add Custom Entry",
@@ -394,5 +397,19 @@
   "dairy": "Dairy",
   "grains": "Grains",
   "fruits": "Fruits",
-  "vegetables": "Vegetables"
+  "vegetables": "Vegetables",
+  "noActiveRoutine": "No Active Routine",
+  "setupRoutineSub": "Select or build a custom program to start training",
+  "setUp": "Set Up",
+  "currentProgram": "CURRENT PROGRAM",
+  "suggestedNext": "Suggested Next",
+  "startDay": "Start {dayName}",
+  "@startDay": {
+    "placeHolders": {
+      "dayName": {
+        "type": "String"
+      }
+    }
+  },
+  "activeSessionInProgress": "ACTIVE SESSION IN PROGRESS"
 }

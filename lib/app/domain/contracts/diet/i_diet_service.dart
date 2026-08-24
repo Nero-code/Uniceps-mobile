@@ -7,7 +7,7 @@ abstract class IDietService {
   // Ingredients Library
   Future<Either<IngredientFailure, List<Ingredient>>> loadIngredients();
   Future<Either<IngredientFailure, List<Ingredient>>> filterIngredientsBy({String searchString = '', int? categoryId});
-  Future<Either<IngredientFailure, Unit>> saveIngredient(Ingredient ingredient);
+  Future<Either<IngredientFailure, Ingredient>> saveIngredient(Ingredient ingredient);
   Future<Either<IngredientFailure, Unit>> bulkSaveIngredients(List<Ingredient> ingredients);
   Future<Either<IngredientFailure, Unit>> deleteIngredient(Ingredient ingredient);
 

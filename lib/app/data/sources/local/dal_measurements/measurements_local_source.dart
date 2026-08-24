@@ -11,6 +11,7 @@ abstract class IMeasurementsLocalSource {
   Future<void> upsertMeasurement(MeasurementModel m);
   Future<void> deleteMeasurement(MeasurementModel m);
 
+  // Sync
   Future<List<MeasurementModel>> getAllUnSyncedMeasurements();
   Future<DateTime?> getLastMeasurementSync();
 }

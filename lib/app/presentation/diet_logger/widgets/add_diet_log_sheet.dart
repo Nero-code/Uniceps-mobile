@@ -1,7 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/domain/classes/diet_classes/diet_log.dart';
 import 'package:uniceps/app/domain/classes/diet_classes/ingredient.dart';
+import 'package:uniceps/app/presentation/diet_logger/blocs/diet_logger/diet_logger_bloc.dart';
+import 'package:uniceps/app/presentation/diet_logger/blocs/ingredients/ingredients_bloc.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
@@ -21,7 +25,6 @@ class _AddDietLogSheetState extends State<AddDietLogSheet> {
   final _searchController = TextEditingController();
   Timer? _debounce;
   Ingredient? _selectedIngredient;
-  List<Ingredient> _filteredIngredients = [];
 
   // Manual Form Controllers
   final _nameController = TextEditingController();
@@ -31,80 +34,9 @@ class _AddDietLogSheetState extends State<AddDietLogSheet> {
   final _carbsController = TextEditingController();
   final _fatsController = TextEditingController();
 
-  // Fake data (Would come from a repository)
-  final List<Ingredient> _mockIngredients = [
-    Ingredient(
-      name: 'Chicken Breast',
-      categoryId: 0,
-      categoryName: 'Meat',
-      servingSizeInGrams: 100,
-      calories: 165,
-      protein: 31,
-      carbs: 0,
-      fats: 3.6,
-      isUserGenerated: false,
-      updatedAt: DateTime.now(),
-      createdAt: DateTime.now(),
-    ),
-    Ingredient(
-      name: 'Brown Rice',
-      categoryId: 0,
-      categoryName: 'Grains',
-      servingSizeInGrams: 100,
-      calories: 111,
-      protein: 2.6,
-      carbs: 23,
-      fats: 0.9,
-      isUserGenerated: false,
-      updatedAt: DateTime.now(),
-      createdAt: DateTime.now(),
-    ),
-    Ingredient(
-      name: 'Whole Egg',
-      categoryId: 0,
-      categoryName: 'Dairy',
-      servingSizeInGrams: 50,
-      calories: 70,
-      protein: 6,
-      carbs: 0.6,
-      fats: 5,
-      isUserGenerated: false,
-      updatedAt: DateTime.now(),
-      createdAt: DateTime.now(),
-    ),
-    Ingredient(
-      name: 'Oats',
-      categoryId: 0,
-      categoryName: 'Grains',
-      servingSizeInGrams: 100,
-      calories: 389,
-      protein: 17,
-      carbs: 66,
-      fats: 7,
-      isUserGenerated: false,
-      updatedAt: DateTime.now(),
-      createdAt: DateTime.now(),
-    ),
-    Ingredient(
-      name: 'Peanut Butter',
-      categoryId: 0,
-      categoryName: 'Fats',
-      servingSizeInGrams: 32,
-      calories: 190,
-      protein: 8,
-      carbs: 6,
-      fats: 16,
-      isUserGenerated: false,
-      updatedAt: DateTime.now(),
-      createdAt: DateTime.now(),
-    ),
-  ];
-
   @override
   void initState() {
     super.initState();
-    _searchController.addListener(_onSearchChanged);
-    _amountController.addListener(() => setState(() {}));
   }
 
   @override
@@ -118,20 +50,6 @@ class _AddDietLogSheetState extends State<AddDietLogSheet> {
     _carbsController.dispose();
     _fatsController.dispose();
     super.dispose();
-  }
-
-  void _onSearchChanged() {
-    if (_debounce?.isActive ?? false) _debounce!.cancel();
-    _debounce = Timer(const Duration(milliseconds: 300), () {
-      final query = _searchController.text.toLowerCase();
-      if (query.isEmpty) {
-        setState(() => _filteredIngredients = []);
-        return;
-      }
-      setState(() {
-        _filteredIngredients = _mockIngredients.where((ing) => ing.name.toLowerCase().contains(query)).toList();
-      });
-    });
   }
 
   void _selectIngredient(Ingredient ingredient) {
@@ -211,6 +129,7 @@ class _AddDietLogSheetState extends State<AddDietLogSheet> {
         const SizedBox(height: 15),
         TextField(
           controller: _searchController,
+          onChanged: (value) => context.read<IngredientsBloc>().add(.filter(search: value)),
           autofocus: true,
           decoration: InputDecoration(
             hintText: locale.searchFood,
@@ -221,40 +140,56 @@ class _AddDietLogSheetState extends State<AddDietLogSheet> {
           ),
         ),
         const SizedBox(height: 15),
-        ListTile(
-          onTap: _switchToManual,
-          leading: const CircleAvatar(
-            backgroundColor: secondaryBlueLight,
-            child: Icon(Icons.edit, color: secondaryBlue),
+        Material(
+          color: Colors.transparent,
+          child: ListTile(
+            onTap: _switchToManual,
+            leading: const CircleAvatar(
+              backgroundColor: secondaryBlueLight,
+              child: Icon(Icons.edit, color: secondaryBlue),
+            ),
+            title: Text(locale.addCustomEntry, style: const TextStyle(fontWeight: FontWeight.bold)),
+            subtitle: Text(locale.manuallyEnterMacros),
+            trailing: const Icon(Icons.chevron_right),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            tileColor: secondaryBlueLight.withValues(alpha: 0.2),
           ),
-          title: Text(locale.addCustomEntry, style: const TextStyle(fontWeight: FontWeight.bold)),
-          subtitle: Text(locale.manuallyEnterMacros),
-          trailing: const Icon(Icons.chevron_right),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          tileColor: secondaryBlueLight.withValues(alpha: 0.2),
         ),
         const SizedBox(height: 10),
-        const Divider(),
+        Divider(color: Colors.grey.shade200),
         Expanded(
-          child: _filteredIngredients.isEmpty
-              ? Center(
-                  child: Text(
-                    _searchController.text.isEmpty ? locale.typeToFindIngredients : locale.noResultsFound,
-                    style: TextStyle(color: Colors.grey[400]),
-                  ),
-                )
-              : ListView.builder(
-                  controller: controller,
-                  itemCount: _filteredIngredients.length,
-                  itemBuilder: (context, index) {
-                    final ing = _filteredIngredients[index];
-                    return ListTile(
-                      title: Text(ing.name, style: const TextStyle(fontWeight: FontWeight.w600)),
-                      subtitle: Text('${ing.calories} ${locale.kcal} per ${ing.servingSizeInGrams}${locale.grams}'),
-                      onTap: () => _selectIngredient(ing),
-                    );
-                  },
+          child: BlocBuilder<IngredientsBloc, IngredientsState>(
+            builder: (context, state) {
+              return state.maybeWhen(
+                orElse: () => Text(
+                  _searchController.text.isEmpty ? locale.typeToFindIngredients : locale.noResultsFound,
+                  style: TextStyle(color: Colors.grey[400]),
                 ),
+                success: (ingredients, categories) => ingredients.isEmpty
+                    ? Text(
+                        _searchController.text.isEmpty ? locale.typeToFindIngredients : locale.noResultsFound,
+                        style: TextStyle(color: Colors.grey[400]),
+                      )
+                    : ListView.builder(
+                        controller: controller,
+                        itemCount: ingredients.length,
+                        itemBuilder: (context, index) {
+                          final ing = ingredients[index];
+                          return Material(
+                            color: Colors.transparent,
+                            child: ListTile(
+                              title: Text(ing.name, style: const TextStyle(fontWeight: FontWeight.w600)),
+                              subtitle: Text(
+                                '${ing.calories} ${locale.kcal} - ${ing.servingSizeInGrams}${locale.grams}',
+                              ),
+                              onTap: () => _selectIngredient(ing),
+                            ),
+                          );
+                        },
+                      ),
+              );
+            },
+          ),
         ),
       ],
     );
@@ -278,7 +213,19 @@ class _AddDietLogSheetState extends State<AddDietLogSheet> {
         const SizedBox(height: 20),
         IngredientNutritionPreview(ingredient: ing, amount: double.tryParse(_amountController.text) ?? 0),
         const SizedBox(height: 30),
-        SubmitButton(label: locale.addToDailyLog, onPressed: () => Navigator.pop(context)),
+        SubmitButton(
+          label: locale.addToDailyLog,
+          onPressed: () {
+            if (double.tryParse(_amountController.text) == null) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(locale.enterAmountGrams)));
+              return;
+            }
+            context.read<DietLoggerBloc>().add(
+              DietLoggerEvent.logServing(log: DietLog.fromIngredient(ing, double.parse(_amountController.text))),
+            );
+            Navigator.pop(context);
+          },
+        ),
       ],
     );
   }
@@ -350,7 +297,37 @@ class _AddDietLogSheetState extends State<AddDietLogSheet> {
           ],
         ),
         const SizedBox(height: 30),
-        SubmitButton(label: locale.saveCustomLog, onPressed: () => Navigator.pop(context)),
+        SubmitButton(
+          label: locale.saveCustomLog,
+          onPressed: () {
+            final name = _nameController.text.trim();
+            final amount = double.tryParse(_amountController.text);
+            final calories = double.tryParse(_caloriesController.text);
+            final protein = double.tryParse(_proteinController.text) ?? 0;
+            final carbs = double.tryParse(_carbsController.text) ?? 0;
+            final fats = double.tryParse(_fatsController.text) ?? 0;
+
+            if (name.isEmpty || amount == null || calories == null) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(locale.enterAmountGrams)));
+              return;
+            }
+
+            final log = DietLog(
+              id: null,
+              apiId: null,
+              ingredientName: name,
+              totalGrams: amount,
+              calories: calories,
+              protein: protein,
+              carbs: carbs,
+              fats: fats,
+              timestamp: DateTime.now(),
+            );
+
+            context.read<DietLoggerBloc>().add(DietLoggerEvent.logServing(log: log));
+            Navigator.pop(context);
+          },
+        ),
       ],
     );
   }

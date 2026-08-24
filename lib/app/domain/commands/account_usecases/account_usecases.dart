@@ -14,6 +14,10 @@ class AccountUsecases {
 
   Future<Either<Failure, Account>> getUserAccount() => _repo.getUserAccount();
 
+  Future<Either<Failure, Unit>> logout() => _repo.logout();
+
+  Future<Either<Failure, Unit>> deleteAccount() => _repo.deleteAccount();
+
   Future<Either<MembershipFailure, Membership>> getSubscriptionPlan() => _repo.getUserMembership();
 
   Future<Either<Failure, Plan>> getPlans() => _repo.getPlans();
@@ -21,8 +25,4 @@ class AccountUsecases {
   Future<Either<Failure, PaymentResponse>> buyPlan(PlanItem item) => _repo.buyPlan(item);
 
   Future<Either<MembershipFailure, Membership>> notifyNewMembership() => _repo.notifyNewMembership();
-
-  Future<Either<Failure, Unit>> logout() => _repo.logout();
-
-  Future<Either<Failure, Unit>> deleteAccount() => _repo.deleteAccount();
 }

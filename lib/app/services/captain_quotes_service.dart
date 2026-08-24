@@ -5,9 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/core/constants/constants.dart';
 
-const quotekey = 'DailyQuote';
-
 class CaptainQuotesService {
+  static const quoteKey = 'DailyQuote';
   final SharedPreferences _prefs;
   const CaptainQuotesService({required SharedPreferences prefs}) : _prefs = prefs;
 
@@ -18,27 +17,27 @@ class CaptainQuotesService {
       final q = (i as Map).map((key, value) => MapEntry(parseLang(key.toString()), value.toString()));
       quotes.add(q);
     }
-    final oldQuote = _prefs.getString(quotekey);
+    final oldQuote = _prefs.getString(quoteKey);
     late DailyQuote quote;
     if (oldQuote == null) {
-      final sentance = {
+      final sentence = {
         Lang.ar: "مرحبا بك في تطبيق Uniceps الرياضي,انا الكابتن يوني هيا نبدا في استكشاف اقسام وميزات التطبيق!",
         Lang.en:
             "Welcome to Uniceps fitness app, my name is captain Uni, "
             "lets start discovering the app's sections and features!",
       };
-      quote = DailyQuote(quote: sentance, date: DateTime.now());
+      quote = DailyQuote(quote: sentence, date: DateTime.now());
     } else {
       final decodedOldQuote = DailyQuote.fromJson(jsonDecode(oldQuote) as Map<String, dynamic>);
 
       if (decodedOldQuote.date.difference(DateTime.now()).inDays == 0) {
         quote = decodedOldQuote;
       } else {
-        final sentance = quotes[Random().nextInt(quotes.length - 1)];
-        quote = DailyQuote(quote: sentance, date: DateTime.now());
+        final sentence = quotes[Random().nextInt(quotes.length - 1)];
+        quote = DailyQuote(quote: sentence, date: DateTime.now());
       }
     }
-    await _prefs.setString(quotekey, jsonEncode(quote.toJson()));
+    await _prefs.setString(quoteKey, jsonEncode(quote.toJson()));
     return quote;
   }
 }
@@ -67,7 +66,7 @@ class DailyQuote {
   }
 
   Map<String, dynamic> toJson() => {
-    'quote': quote.map((lang, sentance) => MapEntry(lang.code, sentance)),
+    'quote': quote.map((lang, sentence) => MapEntry(lang.code, sentence)),
     'date': date.toIso8601String(),
   };
 }

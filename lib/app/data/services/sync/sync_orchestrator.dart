@@ -57,26 +57,20 @@ class SyncOrchestrator {
   Future<void> syncUserActivity() async {
     try {
       logger.d('Syncing User Activity (Training and Measurements)...');
-      await Future.wait([
-        _syncTrainingSessions(),
-        _measurementsSync.syncMeasurements(),
-      ]);
+      await Future.wait([_tSessionSync.syncSessions(), _measurementsSync.uploadMeasurements()]);
     } catch (e) {
       logger.e('User activity sync failed', error: e);
     }
   }
 
-  Future<void> _syncTrainingSessions() async {
+  /// Downloads all remote activity data. Usually called once after login or during restore.
+  Future<void> downloadAllActivityData() async {
     try {
-      _tSessionSync.init();
+      logger.i('Starting initial activity data download...');
+      await Future.wait([_tSessionSync.downloadSessions(), _measurementsSync.downloadMeasurements()]);
+      logger.i('Initial activity data download completed.');
     } catch (e) {
-      logger.e('Training session sync failed', error: e);
+      logger.e('Initial activity data download failed', error: e);
     }
-  }
-
-  /// Stops all background sync processes.
-  void dispose() {
-    logger.d('Disposing Sync Orchestrator...');
-    _tSessionSync.dispose();
   }
 }

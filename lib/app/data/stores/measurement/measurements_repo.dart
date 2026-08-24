@@ -1,15 +1,17 @@
 import 'package:dartz/dartz.dart';
-import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
 import 'package:uniceps/app/data/sources/local/dal_measurements/measurements_local_source.dart';
+import 'package:uniceps/app/data/sources/local/dal_profile/profile_local_source.dart';
 import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/app/domain/contracts/profile/i_measurement_service.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/helpers/physical_calculators.dart';
+import 'package:uniceps/core/logging/app_logger.dart';
 
 class MeasurementsRepo implements IMeasurementContract {
-  MeasurementsRepo({required this.localSource, required this.logger});
+  MeasurementsRepo({required this.localSource, required this.profileLocalSource});
   final IMeasurementsLocalSource localSource;
-  final Logger logger;
+  final IProfileLocalSource profileLocalSource;
 
   final List<Measurement> buffer = [];
   @override
@@ -69,6 +71,24 @@ class MeasurementsRepo implements IMeasurementContract {
     } catch (e) {
       logger.e('Error: deleteMeasurement', error: e);
       return const Left(MeasurementFailure.msDbFailure());
+    }
+  }
+
+  @override
+  Future<double?> getCalories() async {
+    try {
+      final res = await localSource.getMeasurements();
+      final profile = await profileLocalSource.getProfileData();
+      if (res.isEmpty) return null;
+
+      res.sort((a, b) => b.checkDate.compareTo(a.checkDate));
+      buffer.addAll(res.map((m) => m.toEntity()).toList());
+      final m = buffer.first;
+      final bmr = calculateBMR(weight: m.weight, height: m.height, age: profile.age, gender: profile.gender);
+      return bmr;
+    } catch (e) {
+      logger.e('Error: getMeasurements', error: e);
+      return null;
     }
   }
 }

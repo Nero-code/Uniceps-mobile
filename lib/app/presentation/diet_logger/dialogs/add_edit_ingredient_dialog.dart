@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/domain/classes/diet_classes/diet_category.dart';
 import 'package:uniceps/app/domain/classes/diet_classes/ingredient.dart';
+import 'package:uniceps/app/presentation/diet_logger/blocs/ingredients/ingredients_bloc.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
 class AddEditIngredientDialog extends StatefulWidget {
   final Ingredient? ingredient;
-
-  const AddEditIngredientDialog({super.key, this.ingredient});
+  final List<DietCategory> categories;
+  const AddEditIngredientDialog({super.key, this.ingredient, required this.categories});
 
   @override
   State<AddEditIngredientDialog> createState() => _AddEditIngredientDialogState();
@@ -16,7 +19,7 @@ class _AddEditIngredientDialogState extends State<AddEditIngredientDialog> {
 
   // Destructured form data variables
   late String _name;
-  late int _categoryId;
+  late int? _categoryId;
   late String _categoryName;
   late double _servingSize;
   late double _calories;
@@ -31,7 +34,7 @@ class _AddEditIngredientDialogState extends State<AddEditIngredientDialog> {
     super.initState();
     // Initialize data from ingredient or defaults
     _name = widget.ingredient?.name ?? '';
-    _categoryId = widget.ingredient?.categoryId ?? 1;
+    _categoryId = widget.ingredient?.categoryId ?? widget.categories.firstOrNull?.id;
     _categoryName = widget.ingredient?.categoryName ?? '';
     _servingSize = widget.ingredient?.servingSizeInGrams ?? 100.0;
     _calories = widget.ingredient?.calories ?? 0.0;
@@ -46,11 +49,11 @@ class _AddEditIngredientDialogState extends State<AddEditIngredientDialog> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      final _ = Ingredient(
+      final ingredient = Ingredient(
         id: widget.ingredient?.id,
         apiId: widget.ingredient?.apiId,
         name: _name,
-        categoryId: _categoryId,
+        categoryId: _categoryId!,
         categoryName: _categoryName,
         servingSizeInGrams: _servingSize,
         calories: _calories,
@@ -62,7 +65,7 @@ class _AddEditIngredientDialogState extends State<AddEditIngredientDialog> {
         isUserGenerated: true,
         version: widget.ingredient != null ? widget.ingredient!.version + 1 : 0,
       );
-
+      context.read<IngredientsBloc>().add(.createIngredient(ingredient: ingredient));
       Navigator.pop(context);
     }
   }
@@ -82,11 +85,12 @@ class _AddEditIngredientDialogState extends State<AddEditIngredientDialog> {
             children: [
               _Field(label: locale.name, initialValue: _name, icon: Icons.title, onSaved: (v) => _name = v ?? ''),
               const SizedBox(height: 10),
-              _Field(
-                label: locale.category,
-                initialValue: _categoryName,
-                icon: Icons.category,
-                onSaved: (v) => _categoryName = v ?? '',
+              DropdownButtonFormField(
+                decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                initialValue: _categoryId,
+                onChanged: (value) => setState(() => _categoryId = value),
+                validator: (value) => _categoryId == null ? locale.category : null,
+                items: widget.categories.map((c) => DropdownMenuItem(value: c.id, child: Text(c.name))).toList(),
               ),
               const SizedBox(height: 10),
               _Field(

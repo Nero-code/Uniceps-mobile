@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:uniceps/app/services/captian_quotes_service.dart';
+import 'package:uniceps/app/services/captain_quotes_service.dart';
 
 part 'daily_quote_cubit.freezed.dart';
 part 'daily_quote_state.dart';
