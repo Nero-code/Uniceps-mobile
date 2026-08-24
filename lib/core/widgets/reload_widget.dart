@@ -115,7 +115,7 @@ class ReloadScreenWidget extends StatelessWidget {
         return local.empty;
       // case NoAttendenceFoundFailure:
 
-      case const (GeneralPurposFailure):
+      case const (GeneralPurposeFailure):
       default:
         return local.errUnknown;
     }

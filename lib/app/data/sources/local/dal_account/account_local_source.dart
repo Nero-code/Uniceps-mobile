@@ -41,7 +41,8 @@ class AccountLocalSource implements IAccountLocalSource {
   /// `Unatherized` state which translates to **guest**.
   @override
   Future<AccountModel> getUserAccount() async {
-    final account = await _database.select(_database.accounts).getSingle();
+    final account = await _database.select(_database.accounts).getSingleOrNull();
+    if (account == null) throw EmptyCacheExeption();
     return AccountModel.fromTable(account);
   }
 

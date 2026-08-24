@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uniceps/app/domain/commands/routine_management/exercises_commands.dart';
-import 'package:uniceps/core/errors/failure.dart';
 
 part 'media_downloader_cubit.freezed.dart';
 part 'media_downloader_state.dart';
@@ -14,19 +13,19 @@ class MediaDownloaderCubit extends Cubit<MediaDownloaderState> {
   void startLibDownload() async {
     final either = await _commands.getExercises();
     return either.fold(
-      (l) => emit(state.copyWith(progress: 0, failure: l, status: .failure)),
+      (l) => emit(state.copyWith(progress: 0, status: .failure)),
       (r) => downloadImages(r.map((e) => e.apiId).toList()),
     );
   }
 
   void downloadImages(List<String> ids) {
-    emit(state.copyWith(status: .downloading, progress: 0.0, failure: null));
+    emit(state.copyWith(status: .downloading, progress: 0.0));
 
     _commands.downloadImages(ids).listen((result) {
       if (result.error == null) {
         emit(state.copyWith(progress: result.data, status: result.data >= 1.0 ? .success : .downloading));
       } else {
-        emit(state.copyWith(status: .failure, failure: result.error));
+        emit(state.copyWith(status: .failure));
       }
     });
   }

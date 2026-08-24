@@ -141,15 +141,21 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
   @override
   Stream<Stage> insertFullRoutine(RoutineDto dto) async* {
     // Create New Routine
-    final routineId = await _database.into(_database.routines).insert(RoutinesCompanion.insert(name: dto.name));
+    final routineId = await _database
+        .into(_database.routines)
+        .insert(RoutinesCompanion.insert(name: dto.name, description: Value(dto.description)));
     // Create Days
     for (final d in dto.daysDto) {
       final dayId = await _database
           .into(_database.daysGroup)
           .insert(DaysGroupCompanion.insert(index: d.index, dayName: d.name, routineId: routineId));
-      yield Stage.days; // move one step for Day
+
+      // move one step for Day
+      yield Stage.days;
+
       final sortedRoutineItems = d.items;
       sortedRoutineItems.sort((a, b) => a.index.compareTo(b.index));
+
       // Create Items
       for (int j = 0; j < d.items.length; j++) {
         final i = sortedRoutineItems[j];

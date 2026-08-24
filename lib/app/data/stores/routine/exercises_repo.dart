@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
+import 'package:pool/pool.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
@@ -39,7 +40,7 @@ class ExercisesRepo implements IExercisesContract {
        _internet = internet;
 
   @override
-  Future<Either<Failure, bool>> checkExercises() async {
+  Future<Either<ExerciseFailure, bool>> checkExercises() async {
     try {
       final res = await _localSource.getExercises();
       if (res.isNotEmpty) {
@@ -49,12 +50,12 @@ class ExercisesRepo implements IExercisesContract {
       }
       return Right(res.isNotEmpty);
     } catch (e) {
-      return Left(DatabaseFailure(errorMsg: e.toString()));
+      return Left(ExerciseFailure.databaseFailure(message: e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, bool>> changeLibLanguage(String language) async {
+  Future<Either<ExerciseFailure, bool>> changeLibLanguage(String language) async {
     if (await _internet.hasConnection) {
       try {
         final res = await _remoteSource.getAllExercises(language: language);
@@ -66,10 +67,10 @@ class ExercisesRepo implements IExercisesContract {
 
         return const Right(true);
       } catch (e, s) {
-        return Left(NoInternetConnectionFailure(errMsg: '$e\n$s'));
+        return Left(ExerciseFailure.serverFailure(message: '$e\n$s'));
       }
     } else {
-      return Left(NoInternetConnectionFailure(errMsg: ''));
+      return const Left(ExerciseFailure.eOffline());
     }
   }
 
@@ -100,7 +101,7 @@ class ExercisesRepo implements IExercisesContract {
   }
 
   @override
-  Future<Either<Failure, List<Exercise>>> getExercisesLib() async {
+  Future<Either<ExerciseFailure, List<Exercise>>> getExercisesLib() async {
     if (exercisesLib.isNotEmpty) return Right(exercisesLib);
 
     try {
@@ -110,14 +111,14 @@ class ExercisesRepo implements IExercisesContract {
       exercisesLib.addAll(res.map((e) => e.toEntity()));
       return Right(exercisesLib);
     } on ClientException {
-      return Left(OfflineFailure(errorMessage: ""));
+      return const Left(ExerciseFailure.eOffline());
     } catch (e) {
-      return Left(ServerFailure(errMsg: e.toString()));
+      return Left(ExerciseFailure.serverFailure(message: e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> saveExercisesLib(List<Exercise> lib) async {
+  Future<Either<ExerciseFailure, Unit>> saveExercisesLib(List<Exercise> lib) async {
     try {
       for (final e in lib) {
         await _localSource.writeExercise(ExerciseDto.fromEntity(e));
@@ -125,17 +126,17 @@ class ExercisesRepo implements IExercisesContract {
       return const Right(unit);
     } catch (e, s) {
       _logger.e('Error in saving exercises lib!', error: e, stackTrace: s);
-      return Left(DatabaseFailure(errorMsg: e.toString()));
+      return Left(ExerciseFailure.databaseFailure(message: e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, ExerciseFilter>> getExerciseFilters() async {
+  Future<Either<ExerciseFailure, ExerciseFilter>> getExerciseFilters() async {
     return Right(ExerciseFilter(groups: allGroups, tools: allTools));
   }
 
   @override
-  Future<Either<Failure, List<Exercise>>> getExercisesByFilter(ExerciseFilter filter) async {
+  Future<Either<ExerciseFailure, List<Exercise>>> getExercisesByFilter(ExerciseFilter filter) async {
     final filteredList = exercisesLib.where((e) {
       final filterGroup = filter.groups.isNotEmpty
           ? filter.groups.where((g) => e.muscleGroupCode == g.muscleGroupCode).isNotEmpty
@@ -149,7 +150,7 @@ class ExercisesRepo implements IExercisesContract {
   }
 
   @override
-  Future<Either<Failure, List<Exercise>>> getExercisesByGroup(MuscleGroup group) async {
+  Future<Either<ExerciseFailure, List<Exercise>>> getExercisesByGroup(MuscleGroup group) async {
     if (allExercises.containsKey(group.muscleGroupCode)) return Right(allExercises[group.muscleGroupCode]!);
     if (await _internet.hasConnection) {
       try {
@@ -158,14 +159,14 @@ class ExercisesRepo implements IExercisesContract {
         allExercises.addAll({group.muscleGroupCode: augRes.map((r) => r.toEntity()).toList()});
         return Right(allExercises[group.muscleGroupCode]!);
       } catch (e) {
-        return Left(ServerFailure(errMsg: e.toString()));
+        return Left(ExerciseFailure.serverFailure(message: e.toString()));
       }
     }
-    return Left(OfflineFailure(errorMessage: "offline"));
+    return const Left(ExerciseFailure.eOffline());
   }
 
   @override
-  Future<Either<Failure, List<MuscleGroup>>> getExerciseGroups() async {
+  Future<Either<ExerciseFailure, List<MuscleGroup>>> getExerciseGroups() async {
     if (allGroups.isNotEmpty) return Right(allGroups);
     if (await _internet.hasConnection) {
       try {
@@ -173,49 +174,101 @@ class ExercisesRepo implements IExercisesContract {
         allGroups.addAll(res.map((r) => r.toEntity()));
         return Right(allGroups);
       } catch (e) {
-        return Left(ServerFailure(errMsg: e.toString()));
+        return Left(ExerciseFailure.serverFailure(message: e.toString()));
       }
     }
-    return Left(OfflineFailure(errorMessage: ""));
+    return const Left(ExerciseFailure.eOffline());
   }
 
+  //   @override
+  //   Stream<Result<double, ExerciseFailure>> downloadImages(List<String> ids) async* {
+  //     try {
+  //       // Get all images from api.
+  //       for (final id in ids) {
+  //         if (await _localSource.containsImage(id)) continue;
+  //         final img = await _remoteSource.getExerciseImage(id);
+  //         await _localSource.saveExerciseImage(id, img);
+  // final pool = Pool();
+  //         // 0 -> length =============== 0% -> 50%
+  //         final progress = (ids.indexOf(id) + 1) / (2 * ids.length);
+  //         yield Result(data: progress, error: null);
+  //       }
+  //       // When complete save exercises in database.
+  //       for (final e in exercisesLib) {
+  //         await _localSource.writeExercise(ExerciseDto.fromEntity(e));
+  //
+  //         // length -> 2 * length  ===== 50% -> 100%
+  //         final progress = (exercisesLib.indexOf(e) + 1 + exercisesLib.length) / (2 * exercisesLib.length);
+  //         yield Result(data: progress, error: null);
+  //       }
+  //       // yield Result(data: 1, error: null); // 100%
+  //     } catch (e) {
+  //       yield const Result(data: 0, error: ExerciseFailure.eOffline());
+  //     }
+  //     return;
+  //   }
+
+  // region Experimental downloadImages
   @override
-  Stream<Result<double, Failure>> downloadImages(List<String> ids) async* {
+  Stream<Result<double, ExerciseFailure>> downloadImages(List<String> ids) async* {
     try {
-      // Get all images from api.
+      // 1. Filter out what we already have
+      final missingIds = <String>[];
       for (final id in ids) {
-        if (await _localSource.containsImage(id)) continue;
-        final img = await _remoteSource.getExerciseImage(id);
-        await _localSource.saveExerciseImage(id, img);
+        if (!(await _localSource.containsImage(id))) {
+          missingIds.add(id);
+        }
+      }
 
-        // 0 -> length =============== 0% -> 50%
-        final progress = (ids.indexOf(id) + 1) / (2 * ids.length);
+      // 2. Download concurrently using a Pool
+      final pool = Pool(10); // Adjust concurrency (e.g., 5 to 10)
+      int completedCount = 0;
+      final totalToDownload = missingIds.length;
+
+      if (totalToDownload > 0) {
+        // We map each ID to a future that runs in the pool
+        final downloadFutures = missingIds.map((id) {
+          return pool.withResource(() async {
+            final img = await _remoteSource.getExerciseImage(id);
+            await _localSource.saveExerciseImage(id, img);
+            completedCount++;
+
+            // You can't 'yield' from inside this closure, so we use a different approach
+            // for progress if we want to yield for EVERY image.
+          });
+        });
+
+        // To yield progress as each image finishes, we can use a StreamController
+        // or simply wait for the pool to finish if high-granularity progress isn't critical.
+        // However, to keep your 'async*' logic, we can do this:
+
+        await for (final _ in Stream.fromFutures(downloadFutures)) {
+          final progress = completedCount / (2 * ids.length);
+          yield Result(data: progress, error: null);
+        }
+      }
+
+      // 3. Save exercises in database
+      for (int i = 0; i < exercisesLib.length; i++) {
+        await _localSource.writeExercise(ExerciseDto.fromEntity(exercisesLib[i]));
+        final progress = (ids.length + i + 1) / (2 * ids.length);
         yield Result(data: progress, error: null);
       }
-      // When complete save exercises in database.
-      for (final e in exercisesLib) {
-        await _localSource.writeExercise(ExerciseDto.fromEntity(e));
-
-        // length -> 2 * length  ===== 50% -> 100%
-        final progress = (exercisesLib.indexOf(e) + 1 + exercisesLib.length) / (2 * exercisesLib.length);
-        yield Result(data: progress, error: null);
-      }
-      // yield Result(data: 1, error: null); // 100%
     } catch (e) {
-      yield Result(data: 0, error: NoInternetConnectionFailure(errMsg: ''));
+      yield const Result(data: 0, error: ExerciseFailure.eOffline());
     }
-    return;
   }
 
+  // endregion
   @override
-  Future<Either<Failure, ExerciseDetailsResult>> getExerciseDetails(String id) async {
+  Future<Either<ExerciseFailure, ExerciseDetailsResult>> getExerciseDetails(String id) async {
     try {
       final ex = exercisesLib.firstWhere((e) => e.apiId == id);
       final similars = exercisesLib.where((e) => e.muscleHeadCode == ex.muscleHeadCode && e.apiId != ex.apiId).toList();
       return Right(ExerciseDetailsResult(exercise: ex, similars: similars));
     } catch (e, s) {
       logger.e('getExerciseDetails: $id', error: e, stackTrace: s);
-      return Left(DatabaseFailure(errorMsg: ''));
+      return Left(ExerciseFailure.databaseFailure(message: e.toString()));
     }
   }
 }

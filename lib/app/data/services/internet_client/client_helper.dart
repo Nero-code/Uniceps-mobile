@@ -105,3 +105,11 @@ final class UnknownHttpException implements Exception {
   @override
   String toString() => 'UnknownHttpException($statusCode): $message';
 }
+
+final class RetryException implements Exception {
+  final int statusCode;
+  final String message;
+  RetryException(this.statusCode, [this.message = 'Exceeded max retries']);
+  @override
+  String toString() => 'RetryException($statusCode): $message';
+}

@@ -55,14 +55,14 @@ extension AuthFailurePatterns on AuthFailure {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _AOffline value)?  aOffline,TResult Function( _InvalidEmailFailure value)?  invalidEmailFailure,TResult Function( _InvalidCodeFailure value)?  invalidCodeFailure,TResult Function( _UnautherizedFailure value)?  unautherizedFailure,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _AOffline value)?  aOffline,TResult Function( _InvalidEmailFailure value)?  invalidEmailFailure,TResult Function( _InvalidCodeFailure value)?  invalidCodeFailure,TResult Function( _UnauthorizedFailure value)?  unauthorizedFailure,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _AOffline() when aOffline != null:
 return aOffline(_that);case _InvalidEmailFailure() when invalidEmailFailure != null:
 return invalidEmailFailure(_that);case _InvalidCodeFailure() when invalidCodeFailure != null:
-return invalidCodeFailure(_that);case _UnautherizedFailure() when unautherizedFailure != null:
-return unautherizedFailure(_that);case _:
+return invalidCodeFailure(_that);case _UnauthorizedFailure() when unauthorizedFailure != null:
+return unauthorizedFailure(_that);case _:
   return orElse();
 
 }
@@ -80,14 +80,14 @@ return unautherizedFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _AOffline value)  aOffline,required TResult Function( _InvalidEmailFailure value)  invalidEmailFailure,required TResult Function( _InvalidCodeFailure value)  invalidCodeFailure,required TResult Function( _UnautherizedFailure value)  unautherizedFailure,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _AOffline value)  aOffline,required TResult Function( _InvalidEmailFailure value)  invalidEmailFailure,required TResult Function( _InvalidCodeFailure value)  invalidCodeFailure,required TResult Function( _UnauthorizedFailure value)  unauthorizedFailure,}){
 final _that = this;
 switch (_that) {
 case _AOffline():
 return aOffline(_that);case _InvalidEmailFailure():
 return invalidEmailFailure(_that);case _InvalidCodeFailure():
-return invalidCodeFailure(_that);case _UnautherizedFailure():
-return unautherizedFailure(_that);case _:
+return invalidCodeFailure(_that);case _UnauthorizedFailure():
+return unauthorizedFailure(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -104,14 +104,14 @@ return unautherizedFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _AOffline value)?  aOffline,TResult? Function( _InvalidEmailFailure value)?  invalidEmailFailure,TResult? Function( _InvalidCodeFailure value)?  invalidCodeFailure,TResult? Function( _UnautherizedFailure value)?  unautherizedFailure,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _AOffline value)?  aOffline,TResult? Function( _InvalidEmailFailure value)?  invalidEmailFailure,TResult? Function( _InvalidCodeFailure value)?  invalidCodeFailure,TResult? Function( _UnauthorizedFailure value)?  unauthorizedFailure,}){
 final _that = this;
 switch (_that) {
 case _AOffline() when aOffline != null:
 return aOffline(_that);case _InvalidEmailFailure() when invalidEmailFailure != null:
 return invalidEmailFailure(_that);case _InvalidCodeFailure() when invalidCodeFailure != null:
-return invalidCodeFailure(_that);case _UnautherizedFailure() when unautherizedFailure != null:
-return unautherizedFailure(_that);case _:
+return invalidCodeFailure(_that);case _UnauthorizedFailure() when unauthorizedFailure != null:
+return unauthorizedFailure(_that);case _:
   return null;
 
 }
@@ -128,13 +128,13 @@ return unautherizedFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  aOffline,TResult Function()?  invalidEmailFailure,TResult Function()?  invalidCodeFailure,TResult Function()?  unautherizedFailure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  aOffline,TResult Function()?  invalidEmailFailure,TResult Function()?  invalidCodeFailure,TResult Function()?  unauthorizedFailure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AOffline() when aOffline != null:
 return aOffline();case _InvalidEmailFailure() when invalidEmailFailure != null:
 return invalidEmailFailure();case _InvalidCodeFailure() when invalidCodeFailure != null:
-return invalidCodeFailure();case _UnautherizedFailure() when unautherizedFailure != null:
-return unautherizedFailure();case _:
+return invalidCodeFailure();case _UnauthorizedFailure() when unauthorizedFailure != null:
+return unauthorizedFailure();case _:
   return orElse();
 
 }
@@ -152,13 +152,13 @@ return unautherizedFailure();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  aOffline,required TResult Function()  invalidEmailFailure,required TResult Function()  invalidCodeFailure,required TResult Function()  unautherizedFailure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  aOffline,required TResult Function()  invalidEmailFailure,required TResult Function()  invalidCodeFailure,required TResult Function()  unauthorizedFailure,}) {final _that = this;
 switch (_that) {
 case _AOffline():
 return aOffline();case _InvalidEmailFailure():
 return invalidEmailFailure();case _InvalidCodeFailure():
-return invalidCodeFailure();case _UnautherizedFailure():
-return unautherizedFailure();case _:
+return invalidCodeFailure();case _UnauthorizedFailure():
+return unauthorizedFailure();case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -175,13 +175,13 @@ return unautherizedFailure();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  aOffline,TResult? Function()?  invalidEmailFailure,TResult? Function()?  invalidCodeFailure,TResult? Function()?  unautherizedFailure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  aOffline,TResult? Function()?  invalidEmailFailure,TResult? Function()?  invalidCodeFailure,TResult? Function()?  unauthorizedFailure,}) {final _that = this;
 switch (_that) {
 case _AOffline() when aOffline != null:
 return aOffline();case _InvalidEmailFailure() when invalidEmailFailure != null:
 return invalidEmailFailure();case _InvalidCodeFailure() when invalidCodeFailure != null:
-return invalidCodeFailure();case _UnautherizedFailure() when unautherizedFailure != null:
-return unautherizedFailure();case _:
+return invalidCodeFailure();case _UnauthorizedFailure() when unauthorizedFailure != null:
+return unauthorizedFailure();case _:
   return null;
 
 }
@@ -288,8 +288,8 @@ String toString() {
 /// @nodoc
 
 
-class _UnautherizedFailure implements AuthFailure {
-  const _UnautherizedFailure();
+class _UnauthorizedFailure implements AuthFailure {
+  const _UnauthorizedFailure();
   
 
 
@@ -299,7 +299,7 @@ class _UnautherizedFailure implements AuthFailure {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UnautherizedFailure);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UnauthorizedFailure);
 }
 
 
@@ -308,7 +308,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure.unautherizedFailure()';
+  return 'AuthFailure.unauthorizedFailure()';
 }
 
 
@@ -1784,6 +1784,1022 @@ class __$LibUnknownCopyWithImpl<$Res>
   return _then(_LibUnknown(
 currentTotalCount: null == currentTotalCount ? _self.currentTotalCount : currentTotalCount // ignore: cast_nullable_to_non_nullable
 as int,
+  ));
+}
+
+
+}
+
+/// @nodoc
+mixin _$IngredientFailure {
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is IngredientFailure);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'IngredientFailure()';
+}
+
+
+}
+
+/// @nodoc
+class $IngredientFailureCopyWith<$Res>  {
+$IngredientFailureCopyWith(IngredientFailure _, $Res Function(IngredientFailure) __);
+}
+
+
+/// Adds pattern-matching-related methods to [IngredientFailure].
+extension IngredientFailurePatterns on IngredientFailure {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _IOffline value)?  iOffline,TResult Function( _EmptyIngredientBucket value)?  emptyIngredientBucket,TResult Function( _IngredientDatabaseFailure value)?  databaseFailure,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _IOffline() when iOffline != null:
+return iOffline(_that);case _EmptyIngredientBucket() when emptyIngredientBucket != null:
+return emptyIngredientBucket(_that);case _IngredientDatabaseFailure() when databaseFailure != null:
+return databaseFailure(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _IOffline value)  iOffline,required TResult Function( _EmptyIngredientBucket value)  emptyIngredientBucket,required TResult Function( _IngredientDatabaseFailure value)  databaseFailure,}){
+final _that = this;
+switch (_that) {
+case _IOffline():
+return iOffline(_that);case _EmptyIngredientBucket():
+return emptyIngredientBucket(_that);case _IngredientDatabaseFailure():
+return databaseFailure(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _IOffline value)?  iOffline,TResult? Function( _EmptyIngredientBucket value)?  emptyIngredientBucket,TResult? Function( _IngredientDatabaseFailure value)?  databaseFailure,}){
+final _that = this;
+switch (_that) {
+case _IOffline() when iOffline != null:
+return iOffline(_that);case _EmptyIngredientBucket() when emptyIngredientBucket != null:
+return emptyIngredientBucket(_that);case _IngredientDatabaseFailure() when databaseFailure != null:
+return databaseFailure(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  iOffline,TResult Function()?  emptyIngredientBucket,TResult Function( String message)?  databaseFailure,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _IOffline() when iOffline != null:
+return iOffline();case _EmptyIngredientBucket() when emptyIngredientBucket != null:
+return emptyIngredientBucket();case _IngredientDatabaseFailure() when databaseFailure != null:
+return databaseFailure(_that.message);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  iOffline,required TResult Function()  emptyIngredientBucket,required TResult Function( String message)  databaseFailure,}) {final _that = this;
+switch (_that) {
+case _IOffline():
+return iOffline();case _EmptyIngredientBucket():
+return emptyIngredientBucket();case _IngredientDatabaseFailure():
+return databaseFailure(_that.message);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  iOffline,TResult? Function()?  emptyIngredientBucket,TResult? Function( String message)?  databaseFailure,}) {final _that = this;
+switch (_that) {
+case _IOffline() when iOffline != null:
+return iOffline();case _EmptyIngredientBucket() when emptyIngredientBucket != null:
+return emptyIngredientBucket();case _IngredientDatabaseFailure() when databaseFailure != null:
+return databaseFailure(_that.message);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _IOffline implements IngredientFailure {
+  const _IOffline();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _IOffline);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'IngredientFailure.iOffline()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _EmptyIngredientBucket implements IngredientFailure {
+  const _EmptyIngredientBucket();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EmptyIngredientBucket);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'IngredientFailure.emptyIngredientBucket()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _IngredientDatabaseFailure implements IngredientFailure {
+  const _IngredientDatabaseFailure({required this.message});
+  
+
+ final  String message;
+
+/// Create a copy of IngredientFailure
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$IngredientDatabaseFailureCopyWith<_IngredientDatabaseFailure> get copyWith => __$IngredientDatabaseFailureCopyWithImpl<_IngredientDatabaseFailure>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _IngredientDatabaseFailure&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'IngredientFailure.databaseFailure(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$IngredientDatabaseFailureCopyWith<$Res> implements $IngredientFailureCopyWith<$Res> {
+  factory _$IngredientDatabaseFailureCopyWith(_IngredientDatabaseFailure value, $Res Function(_IngredientDatabaseFailure) _then) = __$IngredientDatabaseFailureCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class __$IngredientDatabaseFailureCopyWithImpl<$Res>
+    implements _$IngredientDatabaseFailureCopyWith<$Res> {
+  __$IngredientDatabaseFailureCopyWithImpl(this._self, this._then);
+
+  final _IngredientDatabaseFailure _self;
+  final $Res Function(_IngredientDatabaseFailure) _then;
+
+/// Create a copy of IngredientFailure
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(_IngredientDatabaseFailure(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+mixin _$DietLogFailure {
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DietLogFailure);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'DietLogFailure()';
+}
+
+
+}
+
+/// @nodoc
+class $DietLogFailureCopyWith<$Res>  {
+$DietLogFailureCopyWith(DietLogFailure _, $Res Function(DietLogFailure) __);
+}
+
+
+/// Adds pattern-matching-related methods to [DietLogFailure].
+extension DietLogFailurePatterns on DietLogFailure {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _NoLogsToday value)?  noLogsToday,TResult Function( _noLogsEver value)?  noLogsEver,TResult Function( _DietLogDatabaseFailure value)?  databaseFailure,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _NoLogsToday() when noLogsToday != null:
+return noLogsToday(_that);case _noLogsEver() when noLogsEver != null:
+return noLogsEver(_that);case _DietLogDatabaseFailure() when databaseFailure != null:
+return databaseFailure(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _NoLogsToday value)  noLogsToday,required TResult Function( _noLogsEver value)  noLogsEver,required TResult Function( _DietLogDatabaseFailure value)  databaseFailure,}){
+final _that = this;
+switch (_that) {
+case _NoLogsToday():
+return noLogsToday(_that);case _noLogsEver():
+return noLogsEver(_that);case _DietLogDatabaseFailure():
+return databaseFailure(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _NoLogsToday value)?  noLogsToday,TResult? Function( _noLogsEver value)?  noLogsEver,TResult? Function( _DietLogDatabaseFailure value)?  databaseFailure,}){
+final _that = this;
+switch (_that) {
+case _NoLogsToday() when noLogsToday != null:
+return noLogsToday(_that);case _noLogsEver() when noLogsEver != null:
+return noLogsEver(_that);case _DietLogDatabaseFailure() when databaseFailure != null:
+return databaseFailure(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  noLogsToday,TResult Function()?  noLogsEver,TResult Function( String message)?  databaseFailure,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _NoLogsToday() when noLogsToday != null:
+return noLogsToday();case _noLogsEver() when noLogsEver != null:
+return noLogsEver();case _DietLogDatabaseFailure() when databaseFailure != null:
+return databaseFailure(_that.message);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  noLogsToday,required TResult Function()  noLogsEver,required TResult Function( String message)  databaseFailure,}) {final _that = this;
+switch (_that) {
+case _NoLogsToday():
+return noLogsToday();case _noLogsEver():
+return noLogsEver();case _DietLogDatabaseFailure():
+return databaseFailure(_that.message);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  noLogsToday,TResult? Function()?  noLogsEver,TResult? Function( String message)?  databaseFailure,}) {final _that = this;
+switch (_that) {
+case _NoLogsToday() when noLogsToday != null:
+return noLogsToday();case _noLogsEver() when noLogsEver != null:
+return noLogsEver();case _DietLogDatabaseFailure() when databaseFailure != null:
+return databaseFailure(_that.message);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _NoLogsToday implements DietLogFailure {
+  const _NoLogsToday();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoLogsToday);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'DietLogFailure.noLogsToday()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _noLogsEver implements DietLogFailure {
+  const _noLogsEver();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _noLogsEver);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'DietLogFailure.noLogsEver()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _DietLogDatabaseFailure implements DietLogFailure {
+  const _DietLogDatabaseFailure({required this.message});
+  
+
+ final  String message;
+
+/// Create a copy of DietLogFailure
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$DietLogDatabaseFailureCopyWith<_DietLogDatabaseFailure> get copyWith => __$DietLogDatabaseFailureCopyWithImpl<_DietLogDatabaseFailure>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DietLogDatabaseFailure&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'DietLogFailure.databaseFailure(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$DietLogDatabaseFailureCopyWith<$Res> implements $DietLogFailureCopyWith<$Res> {
+  factory _$DietLogDatabaseFailureCopyWith(_DietLogDatabaseFailure value, $Res Function(_DietLogDatabaseFailure) _then) = __$DietLogDatabaseFailureCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class __$DietLogDatabaseFailureCopyWithImpl<$Res>
+    implements _$DietLogDatabaseFailureCopyWith<$Res> {
+  __$DietLogDatabaseFailureCopyWithImpl(this._self, this._then);
+
+  final _DietLogDatabaseFailure _self;
+  final $Res Function(_DietLogDatabaseFailure) _then;
+
+/// Create a copy of DietLogFailure
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(_DietLogDatabaseFailure(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+mixin _$ExerciseFailure {
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExerciseFailure);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ExerciseFailure()';
+}
+
+
+}
+
+/// @nodoc
+class $ExerciseFailureCopyWith<$Res>  {
+$ExerciseFailureCopyWith(ExerciseFailure _, $Res Function(ExerciseFailure) __);
+}
+
+
+/// Adds pattern-matching-related methods to [ExerciseFailure].
+extension ExerciseFailurePatterns on ExerciseFailure {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _EOffline value)?  eOffline,TResult Function( _EmptyExercises value)?  emptyExercises,TResult Function( _ExerciseNotFound value)?  exerciseNotFound,TResult Function( _ExerciseServerFailure value)?  serverFailure,TResult Function( _ExerciseDatabaseFailure value)?  databaseFailure,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _EOffline() when eOffline != null:
+return eOffline(_that);case _EmptyExercises() when emptyExercises != null:
+return emptyExercises(_that);case _ExerciseNotFound() when exerciseNotFound != null:
+return exerciseNotFound(_that);case _ExerciseServerFailure() when serverFailure != null:
+return serverFailure(_that);case _ExerciseDatabaseFailure() when databaseFailure != null:
+return databaseFailure(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _EOffline value)  eOffline,required TResult Function( _EmptyExercises value)  emptyExercises,required TResult Function( _ExerciseNotFound value)  exerciseNotFound,required TResult Function( _ExerciseServerFailure value)  serverFailure,required TResult Function( _ExerciseDatabaseFailure value)  databaseFailure,}){
+final _that = this;
+switch (_that) {
+case _EOffline():
+return eOffline(_that);case _EmptyExercises():
+return emptyExercises(_that);case _ExerciseNotFound():
+return exerciseNotFound(_that);case _ExerciseServerFailure():
+return serverFailure(_that);case _ExerciseDatabaseFailure():
+return databaseFailure(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _EOffline value)?  eOffline,TResult? Function( _EmptyExercises value)?  emptyExercises,TResult? Function( _ExerciseNotFound value)?  exerciseNotFound,TResult? Function( _ExerciseServerFailure value)?  serverFailure,TResult? Function( _ExerciseDatabaseFailure value)?  databaseFailure,}){
+final _that = this;
+switch (_that) {
+case _EOffline() when eOffline != null:
+return eOffline(_that);case _EmptyExercises() when emptyExercises != null:
+return emptyExercises(_that);case _ExerciseNotFound() when exerciseNotFound != null:
+return exerciseNotFound(_that);case _ExerciseServerFailure() when serverFailure != null:
+return serverFailure(_that);case _ExerciseDatabaseFailure() when databaseFailure != null:
+return databaseFailure(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  eOffline,TResult Function()?  emptyExercises,TResult Function()?  exerciseNotFound,TResult Function( String message)?  serverFailure,TResult Function( String message)?  databaseFailure,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _EOffline() when eOffline != null:
+return eOffline();case _EmptyExercises() when emptyExercises != null:
+return emptyExercises();case _ExerciseNotFound() when exerciseNotFound != null:
+return exerciseNotFound();case _ExerciseServerFailure() when serverFailure != null:
+return serverFailure(_that.message);case _ExerciseDatabaseFailure() when databaseFailure != null:
+return databaseFailure(_that.message);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  eOffline,required TResult Function()  emptyExercises,required TResult Function()  exerciseNotFound,required TResult Function( String message)  serverFailure,required TResult Function( String message)  databaseFailure,}) {final _that = this;
+switch (_that) {
+case _EOffline():
+return eOffline();case _EmptyExercises():
+return emptyExercises();case _ExerciseNotFound():
+return exerciseNotFound();case _ExerciseServerFailure():
+return serverFailure(_that.message);case _ExerciseDatabaseFailure():
+return databaseFailure(_that.message);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  eOffline,TResult? Function()?  emptyExercises,TResult? Function()?  exerciseNotFound,TResult? Function( String message)?  serverFailure,TResult? Function( String message)?  databaseFailure,}) {final _that = this;
+switch (_that) {
+case _EOffline() when eOffline != null:
+return eOffline();case _EmptyExercises() when emptyExercises != null:
+return emptyExercises();case _ExerciseNotFound() when exerciseNotFound != null:
+return exerciseNotFound();case _ExerciseServerFailure() when serverFailure != null:
+return serverFailure(_that.message);case _ExerciseDatabaseFailure() when databaseFailure != null:
+return databaseFailure(_that.message);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _EOffline extends ExerciseFailure {
+  const _EOffline(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EOffline);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ExerciseFailure.eOffline()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _EmptyExercises extends ExerciseFailure {
+  const _EmptyExercises(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EmptyExercises);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ExerciseFailure.emptyExercises()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _ExerciseNotFound extends ExerciseFailure {
+  const _ExerciseNotFound(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExerciseNotFound);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ExerciseFailure.exerciseNotFound()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _ExerciseServerFailure extends ExerciseFailure {
+  const _ExerciseServerFailure({required this.message}): super._();
+  
+
+ final  String message;
+
+/// Create a copy of ExerciseFailure
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ExerciseServerFailureCopyWith<_ExerciseServerFailure> get copyWith => __$ExerciseServerFailureCopyWithImpl<_ExerciseServerFailure>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExerciseServerFailure&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'ExerciseFailure.serverFailure(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ExerciseServerFailureCopyWith<$Res> implements $ExerciseFailureCopyWith<$Res> {
+  factory _$ExerciseServerFailureCopyWith(_ExerciseServerFailure value, $Res Function(_ExerciseServerFailure) _then) = __$ExerciseServerFailureCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class __$ExerciseServerFailureCopyWithImpl<$Res>
+    implements _$ExerciseServerFailureCopyWith<$Res> {
+  __$ExerciseServerFailureCopyWithImpl(this._self, this._then);
+
+  final _ExerciseServerFailure _self;
+  final $Res Function(_ExerciseServerFailure) _then;
+
+/// Create a copy of ExerciseFailure
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(_ExerciseServerFailure(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _ExerciseDatabaseFailure extends ExerciseFailure {
+  const _ExerciseDatabaseFailure({required this.message}): super._();
+  
+
+ final  String message;
+
+/// Create a copy of ExerciseFailure
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ExerciseDatabaseFailureCopyWith<_ExerciseDatabaseFailure> get copyWith => __$ExerciseDatabaseFailureCopyWithImpl<_ExerciseDatabaseFailure>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExerciseDatabaseFailure&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'ExerciseFailure.databaseFailure(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ExerciseDatabaseFailureCopyWith<$Res> implements $ExerciseFailureCopyWith<$Res> {
+  factory _$ExerciseDatabaseFailureCopyWith(_ExerciseDatabaseFailure value, $Res Function(_ExerciseDatabaseFailure) _then) = __$ExerciseDatabaseFailureCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class __$ExerciseDatabaseFailureCopyWithImpl<$Res>
+    implements _$ExerciseDatabaseFailureCopyWith<$Res> {
+  __$ExerciseDatabaseFailureCopyWithImpl(this._self, this._then);
+
+  final _ExerciseDatabaseFailure _self;
+  final $Res Function(_ExerciseDatabaseFailure) _then;
+
+/// Create a copy of ExerciseFailure
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(_ExerciseDatabaseFailure(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

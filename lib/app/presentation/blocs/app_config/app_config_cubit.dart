@@ -60,4 +60,6 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     );
     emit(.appConfig(config: config));
   }
+
+  Future<double?> getCaloriesGoal() => _appConfigsService.getCaloriesGoal();
 }

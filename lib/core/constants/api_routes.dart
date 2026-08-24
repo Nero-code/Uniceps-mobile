@@ -25,4 +25,13 @@ abstract class ApiRoutes {
   static const exercises = "/api/ExerciseV2";
   static const muscleGroups = "/api/MuscleGroup";
   static String exerciseImage(String exId) => "/api/ExerciseV2/get-image/$exId";
+
+  static const version = '/api/release/app/0/latest/5';
+
+  static const ingredients = '/api/ingredients';
+  static const ingredientsUpload = '/api/ingredients/custom';
+
+  static const dietLogs = '/api/dietLogs';
+
+  static const measurements = '/api/bodyMeasurement';
 }

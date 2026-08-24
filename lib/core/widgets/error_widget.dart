@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:uniceps/core/errors/failure.dart';import 'package:uniceps/l10n/app_localizations.dart';
+import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 ///   Error widget without image or refresh
 class ErrorScreenWidget extends StatelessWidget {
-  const ErrorScreenWidget({
-    super.key,
-    required this.f,
-    this.callback,
-    this.gapSize = 5.0,
-  });
+  const ErrorScreenWidget({super.key, required this.f, this.callback, this.gapSize = 5.0});
 
   final Failure f;
   final VoidCallback? callback;
@@ -21,11 +17,7 @@ class ErrorScreenWidget extends StatelessWidget {
       children: [
         Text(errorToTextMapper(context, f)),
         SizedBox(height: gapSize),
-        if (callback != null)
-          IconButton(
-            onPressed: callback,
-            icon: const Icon(Icons.refresh_rounded),
-          ),
+        if (callback != null) IconButton(onPressed: callback, icon: const Icon(Icons.refresh_rounded)),
       ],
     );
   }
@@ -64,7 +56,7 @@ class ErrorScreenWidget extends StatelessWidget {
         return local.empty;
       // case NoAttendenceFoundFailure:
 
-      case const (GeneralPurposFailure):
+      case const (GeneralPurposeFailure):
       default:
         return local.errUnknown;
     }

@@ -61,6 +61,8 @@ class ProfileModel {
     version: p.version,
     isSynced: p.isSynced,
   );
+
+  int get age => (DateTime.now().year - birthDate.year);
   Profile toEntity() =>
       Profile(name: name, birthDate: birthDate, gender: gender, photo: photo, isSynced: isSynced, version: version);
 

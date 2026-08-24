@@ -90,7 +90,7 @@ class _MeasurementToolPageState extends State<MeasurementToolPage> {
                         icon: const Icon(Icons.calendar_month, size: 20),
                         hint: Text(
                           '${locale.measurements} ${locale.before}',
-                          style: TextStyle(fontWeight: FontWeight.normal),
+                          style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 12),
                         ),
                         elevation: 1,
                         value: oldM,
@@ -115,7 +115,7 @@ class _MeasurementToolPageState extends State<MeasurementToolPage> {
                         icon: const Icon(Icons.calendar_month, size: 20),
                         hint: Text(
                           '${locale.measurements} ${locale.after}',
-                          style: TextStyle(fontWeight: FontWeight.normal),
+                          style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 12),
                         ),
                         elevation: 1,
                         value: newM,
