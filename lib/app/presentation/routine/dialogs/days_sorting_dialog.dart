@@ -34,25 +34,17 @@ class _DaysSortingDialogState extends State<DaysSortingDialog> {
         child: ReorderableListView(
           shrinkWrap: true,
           primary: true,
-          // proxyDecorator: (child, index, animation) => Material(
-          //   color: Colors.white,
-          //   child: Transform.scale(
-          //     child: child,
-          //   ),
-          // ),
           children: widget.days
-              .map((day) => ListTile(
-                    key: Key("${day.id!}"),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                    title: Text(day.name),
-                    leading: const Icon(
-                      Icons.drag_handle,
-                      size: 15,
-                      color: Colors.red,
-                    ),
-                  ))
+              .map(
+                (day) => ListTile(
+                  key: Key("${day.id!}"),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                  title: Text(day.name),
+                  leading: const Icon(Icons.drag_handle, size: 15, color: Colors.red),
+                ),
+              )
               .toList(),
-          onReorder: (oldIndex, newIndex) {
+          onReorderItem: (oldIndex, newIndex) {
             final item = reorderedList.removeAt(oldIndex);
 
             reorderedList.insert(newIndex - (newIndex > oldIndex ? 1 : 0), item);
@@ -62,10 +54,7 @@ class _DaysSortingDialogState extends State<DaysSortingDialog> {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(locale.cancel),
-        ),
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(locale.cancel)),
         ElevatedButton(
           onPressed: () {
             widget.onReorder(reorderedList);

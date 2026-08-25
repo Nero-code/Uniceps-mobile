@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/diet_classes/diet_log.dart';
 import 'package:uniceps/app/domain/classes/diet_classes/ingredient.dart';
@@ -208,10 +209,16 @@ class _AddDietLogSheetState extends State<AddDietLogSheet> {
           label: locale.amountGrams,
           icon: Icons.scale,
           keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           autofocus: true,
         ),
         const SizedBox(height: 20),
-        IngredientNutritionPreview(ingredient: ing, amount: double.tryParse(_amountController.text) ?? 0),
+        ListenableBuilder(
+          listenable: _amountController,
+          builder: (context, _) {
+            return IngredientNutritionPreview(ingredient: ing, amount: double.tryParse(_amountController.text) ?? 0);
+          },
+        ),
         const SizedBox(height: 30),
         SubmitButton(
           label: locale.addToDailyLog,
@@ -360,6 +367,7 @@ class FormTextField extends StatelessWidget {
   final IconData? icon;
   final TextInputType keyboardType;
   final bool autofocus;
+  final List<TextInputFormatter>? inputFormatters;
 
   const FormTextField({
     super.key,
@@ -368,6 +376,7 @@ class FormTextField extends StatelessWidget {
     this.icon,
     this.keyboardType = TextInputType.text,
     this.autofocus = false,
+    this.inputFormatters,
   });
 
   @override
@@ -376,6 +385,7 @@ class FormTextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       autofocus: autofocus,
+      inputFormatters: inputFormatters,
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: icon != null ? Icon(icon, size: 20, color: mainBlueLight) : null,
@@ -464,7 +474,10 @@ class NutrientSmall extends StatelessWidget {
     return Column(
       children: [
         Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
-        Text(label, style: const TextStyle(fontSize: 10, color: Colors.grey)),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black54),
+        ),
       ],
     );
   }

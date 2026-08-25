@@ -24,6 +24,7 @@ class ProfileInitialScreen extends StatefulWidget {
 class _ProfileInitialScreenState extends State<ProfileInitialScreen> {
   final PageController _pageController = PageController();
   final nameCtl = TextEditingController();
+  final _nameNode = FocusNode();
   DateTime? birthDate;
   Gender? gender;
   Goal? goal;
@@ -80,7 +81,7 @@ class _ProfileInitialScreenState extends State<ProfileInitialScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
                     // _buildNamePage(locale, theme),
-                    PNamePage(controller: nameCtl),
+                    PNamePage(controller: nameCtl, node: _nameNode),
                     // _buildGenderPage(locale, theme),
                     PGenderPage(selectedGender: gender, onGenderSelected: (g) => setState(() => gender = g)),
                     // _buildBirthDatePage(locale, theme),
@@ -144,9 +145,12 @@ class _ProfileInitialScreenState extends State<ProfileInitialScreen> {
                 onPressed: () {
                   if (_currentPage < 4) {
                     // Validate current step
-                    if (_currentPage == 0 && nameCtl.text.trim().isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(locale.pNameError)));
-                      return;
+                    if (_currentPage == 0) {
+                      if (nameCtl.text.trim().isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(locale.pNameError)));
+                        return;
+                      }
+                      _nameNode.unfocus();
                     }
                     if (_currentPage == 1 && gender == null) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(locale.genderError)));

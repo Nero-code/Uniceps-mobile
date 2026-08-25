@@ -15,7 +15,9 @@ class DietLogDto {
   final double carbs;
   final double fats;
   final DateTime timestamp;
+  @JsonKey(defaultValue: 0)
   final int version;
+  @JsonKey(defaultValue: true)
   final bool isSynced;
 
   const DietLogDto({

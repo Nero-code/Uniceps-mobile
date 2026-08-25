@@ -55,7 +55,7 @@ class ProfileRepo implements IProfileService {
       if (!res.isSynced) syncProfile();
 
       return Right(res.toEntity());
-    } on EmptyCacheExeption catch (e) {
+    } on EmptyCacheExeption {
       return const Left(EmptyCacheFailure(errorMessage: ""));
     } catch (e, s) {
       logger.e('Error getProfile', error: e, stackTrace: s);

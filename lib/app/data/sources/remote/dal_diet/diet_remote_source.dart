@@ -10,6 +10,8 @@ abstract class IDietRemoteSource {
   Future<String> uploadIngredient(IngredientModel userIng);
 
   Future<int> uploadDietLog(DietLogDto log);
+
+  Future<List<DietLogDto>> downloadDietLogs();
 }
 
 class DietRemoteSource implements IDietRemoteSource {
@@ -52,5 +54,10 @@ class DietRemoteSource implements IDietRemoteSource {
         return json['apiId'];
       },
     );
+  }
+
+  @override
+  Future<List<DietLogDto>> downloadDietLogs() async {
+    return await _clientHelper.getListHandler(ApiRoutes.domain, ApiRoutes.dietLogs, DietLogDto.fromJson);
   }
 }

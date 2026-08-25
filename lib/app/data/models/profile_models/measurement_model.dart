@@ -53,10 +53,17 @@ class MeasurementModel {
   @JsonKey(name: "measuredAt")
   final DateTime checkDate;
 
+  // --------------------------------------------
+  // These values are Unimplemented thus not-used
+  @JsonKey(defaultValue: 0.0)
   final double lHumerus;
+  @JsonKey(defaultValue: 0.0)
   final double rHumerus;
+  // --------------------------------------------
 
+  @JsonKey(defaultValue: 0)
   final int version;
+  @JsonKey(defaultValue: true)
   final bool isSynced;
 
   static int get propsNumbers => 15;
