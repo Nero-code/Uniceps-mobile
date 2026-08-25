@@ -292,7 +292,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => TSessionSyncService(database: sl(), client: sl(), preferences: sl()));
   sl.registerLazySingleton(() => DeviceInfoSyncService(preferences: sl(), checker: sl(), client: sl(), logger: sl()));
   sl.registerLazySingleton(() => IngredientsLibrarySyncService(localSource: sl(), remoteSource: sl()));
-  sl.registerLazySingleton(() => DietLogsSyncService(localSource: sl(), remoteSource: sl()));
+  sl.registerLazySingleton(() => DietLogsSyncService(localSource: sl(), remoteSource: sl(), preferences: sl()));
   sl.registerLazySingleton(() => MeasurementsSyncService(localSource: sl(), remoteSource: sl(), preferences: sl()));
 
   sl.registerLazySingleton(

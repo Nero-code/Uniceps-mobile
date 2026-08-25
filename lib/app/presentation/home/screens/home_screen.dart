@@ -174,7 +174,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     orElse: () => null,
                                   ),
                                   activeSessionState: sessionState,
-                                  onSetupRoutine: () => Navigator.pushNamed(context, AppRoutes.routineManager),
+                                  onSetupRoutine: () async {
+                                    await Navigator.pushNamed(context, AppRoutes.routineManager);
+                                    context.mounted ? context.read<CurrentRoutineCubit>().getCurrentRoutine() : null;
+                                  },
                                   onStartSession: (selectedDay) {
                                     context.read<SessionBloc>().add(
                                       SessionEvent.startSession(selectedDay.id!, selectedDay.name),
@@ -293,7 +296,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: SecondaryActionsBar(
                           onAnalytics: () => Navigator.pushNamed(context, AppRoutes.performance),
                           onMeasurements: () => Navigator.pushNamed(context, AppRoutes.measurements),
-                          onRoutineManager: () => Navigator.pushNamed(context, AppRoutes.routineManager),
+                          onRoutineManager: () async {
+                            await Navigator.pushNamed(context, AppRoutes.routineManager);
+                            context.mounted ? context.read<CurrentRoutineCubit>().getCurrentRoutine() : null;
+                          },
                         ),
                       ),
 

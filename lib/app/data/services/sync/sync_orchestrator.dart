@@ -34,26 +34,18 @@ class SyncOrchestrator {
     }
   }
 
-  /// Syncs the ingredients library and diet logs. Should be called for members.
+  /// Syncs the ingredients library and diet logs..
   Future<void> syncDietData() async {
     try {
       logger.i('--- Starting Diet Data Sync ---');
-
-      // 1. Ingredients Library (Critical Dependency)
-      logger.d('Syncing Ingredients Library...');
-      await _ingredientsSync.syncLib();
-
-      // 2. Diet Logs
-      logger.d('Syncing Diet Logs...');
-      await _dietLogsSync.syncDietLogs();
-
+      await Future.wait([_dietLogsSync.syncDietLogs(), _ingredientsSync.syncLib()]);
       logger.i('--- Diet Data Sync Finished ---');
     } catch (e, s) {
       logger.e('Diet data sync failed', error: e, stackTrace: s);
     }
   }
 
-  /// Syncs training sessions and measurements. Should be called when user is authenticated.
+  /// Syncs training sessions and measurements.
   Future<void> syncUserActivity() async {
     try {
       logger.d('Syncing User Activity (Training and Measurements)...');
@@ -67,7 +59,11 @@ class SyncOrchestrator {
   Future<void> downloadAllActivityData() async {
     try {
       logger.i('Starting initial activity data download...');
-      await Future.wait([_tSessionSync.downloadSessions(), _measurementsSync.downloadMeasurements()]);
+      await Future.wait([
+        _tSessionSync.downloadSessions(),
+        _measurementsSync.downloadMeasurements(),
+        _dietLogsSync.downloadDietLogs(),
+      ]);
       logger.i('Initial activity data download completed.');
     } catch (e) {
       logger.e('Initial activity data download failed', error: e);

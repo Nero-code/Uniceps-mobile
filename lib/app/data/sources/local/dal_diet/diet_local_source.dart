@@ -25,6 +25,7 @@ abstract class IDietLocalSource {
 
   // Synchronization
   Future<List<DietLogDto>> getAllUnSyncedLogs();
+  Future<void> bulkSaveLogs(List<DietLogDto> logs);
 }
 
 class DietLocalSource implements IDietLocalSource {
@@ -193,5 +194,26 @@ class DietLocalSource implements IDietLocalSource {
     final result = await query.get();
 
     return result.map((l) => DietLogDto.fromCompanion(l)).toList();
+  }
+
+  @override
+  Future<void> bulkSaveLogs(List<DietLogDto> logs) async {
+    await _db.batch((batch) {
+      for (final log in logs) {
+        final companion = DietLogsCompanion.insert(
+          apiId: Value(log.apiId),
+          name: log.ingredientName,
+          totalGrams: log.totalGrams,
+          calories: log.calories,
+          protein: log.protein,
+          carbs: log.carbs,
+          fats: log.fats,
+          timestamp: log.timestamp,
+          version: log.version,
+          isSynced: true,
+        );
+        batch.insert(_db.dietLogs, companion);
+      }
+    });
   }
 }
