@@ -14,8 +14,8 @@ MeasurementModel _$MeasurementModelFromJson(Map<String, dynamic> json) =>
       weight: (json['weightKg'] as num).toDouble(),
       lArm: (json['leftArmCm'] as num).toDouble(),
       rArm: (json['rightArmCm'] as num).toDouble(),
-      lHumerus: (json['lHumerus'] as num).toDouble(),
-      rHumerus: (json['rHumerus'] as num).toDouble(),
+      lHumerus: (json['lHumerus'] as num?)?.toDouble() ?? 0.0,
+      rHumerus: (json['rHumerus'] as num?)?.toDouble() ?? 0.0,
       lLeg: (json['leftLegCm'] as num).toDouble(),
       rLeg: (json['rightLegCm'] as num).toDouble(),
       lThigh: (json['leftThighCm'] as num).toDouble(),
@@ -26,8 +26,8 @@ MeasurementModel _$MeasurementModelFromJson(Map<String, dynamic> json) =>
       chest: (json['chestCm'] as num).toDouble(),
       hips: (json['hipsCm'] as num).toDouble(),
       checkDate: DateTime.parse(json['measuredAt'] as String),
-      version: (json['version'] as num).toInt(),
-      isSynced: json['isSynced'] as bool,
+      version: (json['version'] as num?)?.toInt() ?? 0,
+      isSynced: json['isSynced'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$MeasurementModelToJson(MeasurementModel instance) =>

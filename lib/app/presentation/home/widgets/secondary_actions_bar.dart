@@ -98,8 +98,8 @@ class _ActionChip extends StatelessWidget {
           Positioned.directional(
             textDirection: Directionality.of(context),
             child: Container(
-              decoration: BoxDecoration(shape: .circle, color: Colors.amber),
-              padding: .all(4.0),
+              decoration: const BoxDecoration(shape: .circle, color: Colors.amber),
+              padding: const .all(4.0),
               child: const Image(image: AssetImage(IMG_PREMIUM), width: 15, color: Colors.white),
             ),
           ),

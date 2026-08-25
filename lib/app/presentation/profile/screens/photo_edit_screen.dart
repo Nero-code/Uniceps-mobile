@@ -352,7 +352,7 @@ class CropOverlayPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.black.withOpacity(0.7);
+    final paint = Paint()..color = Colors.black.withValues(alpha: 0.7);
     final double left = (size.width - cropBoxSize) / 2;
     final double top = (size.height - cropBoxSize) / 2;
     final double right = left + cropBoxSize;

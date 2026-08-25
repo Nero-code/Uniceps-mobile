@@ -91,7 +91,11 @@ class _SmartDaySelectorCardState extends State<SmartDaySelectorCard> {
               borderRadius: BorderRadius.circular(22),
               border: Border.all(color: borderLight),
               boxShadow: [
-                BoxShadow(color: AppColors.primaryDark.withOpacity(0.04), blurRadius: 16, offset: const Offset(0, 4)),
+                BoxShadow(
+                  color: AppColors.primaryDark.withValues(alpha: 0.04),
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
+                ),
               ],
             ),
             child: ClipRRect(
@@ -115,12 +119,12 @@ class _SmartDaySelectorCardState extends State<SmartDaySelectorCard> {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [primaryTeal.withOpacity(0.12), primaryTeal.withOpacity(0.04)],
+                              colors: [primaryTeal.withValues(alpha: 0.12), primaryTeal.withValues(alpha: 0.04)],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: primaryTeal.withOpacity(0.15)),
+                            border: Border.all(color: primaryTeal.withValues(alpha: 0.15)),
                           ),
                           child: const Icon(Icons.fitness_center_rounded, color: primaryTeal, size: 26),
                         ),
@@ -152,7 +156,7 @@ class _SmartDaySelectorCardState extends State<SmartDaySelectorCard> {
                             borderRadius: BorderRadius.circular(14),
                             boxShadow: [
                               BoxShadow(
-                                color: primaryTeal.withOpacity(0.25),
+                                color: primaryTeal.withValues(alpha: 0.25),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
@@ -201,16 +205,18 @@ class _SmartDaySelectorCardState extends State<SmartDaySelectorCard> {
             color: cardSurface,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: borderLight),
-            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4))],
+            boxShadow: [
+              BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 10, offset: const Offset(0, 4)),
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         l10n.currentProgram,
@@ -225,7 +231,7 @@ class _SmartDaySelectorCardState extends State<SmartDaySelectorCard> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: accentMint.withOpacity(0.12),
+                            color: accentMint.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Row(
@@ -334,7 +340,7 @@ class _ActiveSessionHeroBanner extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: const LinearGradient(colors: [primaryTeal, Color(0xFF0284C7)]),
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: primaryTeal.withOpacity(0.3), blurRadius: 12, offset: const Offset(0, 4))],
+        boxShadow: [BoxShadow(color: primaryTeal.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
       ),
       child: Material(
         color: Colors.transparent,
@@ -347,7 +353,7 @@ class _ActiveSessionHeroBanner extends StatelessWidget {
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), shape: BoxShape.circle),
+                  decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), shape: BoxShape.circle),
                   child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 28),
                 ),
                 const SizedBox(width: 16),

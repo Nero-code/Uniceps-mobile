@@ -97,7 +97,7 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab> with AutomaticK
                       ),
                     ),
                   ),
-                  onReorder: (oldIndex, newIndex) {
+                  onReorderItem: (oldIndex, newIndex) {
                     final list = items;
                     final item = list.removeAt(oldIndex);
 

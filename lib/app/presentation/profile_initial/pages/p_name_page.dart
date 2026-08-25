@@ -3,8 +3,8 @@ import 'package:uniceps/l10n/app_localizations.dart';
 
 class PNamePage extends StatelessWidget {
   final TextEditingController controller;
-
-  const PNamePage({super.key, required this.controller});
+  final FocusNode node;
+  const PNamePage({super.key, required this.controller, required this.node});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +34,7 @@ class PNamePage extends StatelessWidget {
             TextField(
               controller: controller,
               autofocus: true,
+              focusNode: node,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 20),
               decoration: InputDecoration(

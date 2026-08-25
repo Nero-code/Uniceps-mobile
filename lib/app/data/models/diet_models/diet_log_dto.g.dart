@@ -16,8 +16,8 @@ DietLogDto _$DietLogDtoFromJson(Map<String, dynamic> json) => DietLogDto(
   carbs: (json['carbs'] as num).toDouble(),
   fats: (json['fats'] as num).toDouble(),
   timestamp: DateTime.parse(json['timestamp'] as String),
-  version: (json['version'] as num).toInt(),
-  isSynced: json['isSynced'] as bool,
+  version: (json['version'] as num?)?.toInt() ?? 0,
+  isSynced: json['isSynced'] as bool? ?? true,
 );
 
 Map<String, dynamic> _$DietLogDtoToJson(DietLogDto instance) =>
