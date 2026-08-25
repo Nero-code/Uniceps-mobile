@@ -40,7 +40,7 @@ class AlertBannerSection extends StatelessWidget {
         error: (err) => err.f.maybeMap(
           orElse: () => notifyUpgrade
               ? AlertBar(
-                  color: primaryTeal.withOpacity(0.1),
+                  color: primaryTeal.withValues(alpha: 0.1),
                   foregroundColor: primaryTeal,
                   content: Text(
                     locale.upgradeAlert,

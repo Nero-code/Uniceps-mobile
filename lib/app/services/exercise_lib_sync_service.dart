@@ -8,24 +8,20 @@ import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
 import 'package:uniceps/app/services/app_configs_service.dart';
-import 'package:uniceps/app/services/network_info.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/injection_dependency.dart';
 
 class ExerciseLibSyncService {
   final IExercisesLocalSourceContract _exercisesLocalSource;
   final IExercisesRemoteSourceContract _exercisesRemoteSource;
-  final NetworkInfo _networkInfo;
   final Logger _logger;
 
   ExerciseLibSyncService({
     required IExercisesLocalSourceContract exercisesLocalSource,
     required IExercisesRemoteSourceContract exercisesRemoteSource,
-    required NetworkInfo networkInfo,
     required Logger logger,
   }) : _exercisesLocalSource = exercisesLocalSource,
        _exercisesRemoteSource = exercisesRemoteSource,
-       _networkInfo = networkInfo,
        _logger = logger;
 
   Completer<int?>? isSynced;

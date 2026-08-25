@@ -224,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   border: Border.all(color: borderLight),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.02),
+                                      color: Colors.black.withValues(alpha: 0.02),
                                       blurRadius: 6,
                                       offset: const Offset(0, 2),
                                     ),
@@ -242,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Container(
                                             padding: const EdgeInsets.all(10),
                                             decoration: BoxDecoration(
-                                              color: accentMint.withOpacity(0.1),
+                                              color: accentMint.withValues(alpha: 0.1),
                                               shape: BoxShape.circle,
                                             ),
                                             child: const Icon(Icons.restaurant_menu, color: accentMint, size: 22),

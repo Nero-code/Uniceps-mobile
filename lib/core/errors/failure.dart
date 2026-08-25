@@ -67,17 +67,6 @@ class ExerciseFailure with _$ExerciseFailure {
   const factory ExerciseFailure.exerciseNotFound() = _ExerciseNotFound;
   const factory ExerciseFailure.serverFailure({required String message}) = _ExerciseServerFailure;
   const factory ExerciseFailure.databaseFailure({required String message}) = _ExerciseDatabaseFailure;
-
-  @override
-  String getErrorMessage() {
-    return when(
-      eOffline: () => 'Exercise service is offline',
-      emptyExercises: () => 'No exercises found',
-      exerciseNotFound: () => 'Exercise not found',
-      serverFailure: (message) => message,
-      databaseFailure: (message) => message,
-    );
-  }
 }
 
 @immutable

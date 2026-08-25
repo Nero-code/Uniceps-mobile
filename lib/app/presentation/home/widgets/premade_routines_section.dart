@@ -84,7 +84,7 @@ class PremadeRoutinesSection extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: AppColors.borderLight),
                   boxShadow: [
-                    BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 8, offset: const Offset(0, 2)),
+                    BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 8, offset: const Offset(0, 2)),
                   ],
                 ),
                 child: InkWell(
@@ -100,7 +100,7 @@ class PremadeRoutinesSection extends StatelessWidget {
                             Container(
                               padding: const EdgeInsets.all(6),
                               decoration: BoxDecoration(
-                                color: AppColors.primaryTeal.withOpacity(0.1),
+                                color: AppColors.primaryTeal.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: const Icon(Icons.fitness_center_rounded, color: AppColors.primaryTeal, size: 18),
