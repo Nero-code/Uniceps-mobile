@@ -9,8 +9,8 @@ part of 't_session_model.dart';
 TSessionModel _$TSessionModelFromJson(Map<String, dynamic> json) =>
     TSessionModel(
       id: (json['id'] as num?)?.toInt(),
-      dayId: (json['dayId'] as num).toInt(),
-      dayName: json['day'] as String,
+      dayId: (json['dayId'] as num?)?.toInt() ?? 0,
+      dayName: json['day'] as String? ?? '',
       logs: (json['logs'] as List<dynamic>)
           .map((e) => TLogModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -20,8 +20,8 @@ TSessionModel _$TSessionModelFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['finishedAt'] as String),
       progress: (json['progress'] as num).toDouble(),
       apiId: (json['apiId'] as num?)?.toInt(),
-      version: (json['version'] as num).toInt(),
-      isSynced: json['isSynced'] as bool,
+      version: (json['version'] as num?)?.toInt() ?? 0,
+      isSynced: json['isSynced'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$TSessionModelToJson(TSessionModel instance) =>

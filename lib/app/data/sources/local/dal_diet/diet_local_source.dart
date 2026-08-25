@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:flutter/foundation.dart';
 import 'package:uniceps/app/data/models/diet_models/diet_log_dto.dart';
 import 'package:uniceps/app/data/models/diet_models/ingredient_model.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
@@ -171,12 +170,6 @@ class DietLocalSource implements IDietLocalSource {
 
   @override
   Future<DateTime?> getLastLibSync() async {
-    if (kDebugMode) {
-      final query2 = await _db.select(_db.ingredients).get();
-      final list = query2.map((e) => e.updatedAt).toList()..sort((a, b) => b.compareTo(a));
-      logger.d("isUtc: ${list.first.isUtc} ${list.first}");
-    }
-
     final query = _db.selectOnly(_db.ingredients)..addColumns([_db.ingredients.updatedAt.max()]);
 
     final result = await query.getSingle();

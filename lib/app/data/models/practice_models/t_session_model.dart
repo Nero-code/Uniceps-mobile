@@ -8,8 +8,9 @@ part 't_session_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class TSessionModel {
   final int? id;
+  @JsonKey(defaultValue: 0)
   final int dayId;
-  @JsonKey(name: 'day')
+  @JsonKey(name: 'day', defaultValue: '')
   final String dayName;
   final List<TLogModel> logs;
   final DateTime createdAt;
@@ -18,7 +19,9 @@ class TSessionModel {
   final double progress;
 
   final int? apiId;
+  @JsonKey(defaultValue: 0)
   final int version;
+  @JsonKey(defaultValue: true)
   final bool isSynced;
 
   const TSessionModel({

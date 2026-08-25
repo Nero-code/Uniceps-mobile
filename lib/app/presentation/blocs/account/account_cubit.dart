@@ -26,6 +26,9 @@ class AccountCubit extends Cubit<AccountState> {
         // Authenticated users get device info and user activity syncs
         _syncOrchestrator.syncDeviceInfo();
         _syncOrchestrator.syncUserActivity();
+        _syncOrchestrator.syncDietData();
+        _syncOrchestrator.downloadAllActivityData();
+
         emit(AccountState.hasAccount(r));
       },
     );

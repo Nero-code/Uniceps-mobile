@@ -18,12 +18,7 @@ class MembershipBloc extends Bloc<MembershipEvent, MembershipState> {
       emit(const MembershipState.loading());
 
       final res = await _usecases.getSubscriptionPlan();
-      res.fold((l) => emit(MembershipState.error(l)), (r) {
-        if (r.isActive) {
-          _syncOrchestrator.syncDietData();
-        }
-        emit(MembershipState.loaded(r));
-      });
+      res.fold((l) => emit(MembershipState.error(l)), (r) => emit(MembershipState.loaded(r)));
     });
     on<_NotifyNewMembership>((event, emit) async {
       final either = await _usecases.notifyNewMembership();

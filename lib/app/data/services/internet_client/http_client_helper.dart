@@ -66,6 +66,7 @@ class HttpClientHelper implements ClientHelper {
     handleHttpStatus(res);
 
     final data = jsonDecode(res.body) as Iterable;
+    // TODO: Why throw if Empty???
     if (data.isEmpty) {
       throw NoContentException();
     }

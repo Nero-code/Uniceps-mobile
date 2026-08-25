@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/data/sources/local/dal_diet/diet_local_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_diet/diet_remote_source.dart';
 import 'package:uniceps/core/logging/app_logger.dart';
@@ -29,6 +30,9 @@ class IngredientsLibrarySyncService {
       logger.d('ClientException: $ce');
     } on SocketException catch (se) {
       logger.d('SocketException: $se');
+    } on NoContentException {
+      logger.d('NoContentException library must be up-to-date');
+      return;
     } catch (e, s) {
       logger.e('IngredientsLibrarySyncService Error', error: e, stackTrace: s);
     }
@@ -46,6 +50,8 @@ class IngredientsLibrarySyncService {
         final syncedItem = item.copyWith(apiId: apiId.toString(), isSynced: true);
 
         await _localSource.saveIngredient(syncedItem);
+      } on NoContentException {
+        return;
       } catch (e) {
         logger.e('Failed to upload ingredient: ${item.name}', error: e);
         // Continue to next item even if one fails
@@ -59,6 +65,8 @@ class IngredientsLibrarySyncService {
       try {
         return await action();
       } on SocketException {
+        rethrow;
+      } on NoContentException {
         rethrow;
       } catch (e) {
         attempts++;
