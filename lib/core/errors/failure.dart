@@ -61,12 +61,18 @@ abstract class DietLogFailure with _$DietLogFailure {
 
 @freezed
 class ExerciseFailure with _$ExerciseFailure {
-  const ExerciseFailure._();
   const factory ExerciseFailure.eOffline() = _EOffline;
   const factory ExerciseFailure.emptyExercises() = _EmptyExercises;
   const factory ExerciseFailure.exerciseNotFound() = _ExerciseNotFound;
   const factory ExerciseFailure.serverFailure({required String message}) = _ExerciseServerFailure;
   const factory ExerciseFailure.databaseFailure({required String message}) = _ExerciseDatabaseFailure;
+}
+
+@freezed
+class PremadeFailure with _$PremadeFailure {
+  const factory PremadeFailure.pOffline() = _POffline;
+  const factory PremadeFailure.emptyPremade() = _EmptyPremade;
+  const factory PremadeFailure.fetchFailed() = _FetchFailed;
 }
 
 @immutable

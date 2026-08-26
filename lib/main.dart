@@ -81,7 +81,7 @@ class MyApp extends StatelessWidget {
           lazy: false,
         ),
         BlocProvider(create: (context) => ProfileCubit(di.sl())..getProfile(), lazy: false),
-        BlocProvider(create: (context) => MembershipBloc(di.sl(), di.sl())..add(const .getCurrentPlan()), lazy: false),
+        BlocProvider(create: (context) => MembershipBloc(di.sl())..add(const .getCurrentPlan()), lazy: false),
 
         BlocProvider(create: (context) => CurrentRoutineCubit(commands: di.sl())..getCurrentRoutine(), lazy: false),
         BlocProvider(create: (context) => SessionBloc(commands: di.sl())..add(const .getLastActiveSession())),

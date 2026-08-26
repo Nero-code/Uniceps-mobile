@@ -64,6 +64,25 @@ class Measurement extends Equatable {
     this.isSynced = false,
   });
 
+  factory Measurement.empty() => Measurement(
+    height: 0,
+    weight: 0,
+    lArm: 0,
+    rArm: 0,
+    lHumerus: 0,
+    rHumerus: 0,
+    lLeg: 0,
+    rLeg: 0,
+    lThigh: 0,
+    rThigh: 0,
+    neck: 0,
+    shoulders: 0,
+    waist: 0,
+    chest: 0,
+    hips: 0,
+    checkDate: DateTime.now(),
+  );
+
   Measurement copyWith({
     int? id,
     int? apiId,
@@ -194,5 +213,26 @@ class Measurement extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [
+    id,
+    apiId,
+    height,
+    weight,
+    lArm,
+    rArm,
+    lHumerus,
+    rHumerus,
+    lLeg,
+    rLeg,
+    lThigh,
+    rThigh,
+    neck,
+    shoulders,
+    waist,
+    chest,
+    hips,
+    checkDate,
+    version,
+    isSynced,
+  ];
 }

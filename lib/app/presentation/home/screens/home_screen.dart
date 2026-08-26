@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/profile/profile_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/update/update_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/daily_quote/daily_quote_cubit.dart';
+import 'package:uniceps/app/presentation/home/blocs/premade_routines/premade_routines_cubit.dart';
 import 'package:uniceps/app/presentation/home/blocs/session/session_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/stopwatch/stopwatch_cubit.dart';
 import 'package:uniceps/app/presentation/home/dialogs/membership_congrats_dialog.dart';
+import 'package:uniceps/app/presentation/home/dialogs/premade_routine_details_dialog.dart';
 import 'package:uniceps/app/presentation/home/widgets/alert_banner_section.dart';
 import 'package:uniceps/app/presentation/home/widgets/captain_uni_card.dart';
+import 'package:uniceps/app/presentation/home/widgets/premade_routines_section.dart';
 import 'package:uniceps/app/presentation/home/widgets/secondary_actions_bar.dart';
 import 'package:uniceps/app/presentation/home/widgets/smart_day_selector_card.dart';
 import 'package:uniceps/app/presentation/practice/screens/practice_screen.dart';
@@ -18,6 +22,7 @@ import 'package:uniceps/app/services/file_handler_service.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/logging/app_logger.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
@@ -54,10 +59,16 @@ class _HomeScreenState extends State<HomeScreen> {
     final locale = AppLocalizations.of(context)!;
     final lang = context.read<AppConfigCubit>().state.config.appLanguage.languageCode;
     final membership = context.watch<MembershipBloc>().state;
+    final gender = context.read<ProfileCubit>().state.whenOrNull(loaded: (p) => p.gender);
 
-    return BlocProvider(
-      create: (context) => StopwatchCubit(prefs: di.sl()),
-      lazy: false,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => StopwatchCubit(prefs: di.sl()), lazy: false),
+        BlocProvider(
+          create: (context) => PremadeRoutinesCubit(repo: di.sl())..getPremadeRoutines(gender ?? Gender.both),
+          lazy: false,
+        ),
+      ],
       child: Stack(
         children: [
           BlocListener<MembershipBloc, MembershipState>(
@@ -304,13 +315,61 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
 
                       // Premade Routines Horizontal List
-                      // SliverToBoxAdapter(
-                      //   child: _PremadeRoutinesSection(
-                      //     onSelectRoutine: (routine) {
-                      //       Navigator.pushNamed(context, AppRoutes.routineManager);
-                      //     },
-                      //   ),
-                      // ),
+                      SliverToBoxAdapter(
+                        child: BlocBuilder<PremadeRoutinesCubit, PremadeRoutinesState>(
+                          buildWhen: (p, c) => c.maybeWhen(
+                            orElse: () => true,
+                            failure: (failure) => failure.maybeWhen(fetchFailed: () => false, orElse: () => true),
+                          ),
+                          builder: (context, state) {
+                            return state.when(
+                              initial: () => const PremadeRoutinesSkeleton(),
+                              loading: () => const PremadeRoutinesSkeleton(),
+                              success: (premade) => PremadeRoutinesSection(
+                                routines: premade,
+                                onSelectRoutine: (routine) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => BlocProvider.value(
+                                      value: context.read<PremadeRoutinesCubit>(),
+                                      child: PremadeRoutineDetailsDialog(
+                                        routine: routine,
+                                        onDownload: () async {
+                                          final result = await context
+                                              .read<PremadeRoutinesCubit>()
+                                              .downloadAndAddRoutine(routine.apiId, languageCode: lang);
+                                          if (context.mounted) {
+                                            result.fold(
+                                              (failure) => ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(
+                                                  content: Text(locale.routineDownloadFailed),
+                                                  backgroundColor: Colors.red,
+                                                ),
+                                              ),
+                                              (success) => ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(
+                                                  content: Text(locale.routineDownloaded),
+                                                  backgroundColor: accentMint,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              failure: (failure) => PremadeRoutinesError(
+                                onRetry: () => context.read<PremadeRoutinesCubit>().getPremadeRoutines(
+                                  gender ?? .both,
+                                  languageCode: lang,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
 
                       // Daily Motivational Quote Banner
                       SliverToBoxAdapter(

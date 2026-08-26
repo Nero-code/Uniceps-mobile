@@ -10,6 +10,8 @@ class UniFile {
     final json = jsonDecode(fileString);
     return UniFile(meta: MetaPart.fromFile(json['Meta']), data: json['Data']);
   }
+  factory UniFile.fromJson(Map<String, dynamic> json) =>
+      UniFile(meta: MetaPart.fromFile(json['Meta']), data: json['Data']);
   String toFile() => jsonEncode(toMap());
 
   Map<String, dynamic> toMap() => {'Meta': meta.toMap(), 'Data': data};
@@ -20,22 +22,15 @@ class MetaPart {
   final int schemaVersion;
   final FileType fileType;
 
-  const MetaPart({
-    required this.source,
-    required this.schemaVersion,
-    required this.fileType,
-  });
+  const MetaPart({required this.source, required this.schemaVersion, required this.fileType});
 
   factory MetaPart.fromFile(Map<String, dynamic> json) => MetaPart(
-      source: (json['Source'] as String),
-      schemaVersion: (json['SchemaVersion'] as num).toInt(),
-      fileType: FileType.values.firstWhere((f) => f.title == json['FileType'].toString()));
+    source: (json['Source'] as String),
+    schemaVersion: (json['SchemaVersion'] as num).toInt(),
+    fileType: FileType.values.firstWhere((f) => f.title == json['FileType'].toString()),
+  );
 
-  Map<String, dynamic> toMap() => {
-        'Source': source,
-        'SchemaVersion': schemaVersion,
-        'FileType': fileType.title,
-      };
+  Map<String, dynamic> toMap() => {'Source': source, 'SchemaVersion': schemaVersion, 'FileType': fileType.title};
 }
 
 enum FileType {

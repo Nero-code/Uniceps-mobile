@@ -1316,6 +1316,12 @@ abstract class AppLocalizations {
   /// **'Female'**
   String get female;
 
+  /// No description provided for @both.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get both;
+
   /// No description provided for @payment.
   ///
   /// In en, this message translates to:
@@ -2215,6 +2221,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ACTIVE SESSION IN PROGRESS'**
   String get activeSessionInProgress;
+
+  /// No description provided for @explorePremadeRoutines.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore Premade Routines'**
+  String get explorePremadeRoutines;
+
+  /// No description provided for @seeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See All'**
+  String get seeAll;
+
+  /// No description provided for @trainingDaysCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Training Days'**
+  String trainingDaysCount(Object count);
+
+  /// No description provided for @errLoadPremadeRoutines.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load premade routines'**
+  String get errLoadPremadeRoutines;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
+  /// No description provided for @routineDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Routine downloaded successfully'**
+  String get routineDownloaded;
+
+  /// No description provided for @routineDownloadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to download routine'**
+  String get routineDownloadFailed;
+
+  /// No description provided for @downloadingRoutine.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading Routine...'**
+  String get downloadingRoutine;
+
+  /// No description provided for @levelBeginner.
+  ///
+  /// In en, this message translates to:
+  /// **'Beginner'**
+  String get levelBeginner;
+
+  /// No description provided for @levelNovice.
+  ///
+  /// In en, this message translates to:
+  /// **'Novice'**
+  String get levelNovice;
+
+  /// No description provided for @levelIntermediate.
+  ///
+  /// In en, this message translates to:
+  /// **'Intermediate'**
+  String get levelIntermediate;
+
+  /// No description provided for @levelAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get levelAdvanced;
+
+  /// No description provided for @levelElite.
+  ///
+  /// In en, this message translates to:
+  /// **'Elite'**
+  String get levelElite;
 }
 
 class _AppLocalizationsDelegate
