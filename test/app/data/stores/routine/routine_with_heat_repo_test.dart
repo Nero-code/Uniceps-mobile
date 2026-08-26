@@ -6,16 +6,24 @@ import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
 import 'package:uniceps/app/data/services/media_helper.dart';
 import 'package:uniceps/app/data/services/unifile/file_parse_service.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart';
+import 'package:uniceps/app/data/sources/remote/dal_routine/routines_remote_source.dart';
 import 'package:uniceps/app/data/stores/routine/routine_with_heat_repo.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
 
 import 'routine_with_heat_repo_test.mocks.dart';
 
-@GenerateMocks([IRoutineManagementLocalSourceContract, UniFileManager, MediaHelper, Logger])
+@GenerateMocks([
+  IRoutineManagementLocalSourceContract,
+  IRoutineRemoteSourceContract,
+  UniFileManager,
+  MediaHelper,
+  Logger,
+])
 void main() {
   late RoutineWithHeatRepo repo;
   late MockIRoutineManagementLocalSourceContract mockLocalSource;
+  late MockIRoutineRemoteSourceContract mockRemoteSource;
   late MockUniFileManager mockUniFileManager;
   late MockMediaHelper mockMediaHelper;
   late MockLogger mockLogger;
@@ -25,6 +33,7 @@ void main() {
 
   setUp(() {
     mockLocalSource = MockIRoutineManagementLocalSourceContract();
+    mockRemoteSource = MockIRoutineRemoteSourceContract();
     mockUniFileManager = MockUniFileManager();
     mockMediaHelper = MockMediaHelper();
     mockLogger = MockLogger();
@@ -32,7 +41,7 @@ void main() {
       localSource: mockLocalSource,
       fileParseService: mockUniFileManager,
       mediaHelper: mockMediaHelper,
-      logger: mockLogger,
+      remoteSource: mockRemoteSource,
     );
     tRoutine = Routine(
       id: 1,

@@ -34,6 +34,7 @@ import 'package:uniceps/app/data/sources/remote/dal_diet/diet_remote_source.dart
 import 'package:uniceps/app/data/sources/remote/dal_profile/measurements_remote_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_profile/profile_remote_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
+import 'package:uniceps/app/data/sources/remote/dal_routine/routines_remote_source.dart';
 import 'package:uniceps/app/data/stores/account/account_repo.dart';
 import 'package:uniceps/app/data/stores/auth/email_auth_repo.dart';
 import 'package:uniceps/app/data/stores/diet/diet_repo.dart';
@@ -155,7 +156,7 @@ Future<void> init() async {
 
   //  R O U T I N E   S O U R C E S
   sl.registerLazySingleton<IRoutineManagementLocalSourceContract>(
-    () => RoutineManagementLocalSourceImpl(database: sl(), logger: sl()),
+    () => RoutineManagementLocalSourceImpl(database: sl()),
   );
   sl.registerLazySingleton<IRoutineDaysLocalSourceContract>(() => RoutineDaysLocalSourceImpl(dataBase: sl()));
   sl.registerLazySingleton<IRoutineItemsLocalSourceContract>(
@@ -193,6 +194,7 @@ Future<void> init() async {
   );
 
   sl.registerLazySingleton<IDietRemoteSource>(() => DietRemoteSource(clientHelper: sl()));
+  sl.registerLazySingleton<IRoutineRemoteSourceContract>(() => RoutinesRemoteSource(clientHelper: sl()));
 
   /////////
   ////////
@@ -214,7 +216,7 @@ Future<void> init() async {
   //   () => RoutineManagementRepo(localSource: sl(), internet: sl(), clientHelper: sl()),
   // );
   sl.registerLazySingleton<IRoutineWithHeatContract>(
-    () => RoutineWithHeatRepo(localSource: sl(), mediaHelper: sl(), fileParseService: sl(), logger: sl()),
+    () => RoutineWithHeatRepo(localSource: sl(), mediaHelper: sl(), fileParseService: sl(), remoteSource: sl()),
   );
   sl.registerLazySingleton<IRoutineDaysContract>(() => RoutineDaysRepo(localSource: sl(), logger: sl()));
   sl.registerLazySingleton<IRoutineItemsContract>(() => RoutineItemsRepo(localSource: sl(), mediaHelper: sl()));

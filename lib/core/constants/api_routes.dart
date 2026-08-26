@@ -34,4 +34,7 @@ abstract class ApiRoutes {
   static const dietLogs = '/api/dietLogs';
 
   static const measurements = '/api/bodyMeasurement';
+
+  static const premadeRoutines = '/api/RoutineTemplates';
+  static String getPremadeRoutine(String id) => '/api/RoutineTemplates/$id';
 }

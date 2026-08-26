@@ -2581,8 +2581,8 @@ return databaseFailure(_that.message);case _:
 /// @nodoc
 
 
-class _EOffline extends ExerciseFailure {
-  const _EOffline(): super._();
+class _EOffline implements ExerciseFailure {
+  const _EOffline();
   
 
 
@@ -2613,8 +2613,8 @@ String toString() {
 /// @nodoc
 
 
-class _EmptyExercises extends ExerciseFailure {
-  const _EmptyExercises(): super._();
+class _EmptyExercises implements ExerciseFailure {
+  const _EmptyExercises();
   
 
 
@@ -2645,8 +2645,8 @@ String toString() {
 /// @nodoc
 
 
-class _ExerciseNotFound extends ExerciseFailure {
-  const _ExerciseNotFound(): super._();
+class _ExerciseNotFound implements ExerciseFailure {
+  const _ExerciseNotFound();
   
 
 
@@ -2677,8 +2677,8 @@ String toString() {
 /// @nodoc
 
 
-class _ExerciseServerFailure extends ExerciseFailure {
-  const _ExerciseServerFailure({required this.message}): super._();
+class _ExerciseServerFailure implements ExerciseFailure {
+  const _ExerciseServerFailure({required this.message});
   
 
  final  String message;
@@ -2743,8 +2743,8 @@ as String,
 /// @nodoc
 
 
-class _ExerciseDatabaseFailure extends ExerciseFailure {
-  const _ExerciseDatabaseFailure({required this.message}): super._();
+class _ExerciseDatabaseFailure implements ExerciseFailure {
+  const _ExerciseDatabaseFailure({required this.message});
   
 
  final  String message;
@@ -2805,5 +2805,273 @@ as String,
 
 
 }
+
+/// @nodoc
+mixin _$PremadeFailure {
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PremadeFailure);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'PremadeFailure()';
+}
+
+
+}
+
+/// @nodoc
+class $PremadeFailureCopyWith<$Res>  {
+$PremadeFailureCopyWith(PremadeFailure _, $Res Function(PremadeFailure) __);
+}
+
+
+/// Adds pattern-matching-related methods to [PremadeFailure].
+extension PremadeFailurePatterns on PremadeFailure {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _POffline value)?  pOffline,TResult Function( _EmptyPremade value)?  emptyPremade,TResult Function( _FetchFailed value)?  fetchFailed,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _POffline() when pOffline != null:
+return pOffline(_that);case _EmptyPremade() when emptyPremade != null:
+return emptyPremade(_that);case _FetchFailed() when fetchFailed != null:
+return fetchFailed(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _POffline value)  pOffline,required TResult Function( _EmptyPremade value)  emptyPremade,required TResult Function( _FetchFailed value)  fetchFailed,}){
+final _that = this;
+switch (_that) {
+case _POffline():
+return pOffline(_that);case _EmptyPremade():
+return emptyPremade(_that);case _FetchFailed():
+return fetchFailed(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _POffline value)?  pOffline,TResult? Function( _EmptyPremade value)?  emptyPremade,TResult? Function( _FetchFailed value)?  fetchFailed,}){
+final _that = this;
+switch (_that) {
+case _POffline() when pOffline != null:
+return pOffline(_that);case _EmptyPremade() when emptyPremade != null:
+return emptyPremade(_that);case _FetchFailed() when fetchFailed != null:
+return fetchFailed(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  pOffline,TResult Function()?  emptyPremade,TResult Function()?  fetchFailed,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _POffline() when pOffline != null:
+return pOffline();case _EmptyPremade() when emptyPremade != null:
+return emptyPremade();case _FetchFailed() when fetchFailed != null:
+return fetchFailed();case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  pOffline,required TResult Function()  emptyPremade,required TResult Function()  fetchFailed,}) {final _that = this;
+switch (_that) {
+case _POffline():
+return pOffline();case _EmptyPremade():
+return emptyPremade();case _FetchFailed():
+return fetchFailed();case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  pOffline,TResult? Function()?  emptyPremade,TResult? Function()?  fetchFailed,}) {final _that = this;
+switch (_that) {
+case _POffline() when pOffline != null:
+return pOffline();case _EmptyPremade() when emptyPremade != null:
+return emptyPremade();case _FetchFailed() when fetchFailed != null:
+return fetchFailed();case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _POffline implements PremadeFailure {
+  const _POffline();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _POffline);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'PremadeFailure.pOffline()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _EmptyPremade implements PremadeFailure {
+  const _EmptyPremade();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EmptyPremade);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'PremadeFailure.emptyPremade()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _FetchFailed implements PremadeFailure {
+  const _FetchFailed();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FetchFailed);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'PremadeFailure.fetchFailed()';
+}
+
+
+}
+
+
+
 
 // dart format on

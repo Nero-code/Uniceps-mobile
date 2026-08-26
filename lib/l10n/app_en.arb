@@ -202,6 +202,7 @@
   "pActivityLevelError": "Please select your activity level",
   "male": "Male",
   "female": "Female",
+  "both": "All",
   "payment": "Payment",
   "paid": "Paid",
   "notPaid": "Not Paid",
@@ -411,5 +412,25 @@
       }
     }
   },
-  "activeSessionInProgress": "ACTIVE SESSION IN PROGRESS"
+  "activeSessionInProgress": "ACTIVE SESSION IN PROGRESS",
+  "explorePremadeRoutines": "Explore Premade Routines",
+  "seeAll": "See All",
+  "trainingDaysCount": "{count} Training Days",
+  "@trainingDaysCount": {
+    "placeHolders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errLoadPremadeRoutines": "Failed to load premade routines",
+  "tryAgain": "Try Again",
+  "routineDownloaded": "Routine downloaded successfully",
+  "routineDownloadFailed": "Failed to download routine",
+  "downloadingRoutine": "Downloading Routine...",
+  "levelBeginner": "Beginner",
+  "levelNovice": "Novice",
+  "levelIntermediate": "Intermediate",
+  "levelAdvanced": "Advanced",
+  "levelElite": "Elite"
 }

@@ -637,6 +637,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get female => 'Female';
 
   @override
+  String get both => 'All';
+
+  @override
   String get payment => 'Payment';
 
   @override
@@ -1107,4 +1110,45 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get activeSessionInProgress => 'ACTIVE SESSION IN PROGRESS';
+
+  @override
+  String get explorePremadeRoutines => 'Explore Premade Routines';
+
+  @override
+  String get seeAll => 'See All';
+
+  @override
+  String trainingDaysCount(Object count) {
+    return '$count Training Days';
+  }
+
+  @override
+  String get errLoadPremadeRoutines => 'Failed to load premade routines';
+
+  @override
+  String get tryAgain => 'Try Again';
+
+  @override
+  String get routineDownloaded => 'Routine downloaded successfully';
+
+  @override
+  String get routineDownloadFailed => 'Failed to download routine';
+
+  @override
+  String get downloadingRoutine => 'Downloading Routine...';
+
+  @override
+  String get levelBeginner => 'Beginner';
+
+  @override
+  String get levelNovice => 'Novice';
+
+  @override
+  String get levelIntermediate => 'Intermediate';
+
+  @override
+  String get levelAdvanced => 'Advanced';
+
+  @override
+  String get levelElite => 'Elite';
 }

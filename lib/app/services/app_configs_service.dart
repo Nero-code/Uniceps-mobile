@@ -57,6 +57,6 @@ class AppConfigsService {
   Future<double?> getCaloriesGoal() async {
     if (_configs.activityLevel == null) return null;
     final res = await _measurementContract.getCalories();
-    return (res ?? 0) * _configs.activityLevel!.multiplier;
+    return (res ?? 0) * (_configs.activityLevel?.multiplier ?? 0);
   }
 }
