@@ -32,27 +32,22 @@ class DietLoggerScreen extends StatelessWidget {
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
-              expandedHeight: 280,
-              collapsedHeight: 280,
+              expandedHeight: 300,
+              collapsedHeight: 300,
               pinned: true,
               stretch: true,
               elevation: 0,
               leading: const SizedBox(),
-
+              backgroundColor: back2,
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.pin,
                 background: BlocBuilder<DietLoggerBloc, DietLoggerState>(
                   builder: (context, state) => FutureBuilder(
                     future: context.read<AppConfigCubit>().getCaloriesGoal(),
-                    builder: (context, asyncSnapshot) {
-                      final calorieGoal =
-                          (asyncSnapshot.data ?? 0) *
-                          (context.read<AppConfigCubit>().state.config.activityLevel?.multiplier ?? 0);
-                      return DietSummaryCard(
-                        logs: state.maybeWhen(orElse: () => [], success: (logs) => logs),
-                        calorieGoal: calorieGoal,
-                      );
-                    },
+                    builder: (context, caloriesGoalValue) => DietSummaryCard(
+                      logs: state.maybeWhen(orElse: () => [], success: (logs) => logs),
+                      calorieGoal: caloriesGoalValue.data ?? 0,
+                    ),
                   ),
                 ),
               ),

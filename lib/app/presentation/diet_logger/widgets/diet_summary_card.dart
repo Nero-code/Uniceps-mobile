@@ -29,17 +29,25 @@ class DietSummaryCard extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 40, 16, 16),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [mainBlue, mainBlueLight],
+          colors: [mainBlueLight, secondaryBlue],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [BoxShadow(color: mainBlue.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 6))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.3),
+            blurRadius: 9,
+            spreadRadius: 1,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Column(
+        mainAxisSize: .min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -54,14 +62,22 @@ class DietSummaryCard extends StatelessWidget {
                 style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Text(dateStr, style: const TextStyle(color: Colors.white70, fontSize: 14)),
-              InkWell(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        BlocProvider.value(value: context.read<IngredientsBloc>(), child: const IngredientsScreen()),
+              Material(
+                color: Colors.black12,
+                shape: const CircleBorder(),
+                child: InkWell(
+                  borderRadius: .circular(50),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          BlocProvider.value(value: context.read<IngredientsBloc>(), child: const IngredientsScreen()),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Icon(Icons.fastfood, color: Colors.white),
                   ),
                 ),
-                child: const Icon(Icons.fastfood, color: Colors.white),
               ),
             ],
           ),
