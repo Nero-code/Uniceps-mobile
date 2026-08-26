@@ -21,6 +21,7 @@ const APP_LOGO_WHITE = "images/logo/Logo-white.png";
 const ASSET_QUOTES = 'assets/captain_quotes.json';
 
 enum Gender {
+  both(0),
   male(1),
   female(2);
 
@@ -92,5 +93,19 @@ enum Lang {
 Lang parseLang(String lang) {
   return Lang.values.firstWhere((l) => l.code == lang.toLowerCase());
 }
+
+enum RoutineLevel {
+  none(0),
+  beginner(1),
+  novice(2),
+  intermediate(3),
+  advanced(4),
+  elite(5);
+
+  final int val;
+  const RoutineLevel(this.val);
+}
+
+RoutineLevel parseRoutineLevel(int val) => RoutineLevel.values.firstWhere((g) => g.val == val);
 
 enum ThemeType { light, dark }

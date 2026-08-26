@@ -1,9 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/data/models/routine_result.dart';
 import 'package:uniceps/app/data/services/unifile/unifile.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/premade_routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_with_heat_contract.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 class RoutineWithHeatCommands {
@@ -26,4 +28,7 @@ class RoutineWithHeatCommands {
   Stream<RoutineResult> importUniFile(UniFile file) => _repo.importRoutine(file);
   Future<bool> exportRoutineToFile(int routineId) => _repo.exportRoutineToFile(routineId);
   Future<bool> shareRoutine(int routineId) => _repo.shareRoutine(routineId);
+
+  Future<Either<PremadeFailure, List<PremadeRoutine>>> getPremadeRoutines(Gender gender, String languageCode) =>
+      _repo.getPremadeRoutines(gender, languageCode);
 }

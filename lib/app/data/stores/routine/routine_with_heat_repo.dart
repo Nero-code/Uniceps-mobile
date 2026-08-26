@@ -2,26 +2,30 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
-import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uniceps/app/data/models/routine_models/extensions.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
 import 'package:uniceps/app/data/models/routine_result.dart';
+import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/data/services/media_helper.dart';
 import 'package:uniceps/app/data/services/unifile/file_parse_service.dart';
 import 'package:uniceps/app/data/services/unifile/unifile.dart';
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart';
+import 'package:uniceps/app/data/sources/remote/dal_routine/routines_remote_source.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/premade_routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_with_heat_contract.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/logging/app_logger.dart';
 
 class RoutineWithHeatRepo implements IRoutineWithHeatContract {
   final IRoutineManagementLocalSourceContract _localSource;
+  final IRoutineRemoteSourceContract _remoteSource;
   final UniFileManager _unifileManager;
   final MediaHelper _mediaHelper;
-  final Logger _logger;
 
   static const _platform = MethodChannel('com.trioverse.uniceps/content_resolver');
 
@@ -31,11 +35,11 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
     required IRoutineManagementLocalSourceContract localSource,
     required UniFileManager fileParseService,
     required MediaHelper mediaHelper,
-    required Logger logger,
-  }) : _localSource = localSource,
+    required IRoutineRemoteSourceContract remoteSource,
+  }) : _remoteSource = remoteSource,
+       _localSource = localSource,
        _unifileManager = fileParseService,
-       _mediaHelper = mediaHelper,
-       _logger = logger;
+       _mediaHelper = mediaHelper;
 
   @override
   Future<Either<Failure, List<({RoutineHeat heat, Routine routine})>>> getAllRoutinesWithHeat() async {
@@ -57,7 +61,7 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
       routines.add((routine: res.toEntity(), heat: RoutineHeat.cold(res.name)));
       return Right(routines);
     } catch (e) {
-      _logger.e('Error: create Routine', error: e);
+      logger.e('Error: create Routine', error: e);
       return Left(DatabaseFailure(errorMsg: e.toString()));
     }
   }
@@ -75,7 +79,7 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
       }
       return Right(routines);
     } catch (e) {
-      _logger.e('Error: update Routine', error: e);
+      logger.e('Error: update Routine', error: e);
       return Left(DatabaseFailure(errorMsg: ""));
     }
   }
@@ -120,25 +124,25 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
       final file = await _unifileManager.importFile();
       yield* importRoutine(file);
     } on NoInternetException {
-      _logger.d('NoInternetException');
+      logger.d('NoInternetException');
       yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.fOffline());
     } on OfflineFailure {
-      _logger.d('OfflineFailure');
+      logger.d('OfflineFailure');
       yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.fOffline());
     } on ParserMismatchException {
-      _logger.d('ParserMismatchException');
+      logger.d('ParserMismatchException');
       yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.parserMismatch());
     } on CorruptedFileException {
-      _logger.d('CorruptedFileException');
+      logger.d('CorruptedFileException');
       yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.corruptedFile());
     } on NoFileSelectedException {
-      _logger.d('NoFileSelectedException');
+      logger.d('NoFileSelectedException');
       yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.noFileSelected());
     } on UnsupportedVersionException {
-      _logger.d('UnsupportedException');
+      logger.d('UnsupportedException');
       yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.unsupportedVersion());
     } catch (e) {
-      _logger.e('Error in importRoutineFromFile', error: e);
+      logger.e('Error in importRoutineFromFile', error: e);
       yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.fOffline());
     }
   }
@@ -171,10 +175,10 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
       yield const RoutineResult(progress: 1, stage: Stage.done);
       return;
     } on ParserMismatchException {
-      _logger.d('ParserMismatchException');
+      logger.d('ParserMismatchException');
       yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.parserMismatch());
     } catch (e) {
-      _logger.e('Error in importRoutine', error: e);
+      logger.e('Error in importRoutine', error: e);
       yield const RoutineResult(progress: -1, stage: Stage.error, error: FileParseFailure.fOffline());
     }
   }
@@ -186,7 +190,7 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
       await _unifileManager.exportRoutineToFile(fileName: routine.name, data: routine.toJson());
       return true;
     } catch (e) {
-      _logger.e('Error exporting routine', error: e);
+      logger.e('Error exporting routine', error: e);
       return false;
     }
   }
@@ -217,8 +221,33 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
 
       return true;
     } catch (e) {
-      _logger.e('Error sharing routine', error: e);
+      logger.e('Error sharing routine', error: e);
       return false;
+    }
+  }
+
+  @override
+  Future<Either<PremadeFailure, List<PremadeRoutine>>> getPremadeRoutines(Gender gender, String languageCode) async {
+    try {
+      final res = await _remoteSource.getPremadeRoutines(gender, languageCode);
+      return Right(res);
+    } on NoContentException {
+      return const Left(.emptyPremade());
+    } catch (e) {
+      return const Left(.pOffline());
+    }
+  }
+
+  @override
+  Future<Either<PremadeFailure, Unit>> downloadAndAddRoutine(String apiId, String languageCode) async {
+    try {
+      final unifile = await _remoteSource.downloadRoutine(apiId, languageCode);
+      final dto = RoutineDto.fromJson(unifile.data);
+      await for (final _ in _localSource.insertFullRoutine(dto)) {}
+      return const Right(unit);
+    } catch (e, s) {
+      logger.e('downloadAndAddRoutine', error: e, stackTrace: s);
+      return const Left(.fetchFailed());
     }
   }
 }

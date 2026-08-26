@@ -73,9 +73,9 @@ class DietSummaryCard extends StatelessWidget {
                           BlocProvider.value(value: context.read<IngredientsBloc>(), child: const IngredientsScreen()),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: const Icon(Icons.fastfood, color: Colors.white),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(Icons.fastfood, color: Colors.white),
                   ),
                 ),
               ),

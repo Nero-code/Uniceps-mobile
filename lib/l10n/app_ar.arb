@@ -202,6 +202,7 @@
   "pActivityLevelError": "الرجاء اختيار مستوى نشاطك",
   "male": "ذكر",
   "female": "انثى",
+  "both": "للجنسين",
   "payment": "الدفعة",
   "paid": "مدفوع",
   "notPaid": "غير مدفوع",
@@ -411,5 +412,25 @@
       }
     }
   },
-  "activeSessionInProgress": "يوجد جلسة تدريب نشطة"
+  "activeSessionInProgress": "يوجد جلسة تدريب نشطة",
+  "explorePremadeRoutines": "استكشف البرامج الجاهزة",
+  "seeAll": "عرض الكل",
+  "trainingDaysCount": "{count} أيام تدريبية",
+  "@trainingDaysCount": {
+    "placeHolders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errLoadPremadeRoutines": "فشل تحميل البرامج الجاهزة",
+  "tryAgain": "إعادة المحاولة",
+  "routineDownloaded": "تم تحميل البرنامج بنجاح",
+  "routineDownloadFailed": "فشل تحميل البرنامج",
+  "downloadingRoutine": "جاري تحميل البرنامج...",
+  "levelBeginner": "مبتدئ",
+  "levelNovice": "ناشئ",
+  "levelIntermediate": "متوسط",
+  "levelAdvanced": "متقدم",
+  "levelElite": "محترف"
 }

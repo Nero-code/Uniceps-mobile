@@ -636,6 +636,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get female => 'انثى';
 
   @override
+  String get both => 'للجنسين';
+
+  @override
   String get payment => 'الدفعة';
 
   @override
@@ -1103,4 +1106,45 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get activeSessionInProgress => 'يوجد جلسة تدريب نشطة';
+
+  @override
+  String get explorePremadeRoutines => 'استكشف البرامج الجاهزة';
+
+  @override
+  String get seeAll => 'عرض الكل';
+
+  @override
+  String trainingDaysCount(Object count) {
+    return '$count أيام تدريبية';
+  }
+
+  @override
+  String get errLoadPremadeRoutines => 'فشل تحميل البرامج الجاهزة';
+
+  @override
+  String get tryAgain => 'إعادة المحاولة';
+
+  @override
+  String get routineDownloaded => 'تم تحميل البرنامج بنجاح';
+
+  @override
+  String get routineDownloadFailed => 'فشل تحميل البرنامج';
+
+  @override
+  String get downloadingRoutine => 'جاري تحميل البرنامج...';
+
+  @override
+  String get levelBeginner => 'مبتدئ';
+
+  @override
+  String get levelNovice => 'ناشئ';
+
+  @override
+  String get levelIntermediate => 'متوسط';
+
+  @override
+  String get levelAdvanced => 'متقدم';
+
+  @override
+  String get levelElite => 'محترف';
 }
