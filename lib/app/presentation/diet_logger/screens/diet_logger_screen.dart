@@ -20,14 +20,15 @@ class DietLoggerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final language = context.read<AppConfigCubit>().state.config.exerciseLibLanguage.languageCode;
     return BlocProvider(
-      create: (context) => IngredientsBloc(dietCommands: sl())..add(const .started()),
+      create: (context) => IngredientsBloc(dietCommands: sl())..add(.started(language)),
       lazy: false,
       child: Scaffold(
         backgroundColor: back2,
         floatingActionButton: Builder(
           builder: (context) =>
-              FloatingActionButton(onPressed: () => _showAddLogSheet(context), child: const Icon(Icons.add)),
+              FloatingActionButton(onPressed: () => _showAddLogSheet(context, language), child: const Icon(Icons.add)),
         ),
         body: CustomScrollView(
           slivers: [
@@ -82,13 +83,13 @@ class DietLoggerScreen extends StatelessWidget {
     );
   }
 
-  void _showAddLogSheet(BuildContext context) {
+  void _showAddLogSheet(BuildContext context, String language) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) => BlocProvider(
-        create: (context) => IngredientsBloc(dietCommands: sl())..add(const .started()),
+        create: (context) => IngredientsBloc(dietCommands: sl())..add(.started(language)),
         child: const AddDietLogSheet(),
       ),
     );

@@ -2264,6 +2264,24 @@ abstract class AppLocalizations {
   /// **'Failed to download routine'**
   String get routineDownloadFailed;
 
+  /// No description provided for @changeIngredientsLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Ingredients Language'**
+  String get changeIngredientsLanguage;
+
+  /// No description provided for @changingIngredientsLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Changing library language...'**
+  String get changingIngredientsLanguage;
+
+  /// No description provided for @langChangedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Language changed successfully'**
+  String get langChangedSuccess;
+
   /// No description provided for @downloadingRoutine.
   ///
   /// In en, this message translates to:

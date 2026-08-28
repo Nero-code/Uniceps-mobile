@@ -14,21 +14,23 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
   final DietCommands _dietCommands;
 
   var categories = <DietCategory>[];
-  IngredientsBloc({required DietCommands dietCommands}) : _dietCommands = dietCommands, super(const .initial()) {
+  IngredientsBloc({required DietCommands dietCommands})
+    : _dietCommands = dietCommands,
+      super(const IngredientsState.initial()) {
     on<_Started>((event, emit) async {
-      emit(const .loading());
-      final result = await _dietCommands.loadIngredients();
-      result.fold((failure) => emit(.failure(failure: failure)), (ingredients) {
+      emit(const IngredientsState.loading());
+      final result = await _dietCommands.loadIngredients(language: event.language);
+      result.fold((failure) => emit(IngredientsState.failure(failure: failure)), (ingredients) {
         categories = _extractCategories(ingredients);
-        emit(.success(ingredients: ingredients, categories: categories));
+        emit(IngredientsState.success(ingredients: ingredients, categories: categories));
       });
     });
 
     on<_Filter>(
       (event, emit) async {
         final either = await _dietCommands.filterIngredientsBy(searchString: event.search, categoryId: event.catId);
-        either.fold((failure) => emit(.failure(failure: failure)), (ingredients) {
-          emit(.success(ingredients: ingredients, categories: categories));
+        either.fold((failure) => emit(IngredientsState.failure(failure: failure)), (ingredients) {
+          emit(IngredientsState.success(ingredients: ingredients, categories: categories));
         });
       },
       transformer: (events, mapper) =>
@@ -37,8 +39,19 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
 
     on<_CreateIngredient>((event, emit) async {
       final either = await _dietCommands.saveIngredient(event.ingredient);
+      either.fold((f) => emit(IngredientsState.failure(failure: f)), (r) {});
+    });
 
-      either.fold((f) => emit(.failure(failure: f)), (r) {});
+    on<_ChangeLibLanguage>((event, emit) async {
+      emit(const IngredientsState.changingLanguage());
+      final either = await _dietCommands.changeIngredientsLanguage(language: event.language);
+
+      await either.fold((failure) async => emit(IngredientsState.failure(failure: failure)), (success) async {
+        emit(IngredientsState.languageChangeSuccess(lang: event.language));
+
+        // IMPORTANT: Re-trigger Started event to reload ingredients with the new language
+        add(IngredientsEvent.started(event.language));
+      });
     });
   }
 

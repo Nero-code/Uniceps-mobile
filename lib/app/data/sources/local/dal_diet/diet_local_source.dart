@@ -98,7 +98,7 @@ class DietLocalSource implements IDietLocalSource {
         batch.insert(
           _db.ingredients,
           companion,
-          onConflict: DoUpdate((old) => companion, target: [_db.ingredients.id]),
+          onConflict: DoUpdate((old) => companion, target: [_db.ingredients.apiId]),
         );
       }
     });

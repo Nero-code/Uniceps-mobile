@@ -27,7 +27,7 @@ class CaptainUniCard extends StatelessWidget {
     return Stack(
       children: [
         Padding(
-          padding: EdgeInsets.only(top: screenSize.width * .18, left: 10, right: 10),
+          padding: EdgeInsets.only(top: screenSize.width * .15, left: 10, right: 10),
           child: InkWell(
             onTap: onCapTap,
             borderRadius: BorderRadius.circular(20),

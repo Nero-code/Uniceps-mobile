@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/core/helpers/access_control_dialogs.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
 class SecondaryActionsBar extends StatelessWidget {
@@ -30,7 +31,11 @@ class SecondaryActionsBar extends StatelessWidget {
               icon: Icons.analytics_outlined,
               label: l10n.scrTitlePerformance,
               isLocked: membership.maybeWhen(orElse: () => true, loaded: (m) => false),
-              onTap: membership.maybeWhen(orElse: () => null, loaded: (m) => onAnalytics),
+              onTap: membership.maybeWhen(
+                orElse: () =>
+                    () => showPremiumDialog(context),
+                loaded: (m) => onAnalytics,
+              ),
             ),
           ),
           const SizedBox(width: 8),

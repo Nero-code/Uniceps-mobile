@@ -25,7 +25,10 @@ class AppConfigsService {
     if (confJson == null) {
       // Get Language
       final systemLang = PlatformDispatcher.instance.locale.languageCode;
-      final defaultAppLanguage = Lang.values.firstWhere((lang) => lang.code == systemLang, orElse: () => Lang.en);
+      final defaultAppLanguage = Lang.values.firstWhere(
+        (lang) => lang.code.toLowerCase() == systemLang.toLowerCase(),
+        orElse: () => Lang.en,
+      );
 
       _configs = Configs.initial(language: defaultAppLanguage.code);
       await _prefs.setString(_configsKeyInPrefs, jsonEncode(_configs.toJson()));
@@ -39,6 +42,7 @@ class AppConfigsService {
   Future<Configs> changeAppConfigs({
     Locale? appLanguage,
     Locale? exerciseLibLanguage,
+    Locale? dietLibLanguage,
     ThemeMode? mode,
     Goal? goal,
     ActivityLevel? activityLevel,
@@ -46,6 +50,7 @@ class AppConfigsService {
     _configs = _configs.copyWith(
       appLanguage: appLanguage,
       exerciseLibLanguage: exerciseLibLanguage,
+      dietLibLanguage: dietLibLanguage,
       mode: mode,
       goal: goal,
       activityLevel: activityLevel,

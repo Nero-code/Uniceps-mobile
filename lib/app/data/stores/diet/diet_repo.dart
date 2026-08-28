@@ -20,7 +20,7 @@ class DietRepo implements IDietService {
       _remoteSource = remoteSource;
 
   @override
-  Future<Either<IngredientFailure, List<Ingredient>>> loadIngredients() async {
+  Future<Either<IngredientFailure, List<Ingredient>>> loadIngredients({String language = 'en'}) async {
     try {
       // 1. Use memory cache if available
       if (allIngredients.isNotEmpty) return Right(allIngredients);
@@ -32,7 +32,7 @@ class DietRepo implements IDietService {
       final hasLibraryItems = models.any((i) => !i.isUserGenerated);
       if (!hasLibraryItems) {
         try {
-          final remoteData = await _remoteSource.loadIngredients();
+          final remoteData = await _remoteSource.loadIngredients(language: language);
           await _localSource.bulkSaveIngredients(remoteData);
           // Refresh local list to include newly saved library items
           models = await _localSource.getIngredients();
@@ -46,6 +46,17 @@ class DietRepo implements IDietService {
       return Right(allIngredients);
     } catch (e) {
       return Left(IngredientFailure.databaseFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<IngredientFailure, bool>> changeIngredientsLanguage({required String language}) async {
+    try {
+      final remoteData = await _remoteSource.loadIngredients(language: language);
+      await _localSource.bulkSaveIngredients(remoteData);
+      return const Right(true);
+    } catch (remoteError) {
+      return const Left(.iOffline());
     }
   }
 
