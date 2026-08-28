@@ -26,7 +26,6 @@ void main() {
   late MockIRoutineRemoteSourceContract mockRemoteSource;
   late MockUniFileManager mockUniFileManager;
   late MockMediaHelper mockMediaHelper;
-  late MockLogger mockLogger;
   late Routine tRoutine;
   late RoutineDto tRoutineDto;
   late ({Routine routine, RoutineHeat heat}) tRoutineWithHeat;
@@ -36,7 +35,6 @@ void main() {
     mockRemoteSource = MockIRoutineRemoteSourceContract();
     mockUniFileManager = MockUniFileManager();
     mockMediaHelper = MockMediaHelper();
-    mockLogger = MockLogger();
     repo = RoutineWithHeatRepo(
       localSource: mockLocalSource,
       fileParseService: mockUniFileManager,

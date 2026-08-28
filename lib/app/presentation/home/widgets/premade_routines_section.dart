@@ -37,9 +37,10 @@ class PremadeRoutinesSection extends StatelessWidget {
                 l10n.explorePremadeRoutines,
                 style: const TextStyle(color: AppColors.primaryDark, fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              Text(
-                l10n.seeAll,
-                style: const TextStyle(color: AppColors.primaryTeal, fontSize: 13, fontWeight: FontWeight.w600),
+              const Text(
+                // l10n.seeAll,
+                '',
+                style: TextStyle(color: AppColors.primaryTeal, fontSize: 13, fontWeight: FontWeight.w600),
               ),
             ],
           ),

@@ -9,7 +9,12 @@ class DietCommands {
   const DietCommands(this._repo);
 
   // Ingredients
-  Future<Either<IngredientFailure, List<Ingredient>>> loadIngredients() => _repo.loadIngredients();
+  Future<Either<IngredientFailure, List<Ingredient>>> loadIngredients({required String language}) =>
+      _repo.loadIngredients(language: language);
+
+  Future<Either<IngredientFailure, bool>> changeIngredientsLanguage({required String language}) =>
+      _repo.changeIngredientsLanguage(language: language);
+
   Future<Either<IngredientFailure, List<Ingredient>>> filterIngredientsBy({
     String searchString = '',
     int? categoryId,

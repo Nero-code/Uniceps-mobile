@@ -1264,9 +1264,15 @@
             "moor_type": "string",
             "nullable": true,
             "customConstraints": null,
+            "defaultConstraints": "UNIQUE",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "UNIQUE"
+            },
             "default_dart": null,
             "default_client_dart": null,
-            "dsl_features": []
+            "dsl_features": [
+              "unique"
+            ]
           },
           {
             "name": "is_user_generated",
@@ -1640,7 +1646,7 @@
       "sql": [
         {
           "dialect": "sqlite",
-          "sql": "CREATE TABLE IF NOT EXISTS \"ingredients\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"api_id\" TEXT NULL, \"is_user_generated\" INTEGER NOT NULL CHECK (\"is_user_generated\" IN (0, 1)), \"name\" TEXT NOT NULL, \"category_id\" INTEGER NOT NULL, \"category_name\" TEXT NOT NULL, \"serving_size_in_grams\" REAL NOT NULL, \"calories\" REAL NOT NULL, \"protein\" REAL NOT NULL, \"carbs\" REAL NOT NULL, \"fats\" REAL NOT NULL, \"version\" INTEGER NOT NULL, \"is_synced\" INTEGER NOT NULL CHECK (\"is_synced\" IN (0, 1)), \"updated_at\" TEXT NOT NULL, \"created_at\" TEXT NOT NULL);"
+          "sql": "CREATE TABLE IF NOT EXISTS \"ingredients\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"api_id\" TEXT NULL UNIQUE, \"is_user_generated\" INTEGER NOT NULL CHECK (\"is_user_generated\" IN (0, 1)), \"name\" TEXT NOT NULL, \"category_id\" INTEGER NOT NULL, \"category_name\" TEXT NOT NULL, \"serving_size_in_grams\" REAL NOT NULL, \"calories\" REAL NOT NULL, \"protein\" REAL NOT NULL, \"carbs\" REAL NOT NULL, \"fats\" REAL NOT NULL, \"version\" INTEGER NOT NULL, \"is_synced\" INTEGER NOT NULL CHECK (\"is_synced\" IN (0, 1)), \"updated_at\" TEXT NOT NULL, \"created_at\" TEXT NOT NULL);"
         }
       ]
     },

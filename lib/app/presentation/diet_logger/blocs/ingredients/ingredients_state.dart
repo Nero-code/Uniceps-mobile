@@ -9,4 +9,6 @@ class IngredientsState with _$IngredientsState {
     required List<DietCategory> categories,
   }) = _Success;
   const factory IngredientsState.failure({required IngredientFailure failure}) = _Failure;
+  const factory IngredientsState.changingLanguage() = _ChangingLanguage;
+  const factory IngredientsState.languageChangeSuccess({required String lang}) = _LanguageChangeSuccess;
 }

@@ -29,6 +29,11 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     emit(.appConfig(config: config));
   }
 
+  Future<void> changeDietLibLanguageTo(String language) async {
+    final config = await _appConfigsService.changeAppConfigs(dietLibLanguage: Locale(language));
+    emit(.appConfig(config: config));
+  }
+
   Future<void> changeAppThemeTo(ThemeMode mode) async {
     final config = await _appConfigsService.changeAppConfigs(mode: mode);
     emit(.appConfig(config: config));

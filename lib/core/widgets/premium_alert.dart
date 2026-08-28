@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
@@ -9,6 +11,7 @@ class PremiumAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
+    final unauthenticated = context.watch<AccountCubit>().state.maybeWhen(orElse: () => true, hasAccount: (_) => false);
     return AlertDialog(
       title: Center(
         child: Image(
@@ -23,7 +26,13 @@ class PremiumAlert extends StatelessWidget {
         Center(
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber, foregroundColor: Colors.white),
-            onPressed: () => Navigator.pushReplacementNamed(context, AppRoutes.plans),
+            onPressed: () {
+              if (unauthenticated) {
+                Navigator.pushReplacementNamed(context, AppRoutes.auth);
+                return;
+              }
+              Navigator.pushReplacementNamed(context, AppRoutes.plans);
+            },
             child: Text(locale.upgrade),
           ),
         ),

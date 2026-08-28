@@ -2103,7 +2103,7 @@ i1.GeneratedColumn<String> _column_85(String aliasedName) =>
       aliasedName,
       true,
       type: i1.DriftSqlType.string,
-      $customConstraints: 'NULL',
+      $customConstraints: 'NULL UNIQUE',
     );
 i1.GeneratedColumn<int> _column_86(String aliasedName) =>
     i1.GeneratedColumn<int>(

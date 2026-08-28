@@ -55,13 +55,14 @@ extension IngredientsEventPatterns on IngredientsEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _Filter value)?  filter,TResult Function( _CreateIngredient value)?  createIngredient,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _Filter value)?  filter,TResult Function( _CreateIngredient value)?  createIngredient,TResult Function( _ChangeLibLanguage value)?  changeLibLanguage,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _Filter() when filter != null:
 return filter(_that);case _CreateIngredient() when createIngredient != null:
-return createIngredient(_that);case _:
+return createIngredient(_that);case _ChangeLibLanguage() when changeLibLanguage != null:
+return changeLibLanguage(_that);case _:
   return orElse();
 
 }
@@ -79,13 +80,14 @@ return createIngredient(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _Filter value)  filter,required TResult Function( _CreateIngredient value)  createIngredient,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _Filter value)  filter,required TResult Function( _CreateIngredient value)  createIngredient,required TResult Function( _ChangeLibLanguage value)  changeLibLanguage,}){
 final _that = this;
 switch (_that) {
 case _Started():
 return started(_that);case _Filter():
 return filter(_that);case _CreateIngredient():
-return createIngredient(_that);case _:
+return createIngredient(_that);case _ChangeLibLanguage():
+return changeLibLanguage(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -102,13 +104,14 @@ return createIngredient(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _Filter value)?  filter,TResult? Function( _CreateIngredient value)?  createIngredient,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _Filter value)?  filter,TResult? Function( _CreateIngredient value)?  createIngredient,TResult? Function( _ChangeLibLanguage value)?  changeLibLanguage,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _Filter() when filter != null:
 return filter(_that);case _CreateIngredient() when createIngredient != null:
-return createIngredient(_that);case _:
+return createIngredient(_that);case _ChangeLibLanguage() when changeLibLanguage != null:
+return changeLibLanguage(_that);case _:
   return null;
 
 }
@@ -125,12 +128,13 @@ return createIngredient(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String search,  int? catId)?  filter,TResult Function( Ingredient ingredient)?  createIngredient,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String language)?  started,TResult Function( String search,  int? catId)?  filter,TResult Function( Ingredient ingredient)?  createIngredient,TResult Function( String language)?  changeLibLanguage,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started();case _Filter() when filter != null:
+return started(_that.language);case _Filter() when filter != null:
 return filter(_that.search,_that.catId);case _CreateIngredient() when createIngredient != null:
-return createIngredient(_that.ingredient);case _:
+return createIngredient(_that.ingredient);case _ChangeLibLanguage() when changeLibLanguage != null:
+return changeLibLanguage(_that.language);case _:
   return orElse();
 
 }
@@ -148,12 +152,13 @@ return createIngredient(_that.ingredient);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String search,  int? catId)  filter,required TResult Function( Ingredient ingredient)  createIngredient,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String language)  started,required TResult Function( String search,  int? catId)  filter,required TResult Function( Ingredient ingredient)  createIngredient,required TResult Function( String language)  changeLibLanguage,}) {final _that = this;
 switch (_that) {
 case _Started():
-return started();case _Filter():
+return started(_that.language);case _Filter():
 return filter(_that.search,_that.catId);case _CreateIngredient():
-return createIngredient(_that.ingredient);case _:
+return createIngredient(_that.ingredient);case _ChangeLibLanguage():
+return changeLibLanguage(_that.language);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -170,12 +175,13 @@ return createIngredient(_that.ingredient);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String search,  int? catId)?  filter,TResult? Function( Ingredient ingredient)?  createIngredient,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String language)?  started,TResult? Function( String search,  int? catId)?  filter,TResult? Function( Ingredient ingredient)?  createIngredient,TResult? Function( String language)?  changeLibLanguage,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started();case _Filter() when filter != null:
+return started(_that.language);case _Filter() when filter != null:
 return filter(_that.search,_that.catId);case _CreateIngredient() when createIngredient != null:
-return createIngredient(_that.ingredient);case _:
+return createIngredient(_that.ingredient);case _ChangeLibLanguage() when changeLibLanguage != null:
+return changeLibLanguage(_that.language);case _:
   return null;
 
 }
@@ -187,33 +193,67 @@ return createIngredient(_that.ingredient);case _:
 
 
 class _Started implements IngredientsEvent {
-  const _Started();
+  const _Started(this.language);
   
 
+ final  String language;
 
-
+/// Create a copy of IngredientsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$StartedCopyWith<_Started> get copyWith => __$StartedCopyWithImpl<_Started>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Started);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Started&&(identical(other.language, language) || other.language == language));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,language);
 
 @override
 String toString() {
-  return 'IngredientsEvent.started()';
+  return 'IngredientsEvent.started(language: $language)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class _$StartedCopyWith<$Res> implements $IngredientsEventCopyWith<$Res> {
+  factory _$StartedCopyWith(_Started value, $Res Function(_Started) _then) = __$StartedCopyWithImpl;
+@useResult
+$Res call({
+ String language
+});
 
 
+
+
+}
+/// @nodoc
+class __$StartedCopyWithImpl<$Res>
+    implements _$StartedCopyWith<$Res> {
+  __$StartedCopyWithImpl(this._self, this._then);
+
+  final _Started _self;
+  final $Res Function(_Started) _then;
+
+/// Create a copy of IngredientsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? language = null,}) {
+  return _then(_Started(
+null == language ? _self.language : language // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
 
 /// @nodoc
 
@@ -350,6 +390,72 @@ as Ingredient,
 }
 
 /// @nodoc
+
+
+class _ChangeLibLanguage implements IngredientsEvent {
+  const _ChangeLibLanguage({required this.language});
+  
+
+ final  String language;
+
+/// Create a copy of IngredientsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ChangeLibLanguageCopyWith<_ChangeLibLanguage> get copyWith => __$ChangeLibLanguageCopyWithImpl<_ChangeLibLanguage>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChangeLibLanguage&&(identical(other.language, language) || other.language == language));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,language);
+
+@override
+String toString() {
+  return 'IngredientsEvent.changeLibLanguage(language: $language)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ChangeLibLanguageCopyWith<$Res> implements $IngredientsEventCopyWith<$Res> {
+  factory _$ChangeLibLanguageCopyWith(_ChangeLibLanguage value, $Res Function(_ChangeLibLanguage) _then) = __$ChangeLibLanguageCopyWithImpl;
+@useResult
+$Res call({
+ String language
+});
+
+
+
+
+}
+/// @nodoc
+class __$ChangeLibLanguageCopyWithImpl<$Res>
+    implements _$ChangeLibLanguageCopyWith<$Res> {
+  __$ChangeLibLanguageCopyWithImpl(this._self, this._then);
+
+  final _ChangeLibLanguage _self;
+  final $Res Function(_ChangeLibLanguage) _then;
+
+/// Create a copy of IngredientsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? language = null,}) {
+  return _then(_ChangeLibLanguage(
+language: null == language ? _self.language : language // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
 mixin _$IngredientsState {
 
 
@@ -393,14 +499,16 @@ extension IngredientsStatePatterns on IngredientsState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Success value)?  success,TResult Function( _Failure value)?  failure,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Success value)?  success,TResult Function( _Failure value)?  failure,TResult Function( _ChangingLanguage value)?  changingLanguage,TResult Function( _LanguageChangeSuccess value)?  languageChangeSuccess,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _Success() when success != null:
 return success(_that);case _Failure() when failure != null:
-return failure(_that);case _:
+return failure(_that);case _ChangingLanguage() when changingLanguage != null:
+return changingLanguage(_that);case _LanguageChangeSuccess() when languageChangeSuccess != null:
+return languageChangeSuccess(_that);case _:
   return orElse();
 
 }
@@ -418,14 +526,16 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Success value)  success,required TResult Function( _Failure value)  failure,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Success value)  success,required TResult Function( _Failure value)  failure,required TResult Function( _ChangingLanguage value)  changingLanguage,required TResult Function( _LanguageChangeSuccess value)  languageChangeSuccess,}){
 final _that = this;
 switch (_that) {
 case _Initial():
 return initial(_that);case _Loading():
 return loading(_that);case _Success():
 return success(_that);case _Failure():
-return failure(_that);case _:
+return failure(_that);case _ChangingLanguage():
+return changingLanguage(_that);case _LanguageChangeSuccess():
+return languageChangeSuccess(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -442,14 +552,16 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Success value)?  success,TResult? Function( _Failure value)?  failure,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Success value)?  success,TResult? Function( _Failure value)?  failure,TResult? Function( _ChangingLanguage value)?  changingLanguage,TResult? Function( _LanguageChangeSuccess value)?  languageChangeSuccess,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _Success() when success != null:
 return success(_that);case _Failure() when failure != null:
-return failure(_that);case _:
+return failure(_that);case _ChangingLanguage() when changingLanguage != null:
+return changingLanguage(_that);case _LanguageChangeSuccess() when languageChangeSuccess != null:
+return languageChangeSuccess(_that);case _:
   return null;
 
 }
@@ -466,13 +578,15 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<Ingredient> ingredients,  List<DietCategory> categories)?  success,TResult Function( IngredientFailure failure)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<Ingredient> ingredients,  List<DietCategory> categories)?  success,TResult Function( IngredientFailure failure)?  failure,TResult Function()?  changingLanguage,TResult Function( String lang)?  languageChangeSuccess,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Success() when success != null:
 return success(_that.ingredients,_that.categories);case _Failure() when failure != null:
-return failure(_that.failure);case _:
+return failure(_that.failure);case _ChangingLanguage() when changingLanguage != null:
+return changingLanguage();case _LanguageChangeSuccess() when languageChangeSuccess != null:
+return languageChangeSuccess(_that.lang);case _:
   return orElse();
 
 }
@@ -490,13 +604,15 @@ return failure(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<Ingredient> ingredients,  List<DietCategory> categories)  success,required TResult Function( IngredientFailure failure)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<Ingredient> ingredients,  List<DietCategory> categories)  success,required TResult Function( IngredientFailure failure)  failure,required TResult Function()  changingLanguage,required TResult Function( String lang)  languageChangeSuccess,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _Success():
 return success(_that.ingredients,_that.categories);case _Failure():
-return failure(_that.failure);case _:
+return failure(_that.failure);case _ChangingLanguage():
+return changingLanguage();case _LanguageChangeSuccess():
+return languageChangeSuccess(_that.lang);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -513,13 +629,15 @@ return failure(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<Ingredient> ingredients,  List<DietCategory> categories)?  success,TResult? Function( IngredientFailure failure)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<Ingredient> ingredients,  List<DietCategory> categories)?  success,TResult? Function( IngredientFailure failure)?  failure,TResult? Function()?  changingLanguage,TResult? Function( String lang)?  languageChangeSuccess,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Success() when success != null:
 return success(_that.ingredients,_that.categories);case _Failure() when failure != null:
-return failure(_that.failure);case _:
+return failure(_that.failure);case _ChangingLanguage() when changingLanguage != null:
+return changingLanguage();case _LanguageChangeSuccess() when languageChangeSuccess != null:
+return languageChangeSuccess(_that.lang);case _:
   return null;
 
 }
@@ -744,6 +862,104 @@ $IngredientFailureCopyWith<$Res> get failure {
     return _then(_self.copyWith(failure: value));
   });
 }
+}
+
+/// @nodoc
+
+
+class _ChangingLanguage implements IngredientsState {
+  const _ChangingLanguage();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChangingLanguage);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'IngredientsState.changingLanguage()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _LanguageChangeSuccess implements IngredientsState {
+  const _LanguageChangeSuccess({required this.lang});
+  
+
+ final  String lang;
+
+/// Create a copy of IngredientsState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$LanguageChangeSuccessCopyWith<_LanguageChangeSuccess> get copyWith => __$LanguageChangeSuccessCopyWithImpl<_LanguageChangeSuccess>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LanguageChangeSuccess&&(identical(other.lang, lang) || other.lang == lang));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,lang);
+
+@override
+String toString() {
+  return 'IngredientsState.languageChangeSuccess(lang: $lang)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$LanguageChangeSuccessCopyWith<$Res> implements $IngredientsStateCopyWith<$Res> {
+  factory _$LanguageChangeSuccessCopyWith(_LanguageChangeSuccess value, $Res Function(_LanguageChangeSuccess) _then) = __$LanguageChangeSuccessCopyWithImpl;
+@useResult
+$Res call({
+ String lang
+});
+
+
+
+
+}
+/// @nodoc
+class __$LanguageChangeSuccessCopyWithImpl<$Res>
+    implements _$LanguageChangeSuccessCopyWith<$Res> {
+  __$LanguageChangeSuccessCopyWithImpl(this._self, this._then);
+
+  final _LanguageChangeSuccess _self;
+  final $Res Function(_LanguageChangeSuccess) _then;
+
+/// Create a copy of IngredientsState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? lang = null,}) {
+  return _then(_LanguageChangeSuccess(
+lang: null == lang ? _self.lang : lang // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
 }
 
 // dart format on

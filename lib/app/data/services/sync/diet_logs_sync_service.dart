@@ -69,6 +69,8 @@ class DietLogsSyncService {
         return await action();
       } on SocketException {
         rethrow; // Don't retry if no internet at all
+      } on NoContentException {
+        rethrow;
       } catch (e) {
         attempts++;
         if (attempts >= maxAttempts) rethrow;

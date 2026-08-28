@@ -5,7 +5,7 @@ import 'package:uniceps/core/constants/api_routes.dart';
 import 'package:uniceps/core/logging/app_logger.dart';
 
 abstract class IDietRemoteSource {
-  Future<List<IngredientModel>> loadIngredients({DateTime? lastSync});
+  Future<List<IngredientModel>> loadIngredients({DateTime? lastSync, String language = 'en'});
 
   Future<String> uploadIngredient(IngredientModel userIng);
 
@@ -19,7 +19,7 @@ class DietRemoteSource implements IDietRemoteSource {
   const DietRemoteSource({required HttpClientHelper clientHelper}) : _clientHelper = clientHelper;
 
   @override
-  Future<List<IngredientModel>> loadIngredients({DateTime? lastSync}) async {
+  Future<List<IngredientModel>> loadIngredients({DateTime? lastSync, String language = 'en'}) async {
     final hasValidToken = await _clientHelper.tokenService.isTokenValid();
     return await _clientHelper.getListHandler(
       ApiRoutes.domain,
@@ -27,6 +27,7 @@ class DietRemoteSource implements IDietRemoteSource {
       IngredientModel.fromJson,
       needsHeader: hasValidToken,
       queryParams: lastSync != null ? {'lastSync': lastSync.toString()} : null,
+      headers: {'Accept-language': language},
     );
   }
 
