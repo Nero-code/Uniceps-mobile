@@ -1131,6 +1131,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get routineDownloadFailed => 'فشل تحميل البرنامج';
 
   @override
+  String get changeIngredientsLanguage => 'تغيير لغة المكتبة';
+
+  @override
+  String get changingIngredientsLanguage => 'جاري تغيير لغة المكتبة...';
+
+  @override
+  String get langChangedSuccess => 'تم تغيير اللغة بنجاح';
+
+  @override
   String get downloadingRoutine => 'جاري تحميل البرنامج...';
 
   @override

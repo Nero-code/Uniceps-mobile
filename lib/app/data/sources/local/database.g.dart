@@ -5509,6 +5509,7 @@ class $IngredientsTable extends Ingredients
     true,
     type: DriftSqlType.string,
     requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
   );
   static const VerificationMeta _isUserGeneratedMeta = const VerificationMeta(
     'isUserGenerated',

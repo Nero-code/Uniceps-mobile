@@ -1135,6 +1135,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get routineDownloadFailed => 'Failed to download routine';
 
   @override
+  String get changeIngredientsLanguage => 'Change Ingredients Language';
+
+  @override
+  String get changingIngredientsLanguage => 'Changing library language...';
+
+  @override
+  String get langChangedSuccess => 'Language changed successfully';
+
+  @override
   String get downloadingRoutine => 'Downloading Routine...';
 
   @override

@@ -3,7 +3,7 @@ import 'package:drift/drift.dart';
 @DataClassName('IngredientData')
 class Ingredients extends Table {
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get apiId => text().nullable()();
+  TextColumn get apiId => text().nullable().unique()();
 
   BoolColumn get isUserGenerated => boolean()();
   TextColumn get name => text()();

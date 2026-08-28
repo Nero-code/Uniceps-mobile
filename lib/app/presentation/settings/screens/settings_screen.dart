@@ -93,6 +93,8 @@ class SettingsScreen extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (_) => ContentLangDialog(
+                    title: locale.changeExercisesLang,
+                    langCode: context.read<AppConfigCubit>().state.config.exerciseLibLanguage.languageCode,
                     onLangChanged: (code) => showDialog(
                       context: context,
                       builder: (context) => BlocProvider(

@@ -23,6 +23,7 @@ import 'package:uniceps/core/constants/app_routes.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/helpers/access_control_dialogs.dart';
 import 'package:uniceps/core/logging/app_logger.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
@@ -58,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     final lang = context.read<AppConfigCubit>().state.config.appLanguage.languageCode;
-    final membership = context.watch<MembershipBloc>().state;
+    final membership = context.watch<MembershipBloc>().state.maybeWhen(orElse: () => false, loaded: (m) => true);
     final gender = context.read<ProfileCubit>().state.whenOrNull(loaded: (p) => p.gender);
 
     return MultiBlocProvider(
@@ -92,18 +93,18 @@ class _HomeScreenState extends State<HomeScreen> {
               scrolledUnderElevation: 0,
               title: const Text(
                 APP_NAME,
-                style: TextStyle(fontFamily: 'Playwrite', color: primaryDark, fontWeight: FontWeight.bold),
+                style: TextStyle(fontFamily: 'Playwrite', color: primaryTeal, fontWeight: FontWeight.bold),
               ),
               leading: IconButton(
                 onPressed: () => showDialog(context: context, builder: (_) => const QrAlertDialog()),
                 icon: const Icon(Icons.qr_code_2_outlined),
-                color: primaryDark,
+                color: primaryTeal,
               ),
               actions: [
                 IconButton(
                   iconSize: 25,
                   onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
-                  icon: const Icon(Icons.settings_outlined, color: primaryDark),
+                  icon: const Icon(Icons.settings_outlined, color: primaryTeal),
                 ),
               ],
             ),
@@ -248,7 +249,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: Colors.transparent,
                                   child: InkWell(
                                     borderRadius: BorderRadius.circular(20),
-                                    onTap: () => Navigator.pushNamed(context, AppRoutes.dietLogger),
+                                    onTap: () => membership
+                                        ? Navigator.pushNamed(context, AppRoutes.dietLogger)
+                                        : showPremiumDialog(context),
                                     child: Padding(
                                       padding: const EdgeInsets.all(16.0),
                                       child: Row(
@@ -288,7 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               ),
-                              if (membership.maybeWhen(orElse: () => true, loaded: (m) => false))
+                              if (!membership)
                                 Positioned.directional(
                                   textDirection: Directionality.of(context),
                                   child: Container(
@@ -374,7 +377,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       // Daily Motivational Quote Banner
                       SliverToBoxAdapter(
                         child: Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.only(top: 0, right: 16.0, bottom: 16.0, left: 16.0),
                           child: BlocBuilder<DailyQuoteCubit, DailyQuoteState>(
                             builder: (context, state) => state.map(
                               initial: (_) => const LoadingIndicator(),
