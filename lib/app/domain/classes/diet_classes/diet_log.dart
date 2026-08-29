@@ -27,7 +27,7 @@ class DietLog {
     this.isSynced = false,
   });
 
-  factory DietLog.fromIngredient(Ingredient ing, double amountInGrams) {
+  factory DietLog.fromIngredient(Ingredient ing, double amountInGrams, {DateTime? timestamp}) {
     final ratio = amountInGrams / ing.servingSizeInGrams;
     return DietLog(
       id: null,
@@ -38,7 +38,7 @@ class DietLog {
       protein: ing.protein * ratio,
       carbs: ing.carbs * ratio,
       fats: ing.fats * ratio,
-      timestamp: DateTime.now(),
+      timestamp: timestamp ?? DateTime.now(),
     );
   }
 }
