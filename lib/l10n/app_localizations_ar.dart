@@ -1156,4 +1156,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get levelElite => 'محترف';
+
+  @override
+  String get fieldRequired => 'هذا الحقل مطلوب!';
 }

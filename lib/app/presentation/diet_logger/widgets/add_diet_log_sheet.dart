@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:uniceps/app/domain/classes/diet_classes/diet_log.dart';
 import 'package:uniceps/app/domain/classes/diet_classes/ingredient.dart';
 import 'package:uniceps/app/presentation/diet_logger/blocs/diet_logger/diet_logger_bloc.dart';
@@ -21,6 +22,7 @@ enum _AddMode { search, ingredientForm, manualForm }
 
 class _AddDietLogSheetState extends State<AddDietLogSheet> {
   _AddMode _mode = _AddMode.search;
+  DateTime _selectedDateTime = DateTime.now();
 
   // Search & Selection
   final _searchController = TextEditingController();
@@ -71,6 +73,24 @@ class _AddDietLogSheetState extends State<AddDietLogSheet> {
     setState(() {
       _mode = _AddMode.search;
       _selectedIngredient = null;
+    });
+  }
+
+  Future<void> _selectDateTime() async {
+    final date = await showDatePicker(
+      context: context,
+      initialDate: _selectedDateTime,
+      firstDate: DateTime.now().subtract(const Duration(days: 30)),
+      lastDate: DateTime.now().add(const Duration(days: 1)),
+    );
+    if (date == null) return;
+
+    if (!mounted) return;
+    final time = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(_selectedDateTime));
+    if (time == null) return;
+
+    setState(() {
+      _selectedDateTime = DateTime(date.year, date.month, date.day, time.hour, time.minute);
     });
   }
 
@@ -204,6 +224,17 @@ class _AddDietLogSheetState extends State<AddDietLogSheet> {
       children: [
         FormHeader(title: ing.name, onBack: _backToSearch),
         const SizedBox(height: 20),
+        ListTile(
+          onTap: _selectDateTime,
+          leading: const Icon(Icons.access_time, color: mainBlueLight),
+          title: Text(DateFormat('yyyy/MM/dd - HH:mm').format(_selectedDateTime)),
+          trailing: const Icon(Icons.edit, size: 18),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+            side: BorderSide(color: Colors.grey.shade300),
+          ),
+        ),
+        const SizedBox(height: 20),
         FormTextField(
           controller: _amountController,
           label: locale.amountGrams,
@@ -228,7 +259,9 @@ class _AddDietLogSheetState extends State<AddDietLogSheet> {
               return;
             }
             context.read<DietLoggerBloc>().add(
-              DietLoggerEvent.logServing(log: DietLog.fromIngredient(ing, double.parse(_amountController.text))),
+              DietLoggerEvent.logServing(
+                log: DietLog.fromIngredient(ing, double.parse(_amountController.text), timestamp: _selectedDateTime),
+              ),
             );
             Navigator.pop(context);
           },
@@ -249,7 +282,18 @@ class _AddDietLogSheetState extends State<AddDietLogSheet> {
         ),
         const SizedBox(height: 10),
         FormHeader(title: locale.customEntry, onBack: null),
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
+        ListTile(
+          onTap: _selectDateTime,
+          leading: const Icon(Icons.access_time, color: mainBlueLight),
+          title: Text(DateFormat('yyyy/MM/dd - HH:mm').format(_selectedDateTime)),
+          trailing: const Icon(Icons.edit, size: 18),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+            side: BorderSide(color: Colors.grey.shade300),
+          ),
+        ),
+        const SizedBox(height: 20),
         FormTextField(controller: _nameController, label: locale.entryName, icon: Icons.title, autofocus: true),
         const SizedBox(height: 15),
         FormTextField(
@@ -328,7 +372,7 @@ class _AddDietLogSheetState extends State<AddDietLogSheet> {
               protein: protein,
               carbs: carbs,
               fats: fats,
-              timestamp: DateTime.now(),
+              timestamp: _selectedDateTime,
             );
 
             context.read<DietLoggerBloc>().add(DietLoggerEvent.logServing(log: log));

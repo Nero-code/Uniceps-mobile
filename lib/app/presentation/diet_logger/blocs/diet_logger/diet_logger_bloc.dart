@@ -10,20 +10,23 @@ part 'diet_logger_state.dart';
 
 class DietLoggerBloc extends Bloc<DietLoggerEvent, DietLoggerState> {
   final DietCommands _commands;
+  DateTime currentDate = DateTime.now();
+
   DietLoggerBloc({required DietCommands commands}) : _commands = commands, super(const DietLoggerState.initial()) {
     on<_Started>((event, emit) async {
       emit(const .loading());
+      currentDate = event.date ?? currentDate;
 
-      final either = await _commands.getTodayLogs();
+      final either = await _commands.getLogsForDate(currentDate);
       either.fold((l) => emit(.failure(failure: l)), (r) => emit(.success(logs: r)));
     });
     on<_LogServing>((event, emit) async {
       final either = await _commands.logMeal(event.log);
-      either.fold((l) => emit(.failure(failure: l)), (r) => add(const .started()));
+      either.fold((l) => emit(.failure(failure: l)), (r) => add(.started(date: currentDate)));
     });
     on<_DeleteLog>((event, emit) async {
       final either = await _commands.deleteLog(event.log);
-      either.fold((l) => emit(.failure(failure: l)), (r) => add(const .started()));
+      either.fold((l) => emit(.failure(failure: l)), (r) => add(.started(date: currentDate)));
     });
   }
 }

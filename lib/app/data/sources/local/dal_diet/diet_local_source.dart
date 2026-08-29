@@ -15,7 +15,7 @@ abstract class IDietLocalSource {
   Future<List<IngredientModel>> getUserGeneratedContent();
 
   // Diet Logging
-  Future<List<DietLogDto>> getTodayLogs();
+  Future<List<DietLogDto>> getLogsForDate(DateTime date);
   Future<void> logMeal(DietLogDto log);
   Future<void> upsertDietLog(DietLogDto log);
   Future<void> deleteLog(DietLogDto log);
@@ -125,13 +125,12 @@ class DietLocalSource implements IDietLocalSource {
   }
 
   @override
-  Future<List<DietLogDto>> getTodayLogs() async {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final tomorrow = today.add(const Duration(days: 1));
+  Future<List<DietLogDto>> getLogsForDate(DateTime date) async {
+    final startOfDay = DateTime(date.year, date.month, date.day);
+    final endOfDay = startOfDay.add(const Duration(days: 1));
 
     final query = _db.select(_db.dietLogs)
-      ..where((tbl) => tbl.timestamp.isBiggerOrEqualValue(today) & tbl.timestamp.isSmallerThanValue(tomorrow));
+      ..where((tbl) => tbl.timestamp.isBiggerOrEqualValue(startOfDay) & tbl.timestamp.isSmallerThanValue(endOfDay));
 
     final result = await query.get();
     return result.map((e) => DietLogDto.fromCompanion(e)).toList();

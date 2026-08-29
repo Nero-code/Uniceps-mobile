@@ -9,8 +9,16 @@ import 'package:uniceps/l10n/app_localizations.dart';
 class DietSummaryCard extends StatelessWidget {
   final List<DietLog> logs;
   final double calorieGoal;
+  final DateTime selectedDate;
+  final ValueChanged<DateTime> onDateChanged;
 
-  const DietSummaryCard({super.key, required this.logs, this.calorieGoal = 0});
+  const DietSummaryCard({
+    super.key,
+    required this.logs,
+    this.calorieGoal = 0,
+    required this.selectedDate,
+    required this.onDateChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +30,7 @@ class DietSummaryCard extends StatelessWidget {
     final remaining = calorieGoal != 0 ? calorieGoal - totalCalories : 0.0;
     final progress = calorieGoal != 0 ? (totalCalories / calorieGoal).clamp(0.0, 1.0) : 0.0;
 
-    final now = DateTime.now();
-    final dateStr = '${now.day}/${now.month}/${now.year}';
+    final dateStr = '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
 
     final locale = AppLocalizations.of(context)!;
 
@@ -61,7 +68,31 @@ class DietSummaryCard extends StatelessWidget {
                 locale.todaySummary,
                 style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              Text(dateStr, style: const TextStyle(color: Colors.white70, fontSize: 14)),
+              InkWell(
+                onTap: () async {
+                  final date = await showDatePicker(
+                    context: context,
+                    initialDate: selectedDate,
+                    firstDate: DateTime.now().subtract(const Duration(days: 365)),
+                    lastDate: DateTime.now().add(const Duration(days: 30)),
+                  );
+                  if (date != null) onDateChanged(date);
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(dateStr, style: const TextStyle(color: Colors.white70, fontSize: 14)),
+                      const SizedBox(width: 4),
+                      const Icon(Icons.calendar_month, color: Colors.white70, size: 16),
+                    ],
+                  ),
+                ),
+              ),
               Material(
                 color: Colors.black12,
                 shape: const CircleBorder(),

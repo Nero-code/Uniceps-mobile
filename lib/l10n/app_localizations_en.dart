@@ -1160,4 +1160,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get levelElite => 'Elite';
+
+  @override
+  String get fieldRequired => 'This field is required!';
 }
