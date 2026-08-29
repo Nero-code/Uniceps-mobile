@@ -125,10 +125,10 @@ return deleteLog(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( DietLog log)?  logServing,TResult Function( DietLog log)?  deleteLog,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( DateTime? date)?  started,TResult Function( DietLog log)?  logServing,TResult Function( DietLog log)?  deleteLog,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started();case _LogServing() when logServing != null:
+return started(_that.date);case _LogServing() when logServing != null:
 return logServing(_that.log);case _DeleteLog() when deleteLog != null:
 return deleteLog(_that.log);case _:
   return orElse();
@@ -148,10 +148,10 @@ return deleteLog(_that.log);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( DietLog log)  logServing,required TResult Function( DietLog log)  deleteLog,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( DateTime? date)  started,required TResult Function( DietLog log)  logServing,required TResult Function( DietLog log)  deleteLog,}) {final _that = this;
 switch (_that) {
 case _Started():
-return started();case _LogServing():
+return started(_that.date);case _LogServing():
 return logServing(_that.log);case _DeleteLog():
 return deleteLog(_that.log);case _:
   throw StateError('Unexpected subclass');
@@ -170,10 +170,10 @@ return deleteLog(_that.log);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( DietLog log)?  logServing,TResult? Function( DietLog log)?  deleteLog,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( DateTime? date)?  started,TResult? Function( DietLog log)?  logServing,TResult? Function( DietLog log)?  deleteLog,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started();case _LogServing() when logServing != null:
+return started(_that.date);case _LogServing() when logServing != null:
 return logServing(_that.log);case _DeleteLog() when deleteLog != null:
 return deleteLog(_that.log);case _:
   return null;
@@ -187,33 +187,67 @@ return deleteLog(_that.log);case _:
 
 
 class _Started implements DietLoggerEvent {
-  const _Started();
+  const _Started({this.date});
   
 
+ final  DateTime? date;
 
-
+/// Create a copy of DietLoggerEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$StartedCopyWith<_Started> get copyWith => __$StartedCopyWithImpl<_Started>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Started);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Started&&(identical(other.date, date) || other.date == date));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,date);
 
 @override
 String toString() {
-  return 'DietLoggerEvent.started()';
+  return 'DietLoggerEvent.started(date: $date)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class _$StartedCopyWith<$Res> implements $DietLoggerEventCopyWith<$Res> {
+  factory _$StartedCopyWith(_Started value, $Res Function(_Started) _then) = __$StartedCopyWithImpl;
+@useResult
+$Res call({
+ DateTime? date
+});
 
 
+
+
+}
+/// @nodoc
+class __$StartedCopyWithImpl<$Res>
+    implements _$StartedCopyWith<$Res> {
+  __$StartedCopyWithImpl(this._self, this._then);
+
+  final _Started _self;
+  final $Res Function(_Started) _then;
+
+/// Create a copy of DietLoggerEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? date = freezed,}) {
+  return _then(_Started(
+date: freezed == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
+as DateTime?,
+  ));
+}
+
+
+}
 
 /// @nodoc
 

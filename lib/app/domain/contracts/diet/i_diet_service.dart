@@ -14,7 +14,7 @@ abstract class IDietService {
   Future<Either<IngredientFailure, bool>> changeIngredientsLanguage({required String language});
 
   // Diet Logging
-  Future<Either<DietLogFailure, List<DietLog>>> getTodayLogs();
+  Future<Either<DietLogFailure, List<DietLog>>> getLogsForDate(DateTime date);
   Future<Either<DietLogFailure, Unit>> logMeal(DietLog log);
   Future<Either<DietLogFailure, Unit>> deleteLog(DietLog log);
 

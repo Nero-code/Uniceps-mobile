@@ -143,9 +143,9 @@ class DietRepo implements IDietService {
   }
 
   @override
-  Future<Either<DietLogFailure, List<DietLog>>> getTodayLogs() async {
+  Future<Either<DietLogFailure, List<DietLog>>> getLogsForDate(DateTime date) async {
     try {
-      final res = await _localSource.getTodayLogs();
+      final res = await _localSource.getLogsForDate(date);
       if (res.isEmpty) return const Left(DietLogFailure.noLogsToday());
       return Right(res.map((log) => log.toEntity()).toList());
     } catch (e) {
