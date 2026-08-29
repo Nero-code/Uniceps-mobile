@@ -54,6 +54,7 @@ class DietRepo implements IDietService {
     try {
       final remoteData = await _remoteSource.loadIngredients(language: language);
       await _localSource.bulkSaveIngredients(remoteData);
+      allIngredients = remoteData.map((e) => e.toEntity()).toList();
       return const Right(true);
     } catch (remoteError) {
       return const Left(.iOffline());

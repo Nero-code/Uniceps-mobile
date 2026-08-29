@@ -435,5 +435,6 @@
   "levelNovice": "Novice",
   "levelIntermediate": "Intermediate",
   "levelAdvanced": "Advanced",
-  "levelElite": "Elite"
+  "levelElite": "Elite",
+  "fieldRequired": "This field is required!"
 }

@@ -2317,6 +2317,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Elite'**
   String get levelElite;
+
+  /// No description provided for @fieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required!'**
+  String get fieldRequired;
 }
 
 class _AppLocalizationsDelegate
