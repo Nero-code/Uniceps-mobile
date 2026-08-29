@@ -35,7 +35,7 @@ class _AddEditIngredientDialogState extends State<AddEditIngredientDialog> {
     // Initialize data from ingredient or defaults
     _name = widget.ingredient?.name ?? '';
     _categoryId = widget.ingredient?.categoryId ?? widget.categories.firstOrNull?.id;
-    _categoryName = widget.ingredient?.categoryName ?? '';
+    _categoryName = widget.ingredient?.categoryName ?? widget.categories.firstOrNull?.name ?? '';
     _servingSize = widget.ingredient?.servingSizeInGrams ?? 100.0;
     _calories = widget.ingredient?.calories ?? 0.0;
     _protein = widget.ingredient?.protein ?? 0.0;
@@ -88,7 +88,10 @@ class _AddEditIngredientDialogState extends State<AddEditIngredientDialog> {
               DropdownButtonFormField(
                 decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
                 initialValue: _categoryId,
-                onChanged: (value) => setState(() => _categoryId = value),
+                onChanged: (value) => setState(() {
+                  _categoryId = value;
+                  _categoryName = widget.categories.where((c) => c.id == value).firstOrNull?.name ?? '';
+                }),
                 validator: (value) => _categoryId == null ? locale.category : null,
                 items: widget.categories.map((c) => DropdownMenuItem(value: c.id, child: Text(c.name))).toList(),
               ),
@@ -175,16 +178,18 @@ class _Field extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return TextFormField(
       initialValue: initialValue,
       keyboardType: keyboardType,
+      selectAllOnFocus: true,
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: icon != null ? Icon(icon, size: 20) : null,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         isDense: true,
       ),
-      validator: (value) => value == null || value.isEmpty ? '' : null,
+      validator: (value) => value == null || value.isEmpty ? l10n.fieldRequired : null,
       onSaved: onSaved,
     );
   }

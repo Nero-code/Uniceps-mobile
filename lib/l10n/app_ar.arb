@@ -435,5 +435,6 @@
   "levelNovice": "ناشئ",
   "levelIntermediate": "متوسط",
   "levelAdvanced": "متقدم",
-  "levelElite": "محترف"
+  "levelElite": "محترف",
+  "fieldRequired": "هذا الحقل مطلوب!"
 }

@@ -40,6 +40,8 @@ class _IngredientsScreenState extends State<IngredientsScreen> {
       listener: (context, state) {
         state.maybeWhen(
           languageChangeSuccess: (lang) {
+            _searchString = '';
+            _selectedCategory = null;
             context.read<AppConfigCubit>().changeDietLibLanguageTo(lang);
             ScaffoldMessenger.of(
               context,
@@ -168,7 +170,13 @@ class _IngredientsScreenState extends State<IngredientsScreen> {
                                       child: ChoiceChip(
                                         label: Text(cat.name),
                                         selected: isSelected,
-                                        onSelected: (val) => setState(() => _selectedCategory = val ? cat.id : null),
+                                        onSelected: (val) {
+                                          // setState(() => _selectedCategory = (val ? cat.id : null));
+                                          _selectedCategory = val ? cat.id : null;
+                                          context.read<IngredientsBloc>().add(
+                                            .filter(search: _searchString, catId: _selectedCategory),
+                                          );
+                                        },
                                         selectedColor: secondaryBlue,
                                         checkmarkColor: Colors.white,
                                         labelStyle: TextStyle(color: isSelected ? Colors.white : Colors.black),
@@ -188,17 +196,14 @@ class _IngredientsScreenState extends State<IngredientsScreen> {
                     changingLanguage: () => const SliverToBoxAdapter(child: LinearProgressIndicator()),
                     orElse: () => SliverToBoxAdapter(child: Center(child: Text(locale.empty))),
                     success: (ingredients, categories) {
-                      final filtered = ingredients
-                          .where((i) => i.categoryId == _selectedCategory || _selectedCategory == null)
-                          .toList();
-                      if (filtered.isEmpty) {
+                      if (ingredients.isEmpty) {
                         return SliverToBoxAdapter(child: Center(child: Text(locale.empty)));
                       }
                       return SliverList(
                         delegate: SliverChildBuilderDelegate((context, index) {
-                          final ing = filtered[index];
+                          final ing = ingredients[index];
                           return IngredientTile(ingredient: ing, onTap: () => _showDetailsDialog(ing, categories));
-                        }, childCount: filtered.length),
+                        }, childCount: ingredients.length),
                       );
                     },
                   ),
@@ -221,7 +226,10 @@ class _IngredientsScreenState extends State<IngredientsScreen> {
   void _showAddEditDialog(Ingredient? ingredient, List<DietCategory> categories) {
     showDialog(
       context: context,
-      builder: (context) => AddEditIngredientDialog(ingredient: ingredient, categories: categories),
+      builder: (_) => BlocProvider.value(
+        value: context.read<IngredientsBloc>(),
+        child: AddEditIngredientDialog(ingredient: ingredient, categories: categories),
+      ),
     );
   }
 

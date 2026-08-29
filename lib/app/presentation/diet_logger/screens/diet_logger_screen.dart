@@ -43,13 +43,21 @@ class DietLoggerScreen extends StatelessWidget {
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.pin,
                 background: BlocBuilder<DietLoggerBloc, DietLoggerState>(
-                  builder: (context, state) => FutureBuilder(
-                    future: context.read<AppConfigCubit>().getCaloriesGoal(),
-                    builder: (context, caloriesGoalValue) => DietSummaryCard(
-                      logs: state.maybeWhen(orElse: () => [], success: (logs) => logs),
-                      calorieGoal: caloriesGoalValue.data ?? 0,
-                    ),
-                  ),
+                  builder: (context, state) {
+                    final logs = state.maybeWhen(orElse: () => <DietLog>[], success: (logs) => logs);
+                    final selectedDate = context.read<DietLoggerBloc>().currentDate;
+
+                    return FutureBuilder(
+                      future: context.read<AppConfigCubit>().getCaloriesGoal(),
+                      builder: (context, caloriesGoalValue) => DietSummaryCard(
+                        logs: logs,
+                        calorieGoal: caloriesGoalValue.data ?? 0,
+                        selectedDate: selectedDate,
+                        onDateChanged: (newDate) =>
+                            context.read<DietLoggerBloc>().add(DietLoggerEvent.started(date: newDate)),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

@@ -25,7 +25,7 @@ class DietCommands {
   Future<Either<IngredientFailure, Unit>> deleteIngredient(Ingredient i) => _repo.deleteIngredient(i);
 
   // Diet Logging
-  Future<Either<DietLogFailure, List<DietLog>>> getTodayLogs() => _repo.getTodayLogs();
+  Future<Either<DietLogFailure, List<DietLog>>> getLogsForDate(DateTime date) => _repo.getLogsForDate(date);
   Future<Either<DietLogFailure, Unit>> logMeal(DietLog log) => _repo.logMeal(log);
   Future<Either<DietLogFailure, Unit>> deleteLog(DietLog log) => _repo.deleteLog(log);
 

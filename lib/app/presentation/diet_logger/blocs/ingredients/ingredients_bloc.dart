@@ -39,7 +39,7 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
 
     on<_CreateIngredient>((event, emit) async {
       final either = await _dietCommands.saveIngredient(event.ingredient);
-      either.fold((f) => emit(IngredientsState.failure(failure: f)), (r) {});
+      either.fold((f) => emit(IngredientsState.failure(failure: f)), (r) => add(const .started('')));
     });
 
     on<_ChangeLibLanguage>((event, emit) async {
