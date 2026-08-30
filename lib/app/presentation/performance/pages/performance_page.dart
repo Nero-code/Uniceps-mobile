@@ -86,7 +86,6 @@ class _PerformancePageState extends State<PerformancePage> {
                               setState(() {
                                 selectedDate = e;
                                 setState(() => initFuture(month: e));
-                                print(e);
                               });
                             },
                           ),

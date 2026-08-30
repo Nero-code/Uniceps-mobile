@@ -9,7 +9,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/data/services/internet_client/http_client_helper.dart';
 import 'package:uniceps/app/data/services/media_helper.dart';
-import 'package:uniceps/app/data/services/sync/sync_contract.dart';
+import 'package:uniceps/app/data/services/sync/diet_logs_sync_service.dart';
+import 'package:uniceps/app/data/services/sync/ingredients_library_sync_service.dart';
+import 'package:uniceps/app/data/services/sync/measurements_sync_service.dart';
+import 'package:uniceps/app/data/services/sync/sync_orchestrator.dart';
 import 'package:uniceps/app/data/services/sync/t_session_sync_service.dart';
 import 'package:uniceps/app/data/services/token/token_service_simple.dart';
 import 'package:uniceps/app/data/services/unifile/file_parse_service.dart';
@@ -27,19 +30,21 @@ import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/data/sources/remote/dal_account/account_remote_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/auth_contracts.dart';
 import 'package:uniceps/app/data/sources/remote/dal_auth/email_auth_remote_source.dart';
+import 'package:uniceps/app/data/sources/remote/dal_diet/diet_remote_source.dart';
+import 'package:uniceps/app/data/sources/remote/dal_profile/measurements_remote_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_profile/profile_remote_source.dart';
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart';
+import 'package:uniceps/app/data/sources/remote/dal_routine/routines_remote_source.dart';
 import 'package:uniceps/app/data/stores/account/account_repo.dart';
 import 'package:uniceps/app/data/stores/auth/email_auth_repo.dart';
 import 'package:uniceps/app/data/stores/diet/diet_repo.dart';
+import 'package:uniceps/app/data/stores/measurement/measurements_repo.dart';
 import 'package:uniceps/app/data/stores/performance/performance_repo.dart';
 import 'package:uniceps/app/data/stores/practice/practice_repo.dart';
-import 'package:uniceps/app/data/stores/profile/measurements_repo.dart';
 import 'package:uniceps/app/data/stores/profile/profile_repo.dart';
 import 'package:uniceps/app/data/stores/routine/exercises_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_days_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_items_repo.dart';
-import 'package:uniceps/app/data/stores/routine/routine_management_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_sets_repo.dart';
 import 'package:uniceps/app/data/stores/routine/routine_with_heat_repo.dart';
 import 'package:uniceps/app/domain/commands/account_usecases/account_usecases.dart';
@@ -52,7 +57,6 @@ import 'package:uniceps/app/domain/commands/profile_usecases/profile_usecases.da
 import 'package:uniceps/app/domain/commands/routine_management/exercises_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_days_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_items_commands.dart';
-import 'package:uniceps/app/domain/commands/routine_management/routine_management_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_sets_commands.dart';
 import 'package:uniceps/app/domain/commands/routine_management/routine_with_heat_commands.dart';
 import 'package:uniceps/app/domain/contracts/account/i_account_service.dart';
@@ -65,17 +69,14 @@ import 'package:uniceps/app/domain/contracts/profile/i_profile_service.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_exercises_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_days_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_items_contract.dart';
-import 'package:uniceps/app/domain/contracts/routine/i_routine_management_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_sets_contract.dart';
 import 'package:uniceps/app/domain/contracts/routine/i_routine_with_heat_contract.dart';
 import 'package:uniceps/app/services/app_configs_service.dart';
-import 'package:uniceps/app/services/captian_quotes_service.dart';
+import 'package:uniceps/app/services/captain_quotes_service.dart';
 import 'package:uniceps/app/services/device_info_sync_service.dart';
 import 'package:uniceps/app/services/exercise_lib_sync_service.dart';
 import 'package:uniceps/app/services/network_info.dart';
-import 'package:uniceps/app/services/update_service.dart';
-
-import 'app/services/diet_service.dart';
+import 'package:uniceps/core/helpers/version_service.dart';
 
 final sl = di.GetIt.instance;
 
@@ -147,7 +148,7 @@ Future<void> init() async {
 
   sl.registerLazySingleton<IProfileLocalSource>(() => ProfileLocalSource(prefs: sl(), logger: sl()));
 
-  sl.registerLazySingleton<IDietLocalSource>(() => DietLocalSource(sl()));
+  sl.registerLazySingleton<IDietLocalSource>(() => DietLocalSource(db: sl()));
 
   sl.registerLazySingleton<ITSessionLocalSourceContract>(
     () => TSessionLocalSource(database: sl(), imagesCache: imagesCache, logger: sl()),
@@ -155,7 +156,7 @@ Future<void> init() async {
 
   //  R O U T I N E   S O U R C E S
   sl.registerLazySingleton<IRoutineManagementLocalSourceContract>(
-    () => RoutineManagementLocalSourceImpl(database: sl(), logger: sl()),
+    () => RoutineManagementLocalSourceImpl(database: sl()),
   );
   sl.registerLazySingleton<IRoutineDaysLocalSourceContract>(() => RoutineDaysLocalSourceImpl(dataBase: sl()));
   sl.registerLazySingleton<IRoutineItemsLocalSourceContract>(
@@ -185,11 +186,15 @@ Future<void> init() async {
   //
 
   sl.registerLazySingleton<IAccountRemoteSource>(() => AccountRemoteSource(clientHelper: sl()));
+  sl.registerLazySingleton<IMeasurementsRemoteSource>(() => MeasurementsRemoteSource(clientHelper: sl()));
   sl.registerLazySingleton<IProfileRemoteSource>(() => ProfileRemoteSource(client: sl()));
 
   sl.registerLazySingleton<IExercisesRemoteSourceContract>(
     () => ExercisesRemoteSourceImpl(clientHelper: sl(), client: sl()),
   );
+
+  sl.registerLazySingleton<IDietRemoteSource>(() => DietRemoteSource(clientHelper: sl()));
+  sl.registerLazySingleton<IRoutineRemoteSourceContract>(() => RoutinesRemoteSource(clientHelper: sl()));
 
   /////////
   ////////
@@ -204,14 +209,14 @@ Future<void> init() async {
     () => ProfileRepo(localSource: sl(), remoteSource: sl(), networkInfo: sl()),
   );
 
-  sl.registerLazySingleton<IDietService>(() => DietRepo(sl()));
+  sl.registerLazySingleton<IDietService>(() => DietRepo(localSource: sl(), remoteSource: sl()));
 
   sl.registerLazySingleton<IPracticeContract>(() => PracticeRepo(localSource: sl()));
-  sl.registerLazySingleton<IRoutineManagementContract>(
-    () => RoutineManagementRepo(localSource: sl(), internet: sl(), clientHelper: sl()),
-  );
+  // sl.registerLazySingleton<IRoutineManagementContract>(
+  //   () => RoutineManagementRepo(localSource: sl(), internet: sl(), clientHelper: sl()),
+  // );
   sl.registerLazySingleton<IRoutineWithHeatContract>(
-    () => RoutineWithHeatRepo(localSource: sl(), mediaHelper: sl(), fileParseService: sl(), logger: sl()),
+    () => RoutineWithHeatRepo(localSource: sl(), mediaHelper: sl(), fileParseService: sl(), remoteSource: sl()),
   );
   sl.registerLazySingleton<IRoutineDaysContract>(() => RoutineDaysRepo(localSource: sl(), logger: sl()));
   sl.registerLazySingleton<IRoutineItemsContract>(() => RoutineItemsRepo(localSource: sl(), mediaHelper: sl()));
@@ -235,7 +240,7 @@ Future<void> init() async {
   );
 
   //  M E A S U R E M E N T S   R E P O
-  sl.registerLazySingleton<IMeasurementContract>(() => MeasurementsRepo(localSource: sl(), logger: sl()));
+  sl.registerLazySingleton<IMeasurementContract>(() => MeasurementsRepo(localSource: sl(), profileLocalSource: sl()));
   sl.registerLazySingleton<IPerformanceContract>(
     () => PerformanceRepo(
       profileLocalSource: sl(),
@@ -248,12 +253,7 @@ Future<void> init() async {
 
   //  L I B - S Y N C   R E P O
   sl.registerLazySingleton(
-    () => ExerciseLibSyncService(
-      exercisesLocalSource: sl(),
-      exercisesRemoteSource: sl(),
-      networkInfo: sl(),
-      logger: sl(),
-    ),
+    () => ExerciseLibSyncService(exercisesLocalSource: sl(), exercisesRemoteSource: sl(), logger: sl()),
   );
 
   /////////
@@ -270,7 +270,7 @@ Future<void> init() async {
 
   sl.registerFactory(() => AccountUsecases(repo: sl()));
   sl.registerFactory(() => PracticeCommands(repo: sl()));
-  sl.registerFactory(() => RoutineManagementCommands(repo: sl()));
+  // sl.registerFactory(() => RoutineManagementCommands(repo: sl()));
   sl.registerFactory(() => RoutineWithHeatCommands(repo: sl()));
   sl.registerFactory(() => RoutineDaysCommands(repo: sl()));
   sl.registerFactory(() => RoutineItemsCommands(repo: sl()));
@@ -289,24 +289,29 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => UniFileManager(logger: sl()));
 
-  sl.registerLazySingleton<UpdateService>(() => UpdateService(connectionChecker: sl(), client: sl()));
+  sl.registerLazySingleton(() => VersionService(clientHelper: sl(), prefs: sl()));
 
-  sl.registerLazySingleton<TSessionSyncContract>(
-    () => TSessionSyncService(database: sl(), client: sl(), connectionChecker: sl(), logger: sl()),
-    dispose: (param) => param.dispose(),
-  );
+  sl.registerLazySingleton(() => TSessionSyncService(database: sl(), client: sl(), preferences: sl()));
   sl.registerLazySingleton(() => DeviceInfoSyncService(preferences: sl(), checker: sl(), client: sl(), logger: sl()));
+  sl.registerLazySingleton(() => IngredientsLibrarySyncService(localSource: sl(), remoteSource: sl()));
+  sl.registerLazySingleton(() => DietLogsSyncService(localSource: sl(), remoteSource: sl(), preferences: sl()));
+  sl.registerLazySingleton(() => MeasurementsSyncService(localSource: sl(), remoteSource: sl(), preferences: sl()));
+
+  sl.registerLazySingleton(
+    () => SyncOrchestrator(
+      ingredientsSync: sl(),
+      dietLogsSync: sl(),
+      tSessionSync: sl(),
+      deviceInfoSync: sl(),
+      measurementsSync: sl(),
+    ),
+  );
 
   sl.registerLazySingleton(() => CaptainQuotesService(prefs: sl()));
 
-  final appConfigs = AppConfigsService(prefs: sl());
+  final appConfigs = AppConfigsService(prefs: sl(), measurementContract: sl());
   await appConfigs.getAppConfigs();
   sl.registerLazySingleton(() => appConfigs);
 
-  sl.registerLazySingleton(() => DietService(sl(), sl()));
-
-  // sl.registerLazySingleton(() => LanguageCacheHelper(sharedPreferences: sl()));
-
-  // final notificationService =  NotificationService();
-  // notificationService.ini
+  // sl.registerLazySingleton(() => DietService(sl(), sl()));
 }

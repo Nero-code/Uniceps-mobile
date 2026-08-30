@@ -58,6 +58,7 @@ class HttpClientHelper implements ClientHelper {
     if (kDebugMode) {
       print(
         "getListHandler code: ${res.statusCode}\n"
+        "${res.body}\n"
         "URL: ${api + urlPart}",
       );
       print("getListHandler body: ${res.body}");
@@ -65,6 +66,7 @@ class HttpClientHelper implements ClientHelper {
     handleHttpStatus(res);
 
     final data = jsonDecode(res.body) as Iterable;
+    // TODO: Why throw if Empty???
     if (data.isEmpty) {
       throw NoContentException();
     }
@@ -188,8 +190,8 @@ String handleHttpStatus(Response res) {
       return 'OK';
     case 201:
       return 'Created';
-    // case 204:
-    //   throw NoContentException();
+    case 204:
+      throw NoContentException();
     // case 400:
     //   throw BadRequestException();
     // case 401:
@@ -203,6 +205,6 @@ String handleHttpStatus(Response res) {
     // case 503:
     //   throw ServiceUnavailableException();
     default:
-      throw ClientException('Unhandled status code: ${res.statusCode}');
+      throw ClientException('Unhandled status code: ${res.statusCode} : ${res.body}');
   }
 }

@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:logger/logger.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_day_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart';
@@ -8,6 +7,7 @@ import 'package:uniceps/app/data/models/routine_models/routine_set_dto.dart';
 import 'package:uniceps/app/data/models/routine_result.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
+import 'package:uniceps/core/logging/app_logger.dart';
 
 abstract class IRoutineManagementLocalSourceContract {
   Future<List<RoutineDto>> getAllRoutines();
@@ -23,11 +23,8 @@ abstract class IRoutineManagementLocalSourceContract {
 
 class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceContract {
   final AppDatabase _database;
-  final Logger _logger;
 
-  const RoutineManagementLocalSourceImpl({required AppDatabase database, required Logger logger})
-    : _database = database,
-      _logger = logger;
+  const RoutineManagementLocalSourceImpl({required AppDatabase database}) : _database = database;
 
   @override
   Future<List<RoutineDto>> getAllRoutines() async {
@@ -37,10 +34,10 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
 
   @override
   Future<RoutineDto> createRoutine(String routineName) async {
-    _logger.t("create routine => inside local source");
+    logger.t("create routine => inside local source");
     final id = await _database.managers.routines.create((o) => o(name: routineName));
     final routine = await _database.managers.routines.filter((f) => f.id.equals(id)).getSingle();
-    _logger.t("create routine => inside local source finished");
+    logger.t("create routine => inside local source finished");
     return RoutineDto.fromTable(routine);
   }
 
@@ -78,7 +75,7 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
     final routines = await _database.select(_database.routines).get();
     final List<({RoutineHeat heat, RoutineDto routine})> result = [];
 
-    _logger.t("step 1: routines.length = ${routines.length}");
+    logger.t("step 1: routines.length = ${routines.length}");
 
     // Part 2:
     //   Get Heat objects.
@@ -90,7 +87,7 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
       DateTime newestSessionDate = DateTime(2000);
       DateTime oldestSessionDate = DateTime.now();
       final days = await (_database.select(_database.daysGroup)..where((f) => f.routineId.equals(routine.id))).get();
-      _logger.t("step 2: days.length = ${days.length}");
+      logger.t("step 2: days.length = ${days.length}");
       for (final day in days) {
         final sessions = await (_database.select(_database.tSessions)..where((f) => f.dayId.equals(day.id))).get();
         tc += sessions.length;
@@ -111,13 +108,13 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
 
         final items = await (_database.select(_database.routineItems)..where((f) => f.dayId.equals(day.id))).get();
 
-        _logger.t("step 3: items.length = ${items.length}");
+        logger.t("step 3: items.length = ${items.length}");
         for (final item in items) {
           final sets = await (_database.select(
             _database.routineSets,
           )..where((f) => f.routineItemId.equals(item.id))).get();
           sc += sets.length;
-          _logger.t("step 4: sets.length = ${sets.length}");
+          logger.t("step 4: sets.length = ${sets.length}");
         }
         ic += items.length;
       }
@@ -141,15 +138,21 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
   @override
   Stream<Stage> insertFullRoutine(RoutineDto dto) async* {
     // Create New Routine
-    final routineId = await _database.into(_database.routines).insert(RoutinesCompanion.insert(name: dto.name));
+    final routineId = await _database
+        .into(_database.routines)
+        .insert(RoutinesCompanion.insert(name: dto.name, description: Value(dto.description)));
     // Create Days
     for (final d in dto.daysDto) {
       final dayId = await _database
           .into(_database.daysGroup)
           .insert(DaysGroupCompanion.insert(index: d.index, dayName: d.name, routineId: routineId));
-      yield Stage.days; // move one step for Day
+
+      // move one step for Day
+      yield Stage.days;
+
       final sortedRoutineItems = d.items;
       sortedRoutineItems.sort((a, b) => a.index.compareTo(b.index));
+
       // Create Items
       for (int j = 0; j < d.items.length; j++) {
         final i = sortedRoutineItems[j];

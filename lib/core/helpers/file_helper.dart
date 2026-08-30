@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:uniceps/core/logging/app_logger.dart';
 
 class FileHelper {
   static const String profileFolderName = 'profile_data';
@@ -18,8 +19,8 @@ class FileHelper {
         return await file.readAsBytes();
       }
       return null;
-    } catch (e) {
-      print("Error reading profile image: $e");
+    } catch (e, s) {
+      logger.e("getProfileImage: Error reading profile image", error: e, stackTrace: s);
       return null;
     }
   }
@@ -71,8 +72,6 @@ class FileHelper {
 
       if (await sourceFile.exists()) {
         await sourceFile.delete();
-      } else {
-        print("Notice: File deletion skipped because no file existed at $sourcePath");
       }
     } catch (e) {
       throw Exception("Failed to delete file from internal storage: $e");

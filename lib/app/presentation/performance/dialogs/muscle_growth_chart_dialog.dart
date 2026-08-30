@@ -55,7 +55,7 @@ class MuscleGrowthChartDialog extends StatelessWidget {
                       reservedSize: 50,
                       getTitlesWidget: (i, meta) => SideTitleWidget(
                         meta: meta,
-                        child: Text(NumberFormat.compact().format(i), style: TextStyle(color: Colors.grey)),
+                        child: Text(NumberFormat.compact().format(i), style: const TextStyle(color: Colors.grey)),
                       ),
                     ),
                   ),

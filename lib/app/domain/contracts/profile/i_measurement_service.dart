@@ -7,4 +7,6 @@ abstract class IMeasurementContract {
   Future<Either<MeasurementFailure, Unit>> createMeasurement(Measurement m);
   Future<Either<MeasurementFailure, Unit>> updateMeasurement(Measurement m);
   Future<Either<MeasurementFailure, Unit>> deleteMeasurement(Measurement m);
+
+  Future<double?> getCalories();
 }

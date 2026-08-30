@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/data/models/auth_models/profile_model.dart';
 import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
@@ -18,9 +16,9 @@ import 'package:uniceps/app/domain/classes/performance_entities/sessions_report.
 import 'package:uniceps/app/domain/classes/performance_entities/uniceps_summery.dart';
 import 'package:uniceps/app/domain/classes/practice_entities/t_session.dart';
 import 'package:uniceps/app/domain/contracts/performance/i_performance_contract.dart';
-import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/exceptions.dart';
 import 'package:uniceps/core/errors/failure.dart';
+import 'package:uniceps/core/helpers/physical_calculators.dart';
 
 class PerformanceRepo implements IPerformanceContract {
   final IProfileLocalSource profileLocalSource;
@@ -164,20 +162,12 @@ class PerformanceRepo implements IPerformanceContract {
     }
 
     final age = DateTime.now().year - profile.birthDate.year;
-    final bmi = m.weight / math.pow(m.height / 100, 2);
-    final bmr = (10 * m.weight) + (6.25 * m.height) - (5 * age) + (profile.gender == Gender.male ? 5 : -161);
-
-    double bf = 0;
-    if (profile.gender == Gender.male && m.waist - m.neck > 0) {
-      bf = 86.01 * log10(m.waist - m.neck) - 70.041 * log10(m.height) + 36.76;
-    } else if (profile.gender == Gender.female && m.waist + m.hips - m.neck > 0) {
-      bf = 163.205 * log10(m.waist + m.hips - m.neck) - 97.684 * log10(m.height) - 78.387;
-    }
+    final bmi = calculateBMI(weight: m.weight, height: m.height);
+    final bmr = calculateBMR(weight: m.weight, height: m.height, age: age, gender: profile.gender);
+    final bf = calculateBodyFat(gender: profile.gender, height: m.height, waist: m.waist, neck: m.neck, hips: m.hips);
 
     return Right(PhysicalReport(bmi: bmi, bmr: bmr, gender: profile.gender, bodyFatPercentage: bf));
   }
-
-  double log10(num x) => math.log(x) / math.ln10;
 
   @override
   Future<Either<PerformanceFailure, UnicepsSummery>> getSummery() async {

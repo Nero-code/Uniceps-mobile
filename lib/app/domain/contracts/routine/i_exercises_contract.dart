@@ -7,22 +7,22 @@ import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/helpers/exercise_details_result.dart';
 
 abstract class IExercisesContract {
-  Future<Either<Failure, bool>> checkExercises();
-  Future<Either<Failure, bool>> changeLibLanguage(String language);
+  Future<Either<ExerciseFailure, bool>> checkExercises();
+  Future<Either<ExerciseFailure, bool>> changeLibLanguage(String language);
 
   /// Must Rename to `loadExercisesLibrary` since its purpose is to only update library.
-  Future<Either<Failure, List<Exercise>>> getExercisesLib();
-  Future<Either<Failure, Unit>> saveExercisesLib(List<Exercise> lib);
+  Future<Either<ExerciseFailure, List<Exercise>>> getExercisesLib();
+  Future<Either<ExerciseFailure, Unit>> saveExercisesLib(List<Exercise> lib);
 
   // Muscle-Groups Filter
-  Future<Either<Failure, List<MuscleGroup>>> getExerciseGroups();
-  Future<Either<Failure, List<Exercise>>> getExercisesByGroup(MuscleGroup group);
+  Future<Either<ExerciseFailure, List<MuscleGroup>>> getExerciseGroups();
+  Future<Either<ExerciseFailure, List<Exercise>>> getExercisesByGroup(MuscleGroup group);
 
   // General-Purpose Filter
-  Future<Either<Failure, ExerciseFilter>> getExerciseFilters();
-  Future<Either<Failure, List<Exercise>>> getExercisesByFilter(ExerciseFilter filter);
+  Future<Either<ExerciseFailure, ExerciseFilter>> getExerciseFilters();
+  Future<Either<ExerciseFailure, List<Exercise>>> getExercisesByFilter(ExerciseFilter filter);
 
-  Stream<Result<double, Failure>> downloadImages(List<String> ids);
+  Stream<Result<double, ExerciseFailure>> downloadImages(List<String> ids);
 
-  Future<Either<Failure, ExerciseDetailsResult>> getExerciseDetails(String id);
+  Future<Either<ExerciseFailure, ExerciseDetailsResult>> getExerciseDetails(String id);
 }

@@ -104,6 +104,18 @@ abstract class AppLocalizations {
   /// **'Hi, '**
   String get hello;
 
+  /// No description provided for @dietLogger.
+  ///
+  /// In en, this message translates to:
+  /// **'Diet Logger'**
+  String get dietLogger;
+
+  /// No description provided for @dietLoggerDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Daily meals, calories & macros'**
+  String get dietLoggerDescription;
+
   /// No description provided for @welcome.
   ///
   /// In en, this message translates to:
@@ -1304,6 +1316,12 @@ abstract class AppLocalizations {
   /// **'Female'**
   String get female;
 
+  /// No description provided for @both.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get both;
+
   /// No description provided for @payment.
   ///
   /// In en, this message translates to:
@@ -1933,6 +1951,378 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'per 100g'**
   String get caloriesPer100g;
+
+  /// No description provided for @todaySummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get todaySummary;
+
+  /// No description provided for @caloriesGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories Goal'**
+  String get caloriesGoal;
+
+  /// No description provided for @left.
+  ///
+  /// In en, this message translates to:
+  /// **'left'**
+  String get left;
+
+  /// No description provided for @over.
+  ///
+  /// In en, this message translates to:
+  /// **'over'**
+  String get over;
+
+  /// No description provided for @calories.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories'**
+  String get calories;
+
+  /// No description provided for @protein.
+  ///
+  /// In en, this message translates to:
+  /// **'Protein'**
+  String get protein;
+
+  /// No description provided for @carbs.
+  ///
+  /// In en, this message translates to:
+  /// **'Carbs'**
+  String get carbs;
+
+  /// No description provided for @fats.
+  ///
+  /// In en, this message translates to:
+  /// **'Fats'**
+  String get fats;
+
+  /// No description provided for @kcal.
+  ///
+  /// In en, this message translates to:
+  /// **'kcal'**
+  String get kcal;
+
+  /// No description provided for @grams.
+  ///
+  /// In en, this message translates to:
+  /// **'g'**
+  String get grams;
+
+  /// No description provided for @noLogsToday.
+  ///
+  /// In en, this message translates to:
+  /// **'No records, Log what you ate today'**
+  String get noLogsToday;
+
+  /// No description provided for @addDietLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Diet Log'**
+  String get addDietLog;
+
+  /// No description provided for @searchFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for food...'**
+  String get searchFood;
+
+  /// No description provided for @addCustomEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Custom Entry'**
+  String get addCustomEntry;
+
+  /// No description provided for @manuallyEnterMacros.
+  ///
+  /// In en, this message translates to:
+  /// **'Manually enter calories and macros'**
+  String get manuallyEnterMacros;
+
+  /// No description provided for @typeToFindIngredients.
+  ///
+  /// In en, this message translates to:
+  /// **'Type to find ingredients'**
+  String get typeToFindIngredients;
+
+  /// No description provided for @noResultsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get noResultsFound;
+
+  /// No description provided for @amountGrams.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount (grams)'**
+  String get amountGrams;
+
+  /// No description provided for @addToDailyLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Daily Log'**
+  String get addToDailyLog;
+
+  /// No description provided for @customEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Entry'**
+  String get customEntry;
+
+  /// No description provided for @entryName.
+  ///
+  /// In en, this message translates to:
+  /// **'Entry Name'**
+  String get entryName;
+
+  /// No description provided for @macros.
+  ///
+  /// In en, this message translates to:
+  /// **'Macros'**
+  String get macros;
+
+  /// No description provided for @saveCustomLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Custom Log'**
+  String get saveCustomLog;
+
+  /// No description provided for @estimatedNutrition.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated Nutrition'**
+  String get estimatedNutrition;
+
+  /// No description provided for @deleteIngredient.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Ingredient?'**
+  String get deleteIngredient;
+
+  /// No description provided for @deleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete {name}?'**
+  String deleteConfirm(Object name);
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
+
+  /// No description provided for @servingSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Serving Size'**
+  String get servingSize;
+
+  /// No description provided for @macrosPerServing.
+  ///
+  /// In en, this message translates to:
+  /// **'Macros per serving'**
+  String get macrosPerServing;
+
+  /// No description provided for @userGeneratedContent.
+  ///
+  /// In en, this message translates to:
+  /// **'User Generated Content'**
+  String get userGeneratedContent;
+
+  /// No description provided for @nutritionPerServing.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrition (per serving)'**
+  String get nutritionPerServing;
+
+  /// No description provided for @ingredientsDbInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'This is the ingredients database, you can only edit what you personally added'**
+  String get ingredientsDbInfo;
+
+  /// No description provided for @meat.
+  ///
+  /// In en, this message translates to:
+  /// **'Meat'**
+  String get meat;
+
+  /// No description provided for @dairy.
+  ///
+  /// In en, this message translates to:
+  /// **'Dairy'**
+  String get dairy;
+
+  /// No description provided for @grains.
+  ///
+  /// In en, this message translates to:
+  /// **'Grains'**
+  String get grains;
+
+  /// No description provided for @fruits.
+  ///
+  /// In en, this message translates to:
+  /// **'Fruits'**
+  String get fruits;
+
+  /// No description provided for @vegetables.
+  ///
+  /// In en, this message translates to:
+  /// **'Vegetables'**
+  String get vegetables;
+
+  /// No description provided for @noActiveRoutine.
+  ///
+  /// In en, this message translates to:
+  /// **'No Active Routine'**
+  String get noActiveRoutine;
+
+  /// No description provided for @setupRoutineSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Select or build a custom program to start training'**
+  String get setupRoutineSub;
+
+  /// No description provided for @setUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Up'**
+  String get setUp;
+
+  /// No description provided for @currentProgram.
+  ///
+  /// In en, this message translates to:
+  /// **'CURRENT PROGRAM'**
+  String get currentProgram;
+
+  /// No description provided for @suggestedNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested Next'**
+  String get suggestedNext;
+
+  /// No description provided for @startDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Start {dayName}'**
+  String startDay(Object dayName);
+
+  /// No description provided for @activeSessionInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'ACTIVE SESSION IN PROGRESS'**
+  String get activeSessionInProgress;
+
+  /// No description provided for @explorePremadeRoutines.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore Premade Routines'**
+  String get explorePremadeRoutines;
+
+  /// No description provided for @seeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See All'**
+  String get seeAll;
+
+  /// No description provided for @trainingDaysCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Training Days'**
+  String trainingDaysCount(Object count);
+
+  /// No description provided for @errLoadPremadeRoutines.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load premade routines'**
+  String get errLoadPremadeRoutines;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
+  /// No description provided for @routineDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Routine downloaded successfully'**
+  String get routineDownloaded;
+
+  /// No description provided for @routineDownloadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to download routine'**
+  String get routineDownloadFailed;
+
+  /// No description provided for @changeIngredientsLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Ingredients Language'**
+  String get changeIngredientsLanguage;
+
+  /// No description provided for @changingIngredientsLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Changing library language...'**
+  String get changingIngredientsLanguage;
+
+  /// No description provided for @langChangedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Language changed successfully'**
+  String get langChangedSuccess;
+
+  /// No description provided for @downloadingRoutine.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading Routine...'**
+  String get downloadingRoutine;
+
+  /// No description provided for @levelBeginner.
+  ///
+  /// In en, this message translates to:
+  /// **'Beginner'**
+  String get levelBeginner;
+
+  /// No description provided for @levelNovice.
+  ///
+  /// In en, this message translates to:
+  /// **'Novice'**
+  String get levelNovice;
+
+  /// No description provided for @levelIntermediate.
+  ///
+  /// In en, this message translates to:
+  /// **'Intermediate'**
+  String get levelIntermediate;
+
+  /// No description provided for @levelAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get levelAdvanced;
+
+  /// No description provided for @levelElite.
+  ///
+  /// In en, this message translates to:
+  /// **'Elite'**
+  String get levelElite;
+
+  /// No description provided for @fieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required!'**
+  String get fieldRequired;
 }
 
 class _AppLocalizationsDelegate

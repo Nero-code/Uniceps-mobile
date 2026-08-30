@@ -5,6 +5,7 @@ import 'package:uniceps/core/constants/constants.dart';
 class Configs extends Equatable {
   final Locale appLanguage;
   final Locale exerciseLibLanguage;
+  final Locale dietLibLanguage;
   final ThemeMode mode;
   final Goal? goal;
   final ActivityLevel? activityLevel;
@@ -12,6 +13,7 @@ class Configs extends Equatable {
   const Configs({
     required this.appLanguage,
     required this.exerciseLibLanguage,
+    required this.dietLibLanguage,
     required this.mode,
     required this.goal,
     required this.activityLevel,
@@ -20,6 +22,7 @@ class Configs extends Equatable {
   factory Configs.initial({required String language}) => Configs(
     appLanguage: Locale(language),
     exerciseLibLanguage: Locale(language),
+    dietLibLanguage: Locale(language),
     mode: .light,
     goal: null,
     activityLevel: null,
@@ -27,7 +30,8 @@ class Configs extends Equatable {
 
   factory Configs.fromJson(Map<String, dynamic> json) => Configs(
     appLanguage: Locale(json['appLanguage'] ?? 'en'),
-    exerciseLibLanguage: Locale(json['exerciseLibLanguage']),
+    exerciseLibLanguage: Locale(json['exerciseLibLanguage'] ?? 'en'),
+    dietLibLanguage: Locale(json['dietLibLanguage'] ?? 'en'),
     mode: ThemeMode.values.firstWhere((mode) => mode.name == json['themeMode'], orElse: () => .light),
     goal: Goal.values.where((goal) => goal.name == json['goal']).firstOrNull,
     activityLevel: ActivityLevel.values.where((al) => al.name == json['activityLevel']).firstOrNull,
@@ -36,6 +40,7 @@ class Configs extends Equatable {
   Map<String, dynamic> toJson() => {
     'appLanguage': appLanguage.languageCode,
     'exerciseLibLanguage': exerciseLibLanguage.languageCode,
+    'dietLibLanguage': dietLibLanguage.languageCode,
     'themeMode': mode.name,
     'goal': goal?.name,
     'activityLevel': activityLevel?.name,
@@ -44,12 +49,14 @@ class Configs extends Equatable {
   Configs copyWith({
     Locale? appLanguage,
     Locale? exerciseLibLanguage,
+    Locale? dietLibLanguage,
     ThemeMode? mode,
     Goal? goal,
     ActivityLevel? activityLevel,
   }) => Configs(
     appLanguage: appLanguage ?? this.appLanguage,
     exerciseLibLanguage: exerciseLibLanguage ?? this.exerciseLibLanguage,
+    dietLibLanguage: dietLibLanguage ?? this.dietLibLanguage,
     mode: mode ?? this.mode,
     goal: goal ?? this.goal,
     activityLevel: activityLevel ?? this.activityLevel,
@@ -60,6 +67,7 @@ class Configs extends Equatable {
   List<Object?> get props => [
     appLanguage.languageCode,
     exerciseLibLanguage.languageCode,
+    dietLibLanguage.languageCode,
     mode.name,
     goal?.name,
     activityLevel?.name,

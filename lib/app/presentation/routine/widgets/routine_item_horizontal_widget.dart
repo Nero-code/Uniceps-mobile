@@ -123,7 +123,6 @@ class _RoutineItemHorizontalWidgetState extends State<RoutineItemHorizontalWidge
                                       onConfirm: () => widget.copyToAll(widget.item.id!),
                                     ),
                                   );
-                                  ;
                                 },
                                 child: Text(
                                   locale.applyToAll,

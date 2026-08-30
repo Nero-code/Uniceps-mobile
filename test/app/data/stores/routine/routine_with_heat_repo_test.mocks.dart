@@ -4,20 +4,25 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i5;
-import 'dart:typed_data' as _i10;
+import 'dart:typed_data' as _i13;
 
-import 'package:logger/logger.dart' as _i11;
+import 'package:logger/logger.dart' as _i14;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart' as _i2;
 import 'package:uniceps/app/data/models/routine_result.dart' as _i7;
-import 'package:uniceps/app/data/services/media_helper.dart' as _i9;
+import 'package:uniceps/app/data/services/media_helper.dart' as _i12;
 import 'package:uniceps/app/data/services/unifile/file_parse_service.dart'
-    as _i8;
+    as _i11;
 import 'package:uniceps/app/data/services/unifile/unifile.dart' as _i3;
 import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart'
     as _i4;
+import 'package:uniceps/app/data/sources/remote/dal_routine/routines_remote_source.dart'
+    as _i8;
+import 'package:uniceps/app/domain/classes/routine_classes/premade_routine.dart'
+    as _i9;
 import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart'
     as _i6;
+import 'package:uniceps/core/constants/constants.dart' as _i10;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -140,10 +145,49 @@ class MockIRoutineManagementLocalSourceContract extends _i1.Mock
           as _i5.Future<_i2.RoutineDto>);
 }
 
+/// A class which mocks [IRoutineRemoteSourceContract].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockIRoutineRemoteSourceContract extends _i1.Mock
+    implements _i8.IRoutineRemoteSourceContract {
+  MockIRoutineRemoteSourceContract() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Future<List<_i9.PremadeRoutine>> getPremadeRoutines(
+    _i10.Gender? gender,
+    String? languageCode,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#getPremadeRoutines, [gender, languageCode]),
+            returnValue: _i5.Future<List<_i9.PremadeRoutine>>.value(
+              <_i9.PremadeRoutine>[],
+            ),
+          )
+          as _i5.Future<List<_i9.PremadeRoutine>>);
+
+  @override
+  _i5.Future<_i3.UniFile> downloadRoutine(
+    String? apiId,
+    String? languageCode,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#downloadRoutine, [apiId, languageCode]),
+            returnValue: _i5.Future<_i3.UniFile>.value(
+              _FakeUniFile_1(
+                this,
+                Invocation.method(#downloadRoutine, [apiId, languageCode]),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.UniFile>);
+}
+
 /// A class which mocks [UniFileManager].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUniFileManager extends _i1.Mock implements _i8.UniFileManager {
+class MockUniFileManager extends _i1.Mock implements _i11.UniFileManager {
   MockUniFileManager() {
     _i1.throwOnMissingStub(this);
   }
@@ -177,7 +221,7 @@ class MockUniFileManager extends _i1.Mock implements _i8.UniFileManager {
 /// A class which mocks [MediaHelper].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMediaHelper extends _i1.Mock implements _i9.MediaHelper {
+class MockMediaHelper extends _i1.Mock implements _i12.MediaHelper {
   MockMediaHelper() {
     _i1.throwOnMissingStub(this);
   }
@@ -191,15 +235,15 @@ class MockMediaHelper extends _i1.Mock implements _i9.MediaHelper {
           as _i5.Stream<double>);
 
   @override
-  _i5.Future<_i10.Uint8List?> getImage(String? imageUrl) =>
+  _i5.Future<_i13.Uint8List?> getImage(String? imageUrl) =>
       (super.noSuchMethod(
             Invocation.method(#getImage, [imageUrl]),
-            returnValue: _i5.Future<_i10.Uint8List?>.value(),
+            returnValue: _i5.Future<_i13.Uint8List?>.value(),
           )
-          as _i5.Future<_i10.Uint8List?>);
+          as _i5.Future<_i13.Uint8List?>);
 
   @override
-  _i5.Future<void> addImage(String? imageKey, _i10.Uint8List? bitmap) =>
+  _i5.Future<void> addImage(String? imageKey, _i13.Uint8List? bitmap) =>
       (super.noSuchMethod(
             Invocation.method(#addImage, [imageKey, bitmap]),
             returnValue: _i5.Future<void>.value(),
@@ -219,7 +263,7 @@ class MockMediaHelper extends _i1.Mock implements _i9.MediaHelper {
 /// A class which mocks [Logger].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLogger extends _i1.Mock implements _i11.Logger {
+class MockLogger extends _i1.Mock implements _i14.Logger {
   MockLogger() {
     _i1.throwOnMissingStub(this);
   }
@@ -354,7 +398,7 @@ class MockLogger extends _i1.Mock implements _i11.Logger {
 
   @override
   void log(
-    _i11.Level? level,
+    _i14.Level? level,
     dynamic message, {
     DateTime? time,
     Object? error,

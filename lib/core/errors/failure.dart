@@ -7,7 +7,7 @@ class AuthFailure with _$AuthFailure {
   const factory AuthFailure.aOffline() = _AOffline;
   const factory AuthFailure.invalidEmailFailure() = _InvalidEmailFailure;
   const factory AuthFailure.invalidCodeFailure() = _InvalidCodeFailure;
-  const factory AuthFailure.unautherizedFailure() = _UnautherizedFailure;
+  const factory AuthFailure.unauthorizedFailure() = _UnauthorizedFailure;
 }
 
 @freezed
@@ -45,22 +45,45 @@ abstract class LibSyncFailure with _$LibSyncFailure {
   const factory LibSyncFailure.libUnknown({required int currentTotalCount}) = _LibUnknown;
 }
 
-// ----------------------------------------------------------------------
-// ----------------------------------------------------------------------
-// ----------------------------------------------------------------------
-// ----------------------------------------------------------------------
-// ----------------------------------------------------------------------
-// ----------------------------------------------------------------------
+@freezed
+abstract class IngredientFailure with _$IngredientFailure {
+  const factory IngredientFailure.iOffline() = _IOffline;
+  const factory IngredientFailure.emptyIngredientBucket() = _EmptyIngredientBucket;
+  const factory IngredientFailure.databaseFailure({required String message}) = _IngredientDatabaseFailure;
+}
+
+@freezed
+abstract class DietLogFailure with _$DietLogFailure {
+  const factory DietLogFailure.noLogsToday() = _NoLogsToday;
+  const factory DietLogFailure.noLogsEver() = _noLogsEver;
+  const factory DietLogFailure.databaseFailure({required String message}) = _DietLogDatabaseFailure;
+}
+
+@freezed
+class ExerciseFailure with _$ExerciseFailure {
+  const factory ExerciseFailure.eOffline() = _EOffline;
+  const factory ExerciseFailure.emptyExercises() = _EmptyExercises;
+  const factory ExerciseFailure.exerciseNotFound() = _ExerciseNotFound;
+  const factory ExerciseFailure.serverFailure({required String message}) = _ExerciseServerFailure;
+  const factory ExerciseFailure.databaseFailure({required String message}) = _ExerciseDatabaseFailure;
+}
+
+@freezed
+class PremadeFailure with _$PremadeFailure {
+  const factory PremadeFailure.pOffline() = _POffline;
+  const factory PremadeFailure.emptyPremade() = _EmptyPremade;
+  const factory PremadeFailure.fetchFailed() = _FetchFailed;
+}
 
 @immutable
 abstract class Failure {
   String getErrorMessage();
 }
 
-class GeneralPurposFailure implements Failure {
+class GeneralPurposeFailure implements Failure {
   final String _errorMessage;
 
-  GeneralPurposFailure({required String errorMessage}) : _errorMessage = errorMessage;
+  const GeneralPurposeFailure({required String errorMessage}) : _errorMessage = errorMessage;
 
   @override
   String getErrorMessage() {
@@ -102,9 +125,9 @@ class InvalidCodeFailure implements Failure {
   }
 }
 
-class AuthUnautherizedFailure implements Failure {
+class AuthUnauthorizedFailure implements Failure {
   final String errMsg;
-  const AuthUnautherizedFailure(this.errMsg);
+  const AuthUnauthorizedFailure(this.errMsg);
   @override
   String getErrorMessage() => errMsg;
 }

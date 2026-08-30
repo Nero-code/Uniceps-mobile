@@ -1,225 +1,217 @@
-import 'dart:convert';
-
 import 'package:drift/drift.dart';
-import 'package:flutter/services.dart';
-import 'package:uniceps/app/data/models/diet_models/diet_day_dto.dart';
-import 'package:uniceps/app/data/models/diet_models/diet_meal_dto.dart';
-import 'package:uniceps/app/data/models/diet_models/diet_meal_ingredient_dto.dart';
-import 'package:uniceps/app/data/models/diet_models/diet_plan_dto.dart';
+import 'package:uniceps/app/data/models/diet_models/diet_log_dto.dart';
 import 'package:uniceps/app/data/models/diet_models/ingredient_model.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
+import 'package:uniceps/core/logging/app_logger.dart';
 
 abstract class IDietLocalSource {
   // Ingredients
-  Future<List<IngredientModel>> getIngredients();
-  Future<void> saveIngredients(List<IngredientModel> ingredients);
+  Future<List<IngredientModel>> getIngredients({String? searchString, int? categoryId});
+  Future<IngredientModel> saveIngredient(IngredientModel ingredient);
+  Future<void> bulkSaveIngredients(List<IngredientModel> ingredients);
+  Future<void> deleteIngredient(IngredientModel ingredient);
 
-  // Diet Plans
-  Future<List<DietPlanDto>> getDietPlans();
-  Future<int> addDietPlan(DietPlanDto plan);
-  Future<void> updateDietPlan(DietPlanDto plan);
-  Future<void> deleteDietPlan(int id);
-  Future<void> setCurrentDietPlan(int id);
+  Future<DateTime?> getLastLibSync();
+  Future<List<IngredientModel>> getUserGeneratedContent();
 
-  // Diet Days
-  Future<List<DietDayDto>> getDietDays(int planId);
-  Future<int> addDietDay(int planId, DietDayDto day);
-  Future<void> updateDietDay(DietDayDto day);
-  Future<void> deleteDietDay(int id);
-  Future<void> reorderDietDays(int planId, List<DietDayDto> days);
+  // Diet Logging
+  Future<List<DietLogDto>> getLogsForDate(DateTime date);
+  Future<void> logMeal(DietLogDto log);
+  Future<void> upsertDietLog(DietLogDto log);
+  Future<void> deleteLog(DietLogDto log);
 
-  // Diet Meals
-  Future<List<DietMealDto>> getDietMeals(int dayId);
-  Future<int> addDietMeal(int dayId, DietMealDto meal);
-  Future<void> updateDietMeal(DietMealDto meal);
-  Future<void> deleteDietMeal(int id);
-  Future<void> reorderDietMeals(int dayId, List<DietMealDto> meals);
+  // Analytics Section
+  Future<List<DietLogDto>> getAllLogs();
 
-  // Diet Meal Ingredients
-  Future<List<DietMealIngredientDto>> getMealIngredients(int mealId);
-  Future<int> addMealIngredient(int mealId, DietMealIngredientDto ingredient);
-  Future<void> addMealIngredients(int mealId, List<DietMealIngredientDto> ingredients);
-  Future<void> updateMealIngredient(DietMealIngredientDto ingredient);
-  Future<void> deleteMealIngredient(int id);
-  Future<void> reorderMealIngredients(int mealId, List<DietMealIngredientDto> ingredients);
+  // Synchronization
+  Future<List<DietLogDto>> getAllUnSyncedLogs();
+  Future<void> bulkSaveLogs(List<DietLogDto> logs);
 }
 
 class DietLocalSource implements IDietLocalSource {
+  const DietLocalSource({required AppDatabase db}) : _db = db;
   final AppDatabase _db;
-  const DietLocalSource(this._db);
 
   @override
-  Future<List<IngredientModel>> getIngredients() async {
-    final String response = await rootBundle.loadString('assets/inge.json');
-    final List<dynamic> data = json.decode(response);
-    return data.map((e) => IngredientModel.fromJson(e)).toList();
+  Future<List<IngredientModel>> getIngredients({String? searchString, int? categoryId}) async {
+    final query = _db.select(_db.ingredients);
+    if (searchString != null && searchString.isNotEmpty) {
+      query.where((tbl) => tbl.name.contains(searchString));
+    }
+    if (categoryId != null) {
+      query.where((tbl) => tbl.categoryId.equals(categoryId));
+    }
+
+    final result = await query.get();
+    return result.map((e) => IngredientModel.fromCompanion(e)).toList();
   }
 
   @override
-  Future<void> saveIngredients(List<IngredientModel> ingredients) async {
+  Future<IngredientModel> saveIngredient(IngredientModel ingredient) async {
+    final companion = IngredientsCompanion(
+      id: ingredient.id != null ? Value(ingredient.id!) : const Value.absent(),
+      apiId: ingredient.apiId != null ? Value(ingredient.apiId!) : const Value.absent(),
+      name: Value(ingredient.name),
+      isUserGenerated: Value(ingredient.isUserGenerated),
+      categoryId: Value(ingredient.categoryId),
+      categoryName: Value(ingredient.categoryName),
+      servingSizeInGrams: Value(ingredient.servingSizeInGrams),
+      calories: Value(ingredient.calories),
+      protein: Value(ingredient.protein),
+      carbs: Value(ingredient.carbs),
+      fats: Value(ingredient.fats),
+      version: Value(ingredient.version),
+      isSynced: Value(ingredient.isSynced),
+      updatedAt: Value(ingredient.updatedAt),
+      createdAt: Value(ingredient.createdAt),
+    );
+
+    final id = await _db
+        .into(_db.ingredients)
+        .insert(companion, onConflict: DoUpdate((old) => companion, target: [_db.ingredients.id]));
+
+    final result = await (_db.select(_db.ingredients)..where((t) => t.id.equals(id))).getSingle();
+    return IngredientModel.fromCompanion(result);
+  }
+
+  @override
+  Future<void> bulkSaveIngredients(List<IngredientModel> ingredients) async {
     await _db.batch((batch) {
       for (final ingredient in ingredients) {
+        final companion = IngredientsCompanion(
+          id: ingredient.id != null ? Value(ingredient.id!) : const Value.absent(),
+          apiId: ingredient.apiId != null ? Value(ingredient.apiId!) : const Value.absent(),
+          name: Value(ingredient.name),
+          isUserGenerated: Value(ingredient.isUserGenerated),
+          categoryId: Value(ingredient.categoryId),
+          categoryName: Value(ingredient.categoryName),
+          servingSizeInGrams: Value(ingredient.servingSizeInGrams),
+          calories: Value(ingredient.calories),
+          protein: Value(ingredient.protein),
+          carbs: Value(ingredient.carbs),
+          fats: Value(ingredient.fats),
+          version: Value(ingredient.version),
+          isSynced: Value(ingredient.isSynced),
+          updatedAt: Value(ingredient.updatedAt),
+          createdAt: Value(ingredient.createdAt),
+        );
         batch.insert(
           _db.ingredients,
-          ingredient.toCompanion(),
-          onConflict: DoUpdate((old) => ingredient.toCompanion()),
+          companion,
+          onConflict: DoUpdate((old) => companion, target: [_db.ingredients.apiId]),
         );
       }
     });
   }
 
   @override
-  Future<List<DietPlanDto>> getDietPlans() async {
-    final data = await (_db.select(
-      _db.dietPlans,
-    )..orderBy([(t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)])).get();
-    return data.map((e) => DietPlanDto.fromData(e)).toList();
+  Future<void> deleteIngredient(IngredientModel ingredient) async {
+    if (ingredient.id != null) {
+      await (_db.delete(_db.ingredients)..where((t) => t.id.equals(ingredient.id!))).go();
+    }
   }
 
   @override
-  Future<int> addDietPlan(DietPlanDto plan) => _db.into(_db.dietPlans).insert(plan.toCompanion());
-
-  @override
-  Future<void> updateDietPlan(DietPlanDto plan) async {
-    await (_db.update(_db.dietPlans)..where((t) => t.id.equals(plan.id!))).write(plan.toCompanion());
+  Future<void> deleteLog(DietLogDto log) async {
+    if (log.id != null) {
+      await (_db.delete(_db.dietLogs)..where((t) => t.id.equals(log.id!))).go();
+    }
   }
 
   @override
-  Future<void> deleteDietPlan(int id) => (_db.delete(_db.dietPlans)..where((t) => t.id.equals(id))).go();
-
-  @override
-  Future<void> setCurrentDietPlan(int id) async {
-    await _db.transaction(() async {
-      await (_db.update(
-        _db.dietPlans,
-      )..where((t) => t.isCurrent.equals(true))).write(const DietPlansCompanion(isCurrent: Value(false)));
-      await (_db.update(
-        _db.dietPlans,
-      )..where((t) => t.id.equals(id))).write(const DietPlansCompanion(isCurrent: Value(true)));
-    });
+  Future<List<DietLogDto>> getAllLogs() async {
+    final result = await _db.select(_db.dietLogs).get();
+    return result.map((e) => DietLogDto.fromCompanion(e)).toList();
   }
 
   @override
-  Future<List<DietDayDto>> getDietDays(int planId) async {
-    final data =
-        await (_db.select(_db.dietDays)
-              ..where((t) => t.dietPlanId.equals(planId))
-              ..orderBy([(t) => OrderingTerm(expression: t.index)]))
-            .get();
-    return data.map((e) => DietDayDto.fromData(e)).toList();
+  Future<List<DietLogDto>> getLogsForDate(DateTime date) async {
+    final startOfDay = DateTime(date.year, date.month, date.day);
+    final endOfDay = startOfDay.add(const Duration(days: 1));
+
+    final query = _db.select(_db.dietLogs)
+      ..where((tbl) => tbl.timestamp.isBiggerOrEqualValue(startOfDay) & tbl.timestamp.isSmallerThanValue(endOfDay));
+
+    final result = await query.get();
+    return result.map((e) => DietLogDto.fromCompanion(e)).toList();
   }
 
   @override
-  Future<int> addDietDay(int planId, DietDayDto day) => _db.into(_db.dietDays).insert(day.toCompanion(planId));
-
-  @override
-  Future<void> updateDietDay(DietDayDto day) async {
-    // Note: We use index 0 as placeholder for planId in the companion if not available,
-    // but the targeted write below only updates name and index.
-    final companion = day.toCompanion(0);
-    await (_db.update(
-      _db.dietDays,
-    )..where((t) => t.id.equals(day.id!))).write(DietDaysCompanion(name: companion.name, index: companion.index));
+  Future<void> logMeal(DietLogDto log) async {
+    await upsertDietLog(log);
   }
 
   @override
-  Future<void> deleteDietDay(int id) => (_db.delete(_db.dietDays)..where((t) => t.id.equals(id))).go();
-
-  @override
-  Future<void> reorderDietDays(int planId, List<DietDayDto> days) async {
-    await _db.batch((batch) {
-      for (final day in days) {
-        batch.update(_db.dietDays, day.toCompanion(planId), where: (t) => t.id.equals(day.id!));
-      }
-    });
-  }
-
-  @override
-  Future<List<DietMealDto>> getDietMeals(int dayId) async {
-    final data =
-        await (_db.select(_db.dietMeals)
-              ..where((t) => t.dietDayId.equals(dayId))
-              ..orderBy([(t) => OrderingTerm(expression: t.index)]))
-            .get();
-    return data.map((e) => DietMealDto.fromData(e)).toList();
-  }
-
-  @override
-  Future<int> addDietMeal(int dayId, DietMealDto meal) => _db.into(_db.dietMeals).insert(meal.toCompanion(dayId));
-
-  @override
-  Future<void> updateDietMeal(DietMealDto meal) async {
-    final companion = meal.toCompanion(0);
-    await (_db.update(
-      _db.dietMeals,
-    )..where((t) => t.id.equals(meal.id!))).write(DietMealsCompanion(name: companion.name, index: companion.index));
-  }
-
-  @override
-  Future<void> deleteDietMeal(int id) => (_db.delete(_db.dietMeals)..where((t) => t.id.equals(id))).go();
-
-  @override
-  Future<void> reorderDietMeals(int dayId, List<DietMealDto> meals) async {
-    await _db.batch((batch) {
-      for (final meal in meals) {
-        batch.update(_db.dietMeals, meal.toCompanion(dayId), where: (t) => t.id.equals(meal.id!));
-      }
-    });
-  }
-
-  @override
-  Future<List<DietMealIngredientDto>> getMealIngredients(int mealId) async {
-    final data =
-        await (_db.select(_db.dietMealIngredients)
-              ..where((t) => t.dietMealId.equals(mealId))
-              ..orderBy([(t) => OrderingTerm(expression: t.index)]))
-            .get();
-    return data.map((e) => DietMealIngredientDto.fromData(e)).toList();
-  }
-
-  @override
-  Future<int> addMealIngredient(int mealId, DietMealIngredientDto ingredient) =>
-      _db.into(_db.dietMealIngredients).insert(ingredient.toCompanion(mealId));
-
-  @override
-  Future<void> addMealIngredients(int mealId, List<DietMealIngredientDto> ingredients) async {
-    await _db.batch((batch) {
-      for (final ing in ingredients) {
-        batch.insert(_db.dietMealIngredients, ing.toCompanion(mealId));
-      }
-    });
-  }
-
-  @override
-  Future<void> updateMealIngredient(DietMealIngredientDto ingredient) async {
-    final companion = ingredient.toCompanion(0);
-    await (_db.update(_db.dietMealIngredients)..where((t) => t.id.equals(ingredient.id!))).write(
-      DietMealIngredientsCompanion(
-        amount: companion.amount,
-        index: companion.index,
-        code: companion.code,
-        nameAr: companion.nameAr,
-        nameEn: companion.nameEn,
-        category: companion.category,
-        description: companion.description,
-        servingSizeInGrams: companion.servingSizeInGrams,
-        calories: companion.calories,
-        protein: companion.protein,
-        carbs: companion.carbs,
-        fats: companion.fats,
-      ),
+  Future<void> upsertDietLog(DietLogDto log) async {
+    final companion = DietLogsCompanion(
+      id: log.id != null ? Value(log.id!) : const Value.absent(),
+      apiId: log.apiId != null ? Value(log.apiId!) : const Value.absent(),
+      name: Value(log.ingredientName),
+      totalGrams: Value(log.totalGrams),
+      calories: Value(log.calories),
+      protein: Value(log.protein),
+      carbs: Value(log.carbs),
+      fats: Value(log.fats),
+      timestamp: Value(log.timestamp),
+      version: Value(log.version),
+      isSynced: Value(log.isSynced),
     );
+
+    await _db
+        .into(_db.dietLogs)
+        .insert(
+          companion,
+          onConflict: DoUpdate(
+            (old) => companion,
+            target: [_db.dietLogs.id], // Conflict target is the id
+          ),
+        );
   }
 
   @override
-  Future<void> deleteMealIngredient(int id) =>
-      (_db.delete(_db.dietMealIngredients)..where((t) => t.id.equals(id))).go();
+  Future<DateTime?> getLastLibSync() async {
+    final query = _db.selectOnly(_db.ingredients)..addColumns([_db.ingredients.updatedAt.max()]);
+
+    final result = await query.getSingle();
+    final latestDate = result.read(_db.ingredients.updatedAt.max());
+    logger.d("isUtc: ${latestDate?.isUtc} $latestDate");
+
+    return latestDate?.toLocal();
+  }
 
   @override
-  Future<void> reorderMealIngredients(int mealId, List<DietMealIngredientDto> ingredients) async {
+  Future<List<IngredientModel>> getUserGeneratedContent() async {
+    final query = _db.select(_db.ingredients)..where((tbl) => (tbl.isUserGenerated & tbl.isSynced.not()));
+
+    final result = await query.get();
+    return result.map((e) => IngredientModel.fromCompanion(e)).toList();
+  }
+
+  @override
+  Future<List<DietLogDto>> getAllUnSyncedLogs() async {
+    final query = _db.select(_db.dietLogs)..where((tbl) => tbl.isSynced.not());
+    final result = await query.get();
+
+    return result.map((l) => DietLogDto.fromCompanion(l)).toList();
+  }
+
+  @override
+  Future<void> bulkSaveLogs(List<DietLogDto> logs) async {
     await _db.batch((batch) {
-      for (final ing in ingredients) {
-        batch.update(_db.dietMealIngredients, ing.toCompanion(mealId), where: (t) => t.id.equals(ing.id!));
+      for (final log in logs) {
+        final companion = DietLogsCompanion.insert(
+          apiId: Value(log.apiId),
+          name: log.ingredientName,
+          totalGrams: log.totalGrams,
+          calories: log.calories,
+          protein: log.protein,
+          carbs: log.carbs,
+          fats: log.fats,
+          timestamp: log.timestamp,
+          version: log.version,
+          isSynced: true,
+        );
+        batch.insert(_db.dietLogs, companion);
       }
     });
   }

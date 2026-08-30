@@ -12,6 +12,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hello => 'Hi, ';
 
   @override
+  String get dietLogger => 'Diet Logger';
+
+  @override
+  String get dietLoggerDescription => 'Log Daily meals, calories & macros';
+
+  @override
   String get welcome => 'Welcome';
 
   @override
@@ -631,6 +637,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get female => 'Female';
 
   @override
+  String get both => 'All';
+
+  @override
   String get payment => 'Payment';
 
   @override
@@ -960,4 +969,198 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get caloriesPer100g => 'per 100g';
+
+  @override
+  String get todaySummary => 'Summary';
+
+  @override
+  String get caloriesGoal => 'Calories Goal';
+
+  @override
+  String get left => 'left';
+
+  @override
+  String get over => 'over';
+
+  @override
+  String get calories => 'Calories';
+
+  @override
+  String get protein => 'Protein';
+
+  @override
+  String get carbs => 'Carbs';
+
+  @override
+  String get fats => 'Fats';
+
+  @override
+  String get kcal => 'kcal';
+
+  @override
+  String get grams => 'g';
+
+  @override
+  String get noLogsToday => 'No records, Log what you ate today';
+
+  @override
+  String get addDietLog => 'Add Diet Log';
+
+  @override
+  String get searchFood => 'Search for food...';
+
+  @override
+  String get addCustomEntry => 'Add Custom Entry';
+
+  @override
+  String get manuallyEnterMacros => 'Manually enter calories and macros';
+
+  @override
+  String get typeToFindIngredients => 'Type to find ingredients';
+
+  @override
+  String get noResultsFound => 'No results found';
+
+  @override
+  String get amountGrams => 'Amount (grams)';
+
+  @override
+  String get addToDailyLog => 'Add to Daily Log';
+
+  @override
+  String get customEntry => 'Custom Entry';
+
+  @override
+  String get entryName => 'Entry Name';
+
+  @override
+  String get macros => 'Macros';
+
+  @override
+  String get saveCustomLog => 'Save Custom Log';
+
+  @override
+  String get estimatedNutrition => 'Estimated Nutrition';
+
+  @override
+  String get deleteIngredient => 'Delete Ingredient?';
+
+  @override
+  String deleteConfirm(Object name) {
+    return 'Are you sure you want to delete $name?';
+  }
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get servingSize => 'Serving Size';
+
+  @override
+  String get macrosPerServing => 'Macros per serving';
+
+  @override
+  String get userGeneratedContent => 'User Generated Content';
+
+  @override
+  String get nutritionPerServing => 'Nutrition (per serving)';
+
+  @override
+  String get ingredientsDbInfo =>
+      'This is the ingredients database, you can only edit what you personally added';
+
+  @override
+  String get meat => 'Meat';
+
+  @override
+  String get dairy => 'Dairy';
+
+  @override
+  String get grains => 'Grains';
+
+  @override
+  String get fruits => 'Fruits';
+
+  @override
+  String get vegetables => 'Vegetables';
+
+  @override
+  String get noActiveRoutine => 'No Active Routine';
+
+  @override
+  String get setupRoutineSub =>
+      'Select or build a custom program to start training';
+
+  @override
+  String get setUp => 'Set Up';
+
+  @override
+  String get currentProgram => 'CURRENT PROGRAM';
+
+  @override
+  String get suggestedNext => 'Suggested Next';
+
+  @override
+  String startDay(Object dayName) {
+    return 'Start $dayName';
+  }
+
+  @override
+  String get activeSessionInProgress => 'ACTIVE SESSION IN PROGRESS';
+
+  @override
+  String get explorePremadeRoutines => 'Explore Premade Routines';
+
+  @override
+  String get seeAll => 'See All';
+
+  @override
+  String trainingDaysCount(Object count) {
+    return '$count Training Days';
+  }
+
+  @override
+  String get errLoadPremadeRoutines => 'Failed to load premade routines';
+
+  @override
+  String get tryAgain => 'Try Again';
+
+  @override
+  String get routineDownloaded => 'Routine downloaded successfully';
+
+  @override
+  String get routineDownloadFailed => 'Failed to download routine';
+
+  @override
+  String get changeIngredientsLanguage => 'Change Ingredients Language';
+
+  @override
+  String get changingIngredientsLanguage => 'Changing library language...';
+
+  @override
+  String get langChangedSuccess => 'Language changed successfully';
+
+  @override
+  String get downloadingRoutine => 'Downloading Routine...';
+
+  @override
+  String get levelBeginner => 'Beginner';
+
+  @override
+  String get levelNovice => 'Novice';
+
+  @override
+  String get levelIntermediate => 'Intermediate';
+
+  @override
+  String get levelAdvanced => 'Advanced';
+
+  @override
+  String get levelElite => 'Elite';
+
+  @override
+  String get fieldRequired => 'This field is required!';
 }

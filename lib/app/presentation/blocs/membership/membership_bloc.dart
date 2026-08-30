@@ -10,6 +10,7 @@ part 'membership_state.dart';
 
 class MembershipBloc extends Bloc<MembershipEvent, MembershipState> {
   final AccountUsecases _usecases;
+
   MembershipBloc(this._usecases) : super(const _Initial()) {
     on<_GetCurrentPlan>((event, emit) async {
       emit(const MembershipState.loading());

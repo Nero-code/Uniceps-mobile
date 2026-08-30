@@ -4,8 +4,12 @@
 //   A P P   C O N S T A N T S
 //
 
+import 'package:uniceps/core/helpers/version.dart';
+
 const APP_NAME = 'Uniceps';
-const APP_VERSION = "v3.2.0+17${String.fromEnvironment('VERSION_SUFFIX')}";
+const APP_VERSION =
+    "v${Version.currentMajor}.${Version.currentMinor}.${Version.currentPatch}.${Version.currentBuild}"
+    "${String.fromEnvironment('VERSION_SUFFIX')}";
 
 ///   A P P   I M A G E S
 const IMG_PREMIUM = "images/photos/premium.png";
@@ -17,6 +21,7 @@ const APP_LOGO_WHITE = "images/logo/Logo-white.png";
 const ASSET_QUOTES = 'assets/captain_quotes.json';
 
 enum Gender {
+  both(0),
   male(1),
   female(2);
 
@@ -33,6 +38,17 @@ enum Goal {
 
   final int val;
   const Goal(this.val);
+
+  double get calorieModifier {
+    switch (this) {
+      case Goal.bulking:
+        return 500.0;
+      case Goal.losingWeight:
+        return -500.0;
+      case Goal.maintenance:
+        return 0.0;
+    }
+  }
 }
 
 Goal parseGoal(int val) => Goal.values.firstWhere((g) => g.val == val);
@@ -46,6 +62,21 @@ enum ActivityLevel {
 
   final int val;
   const ActivityLevel(this.val);
+
+  double get multiplier {
+    switch (this) {
+      case ActivityLevel.sedentary:
+        return 1.2;
+      case ActivityLevel.lightlyActive:
+        return 1.375;
+      case ActivityLevel.moderatelyActive:
+        return 1.55;
+      case ActivityLevel.veryActive:
+        return 1.725;
+      case ActivityLevel.extraActive:
+        return 1.9;
+    }
+  }
 }
 
 ActivityLevel parseActivityLevel(int val) => ActivityLevel.values.firstWhere((a) => a.val == val);
@@ -62,5 +93,19 @@ enum Lang {
 Lang parseLang(String lang) {
   return Lang.values.firstWhere((l) => l.code == lang.toLowerCase());
 }
+
+enum RoutineLevel {
+  none(0),
+  beginner(1),
+  novice(2),
+  intermediate(3),
+  advanced(4),
+  elite(5);
+
+  final int val;
+  const RoutineLevel(this.val);
+}
+
+RoutineLevel parseRoutineLevel(int val) => RoutineLevel.values.firstWhere((g) => g.val == val);
 
 enum ThemeType { light, dark }

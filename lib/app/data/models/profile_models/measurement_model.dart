@@ -6,27 +6,64 @@ import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 
 part 'measurement_model.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
+// "heightCm": 0,
+// "weightKg": 0,
+// "leftArmCm": 0,
+// "rightArmCm": 0,
+// "leftThighCm": 0,
+// "rightThighCm": 0,
+// "leftLegCm": 0,
+// "rightLegCm": 0,
+// "neckCm": 0,
+// "shouldersCm": 0,
+// "waistCm": 0,
+// "chestCm": 0,
+// "hipsCm": 0,
+// "measuredAt": "2026-08-19T15:55:05.7371139Z"
+@JsonSerializable()
 class MeasurementModel {
-  final int? id, apiId;
+  final int? id;
+  final int? apiId;
+  @JsonKey(name: "heightCm")
   final double height;
+  @JsonKey(name: "weightKg")
   final double weight;
+  @JsonKey(name: "leftArmCm")
   final double lArm;
+  @JsonKey(name: "rightArmCm")
   final double rArm;
-  final double lHumerus;
-  final double rHumerus;
+  @JsonKey(name: "leftThighCm")
   final double lThigh;
+  @JsonKey(name: "rightThighCm")
   final double rThigh;
+  @JsonKey(name: "leftLegCm")
   final double lLeg;
+  @JsonKey(name: "rightLegCm")
   final double rLeg;
+  @JsonKey(name: "neckCm")
   final double neck;
+  @JsonKey(name: "shouldersCm")
   final double shoulders;
+  @JsonKey(name: "waistCm")
   final double waist;
+  @JsonKey(name: "chestCm")
   final double chest;
+  @JsonKey(name: "hipsCm")
   final double hips;
+  @JsonKey(name: "measuredAt")
   final DateTime checkDate;
 
+  // --------------------------------------------
+  // These values are Unimplemented thus not-used
+  @JsonKey(defaultValue: 0.0)
+  final double lHumerus;
+  @JsonKey(defaultValue: 0.0)
+  final double rHumerus;
+  // --------------------------------------------
+
+  @JsonKey(defaultValue: 0)
   final int version;
+  @JsonKey(defaultValue: true)
   final bool isSynced;
 
   static int get propsNumbers => 15;
@@ -148,6 +185,50 @@ class MeasurementModel {
     checkDate: DateTime(Random().nextInt(25) + 2000),
     version: 0,
     isSynced: false,
+  );
+
+  MeasurementModel copyWith({
+    int? id,
+    int? apiId,
+    double? height,
+    double? weight,
+    double? lArm,
+    double? rArm,
+    double? lHumerus,
+    double? rHumerus,
+    double? lThigh,
+    double? rThigh,
+    double? lLeg,
+    double? rLeg,
+    double? neck,
+    double? shoulders,
+    double? waist,
+    double? chest,
+    double? hips,
+    DateTime? checkDate,
+    int? version,
+    bool? isSynced,
+  }) => MeasurementModel(
+    id: id ?? this.id,
+    apiId: apiId ?? this.apiId,
+    height: height ?? this.height,
+    weight: weight ?? this.weight,
+    lArm: lArm ?? this.lArm,
+    rArm: rArm ?? this.rArm,
+    lHumerus: lHumerus ?? this.lHumerus,
+    rHumerus: rHumerus ?? this.rHumerus,
+    lThigh: lThigh ?? this.lThigh,
+    rThigh: rThigh ?? this.rThigh,
+    lLeg: lLeg ?? this.lLeg,
+    rLeg: rLeg ?? this.rLeg,
+    neck: neck ?? this.neck,
+    shoulders: shoulders ?? this.shoulders,
+    waist: waist ?? this.waist,
+    chest: chest ?? this.chest,
+    hips: hips ?? this.hips,
+    checkDate: checkDate ?? this.checkDate,
+    version: version ?? this.version,
+    isSynced: isSynced ?? this.isSynced,
   );
 
   double getByIndex(int index) {

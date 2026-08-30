@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MediaDownloaderState {
 
- MediaDownloaderStatus get status; double get progress; Failure? get failure;
+ MediaDownloaderStatus get status; double get progress;
 /// Create a copy of MediaDownloaderState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $MediaDownloaderStateCopyWith<MediaDownloaderState> get copyWith => _$MediaDownl
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MediaDownloaderState&&(identical(other.status, status) || other.status == status)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.failure, failure) || other.failure == failure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MediaDownloaderState&&(identical(other.status, status) || other.status == status)&&(identical(other.progress, progress) || other.progress == progress));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,progress,failure);
+int get hashCode => Object.hash(runtimeType,status,progress);
 
 @override
 String toString() {
-  return 'MediaDownloaderState(status: $status, progress: $progress, failure: $failure)';
+  return 'MediaDownloaderState(status: $status, progress: $progress)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $MediaDownloaderStateCopyWith<$Res>  {
   factory $MediaDownloaderStateCopyWith(MediaDownloaderState value, $Res Function(MediaDownloaderState) _then) = _$MediaDownloaderStateCopyWithImpl;
 @useResult
 $Res call({
- MediaDownloaderStatus status, double progress, Failure? failure
+ MediaDownloaderStatus status, double progress
 });
 
 
@@ -62,12 +62,11 @@ class _$MediaDownloaderStateCopyWithImpl<$Res>
 
 /// Create a copy of MediaDownloaderState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? progress = null,Object? failure = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? progress = null,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as MediaDownloaderStatus,progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
-as double,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
-as Failure?,
+as double,
   ));
 }
 
@@ -152,10 +151,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( MediaDownloaderStatus status,  double progress,  Failure? failure)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( MediaDownloaderStatus status,  double progress)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MediaDownloaderState() when $default != null:
-return $default(_that.status,_that.progress,_that.failure);case _:
+return $default(_that.status,_that.progress);case _:
   return orElse();
 
 }
@@ -173,10 +172,10 @@ return $default(_that.status,_that.progress,_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( MediaDownloaderStatus status,  double progress,  Failure? failure)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( MediaDownloaderStatus status,  double progress)  $default,) {final _that = this;
 switch (_that) {
 case _MediaDownloaderState():
-return $default(_that.status,_that.progress,_that.failure);case _:
+return $default(_that.status,_that.progress);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +192,10 @@ return $default(_that.status,_that.progress,_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( MediaDownloaderStatus status,  double progress,  Failure? failure)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( MediaDownloaderStatus status,  double progress)?  $default,) {final _that = this;
 switch (_that) {
 case _MediaDownloaderState() when $default != null:
-return $default(_that.status,_that.progress,_that.failure);case _:
+return $default(_that.status,_that.progress);case _:
   return null;
 
 }
@@ -208,12 +207,11 @@ return $default(_that.status,_that.progress,_that.failure);case _:
 
 
 class _MediaDownloaderState implements MediaDownloaderState {
-  const _MediaDownloaderState({this.status = MediaDownloaderStatus.initial, this.progress = 0.0, this.failure});
+  const _MediaDownloaderState({this.status = MediaDownloaderStatus.initial, this.progress = 0.0});
   
 
 @override@JsonKey() final  MediaDownloaderStatus status;
 @override@JsonKey() final  double progress;
-@override final  Failure? failure;
 
 /// Create a copy of MediaDownloaderState
 /// with the given fields replaced by the non-null parameter values.
@@ -225,16 +223,16 @@ _$MediaDownloaderStateCopyWith<_MediaDownloaderState> get copyWith => __$MediaDo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MediaDownloaderState&&(identical(other.status, status) || other.status == status)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.failure, failure) || other.failure == failure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MediaDownloaderState&&(identical(other.status, status) || other.status == status)&&(identical(other.progress, progress) || other.progress == progress));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,progress,failure);
+int get hashCode => Object.hash(runtimeType,status,progress);
 
 @override
 String toString() {
-  return 'MediaDownloaderState(status: $status, progress: $progress, failure: $failure)';
+  return 'MediaDownloaderState(status: $status, progress: $progress)';
 }
 
 
@@ -245,7 +243,7 @@ abstract mixin class _$MediaDownloaderStateCopyWith<$Res> implements $MediaDownl
   factory _$MediaDownloaderStateCopyWith(_MediaDownloaderState value, $Res Function(_MediaDownloaderState) _then) = __$MediaDownloaderStateCopyWithImpl;
 @override @useResult
 $Res call({
- MediaDownloaderStatus status, double progress, Failure? failure
+ MediaDownloaderStatus status, double progress
 });
 
 
@@ -262,12 +260,11 @@ class __$MediaDownloaderStateCopyWithImpl<$Res>
 
 /// Create a copy of MediaDownloaderState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? progress = null,Object? failure = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? progress = null,}) {
   return _then(_MediaDownloaderState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as MediaDownloaderStatus,progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
-as double,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
-as Failure?,
+as double,
   ));
 }
 

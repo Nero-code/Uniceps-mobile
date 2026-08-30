@@ -128,7 +128,7 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( ExerciseDetailsResult result)?  success,TResult Function( Failure f)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( ExerciseDetailsResult result)?  success,TResult Function( ExerciseFailure f)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
@@ -152,7 +152,7 @@ return failure(_that.f);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( ExerciseDetailsResult result)  success,required TResult Function( Failure f)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( ExerciseDetailsResult result)  success,required TResult Function( ExerciseFailure f)  failure,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
@@ -175,7 +175,7 @@ return failure(_that.f);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( ExerciseDetailsResult result)?  success,TResult? Function( Failure f)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( ExerciseDetailsResult result)?  success,TResult? Function( ExerciseFailure f)?  failure,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
@@ -326,7 +326,7 @@ class _Failure implements ExerciseDetailsState {
   const _Failure({required this.f});
   
 
- final  Failure f;
+ final  ExerciseFailure f;
 
 /// Create a copy of ExerciseDetailsState
 /// with the given fields replaced by the non-null parameter values.
@@ -358,11 +358,11 @@ abstract mixin class _$FailureCopyWith<$Res> implements $ExerciseDetailsStateCop
   factory _$FailureCopyWith(_Failure value, $Res Function(_Failure) _then) = __$FailureCopyWithImpl;
 @useResult
 $Res call({
- Failure f
+ ExerciseFailure f
 });
 
 
-
+$ExerciseFailureCopyWith<$Res> get f;
 
 }
 /// @nodoc
@@ -378,11 +378,20 @@ class __$FailureCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? f = null,}) {
   return _then(_Failure(
 f: null == f ? _self.f : f // ignore: cast_nullable_to_non_nullable
-as Failure,
+as ExerciseFailure,
   ));
 }
 
-
+/// Create a copy of ExerciseDetailsState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ExerciseFailureCopyWith<$Res> get f {
+  
+  return $ExerciseFailureCopyWith<$Res>(_self.f, (value) {
+    return _then(_self.copyWith(f: value));
+  });
+}
 }
 
 // dart format on

@@ -78,7 +78,7 @@ class _GenderCard extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.color,
-    required bool this.isSelected,
+    required this.isSelected,
     required this.onTap,
   });
 

@@ -1,5 +1,7 @@
 {
   "hello": "Hi, ",
+  "dietLogger": "Diet Logger",
+  "dietLoggerDescription": "Log Daily meals, calories & macros",
   "welcome": "Welcome",
   "signin": "Sign in",
   "login": "Login",
@@ -200,6 +202,7 @@
   "pActivityLevelError": "Please select your activity level",
   "male": "Male",
   "female": "Female",
+  "both": "All",
   "payment": "Payment",
   "paid": "Paid",
   "notPaid": "Not Paid",
@@ -350,5 +353,88 @@
   "addIngredient": "Add Ingredient",
   "all": "All",
   "enterAmountGrams": "Enter amount (grams)",
-  "caloriesPer100g": "per 100g"
+  "caloriesPer100g": "per 100g",
+  "todaySummary": "Summary",
+  "caloriesGoal": "Calories Goal",
+  "left": "left",
+  "over": "over",
+  "calories": "Calories",
+  "protein": "Protein",
+  "carbs": "Carbs",
+  "fats": "Fats",
+  "kcal": "kcal",
+  "grams": "g",
+  "noLogsToday": "No records, Log what you ate today",
+  "addDietLog": "Add Diet Log",
+  "searchFood": "Search for food...",
+  "addCustomEntry": "Add Custom Entry",
+  "manuallyEnterMacros": "Manually enter calories and macros",
+  "typeToFindIngredients": "Type to find ingredients",
+  "noResultsFound": "No results found",
+  "amountGrams": "Amount (grams)",
+  "addToDailyLog": "Add to Daily Log",
+  "customEntry": "Custom Entry",
+  "entryName": "Entry Name",
+  "macros": "Macros",
+  "saveCustomLog": "Save Custom Log",
+  "estimatedNutrition": "Estimated Nutrition",
+  "deleteIngredient": "Delete Ingredient?",
+  "deleteConfirm": "Are you sure you want to delete {name}?",
+  "@deleteConfirm": {
+    "placeHolders": {
+      "name": {
+        "type": "string"
+      }
+    }
+  },
+  "name": "Name",
+  "category": "Category",
+  "servingSize": "Serving Size",
+  "macrosPerServing": "Macros per serving",
+  "userGeneratedContent": "User Generated Content",
+  "nutritionPerServing": "Nutrition (per serving)",
+  "ingredientsDbInfo": "This is the ingredients database, you can only edit what you personally added",
+  "meat": "Meat",
+  "dairy": "Dairy",
+  "grains": "Grains",
+  "fruits": "Fruits",
+  "vegetables": "Vegetables",
+  "noActiveRoutine": "No Active Routine",
+  "setupRoutineSub": "Select or build a custom program to start training",
+  "setUp": "Set Up",
+  "currentProgram": "CURRENT PROGRAM",
+  "suggestedNext": "Suggested Next",
+  "startDay": "Start {dayName}",
+  "@startDay": {
+    "placeHolders": {
+      "dayName": {
+        "type": "String"
+      }
+    }
+  },
+  "activeSessionInProgress": "ACTIVE SESSION IN PROGRESS",
+  "explorePremadeRoutines": "Explore Premade Routines",
+  "seeAll": "See All",
+  "trainingDaysCount": "{count} Training Days",
+  "@trainingDaysCount": {
+    "placeHolders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errLoadPremadeRoutines": "Failed to load premade routines",
+  "tryAgain": "Try Again",
+  "routineDownloaded": "Routine downloaded successfully",
+  "routineDownloadFailed": "Failed to download routine",
+  "changeIngredientsLanguage": "Change Ingredients Language",
+  "changingIngredientsLanguage": "Changing library language...",
+  "langChangedSuccess": "Language changed successfully",
+  "downloadingRoutine": "Downloading Routine...",
+  "levelBeginner": "Beginner",
+  "levelNovice": "Novice",
+  "levelIntermediate": "Intermediate",
+  "levelAdvanced": "Advanced",
+  "levelElite": "Elite",
+  "fieldRequired": "This field is required!"
 }
