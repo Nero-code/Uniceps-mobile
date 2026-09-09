@@ -17,39 +17,65 @@ class RoutineImportExportDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    // final ar = context.read<LocaleCubit>().state.isRtl();
-    final ar = Directionality.of(context) == .rtl;
+    final colorScheme = Theme.of(context).colorScheme;
+    final ar = Directionality.of(context) == TextDirection.rtl;
 
-    return AlertDialog(
-      icon: Icon(
-        isIn ? Icons.download : Icons.import_export,
-        color: const Color.fromARGB(255, 192, 192, 192),
-        size: 50,
-      ),
-      title: Text("$title${ar ? '؟' : '?'}"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(content),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(onPressed: () => Navigator.pop(context), child: Text(locale.cancel)),
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+      backgroundColor: colorScheme.surface,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(color: colorScheme.primary.withValues(alpha: 0.1), shape: BoxShape.circle),
+              child: Icon(
+                isIn ? Icons.download_rounded : Icons.ios_share_rounded,
+                color: colorScheme.primary,
+                size: 32,
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    onConfirm();
-                    Navigator.pop(context);
-                  },
-                  child: Text(locale.confirm),
+            ),
+            const SizedBox(height: 20),
+            Text("$title${ar ? '؟' : '?'}", style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 12),
+            Text(
+              content,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 16),
+            ),
+            const SizedBox(height: 32),
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    ),
+                    child: Text(locale.cancel),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                const SizedBox(width: 12),
+                Expanded(
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    ),
+                    onPressed: () {
+                      onConfirm();
+                      Navigator.pop(context);
+                    },
+                    child: Text(locale.confirm),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
