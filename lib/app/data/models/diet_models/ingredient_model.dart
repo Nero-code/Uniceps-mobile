@@ -19,6 +19,7 @@ class IngredientModel {
   final double fats;
   final bool isUserGenerated;
   final int version;
+  @JsonKey(defaultValue: true)
   final bool isSynced;
   final DateTime updatedAt;
   final DateTime createdAt;

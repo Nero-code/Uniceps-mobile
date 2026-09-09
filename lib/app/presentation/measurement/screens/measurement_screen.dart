@@ -6,10 +6,8 @@ import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
 import 'package:uniceps/app/presentation/measurement/blocs/measurement/measurment_bloc.dart';
 import 'package:uniceps/app/presentation/measurement/dialogs/delete_dialog.dart';
 import 'package:uniceps/app/presentation/measurement/screens/add_edit_measurement_screen.dart';
-import 'package:uniceps/app/presentation/measurement/widgets/measure_widget.dart';
-import 'package:uniceps/app/presentation/measurement/widgets/multifab_menu.dart';
+import 'package:uniceps/app/presentation/measurement/widgets/body_measurement_map.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
-import 'package:uniceps/core/constants/muscles_images.dart';
 import 'package:uniceps/core/widgets/empty_page.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
@@ -23,328 +21,345 @@ class MeasurementScreen extends StatefulWidget {
 }
 
 class _MeasurementScreenState extends State<MeasurementScreen> with TickerProviderStateMixin {
-  final duration = const Duration(milliseconds: 500);
-
   int page = 0;
-  bool isLoading = false;
-  bool isLeft = false;
-  Widget child = const SizedBox();
+  bool isNextPage = false;
 
-  Future<void> animate(bool isNext) async {
-    // isLoading = true;
-    // setState(() {});
-    // await Future.delayed(const Duration(milliseconds: 500));
-    // print("currentPAge:  $page");
-    // print("isLoading:  $isLoading");
-
-    isLeft = isNext;
-    isNext ? ++page : --page;
-
-    // isLoading = false;
-    // childBuilder();
-    setState(() {});
+  void _animate(bool next, int max) {
+    if (next && page < max - 1) {
+      setState(() {
+        isNextPage = true;
+        page++;
+      });
+    } else if (!next && page > 0) {
+      setState(() {
+        isNextPage = false;
+        page--;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final screen = MediaQuery.sizeOf(context);
     final locale = AppLocalizations.of(context)!;
-    // final isRtl = context.read<LocaleCubit>().state.isRtl();
-    final isRtl = Directionality.of(context) == .rtl;
+    final colorScheme = Theme.of(context).colorScheme;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
 
     return BlocProvider(
       create: (context) => MeasurementBloc(di.sl())..add(const MeasurementEvent.getMeasurements()),
       lazy: false,
       child: Scaffold(
-        body: SafeArea(
-          child: BlocConsumer<MeasurementBloc, MeasurementState>(
-            listener: (context, state) => state.whenOrNull(
-              dirty: () => context.read<MeasurementBloc>().add(const MeasurementEvent.getMeasurements()),
-            ),
-            buildWhen: (_, current) => current.maybeWhen(orElse: () => true, dirty: () => false),
-            builder: (context, state) {
-              return state.map(
-                initial: (_) => const SizedBox(),
-                dirty: (_) => const SizedBox(),
-                loading: (_) => const LoadingIndicator(),
-                loaded: (state) {
-                  childBuilder(state.list[page]);
-                  return Stack(
-                    children: [
-                      const SizedBox.expand(),
-                      GestureDetector(
-                        onHorizontalDragEnd: (details) async {
-                          if (isLoading) return;
+        appBar: AppBar(title: Text(locale.measurements), centerTitle: true),
+        body: BlocConsumer<MeasurementBloc, MeasurementState>(
+          listener: (context, state) => state.whenOrNull(
+            dirty: () => context.read<MeasurementBloc>().add(const MeasurementEvent.getMeasurements()),
+          ),
+          buildWhen: (_, current) => current.maybeWhen(orElse: () => true, dirty: () => false),
+          builder: (context, state) {
+            return state.map(
+              initial: (_) => const SizedBox(),
+              dirty: (_) => const SizedBox(),
+              loading: (_) => const LoadingIndicator(),
+              error: (e) => _buildEmptyState(context, locale),
+              loaded: (state) {
+                if (state.list.isEmpty) return _buildEmptyState(context, locale);
 
-                          if (details.primaryVelocity != null && details.primaryVelocity! > 0) {
-                            // print("Left");
-                            if (page < state.list.length - 1) {
-                              // ++page;
-                              await animate(true);
-                            }
-                          } else if (details.primaryVelocity != null && details.primaryVelocity! < 0) {
-                            // print("Right");
-                            if (page > 0) {
-                              // --page;
-                              await animate(false);
-                            }
-                          }
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + kToolbarHeight),
-                          child: SingleChildScrollView(
-                            padding: const EdgeInsets.only(bottom: 5),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                PageTransitionSwitcher(
-                                  duration: const Duration(milliseconds: 500),
-                                  reverse: isLeft,
-                                  transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
-                                    return SharedAxisTransition(
-                                      animation: primaryAnimation,
-                                      secondaryAnimation: secondaryAnimation,
-                                      transitionType: SharedAxisTransitionType.horizontal,
-                                      child: child,
-                                    );
-                                  },
-                                  child: SizedBox(key: ValueKey<int>(page), child: child),
-                                ),
-                              ],
-                            ),
+                final m = state.list[page];
+
+                return Column(
+                  children: [
+                    // Date Selector / Navigation
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _NavButton(
+                            icon: Icons.chevron_left_rounded,
+                            onPressed: () => _animate(isRtl, state.list.length),
+                            enabled: isRtl ? page < state.list.length - 1 : page > 0,
                           ),
-                        ),
-                      ),
-                      const Positioned(top: 0, child: BackButton()),
-                      Positioned(
-                        bottom: 0.0,
-                        width: MediaQuery.sizeOf(context).width,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            IconButton(
-                              style: IconButton.styleFrom(
-                                side: BorderSide(color: Colors.grey.shade300),
-                                padding: EdgeInsets.zero,
-                                backgroundColor: Colors.white.withAlpha(50),
-                                surfaceTintColor: Colors.blue,
-                              ),
-                              onPressed: () async {
-                                //  RTL  -->  Left (previous)
-                                if (isLoading) return;
-
-                                if (isRtl && page > 0) {
-                                  await animate(false);
-                                }
-                                if (!isRtl && page < state.list.length - 1) {
-                                  await animate(true);
-                                }
-                              },
-                              icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.grey.shade600),
-                            ),
-                            PageTransitionSwitcher(
-                              duration: const Duration(milliseconds: 500),
-                              reverse: isLeft,
-                              transitionBuilder: (child, primaryAnimation, secondaryAnimation) => SharedAxisTransition(
-                                animation: primaryAnimation,
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 24),
+                            child: PageTransitionSwitcher(
+                              duration: const Duration(milliseconds: 400),
+                              reverse: !isNextPage,
+                              transitionBuilder: (child, animation, secondaryAnimation) => SharedAxisTransition(
+                                animation: animation,
                                 secondaryAnimation: secondaryAnimation,
                                 transitionType: SharedAxisTransitionType.horizontal,
                                 child: child,
                               ),
-                              child: Text(
-                                key: ValueKey<String>("$page"),
-                                intl.DateFormat("dd/MM/yyyy").format(state.list[page].checkDate),
-                                style: const TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            IconButton(
-                              style: IconButton.styleFrom(
-                                side: BorderSide(color: Colors.grey.shade300),
-                                padding: EdgeInsets.zero,
-                                backgroundColor: Colors.white.withAlpha(50),
-                                surfaceTintColor: Colors.blue,
-                              ),
-                              onPressed: () async {
-                                //  RTL  -->  Right (Next)
-                                if (isLoading) return;
-                                if (isRtl && page < state.list.length - 1) {
-                                  await animate(true);
-                                }
-                                if (!isRtl && page > 0) {
-                                  await animate(false);
-                                }
-                              },
-                              icon: Icon(Icons.arrow_forward_ios_rounded, color: Colors.grey.shade600),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Positioned.directional(
-                        end: 10,
-                        textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
-                        child: AnimatedStackMenu(
-                          spacing: 50,
-                          direction: isRtl ? Direction.left : Direction.right,
-                          toggleButton: (animation, toggle) => IconButton.filled(
-                            style: IconButton.styleFrom(
-                              foregroundColor: Colors.grey.shade700,
-                              backgroundColor: Colors.grey.withAlpha(50),
-                            ),
-                            onPressed: toggle,
-                            icon: AnimatedIcon(icon: AnimatedIcons.menu_close, progress: animation),
-                          ),
-                          children: [
-                            IconButton.filled(
-                              style: IconButton.styleFrom(
-                                foregroundColor: Colors.blue,
-                                backgroundColor: Colors.blue.withAlpha(50),
-                              ),
-                              onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => BlocProvider.value(
-                                    value: context.read<MeasurementBloc>(),
-                                    child: const AddEditMeasurementScreen(),
+                              child: Column(
+                                key: ValueKey<int>(page),
+                                children: [
+                                  Text(
+                                    intl.DateFormat("MMMM d, yyyy").format(m.checkDate),
+                                    style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
                                   ),
-                                ),
-                              ),
-                              icon: const Icon(Icons.add),
-                            ),
-                            IconButton.filled(
-                              style: IconButton.styleFrom(
-                                foregroundColor: Colors.green,
-                                backgroundColor: Colors.green.withAlpha(50),
-                              ),
-                              onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => BlocProvider.value(
-                                    value: context.read<MeasurementBloc>(),
-                                    child: AddEditMeasurementScreen(m: state.list[page]),
-                                  ),
-                                ),
-                              ),
-                              icon: const Icon(Icons.edit),
-                            ),
-                            IconButton.filled(
-                              style: IconButton.styleFrom(
-                                foregroundColor: Colors.red,
-                                backgroundColor: Colors.red.withAlpha(50),
-                              ),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) => BlocProvider.value(
-                                    value: context.read<MeasurementBloc>(),
-                                    child: DeleteDialog(
-                                      onPositive: () => context.read<MeasurementBloc>().add(
-                                        MeasurementEvent.deleteMeasurement(state.list[page]),
-                                      ),
-                                      itemName:
-                                          "${locale.record} ${intl.DateFormat('d/M/y').format(state.list[page].checkDate)}",
+                                  Text(
+                                    "${page + 1} of ${state.list.length}",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                );
-                              },
-                              icon: const Icon(Icons.delete),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
-                error: (state) {
-                  return SizedBox.expand(
-                    child: Stack(
-                      children: [
-                        Positioned.directional(textDirection: isRtl ? .rtl : .ltr, child: const BackButton()),
-                        Positioned.directional(
-                          end: 10.0,
-                          textDirection: isRtl ? .rtl : .ltr,
-                          child: IconButton.filled(
-                            style: IconButton.styleFrom(
-                              foregroundColor: Colors.blue,
-                              backgroundColor: Colors.blue.withAlpha(50),
-                            ),
-                            onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => BlocProvider.value(
-                                  value: context.read<MeasurementBloc>(),
-                                  child: const AddEditMeasurementScreen(),
-                                ),
+                                ],
                               ),
                             ),
-                            icon: const Icon(Icons.add),
                           ),
-                        ),
-                        Center(
-                          child: EmptyPage(
-                            imageName: CaptainImages.emptyMeasurement,
-                            message: locale.emptyMeasurements,
-                            imageSize: Size(screen.width * .7, screen.width * .7),
+                          _NavButton(
+                            icon: Icons.chevron_right_rounded,
+                            onPressed: () => _animate(!isRtl, state.list.length),
+                            enabled: isRtl ? page > 0 : page < state.list.length - 1,
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  );
-                },
-              );
-            },
-          ),
+
+                    // Body Map View
+                    Expanded(
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(32),
+                          border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.3)),
+                        ),
+                        child: PageTransitionSwitcher(
+                          duration: const Duration(milliseconds: 400),
+                          reverse: !isNextPage,
+                          transitionBuilder: (child, animation, secondaryAnimation) => SharedAxisTransition(
+                            animation: animation,
+                            secondaryAnimation: secondaryAnimation,
+                            transitionType: SharedAxisTransitionType.horizontal,
+                            child: child,
+                          ),
+                          child: BodyMeasurementMap(
+                            key: ValueKey<int>(m.id ?? page),
+                            measurement: m,
+                            onSelectPart: (title, val, key) {
+                              // In view mode, maybe show a trend or just open edit
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => BlocProvider.value(
+                                    value: context.read<MeasurementBloc>(),
+                                    child: AddEditMeasurementScreen(m: m),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    // Quick Stats Bar
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
+                        children: [
+                          _CompactStat(label: locale.height, value: "${m.height}", unit: "cm"),
+                          const SizedBox(width: 12),
+                          _CompactStat(label: locale.weight, value: "${m.weight}", unit: "kg"),
+                        ],
+                      ),
+                    ),
+
+                    // Floating Action Menu
+                    _buildActionDock(context, m, locale, isRtl),
+                  ],
+                );
+              },
+            );
+          },
         ),
       ),
     );
   }
 
-  void childBuilder(Measurement m) {
-    final local = AppLocalizations.of(context)!;
-    const verticalGap = 5.0;
-    child = SingleChildScrollView(
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                MeasureWidget(image: MusclesImages.shoulder, title: local.shoulders, value: m.shoulders),
-                MeasureWidget(image: MusclesImages.neck, title: local.nick, value: m.neck),
-                MeasureWidget(image: MusclesImages.height, title: local.height, value: m.height),
-              ],
+  Widget _buildEmptyState(BuildContext context, AppLocalizations locale) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          EmptyPage(
+            imageName: CaptainImages.emptyMeasurement,
+            message: locale.emptyMeasurements,
+            imageSize: Size(MediaQuery.sizeOf(context).width * .6, MediaQuery.sizeOf(context).width * .6),
+          ),
+          const SizedBox(height: 24),
+          FilledButton.icon(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    BlocProvider.value(value: context.read<MeasurementBloc>(), child: const AddEditMeasurementScreen()),
+              ),
             ),
-            const SizedBox(height: verticalGap),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                MeasureWidget(image: MusclesImages.rArm, title: local.lArm, value: m.lArm),
-                MeasureWidget(image: MusclesImages.chest, title: local.chest, value: m.chest),
-                MeasureWidget(image: MusclesImages.lArm, title: local.rArm, value: m.rArm),
-              ],
-            ),
-            const SizedBox(height: verticalGap),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                MeasureWidget(image: MusclesImages.rThigh, title: local.lThigh, value: m.lThigh),
-                MeasureWidget(image: MusclesImages.waist, title: local.waist, value: m.waist),
-                MeasureWidget(image: MusclesImages.lThigh, title: local.rThigh, value: m.rThigh),
-              ],
-            ),
-            const SizedBox(height: verticalGap),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                MeasureWidget(image: MusclesImages.rLeg, title: local.lLeg, value: m.lLeg), // rLeg
-                MeasureWidget(image: MusclesImages.hips, title: local.hips, value: m.hips),
+            icon: const Icon(Icons.add_rounded),
+            label: Text(locale.add.toUpperCase()),
+          ),
+        ],
+      ),
+    );
+  }
 
-                MeasureWidget(image: MusclesImages.lLeg, title: local.rLeg, value: m.rLeg),
+  Widget _buildActionDock(BuildContext context, Measurement m, AppLocalizations locale, bool isRtl) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: EdgeInsets.fromLTRB(24, 8, 24, MediaQuery.paddingOf(context).bottom + 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _DockAction(
+            icon: Icons.delete_outline_rounded,
+            color: Colors.red,
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (_) => BlocProvider.value(
+                  value: context.read<MeasurementBloc>(),
+                  child: DeleteDialog(
+                    onPositive: () => context.read<MeasurementBloc>().add(MeasurementEvent.deleteMeasurement(m)),
+                    itemName: "${locale.record} ${intl.DateFormat('d/M/y').format(m.checkDate)}",
+                  ),
+                ),
+              );
+            },
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: _DockAction(
+              icon: Icons.edit_rounded,
+              label: locale.edit,
+              color: colorScheme.primary,
+              isPrimary: true,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                    value: context.read<MeasurementBloc>(),
+                    child: AddEditMeasurementScreen(m: m),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          _DockAction(
+            icon: Icons.add_rounded,
+            color: colorScheme.secondary,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    BlocProvider.value(value: context.read<MeasurementBloc>(), child: const AddEditMeasurementScreen()),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NavButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onPressed;
+  final bool enabled;
+
+  const _NavButton({required this.icon, required this.onPressed, required this.enabled});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton.filledTonal(
+      onPressed: enabled ? onPressed : null,
+      icon: Icon(icon),
+      style: IconButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+    );
+  }
+}
+
+class _CompactStat extends StatelessWidget {
+  final String label;
+  final String value;
+  final String unit;
+
+  const _CompactStat({required this.label, required this.value, required this.unit});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.5)),
+        ),
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: colorScheme.onSurfaceVariant),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                    const SizedBox(width: 2),
+                    Text(unit, style: TextStyle(fontSize: 10, color: colorScheme.onSurfaceVariant)),
+                  ],
+                ),
               ],
             ),
-            const SizedBox(height: verticalGap),
-            MeasureWidget(image: MusclesImages.weight, title: local.weight, isCm: false, value: m.weight),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DockAction extends StatelessWidget {
+  final IconData icon;
+  final String? label;
+  final Color color;
+  final bool isPrimary;
+  final VoidCallback onTap;
+
+  const _DockAction({required this.icon, this.label, required this.color, this.isPrimary = false, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: isPrimary ? color : color.withValues(alpha: 0.1),
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          height: 56,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: isPrimary ? Colors.white : color),
+              if (label != null) ...[
+                const SizedBox(width: 8),
+                Text(
+                  label!,
+                  style: TextStyle(color: isPrimary ? Colors.white : color, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ],
+          ),
         ),
       ),
     );
