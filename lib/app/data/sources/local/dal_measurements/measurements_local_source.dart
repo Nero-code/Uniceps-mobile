@@ -41,8 +41,37 @@ class MeasurementsLocalSource implements IMeasurementsLocalSource {
 
   @override
   Future<void> upsertMeasurement(MeasurementModel m) async {
+    // 1. If we have a local ID, update the existing local record.
+    // This handles the "Just Uploaded" case where we received an apiId.
+    if (m.id != null) {
+      final companion = MeasurementsCompanion(
+        apiId: m.apiId != null ? Value(m.apiId!) : const Value.absent(),
+        height: Value(m.height),
+        weight: Value(m.weight),
+        lArm: Value(m.lArm),
+        rArm: Value(m.rArm),
+        lHumerus: Value(m.lHumerus),
+        rHumerus: Value(m.rHumerus),
+        lThigh: Value(m.lThigh),
+        rThigh: Value(m.rThigh),
+        lLeg: Value(m.lLeg),
+        rLeg: Value(m.rLeg),
+        neck: Value(m.neck),
+        shoulders: Value(m.shoulders),
+        waist: Value(m.waist),
+        chest: Value(m.chest),
+        hips: Value(m.hips),
+        checkDate: Value(m.checkDate),
+        version: Value(m.version),
+        isSynced: Value(m.isSynced),
+      );
+      await (database.update(database.measurements)..where((f) => f.id.equals(m.id!))).write(companion);
+      return;
+    }
+
+    // 2. If we don't have a local ID, but have an apiId, use apiId for conflict resolution.
+    // This handles the "Downloading" case from the server.
     final companion = MeasurementsCompanion(
-      id: m.id != null ? Value(m.id!) : const Value.absent(),
       apiId: m.apiId != null ? Value(m.apiId!) : const Value.absent(),
       height: Value(m.height),
       weight: Value(m.weight),

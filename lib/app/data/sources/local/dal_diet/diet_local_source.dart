@@ -49,7 +49,6 @@ class DietLocalSource implements IDietLocalSource {
   @override
   Future<IngredientModel> saveIngredient(IngredientModel ingredient) async {
     final companion = IngredientsCompanion(
-      id: ingredient.id != null ? Value(ingredient.id!) : const Value.absent(),
       apiId: ingredient.apiId != null ? Value(ingredient.apiId!) : const Value.absent(),
       name: Value(ingredient.name),
       isUserGenerated: Value(ingredient.isUserGenerated),
@@ -158,8 +157,25 @@ class DietLocalSource implements IDietLocalSource {
 
   @override
   Future<void> upsertDietLog(DietLogDto log) async {
+    if (log.id != null) {
+      final companion = DietLogsCompanion(
+        apiId: log.apiId != null ? Value(log.apiId!) : const Value.absent(),
+        name: Value(log.ingredientName),
+        totalGrams: Value(log.totalGrams),
+        calories: Value(log.calories),
+        protein: Value(log.protein),
+        carbs: Value(log.carbs),
+        fats: Value(log.fats),
+        timestamp: Value(log.timestamp),
+        version: Value(log.version),
+        isSynced: Value(log.isSynced),
+      );
+
+      await (_db.update(_db.dietLogs)..where((tbl) => tbl.id.equals(log.id!))).write(companion);
+      return;
+    }
+
     final companion = DietLogsCompanion(
-      id: log.id != null ? Value(log.id!) : const Value.absent(),
       apiId: log.apiId != null ? Value(log.apiId!) : const Value.absent(),
       name: Value(log.ingredientName),
       totalGrams: Value(log.totalGrams),

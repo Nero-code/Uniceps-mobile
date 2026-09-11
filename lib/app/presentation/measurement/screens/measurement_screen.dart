@@ -51,7 +51,11 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
         appBar: AppBar(title: Text(locale.measurements), centerTitle: true),
         body: BlocConsumer<MeasurementBloc, MeasurementState>(
           listener: (context, state) => state.whenOrNull(
-            dirty: () => context.read<MeasurementBloc>().add(const MeasurementEvent.getMeasurements()),
+            dirty: () {
+              if (page > 0) --page;
+              context.read<MeasurementBloc>().add(const MeasurementEvent.getMeasurements());
+              return null;
+            },
           ),
           buildWhen: (_, current) => current.maybeWhen(orElse: () => true, dirty: () => false),
           builder: (context, state) {
