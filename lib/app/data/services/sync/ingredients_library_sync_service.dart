@@ -14,14 +14,14 @@ class IngredientsLibrarySyncService {
     : _localSource = localSource,
       _remoteSource = remoteSource;
 
-  Future<void> syncLib() async {
+  Future<void> syncLib({required String lang}) async {
     try {
       // 1. Upload User Generated Content First
       await _uploadUserGeneratedContent();
 
       // 2. Download New Base Library Content (Delta Sync)
       final latest = await _localSource.getLastLibSync();
-      final updatedIngredients = await _retry(() => _remoteSource.loadIngredients(lastSync: latest));
+      final updatedIngredients = await _retry(() => _remoteSource.loadIngredients(lastSync: latest, language: lang));
 
       if (updatedIngredients.isNotEmpty) {
         await _localSource.bulkSaveIngredients(updatedIngredients);

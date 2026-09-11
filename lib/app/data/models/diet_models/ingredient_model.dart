@@ -122,10 +122,13 @@ class IngredientModel {
     categoryId: categoryId ?? this.categoryId,
     categoryName: categoryName ?? this.categoryName,
     servingSizeInGrams: servingSizeInGrams ?? this.servingSizeInGrams,
+    isUserGenerated: isUserGenerated ?? this.isUserGenerated,
     calories: calories ?? this.calories,
     protein: protein ?? this.protein,
     carbs: carbs ?? this.carbs,
     fats: fats ?? this.fats,
+    version: version ?? this.version,
+    isSynced: isSynced ?? this.isSynced,
     updatedAt: updatedAt ?? this.updatedAt,
     createdAt: createdAt ?? this.createdAt,
   );

@@ -47,6 +47,11 @@ class _IngredientsScreenState extends State<IngredientsScreen> {
               context,
             ).showSnackBar(SnackBar(content: Text(locale.langChangedSuccess), backgroundColor: Colors.green));
           },
+          deleteSuccess: () {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(locale.deleteSuccess), backgroundColor: Colors.green));
+          },
           failure: (failure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -58,7 +63,12 @@ class _IngredientsScreenState extends State<IngredientsScreen> {
           orElse: () {},
         );
       },
-      // buildWhen: (p, c) => c.maybeWhen(orElse: () => true, changingLanguage: () => false),
+      buildWhen: (p, c) => c.maybeWhen(
+        orElse: () => true,
+        changingLanguage: () => false,
+        deleteSuccess: () => false,
+        languageChangeSuccess: (_) => false,
+      ),
       builder: (context, state) {
         return Stack(
           children: [
@@ -251,6 +261,7 @@ class _IngredientsScreenState extends State<IngredientsScreen> {
 
   void _showDeleteConfirm(Ingredient ingredient) {
     final locale = AppLocalizations.of(context)!;
+    final ingredientsBloc = context.read<IngredientsBloc>();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -259,7 +270,10 @@ class _IngredientsScreenState extends State<IngredientsScreen> {
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: Text(locale.cancel)),
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              ingredientsBloc.add(IngredientsEvent.deleteIngredient(ingredient: ingredient));
+              Navigator.pop(context);
+            },
             child: Text(locale.delete, style: const TextStyle(color: Colors.red)),
           ),
         ],

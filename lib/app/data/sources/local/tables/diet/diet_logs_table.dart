@@ -14,4 +14,5 @@ class DietLogs extends Table {
 
   IntColumn get version => integer()();
   BoolColumn get isSynced => boolean()();
+  BoolColumn get deleted => boolean().withDefault(const Constant(false))();
 }

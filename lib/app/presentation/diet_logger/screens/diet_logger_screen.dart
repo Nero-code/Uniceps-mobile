@@ -20,9 +20,9 @@ class DietLoggerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final language = context.read<AppConfigCubit>().state.config.exerciseLibLanguage.languageCode;
+    final language = context.read<AppConfigCubit>().state.config.dietLibLanguage.languageCode;
     return BlocProvider(
-      create: (context) => IngredientsBloc(dietCommands: sl())..add(.started(language)),
+      create: (context) => IngredientsBloc(dietCommands: sl())..add(const .started()),
       lazy: false,
       child: Scaffold(
         backgroundColor: back2,
@@ -97,7 +97,7 @@ class DietLoggerScreen extends StatelessWidget {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) => BlocProvider(
-        create: (context) => IngredientsBloc(dietCommands: sl())..add(.started(language)),
+        create: (context) => IngredientsBloc(dietCommands: sl())..add(const .started()),
         child: const AddDietLogSheet(),
       ),
     );

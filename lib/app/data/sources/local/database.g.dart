@@ -4457,6 +4457,7 @@ class $MeasurementsTable extends Measurements
     true,
     type: DriftSqlType.int,
     requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
   );
   static const VerificationMeta _heightMeta = const VerificationMeta('height');
   @override
@@ -4637,6 +4638,21 @@ class $MeasurementsTable extends Measurements
     ),
     defaultValue: const Constant(false),
   );
+  static const VerificationMeta _deletedMeta = const VerificationMeta(
+    'deleted',
+  );
+  @override
+  late final GeneratedColumn<bool> deleted = GeneratedColumn<bool>(
+    'deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("deleted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -4659,6 +4675,7 @@ class $MeasurementsTable extends Measurements
     checkDate,
     version,
     isSynced,
+    deleted,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -4821,6 +4838,12 @@ class $MeasurementsTable extends Measurements
         isSynced.isAcceptableOrUnknown(data['is_synced']!, _isSyncedMeta),
       );
     }
+    if (data.containsKey('deleted')) {
+      context.handle(
+        _deletedMeta,
+        deleted.isAcceptableOrUnknown(data['deleted']!, _deletedMeta),
+      );
+    }
     return context;
   }
 
@@ -4910,6 +4933,10 @@ class $MeasurementsTable extends Measurements
         DriftSqlType.bool,
         data['${effectivePrefix}is_synced'],
       )!,
+      deleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}deleted'],
+      )!,
     );
   }
 
@@ -4940,6 +4967,7 @@ class Measurement extends DataClass implements Insertable<Measurement> {
   final DateTime checkDate;
   final int version;
   final bool isSynced;
+  final bool deleted;
   const Measurement({
     required this.id,
     this.apiId,
@@ -4961,6 +4989,7 @@ class Measurement extends DataClass implements Insertable<Measurement> {
     required this.checkDate,
     required this.version,
     required this.isSynced,
+    required this.deleted,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -4987,6 +5016,7 @@ class Measurement extends DataClass implements Insertable<Measurement> {
     map['check_date'] = Variable<DateTime>(checkDate);
     map['version'] = Variable<int>(version);
     map['is_synced'] = Variable<bool>(isSynced);
+    map['deleted'] = Variable<bool>(deleted);
     return map;
   }
 
@@ -5014,6 +5044,7 @@ class Measurement extends DataClass implements Insertable<Measurement> {
       checkDate: Value(checkDate),
       version: Value(version),
       isSynced: Value(isSynced),
+      deleted: Value(deleted),
     );
   }
 
@@ -5043,6 +5074,7 @@ class Measurement extends DataClass implements Insertable<Measurement> {
       checkDate: serializer.fromJson<DateTime>(json['checkDate']),
       version: serializer.fromJson<int>(json['version']),
       isSynced: serializer.fromJson<bool>(json['isSynced']),
+      deleted: serializer.fromJson<bool>(json['deleted']),
     );
   }
   @override
@@ -5069,6 +5101,7 @@ class Measurement extends DataClass implements Insertable<Measurement> {
       'checkDate': serializer.toJson<DateTime>(checkDate),
       'version': serializer.toJson<int>(version),
       'isSynced': serializer.toJson<bool>(isSynced),
+      'deleted': serializer.toJson<bool>(deleted),
     };
   }
 
@@ -5093,6 +5126,7 @@ class Measurement extends DataClass implements Insertable<Measurement> {
     DateTime? checkDate,
     int? version,
     bool? isSynced,
+    bool? deleted,
   }) => Measurement(
     id: id ?? this.id,
     apiId: apiId.present ? apiId.value : this.apiId,
@@ -5114,6 +5148,7 @@ class Measurement extends DataClass implements Insertable<Measurement> {
     checkDate: checkDate ?? this.checkDate,
     version: version ?? this.version,
     isSynced: isSynced ?? this.isSynced,
+    deleted: deleted ?? this.deleted,
   );
   Measurement copyWithCompanion(MeasurementsCompanion data) {
     return Measurement(
@@ -5137,6 +5172,7 @@ class Measurement extends DataClass implements Insertable<Measurement> {
       checkDate: data.checkDate.present ? data.checkDate.value : this.checkDate,
       version: data.version.present ? data.version.value : this.version,
       isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
+      deleted: data.deleted.present ? data.deleted.value : this.deleted,
     );
   }
 
@@ -5162,13 +5198,14 @@ class Measurement extends DataClass implements Insertable<Measurement> {
           ..write('hips: $hips, ')
           ..write('checkDate: $checkDate, ')
           ..write('version: $version, ')
-          ..write('isSynced: $isSynced')
+          ..write('isSynced: $isSynced, ')
+          ..write('deleted: $deleted')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
+  int get hashCode => Object.hashAll([
     id,
     apiId,
     height,
@@ -5189,7 +5226,8 @@ class Measurement extends DataClass implements Insertable<Measurement> {
     checkDate,
     version,
     isSynced,
-  );
+    deleted,
+  ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -5213,7 +5251,8 @@ class Measurement extends DataClass implements Insertable<Measurement> {
           other.hips == this.hips &&
           other.checkDate == this.checkDate &&
           other.version == this.version &&
-          other.isSynced == this.isSynced);
+          other.isSynced == this.isSynced &&
+          other.deleted == this.deleted);
 }
 
 class MeasurementsCompanion extends UpdateCompanion<Measurement> {
@@ -5237,6 +5276,7 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
   final Value<DateTime> checkDate;
   final Value<int> version;
   final Value<bool> isSynced;
+  final Value<bool> deleted;
   const MeasurementsCompanion({
     this.id = const Value.absent(),
     this.apiId = const Value.absent(),
@@ -5258,6 +5298,7 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
     this.checkDate = const Value.absent(),
     this.version = const Value.absent(),
     this.isSynced = const Value.absent(),
+    this.deleted = const Value.absent(),
   });
   MeasurementsCompanion.insert({
     this.id = const Value.absent(),
@@ -5280,6 +5321,7 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
     required DateTime checkDate,
     this.version = const Value.absent(),
     this.isSynced = const Value.absent(),
+    this.deleted = const Value.absent(),
   }) : height = Value(height),
        weight = Value(weight),
        lArm = Value(lArm),
@@ -5317,6 +5359,7 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
     Expression<DateTime>? checkDate,
     Expression<int>? version,
     Expression<bool>? isSynced,
+    Expression<bool>? deleted,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -5339,6 +5382,7 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
       if (checkDate != null) 'check_date': checkDate,
       if (version != null) 'version': version,
       if (isSynced != null) 'is_synced': isSynced,
+      if (deleted != null) 'deleted': deleted,
     });
   }
 
@@ -5363,6 +5407,7 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
     Value<DateTime>? checkDate,
     Value<int>? version,
     Value<bool>? isSynced,
+    Value<bool>? deleted,
   }) {
     return MeasurementsCompanion(
       id: id ?? this.id,
@@ -5385,6 +5430,7 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
       checkDate: checkDate ?? this.checkDate,
       version: version ?? this.version,
       isSynced: isSynced ?? this.isSynced,
+      deleted: deleted ?? this.deleted,
     );
   }
 
@@ -5451,6 +5497,9 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
     if (isSynced.present) {
       map['is_synced'] = Variable<bool>(isSynced.value);
     }
+    if (deleted.present) {
+      map['deleted'] = Variable<bool>(deleted.value);
+    }
     return map;
   }
 
@@ -5476,7 +5525,8 @@ class MeasurementsCompanion extends UpdateCompanion<Measurement> {
           ..write('hips: $hips, ')
           ..write('checkDate: $checkDate, ')
           ..write('version: $version, ')
-          ..write('isSynced: $isSynced')
+          ..write('isSynced: $isSynced, ')
+          ..write('deleted: $deleted')
           ..write(')'))
         .toString();
   }
@@ -5654,6 +5704,21 @@ class $IngredientsTable extends Ingredients
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _deletedMeta = const VerificationMeta(
+    'deleted',
+  );
+  @override
+  late final GeneratedColumn<bool> deleted = GeneratedColumn<bool>(
+    'deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("deleted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -5671,6 +5736,7 @@ class $IngredientsTable extends Ingredients
     isSynced,
     updatedAt,
     createdAt,
+    deleted,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -5806,6 +5872,12 @@ class $IngredientsTable extends Ingredients
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
+    if (data.containsKey('deleted')) {
+      context.handle(
+        _deletedMeta,
+        deleted.isAcceptableOrUnknown(data['deleted']!, _deletedMeta),
+      );
+    }
     return context;
   }
 
@@ -5875,6 +5947,10 @@ class $IngredientsTable extends Ingredients
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
       )!,
+      deleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}deleted'],
+      )!,
     );
   }
 
@@ -5900,6 +5976,7 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
   final bool isSynced;
   final DateTime updatedAt;
   final DateTime createdAt;
+  final bool deleted;
   const IngredientData({
     required this.id,
     this.apiId,
@@ -5916,6 +5993,7 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
     required this.isSynced,
     required this.updatedAt,
     required this.createdAt,
+    required this.deleted,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -5937,6 +6015,7 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
     map['is_synced'] = Variable<bool>(isSynced);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     map['created_at'] = Variable<DateTime>(createdAt);
+    map['deleted'] = Variable<bool>(deleted);
     return map;
   }
 
@@ -5959,6 +6038,7 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
       isSynced: Value(isSynced),
       updatedAt: Value(updatedAt),
       createdAt: Value(createdAt),
+      deleted: Value(deleted),
     );
   }
 
@@ -5985,6 +6065,7 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
       isSynced: serializer.fromJson<bool>(json['isSynced']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      deleted: serializer.fromJson<bool>(json['deleted']),
     );
   }
   @override
@@ -6006,6 +6087,7 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
       'isSynced': serializer.toJson<bool>(isSynced),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'createdAt': serializer.toJson<DateTime>(createdAt),
+      'deleted': serializer.toJson<bool>(deleted),
     };
   }
 
@@ -6025,6 +6107,7 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
     bool? isSynced,
     DateTime? updatedAt,
     DateTime? createdAt,
+    bool? deleted,
   }) => IngredientData(
     id: id ?? this.id,
     apiId: apiId.present ? apiId.value : this.apiId,
@@ -6041,6 +6124,7 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
     isSynced: isSynced ?? this.isSynced,
     updatedAt: updatedAt ?? this.updatedAt,
     createdAt: createdAt ?? this.createdAt,
+    deleted: deleted ?? this.deleted,
   );
   IngredientData copyWithCompanion(IngredientsCompanion data) {
     return IngredientData(
@@ -6067,6 +6151,7 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
       isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      deleted: data.deleted.present ? data.deleted.value : this.deleted,
     );
   }
 
@@ -6087,7 +6172,8 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
           ..write('version: $version, ')
           ..write('isSynced: $isSynced, ')
           ..write('updatedAt: $updatedAt, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('deleted: $deleted')
           ..write(')'))
         .toString();
   }
@@ -6109,6 +6195,7 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
     isSynced,
     updatedAt,
     createdAt,
+    deleted,
   );
   @override
   bool operator ==(Object other) =>
@@ -6128,7 +6215,8 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
           other.version == this.version &&
           other.isSynced == this.isSynced &&
           other.updatedAt == this.updatedAt &&
-          other.createdAt == this.createdAt);
+          other.createdAt == this.createdAt &&
+          other.deleted == this.deleted);
 }
 
 class IngredientsCompanion extends UpdateCompanion<IngredientData> {
@@ -6147,6 +6235,7 @@ class IngredientsCompanion extends UpdateCompanion<IngredientData> {
   final Value<bool> isSynced;
   final Value<DateTime> updatedAt;
   final Value<DateTime> createdAt;
+  final Value<bool> deleted;
   const IngredientsCompanion({
     this.id = const Value.absent(),
     this.apiId = const Value.absent(),
@@ -6163,6 +6252,7 @@ class IngredientsCompanion extends UpdateCompanion<IngredientData> {
     this.isSynced = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.deleted = const Value.absent(),
   });
   IngredientsCompanion.insert({
     this.id = const Value.absent(),
@@ -6180,6 +6270,7 @@ class IngredientsCompanion extends UpdateCompanion<IngredientData> {
     required bool isSynced,
     required DateTime updatedAt,
     required DateTime createdAt,
+    this.deleted = const Value.absent(),
   }) : isUserGenerated = Value(isUserGenerated),
        name = Value(name),
        categoryId = Value(categoryId),
@@ -6209,6 +6300,7 @@ class IngredientsCompanion extends UpdateCompanion<IngredientData> {
     Expression<bool>? isSynced,
     Expression<DateTime>? updatedAt,
     Expression<DateTime>? createdAt,
+    Expression<bool>? deleted,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -6227,6 +6319,7 @@ class IngredientsCompanion extends UpdateCompanion<IngredientData> {
       if (isSynced != null) 'is_synced': isSynced,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (createdAt != null) 'created_at': createdAt,
+      if (deleted != null) 'deleted': deleted,
     });
   }
 
@@ -6246,6 +6339,7 @@ class IngredientsCompanion extends UpdateCompanion<IngredientData> {
     Value<bool>? isSynced,
     Value<DateTime>? updatedAt,
     Value<DateTime>? createdAt,
+    Value<bool>? deleted,
   }) {
     return IngredientsCompanion(
       id: id ?? this.id,
@@ -6263,6 +6357,7 @@ class IngredientsCompanion extends UpdateCompanion<IngredientData> {
       isSynced: isSynced ?? this.isSynced,
       updatedAt: updatedAt ?? this.updatedAt,
       createdAt: createdAt ?? this.createdAt,
+      deleted: deleted ?? this.deleted,
     );
   }
 
@@ -6314,6 +6409,9 @@ class IngredientsCompanion extends UpdateCompanion<IngredientData> {
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
+    if (deleted.present) {
+      map['deleted'] = Variable<bool>(deleted.value);
+    }
     return map;
   }
 
@@ -6334,7 +6432,8 @@ class IngredientsCompanion extends UpdateCompanion<IngredientData> {
           ..write('version: $version, ')
           ..write('isSynced: $isSynced, ')
           ..write('updatedAt: $updatedAt, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('deleted: $deleted')
           ..write(')'))
         .toString();
   }
@@ -6465,6 +6564,21 @@ class $DietLogsTable extends DietLogs
       'CHECK ("is_synced" IN (0, 1))',
     ),
   );
+  static const VerificationMeta _deletedMeta = const VerificationMeta(
+    'deleted',
+  );
+  @override
+  late final GeneratedColumn<bool> deleted = GeneratedColumn<bool>(
+    'deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("deleted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -6478,6 +6592,7 @@ class $DietLogsTable extends DietLogs
     timestamp,
     version,
     isSynced,
+    deleted,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -6572,6 +6687,12 @@ class $DietLogsTable extends DietLogs
     } else if (isInserting) {
       context.missing(_isSyncedMeta);
     }
+    if (data.containsKey('deleted')) {
+      context.handle(
+        _deletedMeta,
+        deleted.isAcceptableOrUnknown(data['deleted']!, _deletedMeta),
+      );
+    }
     return context;
   }
 
@@ -6625,6 +6746,10 @@ class $DietLogsTable extends DietLogs
         DriftSqlType.bool,
         data['${effectivePrefix}is_synced'],
       )!,
+      deleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}deleted'],
+      )!,
     );
   }
 
@@ -6646,6 +6771,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
   final DateTime timestamp;
   final int version;
   final bool isSynced;
+  final bool deleted;
   const DietLogData({
     required this.id,
     this.apiId,
@@ -6658,6 +6784,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
     required this.timestamp,
     required this.version,
     required this.isSynced,
+    required this.deleted,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -6675,6 +6802,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
     map['timestamp'] = Variable<DateTime>(timestamp);
     map['version'] = Variable<int>(version);
     map['is_synced'] = Variable<bool>(isSynced);
+    map['deleted'] = Variable<bool>(deleted);
     return map;
   }
 
@@ -6693,6 +6821,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
       timestamp: Value(timestamp),
       version: Value(version),
       isSynced: Value(isSynced),
+      deleted: Value(deleted),
     );
   }
 
@@ -6713,6 +6842,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
       timestamp: serializer.fromJson<DateTime>(json['timestamp']),
       version: serializer.fromJson<int>(json['version']),
       isSynced: serializer.fromJson<bool>(json['isSynced']),
+      deleted: serializer.fromJson<bool>(json['deleted']),
     );
   }
   @override
@@ -6730,6 +6860,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
       'timestamp': serializer.toJson<DateTime>(timestamp),
       'version': serializer.toJson<int>(version),
       'isSynced': serializer.toJson<bool>(isSynced),
+      'deleted': serializer.toJson<bool>(deleted),
     };
   }
 
@@ -6745,6 +6876,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
     DateTime? timestamp,
     int? version,
     bool? isSynced,
+    bool? deleted,
   }) => DietLogData(
     id: id ?? this.id,
     apiId: apiId.present ? apiId.value : this.apiId,
@@ -6757,6 +6889,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
     timestamp: timestamp ?? this.timestamp,
     version: version ?? this.version,
     isSynced: isSynced ?? this.isSynced,
+    deleted: deleted ?? this.deleted,
   );
   DietLogData copyWithCompanion(DietLogsCompanion data) {
     return DietLogData(
@@ -6773,6 +6906,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
       timestamp: data.timestamp.present ? data.timestamp.value : this.timestamp,
       version: data.version.present ? data.version.value : this.version,
       isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
+      deleted: data.deleted.present ? data.deleted.value : this.deleted,
     );
   }
 
@@ -6789,7 +6923,8 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
           ..write('fats: $fats, ')
           ..write('timestamp: $timestamp, ')
           ..write('version: $version, ')
-          ..write('isSynced: $isSynced')
+          ..write('isSynced: $isSynced, ')
+          ..write('deleted: $deleted')
           ..write(')'))
         .toString();
   }
@@ -6807,6 +6942,7 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
     timestamp,
     version,
     isSynced,
+    deleted,
   );
   @override
   bool operator ==(Object other) =>
@@ -6822,7 +6958,8 @@ class DietLogData extends DataClass implements Insertable<DietLogData> {
           other.fats == this.fats &&
           other.timestamp == this.timestamp &&
           other.version == this.version &&
-          other.isSynced == this.isSynced);
+          other.isSynced == this.isSynced &&
+          other.deleted == this.deleted);
 }
 
 class DietLogsCompanion extends UpdateCompanion<DietLogData> {
@@ -6837,6 +6974,7 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
   final Value<DateTime> timestamp;
   final Value<int> version;
   final Value<bool> isSynced;
+  final Value<bool> deleted;
   const DietLogsCompanion({
     this.id = const Value.absent(),
     this.apiId = const Value.absent(),
@@ -6849,6 +6987,7 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
     this.timestamp = const Value.absent(),
     this.version = const Value.absent(),
     this.isSynced = const Value.absent(),
+    this.deleted = const Value.absent(),
   });
   DietLogsCompanion.insert({
     this.id = const Value.absent(),
@@ -6862,6 +7001,7 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
     required DateTime timestamp,
     required int version,
     required bool isSynced,
+    this.deleted = const Value.absent(),
   }) : name = Value(name),
        totalGrams = Value(totalGrams),
        calories = Value(calories),
@@ -6883,6 +7023,7 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
     Expression<DateTime>? timestamp,
     Expression<int>? version,
     Expression<bool>? isSynced,
+    Expression<bool>? deleted,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -6896,6 +7037,7 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
       if (timestamp != null) 'timestamp': timestamp,
       if (version != null) 'version': version,
       if (isSynced != null) 'is_synced': isSynced,
+      if (deleted != null) 'deleted': deleted,
     });
   }
 
@@ -6911,6 +7053,7 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
     Value<DateTime>? timestamp,
     Value<int>? version,
     Value<bool>? isSynced,
+    Value<bool>? deleted,
   }) {
     return DietLogsCompanion(
       id: id ?? this.id,
@@ -6924,6 +7067,7 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
       timestamp: timestamp ?? this.timestamp,
       version: version ?? this.version,
       isSynced: isSynced ?? this.isSynced,
+      deleted: deleted ?? this.deleted,
     );
   }
 
@@ -6963,6 +7107,9 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
     if (isSynced.present) {
       map['is_synced'] = Variable<bool>(isSynced.value);
     }
+    if (deleted.present) {
+      map['deleted'] = Variable<bool>(deleted.value);
+    }
     return map;
   }
 
@@ -6979,7 +7126,8 @@ class DietLogsCompanion extends UpdateCompanion<DietLogData> {
           ..write('fats: $fats, ')
           ..write('timestamp: $timestamp, ')
           ..write('version: $version, ')
-          ..write('isSynced: $isSynced')
+          ..write('isSynced: $isSynced, ')
+          ..write('deleted: $deleted')
           ..write(')'))
         .toString();
   }
@@ -10356,6 +10504,7 @@ typedef $$MeasurementsTableCreateCompanionBuilder =
       required DateTime checkDate,
       Value<int> version,
       Value<bool> isSynced,
+      Value<bool> deleted,
     });
 typedef $$MeasurementsTableUpdateCompanionBuilder =
     MeasurementsCompanion Function({
@@ -10379,6 +10528,7 @@ typedef $$MeasurementsTableUpdateCompanionBuilder =
       Value<DateTime> checkDate,
       Value<int> version,
       Value<bool> isSynced,
+      Value<bool> deleted,
     });
 
 class $$MeasurementsTableFilterComposer
@@ -10487,6 +10637,11 @@ class $$MeasurementsTableFilterComposer
 
   ColumnFilters<bool> get isSynced => $composableBuilder(
     column: $table.isSynced,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get deleted => $composableBuilder(
+    column: $table.deleted,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -10599,6 +10754,11 @@ class $$MeasurementsTableOrderingComposer
     column: $table.isSynced,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get deleted => $composableBuilder(
+    column: $table.deleted,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$MeasurementsTableAnnotationComposer
@@ -10669,6 +10829,9 @@ class $$MeasurementsTableAnnotationComposer
 
   GeneratedColumn<bool> get isSynced =>
       $composableBuilder(column: $table.isSynced, builder: (column) => column);
+
+  GeneratedColumn<bool> get deleted =>
+      $composableBuilder(column: $table.deleted, builder: (column) => column);
 }
 
 class $$MeasurementsTableTableManager
@@ -10722,6 +10885,7 @@ class $$MeasurementsTableTableManager
                 Value<DateTime> checkDate = const Value.absent(),
                 Value<int> version = const Value.absent(),
                 Value<bool> isSynced = const Value.absent(),
+                Value<bool> deleted = const Value.absent(),
               }) => MeasurementsCompanion(
                 id: id,
                 apiId: apiId,
@@ -10743,6 +10907,7 @@ class $$MeasurementsTableTableManager
                 checkDate: checkDate,
                 version: version,
                 isSynced: isSynced,
+                deleted: deleted,
               ),
           createCompanionCallback:
               ({
@@ -10766,6 +10931,7 @@ class $$MeasurementsTableTableManager
                 required DateTime checkDate,
                 Value<int> version = const Value.absent(),
                 Value<bool> isSynced = const Value.absent(),
+                Value<bool> deleted = const Value.absent(),
               }) => MeasurementsCompanion.insert(
                 id: id,
                 apiId: apiId,
@@ -10787,6 +10953,7 @@ class $$MeasurementsTableTableManager
                 checkDate: checkDate,
                 version: version,
                 isSynced: isSynced,
+                deleted: deleted,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -10830,6 +10997,7 @@ typedef $$IngredientsTableCreateCompanionBuilder =
       required bool isSynced,
       required DateTime updatedAt,
       required DateTime createdAt,
+      Value<bool> deleted,
     });
 typedef $$IngredientsTableUpdateCompanionBuilder =
     IngredientsCompanion Function({
@@ -10848,6 +11016,7 @@ typedef $$IngredientsTableUpdateCompanionBuilder =
       Value<bool> isSynced,
       Value<DateTime> updatedAt,
       Value<DateTime> createdAt,
+      Value<bool> deleted,
     });
 
 class $$IngredientsTableFilterComposer
@@ -10931,6 +11100,11 @@ class $$IngredientsTableFilterComposer
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get deleted => $composableBuilder(
+    column: $table.deleted,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -11018,6 +11192,11 @@ class $$IngredientsTableOrderingComposer
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get deleted => $composableBuilder(
+    column: $table.deleted,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$IngredientsTableAnnotationComposer
@@ -11081,6 +11260,9 @@ class $$IngredientsTableAnnotationComposer
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get deleted =>
+      $composableBuilder(column: $table.deleted, builder: (column) => column);
 }
 
 class $$IngredientsTableTableManager
@@ -11129,6 +11311,7 @@ class $$IngredientsTableTableManager
                 Value<bool> isSynced = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
+                Value<bool> deleted = const Value.absent(),
               }) => IngredientsCompanion(
                 id: id,
                 apiId: apiId,
@@ -11145,6 +11328,7 @@ class $$IngredientsTableTableManager
                 isSynced: isSynced,
                 updatedAt: updatedAt,
                 createdAt: createdAt,
+                deleted: deleted,
               ),
           createCompanionCallback:
               ({
@@ -11163,6 +11347,7 @@ class $$IngredientsTableTableManager
                 required bool isSynced,
                 required DateTime updatedAt,
                 required DateTime createdAt,
+                Value<bool> deleted = const Value.absent(),
               }) => IngredientsCompanion.insert(
                 id: id,
                 apiId: apiId,
@@ -11179,6 +11364,7 @@ class $$IngredientsTableTableManager
                 isSynced: isSynced,
                 updatedAt: updatedAt,
                 createdAt: createdAt,
+                deleted: deleted,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -11218,6 +11404,7 @@ typedef $$DietLogsTableCreateCompanionBuilder =
       required DateTime timestamp,
       required int version,
       required bool isSynced,
+      Value<bool> deleted,
     });
 typedef $$DietLogsTableUpdateCompanionBuilder =
     DietLogsCompanion Function({
@@ -11232,6 +11419,7 @@ typedef $$DietLogsTableUpdateCompanionBuilder =
       Value<DateTime> timestamp,
       Value<int> version,
       Value<bool> isSynced,
+      Value<bool> deleted,
     });
 
 class $$DietLogsTableFilterComposer
@@ -11295,6 +11483,11 @@ class $$DietLogsTableFilterComposer
 
   ColumnFilters<bool> get isSynced => $composableBuilder(
     column: $table.isSynced,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get deleted => $composableBuilder(
+    column: $table.deleted,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -11362,6 +11555,11 @@ class $$DietLogsTableOrderingComposer
     column: $table.isSynced,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get deleted => $composableBuilder(
+    column: $table.deleted,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$DietLogsTableAnnotationComposer
@@ -11407,6 +11605,9 @@ class $$DietLogsTableAnnotationComposer
 
   GeneratedColumn<bool> get isSynced =>
       $composableBuilder(column: $table.isSynced, builder: (column) => column);
+
+  GeneratedColumn<bool> get deleted =>
+      $composableBuilder(column: $table.deleted, builder: (column) => column);
 }
 
 class $$DietLogsTableTableManager
@@ -11451,6 +11652,7 @@ class $$DietLogsTableTableManager
                 Value<DateTime> timestamp = const Value.absent(),
                 Value<int> version = const Value.absent(),
                 Value<bool> isSynced = const Value.absent(),
+                Value<bool> deleted = const Value.absent(),
               }) => DietLogsCompanion(
                 id: id,
                 apiId: apiId,
@@ -11463,6 +11665,7 @@ class $$DietLogsTableTableManager
                 timestamp: timestamp,
                 version: version,
                 isSynced: isSynced,
+                deleted: deleted,
               ),
           createCompanionCallback:
               ({
@@ -11477,6 +11680,7 @@ class $$DietLogsTableTableManager
                 required DateTime timestamp,
                 required int version,
                 required bool isSynced,
+                Value<bool> deleted = const Value.absent(),
               }) => DietLogsCompanion.insert(
                 id: id,
                 apiId: apiId,
@@ -11489,6 +11693,7 @@ class $$DietLogsTableTableManager
                 timestamp: timestamp,
                 version: version,
                 isSynced: isSynced,
+                deleted: deleted,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

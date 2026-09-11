@@ -30,7 +30,7 @@ class AppConfigsService {
         orElse: () => Lang.en,
       );
 
-      _configs = Configs.initial(language: defaultAppLanguage.code);
+      _configs = Configs.initial(appLanguage: defaultAppLanguage.code);
       await _prefs.setString(_configsKeyInPrefs, jsonEncode(_configs.toJson()));
     } else {
       _configs = Configs.fromJson(jsonDecode(confJson));

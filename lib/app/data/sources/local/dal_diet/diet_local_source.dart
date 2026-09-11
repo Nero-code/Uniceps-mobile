@@ -41,7 +41,7 @@ class DietLocalSource implements IDietLocalSource {
     if (categoryId != null) {
       query.where((tbl) => tbl.categoryId.equals(categoryId));
     }
-
+    query.where((tbl) => tbl.deleted.not());
     final result = await query.get();
     return result.map((e) => IngredientModel.fromCompanion(e)).toList();
   }
@@ -68,7 +68,7 @@ class DietLocalSource implements IDietLocalSource {
 
     final id = await _db
         .into(_db.ingredients)
-        .insert(companion, onConflict: DoUpdate((old) => companion, target: [_db.ingredients.id]));
+        .insert(companion, onConflict: DoUpdate((old) => companion, target: [_db.ingredients.apiId]));
 
     final result = await (_db.select(_db.ingredients)..where((t) => t.id.equals(id))).getSingle();
     return IngredientModel.fromCompanion(result);
@@ -107,20 +107,30 @@ class DietLocalSource implements IDietLocalSource {
   @override
   Future<void> deleteIngredient(IngredientModel ingredient) async {
     if (ingredient.id != null) {
-      await (_db.delete(_db.ingredients)..where((t) => t.id.equals(ingredient.id!))).go();
+      if (ingredient.apiId == null) {
+        await (_db.delete(_db.ingredients)..where((t) => t.id.equals(ingredient.id!))).go();
+        return;
+      }
+      final query = _db.update(_db.ingredients)..where((t) => t.id.equals(ingredient.id!));
+      await query.write(const IngredientsCompanion(deleted: Value(true)));
     }
   }
 
   @override
   Future<void> deleteLog(DietLogDto log) async {
     if (log.id != null) {
-      await (_db.delete(_db.dietLogs)..where((t) => t.id.equals(log.id!))).go();
+      if (log.apiId == null) {
+        await (_db.delete(_db.dietLogs)..where((t) => t.id.equals(log.id!))).go();
+        return;
+      }
+      final query = _db.update(_db.dietLogs)..where((t) => t.id.equals(log.id!));
+      await query.write(const DietLogsCompanion(deleted: Value(true)));
     }
   }
 
   @override
   Future<List<DietLogDto>> getAllLogs() async {
-    final result = await _db.select(_db.dietLogs).get();
+    final result = await (_db.select(_db.dietLogs)..where((f) => f.deleted.not())).get();
     return result.map((e) => DietLogDto.fromCompanion(e)).toList();
   }
 
@@ -130,7 +140,12 @@ class DietLocalSource implements IDietLocalSource {
     final endOfDay = startOfDay.add(const Duration(days: 1));
 
     final query = _db.select(_db.dietLogs)
-      ..where((tbl) => tbl.timestamp.isBiggerOrEqualValue(startOfDay) & tbl.timestamp.isSmallerThanValue(endOfDay));
+      ..where(
+        (tbl) =>
+            tbl.timestamp.isBiggerOrEqualValue(startOfDay) &
+            tbl.timestamp.isSmallerThanValue(endOfDay) &
+            tbl.deleted.not(),
+      );
 
     final result = await query.get();
     return result.map((e) => DietLogDto.fromCompanion(e)).toList();
@@ -159,13 +174,7 @@ class DietLocalSource implements IDietLocalSource {
 
     await _db
         .into(_db.dietLogs)
-        .insert(
-          companion,
-          onConflict: DoUpdate(
-            (old) => companion,
-            target: [_db.dietLogs.id], // Conflict target is the id
-          ),
-        );
+        .insert(companion, onConflict: DoUpdate((old) => companion, target: [_db.dietLogs.apiId]));
   }
 
   @override
@@ -181,7 +190,8 @@ class DietLocalSource implements IDietLocalSource {
 
   @override
   Future<List<IngredientModel>> getUserGeneratedContent() async {
-    final query = _db.select(_db.ingredients)..where((tbl) => (tbl.isUserGenerated & tbl.isSynced.not()));
+    final query = _db.select(_db.ingredients)
+      ..where((tbl) => tbl.isUserGenerated & tbl.isSynced.not() & tbl.deleted.not());
 
     final result = await query.get();
     return result.map((e) => IngredientModel.fromCompanion(e)).toList();
@@ -189,7 +199,7 @@ class DietLocalSource implements IDietLocalSource {
 
   @override
   Future<List<DietLogDto>> getAllUnSyncedLogs() async {
-    final query = _db.select(_db.dietLogs)..where((tbl) => tbl.isSynced.not());
+    final query = _db.select(_db.dietLogs)..where((tbl) => tbl.isSynced.not() & tbl.deleted.not());
     final result = await query.get();
 
     return result.map((l) => DietLogDto.fromCompanion(l)).toList();
@@ -211,7 +221,7 @@ class DietLocalSource implements IDietLocalSource {
           version: log.version,
           isSynced: true,
         );
-        batch.insert(_db.dietLogs, companion);
+        batch.insert(_db.dietLogs, companion, onConflict: DoNothing(target: [_db.dietLogs.apiId]));
       }
     });
   }

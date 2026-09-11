@@ -13,7 +13,6 @@ abstract class IMeasurementsLocalSource {
 
   // Sync
   Future<List<MeasurementModel>> getAllUnSyncedMeasurements();
-  Future<DateTime?> getLastMeasurementSync();
 }
 
 class MeasurementsLocalSource implements IMeasurementsLocalSource {
@@ -23,7 +22,8 @@ class MeasurementsLocalSource implements IMeasurementsLocalSource {
 
   @override
   Future<List<MeasurementModel>> getMeasurements() async {
-    final res = await database.select(database.measurements).get();
+    final query = database.select(database.measurements)..where((tbl) => tbl.deleted.not());
+    final res = await query.get();
     return res.map(MeasurementModel.fromTable).toList();
   }
 
@@ -66,25 +66,24 @@ class MeasurementsLocalSource implements IMeasurementsLocalSource {
 
     await database
         .into(database.measurements)
-        .insert(companion, onConflict: DoUpdate((old) => companion, target: [database.measurements.id]));
+        .insert(companion, onConflict: DoUpdate((old) => companion, target: [database.measurements.apiId]));
   }
 
   @override
   Future<void> deleteMeasurement(MeasurementModel m) async {
-    await (database.delete(database.measurements)..where((f) => f.id.equals(m.id!))).go();
+    if (m.apiId == null) {
+      final query = database.delete(database.measurements)..where((f) => f.id.equals(m.id!));
+      await query.go();
+      return;
+    }
+    final query = database.update(database.measurements)..where((f) => f.id.equals(m.id!));
+    await query.write(const MeasurementsCompanion(deleted: Value(true)));
   }
 
   @override
   Future<List<MeasurementModel>> getAllUnSyncedMeasurements() async {
-    final query = database.select(database.measurements)..where((tbl) => tbl.isSynced.not());
+    final query = database.select(database.measurements)..where((tbl) => tbl.isSynced.not() & tbl.deleted.not());
     final res = await query.get();
     return res.map(MeasurementModel.fromTable).toList();
-  }
-
-  @override
-  Future<DateTime?> getLastMeasurementSync() async {
-    final query = database.selectOnly(database.measurements)..addColumns([database.measurements.checkDate.max()]);
-    final result = await query.getSingle();
-    return result.read(database.measurements.checkDate.max());
   }
 }

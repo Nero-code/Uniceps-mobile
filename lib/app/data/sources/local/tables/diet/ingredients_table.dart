@@ -19,4 +19,5 @@ class Ingredients extends Table {
   BoolColumn get isSynced => boolean()();
   DateTimeColumn get updatedAt => dateTime()();
   DateTimeColumn get createdAt => dateTime()();
+  BoolColumn get deleted => boolean().withDefault(const Constant(false))();
 }
