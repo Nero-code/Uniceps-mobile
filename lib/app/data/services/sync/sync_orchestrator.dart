@@ -1,7 +1,9 @@
+import 'package:uniceps/app/data/services/sync/delete_orchestrator.dart';
 import 'package:uniceps/app/data/services/sync/diet_logs_sync_service.dart';
 import 'package:uniceps/app/data/services/sync/ingredients_library_sync_service.dart';
 import 'package:uniceps/app/data/services/sync/measurements_sync_service.dart';
 import 'package:uniceps/app/data/services/sync/t_session_sync_service.dart';
+import 'package:uniceps/app/services/app_configs_service.dart';
 import 'package:uniceps/app/services/device_info_sync_service.dart';
 import 'package:uniceps/core/logging/app_logger.dart';
 
@@ -11,18 +13,41 @@ class SyncOrchestrator {
   final TSessionSyncService _tSessionSync;
   final DeviceInfoSyncService _deviceInfoSync;
   final MeasurementsSyncService _measurementsSync;
+  final DeleteSyncOrchestrator _deleteSync;
+  final AppConfigsService _appConfigsService;
 
-  SyncOrchestrator({
+  const SyncOrchestrator({
     required IngredientsLibrarySyncService ingredientsSync,
     required DietLogsSyncService dietLogsSync,
     required TSessionSyncService tSessionSync,
     required DeviceInfoSyncService deviceInfoSync,
     required MeasurementsSyncService measurementsSync,
-  }) : _ingredientsSync = ingredientsSync,
+    required DeleteSyncOrchestrator deleteSync,
+    required AppConfigsService appConfigsService,
+  }) : _appConfigsService = appConfigsService,
+       _ingredientsSync = ingredientsSync,
        _dietLogsSync = dietLogsSync,
        _tSessionSync = tSessionSync,
        _deviceInfoSync = deviceInfoSync,
+       _deleteSync = deleteSync,
        _measurementsSync = measurementsSync;
+
+  /// Syncs all deletions, user activity and diet data.
+  Future<void> syncAll() async {
+    await syncDeletions();
+    await syncDietData();
+    await syncUserActivity();
+  }
+
+  /// Syncs local soft-deletions with the API.
+  Future<void> syncDeletions() async {
+    try {
+      logger.d('Syncing Deletions...');
+      await _deleteSync.syncAll();
+    } catch (e) {
+      logger.e('Deletion sync failed', error: e);
+    }
+  }
 
   /// Syncs device information. Should be called when user is authenticated.
   Future<void> syncDeviceInfo() async {
@@ -38,7 +63,10 @@ class SyncOrchestrator {
   Future<void> syncDietData() async {
     try {
       logger.i('--- Starting Diet Data Sync ---');
-      await Future.wait([_dietLogsSync.syncDietLogs(), _ingredientsSync.syncLib()]);
+      await Future.wait([
+        _dietLogsSync.syncDietLogs(),
+        _ingredientsSync.syncLib(lang: _appConfigsService.configs.dietLibLanguage.languageCode),
+      ]);
       logger.i('--- Diet Data Sync Finished ---');
     } catch (e, s) {
       logger.e('Diet data sync failed', error: e, stackTrace: s);

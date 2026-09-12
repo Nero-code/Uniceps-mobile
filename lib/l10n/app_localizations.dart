@@ -2282,6 +2282,12 @@ abstract class AppLocalizations {
   /// **'Language changed successfully'**
   String get langChangedSuccess;
 
+  /// No description provided for @deleteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted successfully'**
+  String get deleteSuccess;
+
   /// No description provided for @downloadingRoutine.
   ///
   /// In en, this message translates to:

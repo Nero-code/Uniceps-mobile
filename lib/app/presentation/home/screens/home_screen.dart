@@ -66,7 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
       providers: [
         BlocProvider(create: (context) => StopwatchCubit(prefs: di.sl()), lazy: false),
         BlocProvider(
-          create: (context) => PremadeRoutinesCubit(repo: di.sl())..getPremadeRoutines(gender ?? Gender.both),
+          create: (context) =>
+              PremadeRoutinesCubit(repo: di.sl())..getPremadeRoutines(gender ?? Gender.both, languageCode: lang),
           lazy: false,
         ),
       ],

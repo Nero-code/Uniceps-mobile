@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniceps/app/data/services/internet_client/client_helper.dart';
 import 'package:uniceps/app/data/services/internet_client/http_client_helper.dart';
 import 'package:uniceps/app/data/services/media_helper.dart';
+import 'package:uniceps/app/data/services/sync/delete_orchestrator.dart';
 import 'package:uniceps/app/data/services/sync/diet_logs_sync_service.dart';
 import 'package:uniceps/app/data/services/sync/ingredients_library_sync_service.dart';
 import 'package:uniceps/app/data/services/sync/measurements_sync_service.dart';
@@ -83,7 +84,7 @@ final sl = di.GetIt.instance;
 Future<void> init() async {
   final client = http.Client();
   // final c = io.HttpClient()..connectionTimeout = const Duration(seconds: 30);
-  sl.registerLazySingleton<http.Client>(() => client);
+  sl.registerFactory<http.Client>(() => client);
   // sl.registerLazySingleton<ClientHelper>(
   //     () => NoTokenHttpClientHelper(client: sl()));
 
@@ -125,8 +126,6 @@ Future<void> init() async {
   final appDataBase = AppDatabase();
 
   sl.registerLazySingleton<SharedPreferences>(() => prefs);
-  // sl.registerLazySingleton(() => ReactivePreferencesService(sl()), dispose: (ins) => ins.dispose());
-
   sl.registerLazySingleton<AppDatabase>(() => appDataBase);
   sl.registerLazySingleton<FlutterSecureStorage>(() => const FlutterSecureStorage());
 
@@ -209,12 +208,9 @@ Future<void> init() async {
     () => ProfileRepo(localSource: sl(), remoteSource: sl(), networkInfo: sl()),
   );
 
-  sl.registerLazySingleton<IDietService>(() => DietRepo(localSource: sl(), remoteSource: sl()));
+  sl.registerLazySingleton<IDietService>(() => DietRepo(localSource: sl(), remoteSource: sl(), appConfigs: sl()));
 
   sl.registerLazySingleton<IPracticeContract>(() => PracticeRepo(localSource: sl()));
-  // sl.registerLazySingleton<IRoutineManagementContract>(
-  //   () => RoutineManagementRepo(localSource: sl(), internet: sl(), clientHelper: sl()),
-  // );
   sl.registerLazySingleton<IRoutineWithHeatContract>(
     () => RoutineWithHeatRepo(localSource: sl(), mediaHelper: sl(), fileParseService: sl(), remoteSource: sl()),
   );
@@ -270,7 +266,6 @@ Future<void> init() async {
 
   sl.registerFactory(() => AccountUsecases(repo: sl()));
   sl.registerFactory(() => PracticeCommands(repo: sl()));
-  // sl.registerFactory(() => RoutineManagementCommands(repo: sl()));
   sl.registerFactory(() => RoutineWithHeatCommands(repo: sl()));
   sl.registerFactory(() => RoutineDaysCommands(repo: sl()));
   sl.registerFactory(() => RoutineItemsCommands(repo: sl()));
@@ -297,6 +292,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => DietLogsSyncService(localSource: sl(), remoteSource: sl(), preferences: sl()));
   sl.registerLazySingleton(() => MeasurementsSyncService(localSource: sl(), remoteSource: sl(), preferences: sl()));
 
+  sl.registerLazySingleton(() => DeleteSyncOrchestrator(db: sl(), client: sl()));
+
   sl.registerLazySingleton(
     () => SyncOrchestrator(
       ingredientsSync: sl(),
@@ -304,6 +301,8 @@ Future<void> init() async {
       tSessionSync: sl(),
       deviceInfoSync: sl(),
       measurementsSync: sl(),
+      deleteSync: sl(),
+      appConfigsService: sl(),
     ),
   );
 
@@ -312,6 +311,4 @@ Future<void> init() async {
   final appConfigs = AppConfigsService(prefs: sl(), measurementContract: sl());
   await appConfigs.getAppConfigs();
   sl.registerLazySingleton(() => appConfigs);
-
-  // sl.registerLazySingleton(() => DietService(sl(), sl()));
 }

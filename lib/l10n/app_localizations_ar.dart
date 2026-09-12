@@ -1140,6 +1140,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get langChangedSuccess => 'تم تغيير اللغة بنجاح';
 
   @override
+  String get deleteSuccess => 'تم الحذف بنجاح';
+
+  @override
   String get downloadingRoutine => 'جاري تحميل البرنامج...';
 
   @override

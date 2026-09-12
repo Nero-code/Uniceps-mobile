@@ -22,7 +22,7 @@ IngredientModel _$IngredientModelFromJson(Map<String, dynamic> json) =>
       createdAt: DateTime.parse(json['createdAt'] as String),
       isUserGenerated: json['isUserGenerated'] as bool? ?? false,
       version: (json['version'] as num?)?.toInt() ?? 0,
-      isSynced: json['isSynced'] as bool? ?? false,
+      isSynced: json['isSynced'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$IngredientModelToJson(IngredientModel instance) =>

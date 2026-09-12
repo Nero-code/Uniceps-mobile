@@ -19,7 +19,7 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
       super(const IngredientsState.initial()) {
     on<_Started>((event, emit) async {
       emit(const IngredientsState.loading());
-      final result = await _dietCommands.loadIngredients(language: event.language);
+      final result = await _dietCommands.loadIngredients();
       result.fold((failure) => emit(IngredientsState.failure(failure: failure)), (ingredients) {
         categories = _extractCategories(ingredients);
         emit(IngredientsState.success(ingredients: ingredients, categories: categories));
@@ -39,7 +39,7 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
 
     on<_CreateIngredient>((event, emit) async {
       final either = await _dietCommands.saveIngredient(event.ingredient);
-      either.fold((f) => emit(IngredientsState.failure(failure: f)), (r) => add(const .started('')));
+      either.fold((f) => emit(IngredientsState.failure(failure: f)), (r) => add(const IngredientsEvent.started()));
     });
 
     on<_ChangeLibLanguage>((event, emit) async {
@@ -50,7 +50,17 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
         emit(IngredientsState.languageChangeSuccess(lang: event.language));
 
         // IMPORTANT: Re-trigger Started event to reload ingredients with the new language
-        add(IngredientsEvent.started(event.language));
+        add(const IngredientsEvent.started());
+      });
+    });
+
+    on<_DeleteIngredient>((event, emit) async {
+      final either = await _dietCommands.deleteIngredient(event.ingredient);
+
+      await either.fold((failure) async => emit(IngredientsState.failure(failure: failure)), (success) async {
+        emit(const IngredientsState.deleteSuccess());
+        // Refresh ingredients list
+        add(const IngredientsEvent.started());
       });
     });
   }

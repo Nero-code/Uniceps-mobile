@@ -1144,6 +1144,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get langChangedSuccess => 'Language changed successfully';
 
   @override
+  String get deleteSuccess => 'Deleted successfully';
+
+  @override
   String get downloadingRoutine => 'Downloading Routine...';
 
   @override

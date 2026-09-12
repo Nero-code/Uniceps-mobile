@@ -6,21 +6,27 @@ import 'package:uniceps/app/data/sources/remote/dal_diet/diet_remote_source.dart
 import 'package:uniceps/app/domain/classes/diet_classes/diet_log.dart';
 import 'package:uniceps/app/domain/classes/diet_classes/ingredient.dart';
 import 'package:uniceps/app/domain/contracts/diet/i_diet_service.dart';
+import 'package:uniceps/app/services/app_configs_service.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/logging/app_logger.dart';
 
 class DietRepo implements IDietService {
   final IDietLocalSource _localSource;
   final IDietRemoteSource _remoteSource;
+  final AppConfigsService _appConfigs;
 
   List<Ingredient> allIngredients = [];
 
-  DietRepo({required IDietLocalSource localSource, required IDietRemoteSource remoteSource})
-    : _localSource = localSource,
-      _remoteSource = remoteSource;
+  DietRepo({
+    required IDietLocalSource localSource,
+    required IDietRemoteSource remoteSource,
+    required AppConfigsService appConfigs,
+  }) : _appConfigs = appConfigs,
+       _localSource = localSource,
+       _remoteSource = remoteSource;
 
   @override
-  Future<Either<IngredientFailure, List<Ingredient>>> loadIngredients({String language = 'en'}) async {
+  Future<Either<IngredientFailure, List<Ingredient>>> loadIngredients() async {
     try {
       // 1. Use memory cache if available
       if (allIngredients.isNotEmpty) return Right(allIngredients);
@@ -32,7 +38,8 @@ class DietRepo implements IDietService {
       final hasLibraryItems = models.any((i) => !i.isUserGenerated);
       if (!hasLibraryItems) {
         try {
-          final remoteData = await _remoteSource.loadIngredients(language: language);
+          final dietLibLanguage = _appConfigs.configs.dietLibLanguage.languageCode;
+          final remoteData = await _remoteSource.loadIngredients(language: dietLibLanguage);
           await _localSource.bulkSaveIngredients(remoteData);
           // Refresh local list to include newly saved library items
           models = await _localSource.getIngredients();

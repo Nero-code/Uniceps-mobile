@@ -430,6 +430,7 @@
   "changeIngredientsLanguage": "تغيير لغة المكتبة",
   "changingIngredientsLanguage": "جاري تغيير لغة المكتبة...",
   "langChangedSuccess": "تم تغيير اللغة بنجاح",
+  "deleteSuccess": "تم الحذف بنجاح",
   "downloadingRoutine": "جاري تحميل البرنامج...",
   "levelBeginner": "مبتدئ",
   "levelNovice": "ناشئ",
