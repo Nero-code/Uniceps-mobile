@@ -413,14 +413,6 @@ class MockIMeasurementsLocalSource extends _i1.Mock
             ),
           )
           as _i9.Future<List<_i16.MeasurementModel>>);
-
-  @override
-  _i9.Future<DateTime?> getLastMeasurementSync() =>
-      (super.noSuchMethod(
-            Invocation.method(#getLastMeasurementSync, []),
-            returnValue: _i9.Future<DateTime?>.value(),
-          )
-          as _i9.Future<DateTime?>);
 }
 
 /// A class which mocks [IExercisesLocalSourceContract].

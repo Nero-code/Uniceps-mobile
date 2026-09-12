@@ -28,10 +28,7 @@ class SettingsTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             // color: Colors.white,
             // color: Theme.of(context).colorScheme.secondary.withAlpha(10),
-            border: Border.all(
-              color: const Color(0xFFCCCCCC),
-              width: 0.5,
-            ),
+            border: Border.all(color: const Color(0xFFCCCCCC), width: 0.5),
           ),
           // padding: const EdgeInsets.all(1.0),
           child: InkWell(
@@ -60,21 +57,17 @@ class SettingsTile extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                        color: Colors.grey.shade600,
-                      ),
+                    Column(
+                      crossAxisAlignment: .start,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.grey.shade600),
+                        ),
+                        if (subtitle.isNotEmpty)
+                          Text(subtitle, style: const TextStyle(color: Colors.blueGrey, fontSize: 12)),
+                      ],
                     ),
-                    // Text(
-                    //   subtitle,
-                    //   style: TextStyle(
-                    //     color: Colors.grey,
-                    //     fontSize: 10,
-                    //   ),
-                    // ),
                   ],
                 ),
               ),

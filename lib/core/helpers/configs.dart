@@ -19,10 +19,10 @@ class Configs extends Equatable {
     required this.activityLevel,
   });
 
-  factory Configs.initial({required String language}) => Configs(
-    appLanguage: Locale(language),
-    exerciseLibLanguage: Locale(language),
-    dietLibLanguage: Locale(language),
+  factory Configs.initial({required String appLanguage}) => Configs(
+    appLanguage: Locale(appLanguage),
+    exerciseLibLanguage: Locale(appLanguage),
+    dietLibLanguage: Locale(appLanguage),
     mode: .light,
     goal: null,
     activityLevel: null,
@@ -63,7 +63,6 @@ class Configs extends Equatable {
   );
 
   @override
-  // TODO: implement props
   List<Object?> get props => [
     appLanguage.languageCode,
     exerciseLibLanguage.languageCode,

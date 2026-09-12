@@ -430,6 +430,7 @@
   "changeIngredientsLanguage": "Change Ingredients Language",
   "changingIngredientsLanguage": "Changing library language...",
   "langChangedSuccess": "Language changed successfully",
+  "deleteSuccess": "Deleted successfully",
   "downloadingRoutine": "Downloading Routine...",
   "levelBeginner": "Beginner",
   "levelNovice": "Novice",

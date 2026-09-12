@@ -70,11 +70,6 @@ class _RoutineItemEditTabState extends State<RoutineItemEditTab> with AutomaticK
                                   ),
                                   BlocProvider.value(value: context.read<ItemsEditBloc>()),
                                 ],
-                                // child: ExercisesViewerScreen(
-                                //   dayId: widget.dayId,
-                                //   dayName: widget.dayName,
-                                //   presentExerciseIds: presentItems,
-                                // ),
                                 child: ExercisesSearchScreen(
                                   presentExerciseIds: presentItems,
                                   dayName: widget.dayName,

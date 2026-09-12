@@ -64,7 +64,7 @@ class AppDatabase extends _$AppDatabase {
   );
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 }
 
 extension Migrations on GeneratedDatabase {
@@ -140,6 +140,40 @@ extension Migrations on GeneratedDatabase {
 
       // Re-enable foreign keys
       await m.database.customStatement('PRAGMA foreign_keys = ON;');
+    },
+    from5To6: (m, schema) async {
+      // 1. Programmatically find and delete duplicate rows based on api_id in Dart
+      final rows = await m.database.customSelect('SELECT id, api_id FROM measurements WHERE api_id IS NOT NULL').get();
+
+      final seenApiIds = <int, int>{}; // api_id -> highest id
+      final idsToDelete = <int>[];
+
+      for (final row in rows) {
+        final id = row.read<int>('id');
+        final apiId = row.read<int>('api_id');
+
+        if (seenApiIds.containsKey(apiId)) {
+          final existingId = seenApiIds[apiId]!;
+          if (id > existingId) {
+            idsToDelete.add(existingId);
+            seenApiIds[apiId] = id;
+          } else {
+            idsToDelete.add(id);
+          }
+        } else {
+          seenApiIds[apiId] = id;
+        }
+      }
+
+      if (idsToDelete.isNotEmpty) {
+        final placeholderString = idsToDelete.join(',');
+        await m.database.customStatement('DELETE FROM measurements WHERE id IN ($placeholderString)');
+      }
+
+      // 2. Migrate the tables to apply unique constraint on measurements and add 'deleted' columns to all three
+      await m.alterTable(TableMigration(schema.measurements, newColumns: [schema.measurements.deleted]));
+      await m.addColumn(schema.dietLogs, schema.dietLogs.deleted);
+      await m.addColumn(schema.ingredients, schema.ingredients.deleted);
     },
   );
 }

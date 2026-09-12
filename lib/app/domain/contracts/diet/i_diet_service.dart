@@ -5,7 +5,7 @@ import 'package:uniceps/core/errors/failure.dart';
 
 abstract class IDietService {
   // Ingredients Library
-  Future<Either<IngredientFailure, List<Ingredient>>> loadIngredients({String language});
+  Future<Either<IngredientFailure, List<Ingredient>>> loadIngredients();
   Future<Either<IngredientFailure, List<Ingredient>>> filterIngredientsBy({String searchString = '', int? categoryId});
   Future<Either<IngredientFailure, Ingredient>> saveIngredient(Ingredient ingredient);
   Future<Either<IngredientFailure, Unit>> bulkSaveIngredients(List<Ingredient> ingredients);
