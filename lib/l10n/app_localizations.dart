@@ -1628,35 +1628,35 @@ abstract class AppLocalizations {
   /// **'Set {item} as your current Routine?'**
   String setCurrentAlertContent(Object item);
 
-  /// No description provided for @premiumReminder.
+  /// No description provided for @activationReminder.
   ///
   /// In en, this message translates to:
-  /// **'Your Subscription will end after {days} day(s), renew now!'**
-  String premiumReminder(Object days);
+  /// **'Your Subscription will end after {days} day(s)'**
+  String activationReminder(Object days);
 
-  /// No description provided for @signinAlert.
+  /// No description provided for @signInAlert.
   ///
   /// In en, this message translates to:
   /// **'Sign in to see all features'**
-  String get signinAlert;
+  String get signInAlert;
 
-  /// No description provided for @upgrade.
+  /// No description provided for @activate.
   ///
   /// In en, this message translates to:
-  /// **'Upgrade'**
-  String get upgrade;
+  /// **'Activate'**
+  String get activate;
 
-  /// No description provided for @upgradeAlert.
+  /// No description provided for @activateAlert.
   ///
   /// In en, this message translates to:
-  /// **'Become a Premium Member to unlock your FULL potential'**
-  String get upgradeAlert;
+  /// **'Activate your account to unlock your FULL potential'**
+  String get activateAlert;
 
-  /// No description provided for @premiumAlertContent.
+  /// No description provided for @activationAlertContent.
   ///
   /// In en, this message translates to:
-  /// **'Unlock ALL content with Premium'**
-  String get premiumAlertContent;
+  /// **'Activate to unlock ALL content'**
+  String get activationAlertContent;
 
   /// No description provided for @captainUniAboutContent.
   ///

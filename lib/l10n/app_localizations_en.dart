@@ -805,22 +805,22 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String premiumReminder(Object days) {
-    return 'Your Subscription will end after $days day(s), renew now!';
+  String activationReminder(Object days) {
+    return 'Your Subscription will end after $days day(s)';
   }
 
   @override
-  String get signinAlert => 'Sign in to see all features';
+  String get signInAlert => 'Sign in to see all features';
 
   @override
-  String get upgrade => 'Upgrade';
+  String get activate => 'Activate';
 
   @override
-  String get upgradeAlert =>
-      'Become a Premium Member to unlock your FULL potential';
+  String get activateAlert =>
+      'Activate your account to unlock your FULL potential';
 
   @override
-  String get premiumAlertContent => 'Unlock ALL content with Premium';
+  String get activationAlertContent => 'Activate to unlock ALL content';
 
   @override
   String get captainUniAboutContent =>

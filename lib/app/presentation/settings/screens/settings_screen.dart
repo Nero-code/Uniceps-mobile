@@ -44,7 +44,7 @@ class SettingsScreen extends StatelessWidget {
                   unauthenticated: (_) => SizedBox(
                     height: 35,
                     child: AlertBar(
-                      content: Text(locale.signinAlert, style: const TextStyle(fontSize: 12)),
+                      content: Text(locale.signInAlert, style: const TextStyle(fontSize: 12)),
                       actionText: locale.signin,
                       action: () => Navigator.pushNamed(context, AppRoutes.auth),
                     ),
@@ -79,7 +79,7 @@ class SettingsScreen extends StatelessWidget {
                 }
                 showDialog(
                   context: context,
-                  builder: (context) => AccountLimitAlert(content: locale.signinAlert),
+                  builder: (context) => AccountLimitAlert(content: locale.signInAlert),
                 );
               },
             ),
