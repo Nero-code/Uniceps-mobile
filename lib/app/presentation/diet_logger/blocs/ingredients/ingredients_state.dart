@@ -11,4 +11,5 @@ class IngredientsState with _$IngredientsState {
   const factory IngredientsState.failure({required IngredientFailure failure}) = _Failure;
   const factory IngredientsState.changingLanguage() = _ChangingLanguage;
   const factory IngredientsState.languageChangeSuccess({required String lang}) = _LanguageChangeSuccess;
+  const factory IngredientsState.deleteSuccess() = _DeleteSuccess;
 }

@@ -12,7 +12,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
   final AppConfigsService _appConfigsService;
   AppConfigCubit({required AppConfigsService appConfigsService})
     : _appConfigsService = appConfigsService,
-      super(AppConfigState.appConfig(config: Configs.initial(language: 'en')));
+      super(AppConfigState.appConfig(config: Configs.initial(appLanguage: 'en')));
 
   Future<void> loadConfigs() async {
     final config = await _appConfigsService.getAppConfigs();

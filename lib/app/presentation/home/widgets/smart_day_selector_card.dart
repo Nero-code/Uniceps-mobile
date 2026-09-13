@@ -342,7 +342,7 @@ class _ActiveSessionHeroBanner extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [primaryTeal, Color(0xFF0284C7)]),
+        gradient: LinearGradient(colors: [primaryTeal, const Color(0xFF0284C7)]),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [BoxShadow(color: primaryTeal.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
       ),

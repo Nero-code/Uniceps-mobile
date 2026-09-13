@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/domain/commands/diet/diet_commands.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/exercise_lib/exercise_lib_cubit.dart';
@@ -25,6 +26,9 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     // final screenSize = MediaQuery.sizeOf(context);
+    final appLanguage = context.watch<AppConfigCubit>().state.config.appLanguage.languageCode;
+    final exerciseLibLang = context.watch<AppConfigCubit>().state.config.exerciseLibLanguage.languageCode;
+    final dietLibLanguage = context.watch<AppConfigCubit>().state.config.dietLibLanguage.languageCode;
     return Scaffold(
       appBar: AppBar(title: Text(locale.scrTitleSettings)),
       body: SingleChildScrollView(
@@ -40,7 +44,7 @@ class SettingsScreen extends StatelessWidget {
                   unauthenticated: (_) => SizedBox(
                     height: 35,
                     child: AlertBar(
-                      content: Text(locale.signinAlert, style: const TextStyle(fontSize: 12)),
+                      content: Text(locale.signInAlert, style: const TextStyle(fontSize: 12)),
                       actionText: locale.signin,
                       action: () => Navigator.pushNamed(context, AppRoutes.auth),
                     ),
@@ -75,7 +79,7 @@ class SettingsScreen extends StatelessWidget {
                 }
                 showDialog(
                   context: context,
-                  builder: (context) => AccountLimitAlert(content: locale.signinAlert),
+                  builder: (context) => AccountLimitAlert(content: locale.signInAlert),
                 );
               },
             ),
@@ -83,12 +87,14 @@ class SettingsScreen extends StatelessWidget {
               icon: Icons.language,
               iconsColor: Colors.blue,
               title: locale.language,
+              subtitle: appLanguage,
               onPressed: () => showDialog(context: context, builder: (_) => const LangAlertDialog()),
             ),
             SettingsTile(
-              icon: Icons.swap_horiz,
+              icon: Icons.language,
               iconsColor: Colors.red,
               title: locale.changeExercisesLang,
+              subtitle: exerciseLibLang,
               onPressed: () {
                 showDialog(
                   context: context,
@@ -131,6 +137,68 @@ class SettingsScreen extends StatelessWidget {
                           },
                         ),
                       ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            SettingsTile(
+              icon: Icons.language,
+              iconsColor: Colors.red,
+              title: locale.changeIngredientsLanguage,
+              subtitle: dietLibLanguage,
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => ContentLangDialog(
+                    title: locale.changeIngredientsLanguage,
+                    langCode: dietLibLanguage,
+                    onLangChanged: (code) => showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: FutureBuilder(
+                            future: () async {
+                              final either = await sl<DietCommands>().changeIngredientsLanguage(language: code);
+                              final res = await either.fold(
+                                (l) async {
+                                  return false;
+                                },
+                                (r) async {
+                                  await context.read<AppConfigCubit>().changeDietLibLanguageTo(code);
+                                  return true;
+                                },
+                              );
+
+                              if (context.mounted) {
+                                ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+                                  SnackBar(
+                                    content: Text(res ? locale.done : locale.error),
+                                    backgroundColor: res ? Colors.green : Colors.red,
+                                  ),
+                                );
+                              }
+                              return res;
+                            }(),
+                            builder: (context, asyncSnapshot) {
+                              if (asyncSnapshot.connectionState == ConnectionState.done) {
+                                if (!asyncSnapshot.data!) return Text(locale.errNoInternet);
+                                Navigator.pop(context);
+                              }
+                              return const SizedBox.square(
+                                dimension: 50,
+                                child: Center(
+                                  child: LoadingIndicator(
+                                    backgroundColor: Colors.transparent,
+                                    elevated: false,
+                                    size: Size.square(50),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ),
                 );

@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 
 class Measurements extends Table {
   late final id = integer().autoIncrement()();
-  late final apiId = integer().nullable()();
+  late final apiId = integer().nullable().unique()();
   late final height = real()();
   late final weight = real()();
   late final lArm = real()();
@@ -21,4 +21,5 @@ class Measurements extends Table {
   late final checkDate = dateTime()();
   late final version = integer().withDefault(const Constant(0))();
   late final isSynced = boolean().withDefault(const Constant(false))();
+  late final deleted = boolean().withDefault(const Constant(false))();
 }

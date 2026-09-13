@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniceps/app/domain/classes/routine_classes/exercise_filter.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/exercise_tool.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/muscle_group.dart';
 import 'package:uniceps/app/presentation/blocs/exercise_lib/lib_sync_cubit.dart';
-import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/exercise_filter_cubit.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercises_v2/exercises_v2_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
 import 'package:uniceps/app/presentation/routine/screens/exercise_details_screen.dart';
+import 'package:uniceps/app/presentation/routine/widgets/exercise_filter_drawer.dart';
 import 'package:uniceps/app/presentation/routine/widgets/exercise_grid_widget.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
@@ -112,93 +111,13 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
             ),
           ),
         ),
-        endDrawer: Drawer(
-          child: BlocBuilder<ExerciseFilterCubit, ExerciseFilterState>(
-            builder: (context, filterState) {
-              final state = filterState as AvailableExercisesFilter;
-              return SingleChildScrollView(
-                padding: .only(
-                  top: MediaQuery.of(context).padding.top,
-                  bottom: MediaQuery.of(context).padding.bottom,
-                  left: 15,
-                  right: 15,
-                ),
-                child: Column(
-                  children: [
-                    Text(locale.selectFilter),
-                    Wrap(
-                      alignment: .center,
-                      children: [
-                        for (final fg in state.filter.groups) ...[
-                          FilterChip(
-                            label: Text(fg.muscleGroupName),
-                            selected: filterByMuscleGroup.contains(fg),
-                            onSelected: (selected) {
-                              selected ? filterByMuscleGroup.add(fg) : filterByMuscleGroup.remove(fg);
-                              setState(() {});
-                            },
-                          ),
-                          const SizedBox(width: 10),
-                        ],
-                      ],
-                    ),
-
-                    Wrap(
-                      alignment: .center,
-                      children: [
-                        for (final ft in state.filter.tools) ...[
-                          FilterChip(
-                            label: Text(ft.toolName),
-                            selected: filterByTool.contains(ft),
-                            onSelected: (selected) {
-                              selected ? filterByTool.add(ft) : filterByTool.remove(ft);
-                              setState(() {});
-                            },
-                          ),
-                          const SizedBox(width: 10),
-                        ],
-                      ],
-                    ),
-                    const Divider(),
-                    Row(
-                      spacing: 5,
-                      mainAxisAlignment: .spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: FilledButton(
-                            style: FilledButton.styleFrom(foregroundColor: Colors.white),
-                            onPressed: () {
-                              context.read<ExercisesV2Bloc>().add(
-                                GetExercisesByFilterEvent(
-                                  filter: ExerciseFilter(groups: filterByMuscleGroup, tools: filterByTool),
-                                ),
-                              );
-                              Scaffold.of(context).closeEndDrawer();
-                            },
-                            child: Text(locale.apply),
-                          ),
-                        ),
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
-                              context.read<ExercisesV2Bloc>().add(GetExercisesByFilterEvent(filter: .empty()));
-                              WidgetsBinding.instance.addPostFrameCallback(
-                                (_) => setState(() {
-                                  filterByMuscleGroup.clear();
-                                  filterByTool.clear();
-                                }),
-                              );
-                            },
-                            child: Text(locale.reset),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+        endDrawer: ExerciseFilterDrawer(
+          initialMuscleGroups: filterByMuscleGroup,
+          initialTools: filterByTool,
+          onApply: (groups, tools) => setState(() {
+            filterByMuscleGroup = groups;
+            filterByTool = tools;
+          }),
         ),
         body: BlocBuilder<ExercisesV2Bloc, ExercisesV2State>(
           builder: (context, state) {

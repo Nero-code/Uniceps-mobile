@@ -13,55 +13,78 @@ class RoutineImportProgressDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return BlocBuilder<RoutinesWithHeatBloc, RoutinesWithHeatState>(
       builder: (context, state) {
         return state.maybeWhen(
-          importing: (result) => AlertDialog(
-            icon: const Icon(Icons.download, size: 50),
-            title: Text(locale.importRoutine),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ProgressWidget(
-                  title: Text(locale.gettingRoutine),
-                  percent: result.progress,
-                  progressBackground: result.stage == Stage.error ? Colors.red.shade200 : Colors.white,
-                ),
-                const SizedBox(height: 10),
-                Text(sectionContentOf(result.stage, locale)),
-                if (result.stage == Stage.error)
-                  Text(
-                    result.error!.when(
-                      fOffline: () => locale.errNoInternet,
-                      noFileSelected: () => locale.noFileSelected,
-                      unsupportedVersion: () => locale.unsupportedVersion,
-                      parserMismatch: () => locale.parserMismatch,
-                      corruptedFile: () => locale.corruptedFile,
+          importing: (result) => Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+            backgroundColor: colorScheme.surface,
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: (result.stage == Stage.error ? Colors.red : colorScheme.primary).withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
                     ),
-                    style: const TextStyle(color: Colors.red, fontSize: 11),
+                    child: Icon(
+                      result.stage == Stage.error ? Icons.error_outline_rounded : Icons.downloading_rounded,
+                      color: result.stage == Stage.error ? Colors.red : colorScheme.primary,
+                      size: 32,
+                    ),
                   ),
-              ],
+                  const SizedBox(height: 20),
+                  Text(locale.importRoutine, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 24),
+                  ProgressWidget(
+                    title: Text(
+                      sectionContentOf(result.stage, locale),
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    percent: result.progress,
+                    progressBackground: result.stage == Stage.error
+                        ? Colors.red.withValues(alpha: 0.2)
+                        : colorScheme.surfaceContainerHighest,
+                  ),
+                  if (result.stage == Stage.error && result.error != null) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      result.error!.when(
+                        fOffline: () => locale.errNoInternet,
+                        noFileSelected: () => locale.noFileSelected,
+                        unsupportedVersion: () => locale.unsupportedVersion,
+                        parserMismatch: () => locale.parserMismatch,
+                        corruptedFile: () => locale.corruptedFile,
+                      ),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.red, fontSize: 13, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                  const SizedBox(height: 32),
+                  if (result.stage == Stage.error || result.stage == Stage.done)
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton(
+                        style: FilledButton.styleFrom(
+                          backgroundColor: result.stage == Stage.error ? Colors.red : colorScheme.primary,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        ),
+                        onPressed: () {
+                          context.read<RoutinesWithHeatBloc>().add(const RoutinesWithHeatEvent.getRoutines());
+                          Navigator.pop(context);
+                        },
+                        child: Text(result.stage == Stage.error ? locale.cancel : locale.ok),
+                      ),
+                    ),
+                ],
+              ),
             ),
-            actionsAlignment: MainAxisAlignment.center,
-            actions: [
-              if (result.stage == Stage.error)
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red.shade300, foregroundColor: Colors.white),
-                  onPressed: () {
-                    context.read<RoutinesWithHeatBloc>().add(const RoutinesWithHeatEvent.getRoutines());
-                    Navigator.pop(context);
-                  },
-                  child: Text(locale.cancel),
-                ),
-              if (result.stage == Stage.done)
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<RoutinesWithHeatBloc>().add(const RoutinesWithHeatEvent.getRoutines());
-                    Navigator.pop(context);
-                  },
-                  child: Text(locale.ok),
-                ),
-            ],
           ),
           orElse: () => const SizedBox(),
         );
@@ -81,7 +104,6 @@ class RoutineImportProgressDialog extends StatelessWidget {
         return locale.addingItemsImport;
       case Stage.sets:
         return locale.addingSetsImport;
-
       case Stage.done:
         return locale.done;
       case Stage.error:

@@ -18,7 +18,7 @@ abstract class AppRoutes {
   static const routineEdit = '/routine_manager/edit';
   static const routineExercises = '/routine_manager/exercises';
   static const routineItemSetsEdit = '/routine_manager/sets';
-  static const plans = '/plans';
+  // static const plans = '/plans';
   static const performance = '/home/performance';
 
   static const profile = '/settings/profile';

@@ -143,13 +143,15 @@ class HttpClientHelper implements ClientHelper {
     final res = await _client.delete(
       Uri.https(api, urlPart),
       headers: await getHeader(needsHeader, headers),
-      body: body,
+      body: jsonEncode(body),
     );
 
     if (kDebugMode) {
       print("deleteHandler code: ${res.statusCode}");
       print("deleteHandler body: ${res.body}");
     }
+
+    handleHttpStatus(res);
   }
 
   Future<ByteStream> uploadPhoto(

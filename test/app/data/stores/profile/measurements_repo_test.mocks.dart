@@ -80,12 +80,4 @@ class MockIMeasurementsLocalSource extends _i1.Mock
             ),
           )
           as _i3.Future<List<_i4.MeasurementModel>>);
-
-  @override
-  _i3.Future<DateTime?> getLastMeasurementSync() =>
-      (super.noSuchMethod(
-            Invocation.method(#getLastMeasurementSync, []),
-            returnValue: _i3.Future<DateTime?>.value(),
-          )
-          as _i3.Future<DateTime?>);
 }

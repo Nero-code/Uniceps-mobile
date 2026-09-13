@@ -21,19 +21,17 @@ class PremiumAlert extends StatelessWidget {
           height: MediaQuery.sizeOf(context).width * .2,
         ),
       ),
-      content: Text(locale.upgradeAlert, textAlign: TextAlign.center),
+      content: Text(locale.activateAlert, textAlign: TextAlign.center),
       actions: [
         Center(
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber, foregroundColor: Colors.white),
-            onPressed: () {
-              if (unauthenticated) {
-                Navigator.pushReplacementNamed(context, AppRoutes.auth);
-                return;
-              }
-              Navigator.pushReplacementNamed(context, AppRoutes.plans);
-            },
-            child: Text(locale.upgrade),
+            onPressed: unauthenticated
+                ? () {
+                    Navigator.pushReplacementNamed(context, AppRoutes.auth);
+                  }
+                : null,
+            child: Text(locale.activate),
           ),
         ),
       ],
