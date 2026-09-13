@@ -803,21 +803,21 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String premiumReminder(Object days) {
+  String activationReminder(Object days) {
     return 'سوف ينتهي اشتراكك بعد $days يوم جدد الان!';
   }
 
   @override
-  String get signinAlert => 'سجل دخولك الان لتصفح كامل التطبيق';
+  String get signInAlert => 'سجل دخولك الان لتصفح كامل التطبيق';
 
   @override
-  String get upgrade => 'تفعيل';
+  String get activate => 'تفعيل';
 
   @override
-  String get upgradeAlert => 'فعل باقة Premium من اجل افضل استفادة';
+  String get activateAlert => 'فعل حسابك من اجل افضل استفادة';
 
   @override
-  String get premiumAlertContent => 'استمتع بكامل الميزات مع باقة Premium';
+  String get activationAlertContent => 'استمتع بكامل الميزات مع باقة Premium';
 
   @override
   String get captainUniAboutContent =>

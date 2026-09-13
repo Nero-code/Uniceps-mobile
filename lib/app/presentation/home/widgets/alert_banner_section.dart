@@ -31,7 +31,7 @@ class AlertBannerSection extends StatelessWidget {
     return accountCubit.state.map(
       initial: (_) => const SizedBox.shrink(),
       unauthenticated: (_) => AlertBar(
-        content: Text(locale.signinAlert, style: const TextStyle(fontSize: 12)),
+        content: Text(locale.signInAlert, style: const TextStyle(fontSize: 12)),
         actionText: locale.signin,
         action: () => Navigator.pushNamed(context, AppRoutes.auth),
       ),
@@ -43,11 +43,11 @@ class AlertBannerSection extends StatelessWidget {
                   color: primaryTeal.withValues(alpha: 0.1),
                   foregroundColor: primaryTeal,
                   content: Text(
-                    locale.upgradeAlert,
+                    locale.activateAlert,
                     style: const TextStyle(fontSize: 12, color: primaryDark, fontWeight: FontWeight.w500),
                   ),
-                  actionText: locale.upgrade,
-                  action: () => Navigator.pushNamed(context, AppRoutes.plans),
+                  actionText: locale.activate,
+                  action: null,
                   close: onCloseUpgrade,
                 )
               : const SizedBox.shrink(),
