@@ -271,4 +271,16 @@ class ExercisesRepo implements IExercisesContract {
       return Left(ExerciseFailure.databaseFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<String> getExerciseName(String id) async {
+    if (exercisesLib.isEmpty) {
+      await checkExercises();
+    }
+    final match = exercisesLib.where((e) => e.apiId == id);
+    if (match.isNotEmpty) {
+      return match.first.name;
+    }
+    return id;
+  }
 }

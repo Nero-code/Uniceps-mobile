@@ -1,201 +1,448 @@
-import 'package:dartz/dartz.dart' show Either;
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:uniceps/app/domain/classes/performance_entities/physical_report.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/uniceps_summery.dart';
-import 'package:uniceps/app/domain/commands/performance_usecases/performance_commands.dart';
+import 'package:uniceps/app/domain/classes/practice_entities/t_session.dart';
+import 'package:uniceps/app/presentation/performance/cubits/metrics/metrics_cubit.dart';
 import 'package:uniceps/app/presentation/performance/widgets/physical_report_card.dart';
-import 'package:uniceps/app/presentation/performance/widgets/total_accumulation_card.dart';
-import 'package:uniceps/app/presentation/routine/widgets/progress_widget.dart';
-import 'package:uniceps/core/errors/failure.dart';
-import 'package:uniceps/core/helpers/compact_weight.dart';
-import 'package:uniceps/injection_dependency.dart';
-import 'package:uniceps/l10n/app_localizations.dart';
+import 'package:uniceps/core/widgets/loading_page.dart';
 
-class UnicepsSummaryPage extends StatefulWidget {
-  const UnicepsSummaryPage({super.key, required this.summery});
-
-  final UnicepsSummery summery;
-
-  @override
-  State<UnicepsSummaryPage> createState() => _UnicepsSummaryPageState();
-}
-
-class _UnicepsSummaryPageState extends State<UnicepsSummaryPage> {
-  late Future<Either<PerformanceFailure, PhysicalReport>> _physicalReportFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _initFuture();
-  }
-
-  void _initFuture() {
-    final commands = sl<PerformanceCommands>();
-    _physicalReportFuture = commands.getPhysicalReport();
-  }
+class UnicepsSummaryPage extends StatelessWidget {
+  const UnicepsSummaryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.sizeOf(context);
-    final l10n = AppLocalizations.of(context)!;
-    return SingleChildScrollView(
-      padding: .only(top: MediaQuery.paddingOf(context).top + 50, bottom: MediaQuery.paddingOf(context).bottom + 50),
-      child: Center(
-        child: SizedBox(
-          width: screen.width * .9,
-          child: Column(
-            // crossAxisAlignment: .center,
-            spacing: 10,
-            children: [
-              Container(
-                width: screen.width,
-                padding: const EdgeInsets.all(20.0),
-                alignment: const .directional(-1, 0),
-                child: Text(
-                  l10n.summary,
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: Colors.white, fontWeight: .bold),
-                ),
-              ),
 
-              FutureBuilder<Either<PerformanceFailure, PhysicalReport>>(
-                future: _physicalReportFuture,
-                builder: (context, snapshot) {
-                  return PhysicalReportCard(
-                    report: snapshot.hasData ? snapshot.data!.fold((l) => .empty(), (r) => r) : .empty(),
-                  );
-                },
-              ),
-              Container(
-                padding: const .all(15.0),
-                height: 200,
-                decoration: BoxDecoration(
-                  // gradient: LinearGradient(colors: [Colors.red, Colors.deepOrange]),
-                  gradient: LinearGradient(colors: [Colors.white, Colors.grey.shade200]),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: const Offset(0, 0),
-                      color: Colors.white.withAlpha(100),
-                      blurRadius: 10,
-                      spreadRadius: 3,
-                    ),
-                  ],
-                  borderRadius: .circular(25),
-                ),
-                child: Row(
+    return BlocBuilder<MetricsCubit, MetricsState>(
+      builder: (context, state) {
+        if (state is MetricsLoading || state is MetricsInitial) {
+          return const LoadingIndicator();
+        }
+
+        if (state is MetricsFailure) {
+          return const Center(child: Text("Failed to load summary"));
+        }
+
+        if (state is MetricsLoaded) {
+          final summary = state.result.summary;
+          final physicalReport = state.result.physicalReport;
+          final sessions = state.result.sessions;
+
+          return SingleChildScrollView(
+            padding: EdgeInsets.only(
+              top: MediaQuery.paddingOf(context).top + 16,
+              bottom: MediaQuery.paddingOf(context).bottom + 50,
+            ),
+            child: Center(
+              child: SizedBox(
+                width: screen.width * 0.9,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Icon(Icons.local_fire_department, color: Colors.red, size: 120),
-                          Column(
-                            children: [
-                              Text(
-                                widget.summery.currentStreak.toString(),
-                                style: const TextStyle(color: Colors.black54, fontWeight: .bold),
-                              ),
-                              Text(
-                                l10n.currentStreak,
-                                style: const TextStyle(color: Colors.black54, fontSize: 10, fontWeight: .bold),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              widget.summery.longestStreak.toString(),
-                              style: const TextStyle(fontSize: 70, fontWeight: .bold, color: Colors.black54),
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              l10n.longestStreak,
-                              style: const TextStyle(fontWeight: .bold, color: Colors.black54),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Physical Report Card
+                    PhysicalReportCard(report: physicalReport),
+                    const SizedBox(height: 16),
+
+                    // Consistency Heatmap Widget
+                    _ConsistencyHeatmapWidget(summery: summary, sessions: sessions),
+                    const SizedBox(height: 16),
+
+                    // Progressive Overload Trend Widget
+                    _ProgressiveOverloadWidget(sessions: sessions),
                   ],
                 ),
               ),
+            ),
+          );
+        }
+
+        return const SizedBox();
+      },
+    );
+  }
+}
+
+class _ConsistencyHeatmapWidget extends StatelessWidget {
+  const _ConsistencyHeatmapWidget({required this.summery, required this.sessions});
+
+  final UnicepsSummery summery;
+  final List<TSession> sessions;
+
+  List<List<int>> _generateHeatmapData() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final currentWeekMonday = today.subtract(Duration(days: today.weekday - 1));
+    final gridStartDate = currentWeekMonday.subtract(const Duration(days: 15 * 7));
+
+    final Set<String> sessionDates = {};
+    for (final session in sessions) {
+      final key =
+          "${session.createdAt.year}-${session.createdAt.month.toString().padLeft(2, '0')}-${session.createdAt.day.toString().padLeft(2, '0')}";
+      sessionDates.add(key);
+    }
+
+    final calcStartDate = gridStartDate.subtract(const Duration(days: 4));
+    int daysSinceLastSession = 999;
+    final Map<String, int> dateLevelMap = {};
+
+    for (DateTime d = calcStartDate; !d.isAfter(today); d = d.add(const Duration(days: 1))) {
+      final key = "${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}";
+      if (sessionDates.contains(key)) {
+        daysSinceLastSession = 0;
+        dateLevelMap[key] = 3;
+      } else {
+        daysSinceLastSession++;
+        if (daysSinceLastSession == 1) {
+          dateLevelMap[key] = 2;
+        } else if (daysSinceLastSession <= 2) {
+          dateLevelMap[key] = 1;
+        } else {
+          dateLevelMap[key] = 0;
+        }
+      }
+    }
+
+    final List<List<int>> grid = [];
+    for (int w = 0; w < 16; w++) {
+      final List<int> week = [];
+      for (int d = 0; d < 7; d++) {
+        final cellDate = gridStartDate.add(Duration(days: (w * 7) + d));
+        if (cellDate.isAfter(today)) {
+          week.add(-1);
+          continue;
+        }
+        final key =
+            "${cellDate.year}-${cellDate.month.toString().padLeft(2, '0')}-${cellDate.day.toString().padLeft(2, '0')}";
+        week.add(dateLevelMap[key] ?? 0);
+      }
+      grid.add(week);
+    }
+    return grid;
+  }
+
+  Color _getCellColor(int level, Color primaryColor) {
+    switch (level) {
+      case 3:
+        return primaryColor; // Recharged on session day
+      case 2:
+        return primaryColor.withAlpha(150); // Fading 1st rest day
+      case 1:
+        return primaryColor.withAlpha(75); // Fading 2nd/3rd rest day
+      case -1:
+        return Colors.transparent; // Future day
+      default:
+        return Colors.grey.shade200; // Streak broken / empty day
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+    final heatmapData = _generateHeatmapData();
+    const dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
               Row(
-                spacing: 10,
                 children: [
-                  Expanded(
-                    child: TotalAccumulationCard(
-                      title: l10n.totalSessions,
-                      icon: const Icon(Icons.rocket, size: 50, color: Colors.blue),
-                      value: widget.summery.totalSessions.toString(),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding: const .symmetric(vertical: 15.0, horizontal: 10.0),
-                      // margin: const .symmetric(horizontal: 8.0),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [Colors.white, Colors.grey.shade200]),
-                        boxShadow: [
-                          BoxShadow(
-                            offset: const Offset(0, 0),
-                            color: Colors.white.withAlpha(100),
-                            blurRadius: 10,
-                            spreadRadius: 3,
-                          ),
-                        ],
-                        borderRadius: .circular(25),
-                      ),
-                      child: ProgressWidget(
-                        percent: widget.summery.averageCompletionRate,
-                        textStyle: const TextStyle(fontSize: 18, fontWeight: .bold, color: Colors.black54),
-                        title: Text(
-                          l10n.completionRate,
-                          style: const TextStyle(fontSize: 14, fontWeight: .bold, color: Colors.black54),
-                        ),
-                        color: Colors.grey.shade700,
-                        dimension: 90,
-                        strokeWidth: 10,
-                        progressBackground: Colors.grey.shade200,
-                      ),
-                    ),
-                  ),
+                  Icon(Icons.local_fire_department, color: Colors.orange.shade700, size: 22),
+                  const SizedBox(width: 6),
+                  const Text("Consistency Heatmap", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                 ],
               ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade50,
+                  border: Border.all(color: Colors.orange.shade200),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  "🔥 ${summery.currentStreak} Day Streak",
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.orange.shade900),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+
+          // Heatmap Grid
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            reverse: true,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  children: List.generate(
+                    7,
+                    (i) => SizedBox(
+                      height: 14,
+                      width: 16,
+                      child: Text(
+                        dayLabels[i],
+                        style: TextStyle(fontSize: 9, color: Colors.grey.shade600, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Row(
+                  children: heatmapData.map((week) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      child: Column(
+                        children: week.map((level) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(vertical: 1.5),
+                            width: 11,
+                            height: 11,
+                            decoration: BoxDecoration(
+                              color: _getCellColor(level, primaryColor),
+                              borderRadius: BorderRadius.circular(2.5),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          // Legend
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Longest streak: ${summery.longestStreak} days",
+                style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+              ),
               Row(
-                spacing: 10,
                 children: [
-                  Expanded(
-                    child: Builder(
-                      builder: (context) {
-                        final compactWeight = formatMassiveWeight(widget.summery.totalWeight.toDouble());
-                        return TotalAccumulationCard(
-                          title: l10n.totalWeightLabel,
-                          icon: const Icon(Icons.fitness_center, size: 50, color: Colors.amber),
-                          value: compactWeight.value,
-                          unit: compactWeight.unit,
-                        );
-                      },
+                  Text("Rest ", style: TextStyle(fontSize: 10, color: Colors.grey.shade600)),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                    width: 9,
+                    height: 9,
+                    decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(2)),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                    width: 9,
+                    height: 9,
+                    decoration: BoxDecoration(
+                      color: primaryColor.withAlpha(75),
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  Expanded(
-                    child: TotalAccumulationCard(
-                      title: l10n.totalDuration,
-                      icon: const Icon(Icons.timer_outlined, size: 50, color: Colors.green),
-                      value: (widget.summery.totalDurationInMinutes ~/ 60).toString(),
-                      textDirection: Directionality.of(context),
-                      unit: l10n.hour,
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                    width: 9,
+                    height: 9,
+                    decoration: BoxDecoration(
+                      color: primaryColor.withAlpha(150),
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                    width: 9,
+                    height: 9,
+                    decoration: BoxDecoration(color: primaryColor, borderRadius: BorderRadius.circular(2)),
+                  ),
+                  Text(" Session", style: TextStyle(fontSize: 10, color: Colors.grey.shade600)),
                 ],
               ),
             ],
           ),
-        ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProgressiveOverloadWidget extends StatelessWidget {
+  const _ProgressiveOverloadWidget({required this.sessions});
+
+  final List<TSession> sessions;
+
+  List<FlSpot> _generateWeeklyVolumeSpots() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final currentWeekMonday = today.subtract(Duration(days: today.weekday - 1));
+
+    final List<FlSpot> spots = [];
+    for (int w = 1; w <= 8; w++) {
+      final weekStart = currentWeekMonday.subtract(Duration(days: (8 - w) * 7));
+      final weekEnd = weekStart.add(const Duration(days: 7));
+
+      double weeklyVolume = 0.0;
+      for (final s in sessions) {
+        if (!s.createdAt.isBefore(weekStart) && s.createdAt.isBefore(weekEnd)) {
+          for (final log in s.logs) {
+            weeklyVolume += (log.weight * log.finishedReps);
+          }
+        }
+      }
+      final volumeK = weeklyVolume / 1000.0;
+      spots.add(FlSpot(w.toDouble(), volumeK));
+    }
+    return spots;
+  }
+
+  double _calcPercentageChange(List<FlSpot> spots) {
+    if (spots.length < 2) return 0.0;
+    final last = spots.last.y;
+    final prev = spots[spots.length - 2].y;
+    if (prev == 0) return last == 0 ? 0.0 : 100.0;
+    return ((last - prev) / prev) * 100.0;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+    final spots = _generateWeeklyVolumeSpots();
+    final pctChange = _calcPercentageChange(spots);
+    final isPositive = pctChange >= 0;
+
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.trending_up, color: Colors.green.shade700, size: 22),
+                  const SizedBox(width: 6),
+                  const Text("Progressive Overload Trend", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: isPositive ? Colors.green.shade50 : Colors.red.shade50,
+                  border: Border.all(color: isPositive ? Colors.green.shade300 : Colors.red.shade300),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      isPositive ? Icons.arrow_upward : Icons.arrow_downward,
+                      size: 12,
+                      color: isPositive ? Colors.green.shade800 : Colors.red.shade800,
+                    ),
+                    const SizedBox(width: 2),
+                    Text(
+                      "${isPositive ? '+' : ''}${pctChange.toStringAsFixed(1)}%",
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: isPositive ? Colors.green.shade800 : Colors.red.shade800,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text("Weekly Volume Progression (in k kg)", style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
+          const SizedBox(height: 16),
+
+          // Line Chart
+          SizedBox(
+            height: 150,
+            child: LineChart(
+              LineChartData(
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: false,
+                  getDrawingHorizontalLine: (value) => FlLine(color: Colors.grey.shade200, strokeWidth: 1),
+                ),
+                titlesData: FlTitlesData(
+                  leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 6.0),
+                          child: Text("W${value.toInt()}", style: TextStyle(fontSize: 10, color: Colors.grey.shade600)),
+                        );
+                      },
+                      reservedSize: 22,
+                    ),
+                  ),
+                ),
+                borderData: FlBorderData(show: false),
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: spots,
+                    isCurved: true,
+                    color: primaryColor,
+                    barWidth: 3,
+                    isStrokeCapRound: true,
+                    dotData: FlDotData(
+                      show: true,
+                      getDotPainter: (spot, percent, barData, index) =>
+                          FlDotCirclePainter(radius: 3, color: Colors.white, strokeWidth: 2, strokeColor: primaryColor),
+                    ),
+                    belowBarData: BarAreaData(show: true, color: primaryColor.withAlpha(35)),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.blue.shade50.withAlpha(120),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.blue.shade100),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.lightbulb_outline, size: 16, color: Colors.blue.shade800),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    isPositive
+                        ? "Volume has increased compared to last week. Great job maintaining progressive overload!"
+                        : "Volume decreased this week. Focus on recovery and steady progressive overload.",
+                    style: TextStyle(fontSize: 11, color: Colors.blue.shade900),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,12 +1,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/chart.dart';
-import 'package:uniceps/app/domain/classes/performance_entities/logs_report.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/muscle_focus.dart';
+import 'package:uniceps/app/domain/classes/performance_entities/performance_result.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/physical_report.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/sessions_report.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/uniceps_summery.dart';
 import 'package:uniceps/app/domain/contracts/performance/i_performance_contract.dart';
 import 'package:uniceps/core/errors/failure.dart';
+
+import 'package:uniceps/app/domain/classes/performance_entities/logs_report.dart';
 
 class PerformanceCommands {
   final IPerformanceContract _repo;
@@ -23,7 +25,10 @@ class PerformanceCommands {
   Future<Either<PerformanceFailure, List<MuscleFocus>>> getMuscleFocusChart() => _repo.getMuscleFocusChart();
   Future<Either<PerformanceFailure, List<Chart<DateTime, double>>>> getMusclesEvolution(DateTime month) =>
       _repo.getMusclesEvolution(month);
-  // Future<Either<PerformanceFailure, List<Chart<DateTime, double>>>> getBodyMetrics() => _repo.getBodyMetrics();
   Future<Either<PerformanceFailure, List<Chart<DateTime, double>>>> getMeasurementCharts(DateTime month) =>
       _repo.getMeasurementCharts(month);
+
+  // Single Consolidated Overview Request
+  Future<Either<PerformanceFailure, PerformanceResult>> getPerformanceOverview({DateTime? from, DateTime? to}) =>
+      _repo.getPerformanceOverview(from: from, to: to);
 }

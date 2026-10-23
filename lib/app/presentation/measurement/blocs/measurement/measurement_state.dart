@@ -1,4 +1,4 @@
-part of 'measurment_bloc.dart';
+part of 'measurement_bloc.dart';
 
 @freezed
 class MeasurementState with _$MeasurementState {
