@@ -113,4 +113,14 @@ class PracticeRepo implements IPracticeContract {
       return Left(DatabaseFailure(errorMsg: ""));
     }
   }
+
+  @override
+  Future<Either<Failure, Unit>> cancelSession(TSession session) async {
+    try {
+      await _localSource.deleteSession(session.id!);
+      return Right(unit);
+    } catch (e) {
+      return Left(DatabaseFailure(errorMsg: ''));
+    }
+  }
 }

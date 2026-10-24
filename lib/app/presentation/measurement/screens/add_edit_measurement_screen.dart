@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
-import 'package:uniceps/app/presentation/measurement/blocs/measurement/measurment_bloc.dart';
+import 'package:uniceps/app/domain/classes/profile_classes/measurement.dart';
+import 'package:uniceps/app/presentation/measurement/blocs/measurement/measurement_bloc.dart';
 import 'package:uniceps/app/presentation/measurement/dialogs/set_measure_dialog.dart';
 import 'package:uniceps/app/presentation/measurement/widgets/body_measurement_map.dart';
 import 'package:uniceps/l10n/app_localizations.dart';

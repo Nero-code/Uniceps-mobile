@@ -81,10 +81,10 @@ class RoutineGridItem extends StatelessWidget {
                 // Active Badge
                 if (routine.isCurrent)
                   Positioned(
-                    top: 8,
-                    left: 8,
+                    top: 10,
+                    left: 10,
                     child: Container(
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: Colors.green,
                         shape: BoxShape.circle,

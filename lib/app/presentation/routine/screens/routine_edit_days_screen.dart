@@ -69,7 +69,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
 
     OverlayEntry? overlayEntry;
     overlayEntry = OverlayEntry(
-      builder: (ocontext) => Stack(
+      builder: (_) => Stack(
         children: [
           GestureDetector(
             onTap: () async {
@@ -89,7 +89,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> with TickerProvid
             right: pos!.left > screenSize.width * 0.5 ? (screenSize.width - pos!.right) : null,
             child: AnimatedBuilder(
               animation: animation,
-              builder: (bcontext, child) => SizeTransition(sizeFactor: animation, child: child),
+              builder: (_, child) => SizeTransition(sizeFactor: animation, child: child),
               child: DayEditFlaotingMenu(
                 onEdit: () async {
                   future.complete(0);

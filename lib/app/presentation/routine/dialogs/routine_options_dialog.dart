@@ -7,7 +7,7 @@ import 'package:uniceps/core/widgets/account_limit_alert.dart';
 import 'package:uniceps/core/widgets/premium_alert.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
-enum Option { edit, delete, export, setCurrent }
+enum Option { edit, delete, export, setCurrent, duplicate }
 
 class RoutineOptionsDialog extends StatelessWidget {
   const RoutineOptionsDialog({super.key, required this.routineName});
@@ -48,6 +48,26 @@ class RoutineOptionsDialog extends StatelessWidget {
               icon: Icons.edit_rounded,
               label: locale.rename,
               color: Colors.blueGrey,
+            ),
+            // if (kDebugMode)
+            Builder(
+              builder: (context) {
+                final mem = context.watch<MembershipBloc>();
+
+                final isPremium = mem.state.maybeWhen(loaded: (_) => true, orElse: () => false);
+
+                return _OptionTile(
+                  onTap: isPremium
+                      ? () => Navigator.pop(context, Option.duplicate)
+                      : () => showDialog(context: context, builder: (_) => const PremiumAlert()),
+                  icon: Icons.copy,
+                  label: locale.duplicate,
+                  color: Colors.amber,
+                  trailing: !isPremium
+                      ? const Image(image: AssetImage(IMG_PREMIUM), width: 20, height: 20, color: Colors.amber)
+                      : null,
+                );
+              },
             ),
             Builder(
               builder: (context) {

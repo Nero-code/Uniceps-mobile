@@ -172,13 +172,16 @@ class MockIRoutineManagementLocalSourceContract extends _i1.Mock
           >);
 
   @override
-  _i9.Future<_i3.RoutineDto> createRoutine(String? routineName) =>
+  _i9.Future<_i3.RoutineDto> createRoutine(
+    String? routineName,
+    String? description,
+  ) =>
       (super.noSuchMethod(
-            Invocation.method(#createRoutine, [routineName]),
+            Invocation.method(#createRoutine, [routineName, description]),
             returnValue: _i9.Future<_i3.RoutineDto>.value(
               _FakeRoutineDto_1(
                 this,
-                Invocation.method(#createRoutine, [routineName]),
+                Invocation.method(#createRoutine, [routineName, description]),
               ),
             ),
           )
@@ -232,6 +235,14 @@ class MockIRoutineManagementLocalSourceContract extends _i1.Mock
             ),
           )
           as _i9.Future<_i3.RoutineDto>);
+
+  @override
+  _i9.Future<int> duplicateRoutine(_i3.RoutineDto? duplicate) =>
+      (super.noSuchMethod(
+            Invocation.method(#duplicateRoutine, [duplicate]),
+            returnValue: _i9.Future<int>.value(0),
+          )
+          as _i9.Future<int>);
 }
 
 /// A class which mocks [ITSessionLocalSourceContract].
@@ -488,4 +499,14 @@ class MockIExercisesLocalSourceContract extends _i1.Mock
             ),
           )
           as _i9.Future<List<_i19.MuscleGroupDto>>);
+
+  @override
+  _i9.Future<List<_i7.TLogModel>> getExerciseTimeLine(String? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#getExerciseTimeLine, [id]),
+            returnValue: _i9.Future<List<_i7.TLogModel>>.value(
+              <_i7.TLogModel>[],
+            ),
+          )
+          as _i9.Future<List<_i7.TLogModel>>);
 }

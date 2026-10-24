@@ -102,6 +102,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get share => 'مشاركة';
 
   @override
+  String get duplicate => 'تكرار';
+
+  @override
   String get newVersion => 'يوجد تحديث جديد!';
 
   @override
@@ -1162,4 +1165,35 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get fieldRequired => 'هذا الحقل مطلوب!';
+
+  @override
+  String get overview => 'نظرة عامة';
+
+  @override
+  String get history => 'السجل';
+
+  @override
+  String get noTrainingHistory => 'لا يوجد سجل تمارين مسجل بعد.';
+
+  @override
+  String get pr => 'رقم قياسي';
+
+  @override
+  String get bestWeight => 'أفضل وزن';
+
+  @override
+  String get estOneRepMax => '1RM التقديري';
+
+  @override
+  String get volume => 'الحجم';
+
+  @override
+  String get set => 'الجولة';
+
+  @override
+  String get progress => 'التقدم';
+
+  @override
+  String get cancelSessionAlertContent =>
+      'هل أنت متأكد من إلغاء الجلسة؟ سيتم حذف هذه الجلسة وفقدان جميع التقدم المسجل.';
 }
