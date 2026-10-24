@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/routine.dart';
+import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/home/blocs/current_routine/current_routine_cubit.dart';
@@ -16,6 +18,7 @@ import 'package:uniceps/app/presentation/routine/widgets/routine_grid_item.dart'
 import 'package:uniceps/app/presentation/routine/widgets/routine_with_heat.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/core/logging/app_logger.dart';
 import 'package:uniceps/core/widgets/account_limit_alert.dart';
 import 'package:uniceps/core/widgets/empty_page.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
@@ -37,7 +40,7 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
   bool isGridView = false;
   int routinesLength = 0;
 
-  void _onRoutineMenu(BuildContext context, dynamic e, AppLocalizations locale) async {
+  void _onRoutineMenu(BuildContext context, ({RoutineHeat heat, Routine routine}) e, AppLocalizations locale) async {
     final canDelete = context.read<SessionBloc>().state.maybeWhen(orElse: () => false, noActiveSession: (_, _) => true);
 
     final res = await showDialog<Option>(
@@ -53,12 +56,13 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
       case Option.edit:
         showDialog(
           context: context,
-          builder: (_) => RoutineNameDialog(
+          builder: (_) => RoutineCreateDialog(
             isCreate: false,
             initialName: e.routine.name,
-            onSubmit: (name) {
-              if (name == e.routine.name) return;
-              bloc.add(RoutinesWithHeatEvent.update(e.routine.copyWith(name: name)));
+            initialDescription: e.routine.description ?? '',
+            onSubmit: (name, description) {
+              if (name == e.routine.name && description == e.routine.description) return;
+              bloc.add(RoutinesWithHeatEvent.update(e.routine.copyWith(name: name, description: description)));
             },
           ),
         );
@@ -108,12 +112,28 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
           ),
         );
         break;
+
+      case Option.duplicate:
+        showDialog(
+          context: context,
+          builder: (_) => RoutineCreateDialog(
+            isCreate: true,
+            initialName: e.routine.name,
+            initialDescription: e.routine.description ?? '',
+            onSubmit: (name, description) async {
+              final routine = e.routine.copyWith(name: name, description: description);
+
+              logger.t('duplicateRoutine entity description: ${routine.description}');
+              bloc.add(RoutinesWithHeatEvent.duplicate(routine, e.heat));
+            },
+          ),
+        );
+        break;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.sizeOf(context);
     final locale = AppLocalizations.of(context)!;
     return BlocProvider(
       lazy: false,
@@ -244,11 +264,13 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                             orElse: () => state.routines.isEmpty
                                 ? () => showDialog(
                                     context: context,
-                                    builder: (_) => RoutineNameDialog(
+                                    builder: (_) => RoutineCreateDialog(
                                       isCreate: true,
                                       initialName: "${locale.newRoutine} $routinesLength",
-                                      onSubmit: (name) =>
-                                          context.read<RoutinesWithHeatBloc>().add(RoutinesWithHeatEvent.create(name)),
+                                      initialDescription: '',
+                                      onSubmit: (name, description) => context.read<RoutinesWithHeatBloc>().add(
+                                        RoutinesWithHeatEvent.create(name, description),
+                                      ),
                                     ),
                                   )
                                 : () => showDialog(
@@ -260,11 +282,12 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                                   () => state.routines.isEmpty
                                   ? showDialog(
                                       context: context,
-                                      builder: (_) => RoutineNameDialog(
+                                      builder: (_) => RoutineCreateDialog(
                                         isCreate: true,
                                         initialName: "${locale.newRoutine} $routinesLength",
-                                        onSubmit: (name) => context.read<RoutinesWithHeatBloc>().add(
-                                          RoutinesWithHeatEvent.create(name),
+                                        initialDescription: '',
+                                        onSubmit: (name, description) => context.read<RoutinesWithHeatBloc>().add(
+                                          RoutinesWithHeatEvent.create(name, description),
                                         ),
                                       ),
                                     )
@@ -272,11 +295,13 @@ class _RoutineHeatScreenState extends State<RoutinesHeatScreen> {
                               loaded: (m) =>
                                   () => showDialog(
                                     context: context,
-                                    builder: (_) => RoutineNameDialog(
+                                    builder: (_) => RoutineCreateDialog(
                                       isCreate: true,
                                       initialName: "${locale.newRoutine} $routinesLength",
-                                      onSubmit: (name) =>
-                                          context.read<RoutinesWithHeatBloc>().add(RoutinesWithHeatEvent.create(name)),
+                                      initialDescription: '',
+                                      onSubmit: (name, description) => context.read<RoutinesWithHeatBloc>().add(
+                                        RoutinesWithHeatEvent.create(name, description),
+                                      ),
                                     ),
                                   ),
                             ),

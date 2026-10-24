@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/domain/classes/routine_classes/routine_item.dart';
 import 'package:uniceps/app/presentation/routine/blocs/items_edit/items_edit_bloc.dart';
 import 'package:uniceps/app/presentation/routine/blocs/sets_edit/sets_edit_bloc.dart';
+import 'package:uniceps/app/presentation/routine/screens/exercise_details_screen.dart';
 import 'package:uniceps/app/presentation/routine/screens/routine_edit_sets_screen.dart';
 import 'package:uniceps/core/widgets/app_dialog.dart';
 import 'package:uniceps/core/widgets/box_botton.dart';
@@ -181,6 +182,22 @@ class _RoutineItemHorizontalWidgetState extends State<RoutineItemHorizontalWidge
                           ],
                         ),
                       ),
+                    );
+                  },
+                ),
+              ),
+              Positioned(
+                top: -5.0,
+                left: rtl ? null : -5.0,
+                right: rtl ? -5.0 : null,
+                child: IconButton(
+                  icon: const Icon(Icons.info_outline),
+                  color: Colors.blue.shade300,
+                  iconSize: 20,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => ExerciseDetailsScreen(exerciseId: widget.item.exercise.apiId)),
                     );
                   },
                 ),

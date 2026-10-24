@@ -284,6 +284,12 @@ abstract class AppLocalizations {
   /// **'Share'**
   String get share;
 
+  /// No description provided for @duplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get duplicate;
+
   /// No description provided for @newVersion.
   ///
   /// In en, this message translates to:
@@ -2329,6 +2335,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This field is required!'**
   String get fieldRequired;
+
+  /// No description provided for @overview.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get overview;
+
+  /// No description provided for @history.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get history;
+
+  /// No description provided for @noTrainingHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'No training history recorded yet.'**
+  String get noTrainingHistory;
+
+  /// No description provided for @pr.
+  ///
+  /// In en, this message translates to:
+  /// **'PR'**
+  String get pr;
+
+  /// No description provided for @bestWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Weight'**
+  String get bestWeight;
+
+  /// No description provided for @estOneRepMax.
+  ///
+  /// In en, this message translates to:
+  /// **'Est. 1RM'**
+  String get estOneRepMax;
+
+  /// No description provided for @volume.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume'**
+  String get volume;
+
+  /// No description provided for @set.
+  ///
+  /// In en, this message translates to:
+  /// **'Set'**
+  String get set;
+
+  /// No description provided for @progress.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get progress;
+
+  /// No description provided for @cancelSessionAlertContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to cancel? This session will be deleted and all progress will be lost.'**
+  String get cancelSessionAlertContent;
 }
 
 class _AppLocalizationsDelegate

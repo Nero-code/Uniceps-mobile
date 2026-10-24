@@ -265,10 +265,23 @@ class ExercisesRepo implements IExercisesContract {
     try {
       final ex = exercisesLib.firstWhere((e) => e.apiId == id);
       final similars = exercisesLib.where((e) => e.muscleHeadCode == ex.muscleHeadCode && e.apiId != ex.apiId).toList();
-      return Right(ExerciseDetailsResult(exercise: ex, similars: similars));
+      final timeline = await _localSource.getExerciseTimeLine(id);
+      return Right(ExerciseDetailsResult(exercise: ex, similars: similars, timeline: timeline));
     } catch (e, s) {
       logger.e('getExerciseDetails: $id', error: e, stackTrace: s);
       return Left(ExerciseFailure.databaseFailure(message: e.toString()));
     }
+  }
+
+  @override
+  Future<String> getExerciseName(String id) async {
+    if (exercisesLib.isEmpty) {
+      await checkExercises();
+    }
+    final match = exercisesLib.where((e) => e.apiId == id);
+    if (match.isNotEmpty) {
+      return match.first.name;
+    }
+    return id;
   }
 }

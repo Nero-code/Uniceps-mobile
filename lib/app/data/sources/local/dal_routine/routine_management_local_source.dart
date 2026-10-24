@@ -12,13 +12,15 @@ import 'package:uniceps/core/logging/app_logger.dart';
 abstract class IRoutineManagementLocalSourceContract {
   Future<List<RoutineDto>> getAllRoutines();
   Future<List<({RoutineDto routine, RoutineHeat heat})>> getAllRoutinesWithHeat();
-  Future<RoutineDto> createRoutine(String routineName);
+  Future<RoutineDto> createRoutine(String routineName, String description);
   Future<RoutineDto> updateRoutine(RoutineDto dto);
   Future<void> setCurrentRoutine(RoutineDto dto);
   Future<void> deleteRoutine(RoutineDto dto);
   Stream<Stage> insertFullRoutine(RoutineDto dto);
 
   Future<RoutineDto> getFullRoutine(int routineId);
+
+  Future<int> duplicateRoutine(RoutineDto duplicate);
 }
 
 class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceContract {
@@ -33,9 +35,9 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
   }
 
   @override
-  Future<RoutineDto> createRoutine(String routineName) async {
+  Future<RoutineDto> createRoutine(String routineName, String description) async {
     logger.t("create routine => inside local source");
-    final id = await _database.managers.routines.create((o) => o(name: routineName));
+    final id = await _database.managers.routines.create((o) => o(name: routineName, description: Value(description)));
     final routine = await _database.managers.routines.filter((f) => f.id.equals(id)).getSingle();
     logger.t("create routine => inside local source finished");
     return RoutineDto.fromTable(routine);
@@ -43,9 +45,9 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
 
   @override
   Future<RoutineDto> updateRoutine(RoutineDto dto) async {
-    await (_database.update(
-      _database.routines,
-    )..where((f) => f.id.equals(dto.id!))).write(RoutinesCompanion.custom(name: Constant(dto.name)));
+    await (_database.update(_database.routines)..where((f) => f.id.equals(dto.id!))).write(
+      RoutinesCompanion.custom(name: Constant(dto.name), description: Constant(dto.description)),
+    );
 
     return dto;
   }
@@ -207,5 +209,46 @@ class RoutineManagementLocalSourceImpl implements IRoutineManagementLocalSourceC
     }
     days.sort((a, b) => a.index.compareTo(b.index));
     return RoutineDto.fromTable(routine, days);
+  }
+
+  @override
+  Future<int> duplicateRoutine(RoutineDto duplicate) async {
+    logger.t('duplicateRoutine description: ${duplicate.description}');
+    // Create New Routine
+    final routineId = await _database
+        .into(_database.routines)
+        .insert(RoutinesCompanion.insert(name: duplicate.name, description: Value(duplicate.description)));
+    // Create Days
+    for (final d in duplicate.daysDto) {
+      final dayId = await _database
+          .into(_database.daysGroup)
+          .insert(DaysGroupCompanion.insert(index: d.index, dayName: d.name, routineId: routineId));
+
+      final sortedRoutineItems = d.items;
+      sortedRoutineItems.sort((a, b) => a.index.compareTo(b.index));
+
+      // Create Items
+      for (int j = 0; j < d.items.length; j++) {
+        final i = sortedRoutineItems[j];
+
+        var ex = await (_database.select(
+          _database.exercises,
+        )..where((f) => f.apiId.equals(i.exerciseDto.apiId))).getSingleOrNull();
+
+        if (ex == null) throw Exception("Exercise not found");
+
+        final itemId = await _database
+            .into(_database.routineItems)
+            .insert(RoutineItemsCompanion.insert(index: j, exerciseId: i.exerciseDto.apiId, dayId: dayId));
+
+        // Create Sets
+        for (final s in i.setsDto) {
+          await _database
+              .into(_database.routineSets)
+              .insert(RoutineSetsCompanion.insert(roundIndex: s.index, repsCount: s.reps, routineItemId: itemId));
+        }
+      }
+    }
+    return routineId;
   }
 }

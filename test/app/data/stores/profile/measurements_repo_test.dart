@@ -5,7 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
 import 'package:uniceps/app/data/sources/local/dal_measurements/measurements_local_source.dart';
 import 'package:uniceps/app/data/stores/measurement/measurements_repo.dart';
-import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
+import 'package:uniceps/app/domain/classes/profile_classes/measurement.dart';
 import 'package:uniceps/core/errors/failure.dart';
 
 import '../performance/performance_repo_test.mocks.dart';

@@ -36,6 +36,7 @@ class SecondaryActionsBar extends StatelessWidget {
                     () => showPremiumDialog(context),
                 loaded: (m) => onAnalytics,
               ),
+              // onTap: onAnalytics,
             ),
           ),
           const SizedBox(width: 8),

@@ -93,7 +93,11 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
         listener: (context, state) {
           NotificationService.closeAll();
           // showDialog(context: context, builder: (context) => const SessionCompleteDialog());
-          final session = state.whenOrNull(noActiveSession: (s, f) => s)!;
+          final session = state.whenOrNull(noActiveSession: (s, f) => s);
+          if (session == null) {
+            Navigator.pop(context);
+            return;
+          }
           showDialog(
             context: context,
             useSafeArea: false,
@@ -209,23 +213,35 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
                         width: screenSize.width,
                         child: Container(
                           height: 60,
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(5.0),
                           color: Colors.white,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              final fullSession = sessionState.session.logs.length == totalProgress;
-                              _finishSession(context, sessionState.session, fullSession);
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.bolt, size: 25),
-                                Text(
-                                  locale.finish,
-                                  style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+                          child: Row(
+                            spacing: 5,
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    final fullSession = sessionState.session.logs.length == totalProgress;
+                                    _finishSession(sessionState.session, fullSession);
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(Icons.bolt, size: 25),
+                                      Text(
+                                        locale.finish,
+                                        style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () => _cancelSession(sessionState.session),
+                                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                                child: const Icon(Icons.close, size: 25),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -240,7 +256,8 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
     );
   }
 
-  void _finishSession(BuildContext context, TSession session, bool fullSession) {
+  void _finishSession(TSession session, bool fullSession) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog<bool>(
       context: context,
       builder: (_) {
@@ -251,8 +268,39 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
             BlocProvider.value(value: context.read<CurrentRoutineCubit>()),
           ],
           child: ConfirmationDialog(
+            title: l10n.finish,
+            content: l10n.finishAlertContent,
+            color: Theme.of(context).colorScheme.secondary,
+            icon: Icons.electric_bolt,
             onConfirm: () {
               context.read<SessionBloc>().add(SessionEvent.stopSession(session, fullSession));
+              context.read<StopwatchCubit>().resetStopwatch();
+              context.read<CurrentRoutineCubit>().getCurrentRoutine();
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void _cancelSession(TSession session) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog<bool>(
+      context: context,
+      builder: (_) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: context.read<SessionBloc>()),
+            BlocProvider.value(value: context.read<StopwatchCubit>()),
+            BlocProvider.value(value: context.read<CurrentRoutineCubit>()),
+          ],
+          child: ConfirmationDialog(
+            title: l10n.cancel,
+            content: l10n.cancelSessionAlertContent,
+            color: Colors.red,
+            icon: Icons.close,
+            onConfirm: () {
+              context.read<SessionBloc>().add(SessionEvent.cancelSession(session));
               context.read<StopwatchCubit>().resetStopwatch();
               context.read<CurrentRoutineCubit>().getCurrentRoutine();
             },

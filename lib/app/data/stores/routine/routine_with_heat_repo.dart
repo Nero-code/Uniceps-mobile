@@ -55,9 +55,12 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
   }
 
   @override
-  Future<Either<Failure, List<({RoutineHeat heat, Routine routine})>>> createRoutine(String routineName) async {
+  Future<Either<Failure, List<({RoutineHeat heat, Routine routine})>>> createRoutine(
+    String routineName,
+    String description,
+  ) async {
     try {
-      final res = await _localSource.createRoutine(routineName);
+      final res = await _localSource.createRoutine(routineName, description);
       routines.add((routine: res.toEntity(), heat: RoutineHeat.cold(res.name)));
       return Right(routines);
     } catch (e) {
@@ -112,6 +115,29 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
     try {
       await _localSource.deleteRoutine(routine.toDto());
       routines.removeWhere((tuple) => tuple.routine.id == routine.id);
+      return Right(routines);
+    } catch (e) {
+      return Left(DatabaseFailure(errorMsg: ""));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<({RoutineHeat heat, Routine routine})>>> duplicateRoutine(
+    Routine routine,
+    RoutineHeat heat,
+  ) async {
+    try {
+      final r = await _localSource.getFullRoutine(routine.id!);
+      final duplicate = RoutineDto(
+        version: 0,
+        name: routine.name,
+        description: routine.description,
+        isCurrent: false,
+        daysDto: r.daysDto,
+        isSynced: false,
+      );
+      final int id = await _localSource.duplicateRoutine(duplicate);
+      routines.add((heat: heat, routine: duplicate.copyWith(id: id).toEntity()));
       return Right(routines);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: ""));

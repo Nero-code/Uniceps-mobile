@@ -55,14 +55,15 @@ extension SessionEventPatterns on SessionEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _GetLastActiveSession value)?  getLastActiveSession,TResult Function( _StartSession value)?  startSession,TResult Function( _LogSet value)?  logSet,TResult Function( _StopSession value)?  stopSession,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _GetLastActiveSession value)?  getLastActiveSession,TResult Function( _StartSession value)?  startSession,TResult Function( _LogSet value)?  logSet,TResult Function( _StopSession value)?  stopSession,TResult Function( _CancelSession value)?  cancelSession,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _GetLastActiveSession() when getLastActiveSession != null:
 return getLastActiveSession(_that);case _StartSession() when startSession != null:
 return startSession(_that);case _LogSet() when logSet != null:
 return logSet(_that);case _StopSession() when stopSession != null:
-return stopSession(_that);case _:
+return stopSession(_that);case _CancelSession() when cancelSession != null:
+return cancelSession(_that);case _:
   return orElse();
 
 }
@@ -80,14 +81,15 @@ return stopSession(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _GetLastActiveSession value)  getLastActiveSession,required TResult Function( _StartSession value)  startSession,required TResult Function( _LogSet value)  logSet,required TResult Function( _StopSession value)  stopSession,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _GetLastActiveSession value)  getLastActiveSession,required TResult Function( _StartSession value)  startSession,required TResult Function( _LogSet value)  logSet,required TResult Function( _StopSession value)  stopSession,required TResult Function( _CancelSession value)  cancelSession,}){
 final _that = this;
 switch (_that) {
 case _GetLastActiveSession():
 return getLastActiveSession(_that);case _StartSession():
 return startSession(_that);case _LogSet():
 return logSet(_that);case _StopSession():
-return stopSession(_that);case _:
+return stopSession(_that);case _CancelSession():
+return cancelSession(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -104,14 +106,15 @@ return stopSession(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _GetLastActiveSession value)?  getLastActiveSession,TResult? Function( _StartSession value)?  startSession,TResult? Function( _LogSet value)?  logSet,TResult? Function( _StopSession value)?  stopSession,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _GetLastActiveSession value)?  getLastActiveSession,TResult? Function( _StartSession value)?  startSession,TResult? Function( _LogSet value)?  logSet,TResult? Function( _StopSession value)?  stopSession,TResult? Function( _CancelSession value)?  cancelSession,}){
 final _that = this;
 switch (_that) {
 case _GetLastActiveSession() when getLastActiveSession != null:
 return getLastActiveSession(_that);case _StartSession() when startSession != null:
 return startSession(_that);case _LogSet() when logSet != null:
 return logSet(_that);case _StopSession() when stopSession != null:
-return stopSession(_that);case _:
+return stopSession(_that);case _CancelSession() when cancelSession != null:
+return cancelSession(_that);case _:
   return null;
 
 }
@@ -128,13 +131,14 @@ return stopSession(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  getLastActiveSession,TResult Function( int dayId,  String dayName)?  startSession,TResult Function( TLog log,  double progress)?  logSet,TResult Function( TSession session,  bool fullSession)?  stopSession,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  getLastActiveSession,TResult Function( int dayId,  String dayName)?  startSession,TResult Function( TLog log,  double progress)?  logSet,TResult Function( TSession session,  bool fullSession)?  stopSession,TResult Function( TSession session)?  cancelSession,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GetLastActiveSession() when getLastActiveSession != null:
 return getLastActiveSession();case _StartSession() when startSession != null:
 return startSession(_that.dayId,_that.dayName);case _LogSet() when logSet != null:
 return logSet(_that.log,_that.progress);case _StopSession() when stopSession != null:
-return stopSession(_that.session,_that.fullSession);case _:
+return stopSession(_that.session,_that.fullSession);case _CancelSession() when cancelSession != null:
+return cancelSession(_that.session);case _:
   return orElse();
 
 }
@@ -152,13 +156,14 @@ return stopSession(_that.session,_that.fullSession);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  getLastActiveSession,required TResult Function( int dayId,  String dayName)  startSession,required TResult Function( TLog log,  double progress)  logSet,required TResult Function( TSession session,  bool fullSession)  stopSession,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  getLastActiveSession,required TResult Function( int dayId,  String dayName)  startSession,required TResult Function( TLog log,  double progress)  logSet,required TResult Function( TSession session,  bool fullSession)  stopSession,required TResult Function( TSession session)  cancelSession,}) {final _that = this;
 switch (_that) {
 case _GetLastActiveSession():
 return getLastActiveSession();case _StartSession():
 return startSession(_that.dayId,_that.dayName);case _LogSet():
 return logSet(_that.log,_that.progress);case _StopSession():
-return stopSession(_that.session,_that.fullSession);case _:
+return stopSession(_that.session,_that.fullSession);case _CancelSession():
+return cancelSession(_that.session);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -175,13 +180,14 @@ return stopSession(_that.session,_that.fullSession);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  getLastActiveSession,TResult? Function( int dayId,  String dayName)?  startSession,TResult? Function( TLog log,  double progress)?  logSet,TResult? Function( TSession session,  bool fullSession)?  stopSession,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  getLastActiveSession,TResult? Function( int dayId,  String dayName)?  startSession,TResult? Function( TLog log,  double progress)?  logSet,TResult? Function( TSession session,  bool fullSession)?  stopSession,TResult? Function( TSession session)?  cancelSession,}) {final _that = this;
 switch (_that) {
 case _GetLastActiveSession() when getLastActiveSession != null:
 return getLastActiveSession();case _StartSession() when startSession != null:
 return startSession(_that.dayId,_that.dayName);case _LogSet() when logSet != null:
 return logSet(_that.log,_that.progress);case _StopSession() when stopSession != null:
-return stopSession(_that.session,_that.fullSession);case _:
+return stopSession(_that.session,_that.fullSession);case _CancelSession() when cancelSession != null:
+return cancelSession(_that.session);case _:
   return null;
 
 }
@@ -419,6 +425,72 @@ class __$StopSessionCopyWithImpl<$Res>
 null == session ? _self.session : session // ignore: cast_nullable_to_non_nullable
 as TSession,null == fullSession ? _self.fullSession : fullSession // ignore: cast_nullable_to_non_nullable
 as bool,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _CancelSession implements SessionEvent {
+  const _CancelSession(this.session);
+  
+
+ final  TSession session;
+
+/// Create a copy of SessionEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$CancelSessionCopyWith<_CancelSession> get copyWith => __$CancelSessionCopyWithImpl<_CancelSession>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CancelSession&&(identical(other.session, session) || other.session == session));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,session);
+
+@override
+String toString() {
+  return 'SessionEvent.cancelSession(session: $session)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$CancelSessionCopyWith<$Res> implements $SessionEventCopyWith<$Res> {
+  factory _$CancelSessionCopyWith(_CancelSession value, $Res Function(_CancelSession) _then) = __$CancelSessionCopyWithImpl;
+@useResult
+$Res call({
+ TSession session
+});
+
+
+
+
+}
+/// @nodoc
+class __$CancelSessionCopyWithImpl<$Res>
+    implements _$CancelSessionCopyWith<$Res> {
+  __$CancelSessionCopyWithImpl(this._self, this._then);
+
+  final _CancelSession _self;
+  final $Res Function(_CancelSession) _then;
+
+/// Create a copy of SessionEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? session = null,}) {
+  return _then(_CancelSession(
+null == session ? _self.session : session // ignore: cast_nullable_to_non_nullable
+as TSession,
   ));
 }
 

@@ -10,6 +10,7 @@ import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_lo
 import 'package:uniceps/app/domain/classes/performance_entities/chart.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/logs_report.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/muscle_focus.dart';
+import 'package:uniceps/app/domain/classes/performance_entities/performance_result.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/physical_report.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/point.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/sessions_report.dart';
@@ -309,6 +310,40 @@ class PerformanceRepo implements IPerformanceContract {
       return Right(list);
     } catch (e) {
       return const Left(.noValues());
+    }
+  }
+
+  @override
+  Future<Either<PerformanceFailure, PerformanceResult>> getPerformanceOverview({DateTime? from, DateTime? to}) async {
+    try {
+      final summaryRes = await getSummery();
+      final focusRes = await getMuscleFocusChart();
+      final physicalRes = await getPhysicalReport();
+      final evolutionRes = await getMusclesEvolution(from ?? DateTime.now().subtract(const Duration(days: 30)));
+
+      final rawSessions = await tSessionsLocalSource.getAllSessions();
+      final rawMeasurementsModels = await measurementsLocalSource.getMeasurements();
+
+      final summary = summaryRes.fold((l) => UnicepsSummery.empty(), (r) => r);
+      final muscleFocus = focusRes.fold((l) => <MuscleFocus>[], (r) => r);
+      final physicalReport = physicalRes.fold((l) => PhysicalReport.empty(), (r) => r);
+      final musclesEvolution = evolutionRes.fold((l) => <Chart<DateTime, double>>[], (r) => r);
+
+      final sessions = rawSessions.map((s) => s.toEntity()).toList();
+      final measurements = rawMeasurementsModels.map((m) => m.toEntity()).toList();
+
+      return Right(
+        PerformanceResult(
+          summary: summary,
+          muscleFocus: muscleFocus,
+          physicalReport: physicalReport,
+          sessions: sessions,
+          measurements: measurements,
+          musclesEvolution: musclesEvolution,
+        ),
+      );
+    } catch (e) {
+      return const Left(PerformanceFailure.invalidValues());
     }
   }
 }

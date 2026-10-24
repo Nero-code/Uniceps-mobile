@@ -30,6 +30,7 @@
   "update": "Update",
   "reorder": "Reorder",
   "share": "Share",
+  "duplicate": "Duplicate",
   "newVersion": "New Version Available",
   "save": "Save",
   "level": "Level:",
@@ -437,5 +438,15 @@
   "levelIntermediate": "Intermediate",
   "levelAdvanced": "Advanced",
   "levelElite": "Elite",
-  "fieldRequired": "This field is required!"
+  "fieldRequired": "This field is required!",
+  "overview": "Overview",
+  "history": "History",
+  "noTrainingHistory": "No training history recorded yet.",
+  "pr": "PR",
+  "bestWeight": "Best Weight",
+  "estOneRepMax": "Est. 1RM",
+  "volume": "Volume",
+  "set": "Set",
+  "progress": "Progress",
+  "cancelSessionAlertContent": "Are you sure you want to cancel? This session will be deleted and all progress will be lost."
 }
