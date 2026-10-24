@@ -6,4 +6,5 @@ class SessionEvent with _$SessionEvent {
   const factory SessionEvent.startSession(int dayId, String dayName) = _StartSession;
   const factory SessionEvent.logSet(TLog log, double progress) = _LogSet;
   const factory SessionEvent.stopSession(TSession session, bool fullSession) = _StopSession;
+  const factory SessionEvent.cancelSession(TSession session) = _CancelSession;
 }

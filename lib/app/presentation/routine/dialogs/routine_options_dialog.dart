@@ -57,10 +57,9 @@ class RoutineOptionsDialog extends StatelessWidget {
                 final isPremium = mem.state.maybeWhen(loaded: (_) => true, orElse: () => false);
 
                 return _OptionTile(
-                  // onTap: isPremium
-                  //     ? () => Navigator.pop(context, Option.duplicate)
-                  //     : () => showDialog(context: context, builder: (_) => const PremiumAlert()),
-                  onTap: () => Navigator.pop(context, Option.duplicate),
+                  onTap: isPremium
+                      ? () => Navigator.pop(context, Option.duplicate)
+                      : () => showDialog(context: context, builder: (_) => const PremiumAlert()),
                   icon: Icons.copy,
                   label: locale.duplicate,
                   color: Colors.amber,

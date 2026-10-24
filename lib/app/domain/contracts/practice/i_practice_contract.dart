@@ -16,4 +16,5 @@ abstract class IPracticeContract {
   Future<Either<Failure, TSession>> startTrainingSession(int dayId, String dayName);
   Future<Either<Failure, TSession>> logSetComplete(TLog log, double progress);
   Future<Either<Failure, Unit>> finishTrainingSession(TSession session, bool full);
+  Future<Either<Failure, Unit>> cancelSession(TSession session);
 }

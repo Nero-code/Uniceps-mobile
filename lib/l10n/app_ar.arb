@@ -438,5 +438,15 @@
   "levelIntermediate": "متوسط",
   "levelAdvanced": "متقدم",
   "levelElite": "محترف",
-  "fieldRequired": "هذا الحقل مطلوب!"
+  "fieldRequired": "هذا الحقل مطلوب!",
+  "overview": "نظرة عامة",
+  "history": "السجل",
+  "noTrainingHistory": "لا يوجد سجل تمارين مسجل بعد.",
+  "pr": "رقم قياسي",
+  "bestWeight": "أفضل وزن",
+  "estOneRepMax": "1RM التقديري",
+  "volume": "الحجم",
+  "set": "الجولة",
+  "progress": "التقدم",
+  "cancelSessionAlertContent": "هل أنت متأكد من إلغاء الجلسة؟ سيتم حذف هذه الجلسة وفقدان جميع التقدم المسجل."
 }

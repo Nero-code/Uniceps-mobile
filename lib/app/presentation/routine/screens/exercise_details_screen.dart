@@ -55,9 +55,9 @@ class ExerciseDetailsScreen extends StatelessWidget {
                       unselectedLabelColor: Colors.grey,
                       indicatorColor: Theme.of(context).colorScheme.primary,
                       indicatorWeight: 3,
-                      tabs: const [
-                        Tab(icon: Icon(Icons.info_outline), text: "Overview"),
-                        Tab(icon: Icon(Icons.history_rounded), text: "History"),
+                      tabs: [
+                        Tab(icon: const Icon(Icons.info_outline), text: l10n.overview),
+                        Tab(icon: const Icon(Icons.history_rounded), text: l10n.history),
                       ],
                     ),
                   ),
@@ -245,7 +245,7 @@ class _ExerciseHistoryTimelineTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).colorScheme.primary;
+    final l10n = AppLocalizations.of(context)!;
 
     if (logs.isEmpty) {
       return Center(
@@ -254,7 +254,7 @@ class _ExerciseHistoryTimelineTab extends StatelessWidget {
           children: [
             Icon(Icons.history_toggle_off, size: 64, color: Colors.grey.shade400),
             const SizedBox(height: 12),
-            Text("No training history recorded yet.", style: TextStyle(color: Colors.grey.shade600, fontSize: 16)),
+            Text(l10n.noTrainingHistory, style: TextStyle(color: Colors.grey.shade600, fontSize: 16)),
           ],
         ),
       );
@@ -288,27 +288,6 @@ class _ExerciseHistoryTimelineTab extends StatelessWidget {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Flat Timeline Node & Line
-            // SizedBox(
-            //   width: 24,
-            //   child: Column(
-            //     mainAxisSize: .min,
-            //     children: [
-            //       Container(
-            //         width: 18,
-            //         height: 18,
-            //         decoration: BoxDecoration(
-            //           color: isPrSession ? Colors.amber.shade700 : primaryColor,
-            //           shape: BoxShape.circle,
-            //         ),
-            //         child: Icon(isPrSession ? Icons.star : Icons.fitness_center, size: 10, color: Colors.white),
-            //       ),
-            //       Expanded(child: Container(width: 1.5, color: Colors.grey.shade300)),
-            //     ],
-            //   ),
-            // ),
-            // const SizedBox(width: 10),
-            // Flat Session Container
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),
@@ -339,7 +318,7 @@ class _ExerciseHistoryTimelineTab extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                "PR",
+                                l10n.pr,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 10,
@@ -361,45 +340,48 @@ class _ExerciseHistoryTimelineTab extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            _buildStatItem("Best Weight", "${sessionLogs.maxWeight} kg"),
-                            _buildStatItem("Est. 1RM", "${sessionLogs.estOneRepMax.toStringAsFixed(1)} kg"),
-                            _buildStatItem("Volume", "${sessionLogs.totalVolume.toInt()} kg"),
+                            _buildStatItem(l10n.bestWeight, "${sessionLogs.maxWeight} ${l10n.kg}"),
+                            _buildStatItem(
+                              l10n.estOneRepMax,
+                              "${sessionLogs.estOneRepMax.toStringAsFixed(1)} ${l10n.kg}",
+                            ),
+                            _buildStatItem(l10n.volume, "${sessionLogs.totalVolume.toInt()} ${l10n.kg}"),
                           ],
                         ),
                       ),
                       const SizedBox(height: 10),
 
                       // Sets table header
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
                         child: Row(
                           children: [
                             SizedBox(
                               width: 36,
                               child: Text(
-                                "SET",
-                                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
+                                l10n.set.toUpperCase(),
+                                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
                               ),
                             ),
                             Expanded(
                               child: Text(
-                                "REPS",
-                                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
+                                l10n.reps.toUpperCase(),
+                                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
                               ),
                             ),
                             Expanded(
                               flex: 2,
                               child: Text(
-                                "WEIGHT",
-                                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
+                                l10n.weight.toUpperCase(),
+                                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
                               ),
                             ),
                             SizedBox(
                               width: 75,
                               child: Text(
-                                "PROGRESS",
+                                l10n.progress.toUpperCase(),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
+                                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
                               ),
                             ),
                           ],
@@ -435,6 +417,7 @@ class _ExerciseHistoryTimelineTab extends StatelessWidget {
   }
 
   Widget _buildSetRow(BuildContext context, TLog setLog, TLog? previousSetLog, bool isPr) {
+    final l10n = AppLocalizations.of(context)!;
     String progressText = "-";
     Color progressColor = Colors.grey;
 
@@ -458,13 +441,13 @@ class _ExerciseHistoryTimelineTab extends StatelessWidget {
         children: [
           SizedBox(
             width: 36,
-            child: Text("${setLog.setIndex}", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+            child: Text("${setLog.setIndex + 1}", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
           ),
           Expanded(child: Text("${setLog.reps}", style: const TextStyle(fontSize: 13))),
           Expanded(
             flex: 2,
             child: Text(
-              "${setLog.weight} kg",
+              "${setLog.weight} ${l10n.kg}",
               style: TextStyle(
                 fontWeight: isPr ? FontWeight.bold : FontWeight.normal,
                 color: isPr ? Colors.amber.shade900 : null,
@@ -491,14 +474,11 @@ class _FakeSessionLog {
   final DateTime date;
   final String sessionTitle;
   final List<TLog> logs;
-  final bool isPr;
 
-  const _FakeSessionLog({required this.date, required this.sessionTitle, required this.logs, this.isPr = false});
+  const _FakeSessionLog({required this.date, required this.sessionTitle, required this.logs});
 
   double get maxWeight => logs.map((e) => e.weight).reduce((a, b) => a > b ? a : b);
-
   double get totalVolume => logs.fold(0, (sum, set) => sum + (set.weight * set.reps));
-
   double get estOneRepMax {
     double best1RM = 0;
     for (var set in logs) {

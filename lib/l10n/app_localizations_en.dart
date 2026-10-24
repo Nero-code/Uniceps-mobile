@@ -1169,4 +1169,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fieldRequired => 'This field is required!';
+
+  @override
+  String get overview => 'Overview';
+
+  @override
+  String get history => 'History';
+
+  @override
+  String get noTrainingHistory => 'No training history recorded yet.';
+
+  @override
+  String get pr => 'PR';
+
+  @override
+  String get bestWeight => 'Best Weight';
+
+  @override
+  String get estOneRepMax => 'Est. 1RM';
+
+  @override
+  String get volume => 'Volume';
+
+  @override
+  String get set => 'Set';
+
+  @override
+  String get progress => 'Progress';
+
+  @override
+  String get cancelSessionAlertContent =>
+      'Are you sure you want to cancel? This session will be deleted and all progress will be lost.';
 }
