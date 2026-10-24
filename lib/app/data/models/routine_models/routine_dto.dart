@@ -84,4 +84,17 @@ class RoutineDto {
     isCurrent: r.isCurrent,
     isSynced: r.isSynced,
   );
+
+  RoutineDto copyWith({int? id}) => RoutineDto(
+    id: id ?? this.id,
+    apiId: apiId,
+    description: description,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+    name: name,
+    isCurrent: isCurrent,
+    daysDto: daysDto,
+    version: version,
+    isSynced: isSynced,
+  );
 }

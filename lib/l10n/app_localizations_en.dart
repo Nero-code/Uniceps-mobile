@@ -102,6 +102,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get share => 'Share';
 
   @override
+  String get duplicate => 'Duplicate';
+
+  @override
   String get newVersion => 'New Version Available';
 
   @override

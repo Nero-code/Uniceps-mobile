@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:uniceps/app/data/services/media_helper.dart';
+import 'package:uniceps/app/domain/classes/practice_entities/t_log.dart';
 import 'package:uniceps/app/presentation/routine/blocs/exercise_details/exercise_details_cubit.dart';
 import 'package:uniceps/app/presentation/routine/widgets/exercise_grid_widget.dart';
 import 'package:uniceps/core/errors/failure.dart';
@@ -87,7 +88,7 @@ class ExerciseDetailsScreen extends StatelessWidget {
                   success: (result) => TabBarView(
                     children: [
                       _ExerciseOverviewTab(result: result, l10n: l10n),
-                      _ExerciseHistoryTimelineTab(exerciseId: exerciseId),
+                      _ExerciseHistoryTimelineTab(logs: result.timeline),
                     ],
                   ),
                 );
@@ -239,60 +240,11 @@ class _ExerciseOverviewTab extends StatelessWidget {
 }
 
 class _ExerciseHistoryTimelineTab extends StatelessWidget {
-  const _ExerciseHistoryTimelineTab({required this.exerciseId});
-
-  final String exerciseId;
-
-  List<_FakeSessionLog> _getFakeLogs() {
-    final now = DateTime.now();
-    return [
-      _FakeSessionLog(
-        date: now.subtract(const Duration(days: 2)),
-        sessionTitle: "Chest & Triceps Day",
-        isPr: true,
-        sets: [
-          const _FakeSetLog(setNumber: 1, weight: 60, reps: 12),
-          const _FakeSetLog(setNumber: 2, weight: 80, reps: 10),
-          const _FakeSetLog(setNumber: 3, weight: 85, reps: 8),
-          const _FakeSetLog(setNumber: 4, weight: 92.5, reps: 6, isPr: true),
-        ],
-      ),
-      _FakeSessionLog(
-        date: now.subtract(const Duration(days: 7)),
-        sessionTitle: "Push Workout A",
-        sets: [
-          const _FakeSetLog(setNumber: 1, weight: 60, reps: 12),
-          const _FakeSetLog(setNumber: 2, weight: 80, reps: 10),
-          const _FakeSetLog(setNumber: 3, weight: 85, reps: 8),
-          const _FakeSetLog(setNumber: 4, weight: 87.5, reps: 7),
-        ],
-      ),
-      _FakeSessionLog(
-        date: now.subtract(const Duration(days: 13)),
-        sessionTitle: "Upper Body Hypertrophy",
-        sets: [
-          const _FakeSetLog(setNumber: 1, weight: 55, reps: 12),
-          const _FakeSetLog(setNumber: 2, weight: 75, reps: 10),
-          const _FakeSetLog(setNumber: 3, weight: 80, reps: 8),
-          const _FakeSetLog(setNumber: 4, weight: 85, reps: 6),
-        ],
-      ),
-      _FakeSessionLog(
-        date: now.subtract(const Duration(days: 20)),
-        sessionTitle: "Push Workout B",
-        sets: [
-          const _FakeSetLog(setNumber: 1, weight: 50, reps: 12),
-          const _FakeSetLog(setNumber: 2, weight: 70, reps: 10),
-          const _FakeSetLog(setNumber: 3, weight: 75, reps: 8),
-          const _FakeSetLog(setNumber: 4, weight: 80, reps: 8),
-        ],
-      ),
-    ];
-  }
+  const _ExerciseHistoryTimelineTab({required this.logs});
+  final List<TLog> logs;
 
   @override
   Widget build(BuildContext context) {
-    final logs = _getFakeLogs();
     final primaryColor = Theme.of(context).colorScheme.primary;
 
     if (logs.isEmpty) {
@@ -308,154 +260,165 @@ class _ExerciseHistoryTimelineTab extends StatelessWidget {
       );
     }
 
+    final List<int> sessionIds = [];
+    double maxWeight = 0;
+    int? prId, prSessionId;
+    for (final i in logs) {
+      if (!sessionIds.contains(i.sessionId)) sessionIds.add(i.sessionId);
+      if (i.weight > maxWeight) {
+        maxWeight = i.weight;
+        prId = i.id;
+        prSessionId = i.sessionId;
+      }
+    }
+
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-      itemCount: logs.length,
+      itemCount: sessionIds.length,
       itemBuilder: (context, index) {
-        final session = logs[index];
-        final isLast = index == logs.length - 1;
-
+        final sessionId = sessionIds[index];
         // Order sets in descending order (last set performed is at the top)
-        final setsChronological = session.sets;
-        final setsDescending = session.sets.reversed.toList();
+        final setsChronological = logs.where((e) => sessionId == e.sessionId).toList();
+        setsChronological.sort((a, b) => b.setIndex.compareTo(a.setIndex));
+        final sessionDate = setsChronological.first.completedAt;
+        final isPrSession = prSessionId == sessionId;
 
-        return IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Flat Timeline Node & Line
-              SizedBox(
-                width: 24,
-                child: Column(
-                  children: [
-                    Container(
-                      width: 18,
-                      height: 18,
-                      decoration: BoxDecoration(
-                        color: session.isPr ? Colors.amber.shade700 : primaryColor,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(session.isPr ? Icons.star : Icons.fitness_center, size: 10, color: Colors.white),
-                    ),
-                    if (!isLast) Expanded(child: Container(width: 1.5, color: Colors.grey.shade300)),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-              // Flat Session Container
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: session.isPr ? Colors.amber.shade400 : Colors.grey.shade300,
-                        width: 1.0,
-                      ),
-                    ),
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Header: Date & PR Badge
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              DateFormat('MMM dd, yyyy').format(session.date),
-                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-                            ),
-                            if (session.isPr)
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: Colors.amber.shade50,
-                                  border: Border.all(color: Colors.amber.shade300),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  "PR",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 10,
-                                    color: Colors.amber.shade900,
-                                  ),
+        final sessionLogs = _FakeSessionLog(date: sessionDate, sessionTitle: '', logs: logs);
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Flat Timeline Node & Line
+            // SizedBox(
+            //   width: 24,
+            //   child: Column(
+            //     mainAxisSize: .min,
+            //     children: [
+            //       Container(
+            //         width: 18,
+            //         height: 18,
+            //         decoration: BoxDecoration(
+            //           color: isPrSession ? Colors.amber.shade700 : primaryColor,
+            //           shape: BoxShape.circle,
+            //         ),
+            //         child: Icon(isPrSession ? Icons.star : Icons.fitness_center, size: 10, color: Colors.white),
+            //       ),
+            //       Expanded(child: Container(width: 1.5, color: Colors.grey.shade300)),
+            //     ],
+            //   ),
+            // ),
+            // const SizedBox(width: 10),
+            // Flat Session Container
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: isPrSession ? Colors.amber.shade400 : Colors.grey.shade300, width: 1.0),
+                  ),
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header: Date & PR Badge
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            DateFormat('MMM dd, yyyy').format(sessionDate),
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                          ),
+                          if (isPrSession)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.amber.shade50,
+                                border: Border.all(color: Colors.amber.shade300),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                "PR",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10,
+                                  color: Colors.amber.shade900,
                                 ),
                               ),
+                            ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 10),
+                      // Flat summary stats row
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surfaceContainerHighest.withAlpha(80),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            _buildStatItem("Best Weight", "${sessionLogs.maxWeight} kg"),
+                            _buildStatItem("Est. 1RM", "${sessionLogs.estOneRepMax.toStringAsFixed(1)} kg"),
+                            _buildStatItem("Volume", "${sessionLogs.totalVolume.toInt()} kg"),
                           ],
                         ),
-                        const SizedBox(height: 2),
-                        Text(session.sessionTitle, style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
-                        const SizedBox(height: 10),
+                      ),
+                      const SizedBox(height: 10),
 
-                        // Flat summary stats row
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surfaceContainerHighest.withAlpha(80),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              _buildStatItem("Best Weight", "${session.maxWeight} kg"),
-                              _buildStatItem("Est. 1RM", "${session.estOneRepMax.toStringAsFixed(1)} kg"),
-                              _buildStatItem("Volume", "${session.totalVolume.toInt()} kg"),
-                            ],
-                          ),
+                      // Sets table header
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 36,
+                              child: Text(
+                                "SET",
+                                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                "REPS",
+                                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "WEIGHT",
+                                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 75,
+                              child: Text(
+                                "PROGRESS",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 10),
-
-                        // Sets table header
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 36,
-                                child: Text(
-                                  "SET",
-                                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  "WEIGHT",
-                                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  "REPS",
-                                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 75,
-                                child: Text(
-                                  "PROGRESS",
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Divider(height: 6, thickness: 0.5),
-                        ...setsDescending.map((setLog) {
-                          final index = setsChronological.indexOf(setLog);
-                          final previousSetLog = index > 0 ? setsChronological[index - 1] : null;
-                          return _buildSetRow(context, setLog, previousSetLog);
-                        }),
-                      ],
-                    ),
+                      ),
+                      const Divider(height: 6, thickness: 0.5),
+                      ...setsChronological.map((setLog) {
+                        final index = setsChronological.indexOf(setLog);
+                        final previousSetLog = index < setsChronological.length - 1
+                            ? setsChronological[index + 1]
+                            : null;
+                        return _buildSetRow(context, setLog, previousSetLog, prId == setLog.id);
+                      }),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
@@ -471,9 +434,7 @@ class _ExerciseHistoryTimelineTab extends StatelessWidget {
     );
   }
 
-  Widget _buildSetRow(BuildContext context, _FakeSetLog setLog, _FakeSetLog? previousSetLog) {
-    final isPr = setLog.isPr;
-
+  Widget _buildSetRow(BuildContext context, TLog setLog, TLog? previousSetLog, bool isPr) {
     String progressText = "-";
     Color progressColor = Colors.grey;
 
@@ -497,9 +458,11 @@ class _ExerciseHistoryTimelineTab extends StatelessWidget {
         children: [
           SizedBox(
             width: 36,
-            child: Text("${setLog.setNumber}", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+            child: Text("${setLog.setIndex}", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
           ),
+          Expanded(child: Text("${setLog.reps}", style: const TextStyle(fontSize: 13))),
           Expanded(
+            flex: 2,
             child: Text(
               "${setLog.weight} kg",
               style: TextStyle(
@@ -509,12 +472,12 @@ class _ExerciseHistoryTimelineTab extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(child: Text("${setLog.reps}", style: const TextStyle(fontSize: 13))),
           SizedBox(
             width: 75,
             child: Text(
               progressText,
-              textAlign: TextAlign.end,
+              textDirection: .ltr,
+              textAlign: TextAlign.center,
               style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: progressColor),
             ),
           ),
@@ -527,30 +490,21 @@ class _ExerciseHistoryTimelineTab extends StatelessWidget {
 class _FakeSessionLog {
   final DateTime date;
   final String sessionTitle;
-  final List<_FakeSetLog> sets;
+  final List<TLog> logs;
   final bool isPr;
 
-  const _FakeSessionLog({required this.date, required this.sessionTitle, required this.sets, this.isPr = false});
+  const _FakeSessionLog({required this.date, required this.sessionTitle, required this.logs, this.isPr = false});
 
-  double get maxWeight => sets.map((e) => e.weight).reduce((a, b) => a > b ? a : b);
+  double get maxWeight => logs.map((e) => e.weight).reduce((a, b) => a > b ? a : b);
 
-  double get totalVolume => sets.fold(0, (sum, set) => sum + (set.weight * set.reps));
+  double get totalVolume => logs.fold(0, (sum, set) => sum + (set.weight * set.reps));
 
   double get estOneRepMax {
     double best1RM = 0;
-    for (var set in sets) {
+    for (var set in logs) {
       final oneRm = set.weight * (1 + set.reps / 30.0);
       if (oneRm > best1RM) best1RM = oneRm;
     }
     return best1RM;
   }
-}
-
-class _FakeSetLog {
-  final int setNumber;
-  final double weight;
-  final int reps;
-  final bool isPr;
-
-  const _FakeSetLog({required this.setNumber, required this.weight, required this.reps, this.isPr = false});
 }

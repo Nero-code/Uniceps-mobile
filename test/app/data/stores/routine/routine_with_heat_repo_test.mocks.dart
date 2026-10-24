@@ -11,17 +11,12 @@ import 'package:mockito/mockito.dart' as _i1;
 import 'package:uniceps/app/data/models/routine_models/routine_dto.dart' as _i2;
 import 'package:uniceps/app/data/models/routine_result.dart' as _i7;
 import 'package:uniceps/app/data/services/media_helper.dart' as _i12;
-import 'package:uniceps/app/data/services/unifile/file_parse_service.dart'
-    as _i11;
+import 'package:uniceps/app/data/services/unifile/file_parse_service.dart' as _i11;
 import 'package:uniceps/app/data/services/unifile/unifile.dart' as _i3;
-import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart'
-    as _i4;
-import 'package:uniceps/app/data/sources/remote/dal_routine/routines_remote_source.dart'
-    as _i8;
-import 'package:uniceps/app/domain/classes/routine_classes/premade_routine.dart'
-    as _i9;
-import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart'
-    as _i6;
+import 'package:uniceps/app/data/sources/local/dal_routine/routine_management_local_source.dart' as _i4;
+import 'package:uniceps/app/data/sources/remote/dal_routine/routines_remote_source.dart' as _i8;
+import 'package:uniceps/app/domain/classes/routine_classes/premade_routine.dart' as _i9;
+import 'package:uniceps/app/domain/classes/routine_classes/routine_heat.dart' as _i6;
 import 'package:uniceps/core/constants/constants.dart' as _i10;
 
 // ignore_for_file: type=lint
@@ -40,20 +35,17 @@ import 'package:uniceps/core/constants/constants.dart' as _i10;
 // ignore_for_file: invalid_use_of_internal_member
 
 class _FakeRoutineDto_0 extends _i1.SmartFake implements _i2.RoutineDto {
-  _FakeRoutineDto_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeRoutineDto_0(Object parent, Invocation parentInvocation) : super(parent, parentInvocation);
 }
 
 class _FakeUniFile_1 extends _i1.SmartFake implements _i3.UniFile {
-  _FakeUniFile_1(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeUniFile_1(Object parent, Invocation parentInvocation) : super(parent, parentInvocation);
 }
 
 /// A class which mocks [IRoutineManagementLocalSourceContract].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockIRoutineManagementLocalSourceContract extends _i1.Mock
-    implements _i4.IRoutineManagementLocalSourceContract {
+class MockIRoutineManagementLocalSourceContract extends _i1.Mock implements _i4.IRoutineManagementLocalSourceContract {
   MockIRoutineManagementLocalSourceContract() {
     _i1.throwOnMissingStub(this);
   }
@@ -62,35 +54,26 @@ class MockIRoutineManagementLocalSourceContract extends _i1.Mock
   _i5.Future<List<_i2.RoutineDto>> getAllRoutines() =>
       (super.noSuchMethod(
             Invocation.method(#getAllRoutines, []),
-            returnValue: _i5.Future<List<_i2.RoutineDto>>.value(
-              <_i2.RoutineDto>[],
-            ),
+            returnValue: _i5.Future<List<_i2.RoutineDto>>.value(<_i2.RoutineDto>[]),
           )
           as _i5.Future<List<_i2.RoutineDto>>);
 
   @override
-  _i5.Future<List<({_i6.RoutineHeat heat, _i2.RoutineDto routine})>>
-  getAllRoutinesWithHeat() =>
+  _i5.Future<List<({_i6.RoutineHeat heat, _i2.RoutineDto routine})>> getAllRoutinesWithHeat() =>
       (super.noSuchMethod(
             Invocation.method(#getAllRoutinesWithHeat, []),
-            returnValue:
-                _i5.Future<
-                  List<({_i6.RoutineHeat heat, _i2.RoutineDto routine})>
-                >.value(<({_i6.RoutineHeat heat, _i2.RoutineDto routine})>[]),
+            returnValue: _i5.Future<List<({_i6.RoutineHeat heat, _i2.RoutineDto routine})>>.value(
+              <({_i6.RoutineHeat heat, _i2.RoutineDto routine})>[],
+            ),
           )
-          as _i5.Future<
-            List<({_i6.RoutineHeat heat, _i2.RoutineDto routine})>
-          >);
+          as _i5.Future<List<({_i6.RoutineHeat heat, _i2.RoutineDto routine})>>);
 
   @override
-  _i5.Future<_i2.RoutineDto> createRoutine(String? routineName) =>
+  _i5.Future<_i2.RoutineDto> createRoutine(String? routineName, String? description) =>
       (super.noSuchMethod(
             Invocation.method(#createRoutine, [routineName]),
             returnValue: _i5.Future<_i2.RoutineDto>.value(
-              _FakeRoutineDto_0(
-                this,
-                Invocation.method(#createRoutine, [routineName]),
-              ),
+              _FakeRoutineDto_0(this, Invocation.method(#createRoutine, [routineName])),
             ),
           )
           as _i5.Future<_i2.RoutineDto>);
@@ -125,10 +108,7 @@ class MockIRoutineManagementLocalSourceContract extends _i1.Mock
 
   @override
   _i5.Stream<_i7.Stage> insertFullRoutine(_i2.RoutineDto? dto) =>
-      (super.noSuchMethod(
-            Invocation.method(#insertFullRoutine, [dto]),
-            returnValue: _i5.Stream<_i7.Stage>.empty(),
-          )
+      (super.noSuchMethod(Invocation.method(#insertFullRoutine, [dto]), returnValue: _i5.Stream<_i7.Stage>.empty())
           as _i5.Stream<_i7.Stage>);
 
   @override
@@ -136,49 +116,39 @@ class MockIRoutineManagementLocalSourceContract extends _i1.Mock
       (super.noSuchMethod(
             Invocation.method(#getFullRoutine, [routineId]),
             returnValue: _i5.Future<_i2.RoutineDto>.value(
-              _FakeRoutineDto_0(
-                this,
-                Invocation.method(#getFullRoutine, [routineId]),
-              ),
+              _FakeRoutineDto_0(this, Invocation.method(#getFullRoutine, [routineId])),
             ),
           )
           as _i5.Future<_i2.RoutineDto>);
+
+  @override
+  _i5.Future<int> duplicateRoutine(_i2.RoutineDto? duplicate) =>
+      (super.noSuchMethod(Invocation.method(#duplicateRoutine, [duplicate]), returnValue: _i5.Future<int>.value(0))
+          as _i5.Future<int>);
 }
 
 /// A class which mocks [IRoutineRemoteSourceContract].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockIRoutineRemoteSourceContract extends _i1.Mock
-    implements _i8.IRoutineRemoteSourceContract {
+class MockIRoutineRemoteSourceContract extends _i1.Mock implements _i8.IRoutineRemoteSourceContract {
   MockIRoutineRemoteSourceContract() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i5.Future<List<_i9.PremadeRoutine>> getPremadeRoutines(
-    _i10.Gender? gender,
-    String? languageCode,
-  ) =>
+  _i5.Future<List<_i9.PremadeRoutine>> getPremadeRoutines(_i10.Gender? gender, String? languageCode) =>
       (super.noSuchMethod(
             Invocation.method(#getPremadeRoutines, [gender, languageCode]),
-            returnValue: _i5.Future<List<_i9.PremadeRoutine>>.value(
-              <_i9.PremadeRoutine>[],
-            ),
+            returnValue: _i5.Future<List<_i9.PremadeRoutine>>.value(<_i9.PremadeRoutine>[]),
           )
           as _i5.Future<List<_i9.PremadeRoutine>>);
 
   @override
-  _i5.Future<_i3.UniFile> downloadRoutine(
-    String? apiId,
-    String? languageCode,
-  ) =>
+  _i5.Future<_i3.UniFile> downloadRoutine(String? apiId, String? languageCode) =>
       (super.noSuchMethod(
             Invocation.method(#downloadRoutine, [apiId, languageCode]),
             returnValue: _i5.Future<_i3.UniFile>.value(
-              _FakeUniFile_1(
-                this,
-                Invocation.method(#downloadRoutine, [apiId, languageCode]),
-              ),
+              _FakeUniFile_1(this, Invocation.method(#downloadRoutine, [apiId, languageCode])),
             ),
           )
           as _i5.Future<_i3.UniFile>);
@@ -196,22 +166,14 @@ class MockUniFileManager extends _i1.Mock implements _i11.UniFileManager {
   _i5.Future<_i3.UniFile> importFile() =>
       (super.noSuchMethod(
             Invocation.method(#importFile, []),
-            returnValue: _i5.Future<_i3.UniFile>.value(
-              _FakeUniFile_1(this, Invocation.method(#importFile, [])),
-            ),
+            returnValue: _i5.Future<_i3.UniFile>.value(_FakeUniFile_1(this, Invocation.method(#importFile, []))),
           )
           as _i5.Future<_i3.UniFile>);
 
   @override
-  _i5.Future<void> exportRoutineToFile({
-    required String? fileName,
-    required Map<String, dynamic>? data,
-  }) =>
+  _i5.Future<void> exportRoutineToFile({required String? fileName, required Map<String, dynamic>? data}) =>
       (super.noSuchMethod(
-            Invocation.method(#exportRoutineToFile, [], {
-              #fileName: fileName,
-              #data: data,
-            }),
+            Invocation.method(#exportRoutineToFile, [], {#fileName: fileName, #data: data}),
             returnValue: _i5.Future<void>.value(),
             returnValueForMissingStub: _i5.Future<void>.value(),
           )
@@ -228,18 +190,12 @@ class MockMediaHelper extends _i1.Mock implements _i12.MediaHelper {
 
   @override
   _i5.Stream<double> saveImages(List<String>? imageUrls) =>
-      (super.noSuchMethod(
-            Invocation.method(#saveImages, [imageUrls]),
-            returnValue: _i5.Stream<double>.empty(),
-          )
+      (super.noSuchMethod(Invocation.method(#saveImages, [imageUrls]), returnValue: _i5.Stream<double>.empty())
           as _i5.Stream<double>);
 
   @override
   _i5.Future<_i13.Uint8List?> getImage(String? imageUrl) =>
-      (super.noSuchMethod(
-            Invocation.method(#getImage, [imageUrl]),
-            returnValue: _i5.Future<_i13.Uint8List?>.value(),
-          )
+      (super.noSuchMethod(Invocation.method(#getImage, [imageUrl]), returnValue: _i5.Future<_i13.Uint8List?>.value())
           as _i5.Future<_i13.Uint8List?>);
 
   @override
@@ -253,11 +209,7 @@ class MockMediaHelper extends _i1.Mock implements _i12.MediaHelper {
 
   @override
   bool containsImage(String? id) =>
-      (super.noSuchMethod(
-            Invocation.method(#containsImage, [id]),
-            returnValue: false,
-          )
-          as bool);
+      (super.noSuchMethod(Invocation.method(#containsImage, [id]), returnValue: false) as bool);
 }
 
 /// A class which mocks [Logger].
@@ -270,152 +222,65 @@ class MockLogger extends _i1.Mock implements _i14.Logger {
 
   @override
   _i5.Future<void> get init =>
-      (super.noSuchMethod(
-            Invocation.getter(#init),
-            returnValue: _i5.Future<void>.value(),
-          )
-          as _i5.Future<void>);
+      (super.noSuchMethod(Invocation.getter(#init), returnValue: _i5.Future<void>.value()) as _i5.Future<void>);
 
   @override
-  void v(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #v,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
+  void v(dynamic message, {DateTime? time, Object? error, StackTrace? stackTrace}) => super.noSuchMethod(
+    Invocation.method(#v, [message], {#time: time, #error: error, #stackTrace: stackTrace}),
     returnValueForMissingStub: null,
   );
 
   @override
-  void t(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #t,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
+  void t(dynamic message, {DateTime? time, Object? error, StackTrace? stackTrace}) => super.noSuchMethod(
+    Invocation.method(#t, [message], {#time: time, #error: error, #stackTrace: stackTrace}),
     returnValueForMissingStub: null,
   );
 
   @override
-  void d(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #d,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
+  void d(dynamic message, {DateTime? time, Object? error, StackTrace? stackTrace}) => super.noSuchMethod(
+    Invocation.method(#d, [message], {#time: time, #error: error, #stackTrace: stackTrace}),
     returnValueForMissingStub: null,
   );
 
   @override
-  void i(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #i,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
+  void i(dynamic message, {DateTime? time, Object? error, StackTrace? stackTrace}) => super.noSuchMethod(
+    Invocation.method(#i, [message], {#time: time, #error: error, #stackTrace: stackTrace}),
     returnValueForMissingStub: null,
   );
 
   @override
-  void w(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #w,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
+  void w(dynamic message, {DateTime? time, Object? error, StackTrace? stackTrace}) => super.noSuchMethod(
+    Invocation.method(#w, [message], {#time: time, #error: error, #stackTrace: stackTrace}),
     returnValueForMissingStub: null,
   );
 
   @override
-  void e(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #e,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
+  void e(dynamic message, {DateTime? time, Object? error, StackTrace? stackTrace}) => super.noSuchMethod(
+    Invocation.method(#e, [message], {#time: time, #error: error, #stackTrace: stackTrace}),
     returnValueForMissingStub: null,
   );
 
   @override
-  void wtf(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #wtf,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
+  void wtf(dynamic message, {DateTime? time, Object? error, StackTrace? stackTrace}) => super.noSuchMethod(
+    Invocation.method(#wtf, [message], {#time: time, #error: error, #stackTrace: stackTrace}),
     returnValueForMissingStub: null,
   );
 
   @override
-  void f(
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #f,
-      [message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
+  void f(dynamic message, {DateTime? time, Object? error, StackTrace? stackTrace}) => super.noSuchMethod(
+    Invocation.method(#f, [message], {#time: time, #error: error, #stackTrace: stackTrace}),
     returnValueForMissingStub: null,
   );
 
   @override
-  void log(
-    _i14.Level? level,
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #log,
-      [level, message],
-      {#time: time, #error: error, #stackTrace: stackTrace},
-    ),
-    returnValueForMissingStub: null,
-  );
+  void log(_i14.Level? level, dynamic message, {DateTime? time, Object? error, StackTrace? stackTrace}) =>
+      super.noSuchMethod(
+        Invocation.method(#log, [level, message], {#time: time, #error: error, #stackTrace: stackTrace}),
+        returnValueForMissingStub: null,
+      );
 
   @override
-  bool isClosed() =>
-      (super.noSuchMethod(Invocation.method(#isClosed, []), returnValue: false)
-          as bool);
+  bool isClosed() => (super.noSuchMethod(Invocation.method(#isClosed, []), returnValue: false) as bool);
 
   @override
   _i5.Future<void> close() =>

@@ -15,14 +15,20 @@ class RoutineWithHeatCommands {
 
   Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> getAllRoutinesWithHeat() =>
       _repo.getAllRoutinesWithHeat();
-  Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> createRoutine(String routineName) =>
-      _repo.createRoutine(routineName);
+  Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> createRoutine(
+    String routineName,
+    String description,
+  ) => _repo.createRoutine(routineName, description);
   Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> updateRoutine(Routine routine) =>
       _repo.updateRoutine(routine);
   Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> deleteRoutine(Routine routine) =>
       _repo.deleteRoutine(routine);
   Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> setCurrentRoutine(Routine routine) =>
       _repo.setCurrentRoutine(routine);
+  Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> duplicateRoutine(
+    Routine routine,
+    RoutineHeat heat,
+  ) => _repo.duplicateRoutine(routine, heat);
 
   Stream<RoutineResult> importRoutine() => _repo.importRoutineFromFile();
   Stream<RoutineResult> importUniFile(UniFile file) => _repo.importRoutine(file);

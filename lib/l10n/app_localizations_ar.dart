@@ -102,6 +102,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get share => 'مشاركة';
 
   @override
+  String get duplicate => 'تكرار';
+
+  @override
   String get newVersion => 'يوجد تحديث جديد!';
 
   @override
