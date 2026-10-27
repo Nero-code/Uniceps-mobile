@@ -2395,6 +2395,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to cancel? This session will be deleted and all progress will be lost.'**
   String get cancelSessionAlertContent;
+
+  /// No description provided for @time.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get time;
+
+  /// No description provided for @maxLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Max'**
+  String get maxLabel;
+
+  /// No description provided for @volLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Vol'**
+  String get volLabel;
+
+  /// No description provided for @errLoadSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load sessions'**
+  String get errLoadSessions;
+
+  /// No description provided for @finished.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished'**
+  String get finished;
+
+  /// No description provided for @avgProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Progress'**
+  String get avgProgress;
+
+  /// No description provided for @totalVolumeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Volume'**
+  String get totalVolumeLabel;
+
+  /// No description provided for @timeSpent.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Spent'**
+  String get timeSpent;
+
+  /// No description provided for @fromAnyDate.
+  ///
+  /// In en, this message translates to:
+  /// **'From: Any Date'**
+  String get fromAnyDate;
+
+  /// No description provided for @toToday.
+  ///
+  /// In en, this message translates to:
+  /// **'To: Today'**
+  String get toToday;
+
+  /// No description provided for @clearDateFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Date Filter'**
+  String get clearDateFilter;
+
+  /// No description provided for @noSessionsInRange.
+  ///
+  /// In en, this message translates to:
+  /// **'No finished sessions found in selected range'**
+  String get noSessionsInRange;
+
+  /// No description provided for @analysisPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Analysis Period'**
+  String get analysisPeriod;
+
+  /// No description provided for @days7.
+  ///
+  /// In en, this message translates to:
+  /// **'7 Days'**
+  String get days7;
+
+  /// No description provided for @days30.
+  ///
+  /// In en, this message translates to:
+  /// **'30 Days'**
+  String get days30;
+
+  /// No description provided for @months3.
+  ///
+  /// In en, this message translates to:
+  /// **'3 Months'**
+  String get months3;
+
+  /// No description provided for @year1.
+  ///
+  /// In en, this message translates to:
+  /// **'1 Year'**
+  String get year1;
+
+  /// No description provided for @custom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get custom;
+
+  /// No description provided for @from.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get from;
+
+  /// No description provided for @to.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get to;
+
+  /// No description provided for @muscleEvolutionTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscle Evolution Trend'**
+  String get muscleEvolutionTrend;
+
+  /// No description provided for @growth.
+  ///
+  /// In en, this message translates to:
+  /// **'growth'**
+  String get growth;
+
+  /// No description provided for @errLoadSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load summary'**
+  String get errLoadSummary;
+
+  /// No description provided for @consistencyHeatmap.
+  ///
+  /// In en, this message translates to:
+  /// **'Consistency Heatmap'**
+  String get consistencyHeatmap;
+
+  /// No description provided for @dayStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Day Streak'**
+  String dayStreak(Object count);
+
+  /// No description provided for @longestStreakLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Longest streak: {count} days'**
+  String longestStreakLabel(Object count);
+
+  /// No description provided for @rest.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest'**
+  String get rest;
+
+  /// No description provided for @sessionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Session'**
+  String get sessionLabel;
+
+  /// No description provided for @progressiveOverloadTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'Progressive Overload Trend'**
+  String get progressiveOverloadTrend;
+
+  /// No description provided for @weeklyVolumeProgression.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly Volume Progression (in k kg)'**
+  String get weeklyVolumeProgression;
+
+  /// No description provided for @volumeIncreasedTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume has increased compared to last week. Great job maintaining progressive overload!'**
+  String get volumeIncreasedTip;
+
+  /// No description provided for @volumeDecreasedTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume decreased this week. Focus on recovery and steady progressive overload.'**
+  String get volumeDecreasedTip;
+
+  /// No description provided for @noMuscleFocusData.
+  ///
+  /// In en, this message translates to:
+  /// **'No muscle focus data available for this period'**
+  String get noMuscleFocusData;
+
+  /// No description provided for @muscleFocusBreakdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscle Focus Breakdown'**
+  String get muscleFocusBreakdown;
+
+  /// No description provided for @underweight.
+  ///
+  /// In en, this message translates to:
+  /// **'Underweight'**
+  String get underweight;
+
+  /// No description provided for @normalWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get normalWeight;
+
+  /// No description provided for @overweight.
+  ///
+  /// In en, this message translates to:
+  /// **'Overweight'**
+  String get overweight;
+
+  /// No description provided for @obese.
+  ///
+  /// In en, this message translates to:
+  /// **'Obese'**
+  String get obese;
+
+  /// No description provided for @bodyFat.
+  ///
+  /// In en, this message translates to:
+  /// **'Body Fat'**
+  String get bodyFat;
+
+  /// No description provided for @metabolism.
+  ///
+  /// In en, this message translates to:
+  /// **'Metabolism'**
+  String get metabolism;
 }
 
 class _AppLocalizationsDelegate

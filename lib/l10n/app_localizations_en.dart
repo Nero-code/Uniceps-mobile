@@ -1200,4 +1200,132 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get cancelSessionAlertContent =>
       'Are you sure you want to cancel? This session will be deleted and all progress will be lost.';
+
+  @override
+  String get time => 'Time';
+
+  @override
+  String get maxLabel => 'Max';
+
+  @override
+  String get volLabel => 'Vol';
+
+  @override
+  String get errLoadSessions => 'Failed to load sessions';
+
+  @override
+  String get finished => 'Finished';
+
+  @override
+  String get avgProgress => 'Avg Progress';
+
+  @override
+  String get totalVolumeLabel => 'Total Volume';
+
+  @override
+  String get timeSpent => 'Time Spent';
+
+  @override
+  String get fromAnyDate => 'From: Any Date';
+
+  @override
+  String get toToday => 'To: Today';
+
+  @override
+  String get clearDateFilter => 'Clear Date Filter';
+
+  @override
+  String get noSessionsInRange =>
+      'No finished sessions found in selected range';
+
+  @override
+  String get analysisPeriod => 'Analysis Period';
+
+  @override
+  String get days7 => '7 Days';
+
+  @override
+  String get days30 => '30 Days';
+
+  @override
+  String get months3 => '3 Months';
+
+  @override
+  String get year1 => '1 Year';
+
+  @override
+  String get custom => 'Custom';
+
+  @override
+  String get from => 'From';
+
+  @override
+  String get to => 'To';
+
+  @override
+  String get muscleEvolutionTrend => 'Muscle Evolution Trend';
+
+  @override
+  String get growth => 'growth';
+
+  @override
+  String get errLoadSummary => 'Failed to load summary';
+
+  @override
+  String get consistencyHeatmap => 'Consistency Heatmap';
+
+  @override
+  String dayStreak(Object count) {
+    return '$count Day Streak';
+  }
+
+  @override
+  String longestStreakLabel(Object count) {
+    return 'Longest streak: $count days';
+  }
+
+  @override
+  String get rest => 'Rest';
+
+  @override
+  String get sessionLabel => 'Session';
+
+  @override
+  String get progressiveOverloadTrend => 'Progressive Overload Trend';
+
+  @override
+  String get weeklyVolumeProgression => 'Weekly Volume Progression (in k kg)';
+
+  @override
+  String get volumeIncreasedTip =>
+      'Volume has increased compared to last week. Great job maintaining progressive overload!';
+
+  @override
+  String get volumeDecreasedTip =>
+      'Volume decreased this week. Focus on recovery and steady progressive overload.';
+
+  @override
+  String get noMuscleFocusData =>
+      'No muscle focus data available for this period';
+
+  @override
+  String get muscleFocusBreakdown => 'Muscle Focus Breakdown';
+
+  @override
+  String get underweight => 'Underweight';
+
+  @override
+  String get normalWeight => 'Normal';
+
+  @override
+  String get overweight => 'Overweight';
+
+  @override
+  String get obese => 'Obese';
+
+  @override
+  String get bodyFat => 'Body Fat';
+
+  @override
+  String get metabolism => 'Metabolism';
 }

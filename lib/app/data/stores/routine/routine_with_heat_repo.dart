@@ -137,7 +137,7 @@ class RoutineWithHeatRepo implements IRoutineWithHeatContract {
         isSynced: false,
       );
       final int id = await _localSource.duplicateRoutine(duplicate);
-      routines.add((heat: heat, routine: duplicate.copyWith(id: id).toEntity()));
+      routines.add((heat: heat.copyWith(sessionCount: 0), routine: duplicate.copyWith(id: id).toEntity()));
       return Right(routines);
     } catch (e) {
       return Left(DatabaseFailure(errorMsg: ""));

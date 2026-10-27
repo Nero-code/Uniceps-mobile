@@ -448,5 +448,59 @@
   "volume": "Volume",
   "set": "Set",
   "progress": "Progress",
-  "cancelSessionAlertContent": "Are you sure you want to cancel? This session will be deleted and all progress will be lost."
+  "cancelSessionAlertContent": "Are you sure you want to cancel? This session will be deleted and all progress will be lost.",
+  "time": "Time",
+  "maxLabel": "Max",
+  "volLabel": "Vol",
+  "errLoadSessions": "Failed to load sessions",
+  "finished": "Finished",
+  "avgProgress": "Avg Progress",
+  "totalVolumeLabel": "Total Volume",
+  "timeSpent": "Time Spent",
+  "fromAnyDate": "From: Any Date",
+  "toToday": "To: Today",
+  "clearDateFilter": "Clear Date Filter",
+  "noSessionsInRange": "No finished sessions found in selected range",
+  "analysisPeriod": "Analysis Period",
+  "days7": "7 Days",
+  "days30": "30 Days",
+  "months3": "3 Months",
+  "year1": "1 Year",
+  "custom": "Custom",
+  "from": "From",
+  "to": "To",
+  "muscleEvolutionTrend": "Muscle Evolution Trend",
+  "growth": "growth",
+  "errLoadSummary": "Failed to load summary",
+  "consistencyHeatmap": "Consistency Heatmap",
+  "dayStreak": "{count} Day Streak",
+  "@dayStreak": {
+    "placeHolders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "longestStreakLabel": "Longest streak: {count} days",
+  "@longestStreakLabel": {
+    "placeHolders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rest": "Rest",
+  "sessionLabel": "Session",
+  "progressiveOverloadTrend": "Progressive Overload Trend",
+  "weeklyVolumeProgression": "Weekly Volume Progression (in k kg)",
+  "volumeIncreasedTip": "Volume has increased compared to last week. Great job maintaining progressive overload!",
+  "volumeDecreasedTip": "Volume decreased this week. Focus on recovery and steady progressive overload.",
+  "noMuscleFocusData": "No muscle focus data available for this period",
+  "muscleFocusBreakdown": "Muscle Focus Breakdown",
+  "underweight": "Underweight",
+  "normalWeight": "Normal",
+  "overweight": "Overweight",
+  "obese": "Obese",
+  "bodyFat": "Body Fat",
+  "metabolism": "Metabolism"
 }
