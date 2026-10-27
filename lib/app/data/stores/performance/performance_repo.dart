@@ -329,8 +329,10 @@ class PerformanceRepo implements IPerformanceContract {
       final physicalReport = physicalRes.fold((l) => PhysicalReport.empty(), (r) => r);
       final musclesEvolution = evolutionRes.fold((l) => <Chart<DateTime, double>>[], (r) => r);
 
-      final sessions = rawSessions.map((s) => s.toEntity()).toList();
-      final measurements = rawMeasurementsModels.map((m) => m.toEntity()).toList();
+      final sessions = rawSessions.map((s) => s.toEntity()).toList()
+        ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      final measurements = rawMeasurementsModels.map((m) => m.toEntity()).toList()
+        ..sort((a, b) => b.checkDate.compareTo(a.checkDate));
 
       return Right(
         PerformanceResult(

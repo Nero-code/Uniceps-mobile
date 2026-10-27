@@ -61,6 +61,13 @@ class _MusclesPageState extends State<MusclesPage> {
 
     final daysDiff = _toDate.difference(_fromDate).inDays;
 
+    final presets = [
+      {'key': '7 Days', 'label': l10n.days7},
+      {'key': '30 Days', 'label': l10n.days30},
+      {'key': '3 Months', 'label': l10n.months3},
+      {'key': '1 Year', 'label': l10n.year1},
+    ];
+
     return SingleChildScrollView(
       padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top, bottom: 32),
       child: Column(
@@ -84,7 +91,7 @@ class _MusclesPageState extends State<MusclesPage> {
                       children: [
                         Icon(Icons.date_range, color: primaryColor, size: 20),
                         const SizedBox(width: 8),
-                        const Text("Analysis Period", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                        Text(l10n.analysisPeriod, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                       ],
                     ),
                     Container(
@@ -94,7 +101,7 @@ class _MusclesPageState extends State<MusclesPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        "$daysDiff Days",
+                        "$daysDiff ${l10n.day}",
                         style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: primaryColor),
                       ),
                     ),
@@ -134,7 +141,7 @@ class _MusclesPageState extends State<MusclesPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("From", style: TextStyle(fontSize: 10, color: Colors.grey)),
+                              Text(l10n.from, style: const TextStyle(fontSize: 10, color: Colors.grey)),
                               const SizedBox(height: 2),
                               Text(
                                 DateFormat('MMM dd, yyyy').format(_fromDate),
@@ -178,7 +185,7 @@ class _MusclesPageState extends State<MusclesPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("To", style: TextStyle(fontSize: 10, color: Colors.grey)),
+                              Text(l10n.to, style: const TextStyle(fontSize: 10, color: Colors.grey)),
                               const SizedBox(height: 2),
                               Text(
                                 DateFormat('MMM dd, yyyy').format(_toDate),
@@ -197,14 +204,14 @@ class _MusclesPageState extends State<MusclesPage> {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: ['7 Days', '30 Days', '3 Months', '1 Year'].map((preset) {
-                      final isSelected = _selectedPreset == preset;
+                    children: presets.map((p) {
+                      final isSelected = _selectedPreset == p['key'];
                       return Padding(
                         padding: const EdgeInsets.only(right: 6.0),
                         child: ChoiceChip(
-                          label: Text(preset),
+                          label: Text(p['label']!),
                           selected: isSelected,
-                          onSelected: (_) => _applyPreset(preset),
+                          onSelected: (_) => _applyPreset(p['key']!),
                           selectedColor: primaryColor,
                           labelStyle: TextStyle(
                             color: isSelected ? Colors.white : Colors.black87,
@@ -294,7 +301,7 @@ class _MusclesPageState extends State<MusclesPage> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          "Muscle Evolution Trend",
+                          l10n.muscleEvolutionTrend,
                           style: Theme.of(
                             context,
                           ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: Colors.white),
@@ -369,7 +376,10 @@ class _MusclesPageState extends State<MusclesPage> {
                                               ),
                                             ),
                                             const SizedBox(width: 6),
-                                            Text("growth", style: TextStyle(fontSize: 10, color: Colors.grey.shade600)),
+                                            Text(
+                                              l10n.growth,
+                                              style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
+                                            ),
                                           ],
                                         ),
                                       ],

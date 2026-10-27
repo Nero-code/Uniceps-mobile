@@ -1196,4 +1196,130 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get cancelSessionAlertContent =>
       'هل أنت متأكد من إلغاء الجلسة؟ سيتم حذف هذه الجلسة وفقدان جميع التقدم المسجل.';
+
+  @override
+  String get time => 'الوقت';
+
+  @override
+  String get maxLabel => 'الأقصى';
+
+  @override
+  String get volLabel => 'الحجم';
+
+  @override
+  String get errLoadSessions => 'فشل في تحميل الجلسات';
+
+  @override
+  String get finished => 'المكتملة';
+
+  @override
+  String get avgProgress => 'معدل الإنجاز';
+
+  @override
+  String get totalVolumeLabel => 'إجمالي الحجم';
+
+  @override
+  String get timeSpent => 'الوقت المستغرق';
+
+  @override
+  String get fromAnyDate => 'من: أي تاريخ';
+
+  @override
+  String get toToday => 'إلى: اليوم';
+
+  @override
+  String get clearDateFilter => 'مسح الفلتر';
+
+  @override
+  String get noSessionsInRange => 'لم يتم العثور على جلسات في النطاق المحدد';
+
+  @override
+  String get analysisPeriod => 'فترة التحليل';
+
+  @override
+  String get days7 => '7 أيام';
+
+  @override
+  String get days30 => '30 يوم';
+
+  @override
+  String get months3 => '3 أشهر';
+
+  @override
+  String get year1 => 'سنة واحدة';
+
+  @override
+  String get custom => 'مخصص';
+
+  @override
+  String get from => 'من';
+
+  @override
+  String get to => 'إلى';
+
+  @override
+  String get muscleEvolutionTrend => 'مؤشر تطور العضلات';
+
+  @override
+  String get growth => 'نمو';
+
+  @override
+  String get errLoadSummary => 'فشل في تحميل الملخص';
+
+  @override
+  String get consistencyHeatmap => 'خريطة الاستمرارية';
+
+  @override
+  String dayStreak(Object count) {
+    return 'تتابع $count يوم';
+  }
+
+  @override
+  String longestStreakLabel(Object count) {
+    return 'أطول تتابع: $count يوم';
+  }
+
+  @override
+  String get rest => 'راحة';
+
+  @override
+  String get sessionLabel => 'جلسة';
+
+  @override
+  String get progressiveOverloadTrend => 'مؤشر الحمل التصاعدي';
+
+  @override
+  String get weeklyVolumeProgression => 'تطور الحجم الأسبوعي (بـ 1000 كغ)';
+
+  @override
+  String get volumeIncreasedTip =>
+      'ارتفع الحجم التدريبي مقارنة بالأسبوع الماضي. عمل رائع في المحافظة على الحمل التصاعدي!';
+
+  @override
+  String get volumeDecreasedTip =>
+      'انخفض الحجم هذا الأسبوع. ركز على الاستشفاء والحمل التصاعدي المنتظم.';
+
+  @override
+  String get noMuscleFocusData => 'لا توجد بيانات تركيز عضلات لهذه الفترة';
+
+  @override
+  String get muscleFocusBreakdown => 'توزيع التركيز العضلي';
+
+  @override
+  String get underweight => 'نقص وزن';
+
+  @override
+  String get normalWeight => 'طبيعي';
+
+  @override
+  String get overweight => 'وزن زائد';
+
+  @override
+  String get obese => 'سمنة';
+
+  @override
+  String get bodyFat => 'نسبة الدهون';
+
+  @override
+  String get metabolism => 'الأيض';
 }

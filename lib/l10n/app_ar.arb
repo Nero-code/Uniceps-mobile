@@ -448,5 +448,59 @@
   "volume": "الحجم",
   "set": "الجولة",
   "progress": "التقدم",
-  "cancelSessionAlertContent": "هل أنت متأكد من إلغاء الجلسة؟ سيتم حذف هذه الجلسة وفقدان جميع التقدم المسجل."
+  "cancelSessionAlertContent": "هل أنت متأكد من إلغاء الجلسة؟ سيتم حذف هذه الجلسة وفقدان جميع التقدم المسجل.",
+  "time": "الوقت",
+  "maxLabel": "الأقصى",
+  "volLabel": "الحجم",
+  "errLoadSessions": "فشل في تحميل الجلسات",
+  "finished": "المكتملة",
+  "avgProgress": "معدل الإنجاز",
+  "totalVolumeLabel": "إجمالي الحجم",
+  "timeSpent": "الوقت المستغرق",
+  "fromAnyDate": "من: أي تاريخ",
+  "toToday": "إلى: اليوم",
+  "clearDateFilter": "مسح الفلتر",
+  "noSessionsInRange": "لم يتم العثور على جلسات في النطاق المحدد",
+  "analysisPeriod": "فترة التحليل",
+  "days7": "7 أيام",
+  "days30": "30 يوم",
+  "months3": "3 أشهر",
+  "year1": "سنة واحدة",
+  "custom": "مخصص",
+  "from": "من",
+  "to": "إلى",
+  "muscleEvolutionTrend": "مؤشر تطور العضلات",
+  "growth": "نمو",
+  "errLoadSummary": "فشل في تحميل الملخص",
+  "consistencyHeatmap": "خريطة الاستمرارية",
+  "dayStreak": "تتابع {count} يوم",
+  "@dayStreak": {
+    "placeHolders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "longestStreakLabel": "أطول تتابع: {count} يوم",
+  "@longestStreakLabel": {
+    "placeHolders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rest": "راحة",
+  "sessionLabel": "جلسة",
+  "progressiveOverloadTrend": "مؤشر الحمل التصاعدي",
+  "weeklyVolumeProgression": "تطور الحجم الأسبوعي (بـ 1000 كغ)",
+  "volumeIncreasedTip": "ارتفع الحجم التدريبي مقارنة بالأسبوع الماضي. عمل رائع في المحافظة على الحمل التصاعدي!",
+  "volumeDecreasedTip": "انخفض الحجم هذا الأسبوع. ركز على الاستشفاء والحمل التصاعدي المنتظم.",
+  "noMuscleFocusData": "لا توجد بيانات تركيز عضلات لهذه الفترة",
+  "muscleFocusBreakdown": "توزيع التركيز العضلي",
+  "underweight": "نقص وزن",
+  "normalWeight": "طبيعي",
+  "overweight": "وزن زائد",
+  "obese": "سمنة",
+  "bodyFat": "نسبة الدهون",
+  "metabolism": "الأيض"
 }
