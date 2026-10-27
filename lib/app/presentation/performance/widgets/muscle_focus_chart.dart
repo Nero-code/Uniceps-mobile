@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uniceps/app/domain/classes/performance_entities/muscle_focus.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class MuscleFocusChart extends StatelessWidget {
   const MuscleFocusChart({super.key, required this.chartData});
@@ -25,6 +26,7 @@ class MuscleFocusChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     if (chartData.isEmpty) {
       return Container(
@@ -38,7 +40,7 @@ class MuscleFocusChart extends StatelessWidget {
         ),
         alignment: Alignment.center,
         child: Text(
-          "No muscle focus data available for this period",
+          l10n.noMuscleFocusData,
           style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
         ),
       );
@@ -60,7 +62,7 @@ class MuscleFocusChart extends StatelessWidget {
             children: [
               Icon(Icons.pie_chart_outline, color: theme.colorScheme.primary, size: 20),
               const SizedBox(width: 8),
-              const Text("Muscle Focus Breakdown", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+              Text(l10n.muscleFocusBreakdown, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
             ],
           ),
           const SizedBox(height: 16),

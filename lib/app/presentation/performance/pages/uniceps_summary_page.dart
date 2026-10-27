@@ -6,6 +6,7 @@ import 'package:uniceps/app/domain/classes/practice_entities/t_session.dart';
 import 'package:uniceps/app/presentation/performance/cubits/metrics/metrics_cubit.dart';
 import 'package:uniceps/app/presentation/performance/widgets/physical_report_card.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
+import 'package:uniceps/l10n/app_localizations.dart';
 
 class UnicepsSummaryPage extends StatelessWidget {
   const UnicepsSummaryPage({super.key});
@@ -13,7 +14,7 @@ class UnicepsSummaryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.sizeOf(context);
-
+    final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<MetricsCubit, MetricsState>(
       builder: (context, state) {
         if (state is MetricsLoading || state is MetricsInitial) {
@@ -21,7 +22,7 @@ class UnicepsSummaryPage extends StatelessWidget {
         }
 
         if (state is MetricsFailure) {
-          return const Center(child: Text("Failed to load summary"));
+          return Center(child: Text(l10n.errLoadSummary));
         }
 
         if (state is MetricsLoaded) {
@@ -138,14 +139,16 @@ class _ConsistencyHeatmapWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).colorScheme.primary;
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final primaryColor = theme.colorScheme.primary;
     final heatmapData = _generateHeatmapData();
     const dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey.shade300),
       ),
@@ -159,7 +162,7 @@ class _ConsistencyHeatmapWidget extends StatelessWidget {
                 children: [
                   Icon(Icons.local_fire_department, color: Colors.orange.shade700, size: 22),
                   const SizedBox(width: 6),
-                  const Text("Consistency Heatmap", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                  Text(l10n.consistencyHeatmap, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                 ],
               ),
               Container(
@@ -170,7 +173,7 @@ class _ConsistencyHeatmapWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  "🔥 ${summery.currentStreak} Day Streak",
+                  "🔥 ${l10n.dayStreak(summery.currentStreak)}",
                   style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.orange.shade900),
                 ),
               ),
@@ -229,12 +232,12 @@ class _ConsistencyHeatmapWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Longest streak: ${summery.longestStreak} days",
+                l10n.longestStreakLabel(summery.longestStreak),
                 style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
               ),
               Row(
                 children: [
-                  Text("Rest ", style: TextStyle(fontSize: 10, color: Colors.grey.shade600)),
+                  Text("${l10n.rest} ", style: TextStyle(fontSize: 10, color: Colors.grey.shade600)),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 1.5),
                     width: 9,
@@ -265,7 +268,7 @@ class _ConsistencyHeatmapWidget extends StatelessWidget {
                     height: 9,
                     decoration: BoxDecoration(color: primaryColor, borderRadius: BorderRadius.circular(2)),
                   ),
-                  Text(" Session", style: TextStyle(fontSize: 10, color: Colors.grey.shade600)),
+                  Text(" ${l10n.sessionLabel}", style: TextStyle(fontSize: 10, color: Colors.grey.shade600)),
                 ],
               ),
             ],
@@ -315,7 +318,9 @@ class _ProgressiveOverloadWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).colorScheme.primary;
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final primaryColor = theme.colorScheme.primary;
     final spots = _generateWeeklyVolumeSpots();
     final pctChange = _calcPercentageChange(spots);
     final isPositive = pctChange >= 0;
@@ -323,7 +328,7 @@ class _ProgressiveOverloadWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey.shade300),
       ),
@@ -337,7 +342,10 @@ class _ProgressiveOverloadWidget extends StatelessWidget {
                 children: [
                   Icon(Icons.trending_up, color: Colors.green.shade700, size: 22),
                   const SizedBox(width: 6),
-                  const Text("Progressive Overload Trend", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                  Text(
+                    l10n.progressiveOverloadTrend,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
                 ],
               ),
               Container(
@@ -370,7 +378,7 @@ class _ProgressiveOverloadWidget extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 4),
-          Text("Weekly Volume Progression (in k kg)", style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
+          Text(l10n.weeklyVolumeProgression, style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
           const SizedBox(height: 16),
 
           // Line Chart
@@ -433,9 +441,7 @@ class _ProgressiveOverloadWidget extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    isPositive
-                        ? "Volume has increased compared to last week. Great job maintaining progressive overload!"
-                        : "Volume decreased this week. Focus on recovery and steady progressive overload.",
+                    isPositive ? l10n.volumeIncreasedTip : l10n.volumeDecreasedTip,
                     style: TextStyle(fontSize: 11, color: Colors.blue.shade900),
                   ),
                 ),

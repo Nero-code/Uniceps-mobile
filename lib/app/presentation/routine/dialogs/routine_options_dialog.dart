@@ -60,6 +60,7 @@ class RoutineOptionsDialog extends StatelessWidget {
                   onTap: isPremium
                       ? () => Navigator.pop(context, Option.duplicate)
                       : () => showDialog(context: context, builder: (_) => const PremiumAlert()),
+                  // onTap: () => Navigator.pop(context, Option.duplicate),
                   icon: Icons.copy,
                   label: locale.duplicate,
                   color: Colors.amber,

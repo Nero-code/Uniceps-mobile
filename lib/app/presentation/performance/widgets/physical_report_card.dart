@@ -17,12 +17,12 @@ class PhysicalReportCard extends StatelessWidget {
     return Colors.red.shade700;
   }
 
-  String _getBmiStatus(double bmi) {
+  String _getBmiStatus(AppLocalizations locale, double bmi) {
     if (bmi <= 0) return "N/A";
-    if (bmi < 18.5) return "Underweight";
-    if (bmi < 25.0) return "Normal";
-    if (bmi < 30.0) return "Overweight";
-    return "Obese";
+    if (bmi < 18.5) return locale.underweight;
+    if (bmi < 25.0) return locale.normalWeight;
+    if (bmi < 30.0) return locale.overweight;
+    return locale.obese;
   }
 
   @override
@@ -32,7 +32,7 @@ class PhysicalReportCard extends StatelessWidget {
     final numberFormat = intl.NumberFormat.decimalPattern()..maximumFractionDigits = 1;
 
     final bmiColor = _getBmiColor(report.bmi);
-    final bmiStatus = _getBmiStatus(report.bmi);
+    final bmiStatus = _getBmiStatus(locale, report.bmi);
 
     return Container(
       width: double.infinity,
@@ -69,7 +69,7 @@ class PhysicalReportCard extends StatelessWidget {
                     Icon(report.gender == Gender.male ? Icons.male : Icons.female, size: 14, color: primaryColor),
                     const SizedBox(width: 4),
                     Text(
-                      report.gender == Gender.male ? "Male" : "Female",
+                      report.gender == Gender.male ? locale.male : locale.female,
                       style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: primaryColor),
                     ),
                   ],
@@ -103,7 +103,7 @@ class PhysicalReportCard extends StatelessWidget {
                   context,
                   title: "BF%",
                   value: report.bodyFatPercentage > 0 ? "${numberFormat.format(report.bodyFatPercentage)}%" : "--",
-                  badgeText: "Body Fat",
+                  badgeText: locale.bodyFat,
                   badgeColor: Colors.deepOrange.shade700,
                   icon: Icons.pie_chart_outline,
                   iconColor: Colors.deepOrange.shade700,
@@ -118,8 +118,8 @@ class PhysicalReportCard extends StatelessWidget {
                   context,
                   title: "BMR",
                   value: report.bmr > 0 ? numberFormat.format(report.bmr) : "--",
-                  unit: "kcal/${locale.day}",
-                  badgeText: "Metabolism",
+                  unit: "${locale.kcal}/${locale.day}",
+                  badgeText: locale.metabolism,
                   badgeColor: Colors.amber.shade900,
                   icon: Icons.local_fire_department_outlined,
                   iconColor: Colors.amber.shade800,
