@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:uniceps/app/domain/commands/diet/diet_commands.dart';
 import 'package:uniceps/app/presentation/blocs/account/account_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
@@ -14,10 +15,12 @@ import 'package:uniceps/app/presentation/settings/widgets/premium_banner.dart';
 import 'package:uniceps/app/presentation/settings/widgets/settings_tile.dart';
 import 'package:uniceps/app/presentation/settings/widgets/uniceps_premium.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
+import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/widgets/account_limit_alert.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -30,8 +33,25 @@ class SettingsScreen extends StatelessWidget {
     final exerciseLibLang = context.watch<AppConfigCubit>().state.config.exerciseLibLanguage.languageCode;
     final dietLibLanguage = context.watch<AppConfigCubit>().state.config.dietLibLanguage.languageCode;
     return Scaffold(
-      appBar: AppBar(title: Text(locale.scrTitleSettings)),
+      appBar: AppBar(
+        title: Text(locale.scrTitleSettings),
+        actions: [
+          BlocBuilder<AccountCubit, AccountState>(
+            builder: (context, state) {
+              return IconButton(
+                color: Colors.red,
+                onPressed: state.whenOrNull(
+                  hasAccount: (_) =>
+                      () => showDialog(context: context, builder: (context) => const LogoutAlertDialog()),
+                ),
+                icon: const Icon(Icons.logout),
+              );
+            },
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
         child: Column(
           children: [
             Builder(
@@ -204,24 +224,49 @@ class SettingsScreen extends StatelessWidget {
                 );
               },
             ),
-            SettingsTile(
-              icon: Icons.info,
-              iconsColor: Colors.amber,
-              title: locale.about,
-              onPressed: () => Navigator.pushNamed(context, AppRoutes.about),
-            ),
-            BlocBuilder<AccountCubit, AccountState>(
-              builder: (context, state) {
-                return SettingsTile(
-                  icon: Icons.logout_rounded,
-                  iconsColor: Colors.red,
-                  title: locale.logout,
-                  onPressed: state.whenOrNull(
-                    hasAccount: (_) =>
-                        () => showDialog(context: context, builder: (context) => const LogoutAlertDialog()),
+
+            // SettingsTile(
+            //   icon: Icons.info,
+            //   iconsColor: Colors.amber,
+            //   title: locale.about,
+            //   onPressed: () => Navigator.pushNamed(context, AppRoutes.about),
+            // ),
+            const SizedBox(height: 10),
+
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: .spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: () => launchUrl(Uri.parse('https://t.me/uniceps_bot')),
+                    child: const FaIcon(FontAwesomeIcons.telegram, color: Colors.cyan),
                   ),
-                );
-              },
+                  InkWell(
+                    onTap: () => launchUrl(Uri.parse('https://www.facebook.com/share/1CURTHmiHq/')),
+                    child: const FaIcon(FontAwesomeIcons.facebookF, color: Colors.blue),
+                  ),
+                  InkWell(
+                    onTap: () => launchUrl(Uri.parse('https://whatsapp.com/channel/0029VbBysZDEFeXt1sVdKN3y')),
+                    child: const FaIcon(FontAwesomeIcons.whatsapp, color: Colors.green),
+                  ),
+                  InkWell(
+                    onTap: () => launchUrl(Uri.parse('https://www.instagram.com/uniceps.app')),
+                    child: const FaIcon(FontAwesomeIcons.instagram, color: Colors.pink),
+                  ),
+                  InkWell(
+                    onTap: () => launchUrl(Uri.parse('https://uniceps.trio-verse.com')),
+                    child: const FaIcon(FontAwesomeIcons.earthEurope, color: Colors.blueGrey),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                APP_VERSION,
+                style: TextStyle(fontSize: 12, fontWeight: .bold, color: Colors.grey.shade700),
+              ),
             ),
           ],
         ),

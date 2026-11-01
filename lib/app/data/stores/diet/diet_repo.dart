@@ -94,7 +94,15 @@ class DietRepo implements IDietService {
   Future<Either<IngredientFailure, Ingredient>> saveIngredient(Ingredient ingredient) async {
     try {
       final model = IngredientModel.fromEntity(ingredient);
-      final savedModel = await _localSource.saveIngredient(model);
+
+      IngredientModel savedModel;
+      if (model.id == null) {
+        savedModel = await _localSource.saveIngredient(model);
+      } else {
+        await _localSource.updateIngredient(model);
+        savedModel = model;
+      }
+
       final savedEntity = savedModel.toEntity();
 
       // Update memory cache

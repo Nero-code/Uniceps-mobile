@@ -49,7 +49,11 @@ class IngredientsLibrarySyncService {
         // Update local record as synced
         final syncedItem = item.copyWith(apiId: apiId.toString(), isSynced: true);
 
-        await _localSource.saveIngredient(syncedItem);
+        if (syncedItem.id == null) {
+          await _localSource.saveIngredient(syncedItem);
+        } else {
+          await _localSource.updateIngredient(syncedItem);
+        }
       } on NoContentException {
         return;
       } catch (e) {
