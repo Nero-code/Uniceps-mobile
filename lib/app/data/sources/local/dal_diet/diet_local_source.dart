@@ -8,6 +8,7 @@ abstract class IDietLocalSource {
   // Ingredients
   Future<List<IngredientModel>> getIngredients({String? searchString, int? categoryId});
   Future<IngredientModel> saveIngredient(IngredientModel ingredient);
+  Future<void> updateIngredient(IngredientModel ingredient);
   Future<void> bulkSaveIngredients(List<IngredientModel> ingredients);
   Future<void> deleteIngredient(IngredientModel ingredient);
 
@@ -49,6 +50,7 @@ class DietLocalSource implements IDietLocalSource {
   @override
   Future<IngredientModel> saveIngredient(IngredientModel ingredient) async {
     final companion = IngredientsCompanion(
+      id: ingredient.id != null ? Value(ingredient.id!) : const Value.absent(),
       apiId: ingredient.apiId != null ? Value(ingredient.apiId!) : const Value.absent(),
       name: Value(ingredient.name),
       isUserGenerated: Value(ingredient.isUserGenerated),
@@ -71,6 +73,30 @@ class DietLocalSource implements IDietLocalSource {
 
     final result = await (_db.select(_db.ingredients)..where((t) => t.id.equals(id))).getSingle();
     return IngredientModel.fromCompanion(result);
+  }
+
+  @override
+  Future<void> updateIngredient(IngredientModel ingredient) async {
+    final companion = IngredientsCompanion(
+      id: Value(ingredient.id!),
+      apiId: ingredient.apiId != null ? Value(ingredient.apiId!) : const Value.absent(),
+      name: Value(ingredient.name),
+      isUserGenerated: Value(ingredient.isUserGenerated),
+      categoryId: Value(ingredient.categoryId),
+      categoryName: Value(ingredient.categoryName),
+      servingSizeInGrams: Value(ingredient.servingSizeInGrams),
+      calories: Value(ingredient.calories),
+      protein: Value(ingredient.protein),
+      carbs: Value(ingredient.carbs),
+      fats: Value(ingredient.fats),
+      version: Value(ingredient.version),
+      isSynced: Value(ingredient.isSynced),
+      updatedAt: Value(ingredient.updatedAt),
+      createdAt: Value(ingredient.createdAt),
+    );
+
+    final query = _db.update(_db.ingredients)..where((tbl) => tbl.id.equals(ingredient.id!));
+    await query.write(companion);
   }
 
   @override
