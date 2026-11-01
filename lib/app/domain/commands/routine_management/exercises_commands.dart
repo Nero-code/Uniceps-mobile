@@ -29,4 +29,6 @@ class ExercisesCommands implements ICommand {
   Stream<Result<double, ExerciseFailure>> downloadImages(List<String> urls) => _repo.downloadImages(urls);
 
   Future<Either<ExerciseFailure, ExerciseDetailsResult>> getExerciseDetails(String id) => _repo.getExerciseDetails(id);
+
+  Future<String> getExerciseName(String id) => _repo.getExerciseName(id);
 }

@@ -7,6 +7,8 @@ import 'dart:async' as _i3;
 import 'dart:typed_data' as _i6;
 
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:uniceps/app/data/models/practice_models/t_log_model.dart'
+    as _i8;
 import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart'
     as _i5;
 import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart'
@@ -15,7 +17,7 @@ import 'package:uniceps/app/data/sources/local/dal_routine/exercises_local_sourc
     as _i7;
 import 'package:uniceps/app/data/sources/remote/dal_routine/exercises_remote_source.dart'
     as _i2;
-import 'package:uniceps/app/services/network_info.dart' as _i8;
+import 'package:uniceps/app/services/network_info.dart' as _i9;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -161,12 +163,22 @@ class MockIExercisesLocalSourceContract extends _i1.Mock
             ),
           )
           as _i3.Future<List<_i4.MuscleGroupDto>>);
+
+  @override
+  _i3.Future<List<_i8.TLogModel>> getExerciseTimeLine(String? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#getExerciseTimeLine, [id]),
+            returnValue: _i3.Future<List<_i8.TLogModel>>.value(
+              <_i8.TLogModel>[],
+            ),
+          )
+          as _i3.Future<List<_i8.TLogModel>>);
 }
 
 /// A class which mocks [NetworkInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNetworkInfo extends _i1.Mock implements _i8.NetworkInfo {
+class MockNetworkInfo extends _i1.Mock implements _i9.NetworkInfo {
   MockNetworkInfo() {
     _i1.throwOnMissingStub(this);
   }

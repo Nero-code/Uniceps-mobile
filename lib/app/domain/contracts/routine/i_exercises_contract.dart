@@ -25,4 +25,5 @@ abstract class IExercisesContract {
   Stream<Result<double, ExerciseFailure>> downloadImages(List<String> ids);
 
   Future<Either<ExerciseFailure, ExerciseDetailsResult>> getExerciseDetails(String id);
+  Future<String> getExerciseName(String id);
 }

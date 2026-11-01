@@ -83,13 +83,16 @@ class MockIRoutineManagementLocalSourceContract extends _i1.Mock
           >);
 
   @override
-  _i5.Future<_i2.RoutineDto> createRoutine(String? routineName) =>
+  _i5.Future<_i2.RoutineDto> createRoutine(
+    String? routineName,
+    String? description,
+  ) =>
       (super.noSuchMethod(
-            Invocation.method(#createRoutine, [routineName]),
+            Invocation.method(#createRoutine, [routineName, description]),
             returnValue: _i5.Future<_i2.RoutineDto>.value(
               _FakeRoutineDto_0(
                 this,
-                Invocation.method(#createRoutine, [routineName]),
+                Invocation.method(#createRoutine, [routineName, description]),
               ),
             ),
           )
@@ -143,6 +146,14 @@ class MockIRoutineManagementLocalSourceContract extends _i1.Mock
             ),
           )
           as _i5.Future<_i2.RoutineDto>);
+
+  @override
+  _i5.Future<int> duplicateRoutine(_i2.RoutineDto? duplicate) =>
+      (super.noSuchMethod(
+            Invocation.method(#duplicateRoutine, [duplicate]),
+            returnValue: _i5.Future<int>.value(0),
+          )
+          as _i5.Future<int>);
 }
 
 /// A class which mocks [IRoutineRemoteSourceContract].

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
-import 'package:uniceps/app/domain/commands/measurement_usecases/measurement_commands.dart';
+import 'package:uniceps/app/domain/classes/profile_classes/measurement.dart';
+import 'package:uniceps/app/presentation/performance/cubits/metrics/metrics_cubit.dart';
 import 'package:uniceps/app/presentation/performance/widgets/muscle_difference_widget.dart';
 import 'package:uniceps/core/constants/cap_images.dart';
 import 'package:uniceps/core/constants/muscles_images.dart';
@@ -26,138 +27,27 @@ const imgs = [
 ];
 
 class MeasurementToolPage extends StatefulWidget {
-  const MeasurementToolPage({super.key, required this.commands});
-
-  final MeasurementCommands commands;
+  const MeasurementToolPage({super.key});
 
   @override
   State<MeasurementToolPage> createState() => _MeasurementToolPageState();
 }
 
 class _MeasurementToolPageState extends State<MeasurementToolPage> {
-  List<Measurement> measurements = [];
   Measurement? oldM, newM;
-
-  Future<List<Measurement>> getMeasurements() async {
-    final either = await widget.commands.getMeasurements();
-    return either.fold((l) => Future.error(l), (r) => Future.value(r));
-  }
-
-  late Future<List<Measurement>> future;
-
-  @override
-  void initState() {
-    super.initState();
-    future = getMeasurements();
-  }
 
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     final primaryColor = Theme.of(context).colorScheme.primary;
-    return FutureBuilder(
-      future: future,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          measurements = snapshot.data!;
-          return CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top + 50),
-                  child: const SizedBox(),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    locale.scrTitleCompareTool,
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: Colors.white, fontWeight: .bold),
-                  ),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Container(
-                  height: 50,
-                  margin: const EdgeInsets.only(bottom: 15, left: 5, right: 5),
-                  decoration: BoxDecoration(color: Colors.white, borderRadius: .circular(50)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      // OLD
-                      DropdownButton(
-                        icon: const Icon(Icons.calendar_month, size: 20),
-                        hint: Text(
-                          '${locale.measurements} ${locale.before}',
-                          style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 12),
-                        ),
-                        elevation: 1,
-                        value: oldM,
-                        borderRadius: BorderRadius.circular(10),
-                        items: measurements
-                            .map(
-                              (m) => DropdownMenuItem(
-                                value: m,
-                                child: Text(
-                                  DateFormat('d/M/y').format(m.checkDate),
-                                  style: TextStyle(color: primaryColor),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (v) => setState(() => oldM = v),
-                      ),
-                      const Icon(Icons.arrow_right_alt_outlined),
 
-                      // NEW
-                      DropdownButton(
-                        icon: const Icon(Icons.calendar_month, size: 20),
-                        hint: Text(
-                          '${locale.measurements} ${locale.after}',
-                          style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 12),
-                        ),
-                        elevation: 1,
-                        value: newM,
-                        borderRadius: BorderRadius.circular(10),
-                        items: measurements
-                            .map(
-                              (m) => DropdownMenuItem(
-                                value: m,
-                                child: Text(
-                                  DateFormat('d/M/y').format(m.checkDate),
-                                  style: TextStyle(color: primaryColor),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (v) => setState(() => newM = v),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SliverList.separated(
-                itemCount: imgs.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 5),
-                itemBuilder: (context, i) {
-                  return MuscleDifferenceWidget(
-                    image: imgs[i],
-                    muscleName: muscleNameMapper(i, locale),
-                    newVal: newM?.getByIndex(i),
-                    oldVal: oldM?.getByIndex(i),
-                  );
-                },
-              ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 20),
-                  child: const SizedBox(),
-                ),
-              ),
-            ],
-          );
-        } else if (snapshot.hasError) {
+    return BlocBuilder<MetricsCubit, MetricsState>(
+      builder: (context, state) {
+        if (state is MetricsLoading || state is MetricsInitial) {
+          return const LoadingIndicator();
+        }
+
+        if (state is MetricsFailure) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: EmptyPage(
@@ -167,7 +57,165 @@ class _MeasurementToolPageState extends State<MeasurementToolPage> {
             ),
           );
         }
-        return const LoadingIndicator();
+
+        if (state is MetricsLoaded) {
+          final measurements = state.result.measurements;
+
+          if (measurements.isEmpty) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: EmptyPage(
+                imageName: CaptainImages.noMeasurements,
+                message: locale.emptyMeasure,
+                imageSize: Size(MediaQuery.sizeOf(context).width * .5, MediaQuery.sizeOf(context).width * .5),
+              ),
+            );
+          }
+
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top + 16),
+                  child: const SizedBox(),
+                ),
+              ),
+              // Comparison Date Selector Header
+              SliverToBoxAdapter(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.all(12.0),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.straighten, color: primaryColor, size: 20),
+                          const SizedBox(width: 8),
+                          Text(locale.measurements, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          // OLD Measurement Dropdown
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey.shade300),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<Measurement>(
+                                  isExpanded: true,
+                                  icon: const Icon(Icons.calendar_month, size: 18),
+                                  hint: Text(
+                                    '${locale.measurements} ${locale.before}',
+                                    style: const TextStyle(fontSize: 11),
+                                  ),
+                                  value: oldM,
+                                  borderRadius: BorderRadius.circular(8),
+                                  items: measurements
+                                      .map(
+                                        (m) => DropdownMenuItem(
+                                          value: m,
+                                          child: Text(
+                                            DateFormat('MMM dd, yyyy').format(m.checkDate),
+                                            style: TextStyle(
+                                              color: primaryColor,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                  onChanged: (v) => setState(() => oldM = v),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Icon(Icons.arrow_forward, color: Colors.grey, size: 18),
+                          ),
+                          // NEW Measurement Dropdown
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey.shade300),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<Measurement>(
+                                  isExpanded: true,
+                                  icon: const Icon(Icons.calendar_month, size: 18),
+                                  hint: Text(
+                                    '${locale.measurements} ${locale.after}',
+                                    style: const TextStyle(fontSize: 11),
+                                  ),
+                                  value: newM,
+                                  borderRadius: BorderRadius.circular(8),
+                                  items: measurements
+                                      .map(
+                                        (m) => DropdownMenuItem(
+                                          value: m,
+                                          child: Text(
+                                            DateFormat('MMM dd, yyyy').format(m.checkDate),
+                                            style: TextStyle(
+                                              color: primaryColor,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                  onChanged: (v) => setState(() => newM = v),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Measurements List
+              SliverList.separated(
+                itemCount: imgs.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 2),
+                itemBuilder: (context, i) {
+                  return MuscleDifferenceWidget(
+                    image: imgs[i],
+                    muscleName: muscleNameMapper(i, locale),
+                    newVal: newM?.getByIndex(i),
+                    oldVal: oldM?.getByIndex(i),
+                  );
+                },
+              ),
+
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 20),
+                  child: const SizedBox(),
+                ),
+              ),
+            ],
+          );
+        }
+
+        return const SizedBox();
       },
     );
   }

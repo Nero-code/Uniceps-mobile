@@ -79,9 +79,9 @@ void main() {
   group('createRoutine', () {
     test('should create routine and add to list', () async {
       // arrange
-      when(mockLocalSource.createRoutine(any)).thenAnswer((_) async => tRoutineDto);
+      when(mockLocalSource.createRoutine(any, any)).thenAnswer((_) async => tRoutineDto);
       // act
-      final result = await repo.createRoutine('New Routine');
+      final result = await repo.createRoutine('New Routine', 'String description');
       // assert
       expect(result.isRight(), isTrue);
       result.fold((l) => fail('Expected Right, got \$l'), (r) => expect(r.first.routine.id, tRoutine.id));

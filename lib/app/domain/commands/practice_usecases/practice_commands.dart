@@ -23,4 +23,6 @@ class PracticeCommands {
 
   Future<Either<Failure, Unit>> finishTrainingSession(TSession session, bool full) =>
       _repo.finishTrainingSession(session, full);
+
+  Future<Either<Failure, Unit>> cancelSession(TSession session) => _repo.cancelSession(session);
 }

@@ -56,5 +56,17 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
         (r) => emit(SessionState.noActiveSession(lastSession: event.session, isFullSession: event.fullSession)),
       );
     });
+
+    // ------------------------------------------------
+    // Cancel Session Event
+    on<_CancelSession>((event, emit) async {
+      emit(const SessionState.loading());
+
+      final either = await _commands.cancelSession(event.session);
+      either.fold(
+        (l) => emit(SessionState.error(l)),
+        (r) => emit(SessionState.noActiveSession()),
+      );
+    });
   }
 }

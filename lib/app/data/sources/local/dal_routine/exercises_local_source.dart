@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:uniceps/app/data/models/practice_models/t_log_model.dart';
 import 'package:uniceps/app/data/models/routine_models/exercise_dto.dart';
 import 'package:uniceps/app/data/models/routine_models/muscle_group_dto.dart';
 import 'package:uniceps/app/data/services/media_helper.dart';
@@ -15,6 +16,8 @@ abstract class IExercisesLocalSourceContract {
   Future<bool> containsImage(String id);
 
   Future<List<MuscleGroupDto>> getMuscleGroups();
+
+  Future<List<TLogModel>> getExerciseTimeLine(String id);
 }
 
 class ExercisesLocalSource implements IExercisesLocalSourceContract {
@@ -96,5 +99,17 @@ class ExercisesLocalSource implements IExercisesLocalSourceContract {
       }
     }
     return groups;
+  }
+
+  @override
+  Future<List<TLogModel>> getExerciseTimeLine(String id) async {
+    final query = _appDatabase.select(_appDatabase.tLogs)..where((tbl) => tbl.exerciseId.equals(id));
+    final res = await query.get();
+    final List<TLogModel> logs = [];
+    for (final row in res) {
+      logs.add(TLogModel.fromTable(row));
+    }
+    logs.sort((a, b) => b.completedAt.compareTo(a.completedAt));
+    return logs;
   }
 }

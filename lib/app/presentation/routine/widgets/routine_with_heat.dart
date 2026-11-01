@@ -40,7 +40,6 @@ class RoutineWithHeat extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(24),
           onTap: onTap,
-
           onLongPress: onLongPress,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -70,31 +69,12 @@ class RoutineWithHeat extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              routine.name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: -0.5),
-                            ),
-                          ),
-                          if (routine.isCurrent)
-                            Container(
-                              margin: const EdgeInsets.only(left: 8),
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: Colors.green.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.green.withValues(alpha: 0.2)),
-                              ),
-                              child: Text(
-                                locale.active.toUpperCase(),
-                                style: const TextStyle(color: Colors.green, fontSize: 10, fontWeight: FontWeight.w900),
-                              ),
-                            ),
-                        ],
+                      // Full width routine name
+                      Text(
+                        routine.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: -0.5),
                       ),
                       const SizedBox(height: 12),
                       Row(
@@ -115,19 +95,53 @@ class RoutineWithHeat extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 12),
-                      Text(
-                        DateFormat('MMM d, yyyy').format(routine.createdAt),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
-                          fontWeight: FontWeight.w500,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            DateFormat('MMM d, yyyy').format(routine.createdAt),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          if (routine.isCurrent)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.green.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.green.withValues(alpha: 0.2)),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: 6,
+                                    height: 6,
+                                    decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    locale.active.toUpperCase(),
+                                    style: const TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
                       ),
                     ],
                   ),
                 ),
                 // Options Menu
-                if (onMenu != null)
+                if (onMenu != null) ...[
+                  const SizedBox(width: 8),
                   IconButton(
                     onPressed: onMenu,
                     style: IconButton.styleFrom(
@@ -136,6 +150,7 @@ class RoutineWithHeat extends StatelessWidget {
                     ),
                     icon: const Icon(Icons.more_horiz_rounded, size: 20),
                   ),
+                ],
               ],
             ),
           ),

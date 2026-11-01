@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uniceps/app/data/sources/local/database.dart' as db;
-import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
+import 'package:uniceps/app/domain/classes/profile_classes/measurement.dart';
 
 part 'measurement_model.g.dart';
 

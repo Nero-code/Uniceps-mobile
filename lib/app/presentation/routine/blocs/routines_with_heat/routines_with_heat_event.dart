@@ -6,8 +6,9 @@ class RoutinesWithHeatEvent with _$RoutinesWithHeatEvent {
   const factory RoutinesWithHeatEvent.import() = _Import;
   const factory RoutinesWithHeatEvent.importUniFile(UniFile file) = _ImportUniFile;
   const factory RoutinesWithHeatEvent.export(int routineId) = _Export;
-  const factory RoutinesWithHeatEvent.create(String name) = _Create;
+  const factory RoutinesWithHeatEvent.create(String name, String description) = _Create;
   const factory RoutinesWithHeatEvent.update(Routine update) = _Update;
   const factory RoutinesWithHeatEvent.delete(Routine delete) = _Delete;
   const factory RoutinesWithHeatEvent.setCurrent(Routine update) = _SetCurrent;
+  const factory RoutinesWithHeatEvent.duplicate(Routine source, RoutineHeat heat) = _Duplicate;
 }

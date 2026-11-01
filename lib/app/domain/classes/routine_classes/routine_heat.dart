@@ -39,12 +39,15 @@ class RoutineHeat {
     this.lastdayId,
   });
 
-  factory RoutineHeat.cold(String name) => RoutineHeat(
-        routineName: name,
-        sessionCount: 0,
-        duration: Duration.zero,
-        days: 0,
-        exercises: 0,
-        sets: 0,
-      );
+  factory RoutineHeat.cold(String name) =>
+      RoutineHeat(routineName: name, sessionCount: 0, duration: Duration.zero, days: 0, exercises: 0, sets: 0);
+
+  RoutineHeat copyWith({int? sessionCount}) => RoutineHeat(
+    routineName: routineName,
+    sessionCount: sessionCount ?? this.sessionCount,
+    duration: duration,
+    days: days,
+    exercises: exercises,
+    sets: sets,
+  );
 }

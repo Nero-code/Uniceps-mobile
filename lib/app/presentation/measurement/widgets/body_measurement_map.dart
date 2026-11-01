@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:uniceps/app/domain/classes/profile_classes/measrument.dart';
+import 'package:uniceps/app/domain/classes/profile_classes/measurement.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
 class BodyMeasurementMap extends StatelessWidget {

@@ -10,10 +10,17 @@ import 'package:uniceps/core/errors/failure.dart';
 abstract class IRoutineWithHeatContract {
   //  ROUTINE MANAGEMENT
   Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> getAllRoutinesWithHeat();
-  Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> createRoutine(String routineName);
+  Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> createRoutine(
+    String routineName,
+    String description,
+  );
   Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> updateRoutine(Routine routine);
   Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> deleteRoutine(Routine routine);
   Future<Either<Failure, List<({Routine routine, RoutineHeat heat})>>> setCurrentRoutine(Routine routine);
+  Future<Either<Failure, List<({RoutineHeat heat, Routine routine})>>> duplicateRoutine(
+    Routine routine,
+    RoutineHeat heat,
+  );
 
   Stream<RoutineResult> importRoutineFromFile();
   Stream<RoutineResult> importRoutine(UniFile file);

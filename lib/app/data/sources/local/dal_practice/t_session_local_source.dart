@@ -26,6 +26,8 @@ abstract class ITSessionLocalSourceContract {
   Future<TSessionModel> startTrainingSession(int dayId, String dayName);
   Future<TLogModel> logSet(TLogModel log, double sessionProgress);
   Future<void> finishTrainingSession(TSessionModel session, bool isFullSession);
+
+  Future<void> deleteSession(int i);
 }
 
 class TSessionLocalSource implements ITSessionLocalSourceContract {
@@ -382,5 +384,11 @@ class TSessionLocalSource implements ITSessionLocalSourceContract {
       res.add(TSessionModel.fromTable(s, tLogs));
     }
     return res;
+  }
+
+  @override
+  Future<void> deleteSession(int id) async {
+    final query = _database.delete(_database.tSessions)..where((tbl) => tbl.tsId.equals(id));
+    await query.go();
   }
 }

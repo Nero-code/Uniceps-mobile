@@ -16,7 +16,7 @@ class RoutinesWithHeatBloc extends Bloc<RoutinesWithHeatEvent, RoutinesWithHeatS
   RoutinesWithHeatBloc(this._usecases) : super(const _Initial()) {
     on<_GetRoutines>((event, emit) async {
       final either = await _usecases.getAllRoutinesWithHeat();
-      either.fold((l) => emit(_Error(l)), (r) => emit(_Loaded(r)));
+      either.fold((l) => emit(.error(l)), (r) => emit(.loaded(r)));
     });
     on<_Import>((event, emit) async {
       var importRoutine = _usecases.importRoutine();
@@ -33,30 +33,36 @@ class RoutinesWithHeatBloc extends Bloc<RoutinesWithHeatEvent, RoutinesWithHeatS
     on<_Create>((event, emit) async {
       emit(const _Loading());
 
-      final either = await _usecases.createRoutine(event.name);
-      either.fold((l) => emit(_Error(l)), (r) => emit(_Loaded(r)));
+      final either = await _usecases.createRoutine(event.name, event.description);
+      either.fold((l) => emit(.error(l)), (r) => emit(.loaded(r)));
     });
     on<_Update>((event, emit) async {
-      emit(const _Loading());
+      emit(const .loading());
 
       final either = await _usecases.updateRoutine(event.update);
-      either.fold((l) => emit(_Error(l)), (r) => emit(_Loaded(r)));
+      either.fold((l) => emit(.error(l)), (r) => emit(.loaded(r)));
     });
     on<_Delete>((event, emit) async {
-      emit(const _Loading());
+      emit(const .loading());
 
       final either = await _usecases.deleteRoutine(event.delete);
-      either.fold((l) => emit(_Error(l)), (r) => emit(_Loaded(r)));
+      either.fold((l) => emit(.error(l)), (r) => emit(.loaded(r)));
     });
     on<_SetCurrent>((event, emit) async {
-      emit(const _Loading());
+      emit(const .loading());
 
       final either = await _usecases.setCurrentRoutine(event.update);
-      either.fold((l) => emit(_Error(l)), (r) => emit(_Loaded(r)));
+      either.fold((l) => emit(.error(l)), (r) => emit(.loaded(r)));
     });
     on<_Export>((event, emit) async {
-      // await _usecases.exportRoutineToFile(event.routineId);
       await _usecases.shareRoutine(event.routineId);
+    });
+    on<_Duplicate>((event, emit) async {
+      emit(const .loading());
+
+      final either = await _usecases.duplicateRoutine(event.source, event.heat);
+      // either.fold((l) => .error(l), (r) => add(const .getRoutines()));
+      either.fold((l) => emit(.error(l)), (r) => emit(.loaded(r)));
     });
   }
 }
