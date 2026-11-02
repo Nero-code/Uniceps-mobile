@@ -46,36 +46,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Future<void> _removeImage(AppLocalizations locale) async {
-    return showDialog(
-      context: context,
-      builder: (context) => AppDialog(
-        type: .delete,
-        title: '${locale.delete} ${locale.profilePhoto}',
-        onConfirm: () async {
-          if (profile != null) {
-            context.read<ProfileCubit>().deleteProfilePic(profile!);
-          }
-        },
-      ),
-    );
-  }
-
-  void _showNameDialog(String? name, AppLocalizations locale) {
-    AppDialog.show(
-      context: context,
-      type: DialogActionType.edit,
-      title: locale.pName,
-      initialText: name,
-      isTextField: true,
-      onConfirmText: (val) {
-        if (profile != null) {
-          context.read<ProfileCubit>().saveProfile(profile!.copyWith(name: val));
-        }
-      },
-    );
-  }
-
   void _showGenderDialog(Gender gender, AppLocalizations locale) {
     showDialog(
       context: context,
@@ -93,6 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: Gender.values
+                .skip(1)
                 .map(
                   (g) => RadioListTile<Gender>(title: Text(g == Gender.male ? locale.male : locale.female), value: g),
                 )
@@ -257,7 +228,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               bottom: 0,
                               left: 0,
                               child: GestureDetector(
-                                onTap: () => _removeImage(locale),
+                                onTap: () => showDialog(
+                                  context: context,
+                                  builder: (context) => AppDialog(
+                                    type: .delete,
+                                    title: '${locale.delete} ${locale.profilePhoto}',
+                                    onConfirm: () async {
+                                      if (profile != null) {
+                                        context.read<ProfileCubit>().deleteProfilePic(profile!);
+                                      }
+                                    },
+                                  ),
+                                ),
                                 child: Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
@@ -285,7 +267,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       icon: Icons.person_outline,
                       title: locale.pName,
                       subtitle: p.name,
-                      onTap: () => _showNameDialog(p.name, locale),
+                      onTap: () => AppDialog.show(
+                        context: context,
+                        type: DialogActionType.edit,
+                        title: locale.pName,
+                        initialText: p.name,
+                        isTextField: true,
+                        onConfirmText: (val) {
+                          if (profile != null) {
+                            context.read<ProfileCubit>().saveProfile(profile!.copyWith(name: val));
+                          }
+                        },
+                      ),
                     ),
                     _buildProfileTile(
                       icon: Icons.wc_outlined,
