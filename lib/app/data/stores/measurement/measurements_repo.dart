@@ -50,7 +50,7 @@ class MeasurementsRepo implements IMeasurementContract {
   Future<Either<MeasurementFailure, Unit>> updateMeasurement(Measurement m) async {
     try {
       final model = MeasurementModel.fromEntity(m);
-      await localSource.saveMeasurement(model);
+      await localSource.upsertMeasurement(model);
       buffer.removeWhere((e) => e.id == model.id);
       buffer
         ..add(m)
