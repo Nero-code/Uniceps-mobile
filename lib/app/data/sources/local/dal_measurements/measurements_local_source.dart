@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
 import 'package:logger/logger.dart';
-import 'package:uniceps/app/data/models/profile_models/extensions.dart';
 import 'package:uniceps/app/data/models/profile_models/measurement_model.dart';
 import 'package:uniceps/app/data/sources/local/database.dart';
 
@@ -30,48 +29,8 @@ class MeasurementsLocalSource implements IMeasurementsLocalSource {
   @override
   Future<int> saveMeasurement(MeasurementModel m) async {
     final int? newId;
-    if (m.id == null) {
-      newId = await database.into(database.measurements).insert(m.insertable());
-      return newId;
-    } else {
-      await (database.update(database.measurements)..where((f) => f.id.equals(m.id!))).write(m.updatable());
-      return m.id!;
-    }
-  }
-
-  @override
-  Future<void> upsertMeasurement(MeasurementModel m) async {
-    // 1. If we have a local ID, update the existing local record.
-    // This handles the "Just Uploaded" case where we received an apiId.
-    if (m.id != null) {
-      final companion = MeasurementsCompanion(
-        apiId: m.apiId != null ? Value(m.apiId!) : const Value.absent(),
-        height: Value(m.height),
-        weight: Value(m.weight),
-        lArm: Value(m.lArm),
-        rArm: Value(m.rArm),
-        lHumerus: Value(m.lHumerus),
-        rHumerus: Value(m.rHumerus),
-        lThigh: Value(m.lThigh),
-        rThigh: Value(m.rThigh),
-        lLeg: Value(m.lLeg),
-        rLeg: Value(m.rLeg),
-        neck: Value(m.neck),
-        shoulders: Value(m.shoulders),
-        waist: Value(m.waist),
-        chest: Value(m.chest),
-        hips: Value(m.hips),
-        checkDate: Value(m.checkDate),
-        version: Value(m.version),
-        isSynced: Value(m.isSynced),
-      );
-      await (database.update(database.measurements)..where((f) => f.id.equals(m.id!))).write(companion);
-      return;
-    }
-
-    // 2. If we don't have a local ID, but have an apiId, use apiId for conflict resolution.
-    // This handles the "Downloading" case from the server.
     final companion = MeasurementsCompanion(
+      id: m.id != null ? Value(m.id!) : const Value.absent(),
       apiId: m.apiId != null ? Value(m.apiId!) : const Value.absent(),
       height: Value(m.height),
       weight: Value(m.weight),
@@ -93,9 +52,49 @@ class MeasurementsLocalSource implements IMeasurementsLocalSource {
       isSynced: Value(m.isSynced),
     );
 
-    await database
-        .into(database.measurements)
-        .insert(companion, onConflict: DoUpdate((old) => companion, target: [database.measurements.apiId]));
+    if (m.id == null) {
+      newId = await database.into(database.measurements).insert(companion);
+      return newId;
+    } else {
+      await (database.update(database.measurements)..where((f) => f.id.equals(m.id!))).write(companion);
+      return m.id!;
+    }
+  }
+
+  @override
+  Future<void> upsertMeasurement(MeasurementModel m) async {
+    final companion = MeasurementsCompanion(
+      id: m.id != null ? Value(m.id!) : const Value.absent(),
+      apiId: m.apiId != null ? Value(m.apiId!) : const Value.absent(),
+      height: Value(m.height),
+      weight: Value(m.weight),
+      lArm: Value(m.lArm),
+      rArm: Value(m.rArm),
+      lHumerus: Value(m.lHumerus),
+      rHumerus: Value(m.rHumerus),
+      lThigh: Value(m.lThigh),
+      rThigh: Value(m.rThigh),
+      lLeg: Value(m.lLeg),
+      rLeg: Value(m.rLeg),
+      neck: Value(m.neck),
+      shoulders: Value(m.shoulders),
+      waist: Value(m.waist),
+      chest: Value(m.chest),
+      hips: Value(m.hips),
+      checkDate: Value(m.checkDate),
+      version: Value(m.version + 1),
+      isSynced: const Value(false),
+    );
+
+    if (m.id != null) {
+      // 1. If we have a local ID, update the existing local record.
+      await (database.update(database.measurements)..where((f) => f.id.equals(m.id!))).write(companion);
+    } else {
+      // 2. If we don't have a local ID, use apiId for conflict resolution.
+      await database
+          .into(database.measurements)
+          .insert(companion, onConflict: DoUpdate((old) => companion, target: [database.measurements.apiId]));
+    }
   }
 
   @override

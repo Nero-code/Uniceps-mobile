@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:uniceps/app/domain/classes/profile_classes/measurement.dart';
 import 'package:uniceps/app/presentation/measurement/blocs/measurement/measurement_bloc.dart';
-import 'package:uniceps/app/presentation/measurement/blocs/measurement/measurement_bloc.dart';
 import 'package:uniceps/app/presentation/measurement/dialogs/delete_dialog.dart';
 import 'package:uniceps/app/presentation/measurement/screens/add_edit_measurement_screen.dart';
 import 'package:uniceps/app/presentation/measurement/widgets/body_measurement_map.dart';
@@ -102,7 +101,8 @@ class _MeasurementScreenState extends State<MeasurementScreen> with TickerProvid
                                     style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
                                   ),
                                   Text(
-                                    "${page + 1} of ${state.list.length}",
+                                    "${page + 1} / ${state.list.length}",
+                                    textDirection: .ltr,
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
