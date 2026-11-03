@@ -263,53 +263,27 @@ class PerformanceRepo implements IPerformanceContract {
         (i) => Chart(points: [], title: groups[i].muscleGroupName),
       );
 
-      final to = month.add(const Duration(days: 31));
-      final sessionsSinceTime = sessions.where((s) => s.createdAt.isAfter(month) && s.createdAt.isBefore(to));
+      final sessionsSinceTime = sessions.where(
+        (s) => s.createdAt.isBefore(month) && (since != null ? s.createdAt.isAfter(since) : true),
+      );
       for (final s in sessionsSinceTime) {
         for (int i = 0; i < groups.length; i++) {
           final g = groups[i];
-          final exercises = await exercisesLocalSource.getExercisesByGroup(g.muscleGroupCode);
-          final groupVol = s.logs
-              .where((l) => exercises.where((e) => e.apiId == l.exerciseId).isNotEmpty)
-              .fold(0.0, (previousValue, element) => previousValue + (element.weight * element.reps));
-          if (groupVol != 0) {
-            list[i].points.add(Point(x: s.createdAt, y: groupVol));
-          }
+          final logsPerGroup = s.logs.where((l) => l.exerciseId.contains(g.muscleGroupCode));
+
+          if (logsPerGroup.isEmpty) continue;
+
+          final groupVol = logsPerGroup.fold(
+            0.0,
+            (previousValue, element) => previousValue + (element.weight * element.reps),
+          );
+
+          list[i].points.add(Point(x: s.createdAt, y: groupVol));
         }
       }
       return Right(list);
     } catch (e) {
       return const Left(.invalidValues());
-    }
-  }
-
-  List<MeasurementModel> allMeasurements = [];
-  @override
-  Future<Either<PerformanceFailure, List<Chart<DateTime, double>>>> getMeasurementCharts(
-    DateTime month, {
-    DateTime? since,
-  }) async {
-    try {
-      if (allMeasurements.isEmpty) {
-        allMeasurements = await measurementsLocalSource.getMeasurements();
-      }
-      final to = month.add(const Duration(days: 31));
-      final measurements = allMeasurements
-          .where((m) => m.checkDate.isAfter(month) && m.checkDate.isBefore(to))
-          .toList();
-
-      final List<Chart<DateTime, double>> list = List.generate(
-        MeasurementModel.propsNumbers,
-        (index) => Chart(points: [], title: '$index'),
-      );
-
-      for (int i = 0; i < measurements.length; i++) {
-        final m = measurements[i];
-        list[i].points.add(Point(x: m.checkDate, y: m.getByIndex(i)));
-      }
-      return Right(list);
-    } catch (e) {
-      return const Left(.noValues());
     }
   }
 
@@ -319,7 +293,10 @@ class PerformanceRepo implements IPerformanceContract {
       final summaryRes = await getSummery();
       final focusRes = await getMuscleFocusChart();
       final physicalRes = await getPhysicalReport();
-      final evolutionRes = await getMusclesEvolution(from ?? DateTime.now().subtract(const Duration(days: 30)));
+      final evolutionRes = await getMusclesEvolution(
+        to ?? DateTime.now(),
+        since: from ?? DateTime.now().subtract(const Duration(days: 30)),
+      );
 
       final rawSessions = await tSessionsLocalSource.getAllSessions();
       final rawMeasurementsModels = await measurementsLocalSource.getMeasurements();

@@ -20,10 +20,6 @@ abstract class IPerformanceContract {
     DateTime month, {
     DateTime? since,
   });
-  Future<Either<PerformanceFailure, List<Chart<DateTime, double>>>> getMeasurementCharts(
-    DateTime month, {
-    DateTime? since,
-  });
 
   // Single Consolidated Overview Request
   Future<Either<PerformanceFailure, PerformanceResult>> getPerformanceOverview({DateTime? from, DateTime? to});
