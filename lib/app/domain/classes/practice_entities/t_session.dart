@@ -9,6 +9,7 @@ class TSession extends Equatable {
   final DateTime createdAt;
   final DateTime? finishedAt;
 
+  /// This represents the overall session completion, its takes a value between [0,1]
   final double progress;
 
   final int? apiId;
