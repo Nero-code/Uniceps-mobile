@@ -28,6 +28,7 @@ class ExercisesRepo implements IExercisesContract {
   final List<Exercise> exercisesLib = [];
   final List<MuscleGroup> allGroups = [];
   final List<ExerciseTool> allTools = [];
+  final Map<String, String> allHeads = {};
 
   ExercisesRepo({
     required IExercisesLocalSourceContract localSource,
@@ -74,28 +75,17 @@ class ExercisesRepo implements IExercisesContract {
     }
   }
 
-  Future<void> extractGroups() async {
-    // Groups Extraction...
-    for (final e in exercisesLib) {
-      final group = MuscleGroup(muscleGroupCode: e.muscleGroupCode, muscleGroupName: e.muscleGroupName);
-      if (allGroups.where((g) => g.muscleGroupCode == e.muscleGroupCode).isEmpty) allGroups.add(group);
-    }
-
-    // Exercise Filtering...
-    for (final g in allGroups) {
-      final matches = exercisesLib.where((e) => e.muscleGroupCode == g.muscleGroupCode).toList();
-      allExercises.addAll({g.muscleGroupCode: matches});
-    }
-  }
-
   Future<void> extractFilters() async {
     // Groups Extraction...
     for (final e in exercisesLib) {
-      if (allGroups.where((g) => g.muscleGroupCode == e.muscleGroupCode).isEmpty) {
+      if (allGroups.every((g) => g.muscleGroupCode != e.muscleGroupCode)) {
         allGroups.add(MuscleGroup(muscleGroupCode: e.muscleGroupCode, muscleGroupName: e.muscleGroupName));
       }
-      if (allTools.where((t) => t.toolCode == e.toolCode).isEmpty) {
+      if (allTools.every((t) => t.toolCode != e.toolCode)) {
         allTools.add(ExerciseTool(toolName: e.toolName, toolCode: e.toolCode));
+      }
+      if (allHeads.keys.every((h) => h != e.muscleHeadCode)) {
+        allHeads.addAll({e.muscleHeadCode: e.muscleHeadName});
       }
     }
   }
@@ -132,7 +122,7 @@ class ExercisesRepo implements IExercisesContract {
 
   @override
   Future<Either<ExerciseFailure, ExerciseFilter>> getExerciseFilters() async {
-    return Right(ExerciseFilter(groups: allGroups, tools: allTools));
+    return Right(ExerciseFilter(groups: allGroups, tools: allTools, heads: allHeads));
   }
 
   @override
@@ -144,7 +134,10 @@ class ExercisesRepo implements IExercisesContract {
       final filterTools = filter.tools.isNotEmpty
           ? filter.tools.where((t) => e.toolCode == t.toolCode).isNotEmpty
           : true;
-      return (filterGroup & filterTools);
+      final filterHeads = filter.heads.isNotEmpty
+          ? filter.heads.keys.where((t) => e.muscleHeadCode == t).isNotEmpty
+          : true;
+      return (filterGroup & filterTools & filterHeads);
     }).toList();
     return Right(filteredList);
   }

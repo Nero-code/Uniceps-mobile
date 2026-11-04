@@ -33,6 +33,7 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
 
   List<MuscleGroup> filterByMuscleGroup = [];
   List<ExerciseTool> filterByTool = [];
+  Map<String, String> filterByMuscleHead = {};
 
   // ExerciseFilter filter = .empty();
 
@@ -114,9 +115,11 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
         endDrawer: ExerciseFilterDrawer(
           initialMuscleGroups: filterByMuscleGroup,
           initialTools: filterByTool,
-          onApply: (groups, tools) => setState(() {
+          initialMuscleHeads: filterByMuscleHead,
+          onApply: (groups, tools, heads) => setState(() {
             filterByMuscleGroup = groups;
             filterByTool = tools;
+            filterByMuscleHead = heads;
           }),
         ),
         body: BlocBuilder<ExercisesV2Bloc, ExercisesV2State>(

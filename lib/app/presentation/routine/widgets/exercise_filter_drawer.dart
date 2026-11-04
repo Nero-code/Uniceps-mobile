@@ -12,12 +12,14 @@ class ExerciseFilterDrawer extends StatefulWidget {
     super.key,
     required this.initialMuscleGroups,
     required this.initialTools,
+    required this.initialMuscleHeads,
     required this.onApply,
   });
 
   final List<MuscleGroup> initialMuscleGroups;
   final List<ExerciseTool> initialTools;
-  final void Function(List<MuscleGroup> groups, List<ExerciseTool> tools) onApply;
+  final Map<String, String> initialMuscleHeads;
+  final void Function(List<MuscleGroup> groups, List<ExerciseTool> tools, Map<String, String> heads) onApply;
 
   @override
   State<ExerciseFilterDrawer> createState() => _ExerciseFilterDrawerState();
@@ -26,12 +28,14 @@ class ExerciseFilterDrawer extends StatefulWidget {
 class _ExerciseFilterDrawerState extends State<ExerciseFilterDrawer> {
   late List<MuscleGroup> filterByMuscleGroup;
   late List<ExerciseTool> filterByTool;
+  late Map<String, String> filterByMuscleHead;
 
   @override
   void initState() {
     super.initState();
     filterByMuscleGroup = List.from(widget.initialMuscleGroups);
     filterByTool = List.from(widget.initialTools);
+    filterByMuscleHead = Map.of(widget.initialMuscleHeads);
   }
 
   @override
@@ -76,25 +80,29 @@ class _ExerciseFilterDrawerState extends State<ExerciseFilterDrawer> {
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       sliver: SliverList(
                         delegate: SliverChildListDelegate([
-                          _SectionHeader(title: locale.muscles, icon: Icons.fitness_center_rounded),
-                          const SizedBox(height: 12),
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: 0,
-                            children: [
-                              for (final fg in state.filter.groups)
-                                FilterChip(
-                                  label: Text(fg.muscleGroupName),
-                                  selected: filterByMuscleGroup.contains(fg),
-                                  onSelected: (selected) {
-                                    setState(() {
-                                      selected ? filterByMuscleGroup.add(fg) : filterByMuscleGroup.remove(fg);
-                                    });
-                                  },
-                                  selectedColor: Theme.of(context).colorScheme.primaryContainer,
-                                  checkmarkColor: Theme.of(context).colorScheme.primary,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                ),
+                          ...state.filter.groups.expand(
+                            (g) => [
+                              const SizedBox(height: 24),
+                              _SectionHeader(title: g.muscleGroupName, icon: Icons.fitness_center_rounded),
+                              const SizedBox(height: 12),
+                              Wrap(
+                                children: state.filter.heads.entries
+                                    .where((h) => h.key.contains(g.muscleGroupCode))
+                                    .map(
+                                      (head) => FilterChip(
+                                        label: Text(head.value),
+                                        selected: filterByMuscleHead.containsKey(head.key),
+                                        onSelected: (selected) {
+                                          setState(() {
+                                            selected
+                                                ? filterByMuscleHead.addEntries([head])
+                                                : filterByMuscleHead.remove(head.key);
+                                          });
+                                        },
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 24),
@@ -113,12 +121,11 @@ class _ExerciseFilterDrawerState extends State<ExerciseFilterDrawer> {
                                       selected ? filterByTool.add(ft) : filterByTool.remove(ft);
                                     });
                                   },
-                                  selectedColor: Theme.of(context).colorScheme.secondaryContainer,
-                                  checkmarkColor: Theme.of(context).colorScheme.secondary,
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                 ),
                             ],
                           ),
+
                           const SizedBox(height: 32),
                         ]),
                       ),
@@ -147,7 +154,7 @@ class _ExerciseFilterDrawerState extends State<ExerciseFilterDrawer> {
                           context.read<ExercisesV2Bloc>().add(
                             GetExercisesByFilterEvent(filter: ExerciseFilter.empty()),
                           );
-                          widget.onApply([], []);
+                          widget.onApply([], [], {});
                           Navigator.pop(context);
                         },
                         child: Text(locale.reset),
@@ -164,10 +171,14 @@ class _ExerciseFilterDrawerState extends State<ExerciseFilterDrawer> {
                         onPressed: () {
                           context.read<ExercisesV2Bloc>().add(
                             GetExercisesByFilterEvent(
-                              filter: ExerciseFilter(groups: filterByMuscleGroup, tools: filterByTool),
+                              filter: ExerciseFilter(
+                                groups: filterByMuscleGroup,
+                                tools: filterByTool,
+                                heads: filterByMuscleHead,
+                              ),
                             ),
                           );
-                          widget.onApply(filterByMuscleGroup, filterByTool);
+                          widget.onApply(filterByMuscleGroup, filterByTool, filterByMuscleHead);
                           Navigator.pop(context);
                         },
                         child: Text(locale.apply, style: const TextStyle(fontWeight: FontWeight.bold)),
