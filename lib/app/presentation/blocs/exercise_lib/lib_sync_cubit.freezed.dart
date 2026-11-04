@@ -55,11 +55,12 @@ extension LibSyncStatePatterns on LibSyncState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Syncing value)?  syncing,TResult Function( _Success value)?  success,TResult Function( _Failure value)?  failure,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Syncing value)?  syncing,TResult Function( _Success value)?  success,TResult Function( _Failure value)?  failure,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that);case _Syncing() when syncing != null:
+return initial(_that);case _Loading() when loading != null:
+return loading(_that);case _Syncing() when syncing != null:
 return syncing(_that);case _Success() when success != null:
 return success(_that);case _Failure() when failure != null:
 return failure(_that);case _:
@@ -80,11 +81,12 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Syncing value)  syncing,required TResult Function( _Success value)  success,required TResult Function( _Failure value)  failure,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Syncing value)  syncing,required TResult Function( _Success value)  success,required TResult Function( _Failure value)  failure,}){
 final _that = this;
 switch (_that) {
 case _Initial():
-return initial(_that);case _Syncing():
+return initial(_that);case _Loading():
+return loading(_that);case _Syncing():
 return syncing(_that);case _Success():
 return success(_that);case _Failure():
 return failure(_that);case _:
@@ -104,11 +106,12 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Syncing value)?  syncing,TResult? Function( _Success value)?  success,TResult? Function( _Failure value)?  failure,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Syncing value)?  syncing,TResult? Function( _Success value)?  success,TResult? Function( _Failure value)?  failure,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that);case _Syncing() when syncing != null:
+return initial(_that);case _Loading() when loading != null:
+return loading(_that);case _Syncing() when syncing != null:
 return syncing(_that);case _Success() when success != null:
 return success(_that);case _Failure() when failure != null:
 return failure(_that);case _:
@@ -128,12 +131,13 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  syncing,TResult Function( int total)?  success,TResult Function( LibSyncFailure failure)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( double progress)?  syncing,TResult Function()?  success,TResult Function( LibSyncFailure failure)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial();case _Syncing() when syncing != null:
-return syncing();case _Success() when success != null:
-return success(_that.total);case _Failure() when failure != null:
+return initial();case _Loading() when loading != null:
+return loading();case _Syncing() when syncing != null:
+return syncing(_that.progress);case _Success() when success != null:
+return success();case _Failure() when failure != null:
 return failure(_that.failure);case _:
   return orElse();
 
@@ -152,12 +156,13 @@ return failure(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  syncing,required TResult Function( int total)  success,required TResult Function( LibSyncFailure failure)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( double progress)  syncing,required TResult Function()  success,required TResult Function( LibSyncFailure failure)  failure,}) {final _that = this;
 switch (_that) {
 case _Initial():
-return initial();case _Syncing():
-return syncing();case _Success():
-return success(_that.total);case _Failure():
+return initial();case _Loading():
+return loading();case _Syncing():
+return syncing(_that.progress);case _Success():
+return success();case _Failure():
 return failure(_that.failure);case _:
   throw StateError('Unexpected subclass');
 
@@ -175,12 +180,13 @@ return failure(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  syncing,TResult? Function( int total)?  success,TResult? Function( LibSyncFailure failure)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( double progress)?  syncing,TResult? Function()?  success,TResult? Function( LibSyncFailure failure)?  failure,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial();case _Syncing() when syncing != null:
-return syncing();case _Success() when success != null:
-return success(_that.total);case _Failure() when failure != null:
+return initial();case _Loading() when loading != null:
+return loading();case _Syncing() when syncing != null:
+return syncing(_that.progress);case _Success() when success != null:
+return success();case _Failure() when failure != null:
 return failure(_that.failure);case _:
   return null;
 
@@ -224,8 +230,8 @@ String toString() {
 /// @nodoc
 
 
-class _Syncing implements LibSyncState {
-  const _Syncing();
+class _Loading implements LibSyncState {
+  const _Loading();
   
 
 
@@ -235,7 +241,7 @@ class _Syncing implements LibSyncState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Syncing);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading);
 }
 
 
@@ -244,7 +250,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'LibSyncState.syncing()';
+  return 'LibSyncState.loading()';
 }
 
 
@@ -256,43 +262,43 @@ String toString() {
 /// @nodoc
 
 
-class _Success implements LibSyncState {
-  const _Success({required this.total});
+class _Syncing implements LibSyncState {
+  const _Syncing({required this.progress});
   
 
- final  int total;
+ final  double progress;
 
 /// Create a copy of LibSyncState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$SuccessCopyWith<_Success> get copyWith => __$SuccessCopyWithImpl<_Success>(this, _$identity);
+_$SyncingCopyWith<_Syncing> get copyWith => __$SyncingCopyWithImpl<_Syncing>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&(identical(other.total, total) || other.total == total));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Syncing&&(identical(other.progress, progress) || other.progress == progress));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,total);
+int get hashCode => Object.hash(runtimeType,progress);
 
 @override
 String toString() {
-  return 'LibSyncState.success(total: $total)';
+  return 'LibSyncState.syncing(progress: $progress)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$SuccessCopyWith<$Res> implements $LibSyncStateCopyWith<$Res> {
-  factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) = __$SuccessCopyWithImpl;
+abstract mixin class _$SyncingCopyWith<$Res> implements $LibSyncStateCopyWith<$Res> {
+  factory _$SyncingCopyWith(_Syncing value, $Res Function(_Syncing) _then) = __$SyncingCopyWithImpl;
 @useResult
 $Res call({
- int total
+ double progress
 });
 
 
@@ -300,24 +306,56 @@ $Res call({
 
 }
 /// @nodoc
-class __$SuccessCopyWithImpl<$Res>
-    implements _$SuccessCopyWith<$Res> {
-  __$SuccessCopyWithImpl(this._self, this._then);
+class __$SyncingCopyWithImpl<$Res>
+    implements _$SyncingCopyWith<$Res> {
+  __$SyncingCopyWithImpl(this._self, this._then);
 
-  final _Success _self;
-  final $Res Function(_Success) _then;
+  final _Syncing _self;
+  final $Res Function(_Syncing) _then;
 
 /// Create a copy of LibSyncState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? total = null,}) {
-  return _then(_Success(
-total: null == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
-as int,
+@pragma('vm:prefer-inline') $Res call({Object? progress = null,}) {
+  return _then(_Syncing(
+progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
+as double,
   ));
 }
 
 
 }
+
+/// @nodoc
+
+
+class _Success implements LibSyncState {
+  const _Success();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'LibSyncState.success()';
+}
+
+
+}
+
+
+
 
 /// @nodoc
 

@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/app_config/app_config_cubit.dart';
+import 'package:uniceps/app/presentation/blocs/exercise_lib/lib_sync_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/profile/profile_cubit.dart';
 import 'package:uniceps/app/presentation/blocs/update/update_cubit.dart';
@@ -17,6 +19,7 @@ import 'package:uniceps/app/presentation/home/widgets/premade_routines_section.d
 import 'package:uniceps/app/presentation/home/widgets/secondary_actions_bar.dart';
 import 'package:uniceps/app/presentation/home/widgets/smart_day_selector_card.dart';
 import 'package:uniceps/app/presentation/practice/screens/practice_screen.dart';
+import 'package:uniceps/app/presentation/routine/widgets/progress_widget.dart';
 import 'package:uniceps/app/presentation/settings/dialogs/qr_alert_dialog.dart';
 import 'package:uniceps/app/services/file_handler_service.dart';
 import 'package:uniceps/core/constants/app_routes.dart';
@@ -25,6 +28,7 @@ import 'package:uniceps/core/constants/constants.dart';
 import 'package:uniceps/core/errors/failure.dart';
 import 'package:uniceps/core/helpers/access_control_dialogs.dart';
 import 'package:uniceps/core/logging/app_logger.dart';
+import 'package:uniceps/core/logging/debug_screen.dart';
 import 'package:uniceps/core/widgets/loading_page.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/l10n/app_localizations.dart';
@@ -60,16 +64,16 @@ class _HomeScreenState extends State<HomeScreen> {
     final locale = AppLocalizations.of(context)!;
     final lang = context.read<AppConfigCubit>().state.config.appLanguage.languageCode;
     final membership = context.watch<MembershipBloc>().state.maybeWhen(orElse: () => false, loaded: (m) => true);
-    final gender = context.read<ProfileCubit>().state.whenOrNull(loaded: (p) => p.gender);
+    final gender = context.read<ProfileCubit>().state.maybeWhen(loaded: (p) => p.gender, orElse: () => Gender.both);
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => StopwatchCubit(prefs: di.sl()), lazy: false),
         BlocProvider(
-          create: (context) =>
-              PremadeRoutinesCubit(repo: di.sl())..getPremadeRoutines(gender ?? Gender.both, languageCode: lang),
+          create: (context) => PremadeRoutinesCubit(repo: di.sl())..getPremadeRoutines(gender, languageCode: lang),
           lazy: false,
         ),
+        BlocProvider(create: (context) => LibSyncCubit(di.sl())..syncLibrary()),
       ],
       child: Stack(
         children: [
@@ -83,6 +87,52 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
                 return;
               },
+            ),
+          ),
+          Builder(
+            builder: (context) => BlocListener<LibSyncCubit, LibSyncState>(
+              listenWhen: (p, c) =>
+                  p.maybeWhen(loading: () => true, orElse: () => false) &&
+                  c.maybeWhen(syncing: (_) => true, orElse: () => false),
+              listener: (context, state) => showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) => BlocProvider.value(
+                  value: context.read<LibSyncCubit>(),
+                  child: PopScope(
+                    canPop: false,
+                    onPopInvokedWithResult: (didPop, result) {
+                      if (didPop) return;
+                    },
+                    child: AlertDialog(
+                      icon: const Icon(Icons.sync),
+                      title: Text(locale.downloadingExercises),
+                      content: BlocBuilder<LibSyncCubit, LibSyncState>(
+                        builder: (context, state) {
+                          return state.when(
+                            initial: () => const SizedBox(),
+                            loading: () => const LoadingIndicator(),
+                            success: () => const SizedBox(),
+                            syncing: (progress) => ProgressWidget(
+                              percent: progress,
+                              action: ElevatedButton(
+                                onPressed: progress == 1 ? () => Navigator.pop(context) : null,
+                                child: Text(locale.ok),
+                              ),
+                            ),
+                            failure: (failure) => ProgressWidget(
+                              percent: 0,
+                              progressBackground: Colors.red,
+                              action: ElevatedButton(onPressed: () => Navigator.pop(context), child: Text(locale.ok)),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              child: const SizedBox(),
             ),
           ),
           Scaffold(
@@ -109,6 +159,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
+            floatingActionButton: kDebugMode
+                ? FloatingActionButton(
+                    onPressed: () =>
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const DebugScreen())),
+                    child: const Icon(Icons.bug_report),
+                  )
+                : null,
             body: Column(
               children: [
                 // App Version Update Listener
@@ -176,50 +233,49 @@ class _HomeScreenState extends State<HomeScreen> {
                     slivers: [
                       // Smart Day Selector Card (Dynamic Active Session CTA)
                       SliverToBoxAdapter(
-                        child: BlocBuilder<SessionBloc, SessionState>(
-                          builder: (context, sessionState) {
-                            return BlocBuilder<CurrentRoutineCubit, CurrentRoutineState>(
-                              builder: (context, routineState) {
-                                return SmartDaySelectorCard(
-                                  routine: routineState.maybeMap(loaded: (state) => state.c, orElse: () => null),
-                                  lastCompletedDayId: routineState.maybeMap(
-                                    loaded: (state) => state.heat.lastdayId,
-                                    orElse: () => null,
+                        child: Builder(
+                          builder: (context) {
+                            final sessionState = context.watch<SessionBloc>().state;
+                            final routineState = context.watch<CurrentRoutineCubit>().state;
+
+                            return SmartDaySelectorCard(
+                              routine: routineState.maybeMap(loaded: (state) => state.c, orElse: () => null),
+                              lastCompletedDayId: routineState.maybeMap(
+                                loaded: (state) => state.heat.lastdayId,
+                                orElse: () => null,
+                              ),
+                              activeSessionState: sessionState,
+                              onSetupRoutine: () async {
+                                await Navigator.pushNamed(context, AppRoutes.routineManager);
+                                context.mounted ? context.read<CurrentRoutineCubit>().getCurrentRoutine() : null;
+                              },
+                              onStartSession: (selectedDay) {
+                                context.read<SessionBloc>().add(
+                                  SessionEvent.startSession(selectedDay.id!, selectedDay.name),
+                                );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => MultiBlocProvider(
+                                      providers: [
+                                        BlocProvider.value(value: context.read<SessionBloc>()),
+                                        BlocProvider.value(value: context.read<StopwatchCubit>()..startStopWatch()),
+                                      ],
+                                      child: PracticeScreen(dayName: selectedDay.name, startDate: DateTime.now()),
+                                    ),
                                   ),
-                                  activeSessionState: sessionState,
-                                  onSetupRoutine: () async {
-                                    await Navigator.pushNamed(context, AppRoutes.routineManager);
-                                    context.mounted ? context.read<CurrentRoutineCubit>().getCurrentRoutine() : null;
-                                  },
-                                  onStartSession: (selectedDay) {
-                                    context.read<SessionBloc>().add(
-                                      SessionEvent.startSession(selectedDay.id!, selectedDay.name),
-                                    );
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => MultiBlocProvider(
-                                          providers: [
-                                            BlocProvider.value(value: context.read<SessionBloc>()),
-                                            BlocProvider.value(value: context.read<StopwatchCubit>()..startStopWatch()),
-                                          ],
-                                          child: PracticeScreen(dayName: selectedDay.name, startDate: DateTime.now()),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  onResumeSession: (session) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => BlocProvider.value(
-                                          value: context.read<StopwatchCubit>()
-                                            ..startStopWatch(DateTime.now().difference(session.createdAt)),
-                                          child: PracticeScreen(dayName: session.dayName, startDate: session.createdAt),
-                                        ),
-                                      ),
-                                    );
-                                  },
+                                );
+                              },
+                              onResumeSession: (session) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                      value: context.read<StopwatchCubit>()
+                                        ..startStopWatch(DateTime.now().difference(session.createdAt)),
+                                      child: PracticeScreen(dayName: session.dayName, startDate: session.createdAt),
+                                    ),
+                                  ),
                                 );
                               },
                             );
@@ -228,83 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
 
                       // Diet Logger Action Banner
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-                          child: Stack(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: cardSurface,
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: borderLight),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.02),
-                                      blurRadius: 6,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(20),
-                                    onTap: () => membership
-                                        ? Navigator.pushNamed(context, AppRoutes.dietLogger)
-                                        : showPremiumDialog(context),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color: accentMint.withValues(alpha: 0.1),
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: const Icon(Icons.restaurant_menu, color: accentMint, size: 22),
-                                          ),
-                                          const SizedBox(width: 14),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  locale.dietLogger,
-                                                  style: const TextStyle(
-                                                    color: primaryDark,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  locale.dietLoggerDescription,
-                                                  style: const TextStyle(color: textSubtle, fontSize: 12),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Icon(Icons.add_circle_outline_rounded, color: primaryTeal, size: 24),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              if (!membership)
-                                Positioned.directional(
-                                  textDirection: Directionality.of(context),
-                                  child: Container(
-                                    decoration: const BoxDecoration(shape: .circle, color: Colors.amber),
-                                    padding: const .all(4.0),
-                                    child: const Image(image: AssetImage(IMG_PREMIUM), width: 15, color: Colors.white),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      SliverToBoxAdapter(child: DietLoggerActionBanner(membership: membership)),
 
                       // Quick Navigation Chips
                       SliverToBoxAdapter(
@@ -365,10 +345,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                               ),
                               failure: (failure) => PremadeRoutinesError(
-                                onRetry: () => context.read<PremadeRoutinesCubit>().getPremadeRoutines(
-                                  gender ?? .both,
-                                  languageCode: lang,
-                                ),
+                                onRetry: () =>
+                                    context.read<PremadeRoutinesCubit>().getPremadeRoutines(gender, languageCode: lang),
                               ),
                             );
                           },
@@ -401,6 +379,77 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class DietLoggerActionBanner extends StatelessWidget {
+  const DietLoggerActionBanner({super.key, required this.membership});
+
+  final bool membership;
+
+  @override
+  Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: cardSurface,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: borderLight),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 6, offset: const Offset(0, 2)),
+              ],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(20),
+                onTap: () =>
+                    membership ? Navigator.pushNamed(context, AppRoutes.dietLogger) : showPremiumDialog(context),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(color: accentMint.withValues(alpha: 0.1), shape: BoxShape.circle),
+                        child: const Icon(Icons.restaurant_menu, color: accentMint, size: 22),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              locale.dietLogger,
+                              style: const TextStyle(color: primaryDark, fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                            Text(locale.dietLoggerDescription, style: const TextStyle(color: textSubtle, fontSize: 12)),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.add_circle_outline_rounded, color: primaryTeal, size: 24),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          if (!membership)
+            Positioned.directional(
+              textDirection: Directionality.of(context),
+              child: Container(
+                decoration: const BoxDecoration(shape: .circle, color: Colors.amber),
+                padding: const .all(4.0),
+                child: const Image(image: AssetImage(IMG_PREMIUM), width: 15, color: Colors.white),
+              ),
+            ),
         ],
       ),
     );

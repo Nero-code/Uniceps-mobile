@@ -1,7 +1,7 @@
 class Version {
   static const currentMajor = 4;
   static const currentMinor = 4;
-  static const currentPatch = 30;
+  static const currentPatch = 33;
   static const currentBuild = 26;
 
   final int major, minor, patch, build;

@@ -42,6 +42,7 @@ void main() {
     apiId: '1',
     name: 'Push-up',
     imagePath: 'url',
+    mediaVersion: 0,
     imageBitMap: Uint8List(0),
     muscleGroupName: 'Chest',
     muscleGroupCode: '',

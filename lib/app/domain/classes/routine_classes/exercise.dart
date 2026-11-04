@@ -23,10 +23,13 @@ class Exercise {
 
   final DateTime timestamp;
 
+  final int mediaVersion;
+
   const Exercise({
     required this.apiId,
     required this.name,
     required this.imagePath,
+    required this.mediaVersion,
     required this.imageBitMap,
     required this.muscleGroupName,
     required this.muscleGroupCode,
@@ -46,6 +49,7 @@ class Exercise {
     String? apiId,
     String? name,
     String? imagePath,
+    int? mediaVersion,
     Uint8List? imageBitMap,
 
     String? muscleGroupName,
@@ -68,6 +72,7 @@ class Exercise {
     apiId: apiId ?? this.apiId,
     name: name ?? this.name,
     imagePath: imagePath ?? this.imagePath,
+    mediaVersion: mediaVersion ?? this.mediaVersion,
     imageBitMap: imageBitMap ?? this.imageBitMap,
     muscleGroupName: muscleGroupName ?? this.muscleGroupName,
     muscleGroupCode: muscleGroupCode ?? this.muscleGroupCode,

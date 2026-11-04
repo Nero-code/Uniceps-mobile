@@ -6,6 +6,7 @@ class Exercises extends Table {
 
   TextColumn get name => text()();
   TextColumn get imageName => text().nullable()();
+  IntColumn get mediaVersion => integer().withDefault(const Constant(0))();
 
   TextColumn get muscleGroupCode => text()();
   TextColumn get muscleGroupName => text()();

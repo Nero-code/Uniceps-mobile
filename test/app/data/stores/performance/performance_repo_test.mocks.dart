@@ -368,6 +368,15 @@ class MockITSessionLocalSourceContract extends _i1.Mock
             returnValueForMissingStub: _i9.Future<void>.value(),
           )
           as _i9.Future<void>);
+
+  @override
+  _i9.Future<void> deleteSession(int? i) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteSession, [i]),
+            returnValue: _i9.Future<void>.value(),
+            returnValueForMissingStub: _i9.Future<void>.value(),
+          )
+          as _i9.Future<void>);
 }
 
 /// A class which mocks [IMeasurementsLocalSource].
