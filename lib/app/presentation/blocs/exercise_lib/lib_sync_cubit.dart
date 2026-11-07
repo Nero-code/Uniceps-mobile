@@ -13,8 +13,15 @@ class LibSyncCubit extends Cubit<LibSyncState> {
   LibSyncCubit(this._syncService) : super(const LibSyncState.initial());
 
   Future<void> syncLibrary() async {
-    emit(const .syncing());
-    final either = await _syncService.syncExercises();
-    either.fold((l) => emit(.failure(failure: l)), (r) => emit(.success(total: r)));
+    emit(const .loading());
+    _syncService.resyncExercises().listen(
+      (event) => event.fold(
+        (l) => l.maybeWhen(
+          libUpToDate: () => emit(const .success()),
+          orElse: () => emit(.failure(failure: l)),
+        ),
+        (r) => emit(.syncing(progress: r)),
+      ),
+    );
   }
 }

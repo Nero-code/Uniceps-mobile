@@ -28,6 +28,7 @@ class ExercisesRepo implements IExercisesContract {
   final List<Exercise> exercisesLib = [];
   final List<MuscleGroup> allGroups = [];
   final List<ExerciseTool> allTools = [];
+  final Map<String, String> allHeads = {};
 
   ExercisesRepo({
     required IExercisesLocalSourceContract localSource,
@@ -74,28 +75,17 @@ class ExercisesRepo implements IExercisesContract {
     }
   }
 
-  Future<void> extractGroups() async {
-    // Groups Extraction...
-    for (final e in exercisesLib) {
-      final group = MuscleGroup(muscleGroupCode: e.muscleGroupCode, muscleGroupName: e.muscleGroupName);
-      if (allGroups.where((g) => g.muscleGroupCode == e.muscleGroupCode).isEmpty) allGroups.add(group);
-    }
-
-    // Exercise Filtering...
-    for (final g in allGroups) {
-      final matches = exercisesLib.where((e) => e.muscleGroupCode == g.muscleGroupCode).toList();
-      allExercises.addAll({g.muscleGroupCode: matches});
-    }
-  }
-
   Future<void> extractFilters() async {
     // Groups Extraction...
     for (final e in exercisesLib) {
-      if (allGroups.where((g) => g.muscleGroupCode == e.muscleGroupCode).isEmpty) {
+      if (allGroups.every((g) => g.muscleGroupCode != e.muscleGroupCode)) {
         allGroups.add(MuscleGroup(muscleGroupCode: e.muscleGroupCode, muscleGroupName: e.muscleGroupName));
       }
-      if (allTools.where((t) => t.toolCode == e.toolCode).isEmpty) {
+      if (allTools.every((t) => t.toolCode != e.toolCode)) {
         allTools.add(ExerciseTool(toolName: e.toolName, toolCode: e.toolCode));
+      }
+      if (allHeads.keys.every((h) => h != e.muscleHeadCode)) {
+        allHeads.addAll({e.muscleHeadCode: e.muscleHeadName});
       }
     }
   }
@@ -132,7 +122,7 @@ class ExercisesRepo implements IExercisesContract {
 
   @override
   Future<Either<ExerciseFailure, ExerciseFilter>> getExerciseFilters() async {
-    return Right(ExerciseFilter(groups: allGroups, tools: allTools));
+    return Right(ExerciseFilter(groups: allGroups, tools: allTools, heads: allHeads));
   }
 
   @override
@@ -144,7 +134,10 @@ class ExercisesRepo implements IExercisesContract {
       final filterTools = filter.tools.isNotEmpty
           ? filter.tools.where((t) => e.toolCode == t.toolCode).isNotEmpty
           : true;
-      return (filterGroup & filterTools);
+      final filterHeads = filter.heads.isNotEmpty
+          ? filter.heads.keys.where((t) => e.muscleHeadCode == t).isNotEmpty
+          : true;
+      return (filterGroup & filterTools & filterHeads);
     }).toList();
     return Right(filteredList);
   }
@@ -180,35 +173,6 @@ class ExercisesRepo implements IExercisesContract {
     return const Left(ExerciseFailure.eOffline());
   }
 
-  //   @override
-  //   Stream<Result<double, ExerciseFailure>> downloadImages(List<String> ids) async* {
-  //     try {
-  //       // Get all images from api.
-  //       for (final id in ids) {
-  //         if (await _localSource.containsImage(id)) continue;
-  //         final img = await _remoteSource.getExerciseImage(id);
-  //         await _localSource.saveExerciseImage(id, img);
-  // final pool = Pool();
-  //         // 0 -> length =============== 0% -> 50%
-  //         final progress = (ids.indexOf(id) + 1) / (2 * ids.length);
-  //         yield Result(data: progress, error: null);
-  //       }
-  //       // When complete save exercises in database.
-  //       for (final e in exercisesLib) {
-  //         await _localSource.writeExercise(ExerciseDto.fromEntity(e));
-  //
-  //         // length -> 2 * length  ===== 50% -> 100%
-  //         final progress = (exercisesLib.indexOf(e) + 1 + exercisesLib.length) / (2 * exercisesLib.length);
-  //         yield Result(data: progress, error: null);
-  //       }
-  //       // yield Result(data: 1, error: null); // 100%
-  //     } catch (e) {
-  //       yield const Result(data: 0, error: ExerciseFailure.eOffline());
-  //     }
-  //     return;
-  //   }
-
-  // region Experimental downloadImages
   @override
   Stream<Result<double, ExerciseFailure>> downloadImages(List<String> ids) async* {
     try {
@@ -229,9 +193,13 @@ class ExercisesRepo implements IExercisesContract {
         // We map each ID to a future that runs in the pool
         final downloadFutures = missingIds.map((id) {
           return pool.withResource(() async {
-            final img = await _remoteSource.getExerciseImage(id);
-            await _localSource.saveExerciseImage(id, img);
-            completedCount++;
+            try {
+              final img = await _remoteSource.getExerciseImage(id);
+              await _localSource.saveExerciseImage(id, img);
+              completedCount++;
+            } catch (e) {
+              logger.e('ExercisesRepo.downloadImages() :: Could not get image $id', error: e);
+            }
 
             // You can't 'yield' from inside this closure, so we use a different approach
             // for progress if we want to yield for EVERY image.
@@ -259,7 +227,6 @@ class ExercisesRepo implements IExercisesContract {
     }
   }
 
-  // endregion
   @override
   Future<Either<ExerciseFailure, ExerciseDetailsResult>> getExerciseDetails(String id) async {
     try {

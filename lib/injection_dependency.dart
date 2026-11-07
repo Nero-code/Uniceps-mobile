@@ -248,9 +248,7 @@ Future<void> init() async {
   );
 
   //  L I B - S Y N C   R E P O
-  sl.registerLazySingleton(
-    () => ExerciseLibSyncService(exercisesLocalSource: sl(), exercisesRemoteSource: sl(), logger: sl()),
-  );
+  sl.registerLazySingleton(() => ExerciseLibSyncService(exercisesLocalSource: sl(), exercisesRemoteSource: sl()));
 
   /////////
   ////////

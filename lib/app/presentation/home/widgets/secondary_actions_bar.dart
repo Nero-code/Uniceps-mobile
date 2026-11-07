@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniceps/app/presentation/blocs/membership/membership_bloc.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
 import 'package:uniceps/core/constants/constants.dart';
+import 'package:uniceps/core/helpers/access_control_dialogs.dart';
 import 'package:uniceps/l10n/app_localizations.dart';
 
 class SecondaryActionsBar extends StatelessWidget {
@@ -27,27 +28,34 @@ class SecondaryActionsBar extends StatelessWidget {
         children: [
           Expanded(
             child: _ActionChip(
-              icon: Icons.analytics_outlined,
+              icon: Icons.ssid_chart,
               label: l10n.scrTitlePerformance,
               isLocked: membership.maybeWhen(orElse: () => true, loaded: (m) => false),
-              // onTap: membership.maybeWhen(
-              //   orElse: () =>
-              //       () => showPremiumDialog(context),
-              //   loaded: (m) => onAnalytics,
-              // ),
-              onTap: onAnalytics,
+              onTap: membership.maybeWhen(
+                orElse: () =>
+                    () => showPremiumDialog(context),
+                loaded: (m) => onAnalytics,
+              ),
+              iconColor: Colors.amber,
+              // onTap: onAnalytics,
             ),
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: _ActionChip(icon: Icons.straighten_outlined, label: l10n.measurements, onTap: onMeasurements),
+            child: _ActionChip(
+              icon: Icons.straighten,
+              label: l10n.measurements,
+              onTap: onMeasurements,
+              iconColor: Colors.red,
+            ),
           ),
           const SizedBox(width: 8),
           Expanded(
             child: _ActionChip(
-              icon: Icons.event_note_outlined,
+              icon: Icons.pending_actions,
               label: l10n.scrTitleMyRoutines,
               onTap: onRoutineManager,
+              // iconColor: Colors.green,
             ),
           ),
         ],
@@ -58,11 +66,12 @@ class SecondaryActionsBar extends StatelessWidget {
 
 class _ActionChip extends StatelessWidget {
   final IconData icon;
+  final Color? iconColor;
   final String label;
   final VoidCallback? onTap;
   final bool isLocked;
 
-  const _ActionChip({required this.icon, required this.label, this.onTap, this.isLocked = false});
+  const _ActionChip({required this.icon, required this.label, this.onTap, this.isLocked = false, this.iconColor});
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +94,14 @@ class _ActionChip extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(icon, color: AppColors.primaryTeal, size: 20),
+                    Material(
+                      shape: const CircleBorder(),
+                      color: (iconColor ?? AppColors.primaryTeal).withValues(alpha: .1),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(icon, color: iconColor ?? AppColors.primaryTeal, size: 25),
+                      ),
+                    ),
                     const SizedBox(height: 4),
                     Text(
                       label,

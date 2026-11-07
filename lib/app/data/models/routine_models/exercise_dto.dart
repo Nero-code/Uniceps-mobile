@@ -11,7 +11,7 @@ class ExerciseDto {
   final String apiId;
   final String name;
   final String? imageUrl;
-
+  final int mediaVersion;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final Uint8List? imageBitMap;
 
@@ -44,6 +44,7 @@ class ExerciseDto {
     required this.apiId,
     required this.name,
     required this.imageUrl,
+    required this.mediaVersion,
     this.imageBitMap,
     required this.muscleGroupName,
     required this.muscleGroupCode,
@@ -63,6 +64,7 @@ class ExerciseDto {
     apiId: e.apiId,
     name: e.name,
     imageUrl: e.imagePath,
+    mediaVersion: e.mediaVersion,
     imageBitMap: e.imageBitMap,
     muscleGroupName: e.muscleGroupName,
     muscleGroupCode: e.muscleGroupCode,
@@ -82,6 +84,7 @@ class ExerciseDto {
     apiId: apiId,
     name: name,
     imagePath: imageUrl,
+    mediaVersion: mediaVersion,
     imageBitMap: imageBitMap,
     muscleGroupName: muscleGroupName,
     muscleGroupCode: muscleGroupCode,
@@ -133,6 +136,7 @@ class ExerciseDto {
       apiId: json['ExerciseId'],
       name: json['ExerciseName'],
       imageUrl: json['ExerciseUrl'],
+      mediaVersion: 0,
       imageBitMap: null,
       muscleGroupName: '',
       muscleGroupCode: '',
@@ -155,6 +159,7 @@ class ExerciseDto {
     name: exercise.name,
     muscleGroupName: exercise.muscleGroupName,
     imageUrl: exercise.imageName,
+    mediaVersion: exercise.mediaVersion,
     imageBitMap: imageBitMap,
     muscleGroupCode: exercise.muscleGroupCode,
     muscleHeadName: exercise.muscleHeadName,
@@ -182,6 +187,7 @@ class ExerciseDto {
     apiId: apiId ?? this.apiId,
     name: name ?? this.name,
     imageUrl: imageUrl ?? this.imageUrl,
+    mediaVersion: mediaVersion ?? this.mediaVersion,
     imageBitMap: imageBitMap ?? this.imageBitMap,
     muscleGroupName: muscleGroupName ?? this.muscleGroupName,
     muscleGroupCode: muscleGroupCode ?? this.muscleGroupCode,

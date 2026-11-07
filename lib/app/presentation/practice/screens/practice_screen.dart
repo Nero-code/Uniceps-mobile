@@ -213,33 +213,80 @@ class _PracticeScreenState extends State<PracticeScreen> with WidgetsBindingObse
                         width: screenSize.width,
                         child: Container(
                           height: 60,
-                          padding: const EdgeInsets.all(5.0),
+                          padding: const EdgeInsets.only(bottom: 5.0, left: 5.0, right: 5.0),
                           color: Colors.white,
                           child: Row(
                             spacing: 5,
                             children: [
                               Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    final fullSession = sessionState.session.logs.length == totalProgress;
-                                    _finishSession(sessionState.session, fullSession);
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(Icons.bolt, size: 25),
-                                      Text(
-                                        locale.finish,
-                                        style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+                                child: Container(
+                                  height: 54,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        Theme.of(context).colorScheme.secondary,
+                                        Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
+                                      ],
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 4),
                                       ),
                                     ],
                                   ),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(16),
+                                      onTap: () {
+                                        final fullSession = sessionState.session.logs.length == totalProgress;
+                                        _finishSession(sessionState.session, fullSession);
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(Icons.bolt, size: 25, color: Colors.white),
+                                          Text(
+                                            locale.finish,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                              ElevatedButton(
-                                onPressed: () => _cancelSession(sessionState.session),
-                                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                                child: const Icon(Icons.close, size: 25),
+                              Container(
+                                height: 54,
+                                width: 54,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  color: Colors.red.withValues(alpha: .8),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Theme.of(context).colorScheme.error.withValues(alpha: 0.3),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(16),
+                                    onTap: () => _cancelSession(sessionState.session),
+                                    child: const Icon(Icons.close, size: 25, color: Colors.white),
+                                  ),
+                                ),
                               ),
                             ],
                           ),

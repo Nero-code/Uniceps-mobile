@@ -1392,61 +1392,30 @@ String toString() {
 /// @nodoc
 mixin _$LibSyncFailure {
 
- int get currentTotalCount;
-/// Create a copy of LibSyncFailure
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$LibSyncFailureCopyWith<LibSyncFailure> get copyWith => _$LibSyncFailureCopyWithImpl<LibSyncFailure>(this as LibSyncFailure, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LibSyncFailure&&(identical(other.currentTotalCount, currentTotalCount) || other.currentTotalCount == currentTotalCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LibSyncFailure);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentTotalCount);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'LibSyncFailure(currentTotalCount: $currentTotalCount)';
+  return 'LibSyncFailure()';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $LibSyncFailureCopyWith<$Res>  {
-  factory $LibSyncFailureCopyWith(LibSyncFailure value, $Res Function(LibSyncFailure) _then) = _$LibSyncFailureCopyWithImpl;
-@useResult
-$Res call({
- int currentTotalCount
-});
-
-
-
-
-}
-/// @nodoc
-class _$LibSyncFailureCopyWithImpl<$Res>
-    implements $LibSyncFailureCopyWith<$Res> {
-  _$LibSyncFailureCopyWithImpl(this._self, this._then);
-
-  final LibSyncFailure _self;
-  final $Res Function(LibSyncFailure) _then;
-
-/// Create a copy of LibSyncFailure
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? currentTotalCount = null,}) {
-  return _then(_self.copyWith(
-currentTotalCount: null == currentTotalCount ? _self.currentTotalCount : currentTotalCount // ignore: cast_nullable_to_non_nullable
-as int,
-  ));
-}
-
+class $LibSyncFailureCopyWith<$Res>  {
+$LibSyncFailureCopyWith(LibSyncFailure _, $Res Function(LibSyncFailure) __);
 }
 
 
@@ -1464,13 +1433,14 @@ extension LibSyncFailurePatterns on LibSyncFailure {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _LibOffline value)?  libOffline,TResult Function( _LibNotFound value)?  libNotFound,TResult Function( _LibUnknown value)?  libUnknown,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _LibOffline value)?  libOffline,TResult Function( _LibNotFound value)?  libNotFound,TResult Function( _LibUnknown value)?  libUnknown,TResult Function( _LibUpToDate value)?  libUpToDate,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _LibOffline() when libOffline != null:
 return libOffline(_that);case _LibNotFound() when libNotFound != null:
 return libNotFound(_that);case _LibUnknown() when libUnknown != null:
-return libUnknown(_that);case _:
+return libUnknown(_that);case _LibUpToDate() when libUpToDate != null:
+return libUpToDate(_that);case _:
   return orElse();
 
 }
@@ -1488,13 +1458,14 @@ return libUnknown(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _LibOffline value)  libOffline,required TResult Function( _LibNotFound value)  libNotFound,required TResult Function( _LibUnknown value)  libUnknown,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _LibOffline value)  libOffline,required TResult Function( _LibNotFound value)  libNotFound,required TResult Function( _LibUnknown value)  libUnknown,required TResult Function( _LibUpToDate value)  libUpToDate,}){
 final _that = this;
 switch (_that) {
 case _LibOffline():
 return libOffline(_that);case _LibNotFound():
 return libNotFound(_that);case _LibUnknown():
-return libUnknown(_that);case _:
+return libUnknown(_that);case _LibUpToDate():
+return libUpToDate(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1511,13 +1482,14 @@ return libUnknown(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _LibOffline value)?  libOffline,TResult? Function( _LibNotFound value)?  libNotFound,TResult? Function( _LibUnknown value)?  libUnknown,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _LibOffline value)?  libOffline,TResult? Function( _LibNotFound value)?  libNotFound,TResult? Function( _LibUnknown value)?  libUnknown,TResult? Function( _LibUpToDate value)?  libUpToDate,}){
 final _that = this;
 switch (_that) {
 case _LibOffline() when libOffline != null:
 return libOffline(_that);case _LibNotFound() when libNotFound != null:
 return libNotFound(_that);case _LibUnknown() when libUnknown != null:
-return libUnknown(_that);case _:
+return libUnknown(_that);case _LibUpToDate() when libUpToDate != null:
+return libUpToDate(_that);case _:
   return null;
 
 }
@@ -1534,12 +1506,13 @@ return libUnknown(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int currentTotalCount)?  libOffline,TResult Function( int currentTotalCount)?  libNotFound,TResult Function( int currentTotalCount)?  libUnknown,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  libOffline,TResult Function()?  libNotFound,TResult Function()?  libUnknown,TResult Function()?  libUpToDate,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LibOffline() when libOffline != null:
-return libOffline(_that.currentTotalCount);case _LibNotFound() when libNotFound != null:
-return libNotFound(_that.currentTotalCount);case _LibUnknown() when libUnknown != null:
-return libUnknown(_that.currentTotalCount);case _:
+return libOffline();case _LibNotFound() when libNotFound != null:
+return libNotFound();case _LibUnknown() when libUnknown != null:
+return libUnknown();case _LibUpToDate() when libUpToDate != null:
+return libUpToDate();case _:
   return orElse();
 
 }
@@ -1557,12 +1530,13 @@ return libUnknown(_that.currentTotalCount);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int currentTotalCount)  libOffline,required TResult Function( int currentTotalCount)  libNotFound,required TResult Function( int currentTotalCount)  libUnknown,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  libOffline,required TResult Function()  libNotFound,required TResult Function()  libUnknown,required TResult Function()  libUpToDate,}) {final _that = this;
 switch (_that) {
 case _LibOffline():
-return libOffline(_that.currentTotalCount);case _LibNotFound():
-return libNotFound(_that.currentTotalCount);case _LibUnknown():
-return libUnknown(_that.currentTotalCount);case _:
+return libOffline();case _LibNotFound():
+return libNotFound();case _LibUnknown():
+return libUnknown();case _LibUpToDate():
+return libUpToDate();case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1579,12 +1553,13 @@ return libUnknown(_that.currentTotalCount);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int currentTotalCount)?  libOffline,TResult? Function( int currentTotalCount)?  libNotFound,TResult? Function( int currentTotalCount)?  libUnknown,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  libOffline,TResult? Function()?  libNotFound,TResult? Function()?  libUnknown,TResult? Function()?  libUpToDate,}) {final _that = this;
 switch (_that) {
 case _LibOffline() when libOffline != null:
-return libOffline(_that.currentTotalCount);case _LibNotFound() when libNotFound != null:
-return libNotFound(_that.currentTotalCount);case _LibUnknown() when libUnknown != null:
-return libUnknown(_that.currentTotalCount);case _:
+return libOffline();case _LibNotFound() when libNotFound != null:
+return libNotFound();case _LibUnknown() when libUnknown != null:
+return libUnknown();case _LibUpToDate() when libUpToDate != null:
+return libUpToDate();case _:
   return null;
 
 }
@@ -1596,199 +1571,129 @@ return libUnknown(_that.currentTotalCount);case _:
 
 
 class _LibOffline implements LibSyncFailure {
-  const _LibOffline({required this.currentTotalCount});
+  const _LibOffline();
   
 
-@override final  int currentTotalCount;
 
-/// Create a copy of LibSyncFailure
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$LibOfflineCopyWith<_LibOffline> get copyWith => __$LibOfflineCopyWithImpl<_LibOffline>(this, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LibOffline&&(identical(other.currentTotalCount, currentTotalCount) || other.currentTotalCount == currentTotalCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LibOffline);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentTotalCount);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'LibSyncFailure.libOffline(currentTotalCount: $currentTotalCount)';
+  return 'LibSyncFailure.libOffline()';
 }
 
 
 }
 
-/// @nodoc
-abstract mixin class _$LibOfflineCopyWith<$Res> implements $LibSyncFailureCopyWith<$Res> {
-  factory _$LibOfflineCopyWith(_LibOffline value, $Res Function(_LibOffline) _then) = __$LibOfflineCopyWithImpl;
-@override @useResult
-$Res call({
- int currentTotalCount
-});
 
 
-
-
-}
-/// @nodoc
-class __$LibOfflineCopyWithImpl<$Res>
-    implements _$LibOfflineCopyWith<$Res> {
-  __$LibOfflineCopyWithImpl(this._self, this._then);
-
-  final _LibOffline _self;
-  final $Res Function(_LibOffline) _then;
-
-/// Create a copy of LibSyncFailure
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? currentTotalCount = null,}) {
-  return _then(_LibOffline(
-currentTotalCount: null == currentTotalCount ? _self.currentTotalCount : currentTotalCount // ignore: cast_nullable_to_non_nullable
-as int,
-  ));
-}
-
-
-}
 
 /// @nodoc
 
 
 class _LibNotFound implements LibSyncFailure {
-  const _LibNotFound({required this.currentTotalCount});
+  const _LibNotFound();
   
 
-@override final  int currentTotalCount;
 
-/// Create a copy of LibSyncFailure
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$LibNotFoundCopyWith<_LibNotFound> get copyWith => __$LibNotFoundCopyWithImpl<_LibNotFound>(this, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LibNotFound&&(identical(other.currentTotalCount, currentTotalCount) || other.currentTotalCount == currentTotalCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LibNotFound);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentTotalCount);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'LibSyncFailure.libNotFound(currentTotalCount: $currentTotalCount)';
+  return 'LibSyncFailure.libNotFound()';
 }
 
 
 }
 
-/// @nodoc
-abstract mixin class _$LibNotFoundCopyWith<$Res> implements $LibSyncFailureCopyWith<$Res> {
-  factory _$LibNotFoundCopyWith(_LibNotFound value, $Res Function(_LibNotFound) _then) = __$LibNotFoundCopyWithImpl;
-@override @useResult
-$Res call({
- int currentTotalCount
-});
 
 
-
-
-}
-/// @nodoc
-class __$LibNotFoundCopyWithImpl<$Res>
-    implements _$LibNotFoundCopyWith<$Res> {
-  __$LibNotFoundCopyWithImpl(this._self, this._then);
-
-  final _LibNotFound _self;
-  final $Res Function(_LibNotFound) _then;
-
-/// Create a copy of LibSyncFailure
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? currentTotalCount = null,}) {
-  return _then(_LibNotFound(
-currentTotalCount: null == currentTotalCount ? _self.currentTotalCount : currentTotalCount // ignore: cast_nullable_to_non_nullable
-as int,
-  ));
-}
-
-
-}
 
 /// @nodoc
 
 
 class _LibUnknown implements LibSyncFailure {
-  const _LibUnknown({required this.currentTotalCount});
+  const _LibUnknown();
   
 
-@override final  int currentTotalCount;
 
-/// Create a copy of LibSyncFailure
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$LibUnknownCopyWith<_LibUnknown> get copyWith => __$LibUnknownCopyWithImpl<_LibUnknown>(this, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LibUnknown&&(identical(other.currentTotalCount, currentTotalCount) || other.currentTotalCount == currentTotalCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LibUnknown);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentTotalCount);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'LibSyncFailure.libUnknown(currentTotalCount: $currentTotalCount)';
+  return 'LibSyncFailure.libUnknown()';
 }
 
 
 }
+
+
+
 
 /// @nodoc
-abstract mixin class _$LibUnknownCopyWith<$Res> implements $LibSyncFailureCopyWith<$Res> {
-  factory _$LibUnknownCopyWith(_LibUnknown value, $Res Function(_LibUnknown) _then) = __$LibUnknownCopyWithImpl;
-@override @useResult
-$Res call({
- int currentTotalCount
-});
+
+
+class _LibUpToDate implements LibSyncFailure {
+  const _LibUpToDate();
+  
 
 
 
 
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LibUpToDate);
 }
-/// @nodoc
-class __$LibUnknownCopyWithImpl<$Res>
-    implements _$LibUnknownCopyWith<$Res> {
-  __$LibUnknownCopyWithImpl(this._self, this._then);
 
-  final _LibUnknown _self;
-  final $Res Function(_LibUnknown) _then;
 
-/// Create a copy of LibSyncFailure
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? currentTotalCount = null,}) {
-  return _then(_LibUnknown(
-currentTotalCount: null == currentTotalCount ? _self.currentTotalCount : currentTotalCount // ignore: cast_nullable_to_non_nullable
-as int,
-  ));
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'LibSyncFailure.libUpToDate()';
 }
 
 
 }
+
+
+
 
 /// @nodoc
 mixin _$IngredientFailure {

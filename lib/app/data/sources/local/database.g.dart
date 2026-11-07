@@ -1357,6 +1357,18 @@ class $ExercisesTable extends Exercises
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _mediaVersionMeta = const VerificationMeta(
+    'mediaVersion',
+  );
+  @override
+  late final GeneratedColumn<int> mediaVersion = GeneratedColumn<int>(
+    'media_version',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
   static const VerificationMeta _muscleGroupCodeMeta = const VerificationMeta(
     'muscleGroupCode',
   );
@@ -1495,6 +1507,7 @@ class $ExercisesTable extends Exercises
     apiId,
     name,
     imageName,
+    mediaVersion,
     muscleGroupCode,
     muscleGroupName,
     muscleHeadCode,
@@ -1540,6 +1553,15 @@ class $ExercisesTable extends Exercises
       context.handle(
         _imageNameMeta,
         imageName.isAcceptableOrUnknown(data['image_name']!, _imageNameMeta),
+      );
+    }
+    if (data.containsKey('media_version')) {
+      context.handle(
+        _mediaVersionMeta,
+        mediaVersion.isAcceptableOrUnknown(
+          data['media_version']!,
+          _mediaVersionMeta,
+        ),
       );
     }
     if (data.containsKey('muscle_group_code')) {
@@ -1664,6 +1686,10 @@ class $ExercisesTable extends Exercises
         DriftSqlType.string,
         data['${effectivePrefix}image_name'],
       ),
+      mediaVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}media_version'],
+      )!,
       muscleGroupCode: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}muscle_group_code'],
@@ -1725,6 +1751,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
   final String apiId;
   final String name;
   final String? imageName;
+  final int mediaVersion;
   final String muscleGroupCode;
   final String muscleGroupName;
   final String muscleHeadCode;
@@ -1741,6 +1768,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     required this.apiId,
     required this.name,
     this.imageName,
+    required this.mediaVersion,
     required this.muscleGroupCode,
     required this.muscleGroupName,
     required this.muscleHeadCode,
@@ -1762,6 +1790,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     if (!nullToAbsent || imageName != null) {
       map['image_name'] = Variable<String>(imageName);
     }
+    map['media_version'] = Variable<int>(mediaVersion);
     map['muscle_group_code'] = Variable<String>(muscleGroupCode);
     map['muscle_group_name'] = Variable<String>(muscleGroupName);
     map['muscle_head_code'] = Variable<String>(muscleHeadCode);
@@ -1792,6 +1821,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       imageName: imageName == null && nullToAbsent
           ? const Value.absent()
           : Value(imageName),
+      mediaVersion: Value(mediaVersion),
       muscleGroupCode: Value(muscleGroupCode),
       muscleGroupName: Value(muscleGroupName),
       muscleHeadCode: Value(muscleHeadCode),
@@ -1824,6 +1854,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       apiId: serializer.fromJson<String>(json['apiId']),
       name: serializer.fromJson<String>(json['name']),
       imageName: serializer.fromJson<String?>(json['imageName']),
+      mediaVersion: serializer.fromJson<int>(json['mediaVersion']),
       muscleGroupCode: serializer.fromJson<String>(json['muscleGroupCode']),
       muscleGroupName: serializer.fromJson<String>(json['muscleGroupName']),
       muscleHeadCode: serializer.fromJson<String>(json['muscleHeadCode']),
@@ -1845,6 +1876,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       'apiId': serializer.toJson<String>(apiId),
       'name': serializer.toJson<String>(name),
       'imageName': serializer.toJson<String?>(imageName),
+      'mediaVersion': serializer.toJson<int>(mediaVersion),
       'muscleGroupCode': serializer.toJson<String>(muscleGroupCode),
       'muscleGroupName': serializer.toJson<String>(muscleGroupName),
       'muscleHeadCode': serializer.toJson<String>(muscleHeadCode),
@@ -1864,6 +1896,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     String? apiId,
     String? name,
     Value<String?> imageName = const Value.absent(),
+    int? mediaVersion,
     String? muscleGroupCode,
     String? muscleGroupName,
     String? muscleHeadCode,
@@ -1880,6 +1913,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     apiId: apiId ?? this.apiId,
     name: name ?? this.name,
     imageName: imageName.present ? imageName.value : this.imageName,
+    mediaVersion: mediaVersion ?? this.mediaVersion,
     muscleGroupCode: muscleGroupCode ?? this.muscleGroupCode,
     muscleGroupName: muscleGroupName ?? this.muscleGroupName,
     muscleHeadCode: muscleHeadCode ?? this.muscleHeadCode,
@@ -1898,6 +1932,9 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       apiId: data.apiId.present ? data.apiId.value : this.apiId,
       name: data.name.present ? data.name.value : this.name,
       imageName: data.imageName.present ? data.imageName.value : this.imageName,
+      mediaVersion: data.mediaVersion.present
+          ? data.mediaVersion.value
+          : this.mediaVersion,
       muscleGroupCode: data.muscleGroupCode.present
           ? data.muscleGroupCode.value
           : this.muscleGroupCode,
@@ -1935,6 +1972,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
           ..write('apiId: $apiId, ')
           ..write('name: $name, ')
           ..write('imageName: $imageName, ')
+          ..write('mediaVersion: $mediaVersion, ')
           ..write('muscleGroupCode: $muscleGroupCode, ')
           ..write('muscleGroupName: $muscleGroupName, ')
           ..write('muscleHeadCode: $muscleHeadCode, ')
@@ -1956,6 +1994,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     apiId,
     name,
     imageName,
+    mediaVersion,
     muscleGroupCode,
     muscleGroupName,
     muscleHeadCode,
@@ -1976,6 +2015,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
           other.apiId == this.apiId &&
           other.name == this.name &&
           other.imageName == this.imageName &&
+          other.mediaVersion == this.mediaVersion &&
           other.muscleGroupCode == this.muscleGroupCode &&
           other.muscleGroupName == this.muscleGroupName &&
           other.muscleHeadCode == this.muscleHeadCode &&
@@ -1994,6 +2034,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
   final Value<String> apiId;
   final Value<String> name;
   final Value<String?> imageName;
+  final Value<int> mediaVersion;
   final Value<String> muscleGroupCode;
   final Value<String> muscleGroupName;
   final Value<String> muscleHeadCode;
@@ -2011,6 +2052,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     this.apiId = const Value.absent(),
     this.name = const Value.absent(),
     this.imageName = const Value.absent(),
+    this.mediaVersion = const Value.absent(),
     this.muscleGroupCode = const Value.absent(),
     this.muscleGroupName = const Value.absent(),
     this.muscleHeadCode = const Value.absent(),
@@ -2029,6 +2071,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     required String apiId,
     required String name,
     this.imageName = const Value.absent(),
+    this.mediaVersion = const Value.absent(),
     required String muscleGroupCode,
     required String muscleGroupName,
     required String muscleHeadCode,
@@ -2055,6 +2098,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     Expression<String>? apiId,
     Expression<String>? name,
     Expression<String>? imageName,
+    Expression<int>? mediaVersion,
     Expression<String>? muscleGroupCode,
     Expression<String>? muscleGroupName,
     Expression<String>? muscleHeadCode,
@@ -2073,6 +2117,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
       if (apiId != null) 'api_id': apiId,
       if (name != null) 'name': name,
       if (imageName != null) 'image_name': imageName,
+      if (mediaVersion != null) 'media_version': mediaVersion,
       if (muscleGroupCode != null) 'muscle_group_code': muscleGroupCode,
       if (muscleGroupName != null) 'muscle_group_name': muscleGroupName,
       if (muscleHeadCode != null) 'muscle_head_code': muscleHeadCode,
@@ -2093,6 +2138,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     Value<String>? apiId,
     Value<String>? name,
     Value<String?>? imageName,
+    Value<int>? mediaVersion,
     Value<String>? muscleGroupCode,
     Value<String>? muscleGroupName,
     Value<String>? muscleHeadCode,
@@ -2111,6 +2157,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
       apiId: apiId ?? this.apiId,
       name: name ?? this.name,
       imageName: imageName ?? this.imageName,
+      mediaVersion: mediaVersion ?? this.mediaVersion,
       muscleGroupCode: muscleGroupCode ?? this.muscleGroupCode,
       muscleGroupName: muscleGroupName ?? this.muscleGroupName,
       muscleHeadCode: muscleHeadCode ?? this.muscleHeadCode,
@@ -2138,6 +2185,9 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     }
     if (imageName.present) {
       map['image_name'] = Variable<String>(imageName.value);
+    }
+    if (mediaVersion.present) {
+      map['media_version'] = Variable<int>(mediaVersion.value);
     }
     if (muscleGroupCode.present) {
       map['muscle_group_code'] = Variable<String>(muscleGroupCode.value);
@@ -2187,6 +2237,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
           ..write('apiId: $apiId, ')
           ..write('name: $name, ')
           ..write('imageName: $imageName, ')
+          ..write('mediaVersion: $mediaVersion, ')
           ..write('muscleGroupCode: $muscleGroupCode, ')
           ..write('muscleGroupName: $muscleGroupName, ')
           ..write('muscleHeadCode: $muscleHeadCode, ')
@@ -8239,6 +8290,7 @@ typedef $$ExercisesTableCreateCompanionBuilder =
       required String apiId,
       required String name,
       Value<String?> imageName,
+      Value<int> mediaVersion,
       required String muscleGroupCode,
       required String muscleGroupName,
       required String muscleHeadCode,
@@ -8258,6 +8310,7 @@ typedef $$ExercisesTableUpdateCompanionBuilder =
       Value<String> apiId,
       Value<String> name,
       Value<String?> imageName,
+      Value<int> mediaVersion,
       Value<String> muscleGroupCode,
       Value<String> muscleGroupName,
       Value<String> muscleHeadCode,
@@ -8320,6 +8373,11 @@ class $$ExercisesTableFilterComposer
 
   ColumnFilters<String> get imageName => $composableBuilder(
     column: $table.imageName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get mediaVersion => $composableBuilder(
+    column: $table.mediaVersion,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -8433,6 +8491,11 @@ class $$ExercisesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get mediaVersion => $composableBuilder(
+    column: $table.mediaVersion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get muscleGroupCode => $composableBuilder(
     column: $table.muscleGroupCode,
     builder: (column) => ColumnOrderings(column),
@@ -8511,6 +8574,11 @@ class $$ExercisesTableAnnotationComposer
 
   GeneratedColumn<String> get imageName =>
       $composableBuilder(column: $table.imageName, builder: (column) => column);
+
+  GeneratedColumn<int> get mediaVersion => $composableBuilder(
+    column: $table.mediaVersion,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get muscleGroupCode => $composableBuilder(
     column: $table.muscleGroupCode,
@@ -8621,6 +8689,7 @@ class $$ExercisesTableTableManager
                 Value<String> apiId = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String?> imageName = const Value.absent(),
+                Value<int> mediaVersion = const Value.absent(),
                 Value<String> muscleGroupCode = const Value.absent(),
                 Value<String> muscleGroupName = const Value.absent(),
                 Value<String> muscleHeadCode = const Value.absent(),
@@ -8638,6 +8707,7 @@ class $$ExercisesTableTableManager
                 apiId: apiId,
                 name: name,
                 imageName: imageName,
+                mediaVersion: mediaVersion,
                 muscleGroupCode: muscleGroupCode,
                 muscleGroupName: muscleGroupName,
                 muscleHeadCode: muscleHeadCode,
@@ -8657,6 +8727,7 @@ class $$ExercisesTableTableManager
                 required String apiId,
                 required String name,
                 Value<String?> imageName = const Value.absent(),
+                Value<int> mediaVersion = const Value.absent(),
                 required String muscleGroupCode,
                 required String muscleGroupName,
                 required String muscleHeadCode,
@@ -8674,6 +8745,7 @@ class $$ExercisesTableTableManager
                 apiId: apiId,
                 name: name,
                 imageName: imageName,
+                mediaVersion: mediaVersion,
                 muscleGroupCode: muscleGroupCode,
                 muscleGroupName: muscleGroupName,
                 muscleHeadCode: muscleHeadCode,

@@ -28,8 +28,8 @@ class _RoutineItemHorizontalWidgetState extends State<RoutineItemHorizontalWidge
     final locale = AppLocalizations.of(context)!;
     // final rtl = context.read<LocaleCubit>().state.isRtl();
     final rtl = Directionality.of(context) == .rtl;
-    // final group = widget.item.exercise.muscleGroupTranslations[rtl ? Lang.ar : Lang.en];
-    final group = widget.item.exercise.muscleGroupName;
+    // final muscleHead = widget.item.exercise.muscleGroupTranslations[rtl ? Lang.ar : Lang.en];
+    final muscleHead = widget.item.exercise.muscleHeadName;
 
     return BlocProvider(
       create: (context) => SetsEditBloc(commands: di.sl())..add(GetSetsforRoutineItemEvent(itemId: widget.item.id!)),
@@ -77,7 +77,7 @@ class _RoutineItemHorizontalWidgetState extends State<RoutineItemHorizontalWidge
                           child: Column(
                             children: [
                               Text(widget.item.exercise.name, maxLines: 2, style: const TextStyle(fontWeight: .bold)),
-                              Text(locale.muscleGroup(group), style: const TextStyle(fontSize: 12)),
+                              Text(muscleHead, style: const TextStyle(fontSize: 12)),
                               const SizedBox(height: 5),
                               Text('${locale.setsAndRounds}:', style: const TextStyle(fontSize: 10)),
                               BlocBuilder<SetsEditBloc, SetsEditState>(
