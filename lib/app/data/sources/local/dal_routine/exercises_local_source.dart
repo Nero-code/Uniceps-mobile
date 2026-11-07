@@ -68,6 +68,7 @@ class ExercisesLocalSource implements IExercisesLocalSourceContract {
             apiId: e.apiId,
             name: e.name,
             imageName: Value(e.imageUrl),
+            mediaVersion: Value(e.mediaVersion),
             muscleGroupCode: e.muscleGroupCode,
             muscleGroupName: e.muscleGroupName,
             muscleHeadCode: e.muscleHeadCode,

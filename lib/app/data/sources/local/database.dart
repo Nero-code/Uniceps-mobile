@@ -64,7 +64,7 @@ class AppDatabase extends _$AppDatabase {
   );
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 }
 
 extension Migrations on GeneratedDatabase {
@@ -174,6 +174,9 @@ extension Migrations on GeneratedDatabase {
       await m.alterTable(TableMigration(schema.measurements, newColumns: [schema.measurements.deleted]));
       await m.addColumn(schema.dietLogs, schema.dietLogs.deleted);
       await m.addColumn(schema.ingredients, schema.ingredients.deleted);
+    },
+    from6To7: (m, schema) async {
+      await m.addColumn(schema.exercises, schema.exercises.mediaVersion);
     },
   );
 }

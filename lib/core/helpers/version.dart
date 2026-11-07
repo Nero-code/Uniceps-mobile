@@ -1,8 +1,8 @@
 class Version {
   static const currentMajor = 4;
   static const currentMinor = 4;
-  static const currentPatch = 25;
-  static const currentBuild = 24;
+  static const currentPatch = 33;
+  static const currentBuild = 26;
 
   final int major, minor, patch, build;
   final String changeLogEn, changeLogAr;
@@ -21,7 +21,7 @@ class Version {
   factory Version.fromJson(Map<String, dynamic> json) {
     final versionString = json['version'] as String;
     final [major, minor, patch, build] = versionString.split('.').map((v) => int.parse(v)).toList();
-    final isUrgent = json['isUrgent'] ?? (major > currentMajor || patch - 10 > currentPatch);
+    final isUrgent = json['isUrgent'] ?? (major > currentMajor);
     return Version(
       major: major,
       minor: minor,

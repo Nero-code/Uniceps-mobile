@@ -14,6 +14,8 @@ abstract class MediaHelper {
   Future<void> addImage(String imageKey, Uint8List bitmap);
 
   bool containsImage(String id);
+
+  Future<List<String>> getImageKeys();
 }
 
 class ImageMediaHelper implements MediaHelper {
@@ -70,4 +72,7 @@ class ImageMediaHelper implements MediaHelper {
 
   @override
   bool containsImage(String id) => imagesCache.containsKey(id);
+
+  @override
+  Future<List<String>> getImageKeys() async => List.from(imagesCache.keys);
 }

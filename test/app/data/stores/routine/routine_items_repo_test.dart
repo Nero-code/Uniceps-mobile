@@ -33,6 +33,7 @@ void main() {
     name: 'Test Exercise',
     muscleGroupName: 'Chest',
     imagePath: 'test_url',
+    mediaVersion: 0,
     imageBitMap: Uint8List(0),
     muscleGroupCode: '',
     muscleHeadName: '',

@@ -31,7 +31,6 @@ class _MusclesPageState extends State<MusclesPage> {
     final now = DateTime.now();
     setState(() {
       _selectedPreset = preset;
-      _toDate = now;
       if (preset == '7 Days') {
         _fromDate = now.subtract(const Duration(days: 7));
       } else if (preset == '30 Days') {
@@ -42,7 +41,7 @@ class _MusclesPageState extends State<MusclesPage> {
         _fromDate = now.subtract(const Duration(days: 365));
       }
     });
-    context.read<MetricsCubit>().loadMetricsData(fromDate: _fromDate, toDate: _toDate);
+    context.read<MetricsCubit>().loadMetricsData(fromDate: _fromDate, toDate: now);
   }
 
   int _calcProgressPercentage(Chart<DateTime, double> chart) {

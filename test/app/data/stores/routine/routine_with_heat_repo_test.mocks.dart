@@ -269,6 +269,14 @@ class MockMediaHelper extends _i1.Mock implements _i12.MediaHelper {
             returnValue: false,
           )
           as bool);
+
+  @override
+  _i5.Future<List<String>> getImageKeys() =>
+      (super.noSuchMethod(
+            Invocation.method(#getImageKeys, []),
+            returnValue: _i5.Future<List<String>>.value(<String>[]),
+          )
+          as _i5.Future<List<String>>);
 }
 
 /// A class which mocks [Logger].

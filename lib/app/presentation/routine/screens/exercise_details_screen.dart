@@ -166,11 +166,11 @@ class _ExerciseOverviewTab extends StatelessWidget {
             Wrap(
               spacing: 8,
               children: [
-                if (result.exercise.auxMuscle1 != null && result.exercise.auxMuscle1!.isNotEmpty)
+                if (result.exercise.auxMuscle1 != null && result.exercise.auxMuscle1 != 'None')
                   Chip(label: Text(result.exercise.auxMuscle1!)),
-                if (result.exercise.auxMuscle2 != null && result.exercise.auxMuscle2!.isNotEmpty)
+                if (result.exercise.auxMuscle2 != null && result.exercise.auxMuscle2 != 'None')
                   Chip(label: Text(result.exercise.auxMuscle2!)),
-                if (result.exercise.auxMuscle3 != null && result.exercise.auxMuscle3!.isNotEmpty)
+                if (result.exercise.auxMuscle3 != null && result.exercise.auxMuscle3 != 'None')
                   Chip(label: Text(result.exercise.auxMuscle3!)),
               ],
             ),
