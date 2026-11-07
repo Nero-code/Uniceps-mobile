@@ -31,7 +31,7 @@ class CaptainUniCard extends StatelessWidget {
           child: InkWell(
             onTap: onCapTap,
             borderRadius: BorderRadius.circular(20),
-            child: Ink(
+            child: Container(
               padding: const EdgeInsets.all(8.0),
               width: screenSize.width,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: background, gradient: gradient),
