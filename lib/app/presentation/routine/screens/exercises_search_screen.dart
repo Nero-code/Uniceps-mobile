@@ -52,17 +52,12 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
           centerTitle: true,
           title: Text("${widget.dayName}: ${selectedIds.length + widget.presentExerciseIds.length}"),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.done_all_rounded),
-              color: Theme.of(context).colorScheme.primary,
-              onPressed: () {
-                final list = context.read<ExercisesV2Bloc>().selectedExercises;
-                context.read<ItemsEditBloc>().add(AddRoutineItemsEvent(dayId: widget.dayId, items: list));
-              },
-            ),
             Builder(
-              builder: (context) =>
-                  IconButton(onPressed: Scaffold.of(context).openEndDrawer, icon: const Icon(Icons.filter_alt_rounded)),
+              builder: (context) => IconButton(
+                onPressed: Scaffold.of(context).openEndDrawer,
+                icon: const Icon(Icons.filter_list),
+                style: IconButton.styleFrom(backgroundColor: Colors.black12),
+              ),
             ),
           ],
         ),
@@ -79,95 +74,128 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
         body: BlocBuilder<ExercisesV2Bloc, ExercisesV2State>(
           builder: (context, state) {
             if (state is ExercisesV2LoadedState) {
-              return GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 0.8,
-                  crossAxisCount: 2,
-                  mainAxisSpacing: spacing,
-                  crossAxisSpacing: spacing,
-                ),
-                padding: EdgeInsets.only(
-                  top: spacing,
-                  left: spacing,
-                  right: spacing,
-                  bottom: MediaQuery.of(context).padding.bottom + (screen.height * .1),
-                ),
-                itemCount: state.list.length,
-                itemBuilder: (context, index) {
-                  final isPresent = widget.presentExerciseIds.contains(state.list[index].apiId);
-                  return Stack(
-                    children: [
-                      ExerciseGridWidget(
-                        isSelected: isPresent || selectedIds.contains(state.list[index].apiId),
-                        exercise: state.list[index],
-                        index: index,
-                      ),
-                      Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          splashColor: const Color.fromARGB(30, 158, 158, 158),
-                          highlightColor: const Color.fromARGB(30, 158, 158, 158),
-                          borderRadius: BorderRadius.circular(15.0),
-                          onTap: isPresent
-                              ? null
-                              : () {
-                                  if (!selectedIds.contains(state.list[index].apiId)) {
-                                    // -------------------------------------------------
-                                    // Add exercise here and parent widget and notify
-                                    selectedIds.add(state.list[index].apiId);
-                                    // onSelect(state.list[index], false);
-                                    BlocProvider.of<ExercisesV2Bloc>(context).add(
-                                      AddOrRemoveExerciseEvent(
-                                        exerciseV2: state.list[index],
-                                        isAdd: true,
-                                        all: state.list,
-                                      ),
-                                    );
+              return Stack(
+                children: [
+                  GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 0.8,
+                      crossAxisCount: 2,
+                      mainAxisSpacing: spacing,
+                      crossAxisSpacing: spacing,
+                    ),
+                    padding: EdgeInsets.only(
+                      top: spacing,
+                      left: spacing,
+                      right: spacing,
+                      bottom: MediaQuery.of(context).padding.bottom + (screen.height * .1),
+                    ),
+                    itemCount: state.list.length,
+                    itemBuilder: (context, index) {
+                      final isPresent = widget.presentExerciseIds.contains(state.list[index].apiId);
+                      return Stack(
+                        children: [
+                          ExerciseGridWidget(
+                            isSelected: isPresent || selectedIds.contains(state.list[index].apiId),
+                            exercise: state.list[index],
+                            index: index,
+                          ),
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              splashColor: const Color.fromARGB(30, 158, 158, 158),
+                              highlightColor: const Color.fromARGB(30, 158, 158, 158),
+                              borderRadius: BorderRadius.circular(15.0),
+                              onTap: isPresent
+                                  ? null
+                                  : () {
+                                      if (!selectedIds.contains(state.list[index].apiId)) {
+                                        // -------------------------------------------------
+                                        // Add exercise here and parent widget and notify
+                                        selectedIds.add(state.list[index].apiId);
+                                        // onSelect(state.list[index], false);
+                                        BlocProvider.of<ExercisesV2Bloc>(context).add(
+                                          AddOrRemoveExerciseEvent(
+                                            exerciseV2: state.list[index],
+                                            isAdd: true,
+                                            all: state.list,
+                                          ),
+                                        );
 
-                                    // -------------------------------------------------
-                                  } else {
-                                    // -------------------------------------------------
-                                    // Remove exercise here and parent widget and notify
-                                    selectedIds.remove(state.list[index].apiId);
-                                    // onSelect(state.list[index], true);
-                                    BlocProvider.of<ExercisesV2Bloc>(context).add(
-                                      AddOrRemoveExerciseEvent(
-                                        exerciseV2: state.list[index],
-                                        isAdd: false,
-                                        all: state.list,
-                                      ),
-                                    );
-                                    // -------------------------------------------------
-                                  }
-                                  setState(() {});
-                                },
-                          child: const SizedBox.expand(),
-                        ),
-                      ),
-                      if (isPresent)
-                        Positioned(
-                          top: 10.0,
-                          right: 10.0,
-                          child: Icon(Icons.done, size: 20, color: Theme.of(context).colorScheme.secondary),
-                        ),
-                      Positioned(
-                        top: 0.0,
-                        left: 0.0,
-                        child: IconButton(
-                          iconSize: 20,
-                          icon: const Icon(Icons.info_outline),
-                          color: Theme.of(context).colorScheme.primary,
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ExerciseDetailsScreen(exerciseId: state.list[index].apiId),
+                                        // -------------------------------------------------
+                                      } else {
+                                        // -------------------------------------------------
+                                        // Remove exercise here and parent widget and notify
+                                        selectedIds.remove(state.list[index].apiId);
+                                        // onSelect(state.list[index], true);
+                                        BlocProvider.of<ExercisesV2Bloc>(context).add(
+                                          AddOrRemoveExerciseEvent(
+                                            exerciseV2: state.list[index],
+                                            isAdd: false,
+                                            all: state.list,
+                                          ),
+                                        );
+                                        // -------------------------------------------------
+                                      }
+                                      setState(() {});
+                                    },
+                              child: const SizedBox.expand(),
                             ),
                           ),
+                          if (isPresent)
+                            Positioned(
+                              top: 10.0,
+                              right: 10.0,
+                              child: Icon(Icons.done, size: 20, color: Theme.of(context).colorScheme.secondary),
+                            ),
+                          Positioned(
+                            top: 0.0,
+                            left: 0.0,
+                            child: IconButton(
+                              iconSize: 20,
+                              icon: const Icon(Icons.info_outline),
+                              color: Theme.of(context).colorScheme.primary,
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ExerciseDetailsScreen(exerciseId: state.list[index].apiId),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    width: screen.width,
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        // borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      child: InkWell(
+                        // borderRadius: BorderRadius.circular(10),
+                        onTap: () {
+                          final list = context.read<ExercisesV2Bloc>().selectedExercises;
+                          context.read<ItemsEditBloc>().add(AddRoutineItemsEvent(dayId: widget.dayId, items: list));
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 5,
+                          children: [
+                            const Icon(Icons.done_all_rounded, color: Colors.white),
+                            Text(
+                              locale.add,
+                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  );
-                },
+                    ),
+                  ),
+                ],
               );
             } else if (state is ExercisesV2ErrorState) {
               return Center(child: Text(locale.errNoInternet));

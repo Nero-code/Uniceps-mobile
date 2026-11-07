@@ -86,6 +86,7 @@ class _ExerciseFilterDrawerState extends State<ExerciseFilterDrawer> {
                               _SectionHeader(title: g.muscleGroupName, icon: Icons.fitness_center_rounded),
                               const SizedBox(height: 12),
                               Wrap(
+                                spacing: 8,
                                 children: state.filter.heads.entries
                                     .where((h) => h.key.contains(g.muscleGroupCode))
                                     .map(
@@ -99,6 +100,7 @@ class _ExerciseFilterDrawerState extends State<ExerciseFilterDrawer> {
                                                 : filterByMuscleHead.remove(head.key);
                                           });
                                         },
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                       ),
                                     )
                                     .toList(),
