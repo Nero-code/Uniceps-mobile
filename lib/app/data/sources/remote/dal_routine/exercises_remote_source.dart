@@ -58,6 +58,7 @@ class ExercisesRemoteSourceImpl implements IExercisesRemoteSourceContract {
   @override
   Future<Uint8List> getExerciseImage(String exerciseId) async {
     final res = await _client.get(Uri.https(ApiRoutes.domain, ApiRoutes.exerciseImage(exerciseId)));
+    if (res.statusCode == 404) throw NotFoundException();
     return res.bodyBytes;
   }
 }

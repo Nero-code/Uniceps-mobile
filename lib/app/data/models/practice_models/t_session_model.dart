@@ -68,10 +68,11 @@ class TSessionModel {
 
   TSession toEntity() => TSession(
     id: id,
+    apiId: apiId,
     dayId: dayId,
     dayName: dayName,
     logs: logs,
-    apiId: apiId,
+    progress: progress,
     createdAt: createdAt,
     finishedAt: finishedAt,
   );

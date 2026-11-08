@@ -5,7 +5,7 @@ class ProgressWidget extends StatelessWidget {
   const ProgressWidget({
     super.key,
     required this.percent,
-    required this.title,
+    this.title,
     this.textStyle,
     this.color = secondaryBlue,
     this.backgroundColor = Colors.transparent,
@@ -14,13 +14,15 @@ class ProgressWidget extends StatelessWidget {
     this.strokeWidth = 7.0,
     this.radius,
     this.padding,
+    this.action,
   });
 
   final double? percent, radius, padding;
   final Color color, backgroundColor, progressBackground;
   final double dimension, strokeWidth;
   final TextStyle? textStyle;
-  final Widget title;
+  final Widget? title;
+  final Widget? action;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +60,8 @@ class ProgressWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10.0),
-            title,
+            ?title,
+            ?action,
           ],
         ),
       ),

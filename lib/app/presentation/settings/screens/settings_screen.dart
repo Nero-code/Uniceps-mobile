@@ -231,7 +231,7 @@ class SettingsScreen extends StatelessWidget {
             //   title: locale.about,
             //   onPressed: () => Navigator.pushNamed(context, AppRoutes.about),
             // ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 32),
 
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -239,34 +239,52 @@ class SettingsScreen extends StatelessWidget {
                 mainAxisAlignment: .spaceEvenly,
                 children: [
                   InkWell(
+                    borderRadius: .circular(15),
                     onTap: () => launchUrl(Uri.parse('https://t.me/uniceps_bot')),
-                    child: const FaIcon(FontAwesomeIcons.telegram, color: Colors.cyan),
+                    child: const SizedBox.square(
+                      dimension: 40,
+                      child: Center(child: FaIcon(FontAwesomeIcons.telegram, color: Colors.cyan)),
+                    ),
                   ),
                   InkWell(
+                    borderRadius: .circular(15),
                     onTap: () => launchUrl(Uri.parse('https://www.facebook.com/share/1CURTHmiHq/')),
-                    child: const FaIcon(FontAwesomeIcons.facebookF, color: Colors.blue),
+                    child: const SizedBox.square(
+                      dimension: 40,
+                      child: Center(child: FaIcon(FontAwesomeIcons.facebookF, color: Colors.blue)),
+                    ),
                   ),
                   InkWell(
+                    borderRadius: .circular(15),
                     onTap: () => launchUrl(Uri.parse('https://whatsapp.com/channel/0029VbBysZDEFeXt1sVdKN3y')),
-                    child: const FaIcon(FontAwesomeIcons.whatsapp, color: Colors.green),
+                    child: const SizedBox.square(
+                      dimension: 40,
+                      child: Center(child: FaIcon(FontAwesomeIcons.whatsapp, color: Colors.green)),
+                    ),
                   ),
                   InkWell(
+                    borderRadius: .circular(15),
                     onTap: () => launchUrl(Uri.parse('https://www.instagram.com/uniceps.app')),
-                    child: const FaIcon(FontAwesomeIcons.instagram, color: Colors.pink),
+                    child: const SizedBox.square(
+                      dimension: 40,
+                      child: Center(child: FaIcon(FontAwesomeIcons.instagram, color: Colors.pink)),
+                    ),
                   ),
                   InkWell(
+                    borderRadius: .circular(15),
                     onTap: () => launchUrl(Uri.parse('https://uniceps.trio-verse.com')),
-                    child: const FaIcon(FontAwesomeIcons.earthEurope, color: Colors.blueGrey),
+                    child: const SizedBox.square(
+                      dimension: 40,
+                      child: Center(child: FaIcon(FontAwesomeIcons.earthEurope, color: Colors.blueGrey)),
+                    ),
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                APP_VERSION,
-                style: TextStyle(fontSize: 12, fontWeight: .bold, color: Colors.grey.shade700),
-              ),
+            const SizedBox(height: 32),
+            Text(
+              APP_VERSION,
+              style: TextStyle(fontSize: 12, fontWeight: .bold, color: Colors.grey.shade700),
             ),
           ],
         ),

@@ -29,7 +29,7 @@ class DeleteSyncOrchestrator {
         bool success = true;
         if (m.apiId != null) {
           try {
-            await _retry(() => _client.deleteHandler(ApiRoutes.domain, '${ApiRoutes.measurements}/${m.apiId}', {}));
+            await _retry(() => _client.deleteHandler(ApiRoutes.domain, '${ApiRoutes.measurements}/${m.apiId}'));
           } catch (e) {
             success = false;
             logger.e('Failed to sync deletion for measurement ${m.id} to API', error: e);
@@ -56,7 +56,7 @@ class DeleteSyncOrchestrator {
         bool success = true;
         if (log.apiId != null) {
           try {
-            await _retry(() => _client.deleteHandler(ApiRoutes.domain, '${ApiRoutes.dietLogs}/${log.apiId}', {}));
+            await _retry(() => _client.deleteHandler(ApiRoutes.domain, '${ApiRoutes.dietLogs}/${log.apiId}'));
           } catch (e) {
             success = false;
             logger.e('Failed to sync deletion for diet log ${log.id} to API', error: e);
@@ -83,9 +83,7 @@ class DeleteSyncOrchestrator {
         bool success = true;
         if (ingredient.apiId != null) {
           try {
-            await _retry(
-              () => _client.deleteHandler(ApiRoutes.domain, '${ApiRoutes.ingredients}/${ingredient.apiId}', {}),
-            );
+            await _retry(() => _client.deleteHandler(ApiRoutes.domain, '${ApiRoutes.ingredients}/${ingredient.apiId}'));
           } catch (e) {
             success = false;
             logger.e('Failed to sync deletion for ingredient ${ingredient.id} to API', error: e);

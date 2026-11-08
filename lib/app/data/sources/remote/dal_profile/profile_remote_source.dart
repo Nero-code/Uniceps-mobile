@@ -27,7 +27,7 @@ class ProfileRemoteSource implements IProfileRemoteSource {
 
   @override
   Future<bool> deletePhoto() async {
-    await _client.deleteHandler(ApiRoutes.domain, ApiRoutes.profile, {});
+    await _client.deleteHandler(ApiRoutes.domain, ApiRoutes.profilePicture);
     return true;
   }
 }

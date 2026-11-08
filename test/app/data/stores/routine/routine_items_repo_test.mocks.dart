@@ -139,4 +139,12 @@ class MockMediaHelper extends _i1.Mock implements _i5.MediaHelper {
             returnValue: false,
           )
           as bool);
+
+  @override
+  _i3.Future<List<String>> getImageKeys() =>
+      (super.noSuchMethod(
+            Invocation.method(#getImageKeys, []),
+            returnValue: _i3.Future<List<String>>.value(<String>[]),
+          )
+          as _i3.Future<List<String>>);
 }

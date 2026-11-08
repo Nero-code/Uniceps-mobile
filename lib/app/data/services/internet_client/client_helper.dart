@@ -37,7 +37,8 @@ abstract class ClientHelper {
   Future<void> deleteHandler(
     String api,
     String urlPart,
-    Map<String, dynamic> body, {
+      {
+    Map<String, dynamic>? body,
     bool needsHeader = true,
     Map<String, String>? headers,
   });
