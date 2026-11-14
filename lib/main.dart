@@ -28,6 +28,7 @@ import 'package:uniceps/app/presentation/settings/screens/settings_screen.dart';
 import 'package:uniceps/app/services/file_handler_service.dart';
 import 'package:uniceps/app/services/notification_service.dart';
 import 'package:uniceps/core/Themes/light_theme.dart';
+import 'package:uniceps/core/logging/app_logger.dart';
 import 'package:uniceps/firebase_options.dart';
 import 'package:uniceps/injection_dependency.dart' as di;
 import 'package:uniceps/l10n/app_localizations.dart';
@@ -36,7 +37,29 @@ import 'package:uniceps/splash.dart';
 import 'core/constants/app_routes.dart';
 
 @pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  logger.i("${message.toMap()}");
+  // 1. Always initialize Firebase first in background isolates
+  await Firebase.initializeApp();
+
+  // 2. Initialize your local notifications plugin
+  await NotificationService.init();
+
+  // 3. Extract custom data or fallback to notification title/body
+  final data = message.data;
+  final title = data['title'] ?? message.notification?.title ?? 'Background Notification';
+  final body = data['body'] ?? message.notification?.body ?? 'You have a new message';
+
+  // 4. Customize and show the notification using your expanded property set
+  await NotificationService.showNotification(
+    id: message.hashCode,
+    title: title,
+    body: body,
+    ongoing: false, // Set to true if you want it sticky
+    autoCancel: true,
+    payload: data['route'], // Pass custom deep-link data
+  );
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,7 +78,7 @@ void main() async {
     provisional: false,
     sound: true,
   );
-
+  final notificationService = NotificationService(configsService: di.sl());
   await NotificationService.init();
 
   FileHandlerService().init();
@@ -64,6 +87,7 @@ void main() async {
 
   debugPrint('User granted permission: ${settings.authorizationStatus}');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessage.listen(notificationService.handleForegroundNotification);
 
   runApp(const MyApp());
 }
