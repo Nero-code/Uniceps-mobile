@@ -21,10 +21,12 @@ class LogoutAlertDialog extends StatelessWidget {
           child: Text(locale.cancel),
         ),
         TextButton(
-          onPressed: () {
-            context.read<AccountCubit>().logout();
-            context.read<MembershipBloc>().add(const MembershipEvent.getCurrentPlan());
-            Navigator.pop(context);
+          onPressed: () async {
+            await context.read<AccountCubit>().logout();
+            if (context.mounted) {
+              context.read<MembershipBloc>().add(const MembershipEvent.getCurrentPlan());
+              Navigator.pop(context);
+            }
           },
           child: Text(locale.ok, style: const TextStyle(color: Colors.red)),
         ),
