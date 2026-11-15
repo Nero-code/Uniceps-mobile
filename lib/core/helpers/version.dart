@@ -1,8 +1,8 @@
 class Version {
   static const currentMajor = 4;
   static const currentMinor = 4;
-  static const currentPatch = 33;
-  static const currentBuild = 26;
+  static const currentPatch = 35;
+  static const currentBuild = 27;
 
   final int major, minor, patch, build;
   final String changeLogEn, changeLogAr;

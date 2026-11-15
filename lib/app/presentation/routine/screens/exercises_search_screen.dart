@@ -167,7 +167,7 @@ class _ExercisesSearchScreenState extends State<ExercisesSearchScreen> {
                     },
                   ),
                   Positioned(
-                    bottom: 0,
+                    bottom: MediaQuery.paddingOf(context).bottom,
                     width: screen.width,
                     child: Container(
                       height: 50,
